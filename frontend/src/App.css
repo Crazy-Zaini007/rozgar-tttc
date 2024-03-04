@@ -2,10 +2,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap");
 
 * {
-  /* font-family: 'DM Sans', sans-serif; */
+ 
   font-family: "Inter", sans-serif;
 }
-/* Colors */
+
 :root {
   --white: #fff;
   --grays-ligher-gray: #f4f4f4;
@@ -28,7 +28,6 @@
   --pureblack: #000000;
   --pink: #f68bff;
   --purple: #6f47eb;
-  /* Text Colors */
   --darkgrey: #5c5f62;
   --lightgrey: #f9f9f9;
   --lightblue: #eee9fd;
@@ -41,31 +40,7 @@
   --btnbg: #ededed;
 }
 
-/* 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 4px;
-  border-radius: 20px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: var(--darkgrey);
-  border-radius: 20px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: var(--darkgrey);
-  border-radius: 100px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #28363e;
-  border-radius: 20px;
-}
-*/ .custom-toast-container {
+ .custom-toast-container {
   .Toastify__toast {
     font-size: 12px;
   }
@@ -98,7 +73,6 @@
   color: var(--accent-stonger-blue);
 }
 
-/* Cash in Hand */
 .cash_in_hand .account_details {
   background-color: var(--darkgrey);
 }
@@ -130,7 +104,7 @@
   font-weight: 600;
   font-size: 14px;
 }
-/* User Signup/Login Form  */
+
 .register_form {
   border-radius: 10px;
   position: relative;
@@ -204,7 +178,6 @@
   font-size: 12px;
 }
 
-/* Sidebar */
 .sidenav::-webkit-scrollbar {
   width: 0px;
   height: 0px;
@@ -267,8 +240,8 @@
   padding-left: 8%;
   margin-top: 2px;
   color: var(--accent-stonger-blue);
-  transition: background-color 0.3s, transform 0.3s; /* Add transition for background-color and transform */
-  transform: scale(1.05); /* Add a slight scale transform on hover */
+  transition: background-color 0.3s, transform 0.3s; 
+  transform: scale(1.05);
 }
 
 .sidenav ul p {
@@ -299,13 +272,13 @@
   transition: width 0.3s ease-in-out;
 }
 
-/* Main */
+
 .main {
   margin-left: 220px;
   height: 100%;
 }
 
-/* User Navbar */
+
 .main .nav {
   background: var(--white);
   border-bottom: 1.5px solid var(--mediumgrey);
@@ -424,8 +397,6 @@
   background-color: rgb(253, 253, 253);
 }
 
-/* Entry Section */
-/* new_entry */
 .main .new_entry form label {
   font-size: 10px;
   color: var(--black);
@@ -504,7 +475,7 @@
   width: 100%;
 }
 
-/* Entry Details */
+
 .entry_details .show_btn {
   font-size: 12px;
   color: var(--white);
@@ -561,7 +532,7 @@
 .entry_details .filters ul {
   width: 100%;
   list-style: none;
-  overflow: auto; /* Use 'auto' to show scrollbars only when needed */
+  overflow: auto;
   white-space: nowrap;
 }
 
@@ -750,7 +721,6 @@
   font-weight: 600;
 }
 
-/* entry details Delete Modal */
 .entry_details .detail_table .delete_Modal h5 {
   color: var(--cool-Green);
   font-weight: 600;
@@ -775,8 +745,6 @@
   font-weight: 600;
 }
 
-/* entry_details  Edit*/
-/* edit_entry_details_form */
 .entry_details .edit_entry_details_form input,
 .entry_details .edit_entry_details_form select {
   width: 220px;
@@ -801,7 +769,7 @@
   width: 100%;
 }
 
-/* Payment Form*/
+
 
 .main .payment_form form label {
   font-size: 11px;
@@ -888,7 +856,6 @@
   font-weight: 600;
 }
 
-/* Multiple entries form  */
 .multiple_form form .table thead th {
   font-size: 11px;
   color: var(--black);
@@ -909,7 +876,6 @@
   border: 0.5px solid var(--grays-dm-white);
 }
 
-/* payment Details table */
 .main .payment_details .thead {
   background-color: var(--accent-stonger-blue);
 }
@@ -934,13 +900,11 @@
   font-weight: 600;
 }
 
-/* Setting Section */
 
-/* entry_setting */
 .entry_setting ul {
   width: 100%;
   list-style: none;
-  overflow: auto; /* Use 'auto' to show scrollbars only when needed */
+  overflow: auto;
   white-space: nowrap;
 }
 .entry_setting ul li {
@@ -1028,7 +992,6 @@
   border-radius: 4px;
 }
 
-/* Entry Setting Table design */
 .entry_setting .details_table .label {
   background-color: var(--accent-lighter-blue);
   margin: 3px;
@@ -1080,7 +1043,7 @@
   color: var(--white);
 }
 
-/* payment Details Tables */
+
 .payment_details .show_btn {
   font-size: 12px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
@@ -1137,7 +1100,7 @@
 .payment_details .filters ul {
   width: 100%;
   list-style: none;
-  overflow: auto; /* Use 'auto' to show scrollbars only when needed */
+  overflow: auto; 
   white-space: nowrap;
 }
 
@@ -1348,7 +1311,7 @@
   color: var(--black);
   font-size: 12px;
 }
-/* payment_details  Delete Modal */
+
 .payment_details .detail_table .delete_Modal h5 {
   color: var(--cool-Green);
   font-weight: 600;
@@ -1373,7 +1336,7 @@
   font-weight: 600;
 }
 
-/* edit_entry_details_form */
+
 .payment_details .edit_entry_details_form input,
 .entry_details .edit_entry_details_form select {
   width: 220px;
