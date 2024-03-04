@@ -1,0 +1,1506 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&family=Inter:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
+
+* {
+  /* font-family: 'DM Sans', sans-serif; */
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+/* Colors */
+
+:root {
+  --white: #fff;
+  --grays-ligher-gray: #F4F4F4;
+  --grays-dm-white: #E1E1E1;
+  --grays-white-transparency: #FFFFFF26;
+  --grays-light-gray: #DBDBDB;
+  --black: #000000;
+  --grays-dm-background: #181818;
+  --grays-dm-input-bg: #272727;
+  --grays-card-color: #353535;
+  --grays-text-disable: #767676;
+  --grays-fill-disable: #C8C8C8;
+  --accent-stonger-blue: #2C64C3;
+  --accent-lighter-blue: #467EDC;
+  --accent-stong-blue: #3270D8;
+  --accent-blue-transparent: #467EDC33;
+  --cool-Green: #24CE85;
+  --b-Red: #D83232;
+  --bluepurple: #9780df;
+  --pureblack: #000000;
+  --pink: #F68BFF;
+  --purple: #6F47EB;
+  /* Text Colors */
+  --darkgrey: #5C5F62;
+  --lightgrey: #F9F9F9;
+  --lightblue: #EEE9FD;
+  --mediumgrey: #EDEDED;
+  --lightred: #FBE4E1;
+  --grey: #C5C5C5;
+  --error: #ffefef;
+  --success: rgb(162, 240, 162);
+  --whitegrey: #f9f9f9;
+  --btnbg: #ededed;
+}
+
+/* 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 4px;
+  border-radius: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--darkgrey);
+  border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--darkgrey);
+  border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #28363E;
+  border-radius: 20px;
+}
+ */
+
+
+.custom-toast-container {
+  .Toastify__toast {
+    font-size: 12px;
+  }
+  .Toastify{
+  height: 20px;
+  }
+}
+
+
+.admin-dashboard .data{
+  background: #FFFFFF;
+  border-radius: 2px;
+  height:100%;
+  width: 100%;
+  
+  }
+  
+
+  .admin-dashboard .data h5{
+    color: var(--cool-Green);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+  .admin-dashboard .data h6{
+    color: var(--accent-stonger-blue);
+    font-size: 12px;
+    font-weight: 600;
+    
+  }
+  
+  .admin-dashboard .data .side i{
+    font-size: 24px;
+    color: var(--accent-stonger-blue);
+
+  }
+
+  
+
+/* Cash in Hand */
+.cash_in_hand .account_details{
+  background-color: var(--darkgrey);
+}
+.cash_in_hand .account_details h4{
+  color: var(--white);
+}
+.cash_in_hand .account-text h6{
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--cool-Green);
+  cursor: pointer;
+
+}
+.cash_in_hand .account-text h5{
+  font-size: 22px;
+  color: var(--darkgrey);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.cash_in_hand .account-text .cash_in_btn{
+  background-color: var(--cool-Green);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 14px;
+
+}
+.cash_in_hand .account-text .cash_out_btn{
+  background-color: var(--b-Red);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 14px;
+}
+/* User Signup/Login Form  */
+.register_form {
+  border-radius: 10px;
+  position: relative;
+}
+.register_form h4{
+  font-size: 26px;
+  color: var(--accent-stonger-blue);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.register_form p{
+  color: var(--grays-card-color);
+  font-size: 14px;
+  line-height: 30px;
+  align-content: justify;
+  font-weight: 500;
+}
+.register_form p a{
+  color: var(--accent-stong-blue);
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 600;
+
+}
+.register_form label{
+  color: var(--grays-dm-background);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.register_form input, .register_form select{
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left:20px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-Weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+
+}
+
+
+.register_form input:focus, .register_form select:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+  
+}
+
+.register_form .submit_btn{
+  width: 100%;
+  background-color: var(--accent-stong-blue);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  height: 45px;
+}
+
+.register_form .password_btn{
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register_form .forgot a{
+  font-size: 12px;
+}
+
+
+
+/* Sidebar */
+.sidenav::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.sidenav {
+  height: 100%;
+  width: 220px;
+  position: fixed;
+  overflow-x: hidden;
+  background-color: var(--white);
+  overflow-x: scroll;
+  top: 0;
+  border-right: 1px solid var(--mediumgrey);
+  transition: width 0.3s ease-in-out;
+
+}
+
+.sidenav ul {
+  list-style-type: none;
+}
+
+.sidenav h4{
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--accent-stonger-blue);
+  font-weight: 600;
+
+}
+.sidenav .dropdown .btn{
+  color: var(--grays-text-disable);
+ font-weight: 600;
+  padding-left: 8%;
+  letter-spacing: .5px;
+  width: 97%;
+  margin-left: 0px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  font-size: 12px;
+
+}
+.sidenav .btn i{
+  margin-left: auto;
+}
+
+
+
+.sidenav li {
+  width: 97%;
+  margin-left: 0px;
+  padding: 8px 0px 8px 0px;
+  margin-top: 2px;
+  color: var(--grays-text-disable);
+  font-weight: 600;
+  font-size: 10px;
+  padding-left: 8%;
+  letter-spacing: .5px;
+}
+
+.sidenav li i{
+  font-size: 13px;
+
+}
+.sidenav li:hover{
+  cursor: pointer;
+  background-color: var(--accent-blue-transparent);
+  border-radius: 4px;
+  padding-left: 8%;
+  margin-top: 2px;
+  color: var(--accent-stonger-blue);
+  transition: background-color 0.3s, transform 0.3s; /* Add transition for background-color and transform */
+  transform: scale(1.05); /* Add a slight scale transform on hover */
+}
+
+
+.sidenav ul p {
+  color: #204b66;
+  padding-left: 10%;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+
+.top_btn {
+  position: relative;
+  z-index:999;
+}
+.top_btn .toggle_btn{
+  position: absolute;
+  left: 16%;
+  z-index: 999;
+  top: 10px;
+  border: 0px;
+  color: var(--white);
+  font-size: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 0px 0px solid var(--white);
+
+}
+
+.collapsed{
+  width: 0px;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Main */
+.main {
+  margin-left: 220px;
+  height: 100%;
+}
+
+/* User Navbar */
+.main .nav {
+  background: var(--white);
+  border-bottom: 1.5px solid var(--mediumgrey);
+  justify-content: right;
+  position: relative;
+}
+
+.main .nav .welcome {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+  color: var(-black);
+  box-shadow: 0px 0px 0px 0px solid var(--white);
+  position: absolute;
+  left: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.main .nav form {
+  position: relative;
+}
+
+.main .nav form i {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: var(--darkgrey);
+
+}
+
+.main .nav input {
+  width: 170%;
+  border: 0px;
+  background-color: var(--mediumgrey);
+  border-radius: 4px;
+  height: 38px;
+  padding-left: 40px;
+  padding-right: 10px;
+  color: var(--accent-stong-blue);
+  font-size: 12px;
+
+
+}
+
+.main .nav input:focus {
+  outline: none;
+}
+
+.main .nav input::placeholder {
+  font-size: 14px;
+  color: var(--darkgrey);
+}
+
+.main .nav .add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  height: 40px;
+  width: 40px;
+  border: 0px;
+  font-size: 14px;
+  font-weight: 800;
+  background-color: var(--mediumgrey);
+  color: var(--darkgrey);
+  box-shadow: 0px 0px 0px 0px solid var(--white);
+
+
+}
+
+.main .nav .bell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 100px;
+  height: 40px;
+  width: 40px;
+  border: 0px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--darkgrey);
+}
+
+
+.main h4{
+  color: var(--accent-lighter-blue);
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 22px;
+}
+
+.main h6{
+  color: var(--accent-lighter-blue);
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 18px;
+}
+.main  .upload_btn{
+  border: 1px solid var(--cool-Green);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background-color: var(--cool-Green);
+}
+.main .entry_btn{
+  border: 1px solid var(--accent-lighter-blue);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  color: var(--accent-lighter-blue);
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 10px;
+
+}
+
+.main form{
+  background-color: rgb(253, 253, 253);
+}
+
+/* Entry Section */
+/* new_entry */
+.main .new_entry form label{
+  font-size: 10px;
+  color: var(--black);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+
+
+}
+.main .new_entry form input,.main .new_entry form select{
+  width: 100%;
+  height:40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 12px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+}
+
+.main .new_entry form input:focus,.main .new_entry form select:focus{
+  border: 1px solid var(--accent-lighter-blue) !important;
+  outline: none;
+
+}
+
+.main .new_entry form .submit_btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--cool-Green);
+  color:'var(--black)';
+  border: 1px solid var(--cool-Green);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.main .new_entry form .del_btn{
+  background-color: var(--b-Red);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.main .new_entry .dropdown .btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--accent-stong-blue);
+  color:'var(--black)';
+  border: 1px solid var(--accent-stong-blue);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.main .new_entry .dropdown li{
+color: var(--black);
+padding-left: 20px;
+cursor: pointer;
+font-size: 12px;
+font-weight: 600;
+}
+.main .new_entry .dropdown li:hover{
+  background-color:var(--accent-stong-blue);
+  color: var(--white);
+}
+
+.main .new_entry  .image{
+  height: 150px;
+  width: 100%;
+}
+.main .new_entry .image img{
+  height: 100%;
+  width: 100%;
+}
+
+/* Entry Details */
+.entry_details .show_btn{
+   font-size: 12px;
+  color: var(--white);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background: var(--accent-stonger-blue);
+  font-weight: 600;
+  
+}
+.entry_details .pdf_btn{
+   box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--b-Red);
+  color:'var(--black)';
+  border: 1px solid var(--b-Red);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.entry_details .excel_btn{
+   box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--cool-Green);
+  color:'var(--black)';
+  border: 1px solid var(--cool-Green);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.entry_details .dropdown .btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--accent-stong-blue);
+  color:'var(--black)';
+  border: 1px solid var(--accent-stong-blue);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.entry_details  .dropdown li{
+color: var(--black);
+padding-left: 20px;
+cursor: pointer;
+font-size: 12px;
+font-weight: 600;
+}
+.entry_details .dropdown li:hover{
+  background-color:var(--accent-stong-blue);
+  color: var(--white);
+}
+.entry_details .filters{
+  overflow: scroll;
+}
+.entry_details .filters ul{
+  width: 100%;
+  list-style: none;
+  overflow: auto; /* Use 'auto' to show scrollbars only when needed */
+  white-space: nowrap; 
+}
+
+.entry_details .filters ul li{
+ display: inline;
+
+}
+
+.entry_details .filters select{
+  width: 100%;
+  height:30px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 2px;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:500;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+
+}
+.entry_details .filters select:focus{
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue) !important;
+}
+
+.entry_details input{
+  width: 100%;
+  height:45px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+
+
+}
+
+.entry_details input:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+
+}
+.entry_details .detail_table input, .entry_details .detail_table select{
+  width: auto;
+  height:45px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+
+
+}
+
+.entry_details .detail_table input:focus, .entry_details .detail_table select:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+
+}
+
+.entry_details .detail_table .personel_label{
+  background-color:var(--cool-Green); 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+.entry_details .detail_table .visit_label{
+  background-color:var(--accent-lighter-blue); 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.entry_details .detail_table .ticket_label{
+  background-color:var(--bluepurple); 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+.entry_details .detail_table .azad_label{
+  background-color:var(--purple); 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+.entry_details .detail_table .protector_label{
+  background-color:var(--accent-lighter-blue); 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+.entry_details .detail_table .edw_label{
+  background-color:green; 
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.entry_details .detail_table .label{
+  background-color:var(--grays-dm-input-bg); 
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.entry_details .detail_table .action{
+  background-color:var(--cool-Green); 
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+}
+.entry_details .detail_table img{
+  height: 50px;
+  width: 50px;
+}
+.entry_details .detail_table .bg_white{
+  background-color: var(--btnbg);
+  cursor: pointer;
+}
+.entry_details .detail_table .bg_white:hover{
+  background-color: var(--accent-lighter-blue);
+  
+}
+.entry_details .detail_table .bg_dark{
+  background-color: var(--white);
+  cursor: pointer;
+
+}
+.entry_details .detail_table .bg_dark:hover{
+  background-color: var(--accent-lighter-blue);
+}
+
+.entry_details .detail_table .data_td{
+  font-size: 11px;
+ font-weight: 600;
+ letter-spacing: 1px;
+ width: 100%;
+}
+.entry_details .detail_table p{
+  font-size: 12px;
+}
+.entry_details label{
+  font-size: 11px;
+  color: var(--black);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.entry_details select{
+  width: 100%;
+  height:40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  
+
+}
+
+
+.entry_details .detail_table .btn{
+  font-size: 12px;
+  color: var(--white);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+
+.entry_details .detail_table .edit_btn{
+  background-color: var(--accent-stong-blue);
+  font-weight: 600;
+
+}
+.entry_details .detail_table .delete_btn{
+  background-color: var(--b-Red);
+  font-weight: 600;
+
+}
+.entry_details .detail_table .save_btn{
+  background-color: var(--cool-Green);
+  font-weight: 600;
+}
+
+/* entry details Delete Modal */
+.entry_details .detail_table .delete_Modal h5{
+  color: var(--cool-Green);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+.entry_details .detail_table .delete_Modal p{
+  font-size: 14px;
+  color: var(--black);
+  font-weight: 600;
+}
+.entry_details .detail_table .delete_Modal .modal-header .btn-close{
+  font-size: 12px;
+  color: var(--accent-stonger-blue);
+}
+.entry_details .detail_table .delete_Modal .cancel_btn{
+  background-color: var(--b-Red);
+  font-weight: 600;
+}
+.entry_details .detail_table .delete_Modal .confirm_btn{
+  background-color: var(--accent-stonger-blue);
+  font-weight: 600;
+}
+
+/* entry_details  Edit*/
+/* edit_entry_details_form */
+.entry_details .edit_entry_details_form input,.entry_details .edit_entry_details_form select{
+  width: 220px;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 40px;
+  margin: 0px;
+ 
+   
+
+}
+.entry_details .edit_entry_details_form input:focus,.entry_details .edit_entry_details_form select:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+
+}
+.entry_details .edit_entry_details_form .update_btn{
+  font-size: 14px;
+  background-color: var(--cool-Green);
+  color: var(--white);
+  font-weight: 600;
+
+}
+.entry_details .edit_entry_details_form img{
+  height: 100%;
+  width: 100%;
+}
+
+
+/* Payment Form*/
+
+.main .payment_form form label{
+  font-size: 11px;
+  color: var(--black);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.main .payment_form .show_btn{
+  font-size: 12px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  font-weight: 600;
+  border :1px solid  var(--accent-stonger-blue);
+  color:  var(--accent-stonger-blue);
+  
+}
+.main .payment_form form .image{
+  width: 100%;
+  height: 200px;
+}
+.main .payment_form form .image img{
+  height: 100%;
+  width: 100%;
+}
+
+.main .payment_form form input[type="checkbox"]{
+  height: 15px;
+}
+.main .payment_form input, .main .payment_form select{
+  width: 100%;
+  height:40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+}
+
+.main .payment_form textarea{
+  width: 100%;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+}
+
+
+.main .payment_form form input:focus,.main .payment_form select:focus,.main .payment_form textarea:focus{
+  border: 1px solid var(--accent-lighter-blue) !important;
+  outline: none;
+
+}
+
+.main .payment_form form .submit_btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--cool-Green);
+  color:'var(--black)';
+  border: 1px solid var(--cool-Green);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.payment_form form .add_section_btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--b-Red);
+  color:'var(--black)';
+  border: none;
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Multiple entries form  */
+ .multiple_form form .table thead th{
+  font-size: 11px;
+  color: var(--black);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.multiple_form form .table tbody{
+  border-top: none !important;
+}
+
+.multiple_form form .table input{
+  width: auto !important;
+  color: var(--accent-stong-blue);
+  padding-left: 15px;
+  margin: 0px;
+  border-radius: 0;
+  background-color: transparent;
+  border: .5px solid var(--grays-dm-white);
+   
+
+}
+
+/* payment Details table */
+.main .payment_details .thead{
+  background-color: var(--accent-stonger-blue);
+}
+.main .payment_details .label{
+  color: white;
+}
+.main .payment_details .edit_btn{
+  background-color: var(--accent-stonger-blue);
+  color: white;
+  font-size: 8px;
+}
+.main .payment_details .del_btn{
+  background-color: var(--b-Red);
+  color: white;
+  font-size: 8px;
+}
+.main .payment_details .detail_btn{
+  font-size: 12px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  color: white;
+  background-color: var(--cool-Green);
+  font-weight: 600;
+}
+
+
+/* Setting Section */
+
+
+/* entry_setting */
+.entry_setting ul{
+  width: 100%;
+  list-style: none;
+  overflow: auto; /* Use 'auto' to show scrollbars only when needed */
+  white-space: nowrap; 
+}
+.entry_setting ul li{
+  display: inline;
+  cursor: pointer;
+  color: var(--black);
+}
+.entry_setting ul li .btn{
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+
+}
+
+.entry_setting .adding_form form{
+  background-color: var(--whitegrey);
+}
+
+.entry_setting h5{
+  font-size: 18px;
+  color: var(--accent-lighter-blue);
+  font-weight: 600;
+}
+.adding_form label{
+  color: var(--grays-dm-background);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.entry_setting .adding_form  input, .setting .adding_form select{
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left:20px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-Weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+}
+
+.entry_setting .adding_form  textarea{
+  width: 100%;
+  height: 70px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left:20px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-Weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+.entry_setting .adding_form textarea:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+  
+}
+
+.entry_setting .adding_form input:focus, .setting .adding_form select:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+  
+}
+
+.entry_setting .adding_form .image{
+  height: 150px;
+  width: 100%;
+}
+.entry_setting .adding_form .image img{
+  height: 100%;
+  width: 100%;
+}
+.entry_setting .adding_form .submit_btn{
+  background-color: var(--cool-Green);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  height: 35px;
+  border: none;
+  border-radius: 4px;
+}
+
+
+/* Entry Setting Table design */
+.entry_setting .details_table .label{
+  background-color:var(--accent-lighter-blue); 
+  margin: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.entry_setting .details_table .data_td{
+  font-size: 12px;
+ font-weight: 500;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+
+
+}
+.entry_setting .details_table .data_td input, .entry_setting .details_table .data_td select{
+  width: auto;
+  height:45px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);  
+}
+.entry_setting .details_table .data_td input:focus,.entry_setting .details_table .data_td select:focus{
+ 
+  border: 1px solid var(--accent-stong-blue);
+  outline: none;
+ 
+}
+
+.entry_setting .details_table img{
+  height: 50px;
+  width: 70px;
+}
+.entry_setting .details_table .edit_btn{
+  font-size: 12px;
+  background-color: var(--accent-lighter-blue);
+  color: var(--white);
+}
+
+.entry_setting .details_table .delete_btn{
+  font-size: 12px;
+  background-color: var(--b-Red);
+  color: var(--white);
+}
+
+
+
+
+/* payment Details Tables */
+.payment_details .show_btn{
+   font-size: 12px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  font-weight: 600;
+  border :1px solid  var(--accent-stonger-blue);
+  color:  var(--accent-stonger-blue);
+  
+}
+.payment_details .pdf_btn{
+   box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--b-Red);
+  color:'var(--black)';
+  border: 1px solid var(--b-Red);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.payment_details .excel_btn{
+   box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--cool-Green);
+  color:'var(--black)';
+  border: 1px solid var(--cool-Green);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.payment_details .dropdown .btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background-color:var(--accent-stong-blue);
+  color:'var(--black)';
+  border: 1px solid var(--accent-stong-blue);
+  color: var(--white);
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.payment_details  .dropdown li{
+color: var(--black);
+padding-left: 20px;
+cursor: pointer;
+font-size: 12px;
+font-weight: 600;
+}
+.payment_details .dropdown li:hover{
+  background-color:var(--accent-stong-blue);
+  color: var(--white);
+}
+.payment_details .filters{
+  overflow: scroll;
+}
+.payment_details .filters ul{
+  width: 100%;
+  list-style: none;
+  overflow: auto; /* Use 'auto' to show scrollbars only when needed */
+  white-space: nowrap; 
+}
+
+.payment_details .filters ul li{
+ display: inline;
+
+}
+
+.payment_details .filters select{
+  width: 100%;
+  height:30px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 2px;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:500;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+
+}
+.payment_details .filters select:focus{
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue) !important;
+}
+
+.payment_details input{
+  width: 100%;
+  height:45px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+  
+
+}
+
+.payment_details input:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+
+}
+.payment_details .detail_table input, .entry_details .detail_table select{
+  width: auto;
+  height:45px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+   
+  
+ 
+
+}
+
+.payment_details .detail_table input:focus, .entry_details .detail_table select:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+
+}
+
+.payment_details .detail_table .personel_label{
+  background-color:var(--cool-Green); 
+  margin: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+.payment_details .detail_table .visit_label{
+  background-color:var(--accent-lighter-blue); 
+  margin: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.payment_details .detail_table .ticket_label{
+  background-color:var(--bluepurple); 
+  margin: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+.payment_details .detail_table .azad_label{
+  background-color:var(--purple); 
+  margin: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+.payment_details .detail_table .protector_label{
+  background-color:var(--accent-lighter-blue); 
+  margin: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+.payment_details .detail_table .edw_label{
+  background-color:green; 
+  margin: 3px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+.payment_details .detail_table .label{
+  background-color:var(--grays-dm-input-bg); 
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  display:inline-flexbox;
+}
+
+.payment_details .detail_table .action{
+  background-color:var(--cool-Green); 
+  margin: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+.payment_details .detail_table img{
+  height: 50px;
+  width: 50px;
+}
+.payment_details .detail_table .bg_white{
+  background-color: var(--btnbg);
+  cursor: pointer;
+
+}
+.payment_details .detail_table .bg_white:hover{
+  background-color: var(--accent-lighter-blue);
+color: var(--white);
+}
+
+.payment_details .detail_table .bg_dark{
+  background-color: var(--white);
+  cursor: pointer;
+}
+.payment_details .detail_table .bg_dark:hover{
+  background-color: var(--accent-lighter-blue);
+
+}
+
+.payment_details .detail_table .data_td{
+  font-size: 11px;
+ font-weight: 600;
+ letter-spacing: 1px;
+ width: auto;
+ text-transform: capitalize;
+
+}
+.payment_details .detail_table .profit{
+  background-color:var(--cool-Green)
+}
+.payment_details .detail_table .loss{
+  background-color:var(--b-Red)
+}
+.payment_details label{
+  font-size: 11px;
+  color: var(--black);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.payment_details select{
+  width: 100%;
+  height:40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight:600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+ 
+   
+
+}
+
+
+.payment_details .detail_table .btn{
+  font-size: 12px;
+  color: var(--white);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+
+.payment_details .detail_table .edit_btn{
+  background-color: var(--accent-stong-blue);
+  font-weight: 600;
+
+}
+.payment_details .detail_table .delete_btn{
+  background-color: var(--b-Red);
+  font-weight: 600;
+  cursor:auto;
+
+
+}
+.payment_details .detail_table .save_btn{
+  background-color: var(--cool-Green);
+  font-weight: 600;
+}
+.supplier_Name h4{
+  color: var(--accent-stonger-blue);
+  font-size: 14px;
+}
+.supplier_Name h4 span{
+  color: var(--black);
+  font-size: 12px;
+}
+/* payment_details  Delete Modal */
+.payment_details .detail_table .delete_Modal h5{
+  color: var(--cool-Green);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+.payment_details .detail_table .delete_Modal p{
+  font-size: 14px;
+  color: var(--black);
+  font-weight: 600;
+}
+.payment_details .detail_table .delete_Modal .modal-header .btn-close{
+  font-size: 12px;
+  color: var(--accent-stonger-blue);
+}
+.payment_details .detail_table .delete_Modal .cancel_btn{
+  background-color: var(--b-Red);
+  font-weight: 600;
+}
+.payment_details .detail_table .delete_Modal .confirm_btn{
+  background-color: var(--accent-stonger-blue);
+  font-weight: 600;
+}
+
+
+/* edit_entry_details_form */
+.payment_details .edit_entry_details_form input,.entry_details .edit_entry_details_form select{
+  width: 220px;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 40px;
+  margin: 0px;
+ 
+   
+
+}
+.payment_details .edit_entry_details_form input:focus,.entry_details .edit_entry_details_form select:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+
+}
+.payment_details .edit_entry_details_form .update_btn{
+  font-size: 14px;
+  background-color: var(--cool-Green);
+  color: var(--white);
+  font-weight: 600;
+}
+.payment_details .edit_entry_details_form img{
+  height: 100%;
+  width: 100%;
+}
