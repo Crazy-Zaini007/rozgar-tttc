@@ -118,7 +118,7 @@ export default function ExpenseDetails() {
 
     let expenseId = editedEntry._id
     try {
-      const response = await fetch(`/auth/expenses/update/expense`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/expenses/update/expense`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export default function ExpenseDetails() {
       setIsLoading(true)
       let expenseId = expense._id
       try {
-        const response = await fetch(`/auth/expenses/delete/expense`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/expenses/delete/expense`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

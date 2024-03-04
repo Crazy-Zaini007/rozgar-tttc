@@ -11,7 +11,7 @@ export default function CategoryHook() {
   
   const getCategoryData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_category', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_category', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

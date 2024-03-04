@@ -10,7 +10,7 @@ export default function CPPHook() {
   // b- getting visa Supplier Purchase Parties
   const getCPPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_cpp', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_cpp', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

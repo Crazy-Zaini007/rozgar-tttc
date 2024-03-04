@@ -157,7 +157,7 @@ export default function AgentCandPaymentOutDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/agents/delete/single/payment_out`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/single/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export default function AgentCandPaymentOutDetails() {
       setLoading2(true)
       let personId = person._id
       try {
-        const response = await fetch(`/auth/agents/delete/person/payment_out`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/person/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -248,7 +248,7 @@ export default function AgentCandPaymentOutDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/agents/payment_out/update/single/person`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/payment_out/update/single/person`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -282,7 +282,7 @@ export default function AgentCandPaymentOutDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/agents/update/single/payment_out`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -335,7 +335,7 @@ export default function AgentCandPaymentOutDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/agents/update/all/payment_out`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/update/all/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -369,7 +369,7 @@ export default function AgentCandPaymentOutDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/agents/delete/all/payment_out`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/all/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

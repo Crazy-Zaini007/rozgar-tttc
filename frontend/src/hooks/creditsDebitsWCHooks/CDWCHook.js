@@ -7,7 +7,7 @@ export default function CDWCHook() {
     const { user } = useAuthContext()
     const getPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/credits&debits/with_cash_in_hand/get/payment_in_details', {
+            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/credits&debits/with_cash_in_hand/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +29,7 @@ export default function CDWCHook() {
 
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/credits&debits/with_cash_in_hand/get/payment_in_details', {
+            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/credits&debits/with_cash_in_hand/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

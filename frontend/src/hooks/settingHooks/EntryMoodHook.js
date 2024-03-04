@@ -10,7 +10,7 @@ export default function EntryMoodHook() {
 
   const getEntryMoodData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_entry_mode', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_entry_mode', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

@@ -11,7 +11,7 @@ export default function TSPHook() {
   
   const getTSPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_tsp',{
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_tsp',{
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

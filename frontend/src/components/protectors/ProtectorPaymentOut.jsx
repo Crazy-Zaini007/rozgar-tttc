@@ -133,7 +133,7 @@ export default function ProtectorPaymentOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/protectors/add/payment_out', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/protectors/add/payment_out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

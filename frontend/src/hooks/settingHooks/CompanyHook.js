@@ -10,7 +10,7 @@ export default function CompanyHook() {
 
   const getComapnyData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_company', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_company', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

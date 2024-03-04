@@ -11,7 +11,7 @@ export default function VPPHook() {
   
   const getVPPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_vpp', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_vpp', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

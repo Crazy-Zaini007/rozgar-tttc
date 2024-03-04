@@ -134,7 +134,7 @@ export default function SupCandPaymentOutReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/suppliers/payment_out/cash_out', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/suppliers/payment_out/cash_out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ export default function User() {
 
     const fetchUsers=async()=>{
         try {
-            const response = await fetch('/auth/user/get/users', {
+            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/user/get/users', {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },
@@ -73,7 +73,7 @@ export default function User() {
 
    
     try {
-      const response = await fetch(`/auth/user/update/users`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/user/update/users`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

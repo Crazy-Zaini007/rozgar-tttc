@@ -133,7 +133,7 @@ export default function SupPaymentOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/agents/add/payment_out', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/agents/add/payment_out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ export default function SupPaymentOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/agents/add/multiple/payment_out', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/agents/add/multiple/payment_out', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

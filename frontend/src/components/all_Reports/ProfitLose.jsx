@@ -20,7 +20,7 @@ export default function ProfitLose() {
    const getData = async (expense) => {
      setIsLoading(true)
      try {
-       const response = await fetch(`/auth/reports/get/all/payments/date`, {
+       const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/reports/get/all/payments/date`, {
         
          headers: {
            'Content-Type': 'application/json',

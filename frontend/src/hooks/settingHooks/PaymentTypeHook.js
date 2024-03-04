@@ -11,7 +11,7 @@ export default function PaymentTypeHook() {
 
   const getPaymentTypeData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_payment_type', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_payment_type', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

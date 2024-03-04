@@ -152,7 +152,7 @@ export default function TicketCandPaymentOutDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/ticket/candidates/delete/single/payment_out`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/ticket/candidates/delete/single/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ export default function TicketCandPaymentOutDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/ticket/candidates/update/single/payment_out`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/ticket/candidates/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -242,7 +242,7 @@ export default function TicketCandPaymentOutDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/ticket/candidates/update/all/payment_out`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/ticket/candidates/update/all/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -276,7 +276,7 @@ export default function TicketCandPaymentOutDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/ticket/candidates/delete/all/payment_out`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/ticket/candidates/delete/all/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

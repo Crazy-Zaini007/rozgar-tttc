@@ -49,7 +49,7 @@ export default function Currencies() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_currency', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/add_currency', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ const handleUpdate = async () => {
 
   let sellerId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_currency`, {
+    const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/update_currency`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_currency`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/delete_currency`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

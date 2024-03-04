@@ -158,7 +158,7 @@ export default function AzadVisaAgentPayInDetails() {
         setLoading1(true)
         let paymentId = payment._id
         try {
-            const response = await fetch(`/auth/azadVisa/agents/delete/single/payment_in`, {
+            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/delete/single/payment_in`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ export default function AzadVisaAgentPayInDetails() {
         setLoading2(true)
         let personId = person._id
         try {
-            const response = await fetch(`/auth/azadVisa/agents/delete/person/payment_in`, {
+            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/delete/person/payment_in`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -249,7 +249,7 @@ export default function AzadVisaAgentPayInDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`/auth/azadVisa/agents/payment_in/update/single/person`, {
+            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/payment_in/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -284,7 +284,7 @@ export default function AzadVisaAgentPayInDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`/auth/azadVisa/agents/update/single/payment_in`, {
+            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/update/single/payment_in`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -318,7 +318,7 @@ export default function AzadVisaAgentPayInDetails() {
         setLoading5(true)
         
         try {
-            const response = await fetch(`/auth/azadVisa/agents/delete/all/payment_in`, {
+            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/delete/all/payment_in`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -159,7 +159,7 @@ export default function AgentCandPaymentInDetails() {
       debugger
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/agents/delete/single/payment_in`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export default function AgentCandPaymentInDetails() {
     
       let personId = person._id
       try {
-        const response = await fetch(`/auth/agents/delete/person/payment_in`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/person/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ export default function AgentCandPaymentInDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/agents/payment_in/update/single/person`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/payment_in/update/single/person`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ export default function AgentCandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/agents/update/single/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -338,7 +338,7 @@ export default function AgentCandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/agents/update/all/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -373,7 +373,7 @@ export default function AgentCandPaymentInDetails() {
       setLoading5(true)
     
       try {
-        const response = await fetch(`/auth/agents/delete/all/payment_in`, {
+        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

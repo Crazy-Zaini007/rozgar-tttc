@@ -148,7 +148,7 @@ export default function SupPaymentInDetails() {
     debugger
     let paymentId = payment._id
     try {
-      const response = await fetch(`/auth/suppliers/delete/single/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/suppliers/delete/single/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ export default function SupPaymentInDetails() {
     debugger
     let personId = person._id
     try {
-      const response = await fetch(`/auth/suppliers/delete/person/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/suppliers/delete/person/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ export default function SupPaymentInDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/suppliers/payment_in/update/single/person/`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/suppliers/payment_in/update/single/person/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ export default function SupPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/suppliers/update/single/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/suppliers/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -322,7 +322,7 @@ export default function SupPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/suppliers/update/all/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/suppliers/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -356,7 +356,7 @@ export default function SupPaymentInDetails() {
     setLoading5(true)
     debugger
     try {
-      const response = await fetch(`/auth/suppliers/delete/all/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/suppliers/delete/all/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

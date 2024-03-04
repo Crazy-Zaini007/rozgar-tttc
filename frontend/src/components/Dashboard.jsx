@@ -32,7 +32,7 @@ const[loading4,setLoading4]=useState(false)
   const getCash = async () => {
   
     try {
-      const response = await fetch('/auth/reports/get/all/advance_payments', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/reports/get/all/advance_payments', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`

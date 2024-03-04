@@ -112,7 +112,7 @@ export default function AddExpense() {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch('/auth/expenses/add/expense', {
+            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/expenses/add/expense', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

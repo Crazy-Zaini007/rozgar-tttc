@@ -128,7 +128,7 @@ export default function AzadVisaAgentPayInReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/azadVisa/agents/payment_in/cash_out', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/payment_in/cash_out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

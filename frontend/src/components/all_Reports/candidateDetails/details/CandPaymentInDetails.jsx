@@ -144,7 +144,7 @@ export default function CandPaymentInDetails() {
     debugger
     let paymentId = payment._id
     try {
-      const response = await fetch(`/auth/candidates/delete/single/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/delete/single/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ export default function CandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/candidates/update/single/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ export default function CandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/candidates/update/all/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -263,7 +263,7 @@ export default function CandPaymentInDetails() {
     setLoading5(true)
     debugger
     try {
-      const response = await fetch(`/auth/candidates/delete/all/payment_in`, {
+      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/delete/all/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

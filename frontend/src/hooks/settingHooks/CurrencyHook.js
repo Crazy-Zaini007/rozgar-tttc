@@ -11,7 +11,7 @@ export default function CurrencyHook() {
 
   const getCurrencyData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_currency', {
+      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_currency', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
