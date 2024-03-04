@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const http = require('http');
+const cors = require('cors');
 //User Routes path
 const JoinUSer = require('./routes/user/User_Regi_Route')
 // Setting Route
@@ -48,6 +49,8 @@ const Employees =require('./routes/employees/employee_Route')
 //express app
 const app = express()
 const server = http.createServer(app)
+
+app.use(cors());
 
 //set the limit to 100MB for request
 app.use(bodyParser.json({ limit: '50mb' }))
