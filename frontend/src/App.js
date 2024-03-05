@@ -125,7 +125,7 @@ function App() {
 
           {/* User Signup/Login Routes */}
           <Route path='/' element={!user && <Signup></Signup>}></Route>
-          <Route path='/rozgar/login' element={!user && <Login></Login>}></Route>
+          <Route path='/rozgar/login' element={!user ? <Login></Login>:<Navigate to='/rozgar/dashboard'></Navigate>}></Route>
 
           {/* When user is Logged in */}
 

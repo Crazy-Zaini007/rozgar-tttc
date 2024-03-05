@@ -33,7 +33,7 @@ export default function SignupHook() {
                     setError(null)
                     setEmptyFields([' '])
                     setSuccess(json.message)
-                    console.log(success)
+                   
                     setTimeout(() => {
                 navigate('rozgar/login')
                         

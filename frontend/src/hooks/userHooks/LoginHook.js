@@ -35,7 +35,6 @@ export default function LoginHook() {
                 if(response.ok){
                     setTimeout(() => {
                     localStorage.setItem('user', JSON.stringify(json))
-
                         dispatch({type: 'USER_LOGIN', payload:json})
                          navigate('/rozgar/dashboard')
                    
