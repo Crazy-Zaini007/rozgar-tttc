@@ -115,7 +115,10 @@ import EmployeeDetails from './components/employee/EmployeeDetails.jsx'
 function App() {
   // user Info
   const { user } = useAuthContext()
-  
+    
+  if (user) {
+    return <Navigate to="/rozgar/dashboard" />;
+  }
   return (
     <div className="App">
       <BrowserRouter>
