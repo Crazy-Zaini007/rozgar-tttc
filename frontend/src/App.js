@@ -116,12 +116,11 @@ function App() {
   // user Info
   const { user } = useAuthContext()
     
-  if (user) {
-    return <Navigate to="/rozgar/dashboard" />;
-  }
+  
   return (
     <div className="App">
       <BrowserRouter>
+
         {user && <Sidebar></Sidebar>}
         {/* <Navbar/> */}
         <Routes>
