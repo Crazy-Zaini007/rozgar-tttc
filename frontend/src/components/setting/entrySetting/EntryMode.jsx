@@ -252,7 +252,7 @@ const deleteSupplier = async (data) => {
                     ):(
                       <>
                     <TableCell className='data_td text-center'>{index + 1}</TableCell>
-                  <TableCell className='data_td text-center'>{data.entry_mode}</TableCell>
+                  <TableCell className='data_td text-center'>{data.entry_Mode}</TableCell>
                  
                   <TableCell className='data_td text-center'>
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
