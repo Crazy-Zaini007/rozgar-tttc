@@ -129,7 +129,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
-              {loading1 ? <img height='35px' src={spinner}/>:<h5>{enteries ? enteries.filter(entry => entry.flight_Date.toLowerCase() !== "not fly" || entry.flight_Date.toLowerCase() !== "no fly").length:0 }</h5> }
+              {loading1 ? <img height='35px' src={spinner}/>:<h5>{enteries ? enteries.filter(entry => entry.flight_Date !== "Not Fly").length:0 }</h5> }
             
                 <h6 className='ml-2'>Total Fly <br /> </h6>
               </div>
