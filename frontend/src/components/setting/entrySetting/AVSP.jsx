@@ -54,7 +54,7 @@ export default function AVSP() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/add_avsp', {
+      const response = await fetch('/auth/setting/entry/add_avsp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/update_avsp`, {
+    const response = await fetch(`/auth/setting/entry/update_avsp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/delete_avsp`, {
+      const response = await fetch(`/auth/setting/entry/delete_avsp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

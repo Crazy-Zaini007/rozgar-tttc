@@ -68,7 +68,7 @@ export default function SupPaymentIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/candidates/add/multiple/payment_in', {
+      const response = await fetch('/auth/candidates/add/multiple/payment_in', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

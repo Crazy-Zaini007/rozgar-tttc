@@ -113,7 +113,7 @@ export default function NewEntry() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/entries/add/multiple_enteries', {
+      const response = await fetch('/auth/entries/add/multiple_enteries', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

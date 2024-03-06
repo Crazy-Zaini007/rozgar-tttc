@@ -52,7 +52,7 @@ export default function EntryMode() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/add_entry_mode', {
+      const response = await fetch('/auth/setting/entry/add_entry_mode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const handleUpdate = async () => {
 
   let myId = editedEntry._id
   try {
-    const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/update_entry_mode`, {
+    const response = await fetch(`/auth/setting/entry/update_entry_mode`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/delete_entry_mode`, {
+      const response = await fetch(`/auth/setting/entry/delete_entry_mode`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

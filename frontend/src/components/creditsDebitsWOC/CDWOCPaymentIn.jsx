@@ -72,7 +72,7 @@ export default function CDWOCPaymentIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/credits&debits/without_cash_in_hand/add/multiple/payment_in', {
+      const response = await fetch('/auth/credits&debits/without_cash_in_hand/add/multiple/payment_in', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

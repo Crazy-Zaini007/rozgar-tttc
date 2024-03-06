@@ -112,7 +112,7 @@ export default function CashinHand() {
     e.preventDefault()
 
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/cash_in_hand/add/cash', {
+      const response = await fetch('/auth/cash_in_hand/add/cash', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -208,7 +208,7 @@ export default function CashinHand() {
   const handleUpdate = async () => {
     setLoading1(true)
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/cash_in_hand/update/cash', {
+      const response = await fetch('/auth/cash_in_hand/update/cash', {
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json',
@@ -253,7 +253,7 @@ export default function CashinHand() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading(true)
       try {
-        const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/cash_in_hand/delete/cash', {
+        const response = await fetch('/auth/cash_in_hand/delete/cash', {
           method: "DELETE",
           headers: {
             'Content-Type': 'application/json',

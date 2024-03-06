@@ -54,7 +54,7 @@ export default function VPP() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/add_vpp', {
+      const response = await fetch('/auth/setting/entry/add_vpp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/update_vpp`, {
+    const response = await fetch(`/auth/setting/entry/update_vpp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -197,7 +197,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/delete_vpp`, {
+      const response = await fetch(`/auth/setting/entry/delete_vpp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -47,7 +47,7 @@ export default function Categories() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/add_category', {
+      const response = await fetch('/auth/setting/entry/add_category', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ const handleUpdate = async () => {
 
   let myId = editedEntry._id
   try {
-    const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/update_category`, {
+    const response = await fetch(`/auth/setting/entry/update_category`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/setting/entry/delete_category`, {
+      const response = await fetch(`/auth/setting/entry/delete_category`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

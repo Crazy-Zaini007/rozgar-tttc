@@ -69,7 +69,7 @@ export default function AgentCandPaymentIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/agents/add/multiple/payment_in', {
+      const response = await fetch('/auth/agents/add/multiple/payment_in', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

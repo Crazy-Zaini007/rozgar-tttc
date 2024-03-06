@@ -16,7 +16,7 @@ export default function VisitHook() {
     const { user } = useAuthContext()
     const getVisitAgentPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/agents/get/payment_in_details', {
+            const response = await fetch('/auth/visit/agents/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -38,7 +38,7 @@ export default function VisitHook() {
 
     const getVisitAgentPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/agents/get/payment_out_details', {
+            const response = await fetch('/auth/visit/agents/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -61,7 +61,7 @@ export default function VisitHook() {
 
     const getVisitSupplierPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/get/payment_in_details', {
+            const response = await fetch('/auth/visit/suppliers/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -83,7 +83,7 @@ export default function VisitHook() {
 
     const getVisitSupplierPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/get/payment_out_details', {
+            const response = await fetch('/auth/visit/suppliers/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -105,7 +105,7 @@ export default function VisitHook() {
 
     const getVisitCandPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/candidates/get/payment_in_details', {
+            const response = await fetch('/auth/visit/candidates/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -127,7 +127,7 @@ export default function VisitHook() {
 
     const getVisitCandPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/candidates/get/payment_out_details', {
+            const response = await fetch('/auth/visit/candidates/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

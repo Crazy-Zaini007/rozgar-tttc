@@ -113,7 +113,7 @@ export default function PaymentOutDetails() {
     debugger
     let paymentId = payment._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/credits&debits/without_cash_in_hand/delete/single/payment_in`, {
+      const response = await fetch(`/auth/credits&debits/without_cash_in_hand/delete/single/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export default function PaymentOutDetails() {
 
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/credits&debits/without_cash_in_hand/update/single/payment_out`, {
+      const response = await fetch(`/auth/credits&debits/without_cash_in_hand/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ export default function ProtectorHook() {
    
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/protectors/get/payment_out_details', {
+            const response = await fetch('/auth/protectors/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

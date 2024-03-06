@@ -79,7 +79,7 @@ export default function AddVacation() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/employees/add/employee/vacation', {
+      const response = await fetch('/auth/employees/add/employee/vacation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

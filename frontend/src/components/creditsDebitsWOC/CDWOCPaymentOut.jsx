@@ -137,7 +137,7 @@ export default function CDWOCPaymentOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/credits&debits/without_cash_in_hand/add/payment_in', {
+      const response = await fetch('/auth/credits&debits/without_cash_in_hand/add/payment_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ export default function CDWOCPaymentOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/credits&debits/without_cash_in_hand/add/multiple/payment_out', {
+      const response = await fetch('/auth/credits&debits/without_cash_in_hand/add/multiple/payment_out', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

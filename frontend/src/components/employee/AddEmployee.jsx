@@ -27,7 +27,7 @@ export default function AVPP() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/employees/add/employee', {
+      const response = await fetch('/auth/employees/add/employee', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

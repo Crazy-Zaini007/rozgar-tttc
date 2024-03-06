@@ -10,7 +10,7 @@ export default function AVSPHook() {
 
   const getAVSPData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_avsp', {
+      const response = await fetch('/auth/setting/entry/get_avsp', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

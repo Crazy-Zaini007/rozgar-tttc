@@ -157,7 +157,7 @@ export default function VisitSupPayOutDetails() {
             setLoading1(true)
             let paymentId = payment._id
             try {
-                const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/delete/single/payment_out`, {
+                const response = await fetch(`/auth/visit/suppliers/delete/single/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export default function VisitSupPayOutDetails() {
             setLoading2(true)
             let personId = person._id
             try {
-                const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/delete/person/payment_out`, {
+                const response = await fetch(`/auth/visit/suppliers/delete/person/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -248,7 +248,7 @@ export default function VisitSupPayOutDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/payment_out/update/single/person`, {
+            const response = await fetch(`/auth/visit/suppliers/payment_out/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ export default function VisitSupPayOutDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/update/single/payment_out`, {
+            const response = await fetch(`/auth/visit/suppliers/update/single/payment_out`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -314,7 +314,7 @@ export default function VisitSupPayOutDetails() {
         if (window.confirm('Are you sure you want to delete this record?')){
             setLoading5(true)
             try {
-                const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/suppliers/delete/all/payment_out`, {
+                const response = await fetch(`/auth/visit/suppliers/delete/all/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

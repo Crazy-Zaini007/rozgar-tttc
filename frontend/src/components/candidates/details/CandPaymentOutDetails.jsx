@@ -154,7 +154,7 @@ export default function CandPaymentOutDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/delete/single/payment_out`, {
+        const response = await fetch(`/auth/candidates/delete/single/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -190,7 +190,7 @@ export default function CandPaymentOutDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/update/single/payment_out`, {
+      const response = await fetch(`/auth/candidates/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ export default function CandPaymentOutDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/update/all/payment_out`, {
+      const response = await fetch(`/auth/candidates/update/all/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -278,7 +278,7 @@ export default function CandPaymentOutDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/candidates/delete/all/payment_out`, {
+        const response = await fetch(`/auth/candidates/delete/all/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -354,17 +354,13 @@ export default function CandPaymentOutDetails() {
             <th>TPO_PKR</th>
             <th>Total_Cash_Out</th>
             <th>RPO_PKR</th>
-            <th>TVPO_Oth_Curr</th>
-            <th>TPO_Curr</th>
-            <th>RPO_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
           </tr>
         </thead>
         <tbody>
           ${filteredTotalPaymentOut.map((entry, index) => `
             <tr key="${entry?._id}">
               <td>${index + 1}</td>
+              <td>${String(entry.createdAt)}</td>
               <td>${String(entry.supplierName)}</td>
               <td>${String(entry.pp_No)}</td>
               <td>${String(entry.entry_Mode)}</td>
@@ -377,11 +373,6 @@ export default function CandPaymentOutDetails() {
               <td>${String(entry.total_Payment_Out)}</td>
               <td>${String(entry.total_Cash_Out)}</td>
               <td>${String(entry.remaining_Balance)}</td>
-              <td>${String(entry.total_Visa_Price_Out_Curr)}</td>
-              <td>${String(entry.total_Payment_Out_Curr)}</td>
-              <td>${String(entry.remaining_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -551,6 +542,7 @@ export default function CandPaymentOutDetails() {
     filteredTotalPaymentOut.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
+        Date:payments.createdAt,
         Candidates:payments.supplierName,
         pp_No:payments.pp_No,
         entry_Mode:payments.entry_Mode,

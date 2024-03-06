@@ -134,7 +134,7 @@ export default function VisitCandSinglePayIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/candidates/add/payment_in', {
+      const response = await fetch('/auth/visit/candidates/add/payment_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ export default function VisitCandSinglePayIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/visit/candidates/add/multiple/payment_in', {
+      const response = await fetch('/auth/visit/candidates/add/multiple/payment_in', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

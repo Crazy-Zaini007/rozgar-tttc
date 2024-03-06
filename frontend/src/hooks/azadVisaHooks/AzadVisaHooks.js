@@ -7,7 +7,7 @@ export default function AzadVisaHook() {
     const { user } = useAuthContext()
     const getAzadAgentPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadvisa/agents/get/payment_in_details', {
+            const response = await fetch('/auth/azadvisa/agents/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +29,7 @@ export default function AzadVisaHook() {
 
     const getAzadAgentPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadvisa/agents/get/payment_out_details', {
+            const response = await fetch('/auth/azadvisa/agents/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -52,7 +52,7 @@ export default function AzadVisaHook() {
 
     const getAzadSupplierPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadvisa/suppliers/get/payment_in_details', {
+            const response = await fetch('/auth/azadvisa/suppliers/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -74,7 +74,7 @@ export default function AzadVisaHook() {
 
     const getAzadSupplierPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadvisa/suppliers/get/payment_out_details', {
+            const response = await fetch('/auth/azadvisa/suppliers/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -96,7 +96,7 @@ export default function AzadVisaHook() {
 
     const getAzadCandPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadvisa/candidates/get/payment_in_details', {
+            const response = await fetch('/auth/azadvisa/candidates/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -118,7 +118,7 @@ export default function AzadVisaHook() {
 
     const getAzadCandPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadvisa/candidates/get/payment_out_details', {
+            const response = await fetch('/auth/azadvisa/candidates/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

@@ -111,7 +111,7 @@ console.log('employees',employees)
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/employees/add/employee/payment', {
+      const response = await fetch('/auth/employees/add/employee/payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

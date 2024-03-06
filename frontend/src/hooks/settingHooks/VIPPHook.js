@@ -10,7 +10,7 @@ export default function VIPPHook() {
   // b- getting visa Supplier Purchase Parties
   const getVIPPData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_vipp', {
+      const response = await fetch('/auth/setting/entry/get_vipp', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

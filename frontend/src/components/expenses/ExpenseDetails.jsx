@@ -118,7 +118,7 @@ export default function ExpenseDetails() {
 
     let expenseId = editedEntry._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/expenses/update/expense`, {
+      const response = await fetch(`/auth/expenses/update/expense`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export default function ExpenseDetails() {
       setIsLoading(true)
       let expenseId = expense._id
       try {
-        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/expenses/delete/expense`, {
+        const response = await fetch(`/auth/expenses/delete/expense`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -184,6 +184,7 @@ export default function ExpenseDetails() {
   }
 
 
+            
   // individual payments filters
   const [date, setDate] = useState('')
   const [name, setName] = useState('')
@@ -216,10 +217,8 @@ export default function ExpenseDetails() {
         slip_No:payments.slip_No,
         details:payments.details,
         invoice:payments.invoice,
-        curr_Country:payments.curr_Country,
-        curr_Rate:payments.curr_Rate,
-        curr_Amount:payments.curr_Amount,
-      };
+        Total:filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)
+      }
 
       data.push(rowData);
     });
@@ -230,7 +229,9 @@ export default function ExpenseDetails() {
     XLSX.writeFile(wb, 'expenses.xlsx');
   };
 
-
+{/* <td>${String(entry?.curr_Country)}</td>
+            <td>${String(entry?.curr_Rate)}</td>
+            <td>${String(entry?.curr_Amount)}</td> */}
   const printExpenseTable = () => {
     // Convert JSX to HTML string
     const printContentString = `
@@ -247,9 +248,6 @@ export default function ExpenseDetails() {
         <th>Slip_No</th>
         <th>Details</th>
         <th>Invoice</th>
-        <th>CUR_Country</th>
-        <th>CUR_Rate</th>
-        <th>CUR_Amount</th>
         </tr>
       </thead>
       <tbody>
@@ -265,12 +263,16 @@ export default function ExpenseDetails() {
             <td>${String(entry?.slip_No)}</td>
             <td>${String(entry?.details)}</td>
             <td>${String(entry?.invoice)}</td>
-            <td>${String(entry?.curr_Country)}</td>
-            <td>${String(entry?.curr_Rate)}</td>
-            <td>${String(entry?.curr_Amount)}</td>
           </tr>
         `).join('')
       }
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0))}</td>
+      </tr>
     </tbody>
     </table>
     <style>
@@ -360,36 +362,42 @@ export default function ExpenseDetails() {
                     <label htmlFor="">Name:</label>
                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
+                      {[...new Set(expenses && expenses.map(data => data.name))].map(name => (
+                          <option key={name} value={name}>{name}</option>
+                        ))}
+                      {/* {expenses && expenses.map((data) => (
                         <option value={data.name} key={data._id}>{data.name}</option>
-                      ))}
+                      ))} */}
                     </select>
                   </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Expense Category:</label>
                     <select value={expe_Category} onChange={(e) => setExpe_Category(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.expCategory} key={data._id}>{data.expCategory}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.expCategory))].map(expCategory => (
+                          <option key={expCategory} value={expCategory}>{expCategory}</option>
+                        ))}
+                    
                     </select>
                   </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Payment Via:</label>
                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.payment_Via} key={data._id}>{data.payment_Via}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.payment_Via))].map(payment_Via => (
+                          <option key={payment_Via} value={payment_Via}>{payment_Via}</option>
+                        ))}
+                     
                     </select>
                   </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Payment Type:</label>
                     <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.payment_Type} key={data._id}>{data.payment_Type}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.payment_Type))].map(payment_Type => (
+                          <option key={payment_Type} value={payment_Type}>{payment_Type}</option>
+                        ))}
+                      
                     </select>
                   </div>
                 </div>

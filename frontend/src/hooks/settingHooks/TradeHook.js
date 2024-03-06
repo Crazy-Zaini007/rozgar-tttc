@@ -11,7 +11,7 @@ export default function TradeHook() {
 
   const getTradeData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_trade', {
+      const response = await fetch('/auth/setting/entry/get_trade', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

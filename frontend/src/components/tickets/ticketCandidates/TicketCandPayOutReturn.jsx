@@ -128,7 +128,7 @@ export default function TicketCandPayOutReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/ticket/candidates/payment_in/cash_out', {
+      const response = await fetch('/auth/ticket/candidates/payment_in/cash_out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

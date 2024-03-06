@@ -23,7 +23,7 @@ const[employees,setEmployees]=useState()
 const getProtectors=async()=>{
  
   try {
-    const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/reports/get/all/protector/payments', {
+    const response = await fetch('/auth/reports/get/all/protector/payments', {
      
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const getProtectors=async()=>{
 const getEmployees=async()=>{
  
   try {
-    const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/reports/get/all/employees/payments', {
+    const response = await fetch('/auth/reports/get/all/employees/payments', {
      
       headers: {
         'Content-Type': 'application/json',

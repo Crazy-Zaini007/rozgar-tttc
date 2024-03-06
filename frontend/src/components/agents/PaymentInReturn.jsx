@@ -127,7 +127,7 @@ export default function PaymentInReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/agents/payment_in/cash_out', {
+      const response = await fetch('/auth/agents/payment_in/cash_out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ export default function PaymentInReturn() {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
-                  <option value="">Choose Supplier</option>
+                  <option value="">Choose Agent</option>
                   {agent_Payments_In &&
                     agent_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>

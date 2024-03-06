@@ -11,7 +11,7 @@ export default function CountryHook() {
 
   const getCountryData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_country', {
+      const response = await fetch('/auth/setting/entry/get_country', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

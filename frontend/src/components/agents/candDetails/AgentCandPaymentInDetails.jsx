@@ -159,7 +159,7 @@ export default function AgentCandPaymentInDetails() {
       debugger
       let paymentId = payment._id
       try {
-        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/single/payment_in`, {
+        const response = await fetch(`/auth/agents/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export default function AgentCandPaymentInDetails() {
     
       let personId = person._id
       try {
-        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/person/payment_in`, {
+        const response = await fetch(`/auth/agents/delete/person/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ export default function AgentCandPaymentInDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/payment_in/update/single/person`, {
+      const response = await fetch(`/auth/agents/payment_in/update/single/person`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ export default function AgentCandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/update/single/payment_in`, {
+      const response = await fetch(`/auth/agents/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -338,7 +338,7 @@ export default function AgentCandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/update/all/payment_in`, {
+      const response = await fetch(`/auth/agents/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -373,7 +373,7 @@ export default function AgentCandPaymentInDetails() {
       setLoading5(true)
     
       try {
-        const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/agents/delete/all/payment_in`, {
+        const response = await fetch(`/auth/agents/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -861,7 +861,7 @@ export default function AgentCandPaymentInDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Suppliers:</label>
+                  <label htmlFor="">Agents:</label>
                   <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {agent_Payments_In && agent_Payments_In.map((data) => (
@@ -882,7 +882,7 @@ export default function AgentCandPaymentInDetails() {
                       <TableRow>
                         <TableCell className='label border'>SN</TableCell>
                         <TableCell className='label border'>Date</TableCell>
-                        <TableCell className='label border'>Suppliers</TableCell>
+                        <TableCell className='label border'>Agents</TableCell>
                         <TableCell className='label border'>TVPI_PKR</TableCell>
                         <TableCell className='label border'>TPI_PKR</TableCell>
                         <TableCell className='label border'>Total_Cash_Out</TableCell>
@@ -1052,7 +1052,7 @@ export default function AgentCandPaymentInDetails() {
           <div className="col-md-12 my-2">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
-                <h4 className='d-inline '>Agents Name: <span>{selectedSupplier}</span></h4>
+                <h4 className='d-inline '>Agent Name: <span>{selectedSupplier}</span></h4>
 
               </div>
               <div className="right">

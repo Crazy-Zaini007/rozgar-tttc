@@ -11,7 +11,7 @@ export default function TPPHook() {
   
   const getTPPData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_tpp', {
+      const response = await fetch('/auth/setting/entry/get_tpp', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

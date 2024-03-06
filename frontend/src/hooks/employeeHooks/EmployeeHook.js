@@ -9,7 +9,7 @@ export default function EmployeeHook() {
     const getEmployees = async () => {
 
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/employees/get/employees', {
+            const response = await fetch('/auth/employees/get/employees', {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },

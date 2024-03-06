@@ -254,7 +254,7 @@ export default function SingleEntry() {
     setLoading(true)
 
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/entries/add/single_entry', {
+      const response = await fetch('/auth/entries/add/single_entry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

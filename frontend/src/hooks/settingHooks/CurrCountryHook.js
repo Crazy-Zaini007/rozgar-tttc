@@ -10,7 +10,7 @@ export default function CurrCountryHook() {
 
   const getCurrCountryData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_curr_country', {
+      const response = await fetch('/auth/setting/entry/get_curr_country', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

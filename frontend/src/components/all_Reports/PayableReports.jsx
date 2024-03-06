@@ -12,7 +12,7 @@ export default function PayableReports() {
   const getData = async () => {
     
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/reports/get/all/persons', {
+      const response = await fetch('/auth/reports/get/all/persons', {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },

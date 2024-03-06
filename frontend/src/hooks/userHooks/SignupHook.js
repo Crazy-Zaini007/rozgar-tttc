@@ -13,7 +13,7 @@ export default function SignupHook() {
         setLoading(true)
         setSuccess(false)
             try {
-                const response=await fetch('https://api-rozgar-tttc.onrender.com/auth/user/register',{
+                const response=await fetch('/auth/user/register',{
                     method:'POST',
                     headers:{
                         'Content-Type':'application/json'

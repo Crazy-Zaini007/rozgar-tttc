@@ -8,7 +8,7 @@ export default function AVPPHook() {
   const { user } = useAuthContext();
   const getAVPPData = async () => {
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/setting/entry/get_avpp', {
+      const response = await fetch('/auth/setting/entry/get_avpp', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

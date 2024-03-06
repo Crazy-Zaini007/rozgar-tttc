@@ -9,7 +9,7 @@ export default function EntryHook() {
     const getExpenses = async () => {
 
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/expenses/get/expenses', {
+            const response = await fetch('/auth/expenses/get/expenses', {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },

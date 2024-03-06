@@ -159,7 +159,7 @@ export default function VisitAgentPayInDetails() {
             setLoading1(true)
             let paymentId = payment._id
             try {
-                const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/agents/delete/single/payment_in`, {
+                const response = await fetch(`/auth/visit/agents/delete/single/payment_in`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export default function VisitAgentPayInDetails() {
         
             let personId = person._id
             try {
-                const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/agents/delete/person/payment_in`, {
+                const response = await fetch(`/auth/visit/agents/delete/person/payment_in`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -251,7 +251,7 @@ export default function VisitAgentPayInDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/agents/payment_in/update/single/person`, {
+            const response = await fetch(`/auth/visit/agents/payment_in/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -286,7 +286,7 @@ export default function VisitAgentPayInDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/agents/update/single/payment_in`, {
+            const response = await fetch(`/auth/visit/agents/update/single/payment_in`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -319,7 +319,7 @@ export default function VisitAgentPayInDetails() {
         if (window.confirm('Are you sure you want to delete this record?')){
             setLoading5(true)
             try {
-                const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/visit/agents/delete/all/payment_in`, {
+                const response = await fetch(`/auth/visit/agents/delete/all/payment_in`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -811,7 +811,7 @@ export default function VisitAgentPayInDetails() {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Suppliers:</label>
+                                    <label htmlFor="">Agents:</label>
                                     <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {visitAgent_Payments_In && visitAgent_Payments_In.map((data) => (

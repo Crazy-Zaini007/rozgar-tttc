@@ -159,7 +159,7 @@ export default function AzadVisaAgentPayOutDetails() {
         setLoading1(true)
         let paymentId = payment._id
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/delete/single/payment_out`, {
+            const response = await fetch(`/auth/azadVisa/agents/delete/single/payment_out`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ export default function AzadVisaAgentPayOutDetails() {
         setLoading2(true)
         let personId = person._id
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/delete/person/payment_out`, {
+            const response = await fetch(`/auth/azadVisa/agents/delete/person/payment_out`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -250,7 +250,7 @@ export default function AzadVisaAgentPayOutDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/payment_out/update/single/person`, {
+            const response = await fetch(`/auth/azadVisa/agents/payment_out/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ export default function AzadVisaAgentPayOutDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/update/single/payment_out`, {
+            const response = await fetch(`/auth/azadVisa/agents/update/single/payment_out`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -316,7 +316,7 @@ export default function AzadVisaAgentPayOutDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
         setLoading5(true)
         try {
-            const response = await fetch(`https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/delete/all/payment_out`, {
+            const response = await fetch(`/auth/azadVisa/agents/delete/all/payment_out`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -804,7 +804,7 @@ export default function AzadVisaAgentPayOutDetails() {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Suppliers:</label>
+                                    <label htmlFor="">Agents:</label>
                                     <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {azadAgent_Payments_Out && azadAgent_Payments_Out.map((data) => (

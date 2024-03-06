@@ -134,7 +134,7 @@ export default function AzadVisaAgentSinglePayIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/add/payment_in', {
+      const response = await fetch('/auth/azadVisa/agents/add/payment_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ export default function AzadVisaAgentSinglePayIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/add/multiple/payment_in', {
+      const response = await fetch('/auth/azadVisa/agents/add/multiple/payment_in', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

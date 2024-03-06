@@ -7,7 +7,7 @@ export default function SupplierHook() {
     const { user } = useAuthContext()
     const getPaymentsIn = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/suppliers/get/payment_in_details', {
+            const response = await fetch('/auth/suppliers/get/payment_in_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +29,7 @@ export default function SupplierHook() {
 
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/suppliers/get/payment_out_details', {
+            const response = await fetch('/auth/suppliers/get/payment_out_details', {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

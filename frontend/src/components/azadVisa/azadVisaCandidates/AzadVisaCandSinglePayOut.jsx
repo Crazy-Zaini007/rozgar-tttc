@@ -134,7 +134,7 @@ export default function AzadVisaCandSinglePayOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadVisa/candidates/add/payment_Out', {
+      const response = await fetch('/auth/azadVisa/candidates/add/payment_Out', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ export default function AzadVisaCandSinglePayOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('https://api-rozgar-tttc.onrender.com/auth/azadVisa/agents/add/multiple/payment_out', {
+      const response = await fetch('/auth/azadVisa/agents/add/multiple/payment_out', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

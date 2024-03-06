@@ -17,7 +17,7 @@ export default function LoginHook() {
         setLoading(true)
         setSuccess(false)
             try {
-                const response=await fetch('https://api-rozgar-tttc.onrender.com/auth/user/login',{
+                const response=await fetch('/auth/user/login',{
                     method:'POST',
                     headers:{
                         'Content-Type':'application/json'
