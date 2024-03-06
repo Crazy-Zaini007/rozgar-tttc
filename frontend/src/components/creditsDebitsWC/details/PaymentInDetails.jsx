@@ -24,6 +24,7 @@ export default function PaymentInDetails() {
   const { getPaymentsIn } = CDWCHook()
   const { user } = useAuthContext()
   const dispatch = useDispatch()
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchData = async () => {
     try {
@@ -118,7 +119,7 @@ export default function PaymentInDetails() {
       setIsLoading(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/credits&debits/with_cash_in_hand/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -153,7 +154,7 @@ export default function PaymentInDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setIsLoading(true)
       try {
-        const response = await fetch(`/auth/credits&debits/with_cash_in_hand/delete/total/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/delete/total/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -189,7 +190,7 @@ export default function PaymentInDetails() {
 
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/credits&debits/with_cash_in_hand/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

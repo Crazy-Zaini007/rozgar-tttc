@@ -3,6 +3,7 @@ import { getCrediterPurchaseParty } from '../../redux/reducers/settingSlice';
 import { useDispatch } from 'react-redux';
 
 export default function CPPHook() {
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const dispatch = useDispatch();
 
@@ -10,7 +11,7 @@ export default function CPPHook() {
   // b- getting visa Supplier Purchase Parties
   const getCPPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_cpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_cpp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

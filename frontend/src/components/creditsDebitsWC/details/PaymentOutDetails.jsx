@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 export default function PaymentOutDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [, setNewMessage] = useState('')
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { getPaymentsOut } = CDWCHook()
   const { user } = useAuthContext()
   const dispatch = useDispatch()
@@ -111,7 +111,7 @@ export default function PaymentOutDetails() {
       setIsLoading(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/credits&debits/with_cash_in_hand/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export default function PaymentOutDetails() {
 
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/credits&debits/with_cash_in_hand/update/single/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

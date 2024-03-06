@@ -126,6 +126,7 @@ export default function VisitCandSinglePayOut() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -134,7 +135,7 @@ export default function VisitCandSinglePayOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/visit/candidates/add/payment_Out', {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/add/payment_Out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +245,7 @@ export default function VisitCandSinglePayOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/visit/candidates/add/multiple/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/add/multiple/payment_out`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

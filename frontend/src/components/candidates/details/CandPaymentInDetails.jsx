@@ -22,6 +22,7 @@ export default function CandPaymentInDetails() {
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
 
@@ -154,7 +155,7 @@ export default function CandPaymentInDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/candidates/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/candidates/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -190,7 +191,7 @@ export default function CandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/candidates/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -243,7 +244,7 @@ export default function CandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/candidates/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -275,7 +276,7 @@ export default function CandPaymentInDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/candidates/delete/all/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/candidates/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -351,11 +352,7 @@ export default function CandPaymentInDetails() {
             <th>TPI_PKR</th>
             <th>Total_Cash_Out</th>
             <th>RPI_PKR</th>
-            <th>TVPI_Oth_Curr</th>
-            <th>TPI_Curr</th>
-            <th>RPI_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
+            
           </tr>
         </thead>
         <tbody>

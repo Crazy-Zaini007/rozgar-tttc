@@ -3,11 +3,13 @@ import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getAgent_Payments_In, getAgent_Payments_Out } from '../../redux/reducers/agentSlice'
 
 export default function AgentHook() {
+    const apiUrl = process.env.REACT_APP_API_URL;
+    
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const getPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/agents/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/agents/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +31,7 @@ export default function AgentHook() {
 
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/agents/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/agents/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

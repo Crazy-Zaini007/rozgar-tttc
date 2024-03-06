@@ -10,10 +10,11 @@ export default function User() {
     const [loading2,setLoading2]=useState(false)
     const [users,setUsers]=useState()
     const [, setNewMessage] = useState('')
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const fetchUsers=async()=>{
         try {
-            const response = await fetch('/auth/user/get/users', {
+            const response = await fetch(`${apiUrl}/auth/user/get/users`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },
@@ -73,7 +74,7 @@ export default function User() {
 
    
     try {
-      const response = await fetch(`/auth/user/update/users`, {
+      const response = await fetch(`${apiUrl}/auth/user/update/users`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

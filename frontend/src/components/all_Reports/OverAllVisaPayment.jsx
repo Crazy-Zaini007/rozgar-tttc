@@ -9,10 +9,12 @@ export default function Invoice() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const getData = async () => {
     
     try {
-      const response = await fetch('/auth/reports/get/all/persons', {
+      const response = await fetch(`${apiUrl}/auth/reports/get/all/persons`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },

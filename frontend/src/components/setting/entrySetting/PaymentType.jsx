@@ -39,13 +39,14 @@ export default function PaymentType() {
 
   // getting data from redux store
   const paymentType = useSelector((state) => state.setting.paymentType);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting form 
   const handleForm = async (e) => {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_payment_type', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_payment_type`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ const handleUpdate = async () => {
 
   let myId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_payment_type`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_payment_type`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -157,7 +158,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_payment_type`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_payment_type`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

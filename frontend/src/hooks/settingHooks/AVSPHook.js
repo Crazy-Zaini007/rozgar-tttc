@@ -7,10 +7,11 @@ export default function AVSPHook() {
   const dispatch = useDispatch();
 
   const { user } = useAuthContext();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const getAVSPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_avsp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_avsp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

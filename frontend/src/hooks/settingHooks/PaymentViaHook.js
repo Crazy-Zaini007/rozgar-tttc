@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 export default function PaymentViaHook() {
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
 
   const getPaymentViaData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_payment_via', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_payment_via`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

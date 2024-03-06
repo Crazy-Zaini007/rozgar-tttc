@@ -8,16 +8,16 @@ export default function LoginHook() {
     const [error,setError]=useState(null)
     const [success,setSuccess]=useState(null)
     const[emptyFields,setEmptyFields]=useState([])
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const navigate=useNavigate()
     
     // fetching api end-point to register a new user
     const userLogin=async(userName,password)=>{
-    
         setLoading(true)
         setSuccess(false)
             try {
-                const response=await fetch('/auth/user/login',{
+                const response=await fetch(`${apiUrl}/auth/user/login`,{
                     method:'POST',
                     headers:{
                         'Content-Type':'application/json'

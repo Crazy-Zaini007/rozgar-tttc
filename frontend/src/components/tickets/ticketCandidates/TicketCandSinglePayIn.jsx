@@ -24,6 +24,7 @@ import * as XLSX from 'xlsx';
 export default function TicketCandSinglePayIn() {
   const dispatch = useDispatch();
   // getting data from redux store 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
@@ -134,7 +135,7 @@ export default function TicketCandSinglePayIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/ticket/candidates/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +246,7 @@ export default function TicketCandSinglePayIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/ticket/candidates/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

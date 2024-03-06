@@ -40,6 +40,7 @@ export default function PaymentVia() {
 
   // getting data from redux store
   const paymentVia = useSelector((state) => state.setting.paymentVia);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
 
@@ -48,7 +49,7 @@ export default function PaymentVia() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_payment_via', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_payment_via`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +126,7 @@ const handleUpdate = async () => {
 
   let myId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_payment_via`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_payment_via`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_payment_via`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_payment_via`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

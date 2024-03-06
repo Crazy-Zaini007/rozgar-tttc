@@ -84,6 +84,7 @@ export default function AzadVisaAgentPayOutReturn() {
   }
 
   const [section, setSection] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   const handleSection = () => {
@@ -129,7 +130,7 @@ export default function AzadVisaAgentPayOutReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/azadVisa/agents/payment_out/cash_out', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/payment_out/cash_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

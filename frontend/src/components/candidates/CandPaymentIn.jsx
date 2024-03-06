@@ -62,13 +62,14 @@ export default function SupPaymentIn() {
     setMultiplePayment(updatedData);
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
   
   const [loading, setLoading] = useState(false)
   const handleUploadList =async (e) => {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/candidates/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/candidates/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

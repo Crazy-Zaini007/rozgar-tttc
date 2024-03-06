@@ -6,12 +6,13 @@ export default function CurrencyHook() {
 
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
 
   const getCurrencyData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_currency', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_currency`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

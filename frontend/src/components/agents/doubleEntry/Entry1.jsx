@@ -29,6 +29,7 @@ export default function Entry1() {
   const categories = useSelector((state) => state.setting.categories);
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In)
   const [selectedSupplier, setSelectedSupplier] = useState('');
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
@@ -130,7 +131,7 @@ export default function Entry1() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/agents/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

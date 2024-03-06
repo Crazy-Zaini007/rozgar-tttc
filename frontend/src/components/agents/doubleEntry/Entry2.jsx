@@ -62,6 +62,7 @@ export default function Entry2() {
 
 
   const [option, setOption] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Form input States
@@ -133,7 +134,7 @@ export default function Entry2() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/agents/add/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/agents/add/payment_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

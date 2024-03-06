@@ -6,12 +6,13 @@ export default function TradeHook() {
 
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
 
   const getTradeData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_trade', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_trade`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

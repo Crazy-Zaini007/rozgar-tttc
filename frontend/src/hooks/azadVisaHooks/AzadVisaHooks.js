@@ -3,11 +3,13 @@ import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getAzadAgent_Payments_In, getAzadAgent_Payments_Out, getAzadSupplier_Payments_In, getAzadSupplier_Payments_Out, getAzadCand_Payments_In, getAzadCand_Payments_Out } from '../../redux/reducers/azadVisaSlice'
 
 export default function AzadVisaHook() {
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const getAzadAgentPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/azadvisa/agents/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/azadvisa/agents/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +31,7 @@ export default function AzadVisaHook() {
 
     const getAzadAgentPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/azadvisa/agents/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/azadvisa/agents/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -52,7 +54,7 @@ export default function AzadVisaHook() {
 
     const getAzadSupplierPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/azadvisa/suppliers/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/azadvisa/suppliers/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -74,7 +76,7 @@ export default function AzadVisaHook() {
 
     const getAzadSupplierPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/azadvisa/suppliers/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/azadvisa/suppliers/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -96,7 +98,7 @@ export default function AzadVisaHook() {
 
     const getAzadCandPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/azadvisa/candidates/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/azadvisa/candidates/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -118,7 +120,7 @@ export default function AzadVisaHook() {
 
     const getAzadCandPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/azadvisa/candidates/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/azadvisa/candidates/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

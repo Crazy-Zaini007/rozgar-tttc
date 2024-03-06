@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 export default function CompanyHook() {
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
 
   const getComapnyData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_company', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_company`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

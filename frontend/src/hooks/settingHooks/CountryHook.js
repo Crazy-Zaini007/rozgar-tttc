@@ -7,11 +7,12 @@ export default function CountryHook() {
 
   const dispatch = useDispatch();
 
+    const apiUrl = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
 
   const getCountryData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_country', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_country`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

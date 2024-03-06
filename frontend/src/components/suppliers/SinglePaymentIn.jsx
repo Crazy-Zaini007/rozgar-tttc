@@ -120,6 +120,7 @@ export default function SinglePaymentIn() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -128,7 +129,7 @@ export default function SinglePaymentIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/suppliers/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

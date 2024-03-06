@@ -39,6 +39,7 @@ export default function AzadVisaCandPaymentInDetails() {
   const { user } = useAuthContext()
   const dispatch = useDispatch()
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchData = async () => {
 
@@ -155,7 +156,7 @@ export default function AzadVisaCandPaymentInDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/azadVisa/candidates/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -191,7 +192,7 @@ export default function AzadVisaCandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/azadVisa/candidates/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +245,7 @@ export default function AzadVisaCandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/azadVisa/candidates/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -276,7 +277,7 @@ export default function AzadVisaCandPaymentInDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/azadVisa/candidates/delete/all/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

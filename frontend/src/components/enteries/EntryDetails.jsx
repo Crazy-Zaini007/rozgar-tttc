@@ -32,6 +32,7 @@ const EntryDetails = () => {
   const { getEntries } = EntryHook();
   const { user } = useAuthContext();
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editMode, setEditMode] = useState(false);
   const [editedEntry, setEditedEntry] = useState({});
@@ -121,7 +122,7 @@ const EntryDetails = () => {
    
       const entryId = entry._id;
       try {
-        const response = await fetch('/auth/entries/delete/entry', {
+        const response = await fetch(`${apiUrl}/auth/entries/delete/entry`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -215,7 +216,7 @@ const EntryDetails = () => {
     setUpdateLoading(true)
     let entryId = editedEntry._id
     try {
-      const response = await fetch(`/auth/entries/update/single_entry/${entryId}`, {
+      const response = await fetch(`${apiUrl}/auth/entries/update/single_entry/${entryId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

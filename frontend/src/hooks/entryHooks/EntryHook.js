@@ -9,11 +9,12 @@ export default function EntryHook() {
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false)
   const [, setNewMessage] = useState('')
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const getEntries = async () => {
     setLoading(true)
     try {
-      const response = await fetch('/auth/entries/get/enteries', {
+      const response = await fetch(`${apiUrl}/auth/entries/get/enteries`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -34,7 +35,7 @@ export default function EntryHook() {
   // Deleting a single entry Hook
   const delEntry = async (entryId) => {
     try {
-      const response = await fetch('/auth/entries/delete/entry', {
+      const response = await fetch(`${apiUrl}/auth/entries/delete/entry`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

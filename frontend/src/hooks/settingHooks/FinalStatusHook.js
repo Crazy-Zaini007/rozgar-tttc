@@ -6,12 +6,13 @@ export default function FinalStatusHook() {
 
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
 
   const getFinalStatusData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_final_status', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_final_status`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

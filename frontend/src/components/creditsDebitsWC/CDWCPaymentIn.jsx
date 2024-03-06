@@ -12,6 +12,7 @@ export default function CDWCPaymentIn() {
   const [single, setSingle] = useState(0)
   const [, setNewMessage] = useState('')
   const [loading, setLoading] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const setEntry = (index) => {
     setSingle(index)
@@ -71,7 +72,7 @@ export default function CDWCPaymentIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/credits&debits/with_cash_in_hand/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

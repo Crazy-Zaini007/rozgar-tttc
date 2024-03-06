@@ -41,6 +41,7 @@ export default function FinalStaus() {
   // getting data from redux store
   const finalStatus = useSelector((state) => state.setting.finalStatus);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Submitting form 
@@ -48,7 +49,7 @@ export default function FinalStaus() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_final_status', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_final_status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ const handleUpdate = async () => {
 
   let myId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_final_status`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_final_status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -158,7 +159,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_final_status`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_final_status`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

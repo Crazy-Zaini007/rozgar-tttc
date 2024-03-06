@@ -22,6 +22,7 @@ export default function CandPaymentOutDetails() {
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
 
@@ -135,7 +136,7 @@ export default function CandPaymentOutDetails() {
     debugger
     let paymentId = payment._id
     try {
-      const response = await fetch(`/auth/candidates/delete/single/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/delete/single/payment_out`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +170,7 @@ export default function CandPaymentOutDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/candidates/update/single/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -223,7 +224,7 @@ export default function CandPaymentOutDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/candidates/update/all/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/update/all/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -257,7 +258,7 @@ export default function CandPaymentOutDetails() {
     setLoading5(true)
     debugger
     try {
-      const response = await fetch(`/auth/candidates/delete/all/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/delete/all/payment_out`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -331,11 +332,6 @@ export default function CandPaymentOutDetails() {
             <th>TPO_PKR</th>
             <th>Total_Cash_Out</th>
             <th>RPO_PKR</th>
-            <th>TVPO_Oth_Curr</th>
-            <th>TPO_Curr</th>
-            <th>RPO_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
           </tr>
         </thead>
         <tbody>
@@ -354,12 +350,6 @@ export default function CandPaymentOutDetails() {
               <td>${String(entry.total_Payment_Out)}</td>
               <td>${String(entry.total_Cash_Out)}</td>
               <td>${String(entry.remaining_Balance)}</td>
-              <td>${String(entry.country)}</td>
-              <td>${String(entry.total_Visa_Price_Out_Curr)}</td>
-              <td>${String(entry.total_Payment_Out_Curr)}</td>
-              <td>${String(entry.remaining_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
             </tr>
           `).join('')}
         </tbody>

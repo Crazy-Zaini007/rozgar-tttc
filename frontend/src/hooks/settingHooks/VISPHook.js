@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 export default function VISPHook() {
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
   // b- getting visa Supplier Purchase Parties
   const getVISPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_visp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_visp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

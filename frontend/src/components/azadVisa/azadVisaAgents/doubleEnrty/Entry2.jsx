@@ -125,6 +125,7 @@ export default function Entry2() {
   };
 
 
+  const apiUrl = process.env.REACT_APP_API_URL;
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
@@ -132,7 +133,7 @@ export default function Entry2() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/azadVisa/agents/add/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/add/payment_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

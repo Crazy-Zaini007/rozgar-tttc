@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 export default function CPPHook() {
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
   // b- getting visa Supplier Purchase Parties
   const getProtector = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_protector', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_protector`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

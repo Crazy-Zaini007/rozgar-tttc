@@ -28,6 +28,7 @@ export default function Entry2() {
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const ticketCand_Payments_Out = useSelector((state) => state.tickets.ticketCand_Payments_Out)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
@@ -132,7 +133,7 @@ export default function Entry2() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/ticket/candidates/add/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

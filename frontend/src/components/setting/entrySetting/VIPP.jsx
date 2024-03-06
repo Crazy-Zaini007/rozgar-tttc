@@ -43,6 +43,7 @@ export default function VIPP() {
 
   // getting data from redux store
   const visitPurchaseParties = useSelector((state) => state.setting.visitPurchaseParties);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting form 
 
@@ -51,7 +52,7 @@ export default function VIPP() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_vipp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_vipp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -160,7 +161,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_vipp`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_vipp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -195,7 +196,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_vipp`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_vipp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

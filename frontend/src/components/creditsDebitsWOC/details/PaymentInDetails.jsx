@@ -24,6 +24,7 @@ export default function PaymentInDetails() {
   const { getPaymentsIn } = CDWOCHook()
   const { user } = useAuthContext()
   const dispatch = useDispatch()
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchData = async () => {
     try {
@@ -118,7 +119,7 @@ export default function PaymentInDetails() {
       setIsLoading(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/credits&debits/without_cash_in_hand/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ export default function PaymentInDetails() {
     
     
       try {
-        const response = await fetch(`/auth/credits&debits/without_cash_in_hand/delete/total/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/delete/total/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -191,7 +192,7 @@ export default function PaymentInDetails() {
 
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/credits&debits/without_cash_in_hand/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

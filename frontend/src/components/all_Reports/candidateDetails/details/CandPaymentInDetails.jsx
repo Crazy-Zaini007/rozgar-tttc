@@ -71,6 +71,7 @@ export default function CandPaymentInDetails() {
 
   const candidate_Payments_In = useSelector((state) => state.candidates.candidate_Payments_In);
   
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const rowsPerPageOptions = [10, 15, 30];
 
@@ -144,7 +145,7 @@ export default function CandPaymentInDetails() {
     debugger
     let paymentId = payment._id
     try {
-      const response = await fetch(`/auth/candidates/delete/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/delete/single/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -178,7 +179,7 @@ export default function CandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/candidates/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +232,7 @@ export default function CandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/candidates/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -263,7 +264,7 @@ export default function CandPaymentInDetails() {
     setLoading5(true)
     debugger
     try {
-      const response = await fetch(`/auth/candidates/delete/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/candidates/delete/all/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -337,11 +338,7 @@ export default function CandPaymentInDetails() {
             <th>TPI_PKR</th>
             <th>Total_Cash_Out</th>
             <th>RPI_PKR</th>
-            <th>TVPI_Oth_Curr</th>
-            <th>TPI_Curr</th>
-            <th>RPI_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -360,12 +357,6 @@ export default function CandPaymentInDetails() {
               <td>${String(entry.total_Payment_In)}</td>
               <td>${String(entry.total_Cash_Out)}</td>
               <td>${String(entry.remaining_Balance)}</td>
-              <td>${String(entry.country)}</td>
-              <td>${String(entry.total_Visa_Price_In_Curr)}</td>
-              <td>${String(entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.remaining_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
             </tr>
           `).join('')}
         </tbody>

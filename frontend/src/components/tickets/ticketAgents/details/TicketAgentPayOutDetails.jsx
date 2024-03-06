@@ -41,6 +41,7 @@ export default function AzadVisaAgentPayOutDetails() {
 
     const { user } = useAuthContext()
     const dispatch = useDispatch()
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     
     const fetchData = async () => {
@@ -159,7 +160,7 @@ export default function AzadVisaAgentPayOutDetails() {
             setLoading1(true)
             let paymentId = payment._id
             try {
-                const response = await fetch(`/auth/ticket/agents/delete/single/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/single/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -195,7 +196,7 @@ export default function AzadVisaAgentPayOutDetails() {
             setLoading2(true)
             let personId = person._id
             try {
-                const response = await fetch(`/auth/ticket/agents/delete/person/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/person/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -250,7 +251,7 @@ export default function AzadVisaAgentPayOutDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`/auth/ticket/agents/payment_out/update/single/person`, {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/payment_out/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -285,7 +286,7 @@ export default function AzadVisaAgentPayOutDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`/auth/ticket/agents/update/single/payment_out`, {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/update/single/payment_out`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -316,7 +317,7 @@ export default function AzadVisaAgentPayOutDetails() {
         if (window.confirm('Are you sure you want to delete this record?')){
             setLoading5(true)
             try {
-                const response = await fetch(`/auth/ticket/agents/delete/all/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/all/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

@@ -12,6 +12,7 @@ export default function ProfitLose() {
   // getting data from redux store 
 
  // Submitting Form Data
+ const apiUrl = process.env.REACT_APP_API_URL;
   
    const [, setNewMessage] = useState('')
  
@@ -20,7 +21,7 @@ export default function ProfitLose() {
    const getData = async (expense) => {
      setIsLoading(true)
      try {
-       const response = await fetch(`/auth/reports/get/all/payments/date`, {
+       const response = await fetch(`${apiUrl}/auth/reports/get/all/payments/date`, {
         
          headers: {
            'Content-Type': 'application/json',

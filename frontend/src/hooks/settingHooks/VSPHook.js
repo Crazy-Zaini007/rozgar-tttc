@@ -6,12 +6,13 @@ export default function VSPHook() {
 
 
   const dispatch = useDispatch();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext();
 
   const getVSPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_vsp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_vsp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

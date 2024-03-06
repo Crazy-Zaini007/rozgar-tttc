@@ -25,6 +25,7 @@ export default function SupCandPaymentOutDetails() {
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
   const [loading6, setLoading6] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
 
@@ -159,7 +160,7 @@ export default function SupCandPaymentOutDetails() {
     
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/suppliers/delete/single/payment_out`, {
+        const response = await fetch(`${apiUrl}/auth/suppliers/delete/single/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -195,7 +196,7 @@ export default function SupCandPaymentOutDetails() {
       setLoading2(true)
       let personId = person._id
       try {
-        const response = await fetch(`/auth/suppliers/delete/person/payment_out`, {
+        const response = await fetch(`${apiUrl}/auth/suppliers/delete/person/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -250,7 +251,7 @@ export default function SupCandPaymentOutDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/suppliers/payment_out/update/single/person`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/payment_out/update/single/person`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -284,7 +285,7 @@ export default function SupCandPaymentOutDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/suppliers/update/single/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -337,7 +338,7 @@ export default function SupCandPaymentOutDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/suppliers/update/all/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/update/all/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -371,7 +372,7 @@ export default function SupCandPaymentOutDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/suppliers/delete/all/payment_out`, {
+        const response = await fetch(`${apiUrl}/auth/suppliers/delete/all/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

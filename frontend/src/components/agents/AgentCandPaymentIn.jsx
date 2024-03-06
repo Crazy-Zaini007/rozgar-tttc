@@ -10,6 +10,7 @@ export default function AgentCandPaymentIn() {
   const { user } = useAuthContext();
   const [single, setSingle] = useState(0)
   const [, setNewMessage] = useState('')
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const setEntry = (index) => {
     setSingle(index)
@@ -69,7 +70,7 @@ export default function AgentCandPaymentIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/agents/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/agents/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

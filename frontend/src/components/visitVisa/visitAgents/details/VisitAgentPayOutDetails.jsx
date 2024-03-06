@@ -24,6 +24,7 @@ export default function VisitAgentPayOutDetails() {
     const [loading3, setLoading3] = useState(false)
     const [loading4, setLoading4] = useState(false)
     const [loading5, setLoading5] = useState(false)
+    const apiUrl = process.env.REACT_APP_API_URL;
     
     const [, setNewMessage] = useState('')
     const {  getVisitAgentPaymentsOut } = VisitHook()
@@ -157,7 +158,7 @@ export default function VisitAgentPayOutDetails() {
             setLoading1(true)
             let paymentId = payment._id
             try {
-                const response = await fetch(`/auth/visit/agents/delete/single/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/visit/agents/delete/single/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -194,7 +195,7 @@ export default function VisitAgentPayOutDetails() {
         
             let personId = person._id
             try {
-                const response = await fetch(`/auth/visit/agents/delete/person/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/visit/agents/delete/person/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -249,7 +250,7 @@ export default function VisitAgentPayOutDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`/auth/visit/agents/payment_out/update/single/person`, {
+            const response = await fetch(`${apiUrl}/auth/visit/agents/payment_out/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -284,7 +285,7 @@ export default function VisitAgentPayOutDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`/auth/visit/agents/update/single/payment_out`, {
+            const response = await fetch(`${apiUrl}/auth/visit/agents/update/single/payment_out`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -315,7 +316,7 @@ export default function VisitAgentPayOutDetails() {
         if (window.confirm('Are you sure you want to delete this record?')){
             setLoading5(true)
             try {
-                const response = await fetch(`/auth/visit/agents/delete/all/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/visit/agents/delete/all/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

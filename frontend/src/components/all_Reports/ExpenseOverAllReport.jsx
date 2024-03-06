@@ -44,7 +44,7 @@ export default function ExpenseOverAllReport() {
 
   const expenses = useSelector((state) => state.expenses.expenses);
  
-
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Editing Mode 
   const [editMode, setEditMode] = useState(false);
@@ -116,7 +116,7 @@ export default function ExpenseOverAllReport() {
 
     let expenseId = editedEntry._id
     try {
-      const response = await fetch(`/auth/expenses/update/expense`, {
+      const response = await fetch(`${apiUrl}/auth/expenses/update/expense`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ export default function ExpenseOverAllReport() {
     debugger
     let expenseId = expense._id
     try {
-      const response = await fetch(`/auth/expenses/delete/expense`, {
+      const response = await fetch(`${apiUrl}/auth/expenses/delete/expense`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

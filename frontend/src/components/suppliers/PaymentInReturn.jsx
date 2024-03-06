@@ -120,6 +120,7 @@ export default function PaymentInReturn() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -128,7 +129,7 @@ export default function PaymentInReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/suppliers/payment_in/cash_out', {
+      const response = await fetch(`${apiUrl}/auth/suppliers/payment_in/cash_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

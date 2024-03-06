@@ -120,6 +120,7 @@ export default function TicketAgentPayInReturn() {
       setSlip_Pic('');
     }
   };
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -128,7 +129,7 @@ export default function TicketAgentPayInReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/ticket/agents/payment_in/cash_out', {
+      const response = await fetch(`${apiUrl}/auth/ticket/agents/payment_in/cash_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -126,6 +126,7 @@ export default function TicketCandSinglePayOut() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -134,7 +135,7 @@ export default function TicketCandSinglePayOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/ticket/candidates/add/payment_Out', {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_Out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +245,7 @@ export default function TicketCandSinglePayOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/azadVisa/agents/add/multiple/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/add/multiple/payment_out`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

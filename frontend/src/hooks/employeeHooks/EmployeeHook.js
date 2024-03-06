@@ -5,11 +5,12 @@ import { useDispatch } from 'react-redux';
 export default function EmployeeHook() {
     const dispatch = useDispatch();
     const { user } = useAuthContext();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const getEmployees = async () => {
 
         try {
-            const response = await fetch('/auth/employees/get/employees', {
+            const response = await fetch(`${apiUrl}/auth/employees/get/employees`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },

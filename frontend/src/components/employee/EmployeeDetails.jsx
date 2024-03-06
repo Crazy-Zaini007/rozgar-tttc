@@ -22,6 +22,7 @@ export default function EmployeeDetails() {
     const [loading5, setLoading5] = useState(false)
     const [employeeId, setEmployeeId] = useState('')
     const [selectedEmployee, setSelectedEmployee] = useState('');
+    const apiUrl = process.env.REACT_APP_API_URL;
 
 
     const [, setNewMessage] = useState('')
@@ -151,7 +152,7 @@ const route=location.pathname;;
             setLoading1(true)
             let paymentId = payment._id
             try {
-                const response = await fetch(`/auth/employees/delete/employee/payment`, {
+                const response = await fetch(`${apiUrl}/auth/employees/delete/employee/payment`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -188,7 +189,7 @@ const route=location.pathname;;
         
             let vacationId = vacation._id
             try {
-                const response = await fetch(`/auth/employees/delete/employee/vacation`, {
+                const response = await fetch(`${apiUrl}/auth/employees/delete/employee/vacation`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -243,7 +244,7 @@ const route=location.pathname;;
     const handleUpdateVacation = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`/auth/employees/update/employee/vacation`, {
+            const response = await fetch(`${apiUrl}/auth/employees/update/employee/vacation`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -278,7 +279,7 @@ const route=location.pathname;;
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`/auth/employees/update/employee/payment`, {
+            const response = await fetch(`${apiUrl}/auth/employees/update/employee/payment`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -311,7 +312,7 @@ const route=location.pathname;;
         if (window.confirm('Are you sure you want to delete this record?')){
             setLoading5(true)
             try {
-                const response = await fetch(`/auth/employees/delete/employee`, {
+                const response = await fetch(`${apiUrl}/auth/employees/delete/employee`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -367,7 +368,7 @@ const route=location.pathname;;
 
         let employeeId = editedEntry3._id
         try {
-            const response = await fetch(`/auth/employees/update/employee`, {
+            const response = await fetch(`${apiUrl}/auth/employees/update/employee`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

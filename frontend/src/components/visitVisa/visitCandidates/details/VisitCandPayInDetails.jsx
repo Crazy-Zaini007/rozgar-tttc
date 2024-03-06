@@ -23,6 +23,8 @@ export default function VisitCandPaymentInDetails() {
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const [, setNewMessage] = useState('')
 
   const { getCurrencyData } = CurrencyHook()
@@ -153,7 +155,7 @@ export default function VisitCandPaymentInDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/visit/candidates/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/visit/candidates/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -189,7 +191,7 @@ export default function VisitCandPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/visit/candidates/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -242,7 +244,7 @@ export default function VisitCandPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/visit/candidates/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -274,7 +276,7 @@ export default function VisitCandPaymentInDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/visit/candidates/delete/all/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/visit/candidates/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

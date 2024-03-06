@@ -41,6 +41,7 @@ export default function ExpeCategories() {
   // getting data from redux store
   const expenseCategories = useSelector((state) => state.setting.expenseCategories);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Submitting form 
@@ -48,7 +49,7 @@ export default function ExpeCategories() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_expense_category', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_expense_category`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ const handleUpdate = async () => {
 
   let myId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_expense_category`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_expense_category`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ const deleteSupplier = async (data) => {
   
     let myId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_expense_category`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_expense_category`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

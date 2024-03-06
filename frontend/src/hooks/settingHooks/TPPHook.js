@@ -7,11 +7,12 @@ export default function TPPHook() {
 
   const dispatch = useDispatch();
 
-  const { user } = useAuthContext();
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const { user } = useAuthContext();
   
   const getTPPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_tpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_tpp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

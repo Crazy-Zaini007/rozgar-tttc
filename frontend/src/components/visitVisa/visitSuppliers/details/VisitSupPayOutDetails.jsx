@@ -24,6 +24,7 @@ export default function VisitSupPayOutDetails() {
     const [loading3, setLoading3] = useState(false)
     const [loading4, setLoading4] = useState(false)
     const [loading5, setLoading5] = useState(false)
+    const apiUrl = process.env.REACT_APP_API_URL;
 
 
     const [, setNewMessage] = useState('')
@@ -157,7 +158,7 @@ export default function VisitSupPayOutDetails() {
             setLoading1(true)
             let paymentId = payment._id
             try {
-                const response = await fetch(`/auth/visit/suppliers/delete/single/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/single/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -193,7 +194,7 @@ export default function VisitSupPayOutDetails() {
             setLoading2(true)
             let personId = person._id
             try {
-                const response = await fetch(`/auth/visit/suppliers/delete/person/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/person/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -248,7 +249,7 @@ export default function VisitSupPayOutDetails() {
     const handleUpdatePerson = async () => {
         setLoading5(true)
         try {
-            const response = await fetch(`/auth/visit/suppliers/payment_out/update/single/person`, {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/payment_out/update/single/person`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -283,7 +284,7 @@ export default function VisitSupPayOutDetails() {
 
         let paymentId = editedEntry._id
         try {
-            const response = await fetch(`/auth/visit/suppliers/update/single/payment_out`, {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/update/single/payment_out`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -314,7 +315,7 @@ export default function VisitSupPayOutDetails() {
         if (window.confirm('Are you sure you want to delete this record?')){
             setLoading5(true)
             try {
-                const response = await fetch(`/auth/visit/suppliers/delete/all/payment_out`, {
+                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/all/payment_out`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

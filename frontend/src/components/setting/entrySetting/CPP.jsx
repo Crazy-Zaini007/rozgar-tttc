@@ -23,6 +23,7 @@ export default function CPP() {
   const [contact, setContact] = useState('')
   const [address, setAddress] = useState('')
   const [picture, setPicture] = useState('')
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [isLoading, setIsLoading] = useState(false);
   const [, setNewMessage] = useState('');
@@ -53,7 +54,7 @@ export default function CPP() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_cpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_cpp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_cpp`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_cpp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -197,7 +198,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_cpp`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_cpp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

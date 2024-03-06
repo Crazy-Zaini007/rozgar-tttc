@@ -8,6 +8,7 @@ import {
     getTicketCand_Payments_In,
     getTicketCand_Payments_Out
 } from '../../redux/reducers/ticketSlice'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function TicketHook() {
     const dispatch = useDispatch()
@@ -15,7 +16,7 @@ export default function TicketHook() {
 
     const getTicketAgentPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/ticket/agents/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -37,7 +38,7 @@ export default function TicketHook() {
 
     const getTicketAgentPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/ticket/agents/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -60,7 +61,7 @@ export default function TicketHook() {
 
     const getTicketSupplierPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/ticket/suppliers/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/ticket/suppliers/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -82,7 +83,7 @@ export default function TicketHook() {
 
     const getTicketSupplierPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/ticket/suppliers/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/ticket/suppliers/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -104,7 +105,7 @@ export default function TicketHook() {
 
     const getTicketCandPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/ticket/candidates/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/ticket/candidates/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -126,7 +127,7 @@ export default function TicketHook() {
 
     const getTicketCandPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/ticket/candidates/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/ticket/candidates/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

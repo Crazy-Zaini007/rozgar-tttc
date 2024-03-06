@@ -45,6 +45,7 @@ export default function TPP(){
 
   // getting data from redux store
   const ticketPurchaseParties = useSelector((state) => state.setting.ticketPurchaseParties);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Submitting form 
@@ -54,7 +55,7 @@ export default function TPP(){
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_tpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_tpp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_tpp`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_tpp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -197,7 +198,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_tpp`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_tpp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

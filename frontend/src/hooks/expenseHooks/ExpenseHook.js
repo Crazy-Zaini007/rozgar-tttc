@@ -5,11 +5,12 @@ import { useDispatch } from 'react-redux';
 export default function EntryHook() {
     const dispatch = useDispatch();
     const { user } = useAuthContext();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const getExpenses = async () => {
 
         try {
-            const response = await fetch('/auth/expenses/get/expenses', {
+            const response = await fetch(`${apiUrl}/auth/expenses/get/expenses`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },

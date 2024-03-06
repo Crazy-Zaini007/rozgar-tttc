@@ -127,6 +127,7 @@ export default function TicketSupSinglePayIn() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -135,7 +136,7 @@ export default function TicketSupSinglePayIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/ticket/suppliers/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/ticket/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +246,7 @@ export default function TicketSupSinglePayIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/ticket/suppliers/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/ticket/suppliers/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

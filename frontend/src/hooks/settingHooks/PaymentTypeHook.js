@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 export default function PaymentTypeHook() {
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const dispatch = useDispatch();
 
@@ -11,7 +12,7 @@ export default function PaymentTypeHook() {
 
   const getPaymentTypeData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_payment_type', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_payment_type`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

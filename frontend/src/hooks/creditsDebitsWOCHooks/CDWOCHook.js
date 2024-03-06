@@ -3,11 +3,12 @@ import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getCDWOC_Payments_In, getCDWOC_Payments_Out } from '../../redux/reducers/creditsDebitsWOCSlice'
 
 export default function CDWOCHook() {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const getPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/credits&debits/without_cash_in_hand/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +30,7 @@ export default function CDWOCHook() {
 
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/credits&debits/without_cash_in_hand/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

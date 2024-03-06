@@ -7,10 +7,11 @@ export default function CurrCountryHook() {
   const dispatch = useDispatch();
 
   const { user } = useAuthContext();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const getCurrCountryData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_curr_country', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_curr_country`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

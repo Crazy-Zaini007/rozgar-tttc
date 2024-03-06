@@ -27,12 +27,13 @@ const[loading2,setLoading2]=useState(false)
 const[loading3,setLoading3]=useState(false)
 const[loading4,setLoading4]=useState(false)
 
+const apiUrl = process.env.REACT_APP_API_URL;
 
 
   const getCash = async () => {
   
     try {
-      const response = await fetch('/auth/reports/get/all/advance_payments', {
+      const response = await fetch(`${apiUrl}/auth/reports/get/all/advance_payments`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`

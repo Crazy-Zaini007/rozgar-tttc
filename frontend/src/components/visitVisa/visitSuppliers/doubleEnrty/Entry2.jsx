@@ -123,6 +123,7 @@ export default function Entry2() {
       setSlip_Pic('');
     }
   };
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Submitting Form Data
@@ -132,7 +133,7 @@ export default function Entry2() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/visit/suppliers/add/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/visit/suppliers/add/payment_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

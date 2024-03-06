@@ -41,6 +41,7 @@ export default function SupPaymentInDetails() {
   const { getPaymentsIn } = SupplierHook()
   const { user } = useAuthContext()
   const dispatch = useDispatch()
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   const fetchData = async () => {
@@ -157,7 +158,7 @@ export default function SupPaymentInDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/suppliers/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/suppliers/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -193,7 +194,7 @@ export default function SupPaymentInDetails() {
       setLoading2(true)
       let personId = person._id
       try {
-        const response = await fetch(`/auth/suppliers/delete/person/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/suppliers/delete/person/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -248,7 +249,7 @@ export default function SupPaymentInDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/suppliers/payment_in/update/single/person`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/payment_in/update/single/person`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -282,7 +283,7 @@ export default function SupPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/suppliers/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -335,7 +336,7 @@ export default function SupPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/suppliers/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -369,7 +370,7 @@ export default function SupPaymentInDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/suppliers/delete/all/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/suppliers/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

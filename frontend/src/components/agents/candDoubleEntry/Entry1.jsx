@@ -33,6 +33,7 @@ export default function Entry1() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const { getPaymentsIn } = AgentHook()
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -134,7 +135,7 @@ export default function Entry1() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/agents/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

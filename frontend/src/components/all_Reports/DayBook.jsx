@@ -8,6 +8,7 @@ import * as XLSX from 'xlsx';
 import ExpenseHook from '../../hooks/expenseHooks/ExpenseHook'
 
 export default function DayBook() {
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user } = useAuthContext()
   const {getOverAllPayments,overAllPayments}=CashInHandHook()
@@ -23,7 +24,7 @@ const[employees,setEmployees]=useState()
 const getProtectors=async()=>{
  
   try {
-    const response = await fetch('/auth/reports/get/all/protector/payments', {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/protector/payments`, {
      
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ const getProtectors=async()=>{
 const getEmployees=async()=>{
  
   try {
-    const response = await fetch('/auth/reports/get/all/employees/payments', {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/employees/payments`, {
      
       headers: {
         'Content-Type': 'application/json',

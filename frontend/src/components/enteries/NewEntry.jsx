@@ -106,6 +106,7 @@ export default function NewEntry() {
   }, [triggerEffect, entries]);
 
   const [, setNewMessage] = useState('')
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   //Adding Multiple entries 
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -113,7 +114,7 @@ export default function NewEntry() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/entries/add/multiple_enteries', {
+      const response = await fetch(`${apiUrl}/auth/entries/add/multiple_enteries`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

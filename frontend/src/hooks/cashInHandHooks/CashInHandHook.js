@@ -3,6 +3,7 @@ import { getCashInHand } from '../../redux/reducers/cashInHandSlice'
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function CashInHandHook() {
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ export default function CashInHandHook() {
       setLoading(true)
       
       try {
-        const response = await fetch('/auth/cash_in_hand/get/cash', {
+        const response = await fetch(`${apiUrl}/auth/cash_in_hand/get/cash`, {
          
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ export default function CashInHandHook() {
       setLoading(true)
       
       try {
-        const response = await fetch('/auth/reports/get/all/payments', {
+        const response = await fetch(`${apiUrl}/auth/reports/get/all/payments`, {
          
           headers: {
             'Content-Type': 'application/json',

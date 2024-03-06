@@ -5,10 +5,11 @@ import { getProtctor_Payments_Out } from '../../redux/reducers/protectorSlice'
 export default function ProtectorHook() {
     const dispatch = useDispatch()
     const { user } = useAuthContext()
+    const apiUrl = process.env.REACT_APP_API_URL;
    
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/protectors/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/protectors/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

@@ -244,6 +244,7 @@ export default function SingleEntry() {
   // Submitting Form to Store Data in Database
   const { user } = useAuthContext()
   const [loading, setLoading] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   const [, setNewMessage] = useState('')
@@ -254,7 +255,7 @@ export default function SingleEntry() {
     setLoading(true)
 
     try {
-      const response = await fetch('/auth/entries/add/single_entry', {
+      const response = await fetch(`${apiUrl}/auth/entries/add/single_entry`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

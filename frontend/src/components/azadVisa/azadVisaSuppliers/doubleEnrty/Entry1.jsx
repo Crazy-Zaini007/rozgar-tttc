@@ -34,6 +34,7 @@ export default function Entry1() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const { getAzadSupplierPaymentsIn } = AzadVisaHook()
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -129,7 +130,7 @@ export default function Entry1() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/azadVisa/suppliers/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

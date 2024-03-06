@@ -46,6 +46,7 @@ export default function Protector() {
   // getting data from redux store
   const protectors = useSelector((state) => state.setting.protectors);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting form 
 
@@ -54,7 +55,7 @@ export default function Protector() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_protector', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_protector`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_protector`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_protector`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -196,7 +197,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_protector`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_protector`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

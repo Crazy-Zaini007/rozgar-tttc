@@ -126,6 +126,7 @@ export default function VisitAgentSinglePayIn() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -134,7 +135,7 @@ export default function VisitAgentSinglePayIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/visit/agents/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/visit/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +246,7 @@ export default function VisitAgentSinglePayIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/visit/agents/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/visit/agents/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

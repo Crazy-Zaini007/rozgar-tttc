@@ -71,6 +71,7 @@ export default function AgentPaymentInDetails() {
   const trades = useSelector((state) => state.setting.trades);
 
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In);
+  const apiUrl = process.env.REACT_APP_API_URL;
  
 
 
@@ -146,7 +147,7 @@ export default function AgentPaymentInDetails() {
     debugger
     let paymentId = payment._id
     try {
-      const response = await fetch(`/auth/agents/delete/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/delete/single/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -180,7 +181,7 @@ export default function AgentPaymentInDetails() {
     debugger
     let personId = person._id
     try {
-      const response = await fetch(`/auth/agents/delete/person/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/delete/person/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -233,7 +234,7 @@ export default function AgentPaymentInDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/agents/payment_in/update/single/person/`, {
+      const response = await fetch(`${apiUrl}/auth/agents/payment_in/update/single/person/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -267,7 +268,7 @@ export default function AgentPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/agents/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +321,7 @@ export default function AgentPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/agents/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -354,7 +355,7 @@ export default function AgentPaymentInDetails() {
     setLoading5(true)
     debugger
     try {
-      const response = await fetch(`/auth/agents/delete/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/delete/all/payment_in`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -814,7 +815,7 @@ export default function AgentPaymentInDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Suppliers:</label>
+                  <label htmlFor="">Agents:</label>
                   <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {agent_Payments_In && agent_Payments_In.map((data) => (

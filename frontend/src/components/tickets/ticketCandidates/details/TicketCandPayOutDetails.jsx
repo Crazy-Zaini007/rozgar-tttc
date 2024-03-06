@@ -22,6 +22,7 @@ export default function TicketCandPaymentOutDetails() {
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
 
@@ -152,7 +153,7 @@ export default function TicketCandPaymentOutDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/ticket/candidates/delete/single/payment_out`, {
+        const response = await fetch(`${apiUrl}/auth/ticket/candidates/delete/single/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -188,7 +189,7 @@ export default function TicketCandPaymentOutDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/ticket/candidates/update/single/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/update/single/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -242,7 +243,7 @@ export default function TicketCandPaymentOutDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/ticket/candidates/update/all/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/update/all/payment_out`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -276,7 +277,7 @@ export default function TicketCandPaymentOutDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/ticket/candidates/delete/all/payment_out`, {
+        const response = await fetch(`${apiUrl}/auth/ticket/candidates/delete/all/payment_out`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

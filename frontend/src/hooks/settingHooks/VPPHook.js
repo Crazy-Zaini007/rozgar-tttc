@@ -7,11 +7,11 @@ export default function VPPHook() {
   const dispatch = useDispatch();
 
   const { user } = useAuthContext();
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   
   const getVPPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_vpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_vpp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

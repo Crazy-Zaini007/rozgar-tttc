@@ -48,12 +48,13 @@ export default function AVPP() {
 
 
   // Submitting form 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const addSuppliers = async (e) => {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_avpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_avpp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +164,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_avpp`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_avpp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -198,7 +199,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_avpp`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_avpp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

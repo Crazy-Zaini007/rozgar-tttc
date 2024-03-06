@@ -24,7 +24,7 @@ export default function AgentPaymentInDetails() {
   const [loading3, setLoading3] = useState(false)
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
 
   const { getCurrencyData } = CurrencyHook()
@@ -157,7 +157,7 @@ export default function AgentPaymentInDetails() {
       setLoading1(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`/auth/agents/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/agents/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export default function AgentPaymentInDetails() {
       setLoading2(true)
       let personId = person._id
       try {
-        const response = await fetch(`/auth/agents/delete/person/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/agents/delete/person/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -248,7 +248,7 @@ export default function AgentPaymentInDetails() {
   const handleUpdatePerson = async () => {
     setLoading4(true)
     try {
-      const response = await fetch(`/auth/agents/payment_in/update/single/person`, {
+      const response = await fetch(`${apiUrl}/auth/agents/payment_in/update/single/person`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -282,7 +282,7 @@ export default function AgentPaymentInDetails() {
     setLoading3(true)
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`/auth/agents/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -335,7 +335,7 @@ export default function AgentPaymentInDetails() {
   const handleTotalPaymentUpdate = async () => {
     setLoading3(true)
     try {
-      const response = await fetch(`/auth/agents/update/all/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/update/all/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -369,7 +369,7 @@ export default function AgentPaymentInDetails() {
     if (window.confirm('Are you sure you want to delete this record?')){
       setLoading5(true)
       try {
-        const response = await fetch(`/auth/agents/delete/all/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/agents/delete/all/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

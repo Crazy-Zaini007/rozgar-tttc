@@ -6,9 +6,10 @@ export default function AVPPHook() {
 
   const dispatch = useDispatch();
   const { user } = useAuthContext();
+  const apiUrl = process.env.REACT_APP_API_URL;
   const getAVPPData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_avpp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_avpp`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

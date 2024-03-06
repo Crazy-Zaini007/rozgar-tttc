@@ -43,6 +43,7 @@ export default function TSP() {
 
   // getting data from redux store
   const ticketSalesParties = useSelector((state) => state.setting.ticketSalesParties);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Submitting form 
@@ -52,7 +53,7 @@ export default function TSP() {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/setting/entry/add_tsp', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/add_tsp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ const handleUpdate = async () => {
 
   let supplierId = editedEntry._id
   try {
-    const response = await fetch(`/auth/setting/entry/update_tsp`, {
+    const response = await fetch(`${apiUrl}/auth/setting/entry/update_tsp`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -195,7 +196,7 @@ const deleteSupplier = async (data) => {
   
     let supplierId = data._id
     try {
-      const response = await fetch(`/auth/setting/entry/delete_tsp`, {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/delete_tsp`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

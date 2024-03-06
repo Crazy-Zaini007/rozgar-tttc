@@ -5,9 +5,10 @@ import { getSup_Payments_In, getSup_Payments_Out } from '../../redux/reducers/su
 export default function SupplierHook() {
     const dispatch = useDispatch()
     const { user } = useAuthContext()
+    const apiUrl = process.env.REACT_APP_API_URL;
     const getPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/suppliers/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/suppliers/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +30,7 @@ export default function SupplierHook() {
 
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/suppliers/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/suppliers/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

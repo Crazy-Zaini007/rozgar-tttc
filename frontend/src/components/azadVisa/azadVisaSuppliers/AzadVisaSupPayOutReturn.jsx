@@ -36,6 +36,8 @@ export default function AzadVisaSupPayOutReturn() {
   const { getPaymentTypeData } = PaymentTypeHook()
   const { getAzadSupplierPaymentsOut } = AzadVisaHook()
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   // getting Data from DB
   const { user } = useAuthContext()
   const fetchData = async () => {
@@ -128,7 +130,7 @@ export default function AzadVisaSupPayOutReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/azadVisa/suppliers/payment_out/cash_out', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/payment_out/cash_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

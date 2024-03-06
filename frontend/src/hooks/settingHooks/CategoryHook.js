@@ -6,12 +6,12 @@ export default function CategoryHook() {
 
 
   const dispatch = useDispatch();
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   
   const getCategoryData = async () => {
     try {
-      const response = await fetch('/auth/setting/entry/get_category', {
+      const response = await fetch(`${apiUrl}/auth/setting/entry/get_category`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,

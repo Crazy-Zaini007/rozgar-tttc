@@ -3,11 +3,13 @@ import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getCandidate_Payments_In, getCandidate_Payments_Out } from '../../redux/reducers/candidateSlice'
 
 export default function CandidateHook() {
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const getPaymentsIn = async () => {
         try {
-            const response = await fetch('/auth/candidates/get/payment_in_details', {
+            const response = await fetch(`${apiUrl}/auth/candidates/get/payment_in_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,
@@ -29,7 +31,7 @@ export default function CandidateHook() {
 
     const getPaymentsOut = async () => {
         try {
-            const response = await fetch('/auth/candidates/get/payment_out_details', {
+            const response = await fetch(`${apiUrl}/auth/candidates/get/payment_out_details`, {
                 headers: {
 
                     'Authorization': `Bearer ${user.token}`,

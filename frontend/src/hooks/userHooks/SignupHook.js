@@ -6,6 +6,7 @@ export default function SignupHook() {
     const [error,setError]=useState(null)
     const [success,setSuccess]=useState(null)
     const[emptyFields,setEmptyFields]=useState([])
+    const apiUrl = process.env.REACT_APP_API_URL;
     
     // fetching api end-point to register a new user
     const userSignup=async(userName,role,companyCode,password)=>{
@@ -13,7 +14,7 @@ export default function SignupHook() {
         setLoading(true)
         setSuccess(false)
             try {
-                const response=await fetch('/auth/user/register',{
+                const response=await fetch(`${apiUrl}/auth/user/register`,{
                     method:'POST',
                     headers:{
                         'Content-Type':'application/json'

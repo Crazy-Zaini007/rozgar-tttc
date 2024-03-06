@@ -19,7 +19,9 @@ export default function ExpenseDetails() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const expenseCategories = useSelector((state) => state.setting.expenseCategories);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
+  
   const { getCurrCountryData } = CurrCountryHook()
   const { getExpenseCategoryData } = ExpeCategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
@@ -118,7 +120,7 @@ export default function ExpenseDetails() {
 
     let expenseId = editedEntry._id
     try {
-      const response = await fetch(`/auth/expenses/update/expense`, {
+      const response = await fetch(`${apiUrl}/auth/expenses/update/expense`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +155,7 @@ export default function ExpenseDetails() {
       setIsLoading(true)
       let expenseId = expense._id
       try {
-        const response = await fetch(`/auth/expenses/delete/expense`, {
+        const response = await fetch(`${apiUrl}/auth/expenses/delete/expense`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

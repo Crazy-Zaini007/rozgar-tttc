@@ -127,6 +127,7 @@ export default function AzadVisaSupSinglePayIn() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -135,7 +136,7 @@ export default function AzadVisaSupSinglePayIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/azadVisa/suppliers/add/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -246,7 +247,7 @@ export default function AzadVisaSupSinglePayIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/azadVisa/suppliers/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

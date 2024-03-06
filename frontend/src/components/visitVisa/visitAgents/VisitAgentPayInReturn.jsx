@@ -121,6 +121,8 @@ export default function VisitAgentPayInReturn() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
@@ -128,7 +130,7 @@ export default function VisitAgentPayInReturn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/visit/agents/payment_in/cash_out', {
+      const response = await fetch(`${apiUrl}/auth/visit/agents/payment_in/cash_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

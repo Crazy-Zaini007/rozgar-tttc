@@ -126,6 +126,7 @@ export default function SupCandPaymentOut() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -134,7 +135,7 @@ export default function SupCandPaymentOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/suppliers/add/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -254,7 +255,7 @@ export default function SupCandPaymentOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('/auth/suppliers/add/multiple/payment_out', {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/multiple/payment_out`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

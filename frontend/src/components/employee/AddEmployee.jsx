@@ -22,12 +22,13 @@ export default function AVPP() {
   const dispatch = useDispatch()
 
   // Submitting form 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const addEmployee = async (e) => {
     e.preventDefault()
     setIsLoading(true);
     try {
-      const response = await fetch('/auth/employees/add/employee', {
+      const response = await fetch(`${apiUrl}/auth/employees/add/employee`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

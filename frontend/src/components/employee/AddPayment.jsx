@@ -102,6 +102,7 @@ console.log('employees',employees)
   }
   }, [user, dispatch,employeeName])
 
+  const apiUrl = process.env.REACT_APP_API_URL;
  
 
   // Submitting Form Data
@@ -111,7 +112,7 @@ console.log('employees',employees)
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('/auth/employees/add/employee/payment', {
+      const response = await fetch(`${apiUrl}/auth/employees/add/employee/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
