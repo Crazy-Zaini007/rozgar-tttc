@@ -40,6 +40,28 @@
   --btnbg: #ededed;
 }
 
+
+
+
+/* Track */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ededed;
+  border-radius: 100px;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5c5f62;
+  border-radius: 100px;
+}
+
  .custom-toast-container {
   .Toastify__toast {
     font-size: 12px;
@@ -178,10 +200,16 @@
   font-size: 12px;
 }
 
+
+
 .sidenav::-webkit-scrollbar {
-  width: 0px;
+  width: 8px;
   height: 0px;
+  border-radius: 100px;
 }
+
+
+
 .sidenav {
   height: 100%;
   width: 220px;
