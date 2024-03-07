@@ -439,7 +439,7 @@ export default function SingleEntry() {
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Trade</label>
-                <select required value={trade} onChange={(e) => setTrade(e.target.value)} >
+                <select  value={trade} onChange={(e) => setTrade(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   {trades && trades.map((data) => (
 
@@ -450,7 +450,7 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Company</label>
-                <select required value={company} onChange={(e) => setCompany(e.target.value)} >
+                <select  value={company} onChange={(e) => setCompany(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   {companies && companies.map((data) => (
 
@@ -462,11 +462,11 @@ export default function SingleEntry() {
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Contact</label>
-                <input type="text" value={contact} onChange={(e) => setContact(e.target.value)} required />
+                <input type="text" value={contact} onChange={(e) => setContact(e.target.value)}  />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Country</label>
-                <select required value={country} onChange={(e) => setCountry(e.target.value)} >
+                <select  value={country} onChange={(e) => setCountry(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   {countries && countries.map((data) => (
 
@@ -481,7 +481,7 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Final Status</label>
-                <select required value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} >
+                <select  value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   {finalStatus && finalStatus.map((data) => (
 
@@ -492,11 +492,11 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Remarks</label>
-                <input type="text" value={remarks} onChange={(e) => setRemarks(e.target.value)} required />
+                <input type="text" value={remarks} onChange={(e) => setRemarks(e.target.value)}  />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Entry Mode</label>
-                <select required value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} >
+                <select  value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   {entryMode && entryMode.map((data) => (
 
@@ -508,7 +508,7 @@ export default function SingleEntry() {
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Reference Out </label>
-                <select required value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} >
+                <select  value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   <option className="my-1 py-2" value="Candidate">Candidate</option>
                   <option className="my-1 py-2" value="Agents">Agents</option>
@@ -527,7 +527,7 @@ export default function SingleEntry() {
                     readOnly />
                 ) : (
 
-                  <select required value={reference_Out_Name} onChange={(e) => setReference_Out_Name(e.target.value)} >
+                  <select  value={reference_Out_Name} onChange={(e) => setReference_Out_Name(e.target.value)} >
                     {reference_Out === "Agents" && (
                       <>
                         <option value="">Choose Agents</option>
@@ -632,15 +632,15 @@ export default function SingleEntry() {
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visa Sale Rate PKR </label>
-                <input type="number" min='0' required value={visa_Sales_Rate_PKR} onChange={(e) => setVisa_Sales_Rate_PKR(e.target.value)} />
+                <input type="number" min='0'  value={visa_Sales_Rate_PKR} onChange={(e) => setVisa_Sales_Rate_PKR(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visa Sale Rate(Oth Cur) </label>
-                <input type="number" min='0' required value={visa_Sale_Rate_Oth_Cur} onChange={(e) => setVisa_Sale_Rate_Oth_Cur(e.target.value)} />
+                <input type="number" min='0'  value={visa_Sale_Rate_Oth_Cur} onChange={(e) => setVisa_Sale_Rate_Oth_Cur(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Cur Country </label>
-                <select required value={cur_Country_One} onChange={(e) => setCur_Country_One(e.target.value)}>
+                <select  value={cur_Country_One} onChange={(e) => setCur_Country_One(e.target.value)}>
                   <option className="my-1 py-2" value="">choose</option>
                   {currCountries && currCountries.map((data) => (
                     <option className="my-1 py-2" key={data._id} value={data.currCountry}>{data.currCountry}</option>
@@ -650,7 +650,7 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Reference In </label>
-                <select required value={reference_In} onChange={(e) => setReference_In(e.target.value)}>
+                <select  value={reference_In} onChange={(e) => setReference_In(e.target.value)}>
                   <option className="my-1 py-2" value="">choose</option>
                   <option className="my-1 py-2" value="Candidate">Candidate</option>
                   <option className="my-1 py-2" value="Agents">Agents</option>
@@ -670,7 +670,7 @@ export default function SingleEntry() {
                   />
                 ) : (
                   <select
-                    required
+                    
                     value={reference_In_Name}
                     onChange={(e) => setReference_In_Name(e.target.value)}
                   >
@@ -725,17 +725,17 @@ export default function SingleEntry() {
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visa Purchase Rate PKR </label>
-                <input type="number" min='0' required value={visa_Purchase_Rate_PKR} onChange={(e) => setVisa_Purchase_Rate_PKR(e.target.value)} />
+                <input type="number" min='0'  value={visa_Purchase_Rate_PKR} onChange={(e) => setVisa_Purchase_Rate_PKR(e.target.value)} />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visa Purch Rate (Oth Cur) </label>
-                <input type="number" min='0' required value={visa_Purchase_Rate_Oth_Cur} onChange={(e) => setVisa_Purchase_Rate_Oth_Cur(e.target.value)} />
+                <input type="number" min='0'  value={visa_Purchase_Rate_Oth_Cur} onChange={(e) => setVisa_Purchase_Rate_Oth_Cur(e.target.value)} />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Cur Country </label>
-                <select required value={cur_Country_Two} onChange={(e) => setCur_Country_Two(e.target.value)}>
+                <select  value={cur_Country_Two} onChange={(e) => setCur_Country_Two(e.target.value)}>
                   <option className="my-1 py-2" value="">choose</option>
                   {currCountries && currCountries.map((data) => (
                     <option className="my-1 py-2" key={data._id} value={data.currCountry}>{data.currCountry}</option>
@@ -764,7 +764,7 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Reference Out </label>
-                <select required value={visit_Reference_Out} onChange={(e) => setVisit_Reference_Out(e.target.value)} >
+                <select  value={visit_Reference_Out} onChange={(e) => setVisit_Reference_Out(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   <option className="my-1 py-2" value="Candidate">Candidate</option>
                   <option className="my-1 py-2" value="Agents">Agents</option>
@@ -784,7 +784,7 @@ export default function SingleEntry() {
                     readOnly
                   />
                 ) :
-                  <select value={visit_Reference_Out_Name} onChange={(e) => setVisit_Reference_Out_Name(e.target.value)} required>
+                  <select value={visit_Reference_Out_Name} onChange={(e) => setVisit_Reference_Out_Name(e.target.value)} >
 
                     (
                     <>
@@ -819,15 +819,15 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visit Sale Rate PKR </label>
-                <input type="number" min='0' required value={visit_Sales_PKR} onChange={(e) => setVisit_Sales_PKR(e.target.value)} />
+                <input type="number" min='0'  value={visit_Sales_PKR} onChange={(e) => setVisit_Sales_PKR(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visit Sale Rate Oth Curr </label>
-                <input type="number" min='0' required value={visit_Sales_Rate_Oth_Curr} onChange={(e) => setVisit_Sales_Rate_Oth_Curr(e.target.value)} />
+                <input type="number" min='0'  value={visit_Sales_Rate_Oth_Curr} onChange={(e) => setVisit_Sales_Rate_Oth_Curr(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visit Sale Cur </label>
-                <select required value={visit_Sales_Cur} onChange={(e) => setVisit_Sales_Cur(e.target.value)}>
+                <select  value={visit_Sales_Cur} onChange={(e) => setVisit_Sales_Cur(e.target.value)}>
                   <option className="my-1 py-2" value="">choose</option>
                   {currencies && currencies.map((data) => (
                     <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
@@ -836,7 +836,7 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Reference In </label>
-                <select required value={visit_Reference_In} onChange={(e) => setVisit_Reference_In(e.target.value)} >
+                <select  value={visit_Reference_In} onChange={(e) => setVisit_Reference_In(e.target.value)} >
                   <option className="my-1 py-2" value="">choose</option>
                   <option className="my-1 py-2" value="Candidate">Candidate</option>
                   <option className="my-1 py-2" value="Agents">Agents</option>
@@ -856,7 +856,7 @@ export default function SingleEntry() {
                     readOnly
                   />
                 ) :
-                  <select value={visit_Reference_In_Name} onChange={(e) => setVisit_Reference_In_Name(e.target.value)} required>
+                  <select value={visit_Reference_In_Name} onChange={(e) => setVisit_Reference_In_Name(e.target.value)} >
 
                     (
                     <>
@@ -891,15 +891,15 @@ export default function SingleEntry() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visit Purchase Rate PKR </label>
-                <input type="number" min='0' required value={visit_Purchase_Rate_PKR} onChange={(e) => setVisit_Purchase_Rate_PKR(e.target.value)} />
+                <input type="number" min='0'  value={visit_Purchase_Rate_PKR} onChange={(e) => setVisit_Purchase_Rate_PKR(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visit Purchase Rate Oth Curr </label>
-                <input type="number" min='0' required value={visit_Purchase_Rate_Oth_Cur} onChange={(e) => setVisit_Purchase_Rate_Oth_Cur(e.target.value)} />
+                <input type="number" min='0'  value={visit_Purchase_Rate_Oth_Cur} onChange={(e) => setVisit_Purchase_Rate_Oth_Cur(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Visit Purchase Cur </label>
-                <select required value={visit_Purchase_Cur} onChange={(e) => setVisit_Purchase_Cur(e.target.value)}>
+                <select  value={visit_Purchase_Cur} onChange={(e) => setVisit_Purchase_Cur(e.target.value)}>
                   <option className="my-1 py-2" value="">choose</option>
                   {currencies && currencies.map((data) => (
                     <option key={data._id} value={data.currency}>{data.currency}</option>
@@ -913,7 +913,7 @@ export default function SingleEntry() {
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label htmlFor="" >Picture</label>
-                <input type="file" accept='image/*' onChange={handlePictureTwo} required />
+                <input type="file" accept='image/*' onChange={handlePictureTwo}  />
               </div>
               {visit_Section_Picture && <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 mb-3">
                 <div className="image">
@@ -935,7 +935,7 @@ export default function SingleEntry() {
 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Reference Out </label>
-                  <select required value={ticket_Reference_Out} onChange={(e) => setTicket_Reference_Out(e.target.value)} >
+                  <select  value={ticket_Reference_Out} onChange={(e) => setTicket_Reference_Out(e.target.value)} >
                     <option className="my-1 py-2" value="">choose</option>
                     <option className="my-1 py-2" value="Candidate">Candidate</option>
                     <option className="my-1 py-2" value="Agents">Agents</option>
@@ -955,7 +955,7 @@ export default function SingleEntry() {
                       readOnly
                     />
                   ) :
-                    <select value={ticket_Reference_Out_Name} onChange={(e) => setTicket_Reference_Out_Name(e.target.value)} required>
+                    <select value={ticket_Reference_Out_Name} onChange={(e) => setTicket_Reference_Out_Name(e.target.value)} >
 
                       (
                       <>
@@ -990,16 +990,16 @@ export default function SingleEntry() {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Ticket Sales PKR </label>
-                  <input type="number" min='0' required value={ticket_Sales_PKR} onChange={(e) => setTicket_Sales_PKR(e.target.value)} />
+                  <input type="number" min='0'  value={ticket_Sales_PKR} onChange={(e) => setTicket_Sales_PKR(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Ticket Sales Rate Oth Curr </label>
-                  <input type="number" min='0' required value={ticket_Sales_Rate_Oth_Cur} onChange={(e) => setTicket_Sales_Rate_Oth_Cur(e.target.value)} />
+                  <input type="number" min='0'  value={ticket_Sales_Rate_Oth_Cur} onChange={(e) => setTicket_Sales_Rate_Oth_Cur(e.target.value)} />
                 </div>
 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Ticket Sales Cur </label>
-                  <select required value={ticket_Sales_Cur} onChange={(e) => setTicket_Sales_Cur(e.target.value)}>
+                  <select  value={ticket_Sales_Cur} onChange={(e) => setTicket_Sales_Cur(e.target.value)}>
                     <option className="my-1 py-2" value="">choose</option>
                     {currencies && currencies.map((data) => (
                       <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
@@ -1009,7 +1009,7 @@ export default function SingleEntry() {
 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Reference In </label>
-                  <select required value={ticket_Reference_In} onChange={(e) => setTicket_Reference_In(e.target.value)} >
+                  <select  value={ticket_Reference_In} onChange={(e) => setTicket_Reference_In(e.target.value)} >
                     <option className="my-1 py-2" value="">choose</option>
                     <option className="my-1 py-2" value="Candidate">Candidate</option>
                     <option className="my-1 py-2" value="Agents">Agents</option>
@@ -1029,7 +1029,7 @@ export default function SingleEntry() {
                       readOnly
                     />
                   ) :
-                    <select value={ticket_Reference_In_Name} onChange={(e) => setTicket_Reference_In_Name(e.target.value)} required>
+                    <select value={ticket_Reference_In_Name} onChange={(e) => setTicket_Reference_In_Name(e.target.value)} >
 
                       (
                       <>
@@ -1064,15 +1064,15 @@ export default function SingleEntry() {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Ticket Purchase PKR </label>
-                  <input type="number" min='0' value={ticket_Purchase_PKR} onChange={(e) => setTicket_Purchase_PKR(e.target.value)} required />
+                  <input type="number" min='0' value={ticket_Purchase_PKR} onChange={(e) => setTicket_Purchase_PKR(e.target.value)}  />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Ticket Purchase Rate Oth Curr </label>
-                  <input type="number" min='0' value={ticket_Purchase_Rate_Oth_Cur} onChange={(e) => setTicket_Purchase_Rate_Oth_Cur(e.target.value)} required />
+                  <input type="number" min='0' value={ticket_Purchase_Rate_Oth_Cur} onChange={(e) => setTicket_Purchase_Rate_Oth_Cur(e.target.value)}  />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Ticket Purchase Cur </label>
-                  <select required value={ticket_Purchase_Cur} onChange={(e) => setTicket_Purchase_Cur(e.target.value)} >
+                  <select  value={ticket_Purchase_Cur} onChange={(e) => setTicket_Purchase_Cur(e.target.value)} >
                     <option className="my-1 py-2" value="">choose</option>
                     {currencies && currencies.map((data) => (
                       <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
@@ -1108,7 +1108,7 @@ export default function SingleEntry() {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Reference Out </label>
-                  <select required value={azad_Visa_Reference_Out} onChange={(e) => setAzad_Visa_Reference_Out(e.target.value)} >
+                  <select  value={azad_Visa_Reference_Out} onChange={(e) => setAzad_Visa_Reference_Out(e.target.value)} >
                     <option className="my-1 py-2" value="">choose</option>
                     <option className="my-1 py-2" value="Candidate">Candidate</option>
                     <option className="my-1 py-2" value="Agents">Agents</option>
@@ -1128,7 +1128,7 @@ export default function SingleEntry() {
                       readOnly
                     />
                   ) :
-                    <select value={azad_Visa_Reference_Out_Name} onChange={(e) => setAzad_Visa_Reference_Out_Name(e.target.value)} required>
+                    <select value={azad_Visa_Reference_Out_Name} onChange={(e) => setAzad_Visa_Reference_Out_Name(e.target.value)} >
 
                       (
                       <>
@@ -1163,15 +1163,15 @@ export default function SingleEntry() {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Azad Visa Sale PKR </label>
-                  <input type="number" min='0' required value={azad_Visa_Sales_PKR} onChange={(e) => setAzad_Visa_Sales_PKR(e.target.value)} />
+                  <input type="number" min='0'  value={azad_Visa_Sales_PKR} onChange={(e) => setAzad_Visa_Sales_PKR(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Azad Visa Sale Rate Oth Curr </label>
-                  <input type="number" min='0' required value={azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => setAzad_Visa_Sales_Rate_Oth_Cur(e.target.value)} />
+                  <input type="number" min='0'  value={azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => setAzad_Visa_Sales_Rate_Oth_Cur(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Azad Visa Sale Cur </label>
-                  <select required value={azad_Visa_Sales_Cur} onChange={(e) => setAzad_Visa_Sales_Cur(e.target.value)}>
+                  <select  value={azad_Visa_Sales_Cur} onChange={(e) => setAzad_Visa_Sales_Cur(e.target.value)}>
                     <option className="my-1 py-2" value="">choose</option>
                     {currencies && currencies.map((data) => (
                       <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
@@ -1181,7 +1181,7 @@ export default function SingleEntry() {
 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Reference In </label>
-                  <select required value={azad_Visa_Reference_In} onChange={(e) => setAzad_Visa_Reference_In(e.target.value)}  >
+                  <select  value={azad_Visa_Reference_In} onChange={(e) => setAzad_Visa_Reference_In(e.target.value)}  >
                     <option className="my-1 py-2" value="">choose</option>
                     <option className="my-1 py-2" value="Candidate">Candidate</option>
                     <option className="my-1 py-2" value="Agents">Agents</option>
@@ -1201,7 +1201,7 @@ export default function SingleEntry() {
                       readOnly
                     />
                   ) :
-                    <select value={azad_Visa_Reference_In_Name} onChange={(e) => setAzad_Visa_Reference_In_Name(e.target.value)} required>
+                    <select value={azad_Visa_Reference_In_Name} onChange={(e) => setAzad_Visa_Reference_In_Name(e.target.value)} >
 
                       (
                       <>
@@ -1236,15 +1236,15 @@ export default function SingleEntry() {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Azad Visa Purchase PKR </label>
-                  <input type="number" min='0' required value={azad_Visa_Purchase_PKR} onChange={(e) => setAzad_Visa_Purchase_PKR(e.target.value)} />
+                  <input type="number" min='0'  value={azad_Visa_Purchase_PKR} onChange={(e) => setAzad_Visa_Purchase_PKR(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Azad Visa Purch Rate Oth Curr </label>
-                  <input type="number" min='0' required value={azad_Visa_Purchase_Rate_Oth_Cur} onChange={(e) => setAzad_Visa_Purchase_Rate_Oth_Cur(e.target.value)} />
+                  <input type="number" min='0'  value={azad_Visa_Purchase_Rate_Oth_Cur} onChange={(e) => setAzad_Visa_Purchase_Rate_Oth_Cur(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Azad Visa Purchase Cur </label>
-                  <select required value={azad_Visa_Purchase_Cur} onChange={(e) => setAzad_Visa_Purchase_Cur(e.target.value)}>
+                  <select  value={azad_Visa_Purchase_Cur} onChange={(e) => setAzad_Visa_Purchase_Cur(e.target.value)}>
                     <option className="my-1 py-2" value="">choose</option>
                     {currencies && currencies.map((data) => (
                       <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
@@ -1282,15 +1282,15 @@ export default function SingleEntry() {
 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Protector Price In </label>
-                  <input type="number" min='0' required value={protector_Price_In} onChange={(e) => setProtector_Price_In(e.target.value)} />
+                  <input type="number" min='0'  value={protector_Price_In} onChange={(e) => setProtector_Price_In(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Protector Price In Oth Curr </label>
-                  <input type="number" min='0' required value={azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => setAzad_Visa_Sales_Rate_Oth_Cur(e.target.value)} />
+                  <input type="number" min='0'  value={azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => setAzad_Visa_Sales_Rate_Oth_Cur(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Reference In </label>
-                  <select required value={protector_Reference_In} onChange={(e) => setProtector_Reference_In(e.target.value)} >
+                  <select  value={protector_Reference_In} onChange={(e) => setProtector_Reference_In(e.target.value)} >
                     <option className="my-1 py-2" value="">choose</option>
                     <option className="my-1 py-2" value="Protector">Protector</option>
                   </select>
@@ -1298,7 +1298,7 @@ export default function SingleEntry() {
 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Reference In Name</label>
-                  <select required value={protector_Reference_In_Name} onChange={(e) => setProtector_Reference_In_Name(e.target.value)} >
+                  <select  value={protector_Reference_In_Name} onChange={(e) => setProtector_Reference_In_Name(e.target.value)} >
                     {protector_Reference_In==="Protector" &&(
                       <>
                       <option value="">choose Protector</option>
@@ -1321,7 +1321,7 @@ export default function SingleEntry() {
                 
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label htmlFor="" >Protector Price Out </label>
-                  <input type="number" min='0' required value={protector_Price_Out} onChange={(e) => setProtector_Price_Out(e.target.value)} />
+                  <input type="number" min='0'  value={protector_Price_Out} onChange={(e) => setProtector_Price_Out(e.target.value)} />
                 </div>
               </div>
             }

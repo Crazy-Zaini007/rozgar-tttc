@@ -24,7 +24,7 @@ import ProtectorHook from '../../hooks/settingHooks/ProtectorHook';
 
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
-// import jsPDF from 'jspdf';
+import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 const rowsPerPageOptions = [10, 15, 30];
 
