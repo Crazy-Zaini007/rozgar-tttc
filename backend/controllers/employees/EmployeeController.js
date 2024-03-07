@@ -330,9 +330,9 @@ const delSalary = async (req, res) => {
           $inc: {},
         };
 
-        if (paymentToDelete.payment_Via.toLowerCase() === "cash" || paymentToDelete.payment_Via==="cash") {
-          cashInHandUpdate.$inc.cash = -paymentToDelete.payment_Out;
-          cashInHandUpdate.$inc.total_Cash = -paymentToDelete.payment_Out;
+        if (paymentToDelete.payment_Via.toLowerCase() === "cash") {
+          cashInHandUpdate.$inc.cash = paymentToDelete.payment_Out;
+          cashInHandUpdate.$inc.total_Cash = paymentToDelete.payment_Out;
         }
         else{
           cashInHandUpdate.$inc.bank_Cash = -paymentToDelete.payment_Out;
@@ -420,12 +420,12 @@ const updateSalary = async (req, res) => {
                     }
 
                     const newAmount = paymentToUpdate.payment_Out - payment_Out
-                    if (paymentToUpdate.payment_Via.toLowerCase() === "cash" || paymentToUpdate.payment_Via === "cash") {
+                    if (paymentToUpdate.payment_Via.toLowerCase() === "cash") {
                         cashInHandUpdate.$inc.cash = -newAmount;
                         cashInHandUpdate.$inc.total_Cash = -newAmount;
 
                     } else  {
-                        cashInHandUpdate.$inc.bankCash = -newAmount;
+                        cashInHandUpdate.$inc.bank_Cash = -newAmount;
                         cashInHandUpdate.$inc.total_Cash = -newAmount;
 
                     }

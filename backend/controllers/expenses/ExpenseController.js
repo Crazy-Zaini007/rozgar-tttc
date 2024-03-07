@@ -164,15 +164,15 @@ const delExpense = async (req, res) => {
                 $inc: {}
             };
 
-            if (expenseToDelete.payment_Via === "Bank") {
-                cashInHandUpdate.$inc.bank_Cash = expenseToDelete.payment_Out;
-                cashInHandUpdate.$inc.total_Cash = expenseToDelete.payment_Out;
-         
-                
-            } else if (expenseToDelete.payment_Via.toLowerCase() === "cash") {
+            if (expenseToDelete.payment_Via.toLowerCase() === "cash") {
                 cashInHandUpdate.$inc.cash = expenseToDelete.payment_Out;
                 cashInHandUpdate.$inc.total_Cash = expenseToDelete.payment_Out;
             }
+            else{
+                cashInHandUpdate.$inc.bank_Cash = expenseToDelete.payment_Out;
+                cashInHandUpdate.$inc.total_Cash = expenseToDelete.payment_Out;
+            }
+
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
@@ -236,10 +236,10 @@ const updateExpense = async (req, res) => {
                     const newExpenseAmount = expenseToUpdate.payment_Out - payment_Out
                     if (expenseToUpdate.payment_Via.toLowerCase() === "cash") {
                         cashInHandUpdate.$inc.cash = -newExpenseAmount;
-                cashInHandUpdate.$inc.total_Cash = -newExpenseAmount;
+                        cashInHandUpdate.$inc.total_Cash = -newExpenseAmount;
 
                     } else  {
-                        cashInHandUpdate.$inc.bankCash = -newExpenseAmount;
+                        cashInHandUpdate.$inc.bank_Cash = -newExpenseAmount;
                          cashInHandUpdate.$inc.total_Cash = -newExpenseAmount;
                     }
 
