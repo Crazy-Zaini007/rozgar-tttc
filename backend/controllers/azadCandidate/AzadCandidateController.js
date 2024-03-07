@@ -658,13 +658,14 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
                 $inc: {}
             };
 
-            if (payment_Via === "Bank") {
-                cashInHandUpdate.$inc.bank_Cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
-            } else if (payment_Via.toLowerCase() === "cash") {
-                cashInHandUpdate.$inc.cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+             if (payment_Via.toLowerCase() === "cash") {
+                cashInHandUpdate.$inc.cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
             }
+            else{
+                cashInHandUpdate.$inc.bank_Cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
+            } 
             
             await CashInHand.updateOne({}, cashInHandUpdate);
 
@@ -676,7 +677,7 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_In = newPaymentIn;
             paymentToUpdate.cash_Out = newCashOut;
-            paymentToUpdate.slip_Pic = uploadImage.secure_url;
+            paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_In_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = newCurrAmount;
@@ -740,6 +741,7 @@ const deleteAzadCandPaymentInSchema = async (req, res) => {
 
 
         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Candidate_Payment_In_Schema.total_Payment_In
+        cashInHandUpdate.$inc.total_Cash =  existingSupplier.Candidate_Payment_In_Schema.total_Cash_Out
 
 
         await CashInHand.updateOne({}, cashInHandUpdate);
@@ -1789,7 +1791,7 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_Out = newPaymentOut;
             paymentToUpdate.cash_Out = newCashOut,
-                paymentToUpdate.slip_Pic = uploadImage.secure_url;
+                paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_Out_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = curr_Amount;
@@ -1873,7 +1875,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
                 }
 
                 let nextInvoiceNumber = 0;
-
+                
                 const currentInvoiceNumber = await InvoiceNumber.findOne({});
 
                 if (!currentInvoiceNumber) {
@@ -2012,6 +2014,7 @@ const deleteAzadCandPaymentOutSchema = async (req, res) => {
 
 
         cashInHandUpdate.$inc.total_Cash = existingSupplier.Candidate_Payment_Out_Schema.total_Payment_Out
+        cashInHandUpdate.$inc.total_Cash = -existingSupplier.Candidate_Payment_Out_Schema.total_Cash_Out
 
 
         await CashInHand.updateOne({}, cashInHandUpdate);

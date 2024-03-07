@@ -92,7 +92,7 @@ const addExpense = async (req, res) => {
 
             if (payment_Via.toLowerCase() === "cash") {
                 cashInHandUpdate.$inc.cash = -payment_Out;
-          cashInHandUpdate.$inc.total_Cash = -payment_Out;
+                cashInHandUpdate.$inc.total_Cash = -payment_Out;
 
             } else {
                 cashInHandUpdate.$inc.bank_Cash = -payment_Out;
@@ -234,13 +234,15 @@ const updateExpense = async (req, res) => {
                     }
 
                     const newExpenseAmount = expenseToUpdate.payment_Out - payment_Out
-                    if (expenseToUpdate.payment_Via.toLowerCase() === "cash") {
-                        cashInHandUpdate.$inc.cash = -newExpenseAmount;
-                        cashInHandUpdate.$inc.total_Cash = -newExpenseAmount;
+                    console.log(newExpenseAmount)
 
+                    if (expenseToUpdate.payment_Via.toLowerCase() === "cash") {
+                        cashInHandUpdate.$inc.cash = newExpenseAmount;
+                        cashInHandUpdate.$inc.total_Cash = newExpenseAmount;
+                        
                     } else  {
-                        cashInHandUpdate.$inc.bank_Cash = -newExpenseAmount;
-                         cashInHandUpdate.$inc.total_Cash = -newExpenseAmount;
+                        cashInHandUpdate.$inc.bank_Cash = newExpenseAmount;
+                         cashInHandUpdate.$inc.total_Cash = newExpenseAmount;
                     }
 
                     await CashInHand.updateOne({}, cashInHandUpdate);

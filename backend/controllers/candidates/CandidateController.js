@@ -566,7 +566,7 @@ const deleteSinglePaymentIn = async (req, res) => {
             cashInHandUpdate.$inc.bank_Cash = -newPaymentIn;
             cashInHandUpdate.$inc.total_Cash = -newPaymentIn;
           }
-
+          
             await CashInHand.updateOne({}, cashInHandUpdate);
             const updatedSupplier = await Candidate.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
@@ -652,13 +652,14 @@ const updateSinglePaymentIn = async (req, res) => {
                 $inc: {}
             };
 
-            if (payment_Via === "Bank") {
-                cashInHandUpdate.$inc.bank_Cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
-            } else if (payment_Via === "Cash") {
-                cashInHandUpdate.$inc.cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+            if (payment_Via.toLowerCase() === "cash") {
+                cashInHandUpdate.$inc.cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
             }
+            else{
+                cashInHandUpdate.$inc.bank_Cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
+            }  
             await CashInHand.updateOne({}, cashInHandUpdate);
 
             // Update the payment details
@@ -669,13 +670,11 @@ const updateSinglePaymentIn = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_In = newPaymentIn;
             paymentToUpdate.cash_Out = newCashOut;
-            paymentToUpdate.slip_Pic = uploadImage.secure_url;
+            paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_In_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = newCurrAmount;
             paymentToUpdate.date = date;
-            paymentToUpdate.cand_Name = cand_Name
-
 
             // Save the updated supplier
 
@@ -731,7 +730,8 @@ const deleteAgentPaymentInSchema = async (req, res) => {
         };
 
 
-        cashInHandUpdate.$inc.total_Cash = existingSupplier.payment_Out_Schema.total_Payment_Out
+        cashInHandUpdate.$inc.total_Cash = -existingSupplier.payment_In_Schema.total_Payment_In
+        cashInHandUpdate.$inc.total_Cash =  existingSupplier.payment_In_Schema.total_Cash_Out
 
 
         await CashInHand.updateOne({}, cashInHandUpdate);
@@ -1515,7 +1515,6 @@ const addPaymentOutReturn = async (req, res) => {
                     nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
                 }
 
-
                 let uploadImage;
 
                 if (slip_Pic) {
@@ -1785,12 +1784,11 @@ const updateSinglePaymentOut = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_Out = newPaymentOut;
             paymentToUpdate.cash_Out = newCashOut,
-                paymentToUpdate.slip_Pic = uploadImage.secure_url;
+            paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_Out_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = curr_Amount;
             paymentToUpdate.date = date;
-            paymentToUpdate.cand_Name = cand_Name
             // Save the updated supplier
             await existingSupplier.save();
 
@@ -1800,7 +1798,7 @@ const updateSinglePaymentOut = async (req, res) => {
             res.status(200).json({ message: "Payment Out details updated successfully", data: updatedSupplier });
         } catch (error) {
             console.error('Error updating payment details:', error);
-            res.status(500).json({ message: 'Error updating payment details', error: error.message });
+            res.status(500).json({ message: `Error updating payment details ${error}` });
         }
     }
 };
@@ -2481,6 +2479,7 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
 
 
         cashInHandUpdate.$inc.total_Cash = existingSupplier.payment_Out_Schema.total_Payment_Out
+        cashInHandUpdate.$inc.total_Cash = -existingSupplier.payment_Out_Schema.total_Cash_Out
 
 
         await CashInHand.updateOne({}, cashInHandUpdate);

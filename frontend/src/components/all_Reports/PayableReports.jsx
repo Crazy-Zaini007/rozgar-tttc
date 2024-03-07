@@ -298,7 +298,7 @@ export default function PayableReports() {
                   <Table stickyHeader>
                   <TableHead>
                         <TableRow>
-                          <TableCell className='label border'>SN</TableCell>
+                          <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Reference</TableCell>
                           <TableCell className='label border'>Name/PP#</TableCell>
                           <TableCell className='label border'>Visa_Amount_PKR</TableCell>

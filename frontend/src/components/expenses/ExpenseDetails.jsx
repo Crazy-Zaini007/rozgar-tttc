@@ -174,7 +174,6 @@ export default function ExpenseDetails() {
           getExpenses()
           setNewMessage(toast.success(json.message));
           setIsLoading(false)
-          setEditMode(!editMode)
         }
       }
       catch (error) {

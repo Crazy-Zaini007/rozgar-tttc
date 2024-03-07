@@ -247,6 +247,7 @@ const addEntry = async (req, res) => {
         }
 
         const newEntry = new Entries({
+          entry_Date: new Date().toISOString().split("T")[0],
           reference_Out,
           reference_In,
           name,
@@ -3230,6 +3231,9 @@ const addMultipleEnteries = async (req, res) => {
           entryData.flight_Date !== undefined && entryData.flight_Date !== ""
             ? entryData.flight_Date
             : "No Fly";
+            if(!entryData.entry_Date){
+              entryData.entry_Date= new Date().toISOString().split("T")[0]
+            }
         let sendResponse = true;
 
         const existingPPNO = await Entries.findOne({
@@ -5827,7 +5831,9 @@ const getEntry = async (req, res) => {
       const entries = await Entries.find({}).sort({ createdAt: -1 });
       // Format createdAt dates using moment
       const formattedEntries = entries.map((entry) => ({
+
         ...entry._doc,
+       
         createdAt: moment(entry.createdAt).format("YYYY-MM-DD"),
         updatedAt: moment(entry.updatedAt).format("YYYY-MM-DD"),
       }));

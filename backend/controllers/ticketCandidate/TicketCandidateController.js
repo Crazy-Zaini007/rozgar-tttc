@@ -189,9 +189,9 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePaymentIn = req.body.multiplePaymentIn;
+        const multiplePayment = req.body.multiplePayment;
 
-        if (!Array.isArray(multiplePaymentIn) || multiplePaymentIn.length === 0) {
+        if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
             return;
         }
@@ -201,7 +201,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
 
             const updatedPayments = [];
 
-            for (const payment of multiplePaymentIn) {
+            for (const payment of multiplePayment) {
                 let {
                     supplierName,
                     category,
@@ -658,13 +658,14 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
                 $inc: {}
             };
 
-            if (payment_Via === "Bank") {
-                cashInHandUpdate.$inc.bank_Cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
-            } else if (payment_Via.toLowerCase() === "cash") {
-                cashInHandUpdate.$inc.cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+             if (payment_Via.toLowerCase() === "cash") {
+                cashInHandUpdate.$inc.cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
             }
+            else{
+                cashInHandUpdate.$inc.bank_Cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
+            } 
             
             await CashInHand.updateOne({}, cashInHandUpdate);
 
@@ -676,7 +677,7 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_In = newPaymentIn;
             paymentToUpdate.cash_Out = newCashOut;
-            paymentToUpdate.slip_Pic = uploadImage.secure_url;
+            paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_In_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = newCurrAmount;
@@ -740,6 +741,7 @@ const deleteAzadCandPaymentInSchema = async (req, res) => {
 
 
         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Candidate_Payment_In_Schema.total_Payment_In
+        cashInHandUpdate.$inc.total_Cash =  existingSupplier.Candidate_Payment_In_Schema.total_Cash_Out
 
 
         await CashInHand.updateOne({}, cashInHandUpdate);
@@ -763,7 +765,6 @@ const deleteAzadCandPaymentInSchema = async (req, res) => {
         });
     }
 }
-
 
 
 // Updating a single Agent Total Payment In Details
@@ -1238,10 +1239,8 @@ const candidateIn=await Candidate.findOne({
   
   }
   
-  
-  
-  
-  
+
+
 // Getting All Supplier Payments In
 const getAzadCandAllPaymentsIn = async (req, res) => {
     try {
@@ -1792,7 +1791,7 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_Out = newPaymentOut;
             paymentToUpdate.cash_Out = newCashOut,
-                paymentToUpdate.slip_Pic = uploadImage.secure_url;
+                paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_Out_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = curr_Amount;
@@ -1830,9 +1829,9 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePaymentOut = req.body.multiplePaymentOut;
+        const multiplePayment = req.body.multiplePayment;
 
-        if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
+        if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
             return;
         }
@@ -1840,7 +1839,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
         try {
             const updatedPayments = [];
 
-            for (const payment of multiplePaymentOut) {
+            for (const payment of multiplePayment) {
                 let {
                     supplierName,
                     category,
@@ -1876,7 +1875,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
                 }
 
                 let nextInvoiceNumber = 0;
-
+                
                 const currentInvoiceNumber = await InvoiceNumber.findOne({});
 
                 if (!currentInvoiceNumber) {
@@ -1963,7 +1962,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
             }
 
 
-            res.status(200).json({ message: `${multiplePaymentOut.length} Payments Out added Successfully` });
+            res.status(200).json({ message: `${multiplePayment.length} Payments Out added Successfully` });
         } catch (error) {
             console.error('Error updating values:', error);
             res.status(500).json({ message: 'Error updating values', error: error.message });
@@ -2015,6 +2014,7 @@ const deleteAzadCandPaymentOutSchema = async (req, res) => {
 
 
         cashInHandUpdate.$inc.total_Cash = existingSupplier.Candidate_Payment_Out_Schema.total_Payment_Out
+        cashInHandUpdate.$inc.total_Cash = -existingSupplier.Candidate_Payment_Out_Schema.total_Cash_Out
 
 
         await CashInHand.updateOne({}, cashInHandUpdate);
@@ -2038,7 +2038,6 @@ const deleteAzadCandPaymentOutSchema = async (req, res) => {
         });
     }
 };
-
 
 // Updating a single Agent Total Payment In Details
 const updateAgentTotalPaymentOut = async (req, res) => {
@@ -2400,7 +2399,7 @@ const candidateIn=await Candidate.findOne({
   
   
   
-     const ticketCandidateIn=await AzadCandidate.findOne({
+     const ticketCandidateIn=await TicketCandidate.findOne({
       "Candidate_Payment_In_Schema.supplierName": name,
       "Candidate_Payment_In_Schema.entry_Mode": entryMode,
       "Candidate_Payment_In_Schema.pp_No": pp_No,
@@ -2416,7 +2415,7 @@ const candidateIn=await Candidate.findOne({
   
     }
     
-    const ticketCandidateOut=await AzadCandidate.findOne({
+    const ticketCandidateOut=await TicketCandidate.findOne({
       "Candidate_Payment_Out_Schema.supplierName": name,
       "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
       "Candidate_Payment_Out_Schema.pp_No": pp_No,
@@ -2513,6 +2512,7 @@ const candidateIn=await Candidate.findOne({
   }
   
   
+  
 
 // Getting All Supplier Payments Out
 const getAzadCandAllPaymentsOut = async (req, res) => {
@@ -2526,7 +2526,7 @@ const getAzadCandAllPaymentsOut = async (req, res) => {
         }
 
         if (user.role === "Admin") {
-            const supplierPayments = await AzadTicketCandidate.find({}).sort({ createdAt: -1 });
+            const supplierPayments = await TicketCandidate.find({}).sort({ createdAt: -1 });
             const formattedDetails = supplierPayments
                 .filter(candidate => candidate.Candidate_Payment_Out_Schema)
                 .map(candidate => {
@@ -2560,4 +2560,4 @@ const getAzadCandAllPaymentsOut = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-module.exports = { addAzadCandPaymentIn, addAzadCandMultiplePaymentsIn, addAzadCandPaymentInReturn, deleteSingleAzadCandPaymentIn, updateSingleAzadCandPaymentIn,deleteAzadCandPaymentInSchema,updateAgentTotalPaymentIn, getAzadCandAllPaymentsIn, addAzadCandPaymentOut, addAzadCandPaymentOutReturn, deleteAzadCandSinglePaymentOut, updateAzadCandSinglePaymentOut, addAzadCandMultiplePaymentsOut,deleteAzadCandPaymentOutSchema,updateAgentTotalPaymentOut, getAzadCandAllPaymentsOut}
+module.exports = { addAzadCandPaymentIn, addAzadCandMultiplePaymentsIn, addAzadCandPaymentInReturn, deleteSingleAzadCandPaymentIn, updateSingleAzadCandPaymentIn,deleteAzadCandPaymentInSchema,updateAgentTotalPaymentIn, getAzadCandAllPaymentsIn, addAzadCandPaymentOut, addAzadCandPaymentOutReturn, deleteAzadCandSinglePaymentOut, updateAzadCandSinglePaymentOut, addAzadCandMultiplePaymentsOut,deleteAzadCandPaymentOutSchema,updateAgentTotalPaymentOut, getAzadCandAllPaymentsOut }

@@ -420,16 +420,16 @@ const deleteSinglePaymentOut = async (req, res) => {
       const cashInHandUpdate = {
         $inc: {},
       };
-
-      if (payment_Via === "Bank") {
-        cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
-        cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-
-      } else if (payment_Via.toLowerCase() === "cash") {
+      if (payment_Via.toLowerCase() === "cash") {
         cashInHandUpdate.$inc.cash = newPaymentOut;
         cashInHandUpdate.$inc.total_Cash = newPaymentOut;
 
       }
+      else{
+        cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
+        cashInHandUpdate.$inc.total_Cash = newPaymentOut;
+
+      } 
 
       await CashInHand.updateOne({}, cashInHandUpdate);
       await existingSupplier.save()

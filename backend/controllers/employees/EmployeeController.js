@@ -395,19 +395,14 @@ const updateSalary = async (req, res) => {
 
         }
         if(paymentToUpdate){
-          paymentToUpdate.category = category
-          paymentToUpdate.payment_Via = payment_Via
-          paymentToUpdate.payment_Type = payment_Type
-          paymentToUpdate.slip_No = slip_No
-          paymentToUpdate.payment_Out = payment_Out
-          paymentToUpdate.payment_Out_Curr = payment_Out_Curr
-          paymentToUpdate.slip_Pic = slip_Pic
-          paymentToUpdate.details = details
-          paymentToUpdate.date = date
-          paymentToUpdate.curr_Rate = curr_Rate
-          paymentToUpdate.curr_Amount = curr_Amount
-          employee.open=open,
-          employee.close=close
+          let uploadImage;
+
+          if (slip_Pic) {
+              uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+                  upload_preset: 'rozgar'
+              });
+          }
+         
           const cashInHandDoc = await CashInHand.findOne({});
 
                     if (!cashInHandDoc) {
@@ -421,17 +416,30 @@ const updateSalary = async (req, res) => {
 
                     const newAmount = paymentToUpdate.payment_Out - payment_Out
                     if (paymentToUpdate.payment_Via.toLowerCase() === "cash") {
-                        cashInHandUpdate.$inc.cash = -newAmount;
-                        cashInHandUpdate.$inc.total_Cash = -newAmount;
+                      
+                        cashInHandUpdate.$inc.cash = newAmount;
+                        cashInHandUpdate.$inc.total_Cash = newAmount;
 
                     } else  {
-                        cashInHandUpdate.$inc.bank_Cash = -newAmount;
-                        cashInHandUpdate.$inc.total_Cash = -newAmount;
+                        cashInHandUpdate.$inc.bank_Cash = newAmount;
+                        cashInHandUpdate.$inc.total_Cash = newAmount;
 
                     }
 
                     await CashInHand.updateOne({}, cashInHandUpdate);
-
+                    paymentToUpdate.category = category
+                    paymentToUpdate.payment_Via = payment_Via
+                    paymentToUpdate.payment_Type = payment_Type
+                    paymentToUpdate.slip_No = slip_No
+                    paymentToUpdate.payment_Out = payment_Out
+                    paymentToUpdate.payment_Out_Curr = payment_Out_Curr
+                    paymentToUpdate.slip_Pic = uploadImage?.slip_Pic || ""
+                    paymentToUpdate.details = details
+                    paymentToUpdate.date = date
+                    paymentToUpdate.curr_Rate = curr_Rate
+                    paymentToUpdate.curr_Amount = curr_Amount
+                    employee.open=open,
+                    employee.close=close
           await employee.save()
           res.status(200).json({ message: `Payment updated Successfully !` })
         }

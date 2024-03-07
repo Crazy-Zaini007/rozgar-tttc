@@ -1117,7 +1117,7 @@ const route=location.pathname;;
                         </Paper>
                     </div>
                     <div className="col-md-12 detail_table my-2">
-                        <h6>Payment In Details</h6>
+                        <h6>Payments Details</h6>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead className="thead">

@@ -3,7 +3,7 @@ const User = require("../../database/userdb/UserSchema");
 const Suppliers = require("../../database/suppliers/SupplierSchema");
 const Agents = require("../../database/agents/AgentSchema");
 const Candidate = require("../../database/candidate/CandidateSchema");
-const AzadSupplier = require("../../database/azadSuppliers/AzadSupplierSchema");
+const AzadSuppliers = require("../../database/azadSuppliers/AzadSupplierSchema");
 const AzadCandidate = require("../../database/azadCandidates/AzadCandidateSchema");
 const TicketSuppliers = require("../../database/ticketSuppliers/TicketSupplierSchema");
 const TicketCandidate = require("../../database/ticketCandidates/TicketCandidateSchema");
@@ -179,9 +179,9 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePaymentIn = req.body.multiplePaymentIn;
+        const multiplePayment = req.body.multiplePayment;
 
-        if (!Array.isArray(multiplePaymentIn) || multiplePaymentIn.length === 0) {
+        if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
             return;
         }
@@ -190,7 +190,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
             
             const updatedPayments = [];
 
-            for (const payment of multiplePaymentIn) {
+            for (const payment of multiplePayment) {
                 let {
                     supplierName,
                     category,
@@ -304,7 +304,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
 
             res.status(200).json({
                
-                message: `${multiplePaymentIn.length} Payments Out added Successfully `
+                message: `${multiplePayment.length} Payments Out added Successfully `
             });
         } catch (error) {
             console.error('Error updating values:', error);
@@ -633,12 +633,12 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
       
            
         if (payment_Via.toLowerCase() === "cash" ) {
-            cashInHandUpdate.$inc.cash = -newBalance;
-            cashInHandUpdate.$inc.total_Cash = -newBalance;
+            cashInHandUpdate.$inc.cash = newBalance;
+            cashInHandUpdate.$inc.total_Cash = newBalance;
           }
           else{
-            cashInHandUpdate.$inc.bank_Cash = -newBalance;
-            cashInHandUpdate.$inc.total_Cash = -newBalance;
+            cashInHandUpdate.$inc.bank_Cash = newBalance;
+            cashInHandUpdate.$inc.total_Cash = newBalance;
           }
       
             await CashInHand.updateOne({}, cashInHandUpdate);      
@@ -712,6 +712,7 @@ const deleteAzadSupplierPaymentInSchema = async (req, res) => {
           $inc: {}
       };   
          cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_In_Schema.total_Payment_In
+         cashInHandUpdate.$inc.total_Cash =  existingSupplier.Supplier_Payment_In_Schema.total_Cash_Out
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -794,7 +795,7 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
     }
 }
 
-
+// Updating Payments in Person
 
 const updateSupPaymentInPerson=async(req,res)=>{
   
@@ -876,7 +877,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
           personIn.final_Status = final_Status;
           personIn.trade = trade;
           personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
-          await newAgent.save()
+          await supplier.save()
   
       } 
   } 
@@ -891,7 +892,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
     personOut.final_Status=final_Status
     personOut.trade=trade
     personOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-    await newAgent.save()
+    await supplier.save()
   
    }
   }
@@ -965,7 +966,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
   }
   
         
-         const ticketSuppliers=await AzadSupplier.find({})
+         const ticketSuppliers=await TicketSuppliers.find({})
          for(const ticketSupplier of ticketSuppliers){
           
           if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
@@ -996,6 +997,10 @@ const updateSupPaymentInPerson=async(req,res)=>{
             }
           }
         
+   
+         
+  
+    
   
           if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
             const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -1032,7 +1037,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
   
   
   
-         const visitSuppliers=await TicketSuppliers.find({})
+         const visitSuppliers=await AzadSuppliers.find({})
          for(const visitSupplier of visitSuppliers){
    
           if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
@@ -1276,7 +1281,6 @@ const updateSupPaymentInPerson=async(req,res)=>{
   
   
 
-
 // Getting All Azad Supplier Payments In
 const getAllAzadSupplierPaymentsIn = async (req, res) => {
     try {
@@ -1499,9 +1503,9 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePaymentOut = req.body.multiplePaymentOut;
+        const multiplePayment = req.body.multiplePayment;
 
-        if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
+        if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
             return;
         }
@@ -1509,7 +1513,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
         try {
             const updatedPayments = [];
 
-            for (const payment of multiplePaymentOut) {
+            for (const payment of multiplePayment) {
                 let {
                     supplierName,
                     category,
@@ -1623,7 +1627,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
 
 
             }
-            res.status(200).json({  message: `${multiplePaymentOut.length} Payments Out added Successfully` });
+            res.status(200).json({  message: `${multiplePayment.length} Payments Out added Successfully` });
         } catch (error) {
             console.error('Error updating values:', error);
             res.status(500).json({ message: 'Error updating values', error: error.message });
@@ -1858,15 +1862,16 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
               $inc: {},
             };
       
-            if (payment_Via === "Bank") {
-              cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-      
-            } else if (payment_Via.toLowerCase() === "cash") {
+            if (payment_Via.toLowerCase() === "cash") {
               cashInHandUpdate.$inc.cash = newPaymentOut;
               cashInHandUpdate.$inc.total_Cash = newPaymentOut;
       
             }
+            else {
+              cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
+              cashInHandUpdate.$inc.total_Cash = newPaymentOut;
+      
+            }  
       
             await CashInHand.updateOne({}, cashInHandUpdate);
       
@@ -2061,7 +2066,7 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
     }
 }
 
-
+// Updating Payments in Person
 
 const updateSupPaymentOutPerson=async(req,res)=>{
   
@@ -2130,8 +2135,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
         }
   
          
-          
-  
+      
   const newAgents=await Agents.find({})
   for(const newAgent of newAgents){
     if (newAgent.payment_In_Schema && newAgent.payment_In_Schema.persons) {
@@ -2158,7 +2162,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
     personOut.final_Status=final_Status
     personOut.trade=trade
     personOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-    await newAgent.save()
+    await supplier.save()
   
    }
   }
@@ -2232,7 +2236,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
   }
   
         
-         const ticketSuppliers=await AzadSupplier.find({})
+         const ticketSuppliers=await TicketSuppliers.find({})
          for(const ticketSupplier of ticketSuppliers){
           
           if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
@@ -2263,6 +2267,10 @@ const updateSupPaymentOutPerson=async(req,res)=>{
             }
           }
         
+   
+         
+  
+    
   
           if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
             const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -2299,7 +2307,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
   
   
   
-         const visitSuppliers=await TicketSuppliers.find({})
+         const visitSuppliers=await AzadSuppliers.find({})
          for(const visitSupplier of visitSuppliers){
    
           if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
@@ -2540,6 +2548,8 @@ const updateSupPaymentOutPerson=async(req,res)=>{
   
   }
   
+  
+  
 
 //deleting the Azad Supplier payment_In_Schema
 const deleteAzadSupplierPaymentOutSchema = async (req, res) => {
@@ -2578,7 +2588,9 @@ const deleteAzadSupplierPaymentOutSchema = async (req, res) => {
       const cashInHandUpdate = {
           $inc: {}
       };   
-         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+         cashInHandUpdate.$inc.total_Cash = existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+        cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Cash_Out
+
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -2813,9 +2825,9 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePaymentIn = req.body.multiplePaymentIn;
+        const multiplePayment = req.body.multiplePayment;
 
-        if (!Array.isArray(multiplePaymentIn) || multiplePaymentIn.length === 0) {
+        if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
             return;
         }
@@ -2824,7 +2836,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
             
             const updatedPayments = [];
 
-            for (const payment of multiplePaymentIn) {
+            for (const payment of multiplePayment) {
                 let {
                     supplierName,
                     category,
@@ -2939,7 +2951,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
 
             res.status(200).json({
                
-                message: `${multiplePaymentIn.length} Payments Out added Successfully `
+                message: `${multiplePayment.length} Payments Out added Successfully `
             });
         } catch (error) {
             console.error('Error updating values:', error);
@@ -3081,14 +3093,14 @@ const addAzadAgentPaymentInReturn = async (req, res) => {
                     const cashInHandUpdate = {
                       $inc: {},
                     };
-          
-                    if (payment_Via === "Bank") {
-                      cashInHandUpdate.$inc.bank_Cash = -newCashOut;
-                      cashInHandUpdate.$inc.total_Cash = -newCashOut;
-                    } else if (payment_Via.toLowerCase() === "cash") {
+                    if (payment_Via.toLowerCase() === "cash") {
                       cashInHandUpdate.$inc.cash = -newCashOut;
                       cashInHandUpdate.$inc.total_Cash = -newCashOut;
                     }
+                    else{
+                      cashInHandUpdate.$inc.bank_Cash = -newCashOut;
+                      cashInHandUpdate.$inc.total_Cash = -newCashOut;
+                    }  
           
                     await CashInHand.updateOne({}, cashInHandUpdate);          
                     // const updatedSupplier = await VisitSuppliers.findById(existingSupplier._id);
@@ -3267,12 +3279,12 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
             };
       
             if (payment_Via.toLowerCase() === "cash" ) {
-                cashInHandUpdate.$inc.cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+                cashInHandUpdate.$inc.cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
               }
               else{
-                cashInHandUpdate.$inc.bank_Cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+                cashInHandUpdate.$inc.bank_Cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
               }
       
             await CashInHand.updateOne({}, cashInHandUpdate);      
@@ -3346,6 +3358,7 @@ const deleteAzadAgentPaymentInSchema = async (req, res) => {
           $inc: {}
       };   
          cashInHandUpdate.$inc.total_Cash = -existingSupplier.Agent_Payment_In_Schema.total_Payment_In
+         cashInHandUpdate.$inc.total_Cash =  existingSupplier.Agent_Payment_In_Schema.total_Cash_Out
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -3428,8 +3441,7 @@ const deleteAzadAgentPaymentInPerson = async (req, res) => {
 
     }
 }
-
-
+// Updating Payments in Person
 
 const updateAgentPaymentInPerson=async(req,res)=>{
   
@@ -3600,7 +3612,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
   }
   
         
-         const ticketSuppliers=await AzadSupplier.find({})
+         const ticketSuppliers=await TicketSuppliers.find({})
          for(const ticketSupplier of ticketSuppliers){
           
           if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
@@ -3631,6 +3643,10 @@ const updateAgentPaymentInPerson=async(req,res)=>{
             }
           }
         
+   
+         
+  
+    
   
           if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
             const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -3667,7 +3683,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
   
   
   
-         const visitSuppliers=await TicketSuppliers.find({})
+         const visitSuppliers=await AzadSuppliers.find({})
          for(const visitSupplier of visitSuppliers){
    
           if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
@@ -3880,7 +3896,6 @@ const updateAgentPaymentInPerson=async(req,res)=>{
   const entry=await Entries.findOne({name,pp_No,entry_Mode:entryMode})
   
   if(entry){
-  console.log('entry Found')
     entry.company=company
     entry.country=country
     entry.entry_Mode=entry_Mode
@@ -3908,7 +3923,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
   
   }
   
-
+  
 
 // Getting All Azad Supplier Payments In
 const getAllAzadAgentPaymentsIn = async (req, res) => {
@@ -4136,9 +4151,9 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePaymentOut = req.body.multiplePaymentOut;
+        const multiplePayment = req.body.multiplePayment;
 
-        if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
+        if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
             return;
         }
@@ -4146,7 +4161,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
         try {
             const updatedPayments = [];
 
-            for (const payment of multiplePaymentOut) {
+            for (const payment of multiplePayment) {
                 let {
                     supplierName,
                     category,
@@ -4263,7 +4278,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
 
             }
 
-            res.status(200).json({  message: `${multiplePaymentOut.length} Payments Out added Successfully` });
+            res.status(200).json({  message: `${multiplePayment.length} Payments Out added Successfully` });
         } catch (error) {
             console.error('Error updating values:', error);
             res.status(500).json({ message: 'Error updating values', error: error.message });
@@ -4695,6 +4710,8 @@ const deleteAzadAgentPaymentOutPerson = async (req, res) => {
 }
 
 
+// Updating Payments in Person
+
 const updateAgentPaymentOutPerson=async(req,res)=>{
   
     const userId = req.user._id;
@@ -4775,7 +4792,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
           personIn.final_Status = final_Status;
           personIn.trade = trade;
           personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
-          await newAgent.save()
+          await supplier.save()
   
       } 
   } 
@@ -4790,7 +4807,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
     personOut.final_Status=final_Status
     personOut.trade=trade
     personOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-    await newAgent.save()
+    await supplier.save()
   
    }
   }
@@ -4864,7 +4881,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
   }
   
         
-         const ticketSuppliers=await AzadSupplier.find({})
+         const ticketSuppliers=await TicketSuppliers.find({})
          for(const ticketSupplier of ticketSuppliers){
           
           if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
@@ -4895,6 +4912,10 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
             }
           }
         
+   
+         
+  
+    
   
           if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
             const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -4931,7 +4952,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
   
   
   
-         const visitSuppliers=await TicketSuppliers.find({})
+         const visitSuppliers=await AzadSuppliers.find({})
          for(const visitSupplier of visitSuppliers){
    
           if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
@@ -5144,7 +5165,6 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
   const entry=await Entries.findOne({name,pp_No,entry_Mode:entryMode})
   
   if(entry){
-  console.log('entry Found')
     entry.company=company
     entry.country=country
     entry.entry_Mode=entry_Mode
@@ -5172,6 +5192,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
   
   }
   
+
 
 //deleting the Azad Supplier payment_In_Schema
 const deleteAzadAgentPaymentOutSchema = async (req, res) => {
@@ -5210,7 +5231,8 @@ const deleteAzadAgentPaymentOutSchema = async (req, res) => {
       const cashInHandUpdate = {
           $inc: {}
       };   
-         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+         cashInHandUpdate.$inc.total_Cash = existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Cash_Out
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -5282,4 +5304,4 @@ const getAllAzadAgentPaymentsOut = async (req, res) => {
 
 
 
-module.exports = { addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut, addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut }
+module.exports = { addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut, addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut}

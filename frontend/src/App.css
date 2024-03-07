@@ -675,7 +675,8 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1px;
-  width: 100%;
+  width: auto;
+
 }
 .entry_details .detail_table p {
   font-size: 12px;

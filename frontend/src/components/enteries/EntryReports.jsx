@@ -347,7 +347,7 @@ const EntryReports = () => {
   const [flight_Date, setFlight_Date] = useState('')
   const filteredEntries = enteries.filter(entry => {
     return (
-      entry.createdAt.toLowerCase().includes(date.toLowerCase()) &&
+      entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
       entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
       entry.company.toLowerCase().includes(company.toLowerCase()) &&
       entry.country.toLowerCase().includes(country.toLowerCase()) &&
@@ -408,7 +408,7 @@ const EntryReports = () => {
                       <label htmlFor="">Date:</label>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.createdAt))].map(dateValue => (
+                        {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
                           <option value={dateValue} key={dateValue}>{dateValue}</option>
                         ))}
                       </select>
@@ -630,7 +630,7 @@ const EntryReports = () => {
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
                               <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.createdAt} readOnly />
+                                <input type='text' value={editedEntry.entry_Date} readOnly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.name} onChange={(e) => handleInputChange(e, 'name')} />
@@ -1633,7 +1633,7 @@ const EntryReports = () => {
                             ) : (
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
-                                <TableCell className='border data_td  '>{entry.createdAt}</TableCell>
+                                <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
                                 <TableCell className='border data_td '>{entry.pp_No}</TableCell>
                                 <TableCell className='border data_td '>{entry.trade}</TableCell>

@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
 const EntrySchema = new mongoose.Schema({
+    entry_Date:{
+        type: String
+    },
     name: {
         type: String,
 

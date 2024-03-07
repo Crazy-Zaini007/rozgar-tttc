@@ -385,7 +385,6 @@ const addMultiplePaymentsIn = async (req, res) => {
 
             await existingSupplier.save();
            
-
           }
 
           else {
@@ -427,7 +426,7 @@ const addMultiplePaymentsIn = async (req, res) => {
             }
 
             await CashInHand.updateOne({}, cashInHandUpdate);
-
+            
             await existingSupplier.save();
 
           }
@@ -941,12 +940,12 @@ const updateSinglePaymentIn = async (req, res) => {
         };
   
         if (payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = -newBalance;
-          cashInHandUpdate.$inc.total_Cash = -newBalance;
+          cashInHandUpdate.$inc.cash = newBalance;
+          cashInHandUpdate.$inc.total_Cash = newBalance;
         }
         else{
-          cashInHandUpdate.$inc.bank_Cash = -newBalance;
-          cashInHandUpdate.$inc.total_Cash = -newBalance;
+          cashInHandUpdate.$inc.bank_Cash = newBalance;
+          cashInHandUpdate.$inc.total_Cash = newBalance;
         }
   
         await CashInHand.updateOne({}, cashInHandUpdate);
@@ -1001,12 +1000,13 @@ const updateSinglePaymentIn = async (req, res) => {
   
        
         if (payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = -newBalance;
-          cashInHandUpdate.$inc.total_Cash = -newBalance;
+          
+          cashInHandUpdate.$inc.cash = newBalance;
+          cashInHandUpdate.$inc.total_Cash = newBalance;
         }
         else{
-          cashInHandUpdate.$inc.bank_Cash = -newBalance;
-          cashInHandUpdate.$inc.total_Cash = -newBalance;
+          cashInHandUpdate.$inc.bank_Cash = newBalance;
+          cashInHandUpdate.$inc.total_Cash = newBalance;
         }
   
         await CashInHand.updateOne({}, cashInHandUpdate);
@@ -1033,7 +1033,7 @@ const updateSinglePaymentIn = async (req, res) => {
         await existingSupplier.save();
   
         const updatedSupplier = await Agents.findById(existingSupplier._id);
-        console.log(updatedSupplier);
+       
         res.status(200).json({
           message: "Payment In details updated successfully",
           data: updatedSupplier,
@@ -1182,6 +1182,7 @@ const deleteAgentPaymentInSchema = async (req, res) => {
 
 
     cashInHandUpdate.$inc.total_Cash = -existingSupplier.payment_In_Schema.total_Payment_In
+    cashInHandUpdate.$inc.total_Cash =  existingSupplier.payment_In_Schema.total_Cash_Out
 
     await CashInHand.updateOne({}, cashInHandUpdate);
 
@@ -2620,15 +2621,16 @@ const deleteSinglePaymentOut = async (req, res) => {
         $inc: {},
       };
 
-      if (payment_Via === "Bank") {
-        cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
-        cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-
-      } else if (payment_Via.toLowerCase() === "cash") {
+      if(payment_Via.toLowerCase() === "cash"){
         cashInHandUpdate.$inc.cash = newPaymentOut;
         cashInHandUpdate.$inc.total_Cash = newPaymentOut;
 
       }
+    else{
+        cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
+        cashInHandUpdate.$inc.total_Cash = newPaymentOut;
+
+      } 
 
       await CashInHand.updateOne({}, cashInHandUpdate);
       await existingSupplier.save()
@@ -3054,6 +3056,7 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
 
 
     cashInHandUpdate.$inc.total_Cash = existingSupplier.payment_Out_Schema.total_Payment_Out
+    cashInHandUpdate.$inc.total_Cash = -existingSupplier.payment_Out_Schema.total_Cash_Out
 
 
     await CashInHand.updateOne({}, cashInHandUpdate);

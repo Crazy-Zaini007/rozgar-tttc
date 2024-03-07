@@ -633,12 +633,12 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
       
            
         if (payment_Via.toLowerCase() === "cash" ) {
-            cashInHandUpdate.$inc.cash = -newBalance;
-            cashInHandUpdate.$inc.total_Cash = -newBalance;
+            cashInHandUpdate.$inc.cash = newBalance;
+            cashInHandUpdate.$inc.total_Cash = newBalance;
           }
           else{
-            cashInHandUpdate.$inc.bank_Cash = -newBalance;
-            cashInHandUpdate.$inc.total_Cash = -newBalance;
+            cashInHandUpdate.$inc.bank_Cash = newBalance;
+            cashInHandUpdate.$inc.total_Cash = newBalance;
           }
       
             await CashInHand.updateOne({}, cashInHandUpdate);      
@@ -712,6 +712,7 @@ const deleteAzadSupplierPaymentInSchema = async (req, res) => {
           $inc: {}
       };   
          cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_In_Schema.total_Payment_In
+         cashInHandUpdate.$inc.total_Cash =  existingSupplier.Supplier_Payment_In_Schema.total_Cash_Out
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -818,7 +819,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
        
         let entryMode
        
-        const existingSupplier = await AzadSupplier.findOne({
+        const existingSupplier = await AzadSuppliers.findOne({
           "Supplier_Payment_In_Schema.supplierName": supplierName,
         });
       
@@ -842,7 +843,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
   
        
          // Updating in Agents both Schema
-         const agents=await AzadSupplier.find({})
+         const agents=await AzadSuppliers.find({})
   
         for(const agent of agents){
   
@@ -1098,7 +1099,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
          }
   
   
-         const azadSuppliers=await AzadSupplier.find({})
+         const azadSuppliers=await AzadSuppliers.find({})
          for(const azadSupplier of azadSuppliers){
           if(azadSupplier.Agent_Payment_In_Schema && azadSupplier.Agent_Payment_In_Schema.persons){
             const AgentPersonIn= azadSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -1861,15 +1862,16 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
               $inc: {},
             };
       
-            if (payment_Via === "Bank") {
-              cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-      
-            } else if (payment_Via.toLowerCase() === "cash") {
+            if (payment_Via.toLowerCase() === "cash") {
               cashInHandUpdate.$inc.cash = newPaymentOut;
               cashInHandUpdate.$inc.total_Cash = newPaymentOut;
       
             }
+            else {
+              cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
+              cashInHandUpdate.$inc.total_Cash = newPaymentOut;
+      
+            }  
       
             await CashInHand.updateOne({}, cashInHandUpdate);
       
@@ -2088,7 +2090,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
        
         let entryMode
        
-        const existingSupplier = await AzadSupplier.findOne({
+        const existingSupplier = await AzadSuppliers.findOne({
           "Supplier_Payment_Out_Schema.supplierName": supplierName,
         });
       
@@ -2112,7 +2114,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
   
        
          // Updating in Agents both Schema
-         const agents=await AzadSupplier.find({})
+         const agents=await AzadSuppliers.find({})
   
         for(const agent of agents){
   
@@ -2367,7 +2369,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
          }
   
   
-         const azadSuppliers=await AzadSupplier.find({})
+         const azadSuppliers=await AzadSuppliers.find({})
          for(const azadSupplier of azadSuppliers){
           if(azadSupplier.Agent_Payment_In_Schema && azadSupplier.Agent_Payment_In_Schema.persons){
             const AgentPersonIn= azadSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -2586,7 +2588,9 @@ const deleteAzadSupplierPaymentOutSchema = async (req, res) => {
       const cashInHandUpdate = {
           $inc: {}
       };   
-         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+         cashInHandUpdate.$inc.total_Cash = existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+        cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Cash_Out
+
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -3089,14 +3093,14 @@ const addAzadAgentPaymentInReturn = async (req, res) => {
                     const cashInHandUpdate = {
                       $inc: {},
                     };
-          
-                    if (payment_Via === "Bank") {
-                      cashInHandUpdate.$inc.bank_Cash = -newCashOut;
-                      cashInHandUpdate.$inc.total_Cash = -newCashOut;
-                    } else if (payment_Via.toLowerCase() === "cash") {
+                    if (payment_Via.toLowerCase() === "cash") {
                       cashInHandUpdate.$inc.cash = -newCashOut;
                       cashInHandUpdate.$inc.total_Cash = -newCashOut;
                     }
+                    else {
+                      cashInHandUpdate.$inc.bank_Cash = -newCashOut;
+                      cashInHandUpdate.$inc.total_Cash = -newCashOut;
+                    } 
           
                     await CashInHand.updateOne({}, cashInHandUpdate);          
                     // const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
@@ -3275,12 +3279,12 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
             };
       
             if (payment_Via.toLowerCase() === "cash" ) {
-                cashInHandUpdate.$inc.cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+                cashInHandUpdate.$inc.cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
               }
               else{
-                cashInHandUpdate.$inc.bank_Cash = -newBalance;
-                cashInHandUpdate.$inc.total_Cash = -newBalance;
+                cashInHandUpdate.$inc.bank_Cash = newBalance;
+                cashInHandUpdate.$inc.total_Cash = newBalance;
               }
       
             await CashInHand.updateOne({}, cashInHandUpdate);      
@@ -3354,6 +3358,7 @@ const deleteAzadAgentPaymentInSchema = async (req, res) => {
           $inc: {}
       };   
          cashInHandUpdate.$inc.total_Cash = -existingSupplier.Agent_Payment_In_Schema.total_Payment_In
+         cashInHandUpdate.$inc.total_Cash =  existingSupplier.Agent_Payment_In_Schema.total_Cash_Out
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   
@@ -3460,7 +3465,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
        
         let entryMode
        
-        const existingSupplier = await AzadSupplier.findOne({
+        const existingSupplier = await AzadSuppliers.findOne({
           "Agent_Payment_In_Schema.supplierName": supplierName,
         });
       
@@ -3484,7 +3489,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
   
        
          // Updating in Agents both Schema
-         const agents=await AzadSupplier.find({})
+         const agents=await AzadSuppliers.find({})
   
         for(const agent of agents){
   
@@ -3740,7 +3745,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
          }
   
   
-         const azadSuppliers=await AzadSupplier.find({})
+         const azadSuppliers=await AzadSuppliers.find({})
          for(const azadSupplier of azadSuppliers){
           if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
             const AgentPersonIn= azadSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -3891,7 +3896,6 @@ const updateAgentPaymentInPerson=async(req,res)=>{
   const entry=await Entries.findOne({name,pp_No,entry_Mode:entryMode})
   
   if(entry){
-  console.log('entry Found')
     entry.company=company
     entry.country=country
     entry.entry_Mode=entry_Mode
@@ -4730,7 +4734,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
        
         let entryMode
        
-        const existingSupplier = await AzadSupplier.findOne({
+        const existingSupplier = await AzadSuppliers.findOne({
           "Agent_Payment_Out_Schema.supplierName": supplierName,
         });
       
@@ -4754,7 +4758,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
   
        
          // Updating in Agents both Schema
-         const agents=await AzadSupplier.find({})
+         const agents=await AzadSuppliers.find({})
   
         for(const agent of agents){
   
@@ -5010,7 +5014,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
          }
   
   
-         const azadSuppliers=await AzadSupplier.find({})
+         const azadSuppliers=await AzadSuppliers.find({})
          for(const azadSupplier of azadSuppliers){
           if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
             const AgentPersonIn= azadSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
@@ -5161,7 +5165,6 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
   const entry=await Entries.findOne({name,pp_No,entry_Mode:entryMode})
   
   if(entry){
-  console.log('entry Found')
     entry.company=company
     entry.country=country
     entry.entry_Mode=entry_Mode
@@ -5228,7 +5231,8 @@ const deleteAzadAgentPaymentOutSchema = async (req, res) => {
       const cashInHandUpdate = {
           $inc: {}
       };   
-         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+         cashInHandUpdate.$inc.total_Cash = existingSupplier.Supplier_Payment_Out_Schema.total_Payment_Out
+         cashInHandUpdate.$inc.total_Cash = -existingSupplier.Supplier_Payment_Out_Schema.total_Cash_Out
       
       await CashInHand.updateOne({}, cashInHandUpdate);
   

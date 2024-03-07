@@ -512,7 +512,7 @@ const EntryDetails = () => {
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
                               <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.createdAt} readOnly />
+                                <input type='text' value={editedEntry.entry_Date} readOnly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.name} onChange={(e) => handleInputChange(e, 'name')} />
@@ -1515,7 +1515,7 @@ const EntryDetails = () => {
                             ) : (
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
-                                <TableCell className='border data_td  '>{entry.createdAt}</TableCell>
+                                <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
                                 <TableCell className='border data_td '>{entry.pp_No}</TableCell>
                                 <TableCell className='border data_td '>{entry.trade}</TableCell>

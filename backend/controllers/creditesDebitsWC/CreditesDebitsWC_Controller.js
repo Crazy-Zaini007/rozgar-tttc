@@ -170,13 +170,14 @@ const addPaymentIn = async (req, res) => {
             const cashInHandUpdate = {
                 $inc: {}
             };
-            if (payment_Via === "Bank") {
-                cashInHandUpdate.$inc.bank_Cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
-            } else if (payment_Via === "Cash") {
+             if (payment_Via.toLowerCase() === "cash") {
                 cashInHandUpdate.$inc.cash = payment_In ? payment_In : -payment_Out
                 cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
             }
+            else {
+                cashInHandUpdate.$inc.bank_Cash = payment_In ? payment_In : -payment_Out
+                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
+            } 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
             await newSupplierEntry.save();
@@ -357,7 +358,7 @@ for(const payment of multiplePayment){
             else {
                 cashInHandUpdate.$inc.bank_Cash = payment_In ? payment_In : -payment_Out
                 cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
-            }
+            } 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
             await newSupplierEntry.save();
@@ -525,7 +526,7 @@ const updateSinglePaymentIn = async (req, res) => {
             const cashInHandUpdate = {
                 $inc: {}
             };
-
+            
             if (payment_Via.toLowerCase() === "cash") {
                 cashInHandUpdate.$inc.cash = -newBalance
                 cashInHandUpdate.$inc.total_Cash = -newBalance
@@ -653,7 +654,7 @@ const updateSinglePaymentOut = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_In = payment_In;
             paymentToUpdate.payment_Out = payment_Out;
-            paymentToUpdate.slip_Pic = uploadImage.secure_url;
+            paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_In_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate ? curr_Rate : 0;
             paymentToUpdate.curr_Amount = curr_Amount ? curr_Amount : 0;
