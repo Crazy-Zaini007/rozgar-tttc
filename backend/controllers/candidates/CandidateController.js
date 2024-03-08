@@ -55,11 +55,21 @@ const addPaymentIn = async (req, res) => {
                 const newPaymentIn = parseInt(payment_In, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
 
-
-                const existingSupplier = await Candidate.findOne({ 'payment_In_Schema.supplierName': supplierName });
+                const candidates=await Candidate.find({})
+                let existingSupplier
+        
+               for (const candidate of candidates){
+                if(candidate.payment_In_Schema){
+                  if(candidate.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = candidate;
+                    break
+                  }
+                }
+               }
+                
                 if (!existingSupplier) {
                     res.status(404).json({
-                        message: "Supplier not Found"
+                        message: `${supplierName} not Found`
                     });
                 }
 
@@ -184,7 +194,7 @@ const addMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -210,7 +220,6 @@ const addMultiplePaymentsIn = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    cand_Name,
                     open, close
                 } = payment;
 
@@ -267,7 +276,6 @@ const addMultiplePaymentsIn = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
                 };
 
                 updatedPayments.push(newPayment)
@@ -1821,7 +1829,7 @@ const addMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -1845,7 +1853,6 @@ const addMultiplePaymentsOut = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    cand_Name,
                     open,
                     close
                 } = payment;
@@ -1857,8 +1864,18 @@ const addMultiplePaymentsOut = async (req, res) => {
 
                 const newPaymentOut = parseInt(payment_Out, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await Candidate.findOne({ 'payment_Out_Schema.supplierName': supplierName });
-
+                const candidates=await Candidate.find({})
+                let existingSupplier
+        
+               for (const candidate of candidates){
+                if(candidate.payment_Out_Schema){
+                  if(candidate.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = candidate;
+                    break
+                  }
+                }
+               }
+            
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: `${supplierName} not found`
@@ -1908,7 +1925,6 @@ const addMultiplePaymentsOut = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
                 }
                 updatedPayments.push(newPayment);
 

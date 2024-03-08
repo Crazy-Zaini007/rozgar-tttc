@@ -241,8 +241,37 @@ export default function SupPaymentOut() {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-    return dataArray;
-  };
+    
+    // Modify the dataArray to ensure missing fields are initialized with undefined
+    const updatedDataArray = dataArray.map((entry, rowIndex) => {
+      // Map over each entry and replace empty strings with undefined
+      return Object.fromEntries(
+        Object.entries(entry).map(([key, value]) => {
+          const trimmedValue = typeof value === 'string' ? value.trim() : value; // Check if the value is a string before trimming
+  
+          // Convert the flight_Date value if the key is 'flight_Date'
+          if (key === 'date') {
+            if (!isNaN(trimmedValue) && trimmedValue !== '') {
+              // Parse the numeric value as a date without time component
+              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000); // Adjust for timezone offset
+  
+              if (!isNaN(dateValue.getTime())) {
+                return [key, dateValue.toISOString().split('T')[0]]; // Format the date as 'YYYY-MM-DD' if the date is valid
+              } else {
+                console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
+                return [key, undefined];
+              }
+            } 
+          }
+  
+          return [key, trimmedValue === '' ? undefined : trimmedValue];
+        })
+      );
+    });
+  
+    return updatedDataArray;
+
+  }
 
   const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...multiplePayment];
@@ -250,16 +279,17 @@ export default function SupPaymentOut() {
     setMultiplePayment(updatedData);
   }
   const handleUploadList =async (e) => {
+    
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch('${apiUrl}/auth/suppliers/add/multiple/payment_in', {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/multiple/payment_out`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ multiplePayment })
+        body: JSON.stringify(multiplePayment)
       });
 
       const json = await response.json();
@@ -279,7 +309,7 @@ export default function SupPaymentOut() {
 
     }
 
-  };
+  }
 
   useEffect(() => {
     if (triggerEffect) {
@@ -311,7 +341,7 @@ export default function SupPaymentOut() {
                   <Paper>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
-                        <button className='btn submit_btn m-1'>Add Payment</button>
+                      <button className='btn submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
                       </div>
                       <div className="table-responsive">
                         <table className='table table-borderless table-striped'>

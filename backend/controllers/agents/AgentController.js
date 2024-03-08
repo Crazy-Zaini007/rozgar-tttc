@@ -247,7 +247,7 @@ const addMultiplePaymentsIn = async (req, res) => {
       return;
     }
 
-    const multiplePayment = req.body.multiplePayment;
+    const multiplePayment = req.body;
 
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
@@ -280,9 +280,18 @@ const addMultiplePaymentsIn = async (req, res) => {
 
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-        const existingSupplier = await Agents.findOne({
-          "payment_In_Schema.supplierName": supplierName,
-        });
+       
+        const agents=await Agents.find({})
+        let existingSupplier
+
+       for (const agent of agents){
+        if(agent.payment_In_Schema){
+          if(agent.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = agent;
+            break
+          }
+        }
+       }
 
         if (!existingSupplier) {
           res.status(404).json({
@@ -402,7 +411,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                 "payment_In_Schema.close": close
               },
               $push: {
-                "payment_In_Schema.payment": payment,
+                "payment_In_Schema.payment": newPayment,
               },
             })
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2052,7 +2061,7 @@ const addMultiplePaymentsOut = async (req, res) => {
       return;
     }
 
-    const multiplePayment = req.body.multiplePayment;
+    const multiplePayment = req.body;
 
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
@@ -2089,9 +2098,18 @@ const addMultiplePaymentsOut = async (req, res) => {
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-        const existingSupplier = await Agents.findOne({
-          "payment_Out_Schema.supplierName": supplierName,
-        });
+       
+        const agents=await Agents.find({})
+        let existingSupplier
+
+       for (const agent of agents){
+        if(agent.payment_Out_Schema){
+          if(agent.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = agent;
+            break
+          }
+        }
+       }
 
         if (!existingSupplier) {
           res.status(404).json({
@@ -2212,8 +2230,8 @@ const addMultiplePaymentsOut = async (req, res) => {
                 "payment_Out_Schema.close": close
               },
               $push: {
-                "payment_Out_Schema.payment": payment,
-              },
+                "payment_Out_Schema.payment": newPayment,
+              }
             })
             const cashInHandDoc = await CashInHand.findOne({});
 

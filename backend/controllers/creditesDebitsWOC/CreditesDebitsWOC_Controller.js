@@ -159,7 +159,7 @@ const addMultiplePaymentIn = async (req, res) => {
             res.status(403).json({ message: "Only Admin is allowed!" });
             return;
         }
-    const multiplePayment = req.body.multiplePayment;
+    const multiplePayment = req.body;
 
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
         res.status(400).json({ message: "Invalid request payload" });
@@ -186,12 +186,18 @@ for(const payment of multiplePayment){
         close
     } = payment
 
+ 
+        const agents=await CDWOC.find({})
+        let existingSupplier
 
-        // Check if the supplier already exists
-        const existingSupplier = await CDWOC.findOne({
-            'payment_In_Schema.supplierName': supplierName
-        })
-
+       for (const agent of agents){
+        if(agent.payment_In_Schema){
+          if(agent.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = agent;
+            break
+          }
+        }
+       }
 
         if (existingSupplier) {
             let nextInvoiceNumber = 0;
@@ -288,7 +294,7 @@ for(const payment of multiplePayment){
       } catch (error) {
         
       }
-      res.status(200).json({ message: `${multiplePayment.length} Payments In added Successfully` });
+      res.status(200).json({ message: `${multiplePayment.length} Payments added Successfully` });
        
 
     } catch (err) {

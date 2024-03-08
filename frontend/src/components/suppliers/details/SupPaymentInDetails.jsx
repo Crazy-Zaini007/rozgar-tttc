@@ -419,7 +419,7 @@ export default function SupPaymentInDetails() {
         <thead>
           <tr>
             <th>SN</th>
-            <th>Agents</th>
+            <th>Suppliers</th>
             <th>TVPI_PKR</th>
             <th>TPI_PKR</th>
             <th>Total_Cash_Out</th>

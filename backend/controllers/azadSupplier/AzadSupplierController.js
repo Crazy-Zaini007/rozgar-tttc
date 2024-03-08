@@ -179,7 +179,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -210,8 +210,19 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
 
                 const newPaymentIn = parseInt(payment_In, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await AzadSuppliers.findOne({ 'Supplier_Payment_In_Schema.supplierName': supplierName });
+                
 
+                const suppliers=await AzadSuppliers.find({})
+                let existingSupplier
+        
+               for (const supplier of suppliers){
+                if(supplier.Supplier_Payment_In_Schema){
+                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = supplier;
+                    break
+                  }
+                }
+               }
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: `${supplierName} not found`
@@ -1503,7 +1514,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -1538,8 +1549,18 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
 
                 const newPaymentOut = parseInt(payment_Out, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await AzadSuppliers.findOne({ 'Supplier_Payment_Out_Schema.supplierName': supplierName });
-
+              
+                const suppliers=await AzadSuppliers.find({})
+                let existingSupplier
+        
+               for (const supplier of suppliers){
+                if(supplier.Supplier_Payment_Out_Schema){
+                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = supplier;
+                    break
+                  }
+                }
+               }
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: `${supplierName} not found`
@@ -2825,7 +2846,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -2856,8 +2877,19 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
 
                 const newPaymentIn = parseInt(payment_In, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await AzadSuppliers.findOne({ 'Agent_Payment_In_Schema.supplierName': supplierName });
+                
 
+                const suppliers=await AzadSuppliers.find({})
+                let existingSupplier
+        
+               for (const supplier of suppliers){
+                if(supplier.Agent_Payment_In_Schema){
+                  if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = supplier;
+                    break
+                  }
+                }
+               }
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: `${supplierName} not found`
@@ -4151,7 +4183,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -4180,14 +4212,24 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
                 } = payment;
 
                 if (!supplierName) {
-                    res.status(400).json({ message: "Supplier Name is required" });
+                    res.status(400).json({ message: "Name is required" });
                     return;
                 }
 
                 const newPaymentOut = parseInt(payment_Out, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await AzadSuppliers.findOne({ 'Agent_Payment_Out_Schema.supplierName': supplierName });
-
+                
+                const suppliers=await AzadSuppliers.find({})
+                let existingSupplier
+        
+               for (const supplier of suppliers){
+                if(supplier.Agent_Payment_Out_Schema){
+                  if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = supplier;
+                    break
+                  }
+                }
+               }
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: `${supplierName} not found`

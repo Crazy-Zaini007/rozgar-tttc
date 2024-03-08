@@ -197,7 +197,7 @@ const addMultiplePaymentsOut = async (req, res) => {
       return;
     }
 
-    const multiplePaymentOut = req.body.multiplePaymentOut;
+    const multiplePaymentOut = req.body;
 
     if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
@@ -227,16 +227,24 @@ const addMultiplePaymentsOut = async (req, res) => {
         } = payment;
 
         if (!supplierName) {
-          res.status(400).json({ message: "Supplier Name is required" });
+          res.status(400).json({ message: "Name is required" });
           return;
         }
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-        const existingSupplier = await Protector.findOne({
-          "payment_Out_Schema.supplierName": supplierName,
-        });
+     
+        const agents=await Protector.find({})
+        let existingSupplier
 
+       for (const agent of agents){
+        if(agent.payment_Out_Schema){
+          if(agent.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = agent;
+            break
+          }
+        }
+       }
         if (!existingSupplier) {
           res.status(404).json({
             message: `${supplierName} not found`,
@@ -346,7 +354,7 @@ const addMultiplePaymentsOut = async (req, res) => {
         }
       }
       res.status(200).json({
-        message: `${multiplePaymentOut.length} Payments Out added Successfully`,
+        message: `${multiplePaymentOut.length} Payments added Successfully`,
       });
     } catch (error) {
       console.error("Error updating values:", error);

@@ -247,7 +247,7 @@ const addMultiplePaymentsIn = async (req, res) => {
       return;
     }
 
-    const multiplePaymentIn = req.body.multiplePaymentIn;
+    const multiplePaymentIn = req.body;
 
     if (!Array.isArray(multiplePaymentIn) || multiplePaymentIn.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
@@ -280,9 +280,17 @@ const addMultiplePaymentsIn = async (req, res) => {
 
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-        const existingSupplier = await Suppliers.findOne({
-          "payment_In_Schema.supplierName": supplierName,
-        });
+        const suppliers=await Suppliers.find({})
+        let existingSupplier
+
+       for (const supplier of suppliers){
+        if(supplier.payment_In_Schema){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = supplier;
+            break
+          }
+        }
+       }
 
         if (!existingSupplier) {
           res.status(404).json({
@@ -403,8 +411,8 @@ const addMultiplePaymentsIn = async (req, res) => {
                 "payment_In_Schema.close": close
               },
               $push: {
-                "payment_In_Schema.payment": payment,
-              },
+                "payment_In_Schema.payment": newPayment,
+              }
             })
             const cashInHandDoc = await CashInHand.findOne({});
 
@@ -2053,8 +2061,8 @@ const addMultiplePaymentsOut = async (req, res) => {
       return;
     }
 
-    const multiplePaymentOut = req.body.multiplePaymentOut;
-
+    const multiplePaymentOut = req.body;
+    console.log('multiplePaymentOut',multiplePaymentOut)
     if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
@@ -2084,21 +2092,30 @@ const addMultiplePaymentsOut = async (req, res) => {
         } = payment;
 
         if (!supplierName) {
-          res.status(400).json({ message: "Supplier Name is required" });
+          res.status(400).json({ message: `${supplierName}  is required` });
           return;
         }
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-        const existingSupplier = await Suppliers.findOne({
-          "payment_Out_Schema.supplierName": supplierName,
-        });
+        const suppliers=await Suppliers.find({})
+        let existingSupplier
+
+       for (const supplier of suppliers){
+        if(supplier.payment_Out_Schema){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = supplier;
+            break
+          }
+        }
+       }
+        
 
         if (!existingSupplier) {
           res.status(404).json({
             message: `${supplierName} not found`,
           });
-          return;
+          return
         }
 
         let nextInvoiceNumber = 0;
@@ -2134,7 +2151,7 @@ const addMultiplePaymentsOut = async (req, res) => {
           category,
           payment_Via,
           payment_Type,
-          slip_No: slip_No ? slip_No : '',
+          slip_No: slip_No,
           payment_Out: newPaymentOut,
           slip_Pic: uploadImage?.secure_url || '',
           details,
@@ -2213,7 +2230,7 @@ const addMultiplePaymentsOut = async (req, res) => {
                 "payment_Out_Schema.close": close
               },
               $push: {
-                "payment_Out_Schema.payment": payment,
+                "payment_Out_Schema.payment": newPayment,
               },
             })
             const cashInHandDoc = await CashInHand.findOne({});

@@ -418,7 +418,7 @@ export default function SupPaymentOutDetails() {
         <thead>
           <tr>
             <th>SN</th>
-            <th>Agents</th>
+            <th>Suppliers</th>
             <th>TVPO_PKR</th>
             <th>TPO_PKR</th>
             <th>Total_Cash_Out</th>

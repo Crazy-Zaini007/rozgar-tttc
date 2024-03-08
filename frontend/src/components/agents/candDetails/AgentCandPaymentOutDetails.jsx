@@ -1049,7 +1049,7 @@ export default function AgentCandPaymentOutDetails() {
           <div className="col-md-12 my-2">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
-                <h4 className='d-inline '>Agents Name: <span>{selectedSupplier}</span></h4>
+                <h4 className='d-inline '>Agent Name: <span>{selectedSupplier}</span></h4>
 
               </div>
               <div className="right">

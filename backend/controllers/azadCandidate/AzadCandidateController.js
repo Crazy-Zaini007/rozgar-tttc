@@ -189,7 +189,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -215,13 +215,24 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    cand_Name,
+                   
                     open, close
                 } = payment;
 
                 const newPaymentIn = parseInt(payment_In, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await AzadCandidate.findOne({ 'Candidate_Payment_In_Schema.supplierName': supplierName });
+                const suppliers=await AzadCandidate.find({})
+                let existingSupplier
+        
+               for (const supplier of suppliers){
+                if(supplier.Candidate_Payment_In_Schema){
+                  if(supplier.Candidate_Payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = supplier;
+                    break
+                  }
+                }
+               }
+                
 
                 if (!existingSupplier) {
                     res.status(404).json({
@@ -272,7 +283,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
+                    
                 };
 
                 updatedPayments.push(newPayment)
@@ -323,7 +334,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
 
 
             res.status(200).json({
-                message: `Multiple Payments In added Successfully to ${updatedSupplier.Candidate_Payment_In_Schema.supplierName}'s Record`
+                message: `${updatedPayments.length} Payments In added Successfully to ${updatedSupplier.Candidate_Payment_In_Schema.supplierName}'s Record`
             });
         } catch (error) {
             console.error('Error updating values:', error);
@@ -1829,7 +1840,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
             return;
         }
 
-        const multiplePayment = req.body.multiplePayment;
+        const multiplePayment = req.body;
 
         if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
             res.status(400).json({ message: "Invalid request payload" });
@@ -1853,7 +1864,6 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    cand_Name,
                     open,
                     close
                 } = payment;
@@ -1865,8 +1875,18 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
 
                 const newPaymentOut = parseInt(payment_Out, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
-                const existingSupplier = await AzadCandidate.findOne({ 'Candidate_Payment_Out_Schema.supplierName': supplierName });
-
+                const suppliers=await AzadCandidate.find({})
+                let existingSupplier
+        
+               for (const supplier of suppliers){
+                if(supplier.Candidate_Payment_Out_Schema){
+                  if(supplier.Candidate_Payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+                    existingSupplier = supplier;
+                    break
+                  }
+                }
+               }
+                
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: `${supplierName} not found`

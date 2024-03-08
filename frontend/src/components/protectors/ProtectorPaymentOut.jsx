@@ -201,7 +201,8 @@ export default function ProtectorPaymentOut() {
     setSingle(index)
   }
 
-  const [formData, setFormData] = useState([{ Name: '', Category: '', Payment_Via: '', Payment_Type: '', Slip_No: '', Payment_Out: '', Details: '', CUR_Country: '', CUR_Rate: '', Currency_Amount: '' }])
+  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  
 
   const [triggerEffect, setTriggerEffect] = useState(false);
 
@@ -225,8 +226,8 @@ export default function ProtectorPaymentOut() {
     fileReader.onload = (e) => {
       const data = e.target.result;
       const dataArray = parseExcelData(data);
-      setFormData(dataArray);
-      setTriggerEffect(true); // Trigger the useEffect when formData changes
+      setMultiplePayment(dataArray);
+      setTriggerEffect(true); // Trigger the useEffect when multiplePayment changes
     };
 
     fileReader.readAsBinaryString(file);
@@ -240,27 +241,82 @@ export default function ProtectorPaymentOut() {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-    return dataArray;
-  };
+    
+    // Modify the dataArray to ensure missing fields are initialized with undefined
+    const updatedDataArray = dataArray.map((entry, rowIndex) => {
+      // Map over each entry and replace empty strings with undefined
+      return Object.fromEntries(
+        Object.entries(entry).map(([key, value]) => {
+          const trimmedValue = typeof value === 'string' ? value.trim() : value; // Check if the value is a string before trimming
+  
+          // Convert the flight_Date value if the key is 'flight_Date'
+          if (key === 'date') {
+            if (!isNaN(trimmedValue) && trimmedValue !== '') {
+              // Parse the numeric value as a date without time component
+              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000); // Adjust for timezone offset
+  
+              if (!isNaN(dateValue.getTime())) {
+                return [key, dateValue.toISOString().split('T')[0]]; // Format the date as 'YYYY-MM-DD' if the date is valid
+              } else {
+                console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
+                return [key, undefined];
+              }
+            } 
+          }
+  
+          return [key, trimmedValue === '' ? undefined : trimmedValue];
+        })
+      );
+    });
+  
+    return updatedDataArray;
+
+  }
 
   const handleInputChange = (rowIndex, key, value) => {
-    const updatedData = [...formData];
+    const updatedData = [...multiplePayment];
     updatedData[rowIndex][key] = value;
-    setFormData(updatedData);
+    setMultiplePayment(updatedData);
   };
 
-  const handleUploadList = (e) => {
-    e.preventDefault();
-    console.log([formData])
-    setFormData([]);
-    setSingle(1);
-  };
+  const handleUploadList =async (e) => {
+    
+    setLoading(true)
+    e.preventDefault()
+    try {
+      const response = await fetch(`${apiUrl}/auth/protectors/add/multiple/payment_out`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+        body: JSON.stringify(multiplePayment)
+      });
+
+      const json = await response.json()
+      if (response.ok) {
+        setMultiplePayment('')
+        setNewMessage(toast.success(json.message))
+        setLoading(false)
+      }
+      if (!response.ok) {
+        setLoading(false)
+        setNewMessage(toast.error(json.message))
+      }
+    } catch (error) {
+      setLoading(false)
+      setNewMessage(toast.error("Server is not Reponding..."))
+
+
+    }
+
+  }
 
   useEffect(() => {
     if (triggerEffect) {
       setTriggerEffect(false);
     }
-  }, [triggerEffect, formData]);
+  }, [triggerEffect, multiplePayment]);
   return (
     <>
       <div className="main">
@@ -285,12 +341,14 @@ export default function ProtectorPaymentOut() {
                   <Paper>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
-                        <button className='btn submit_btn m-1'>Add Payment</button>
+                      <button className='btn submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
+                      
                       </div>
                       <div className="table-responsive">
                         <table className='table table-borderless table-striped'>
                           <thead >
                             <tr >
+                            <th >Date</th>
                               <th >Name</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
@@ -305,7 +363,7 @@ export default function ProtectorPaymentOut() {
                             </tr>
                           </thead>
                           <tbody className='p-0 m-0'>
-                            {formData.length > 0 && formData.map((rowData, rowIndex) => (
+                            {multiplePayment.length > 0 && multiplePayment.map((rowData, rowIndex) => (
                               <tr key={rowIndex} className='p-0 m-0'>
                                 {Object.entries(rowData).map(([key, value], colIndex) => (
                                   <td key={colIndex} className='p-0 m-0'>
