@@ -733,7 +733,7 @@ const downloadEmployeesPayments = () => {
           <div className='col-md-12'>
             <Paper className='py-3 mb-1 px-2 detail_table'>
             <TableContainer >
-                      <Table stickyHeader  sx={{ maxHeight: 100 }}>
+                      <Table stickyHeader  sx={{ maxHeight: 600 }}>
                         <TableHead className="thead" >
                           <TableRow>
                           <TableCell className='label border'>SN</TableCell>
@@ -838,8 +838,8 @@ const downloadEmployeesPayments = () => {
           {!loading3 && 
           <div className='col-md-12'>
             <Paper className='py-3 mb-1 px-2 detail_table'>
-            <TableContainer >
-                      <Table stickyHeader  sx={{ maxHeight: 100 }}>
+            <TableContainer sx={{ maxHeight: 600 }}>
+                      <Table stickyHeader  >
                         <TableHead className="thead" >
                           <TableRow>
                           <TableCell className='label border'>SN</TableCell>
@@ -942,8 +942,8 @@ const downloadEmployeesPayments = () => {
           {!loading4 && 
           <div className='col-md-12'>
             <Paper className='py-3 mb-1 px-2 detail_table'>
-            <TableContainer >
-                      <Table stickyHeader  sx={{ maxHeight: 100 }}>
+            <TableContainer sx={{ maxHeight: 600 }}>
+                      <Table stickyHeader  >
                         <TableHead className="thead" >
                           <TableRow>
                                        <TableCell className='label border'>SN</TableCell>
