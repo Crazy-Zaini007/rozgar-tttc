@@ -498,23 +498,32 @@ const route=location.pathname;;
 
 
     // individual payments filters
-    const [date2, setDate2] = useState('')
-    const [payment_Via, setPayment_Via] = useState('')
-    const [payment_Type, setPayment_Type] = useState('')
+const [newDateFrom, setNewDateFrom] = useState('')
+  const [newDateTo, setNewDateTo] = useState('')
 
-    const filteredIndividualPayments = employees
-        .filter((data) => data.employeeName === selectedEmployee)
-        .map((filteredData) => ({
-            ...filteredData,
-            payment: filteredData.payment
-                .filter((paymentItem) =>
-                    paymentItem.date.toLowerCase().includes(date2.toLowerCase()) &&
-                    paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-                    paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+  const [payment_Via, setPayment_Via] = useState('')
+  const [payment_Type, setPayment_Type] = useState('')
 
-                ),
+  const filteredIndividualPayments = employees
+  .filter((data) => data.employeeName === selectedEmployee)
+  .map((filteredData) => ({
+    ...filteredData,
+    payment: filteredData.payment
+      .filter((paymentItem) => {
+        let isDateInRange = true;
+        // Check if the payment item's date is within the selected date range
+        if (newDateFrom && newDateTo) {
+          isDateInRange =
+            paymentItem.date >= newDateFrom && paymentItem.date <= newDateTo;
+        }
 
-        }))
+        return (
+          isDateInRange &&
+          paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+          paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+        );
+      }),
+  }))
 
     const printPaymentsTable = () => {
         // Convert JSX to HTML string
@@ -555,6 +564,17 @@ const route=location.pathname;;
           </tr>
         `).join('')
         )}
+        <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td>Total</td>
+    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_Out, 0), 0))}</td>
+    </tr>
     </tbody>
     </table>
     <style>
@@ -1072,19 +1092,32 @@ const route=location.pathname;;
                     <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
-                                <div className="col-auto px-1">
-                                    <label htmlFor="">Date:</label>
-                                    <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
-                                        <option value="">All</option>
-                                        {[...new Set(employees
-                                            .filter(data => data.employeeName === selectedEmployee)
-                                            .flatMap(data => data.payment)
-                                            .map(data => data.date)
-                                        )].map(dateValue => (
-                                            <option value={dateValue} key={dateValue}>{dateValue}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                            <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <select value={newDateFrom} onChange={(e) => setNewDateFrom(e.target.value)} className='m-0 p-1'>
+                    <option value="">All</option>
+                    {[...new Set(employees
+                      .filter(data => data.employeeName === selectedEmployee)
+                      .flatMap(data => data.payment)
+                      .map(data => data.date)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <select value={newDateTo} onChange={(e) => setNewDateTo(e.target.value)} className='m-0 p-1'>
+                    <option value="">All</option>
+                    {[...new Set(employees
+                      .filter(data => data.employeeName === selectedEmployee)
+                      .flatMap(data => data.payment)
+                      .map(data => data.date)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue}</option>
+                    ))}
+                  </select>
+                </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Payment Via:</label>
                                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
@@ -1118,8 +1151,8 @@ const route=location.pathname;;
                     </div>
                     <div className="col-md-12 detail_table my-2">
                         <h6>Payments Details</h6>
-                        <TableContainer component={Paper}>
-                            <Table>
+                        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                            <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
                                         <TableCell className='label border'>Date</TableCell>
@@ -1358,8 +1391,8 @@ const route=location.pathname;;
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printVacationsTable}>Print </button>
               </div>
             </div>
-                        <TableContainer component={Paper}>
-                            <Table>
+                        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                            <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
                                         <TableCell className='label border'>SN</TableCell>
@@ -1382,25 +1415,25 @@ const route=location.pathname;;
                                                 <TableRow key={vacation?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                     {editMode2 && editedRowIndex2 === index ? (
                                                         <>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='text' value={index + 1} readonly />
                                                             </TableCell>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='date' value={editedEntry2.date} onChange={(e) => handlePersonInputChange(e, 'date')}  />
                                                             </TableCell>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='date' value={editedEntry2.dateFrom} onChange={(e) => handlePersonInputChange(e, 'dateFrom')}  />
                                                             </TableCell>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='date' value={editedEntry2.dateTo} onChange={(e) => handlePersonInputChange(e, 'dateTo')}  />
                                                             </TableCell>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='number' min='0' value={editedEntry2.days} onChange={(e) => handlePersonInputChange(e, 'days')}  />
                                                             </TableCell>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='time' value={editedEntry2.timeIn} onChange={(e) => handlePersonInputChange(e, 'timeIn')}  />
                                                             </TableCell>
-                                                            <TableCell className='border data_td p-1 '>
+                                                            <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                                                 <input type='time' value={editedEntry2.timeOut} onChange={(e) => handlePersonInputChange(e, 'timeOut')}  />
                                                             </TableCell>
                                                             
@@ -1410,20 +1443,20 @@ const route=location.pathname;;
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{vacation?.date}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{vacation?.dateFrom}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{vacation?.dateTo}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{vacation?.days}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{vacation?.timeIn}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{vacation?.timeOut}</TableCell>
+                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{index + 1}</TableCell>
+                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{vacation?.date}</TableCell>
+                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{vacation?.dateFrom}</TableCell>
+                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{vacation?.dateTo}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.days}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeIn}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeOut}</TableCell>
                                                         
 
 
                                                         </>
                                                     )}
                                                      {route!=="/rozgar/reports/payroll_reports" &&
-                                         <TableCell className='border data_td p-1 '>
+                                         <TableCell className='border data_td p-1 'style={{ width: '18.28%' }}>
                                          {editMode2 && editedRowIndex2 === index ? (
                                              // Render Save button when in edit mode for the specific row
                                              <>

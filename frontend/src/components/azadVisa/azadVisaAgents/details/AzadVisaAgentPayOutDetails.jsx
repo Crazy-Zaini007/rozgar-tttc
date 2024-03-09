@@ -443,24 +443,32 @@ export default function AzadVisaAgentPayOutDetails() {
 
 
     // individual payments filters
-    const [date2, setDate2] = useState('')
+    const [dateFrom, setDateFrom] = useState('')
+    const [dateTo, setDateTo] = useState('')
+  
     const [payment_Via, setPayment_Via] = useState('')
     const [payment_Type, setPayment_Type] = useState('')
-
+  
     const filteredIndividualPayments = azadAgent_Payments_Out
-        .filter((data) => data.supplierName === selectedSupplier)
-        .map((filteredData) => ({
-            ...filteredData,
-            payment: filteredData.payment
-                .filter((paymentItem) => paymentItem.cand_Name === undefined)
-                .filter((paymentItem) =>
-                    paymentItem.date.toLowerCase().includes(date2.toLowerCase()) &&
-                    paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-                    paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
-
-                ),
-
-        }))
+    .filter((data) => data.supplierName === selectedSupplier)
+    .map((filteredData) => ({
+      ...filteredData,
+      payment: filteredData.payment
+        .filter((paymentItem) => {
+          let isDateInRange = true;
+          // Check if the payment item's date is within the selected date range
+          if (dateFrom && dateTo) {
+            isDateInRange =
+              paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+          }
+  
+          return (
+            isDateInRange &&
+            paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+            paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+          );
+        }),
+    }))
 
     const printPaymentsTable = () => {
         // Convert JSX to HTML string
@@ -503,6 +511,18 @@ export default function AzadVisaAgentPayOutDetails() {
           </tr>
         `).join('')
         )}
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    
+        <td></td>
+        <td>Total</td>
+        <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_Out, 0), 0))}</td>
+        <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
+        </tr>
     </tbody>
     </table>
     <style>
@@ -952,19 +972,32 @@ export default function AzadVisaAgentPayOutDetails() {
                     <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
-                                <div className="col-auto px-1">
-                                    <label htmlFor="">Date:</label>
-                                    <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
-                                        <option value="">All</option>
-                                        {[...new Set(azadAgent_Payments_Out
-                                            .filter(data => data.supplierName === selectedSupplier)
-                                            .flatMap(data => data.payment)
-                                            .map(data => data.date)
-                                        )].map(dateValue => (
-                                            <option value={dateValue} key={dateValue}>{dateValue}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                            <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
+                    <option value="">All</option>
+                    {[...new Set(azadAgent_Payments_Out
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .flatMap(data => data.payment)
+                      .map(data => data.date)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
+                    <option value="">All</option>
+                    {[...new Set(azadAgent_Payments_Out
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .flatMap(data => data.payment)
+                      .map(data => data.date)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue}</option>
+                    ))}
+                  </select>
+                </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Payment Via:</label>
                                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
@@ -998,8 +1031,8 @@ export default function AzadVisaAgentPayOutDetails() {
                     </div>
                     <div className="col-md-12 detail_table my-2">
                         <h6>Payment Out Details</h6>
-                        <TableContainer component={Paper}>
-                            <Table>
+                        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                            <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
                                         <TableCell className='label border'>Date</TableCell>
@@ -1323,9 +1356,9 @@ export default function AzadVisaAgentPayOutDetails() {
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
               </div>
             </div>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead className="thead">
+                        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                            <Table stickyHeader>
+                                <TableHead className="thead" >
                                     <TableRow>
                                         <TableCell className='label border'>SN</TableCell>
                                         <TableCell className='label border'>Date</TableCell>
@@ -1476,6 +1509,29 @@ export default function AzadVisaAgentPayOutDetails() {
 
                                                 </TableRow>
                                             ))}
+                                               <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                            <TableCell className='border data_td text-center bg-warning text-white'>
+          {/* Calculate the total sum of payment_In */}
+          {filteredPersons.reduce((total, filteredData) => {
+            return total + filteredData.persons.reduce((sum, paymentItem) => {
+              const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
+              return isNaN(paymentIn) ? sum : sum + paymentIn;
+            }, 0);
+          }, 0)}
+        </TableCell>
+      
+                            
+                          </TableRow>
                                         </>
                                     ))}
                                 </TableBody>

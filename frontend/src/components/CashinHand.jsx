@@ -294,18 +294,30 @@ export default function CashinHand() {
 
 
 
-  const [date1, setDate1] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+
   const [category1, setCategory1] = useState('')
   const [payment_Via1, setPayment_Via1] = useState('')
   const [payment_Type1, setPayment_Type1] = useState('')
 
   const filteredCash = cashInHand.payment
-  ? cashInHand.payment.filter((paymentItem) =>
-      paymentItem.category.toLowerCase().includes(category1.toLowerCase()) &&
-      paymentItem.date.toLowerCase().includes(date1.toLowerCase()) &&
-      paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()) &&
-      paymentItem.payment_Type.toLowerCase().includes(payment_Type1.toLowerCase())
-    )
+  ? cashInHand.payment.filter((paymentItem) => {
+      let isDateInRange = true;
+
+      // Check if the payment item's date is within the selected date range
+      if (dateFrom && dateTo) {
+        isDateInRange =
+          paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+      }
+
+      return (
+        paymentItem.category.toLowerCase().includes(category1.toLowerCase()) &&
+        isDateInRange &&
+        paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()) &&
+        paymentItem.payment_Type.toLowerCase().includes(payment_Type1.toLowerCase())
+      );
+    })
   : [];
 
 
@@ -344,6 +356,17 @@ export default function CashinHand() {
           </tr>
         `).join('')
       }
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredCash.reduce((total, expense) => total + expense.payment_In, 0))}</td>
+      <td>${String(filteredCash.reduce((total, expense) => total + expense.payment_Out, 0))}</td>
+
+      </tr>
     </tbody>
     </table>
     <style>
@@ -423,6 +446,7 @@ export default function CashinHand() {
 
 
   const [date2, setDate2] = useState('')
+  const [date3, setDate3] = useState('')
   const [supplierName, setSupplierName] = useState('')
   const [type, setType] = useState('')
   const [category2, setCategory2] = useState('')
@@ -430,17 +454,25 @@ export default function CashinHand() {
   const [payment_Type2, setPayment_Type2] = useState('')
 
   const filteredPayment = overAllPayments
-  ? overAllPayments.filter((paymentItem) =>
-      paymentItem.category.toLowerCase().includes(category2.toLowerCase()) &&
-      paymentItem.date.toLowerCase().includes(date2.toLowerCase()) &&
-      paymentItem.supplierName.toLowerCase().includes(supplierName.toLowerCase()) &&
-      paymentItem.type.toLowerCase().includes(type.toLowerCase()) &&
-      paymentItem.payment_Via.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-      paymentItem.payment_Type.toLowerCase().includes(payment_Type2.toLowerCase())
-    )
+  ? overAllPayments.filter((paymentItem) => {
+      let isDateInRange = true;
+
+      // Check if the payment item's date is within the selected date range
+      if (date2 && date3) {
+        isDateInRange =
+          paymentItem.date >= date2 && paymentItem.date <= date3;
+      }
+
+      return (
+        paymentItem.category.toLowerCase().includes(category2.toLowerCase()) &&
+        isDateInRange &&
+        paymentItem.supplierName.toLowerCase().includes(supplierName.toLowerCase()) &&
+        paymentItem.type.toLowerCase().includes(type.toLowerCase()) &&
+        paymentItem.payment_Via.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+        paymentItem.payment_Type.toLowerCase().includes(payment_Type2.toLowerCase())
+      );
+    })
   : [];
-
-
 
   const printOverAllCashTable = () => {
     // Convert JSX to HTML string
@@ -480,6 +512,25 @@ export default function CashinHand() {
           </tr>
         `).join('')
       }
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${filteredPayment ? 
+        String(filteredPayment.reduce((total, cash) => total + cash.payment_In, 0))
+        : '0'}
+      </td>
+      <td>${filteredPayment ? 
+        String(filteredPayment.reduce((total, cash) => total + cash.cash_Out, 0))
+        : '0'}
+      </td>
+      </tr>
     </tbody>
     </table>
     <style>
@@ -617,15 +668,23 @@ export default function CashinHand() {
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
                           <div className="col-auto px-1">
-                            <label htmlFor="">Date:</label>
-                            <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
+                            <label htmlFor="">Date From:</label>
+                            <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.date))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
                           </div>
-
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Date To:</label>
+                            <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.date))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
                          
 
                           <div className="col-auto px-1">
@@ -665,18 +724,18 @@ export default function CashinHand() {
                         <Table>
                           <TableHead className="thead">
                             <TableRow>
-                              <TableCell className='label border'>SN</TableCell>
-                              <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Out</TableCell>
-                              <TableCell className='label border'>Details</TableCell>
-                              <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
-                              <TableCell align='left' className='edw_label border' colSpan={1}>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Cash_In</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Slip_Pic</TableCell>
+                              <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                                 Actions
                               </TableCell>
 
@@ -684,7 +743,7 @@ export default function CashinHand() {
                           </TableHead>
                           <TableBody>
                             {filteredCash
-                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((cash, outerIndex) => (
+                              .map((cash, outerIndex) => (
                                 // Map through the payment array
                                 <React.Fragment key={cash._id}>
                                   <TableRow key={cash._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
@@ -752,41 +811,23 @@ export default function CashinHand() {
                                     ) : (
                                       // Non-Edit Mode
                                       <>
-                                        <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.category}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
-                                        <TableCell className='border data_td text-center'>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                             <button onClick={() => handleEditClick(cash, outerIndex)} className='btn edit_btn'>Edit</button>
                                             <button className='btn delete_btn' onClick={() => deleteCash(cash)} disabled={loading}>{loading ? "Deleting..." : "Delete"}</button>
                                           </div>
-                                          {/* Deleting Modal  */}
-                                          <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div className="modal-dialog p-0">
-                                              <div className="modal-content p-0">
-                                                <div className="modal-header border-0">
-                                                  <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                                  {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                                </div>
-                                                <div className="modal-body text-center p-0">
-
-                                                  <p>Do you want to Delete the Record?</p>
-                                                </div>
-                                                <div className="text-end m-2">
-                                                  <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                                  <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" onClick={() => deleteCash(cash)}>Confirm</button>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
+                                         
                                         </TableCell>
                                       </>
                                     )}
@@ -814,21 +855,7 @@ export default function CashinHand() {
                           </TableBody>
                         </Table>
                       </TableContainer>
-                      <TablePagination
-                        rowsPerPageOptions={rowsPerPageOptions}
-                        component='div'
-                        count={filteredCash.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        style={{
-                          color: 'blue',
-                          fontSize: '14px',
-                          fontWeight: '700',
-                          textTransform: 'capitalize',
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
+                      
                     </div>
 
                   </div>
@@ -841,8 +868,17 @@ export default function CashinHand() {
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
                           <div className="col-auto px-1">
-                            <label htmlFor="">Date:</label>
+                            <label htmlFor="">Date From:</label>
                             <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.date))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Date To:</label>
+                            <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.date))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
@@ -907,42 +943,42 @@ export default function CashinHand() {
                         <Table>
                           <TableHead className="thead">
                             <TableRow>
-                              <TableCell className='label border'>SN</TableCell>
-                              <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Supp/Agent/Cand</TableCell>
-                              <TableCell className='label border'>Type</TableCell>
-                              <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Out</TableCell>
-                              <TableCell className='label border'>Details</TableCell>
-                              <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Date</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Type</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Category</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Slip_No</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_In</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Details</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Invoice</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Slip_Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
                             {filteredPayment
-                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((cash, outerIndex) => (
+                              .map((cash, outerIndex) => (
                                 // Map through the payment array
                                 <React.Fragment key={outerIndex}>
                                   <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
                                    
                                       <>
-                                        <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.type}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.category}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.cash_Out}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.cash_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                        
                                       </>
                                   
@@ -972,21 +1008,7 @@ export default function CashinHand() {
                           </TableBody>
                         </Table>
                       </TableContainer>
-                      <TablePagination
-                        rowsPerPageOptions={rowsPerPageOptions}
-                        component='div'
-                        count={filteredPayment.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        style={{
-                          color: 'blue',
-                          fontSize: '14px',
-                          fontWeight: '700',
-                          textTransform: 'capitalize',
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
+                      
                     </div>
                   </div>
                 </div>

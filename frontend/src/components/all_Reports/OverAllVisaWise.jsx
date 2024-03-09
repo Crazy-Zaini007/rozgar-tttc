@@ -109,6 +109,26 @@ export default function OverAllVisaWise() {
           </tr>
         `).join('')
       }
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredEntries.reduce((total, expense) => total + expense.visa_Purchase_Rate_PKR, 0))}</td>
+      <td>${String(filteredEntries.reduce((total, expense) => total + expense.visa_Purchase_Rate_PKR, 0))}</td>
+      
+      <td>${filteredEntries && filteredEntries.length > 0 && 
+        filteredEntries.reduce((total, entry) => {
+          return total + parseFloat(entry.visa_Sales_Rate_PKR) - parseFloat(entry.visa_Purchase_Rate_PKR)
+        }, 0).toFixed(2)}
+      </td>
+    
+      </tr>
     </tbody>
     </table>
     <style>
@@ -276,7 +296,7 @@ export default function OverAllVisaWise() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {filteredEntries && filteredEntries.length>0 && filteredEntries.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry,index)=>(
+                        {filteredEntries && filteredEntries.length>0 && filteredEntries.map((entry,index)=>(
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
@@ -293,24 +313,40 @@ export default function OverAllVisaWise() {
 
                           </TableRow>
                         ))}
+                         <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Sales_Rate_PKR);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Purchase_Rate_PKR);
+      }, 0)}
+    </TableCell>
+   
+    <TableCell className='border data_td text-center bg-success text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Sales_Rate_PKR) - parseFloat(entry.visa_Purchase_Rate_PKR) 
+      }, 0)}
+    </TableCell>
+  </TableRow>
                       </TableBody>
                   </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    component='div'
-                    count={filteredEntries.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    style={{
-                      color: 'blue',
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      textTransform: 'capitalize',
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
+              
               </Paper>
             </div>
             }

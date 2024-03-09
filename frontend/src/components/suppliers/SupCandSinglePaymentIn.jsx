@@ -78,6 +78,98 @@ export default function SupCandSinglePaymentIn() {
   const [supplierNames, setSupplierNames] = useState([]);
   const [selectedPersonDetails, setSelectedPersonDetails] = useState({});
 
+  const printPersonsTable = () => {
+    // Convert JSX to HTML string
+    const printContentString = `
+    <table class='print-table'>
+      <thead>
+        <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>PP#</th>
+        <th>Entry_Mode</th>
+        <th>Company</th>
+        <th>Trade</th>
+        <th>Country</th>
+        <th>Final tatus</th>
+        <th>Flight Date</th>
+        <th>VPI PKR</th>
+        <th>Total In PKR</th>
+        <th>Remaining PKR</th>
+        <th>VPI Oth Curr</th>
+        <th>Remaining Curr</th>
+        
+        </tr>
+      </thead>
+      <tbody>
+     
+          <tr>
+            <td>${String(selectedPersonDetails?.entry_Date)}</td>
+            <td>${String(selectedPersonDetails?.name)}</td>
+            <td>${String(selectedPersonDetails?.pp_No)}</td>
+            <td>${String(selectedPersonDetails?.entry_Mode)}</td>
+            <td>${String(selectedPersonDetails?.company)}</td>
+            <td>${String(selectedPersonDetails?.trade)}</td>
+            <td>${String(selectedPersonDetails?.country)}</td>
+            <td>${String(selectedPersonDetails?.final_Status)}</td>
+            <td>${String(selectedPersonDetails?.flight_Date)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_In_PKR)}</td>
+            <td>${String(selectedPersonDetails?.total_In)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_In_PKR)-String(selectedPersonDetails?.total_In)+String(selectedPersonDetails?.cash_Out)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_In_Curr)}</td>
+            <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
+
+          </tr>
+      
+    
+    </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedPersonDetails.name} Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
+
   const handleOpen = () => {
     setOption(!option);
   };
@@ -458,6 +550,7 @@ export default function SupCandSinglePaymentIn() {
               )}
 
               {cand_Name && (
+                <>
                 <div className="row p-0 m-0 mt-2">
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Candidate Name</label>
@@ -471,7 +564,7 @@ export default function SupCandSinglePaymentIn() {
                     <label>PP#</label>
                     <input
                       type="text"
-                      value={selectedPersonDetails.pp_NO}
+                      value={selectedPersonDetails.pp_No}
                       readOnly
                     />
                   </div>
@@ -491,6 +584,10 @@ export default function SupCandSinglePaymentIn() {
                       readOnly
                     />
                   </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total In PKR</label>
+                  <input type="text" value={selectedPersonDetails.total_In} readOnly />
+                </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Remaining PKR</label>
                     <input
@@ -516,6 +613,12 @@ export default function SupCandSinglePaymentIn() {
                     />
                   </div>
                 </div>
+                <div className="row p-0 m-0 mt-2 justify-content-center">
+                <div className="col-md-2 col-sm-12">
+                <button className='btn shadow bg-success text-white' onClick={printPersonsTable}>Print</button>
+                </div>
+              </div>
+               </>
               )}
             </form>
           </TableContainer>

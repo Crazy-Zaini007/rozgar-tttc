@@ -85,8 +85,6 @@ export default function AgentCandPaymentInDetails() {
 
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In);
   
-
-
   const rowsPerPageOptions = [10, 15, 30];
 
   const [page, setPage] = useState(0);
@@ -500,24 +498,35 @@ export default function AgentCandPaymentInDetails() {
  
   // individual payments filters
   
-  const [date2, setDate2] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredIndividualPayments = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
-    .map((filteredData) => ({
-      ...filteredData,
-      payment: filteredData.payment
-        .filter((paymentItem) => paymentItem.cand_Name !== undefined)
-        .filter((paymentItem) =>
-          paymentItem.date.toLowerCase().includes(date2.toLowerCase()) &&
+  .filter((data) => data.supplierName === selectedSupplier)
+  .map((filteredData) => ({
+    ...filteredData,
+    payment: filteredData.payment
+      .filter((paymentItem) => paymentItem.cand_Name !== undefined)
+      .filter((paymentItem) => {
+        let isDateInRange = true;
+
+        // Check if the payment item's date is within the selected date range
+        if (dateFrom && dateTo) {
+          isDateInRange =
+            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+        }
+
+        return (
+          isDateInRange &&
           paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
           paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+        );
+      }),
+  }))
 
-        ),
-
-    }))
 
   const printPaymentsTable = () => {
     // Convert JSX to HTML string
@@ -539,6 +548,8 @@ export default function AgentCandPaymentInDetails() {
         <th>Payment In Curr</th>
         <th>CUR Rate</th>
         <th>CUR Amount</th>
+        <th>Candidate</th>
+
         </tr>
       </thead>
       <tbody>
@@ -559,9 +570,23 @@ export default function AgentCandPaymentInDetails() {
             <td>${String(paymentItem?.payment_In_Curr)}</td>
             <td>${String(paymentItem?.curr_Rate)}</td>
             <td>${String(paymentItem?.curr_Amount)}</td>
+            <td>${String(paymentItem?.cand_Name)}</td>
           </tr>
         `).join('')
     )}
+    <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td>Total</td>
+    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
+    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
+    </tr>
+
     </tbody>
     </table>
     <style>
@@ -658,7 +683,11 @@ export default function AgentCandPaymentInDetails() {
         <th>Final tatus</th>
         <th>Flight Date</th>
         <th>VPI PKR</th>
+        <th>Toatl In PKR</th>
+        <th>Toatl Cash Out</th>
+        <th>Remaining PKR</th>
         <th>VPI Oth Curr</th>
+        <th>Remaining Curr</th>
         
         </tr>
       </thead>
@@ -677,7 +706,11 @@ export default function AgentCandPaymentInDetails() {
             <td>${String(person?.final_Status)}</td>
             <td>${String(person?.flight_Date)}</td>
             <td>${String(person?.visa_Price_In_PKR)}</td>
+            <td>${String(person?.toatl_In)}</td>
+            <td>${String(person?.cash_Out)}</td>
+            <td>${String(person?.visa_Price_In_PKR)-String(person?.toatl_In)+String(person?.cash_Out)}</td>
             <td>${String(person?.visa_Price_In_Curr)}</td>
+            <td>${String(person?.remaining_Curr)}</td>
           </tr>
         `).join('')
     )}
@@ -727,7 +760,7 @@ export default function AgentCandPaymentInDetails() {
       // Handle if the new window cannot be opened
       alert('Could not open print window. Please check your browser settings.');
     }
-  };
+  }
 
 
 
@@ -808,8 +841,11 @@ export default function AgentCandPaymentInDetails() {
         final_Status:payments.final_Status,
         flight_Date:payments.flight_Date,
         visa_Price_In_PKR:payments.visa_Price_In_PKR,
+        total_In:payments.total_In,
+        total_Cash_Out:payments.cash_Out,
+        Remaining_PKR:payments.visa_Price_In_PKR-payments.total_In+payments.cash_Out,
         visa_Price_In_Curr:payments.visa_Price_In_Curr,
-        
+        remaining_Curr:payments.remaining_Curr,
       }
 
       data.push(rowData);
@@ -1068,8 +1104,21 @@ export default function AgentCandPaymentInDetails() {
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date:</label>
-                  <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
+                  <label htmlFor="">Date From:</label>
+                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
+                    <option value="">All</option>
+                    {[...new Set(agent_Payments_In
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .flatMap(data => data.payment)
+                      .map(data => data.date)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_In
                       .filter(data => data.supplierName === selectedSupplier)
@@ -1113,8 +1162,8 @@ export default function AgentCandPaymentInDetails() {
           </div>
           <div className="col-md-12 detail_table my-2">
             <h6>Payment In Details</h6>
-            <TableContainer component={Paper}>
-              <Table>
+            <TableContainer component={Paper}  sx={{ maxHeight: 600 }}>
+              <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
                     <TableCell className='label border'>Date</TableCell>
@@ -1437,8 +1486,8 @@ export default function AgentCandPaymentInDetails() {
 
               </div>
             </div>
-            <TableContainer component={Paper}>
-              <Table>
+            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+              <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
                     <TableCell className='label border'>SN</TableCell>
@@ -1452,7 +1501,11 @@ export default function AgentCandPaymentInDetails() {
                     <TableCell className='label border'>Final_Status</TableCell>
                     <TableCell className='label border'>Flight_Date</TableCell>
                     <TableCell className='label border'>VPI_PKR</TableCell>
+                    <TableCell className='label border'>Total_In_PKR</TableCell>
+                    <TableCell className='label border'>Total_Cash_Out</TableCell>
+                    <TableCell className='label border'>Remaining</TableCell>
                     <TableCell className='label border'>VPI_Oth_Curr</TableCell>
+                    <TableCell className='label border'>Remaining_Oth_Curr</TableCell>
                     <TableCell className='label border'>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -1523,7 +1576,20 @@ export default function AgentCandPaymentInDetails() {
                                 <input type='number' value={editedEntry2.visa_Price_In_PKR} readonly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.total_In} readonly />
+                              </TableCell>
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR -editedEntry2.total_In +editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.remaining_Curr} readonly />
                               </TableCell>
 
 
@@ -1541,7 +1607,11 @@ export default function AgentCandPaymentInDetails() {
                               <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR}</TableCell>
+                              <TableCell className='border data_td text-center'>{person?.total_In}</TableCell>
+                              <TableCell className='border data_td text-center'>{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR-person?.total_In +person?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_In_Curr}</TableCell>
+                              <TableCell className='border data_td text-center'>{person?.remaining_Curr}</TableCell>
 
 
                             </>
@@ -1590,6 +1660,46 @@ export default function AgentCandPaymentInDetails() {
 
                         </TableRow>
                       ))}
+                        <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                            <TableCell className='border data_td text-center bg-warning text-white'>
+          {/* Calculate the total sum of payment_In */}
+          {filteredPersons.reduce((total, filteredData) => {
+            return total + filteredData.persons.reduce((sum, paymentItem) => {
+              const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
+              return isNaN(paymentIn) ? sum : sum + paymentIn;
+            }, 0);
+          }, 0)}
+        </TableCell>
+        <TableCell className='border data_td text-center bg-info text-white'>
+          {/* Calculate the total sum of cash_Out */}
+          {filteredIndividualPayments.reduce((total, filteredData) => {
+            return total + filteredData.payment.reduce((sum, paymentItem) => {
+              const cashOut = parseFloat(paymentItem.total_In);
+              return isNaN(cashOut) ? sum : sum + cashOut;
+            }, 0);
+          }, 0)}
+        </TableCell>
+        <TableCell className='border data_td text-center bg-danger text-white'>
+          {/* Calculate the total sum of cash_Out */}
+          {filteredIndividualPayments.reduce((total, filteredData) => {
+            return total + filteredData.payment.reduce((sum, paymentItem) => {
+              const cashOut = parseFloat(paymentItem.cash_Out);
+              return isNaN(cashOut) ? sum : sum + cashOut;
+            }, 0);
+          }, 0)}
+        </TableCell>
+                            
+                          </TableRow>
                     </>
                   ))}
                 </TableBody>

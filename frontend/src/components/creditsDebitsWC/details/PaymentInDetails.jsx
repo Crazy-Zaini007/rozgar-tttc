@@ -289,7 +289,7 @@ export default function PaymentInDetails() {
       printWindow.document.write(`
         <html>
           <head>
-            <title>Agents Payment In Details</title>
+            <title>Payment Details</title>
           </head>
           <body class='bg-dark'>${printContentString}</body>
         </html>
@@ -308,24 +308,31 @@ export default function PaymentInDetails() {
   };
 
   // individual payments filters
-  
-  const [date2, setDate2] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredIndividualPayments = CDWC_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
-    .map((filteredData) => ({
-      ...filteredData,
-      payment: filteredData.payment
-        .filter((paymentItem) =>
-          paymentItem.date.toLowerCase().includes(date2.toLowerCase()) &&
+  .filter((data) => data.supplierName === selectedSupplier)
+  .map((filteredData) => ({
+    ...filteredData,
+    payment: filteredData.payment
+      .filter((paymentItem) => {
+        let isDateInRange = true;
+        // Check if the payment item's date is within the selected date range
+        if (dateFrom && dateTo) {
+          isDateInRange =
+            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+        }
+
+        return (
+          isDateInRange &&
           paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
           paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
-
-        ),
-
-    }))
+        );
+      }),
+  }))
 
   const printPaymentsTable = () => {
     // Convert JSX to HTML string
@@ -368,6 +375,18 @@ export default function PaymentInDetails() {
           </tr>
         `).join('')
     )}
+    <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td>Total</td>
+    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
+    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_Out, 0), 0))}</td>
+    </tr>
     </tbody>
     </table>
     <style>
@@ -528,15 +547,15 @@ export default function PaymentInDetails() {
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
-                    <TableCell className='label border'>SN</TableCell>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Suppliers</TableCell>
-                    <TableCell className='label border'>TPI_PKR</TableCell>
-                    <TableCell className='label border'>TPO_PKR</TableCell>
-                    <TableCell className='label border'>Balance</TableCell>
-                    <TableCell className='label border'>Open</TableCell>
-                    <TableCell className='label border'>Close</TableCell>
-                    <TableCell align='left' className='edw_label border' colSpan={1}>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Suppliers</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>TPI_PKR</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>TPO_PKR</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Balance</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell>
+                    <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                         Actions
                       </TableCell>
                   </TableRow>
@@ -545,29 +564,29 @@ export default function PaymentInDetails() {
                 <TableBody>
                   {filteredTotalPaymentIn.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
                     <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'} >
-                      <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         {entry.createdAt}
                       </TableCell>
-                      <TableCell className='border data_td text-center' onClick={() => handleRowClick(entry.supplierName)}>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.supplierName)}>
                         {entry.supplierName}
                       </TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{entry.total_Payment_In}
                       </TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Payment_Out}
                       </TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         {entry.balance}
                       </TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
                       </TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         {entry.close === false ? "Not Closed" : "Closed"}
                       </TableCell>
-                      <TableCell className='border data_td text-center'>
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                       <button className='btn delete_btn' onClick={() => deleteTotalPayment(entry)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
                       <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div className="modal-dialog p-0">
@@ -634,9 +653,22 @@ export default function PaymentInDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+              <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
+                    <option value="">All</option>
+                    {[...new Set(CDWC_Payments_In
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .flatMap(data => data.payment)
+                      .map(data => data.date)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue}</option>
+                    ))}
+                  </select>
+                </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date:</label>
-                  <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
+                  <label htmlFor="">Date To:</label>
+                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(CDWC_Payments_In
                       .filter(data => data.supplierName === selectedSupplier)

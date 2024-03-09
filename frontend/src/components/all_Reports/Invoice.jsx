@@ -282,8 +282,8 @@ export default function Invoice() {
 
                     <div className="col-md-12 detail_table my-2">
 
-                      <TableContainer component={Paper}>
-                        <Table>
+                      <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                        <Table stickyHeader>
                           <TableHead className="thead">
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>

@@ -111,7 +111,6 @@ export default function Invoice() {
         <th>Cash In</th>
         <th>Cash Out</th>
         <th>Remaining</th>
-
         </tr>
       </thead>
       <tbody>
@@ -133,6 +132,26 @@ export default function Invoice() {
           </tr>
         `).join('')
       }
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredEntries.reduce((total, expense) => total + expense.visa_Price_In_PKR, 0))}</td>
+      <td>${String(filteredEntries.reduce((total, expense) => total + expense.total_In, 0))}</td>
+      <td>${String(filteredEntries.reduce((total, expense) => total + expense.cash_Out, 0))}</td>
+      <td>${filteredEntries && filteredEntries.length > 0 && 
+        filteredEntries.reduce((total, entry) => {
+          return total + parseFloat(entry.visa_Price_In_PKR) - parseFloat(entry.total_In) + parseFloat(entry.cash_Out);
+        }, 0).toFixed(2)}
+      </td>
+    
+      </tr>
     </tbody>
     </table>
     <style>
@@ -317,45 +336,62 @@ export default function Invoice() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {filteredEntries && filteredEntries.length>0 && filteredEntries.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry,index)=>(
-                          <TableRow>
-                                <TableCell className='border data_td  '>{index+1}</TableCell>
-                                <TableCell className='border data_td  '>{entry.name}</TableCell>
-                                <TableCell className='border data_td '>{entry.pp_No}</TableCell>
-                                <TableCell className='border data_td '>{entry.country}</TableCell>
-                                <TableCell className='border data_td  '>{entry.company}</TableCell>
-                                <TableCell className='border data_td '>{entry.trade}</TableCell>
-                                <TableCell className='border data_td  '>{entry.flight_Date}</TableCell>
-                                <TableCell className='border data_td  '>{entry.type}</TableCell>
-                                <TableCell className='border data_td text-center'>{entry.supplierName===entry.name ? "/":entry.supplierName}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Price_In_PKR}</TableCell>
-                                <TableCell className='border data_td bg-success text-white'>{entry.total_In}</TableCell>
-                                <TableCell className='border data_td bg-danger text-white'>{entry.cash_Out}</TableCell>
-                                <TableCell className='border data_td bg-warning text-white'>{entry.visa_Price_In_PKR-entry.total_In+entry.cash_Out}</TableCell>
-
-
-
-
-                          </TableRow>
-                        ))}
-                      </TableBody>
+  {filteredEntries && filteredEntries.length > 0 && filteredEntries.map((entry, index) => (
+    <TableRow key={index}>
+      <TableCell className='border data_td'>{index + 1}</TableCell>
+      <TableCell className='border data_td'>{entry.name}</TableCell>
+      <TableCell className='border data_td'>{entry.pp_No}</TableCell>
+      <TableCell className='border data_td'>{entry.country}</TableCell>
+      <TableCell className='border data_td'>{entry.company}</TableCell>
+      <TableCell className='border data_td'>{entry.trade}</TableCell>
+      <TableCell className='border data_td'>{entry.flight_Date}</TableCell>
+      <TableCell className='border data_td'>{entry.type}</TableCell>
+      <TableCell className='border data_td text-center'>{entry.supplierName === entry.name ? "/" : entry.supplierName}</TableCell>
+      <TableCell className='border data_td'>{entry.visa_Price_In_PKR}</TableCell>
+      <TableCell className='border data_td bg-success text-white'>{entry.total_In}</TableCell>
+      <TableCell className='border data_td bg-danger text-white'>{entry.cash_Out}</TableCell>
+      <TableCell className='border data_td bg-warning text-white'>{entry.visa_Price_In_PKR - entry.total_In + entry.cash_Out}</TableCell>
+    </TableRow>
+  ))}
+  <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_PKR);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.total_In);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-danger text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.cash_Out);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_PKR) - parseFloat(entry.total_In) +parseFloat(entry.cash_Out)
+      }, 0)}
+    </TableCell>
+  </TableRow>
+</TableBody>
                   </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    component='div'
-                    count={filteredEntries.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    style={{
-                      color: 'blue',
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      textTransform: 'capitalize',
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
+                
               </Paper>
             </div>
             }

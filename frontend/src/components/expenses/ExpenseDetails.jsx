@@ -115,18 +115,18 @@ export default function ExpenseDetails() {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleUpdate = async () => {
+  const handleUpdateFrom = async () => {
     setIsLoading(true)
 
     let expenseId = editedEntry._id
     try {
-      const response = await fetch(`${apiUrl}/auth/expenses/update/expense`, {
+      const response = await fetch(`${apiUrl}/auth/expenses/updateFrom/expense`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ expenseId, name: editedEntry.name, expCategory: editedEntry.expCategory, payment_Out: editedEntry.payment_Out, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, slip_Pic: editedEntry.slip_Pic, details: editedEntry.details, curr_Country: editedEntry.curr_Country, curr_Rate: editedEntry.curr_Rate, curr_Amount: editedEntry.curr_Amount, date: editedEntry.date })
+        body: JSON.stringify({ expenseId, name: editedEntry.name, expCategory: editedEntry.expCategory, payment_Out: editedEntry.payment_Out, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, slip_Pic: editedEntry.slip_Pic, details: editedEntry.details, curr_Country: editedEntry.curr_Country, curr_Rate: editedEntry.curr_Rate, curr_Amount: editedEntry.curr_Amount, dateFrom: editedEntry.dateFrom })
       })
 
       const json = await response.json()
@@ -187,21 +187,32 @@ export default function ExpenseDetails() {
 
             
   // individual payments filters
-  const [date, setDate] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+
   const [name, setName] = useState('')
   const [expe_Category, setExpe_Category] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredExpenses = expenses.filter(expense => {
+    let isDateInRange = true;
+  
+    // Check if the expense date is within the selected date range
+    if (dateFrom && dateTo) {
+      isDateInRange =
+        expense.date >= dateFrom && expense.date <= dateTo;
+    }
+  
     return (
-      expense.date.toLowerCase().includes(date.toLowerCase()) &&
+      isDateInRange &&
       expense.name.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
       expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
-    )
-  })
+    );
+  });
+  
 
   const downloadExcel = () => {
     const data = [];
@@ -209,7 +220,7 @@ export default function ExpenseDetails() {
     filteredExpenses.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        date:payments.date,
+        dateFrom:payments.date,
         person_Name:payments.name,
         expCategory:payments.expCategory,
         ExpAmount:payments.payment_Out,
@@ -342,7 +353,6 @@ export default function ExpenseDetails() {
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
                     </>
                   }
-
                 </div>
               </Paper>
             </div>
@@ -351,11 +361,20 @@ export default function ExpenseDetails() {
               <Paper className='py-1 mb-2 px-3'>
                 <div className="row">
                   <div className="col-auto px-1">
-                    <label htmlFor="">Date:</label>
-                    <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
+                    <label htmlFor="">Date From:</label>
+                    <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {[...new Set(expenses.map(data => data.date))].map(dateValue => (
-                        <option value={dateValue} key={dateValue}>{dateValue}</option>
+                      {[...new Set(expenses.map(data => data.date))].map(date => (
+                        <option value={date} key={date}>{date}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Date To:</label>
+                    <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      {[...new Set(expenses.map(data => data.date))].map(date => (
+                        <option value={date} key={date}>{date}</option>
                       ))}
                     </select>
                   </div>
@@ -407,8 +426,8 @@ export default function ExpenseDetails() {
 
             <div className="col-md-12 detail_table my-2">
 
-              <TableContainer component={Paper}>
-                <Table>
+              <TableContainer component={Paper}  sx={{ maxHeight: 600 }}>
+                <Table stickyHeader>
                   <TableHead className="thead">
                     <TableRow>
                       <TableCell className='label border'>SN</TableCell>
@@ -433,7 +452,7 @@ export default function ExpenseDetails() {
                   </TableHead>
                   <TableBody>
                     {filteredExpenses
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((expense, outerIndex) => (
+                      .map((expense, outerIndex) => (
                         // Map through the payment array
                         <React.Fragment key={outerIndex}>
                           <TableRow key={expense?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
@@ -444,7 +463,7 @@ export default function ExpenseDetails() {
                                   <input type='number' value={outerIndex + 1} readOnly />
                                 </TableCell>
                                 <TableCell className='border data_td p-1 '>
-                                  <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
+                                  <input type='dateFrom' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'dateFrom')} />
                                 </TableCell>
                                 <TableCell className='border data_td p-1 '>
                                   <input type='text' value={editedEntry.name} onChange={(e) => handleInputChange(e, 'name')} />
@@ -508,7 +527,7 @@ export default function ExpenseDetails() {
 
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                     <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                    <button onClick={() => handleUpdate()} className='btn save_btn' disabled={isLoading}>{isLoading ? "Saving..." : "Save"}</button>
+                                    <button onClick={() => handleUpdateFrom()} className='btn save_btn' disabled={isLoading}>{isLoading ? "Saving..." : "Save"}</button>
 
                                   </div>
 
@@ -536,25 +555,7 @@ export default function ExpenseDetails() {
                                     <button onClick={() => handleEditClick(expense, outerIndex)} className='btn edit_btn'>Edit</button>
                                     <button className='btn delete_btn' onClick={() => deleteExpense(expense)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
                                   </div>
-                                  {/* Deleting Modal  */}
-                                  <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div className="modal-dialog p-0">
-                                      <div className="modal-content p-0">
-                                        <div className="modal-header border-0">
-                                          <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                          {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                        </div>
-                                        <div className="modal-body text-center p-0">
-
-                                          <p>Do you want to Delete the Record?</p>
-                                        </div>
-                                        <div className="text-end m-2">
-                                          <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                          <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                  
                                 </TableCell>
                               </>
                             )}
@@ -575,21 +576,7 @@ export default function ExpenseDetails() {
                   </TableBody>
                 </Table>
               </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={rowsPerPageOptions}
-                component='div'
-                count={filteredExpenses.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                style={{
-                  color: 'blue',
-                  fontSize: '14px',
-                  fontWeight: '700',
-                  textTransform: 'capitalize',
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+             
             </div>
 
           </div>

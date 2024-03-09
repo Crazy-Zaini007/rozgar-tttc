@@ -152,7 +152,6 @@ export default function AgentCandPaymentIn() {
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
                 <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
-
               </Paper>
             </div>
 

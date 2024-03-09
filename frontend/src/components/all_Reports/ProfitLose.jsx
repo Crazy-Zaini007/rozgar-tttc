@@ -106,7 +106,6 @@ export default function ProfitLose() {
         <th>Total out</th>
         <th>Profit</th>
         <th>Loss</th>
-        
         </tr>
       </thead>
       <tbody>
@@ -121,6 +120,22 @@ export default function ProfitLose() {
           </tr>
         `).join('')
       }
+      <tr>
+      
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredData.reduce((total, entry) => total + entry.total_payment_in, 0))}</td>
+      <td>${String(filteredData.reduce((total, entry) => total + entry.total_payment_out, 0))}</td>
+
+      <td> Net Profit: ${filteredData && filteredData.length > 0 && 
+        filteredData.reduce((total, entry) => {
+          return total + parseFloat(entry.total_payment_in)
+        }, 0).toFixed(2)}
+      </td>
+      <td> Net Loss: ${String(filteredData.reduce((total, expense) => total + expense.total_payment_out, 0))}</td>
+      
+    
+      </tr>
     </tbody>
     </table>
     <style>
@@ -250,74 +265,69 @@ export default function ProfitLose() {
             </div>
           }
           {!isLoading && 
-           <div className="col-md-12 detail_table my-2">
-           <TableContainer component={Paper}>
-             <Table>
-               <TableHead className="thead">
-                 <TableRow>
-                   <TableCell className='label border  text-center'>SN</TableCell>
-                   <TableCell className='label border  text-center'>Date</TableCell>
-                   <TableCell className='label border  text-center'>Total_IN</TableCell>
-                   <TableCell className='label border text-center'>Total_OUT</TableCell>
-                   <TableCell className='label border  text-center'>Net_PROFIT</TableCell>
-                   <TableCell className='label border  text-center'>Net_LOSE</TableCell>
-                  
-                 </TableRow>
-               </TableHead>
-               <TableBody>
-                 {filteredData && filteredData
-                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data, outerIndex) => (
-                     // Map through the payment array
-                     <React.Fragment key={outerIndex}>
-                       <TableRow key={data?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
-                             <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                             <TableCell className='border data_td text-center'>{data.date}</TableCell>
-                             <TableCell className='border data_td text-center'> <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{data.total_payment_in}</TableCell>
-                             <TableCell className='border data_td text-center'> <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{data.total_payment_out}</TableCell>
-                             <TableCell className='border data_td text-center text-white profit'> <i className="fa-solid fa-arrow-down me-2 text-white text-bold "></i>{data.total_payment_in}</TableCell>
-                             <TableCell className='border data_td text-center text-white loss'> <i className="fa-solid fa-arrow-up me-2 text-white text-bold "></i>{data.total_payment_out}</TableCell>    
-                       </TableRow>
-
-                     </React.Fragment>
-                   ))}
-                    <TableRow>
-                         <TableCell className='border data_td text-center bg-secondary text-white'></TableCell>
-                         <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                         <TableCell className='border data_td text-center profit text-white'> <i className="fa-solid fa-arrow-down me-2 text-white text-bold"></i>{filteredData && filteredData.reduce((total, data) => {
-  return total + data.total_payment_in;
-}, 0)}</TableCell>
-
-<TableCell className='border data_td text-center loss text-white'> <i className="fa-solid fa-arrow-up me-2 text-white text-bold"></i>{filteredData && filteredData.reduce((total, data) => {
-  return total + data.total_payment_out;
-}, 0)}</TableCell>
-                         <TableCell className='border data_td text-center bg-success text-white'>{filteredData && filteredData.reduce((total, data) => {
-  return total + data.total_payment_in;
-}, 0)}</TableCell>
-
-<TableCell className='border data_td text-center text-white bg-danger'>{filteredData && filteredData.reduce((total, data) => {
-  return total + data.total_payment_out;
-}, 0)}</TableCell>
-                         
-                       </TableRow>
-               </TableBody>
-             </Table>
-           </TableContainer>
-           <TablePagination
-             rowsPerPageOptions={rowsPerPageOptions}
-             component='div'
-             count={filteredData && filteredData.length}
-             rowsPerPage={rowsPerPage}
-             page={page}
-             style={{
-               color: 'blue',
-               fontSize: '14px',
-               fontWeight: '700',
-               textTransform: 'capitalize',
-             }}
-             onPageChange={handleChangePage}
-             onRowsPerPageChange={handleChangeRowsPerPage}
-           />
-         </div>
+          <div className="col-sm-12 detail_table my-2">
+          <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+            <Table stickyHeader>
+              <TableHead className="thead">
+                <TableRow>
+                  <TableCell className='label border text-center' style={{ width: '18.28%' }}>SN</TableCell>
+                  <TableCell className='label border text-center' style={{ width: '18.28%' }}>Date</TableCell>
+                  <TableCell className='label border text-center' style={{ width: '18.28%' }}>Total_IN</TableCell>
+                  <TableCell className='label border text-center' style={{ width: '18.28%' }}>Total_OUT</TableCell>
+                  <TableCell className='label border text-center' style={{ width: '18.28%' }}>PROFIT</TableCell>
+                  <TableCell className='label border text-center' style={{ width: '18.28%' }}>LOSE</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredData && filteredData.map((data, outerIndex) => (
+                  <TableRow key={data?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
+                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{data.date}</TableCell>
+                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                      <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{data.total_payment_in}
+                    </TableCell>
+                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                      <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{data.total_payment_out}
+                    </TableCell>
+                    <TableCell className='border data_td text-center text-white profit' style={{ width: '18.28%' }}>
+                      <i className="fa-solid fa-arrow-down me-2 text-white text-bold "></i>{data.total_payment_in}
+                    </TableCell>
+                    <TableCell className='border data_td text-center text-white loss' style={{ width: '18.28%' }}>
+                      <i className="fa-solid fa-arrow-up me-2 text-white text-bold "></i>{data.total_payment_out}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow>
+                  <TableCell className='border data_td text-center bg-secondary text-white' style={{ width: '18.28%' }}></TableCell>
+                  <TableCell className='border data_td text-center bg-secondary text-white' style={{ width: '18.28%' }}>Total</TableCell>
+                  <TableCell className='border data_td text-center profit text-white' style={{ width: '18.28%' }}>
+                    <i className="fa-solid fa-arrow-down me-2 text-white text-bold"></i>{filteredData && filteredData.reduce((total, data) => {
+                      return total + data.total_payment_in;
+                    }, 0)}
+                  </TableCell>
+                  <TableCell className='border data_td text-center loss text-white' style={{ width: '18.28%' }}>
+                    <i className="fa-solid fa-arrow-up me-2 text-white text-bold"></i>{filteredData && filteredData.reduce((total, data) => {
+                      return total + data.total_payment_out;
+                    }, 0)}
+                  </TableCell>
+                  <TableCell className='border data_td text-center bg-success text-white' style={{ width: '18.28%' }}>
+                    Net_Profit: 
+                    {filteredData && filteredData.reduce((total, data) => {
+                      return total + data.total_payment_in;
+                    }, 0)}
+                  </TableCell>
+                  <TableCell className='border data_td text-center text-white bg-danger' style={{ width: '18.28%' }}>
+                  Net_Loss: 
+                    {filteredData && filteredData.reduce((total, data) => {
+                      return total + data.total_payment_out;
+                    }, 0)}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        
           }
            
             

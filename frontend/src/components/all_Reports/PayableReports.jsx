@@ -121,6 +121,33 @@ export default function PayableReports() {
           </tr>
         `).join('')
       }
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredEntries.reduce((total, entry) => total + entry.visa_Price_In_PKR, 0))}</td>
+      <td>${String(filteredEntries.reduce((total, entry) => total + entry.total_In, 0))}</td>
+      
+      <td>${filteredEntries && filteredEntries.length > 0 && 
+        filteredEntries.reduce((total, entry) => {
+          return total + parseFloat(entry.visa_Price_In_PKR) - parseFloat(entry.total_In)
+        }, 0).toFixed(2)}
+      </td>
+      <td>${filteredEntries && filteredEntries.length > 0 && 
+        filteredEntries.reduce((total, entry) => {
+          return total + parseFloat(entry.visa_Price_In_Curr) - parseFloat(entry.remaining_Curr)
+        }, 0).toFixed(2)}
+      </td>
+      <td>${filteredEntries && filteredEntries.length > 0 && 
+        filteredEntries.reduce((total, entry) => {
+          return total + parseFloat(entry.visa_Price_In_Curr) - parseFloat(entry.remaining_Curr)
+        }, 0).toFixed(2)}
+      </td>
+      <td>${String(filteredEntries.reduce((total, expense) => total + expense.remaining_Curr, 0))}</td>
+      
+    
+      </tr>
     </tbody>
     </table>
     <style>
@@ -151,7 +178,7 @@ export default function PayableReports() {
       printWindow.document.write(`
       <html>
         <head>
-          <title>Overall Payment Visa Wise Report</title>
+          <title>Payable Reports</title>
         </head>
         <body class='bg-dark'>${printContentString}</body>
       </html>
@@ -313,7 +340,7 @@ export default function PayableReports() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {filteredEntries && filteredEntries.length>0 && filteredEntries.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry,index)=>(
+                        {filteredEntries && filteredEntries.length>0 && filteredEntries.map((entry,index)=>(
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.type}</TableCell>
@@ -326,24 +353,54 @@ export default function PayableReports() {
                                 <TableCell className='border data_td bg-warning text-white'>{entry.remaining_Curr}</TableCell>
                           </TableRow>
                         ))}
+                         <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-primary text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_PKR);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.total_In);
+      }, 0)}
+    </TableCell>
+   
+    <TableCell className='border data_td text-center bg-danger text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_PKR) - parseFloat(entry.total_In) 
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_Curr);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_Curr) - parseFloat(entry.remaining_Curr) 
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.remaining_Curr);
+      }, 0)}
+    </TableCell>
+    
+  </TableRow>
                       </TableBody>
                   </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    component='div'
-                    count={filteredEntries.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    style={{
-                      color: 'blue',
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      textTransform: 'capitalize',
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
+                
               </Paper>
             </div>
             }
