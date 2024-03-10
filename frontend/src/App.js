@@ -87,6 +87,7 @@ import ProtectorDetails from './components/protectors/ProtectorDetails.jsx'
 
 //Expenses Section
 import AddExpense from './components/expenses/AddExpense.jsx'
+import AddMulExpenses from './components/expenses/AddMulExpenses.jsx'
 import ExpenseDetails from './components/expenses/ExpenseDetails.jsx'
 
 // All Reports
@@ -211,6 +212,7 @@ function App() {
 
           {/* Expense Routes */}
           <Route  path='/rozgar/expenses/add_new_expense' element={user && <AddExpense></AddExpense> }></Route>
+          <Route  path='/rozgar/expenses/add/mul_expense' element={user && <AddMulExpenses></AddMulExpenses> }></Route>
           <Route  path='/rozgar/expenses/expenses_details' element={user && <ExpenseDetails></ExpenseDetails> }></Route>
           
           {/* Reports */}

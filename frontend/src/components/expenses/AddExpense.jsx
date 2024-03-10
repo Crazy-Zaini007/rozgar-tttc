@@ -20,8 +20,7 @@ export default function AddExpense() {
     const paymentVia = useSelector((state) => state.setting.paymentVia);
     const paymentType = useSelector((state) => state.setting.paymentType);
     const expenseCategories = useSelector((state) => state.setting.expenseCategories);
-
-
+    
     const { getCurrCountryData } = CurrCountryHook()
     const { getExpenseCategoryData } = ExpeCategoryHook()
     const { getPaymentViaData } = PaymentViaHook()

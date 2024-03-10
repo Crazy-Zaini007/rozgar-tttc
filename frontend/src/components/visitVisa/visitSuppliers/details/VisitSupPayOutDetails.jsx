@@ -154,7 +154,7 @@ export default function VisitSupPayOutDetails() {
 
 
     const deletePaymentIn = async (payment) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
+        if (window.confirm('Are you sure you want to delete this record?')) {
             setLoading1(true)
             let paymentId = payment._id
             try {
@@ -166,9 +166,9 @@ export default function VisitSupPayOutDetails() {
                     },
                     body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
                 })
-    
+
                 const json = await response.json()
-    
+
                 if (!response.ok) {
                     setNewMessage(toast.error(json.message));
                     setLoading1(false)
@@ -185,12 +185,12 @@ export default function VisitSupPayOutDetails() {
                 setLoading1(false)
             }
         }
-       
+
     }
 
 
     const deletePerson = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
+        if (window.confirm('Are you sure you want to delete this record?')) {
             setLoading2(true)
             let personId = person._id
             try {
@@ -202,9 +202,9 @@ export default function VisitSupPayOutDetails() {
                     },
                     body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Visa_Price_Out_PKR: person.azad_Visa_Price_Out_PKR, azad_Visa_Price_Out_Curr: person.azad_Visa_Price_Out_Curr })
                 })
-    
+
                 const json = await response.json()
-    
+
                 if (!response.ok) {
                     setNewMessage(toast.error(json.message));
                     setLoading2(false)
@@ -221,7 +221,7 @@ export default function VisitSupPayOutDetails() {
                 setLoading2(false)
             }
         }
-       
+
     }
 
 
@@ -312,7 +312,7 @@ export default function VisitSupPayOutDetails() {
 
 
     const deleteTotalpayment = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
+        if (window.confirm('Are you sure you want to delete this record?')) {
             setLoading5(true)
             try {
                 const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/all/payment_out`, {
@@ -323,9 +323,9 @@ export default function VisitSupPayOutDetails() {
                     },
                     body: JSON.stringify({ supplierName: person.supplierName })
                 })
-    
+
                 const json = await response.json()
-    
+
                 if (!response.ok) {
                     setNewMessage(toast.error(json.message));
                     setLoading5(false)
@@ -334,7 +334,7 @@ export default function VisitSupPayOutDetails() {
                     fetchData();
                     setNewMessage(toast.success(json.message));
                     setLoading5(false)
-    
+
                 }
             }
             catch (error) {
@@ -342,7 +342,7 @@ export default function VisitSupPayOutDetails() {
                 setLoading5(false)
             }
         }
-       
+
     }
 
 
@@ -444,30 +444,30 @@ export default function VisitSupPayOutDetails() {
     // individual payments filters
     const [dateFrom, setDateFrom] = useState('')
     const [dateTo, setDateTo] = useState('')
-  
+
     const [payment_Via, setPayment_Via] = useState('')
     const [payment_Type, setPayment_Type] = useState('')
-  
+
     const filteredIndividualPayments = visitSupplier_Payments_Out
-    .filter((data) => data.supplierName === selectedSupplier)
-    .map((filteredData) => ({
-      ...filteredData,
-      payment: filteredData.payment
-        .filter((paymentItem) => {
-          let isDateInRange = true;
-          // Check if the payment item's date is within the selected date range
-          if (dateFrom && dateTo) {
-            isDateInRange =
-              paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
-          }
-  
-          return (
-            isDateInRange &&
-            paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-            paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
-          );
-        }),
-    }))
+        .filter((data) => data.supplierName === selectedSupplier)
+        .map((filteredData) => ({
+            ...filteredData,
+            payment: filteredData.payment
+                .filter((paymentItem) => {
+                    let isDateInRange = true;
+                    // Check if the payment item's date is within the selected date range
+                    if (dateFrom && dateTo) {
+                        isDateInRange =
+                            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+                    }
+
+                    return (
+                        isDateInRange &&
+                        paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+                        paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+                    );
+                }),
+        }))
     const printPaymentsTable = () => {
         // Convert JSX to HTML string
         const printContentString = `
@@ -687,95 +687,95 @@ export default function VisitSupPayOutDetails() {
         }
     };
 
-        
-  const downloadExcel = () => {
-    const data = [];
-    // Iterate over entries and push all fields
-    filteredTotalPaymentIn.forEach((payments, index) => {
-      const rowData = {
-        SN: index + 1,
-        Agents:payments.supplierName,
-        Total_Visa_Price_Out_PKR:payments.total_Azad_Visa_Price_Out_PKR,
-        Total_Payment_Out:payments.total_Payment_Out,
-        Total_Cash_Out:payments.total_Cash_Out,
-        Remaining_PKR: payments.total_Azad_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
-        Total_Visa_Price_In_Curr:payments.total_Azad_Visa_Price_Out_Curr,
-        Total_Payment_Out_Curr:payments.total_Payment_Out_Curr,
-        Remaining_Curr:payments.total_Azad_Visa_Price_Out_Curr-payments.total_Payment_Out_Curr,
-        close:payments.close,
-        open:payments.open
-        
-      }
 
-      data.push(rowData);
-    });
+    const downloadExcel = () => {
+        const data = [];
+        // Iterate over entries and push all fields
+        filteredTotalPaymentIn.forEach((payments, index) => {
+            const rowData = {
+                SN: index + 1,
+                Agents: payments.supplierName,
+                Total_Visa_Price_Out_PKR: payments.total_Azad_Visa_Price_Out_PKR,
+                Total_Payment_Out: payments.total_Payment_Out,
+                Total_Cash_Out: payments.total_Cash_Out,
+                Remaining_PKR: payments.total_Azad_Visa_Price_Out_PKR - payments.total_Payment_Out + payments.total_Cash_Out,
+                Total_Visa_Price_In_Curr: payments.total_Azad_Visa_Price_Out_Curr,
+                Total_Payment_Out_Curr: payments.total_Payment_Out_Curr,
+                Remaining_Curr: payments.total_Azad_Visa_Price_Out_Curr - payments.total_Payment_Out_Curr,
+                close: payments.close,
+                open: payments.open
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Agent_Payments_Details.xlsx');
-  }
+            }
+
+            data.push(rowData);
+        });
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'Agent_Payments_Details.xlsx');
+    }
 
 
-  const downloadIndividualPayments = () => {
-    const data = [];
-    // Iterate over entries and push all fields
-    filteredIndividualPayments.forEach((payments, index) => {
-      const rowData = {
-        SN: index + 1,
-        Date:payments.date,
-        Category:payments.category,
-        payment_Via:payments.payment_Via,
-        payment_Type:payments.payment_Type,
-        slip_No: payments.slip_No,
-        details:payments.details,
-        payment_Out:payments.payment_Out,
-        cash_Out:payments.cash_Out,
-        invoice:payments.invoice,
-        payment_Out_Curr:payments.payment_Out_Curr,
-        curr_Rate:payments.curr_Rate,
-        curr_Amount:payments.curr_Amount
-      }
+    const downloadIndividualPayments = () => {
+        const data = [];
+        // Iterate over entries and push all fields
+        filteredIndividualPayments.forEach((payments, index) => {
+            const rowData = {
+                SN: index + 1,
+                Date: payments.date,
+                Category: payments.category,
+                payment_Via: payments.payment_Via,
+                payment_Type: payments.payment_Type,
+                slip_No: payments.slip_No,
+                details: payments.details,
+                payment_Out: payments.payment_Out,
+                cash_Out: payments.cash_Out,
+                invoice: payments.invoice,
+                payment_Out_Curr: payments.payment_Out_Curr,
+                curr_Rate: payments.curr_Rate,
+                curr_Amount: payments.curr_Amount
+            }
 
-      data.push(rowData);
-    });
+            data.push(rowData);
+        });
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-  }
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+    }
 
-  
-  const downloadPersons = () => {
-    const data = [];
-    // Iterate over entries and push all fields
-    filteredPersons.forEach((payments, index) => {
-      const rowData = {
-        SN: index + 1,
-        entry_Date:payments.entry_Date,
-        Category:payments.category,
-        name:payments.name,
-        pp_No:payments.pp_No,
-        entry_Mode: payments.entry_Mode,
-        company:payments.company,
-        trade:payments.trade,
-        country:payments.country,
-        final_Status:payments.final_Status,
-        flight_Date:payments.flight_Date,
-        visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
-        visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
-        
-      }
 
-      data.push(rowData);
-    });
+    const downloadPersons = () => {
+        const data = [];
+        // Iterate over entries and push all fields
+        filteredPersons.forEach((payments, index) => {
+            const rowData = {
+                SN: index + 1,
+                entry_Date: payments.entry_Date,
+                Category: payments.category,
+                name: payments.name,
+                pp_No: payments.pp_No,
+                entry_Mode: payments.entry_Mode,
+                company: payments.company,
+                trade: payments.trade,
+                country: payments.country,
+                final_Status: payments.final_Status,
+                flight_Date: payments.flight_Date,
+                visa_Price_Out_PKR: payments.azad_Visa_Price_Out_PKR,
+                visa_Price_Out_Curr: payments.azad_Visa_Price_Out_Curr,
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-  }
+            }
+
+            data.push(rowData);
+        });
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
+    }
 
 
 
@@ -923,6 +923,44 @@ export default function VisitSupPayOutDetails() {
 
                                                 </TableRow>
                                             ))}
+                                                <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+        {/* Calculate the total sum of payment_In */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const paymentIn = parseFloat(paymentItem.total_Azad_Visa_Price_Out_PKR);
+            return isNaN(paymentIn) ? total : total + paymentIn;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Payment_Out);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-danger text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Cash_Out);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+        const paymentIn = parseFloat(paymentItem.total_Azad_Visa_Price_Out_PKR);
+        const cashOut = parseFloat(paymentItem.total_Cash_Out);
+        const paymentOut = parseFloat(paymentItem.total_Payment_Out);
+        
+        // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
+        const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+        return total + netCashOut;
+    }, 0)}
+</TableCell>
+</TableRow>
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
@@ -957,7 +995,7 @@ export default function VisitSupPayOutDetails() {
 
                             </div>
                             <div className="right">
-                            <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
 
                                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
@@ -968,32 +1006,15 @@ export default function VisitSupPayOutDetails() {
                     <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
-                            <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
-                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(visitSupplier_Payments_Out
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
-                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(visitSupplier_Payments_Out
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
-                </div>
+                                <div className="col-auto px-1">
+                                    <label htmlFor="">Date From:</label>
+                                    <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
+                                </div>
+                                <div className="col-auto px-1">
+                                    <label htmlFor="">Date To:</label>
+                                    <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1' />
+
+                                </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Payment Via:</label>
                                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
@@ -1031,6 +1052,7 @@ export default function VisitSupPayOutDetails() {
                             <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
+                                        <TableCell className='label border'>SN</TableCell>
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Category</TableCell>
                                         <TableCell className='label border'>Payment_Via</TableCell>
@@ -1059,6 +1081,9 @@ export default function VisitSupPayOutDetails() {
                                                     <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                         {editMode && editedRowIndex === index ? (
                                                             <>
+                                                                <TableCell className='border data_td p-1 '>
+                                                                    <input type='text' value={index + 1} readonly />
+                                                                </TableCell>
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                                                                 </TableCell>
@@ -1122,6 +1147,7 @@ export default function VisitSupPayOutDetails() {
                                                             </>
                                                         ) : (
                                                             <>
+                                                                <TableCell className='border data_td text-center'>{index + 1}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
@@ -1186,33 +1212,33 @@ export default function VisitSupPayOutDetails() {
 
                                             </>
                                         ))}
-                                         <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-warning text-white'>
-          {/* Calculate the total sum of payment_In */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const paymentIn = parseFloat(paymentItem.payment_Out);
-              return isNaN(paymentIn) ? sum : sum + paymentIn;
-            }, 0);
-          }, 0)}
-        </TableCell>
-        <TableCell className='border data_td text-center bg-info text-white'>
-          {/* Calculate the total sum of cash_Out */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const cashOut = parseFloat(paymentItem.cash_Out);
-              return isNaN(cashOut) ? sum : sum + cashOut;
-            }, 0);
-          }, 0)}
-        </TableCell>
-                            
-                          </TableRow>
+                                    <TableRow>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                                        <TableCell className='border data_td text-center bg-warning text-white'>
+                                            {/* Calculate the total sum of payment_In */}
+                                            {filteredIndividualPayments.reduce((total, filteredData) => {
+                                                return total + filteredData.payment.reduce((sum, paymentItem) => {
+                                                    const paymentIn = parseFloat(paymentItem.payment_Out);
+                                                    return isNaN(paymentIn) ? sum : sum + paymentIn;
+                                                }, 0);
+                                            }, 0)}
+                                        </TableCell>
+                                        <TableCell className='border data_td text-center bg-info text-white'>
+                                            {/* Calculate the total sum of cash_Out */}
+                                            {filteredIndividualPayments.reduce((total, filteredData) => {
+                                                return total + filteredData.payment.reduce((sum, paymentItem) => {
+                                                    const cashOut = parseFloat(paymentItem.cash_Out);
+                                                    return isNaN(cashOut) ? sum : sum + cashOut;
+                                                }, 0);
+                                            }, 0)}
+                                        </TableCell>
+
+                                    </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -1348,7 +1374,7 @@ export default function VisitSupPayOutDetails() {
                                 <h6>Persons Details</h6>
                             </div>
                             <div className="right">
-                               <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
+                                <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
                             </div>
                         </div>
@@ -1505,29 +1531,29 @@ export default function VisitSupPayOutDetails() {
 
                                                 </TableRow>
                                             ))}
-                                               <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-warning text-white'>
-          {/* Calculate the total sum of payment_In */}
-          {filteredPersons.reduce((total, filteredData) => {
-            return total + filteredData.persons.reduce((sum, paymentItem) => {
-              const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
-              return isNaN(paymentIn) ? sum : sum + paymentIn;
-            }, 0);
-          }, 0)}
-        </TableCell>
-      
-                            
-                          </TableRow>
+                                            <TableRow>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                                                <TableCell className='border data_td text-center bg-warning text-white'>
+                                                    {/* Calculate the total sum of payment_In */}
+                                                    {filteredPersons.reduce((total, filteredData) => {
+                                                        return total + filteredData.persons.reduce((sum, paymentItem) => {
+                                                            const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
+                                                            return isNaN(paymentIn) ? sum : sum + paymentIn;
+                                                        }, 0);
+                                                    }, 0)}
+                                                </TableCell>
+
+
+                                            </TableRow>
                                         </>
                                     ))}
                                 </TableBody>

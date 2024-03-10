@@ -4,9 +4,9 @@ const cloudinary = cloudinaryModule.v2;
 
 // Configuration 
 cloudinary.config({
-    cloud_name: "degdse5on",
-    api_key: "661817392641162",
-    api_secret: "MqXdxVCP1_lb6BXezX6wp-WqmNo"
+    cloud_name: "dnp3osckt",
+    api_key: "612998946321666",
+    api_secret: "9T8tkU-5GHgJrZhRlmGQ0i6Y_PM"
   });
   
   module.exports=cloudinary

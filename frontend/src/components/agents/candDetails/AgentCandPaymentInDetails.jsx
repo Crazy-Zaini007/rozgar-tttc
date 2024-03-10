@@ -917,19 +917,19 @@ export default function AgentCandPaymentInDetails() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <TableCell className='label border'>SN</TableCell>
-                        <TableCell className='label border'>Date</TableCell>
-                        <TableCell className='label border'>Agents</TableCell>
-                        <TableCell className='label border'>TVPI_PKR</TableCell>
-                        <TableCell className='label border'>TPI_PKR</TableCell>
-                        <TableCell className='label border'>Total_Cash_Out</TableCell>
-                        <TableCell className='label border'>RPI_PKR</TableCell>
-                        <TableCell className='label border'>TVPI_Oth_Curr</TableCell>
-                        <TableCell className='label border'>TPI_Curr</TableCell>
-                        <TableCell className='label border'>RPI_Curr</TableCell>
-                        <TableCell className='label border'>Close</TableCell>
-                        <TableCell className='label border'>Open</TableCell>
-                        <TableCell align='left' className='edw_label border' colSpan={1}>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>Agents</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>TVPI_PKR</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>TPI_PKR</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>Total_Cash_Out</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>RPI_PKR</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>TVPI_Oth_Curr</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>TPI_Curr</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
+                        <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                           Actions
                         </TableCell>
                       </TableRow>
@@ -992,39 +992,39 @@ export default function AgentCandPaymentInDetails() {
                               ) : (
                                 // Non-Edit Mode
                                 <>
-                                  <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center' onClick={() => handleRowClick(entry.supplierName)}>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.supplierName)}>
                                     {entry.supplierName}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.total_Visa_Price_In_PKR}
                                   </TableCell>
 
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{entry.total_Payment_In}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.total_Visa_Price_In_Curr}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.total_Payment_In_Curr}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.close === false ? "Not Closed" : "Closed"}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
@@ -1058,6 +1058,45 @@ export default function AgentCandPaymentInDetails() {
 
                           </React.Fragment>
                         ))}
+                        <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+        {/* Calculate the total sum of payment_In */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
+            return isNaN(paymentIn) ? total : total + paymentIn;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Payment_In);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-danger text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Cash_Out);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+        const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
+        const cashOut = parseFloat(paymentItem.total_Cash_Out);
+        const paymentOut = parseFloat(paymentItem.total_Payment_In);
+        
+        // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
+        const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+        return total + netCashOut;
+    }, 0)}
+</TableCell>
+</TableRow>
+
                     </TableBody>
 
                   </Table>
@@ -1105,29 +1144,12 @@ export default function AgentCandPaymentInDetails() {
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
-                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(agent_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date To:</label>
-                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(agent_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Payment Via:</label>
@@ -1166,21 +1188,22 @@ export default function AgentCandPaymentInDetails() {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
-                    <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_In</TableCell>
-                    <TableCell className='label border'>Cash_Out</TableCell>
-                    <TableCell className='label border'>Candidate</TableCell>
-                    <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
-                    <TableCell className='label border'>Slip_Pic</TableCell>
-                    <TableCell align='left' className='edw_label border' colSpan={1}>
+                  <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Candidate</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_Pic</TableCell>
+                    <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                       Actions
                     </TableCell>
                   </TableRow>
@@ -1192,6 +1215,9 @@ export default function AgentCandPaymentInDetails() {
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
+                             <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index+1} readonly />
+                              </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                               </TableCell>
@@ -1257,20 +1283,21 @@ export default function AgentCandPaymentInDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
-                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.cand_Name}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index+1}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.cand_Name}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                             </>
                           )}
                           <TableCell className='border data_td p-1 '>
@@ -1490,23 +1517,23 @@ export default function AgentCandPaymentInDetails() {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>SN</TableCell>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Name</TableCell>
-                    <TableCell className='label border'>PP#</TableCell>
-                    <TableCell className='label border'>Entry_Mode</TableCell>
-                    <TableCell className='label border'>Company</TableCell>
-                    <TableCell className='label border'>Trade</TableCell>
-                    <TableCell className='label border'>Country</TableCell>
-                    <TableCell className='label border'>Final_Status</TableCell>
-                    <TableCell className='label border'>Flight_Date</TableCell>
-                    <TableCell className='label border'>VPI_PKR</TableCell>
-                    <TableCell className='label border'>Total_In_PKR</TableCell>
-                    <TableCell className='label border'>Total_Cash_Out</TableCell>
-                    <TableCell className='label border'>Remaining</TableCell>
-                    <TableCell className='label border'>VPI_Oth_Curr</TableCell>
-                    <TableCell className='label border'>Remaining_Oth_Curr</TableCell>
-                    <TableCell className='label border'>Action</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Name</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>PP#</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Entry_Mode</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Company</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Trade</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Country</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Final_Status</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Flight_Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>VPI_PKR</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Total_In_PKR</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Total_Cash_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Remaining</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Remaining_Oth_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1596,22 +1623,22 @@ export default function AgentCandPaymentInDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.entry_Date}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.name}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR-person?.total_In +person?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_In_Curr}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.remaining_Curr}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.pp_No}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Mode}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.company}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.trade}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.country}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.final_Status}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.flight_Date}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.total_In}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR-person?.total_In +person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.remaining_Curr}</TableCell>
 
 
                             </>

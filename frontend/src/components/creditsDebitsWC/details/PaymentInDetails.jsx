@@ -588,27 +588,38 @@ export default function PaymentInDetails() {
                       </TableCell>
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                       <button className='btn delete_btn' onClick={() => deleteTotalPayment(entry)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
-                      <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div className="modal-dialog p-0">
-                                      <div className="modal-content p-0">
-                                        <div className="modal-header border-0">
-                                          <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                          {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                        </div>
-                                        <div className="modal-body text-center p-0">
-
-                                          <p>Do you want to Delete the Record?</p>
-                                        </div>
-                                        <div className="text-end m-2">
-                                          <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                          <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                     
                       </TableCell>
                     </TableRow>
                   ))}
+                   <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+  
+    <TableCell className='border data_td text-center bg-success text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Payment_In);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-danger text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Payment_Out);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.balance);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    
+</TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -655,29 +666,12 @@ export default function PaymentInDetails() {
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
-                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(CDWC_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date To:</label>
-                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(CDWC_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Payment Via:</label>
@@ -716,6 +710,7 @@ export default function PaymentInDetails() {
               <Table>
                 <TableHead className="thead">
                   <TableRow>
+                  <TableCell className='label border'>SN</TableCell>
                     <TableCell className='label border'>Date</TableCell>
                     <TableCell className='label border'>Category</TableCell>
                     <TableCell className='label border'>Payment_Via</TableCell>
@@ -741,6 +736,9 @@ export default function PaymentInDetails() {
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
+                            <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index+1} readonly />
+                              </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                               </TableCell>
@@ -804,6 +802,7 @@ export default function PaymentInDetails() {
                             </>
                           ) : (
                             <>
+                              <TableCell className='border data_td text-center'>{index+1}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>

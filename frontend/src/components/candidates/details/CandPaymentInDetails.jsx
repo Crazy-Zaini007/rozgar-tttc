@@ -965,6 +965,51 @@ export default function CandPaymentInDetails() {
 
                           </React.Fragment>
                         ))}
+                        <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+        {/* Calculate the total sum of payment_In */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
+            return isNaN(paymentIn) ? total : total + paymentIn;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Payment_In);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-danger text-white'>
+        {/* Calculate the total sum of cash_Out */}
+        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+            const cashOut = parseFloat(paymentItem.total_Cash_Out);
+            return isNaN(cashOut) ? total : total + cashOut;
+        }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+        const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
+        const cashOut = parseFloat(paymentItem.total_Cash_Out);
+        const paymentOut = parseFloat(paymentItem.total_Payment_In);
+        
+        // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
+        const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+        return total + netCashOut;
+    }, 0)}
+</TableCell>
+</TableRow>
                     </TableBody>
 
                   </Table>
@@ -1012,29 +1057,12 @@ export default function CandPaymentInDetails() {
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
-                  <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(candidate_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date To:</label>
-                  <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(candidate_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Payment Via:</label>
@@ -1072,6 +1100,7 @@ export default function CandPaymentInDetails() {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
+                  <TableCell className='label border'>SN</TableCell>
                     <TableCell className='label border'>Date</TableCell>
                     <TableCell className='label border'>Category</TableCell>
                     <TableCell className='label border'>Payment_Via</TableCell>
@@ -1098,6 +1127,9 @@ export default function CandPaymentInDetails() {
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
+                            <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index+1} readonly />
+                              </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                               </TableCell>
@@ -1160,6 +1192,7 @@ export default function CandPaymentInDetails() {
                             </>
                           ) : (
                             <>
+                              <TableCell className='border data_td text-center'>{index+1}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>

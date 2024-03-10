@@ -213,12 +213,12 @@ export default function AddVacation() {
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border text-center'>Date</TableCell>
-                    <TableCell className='label border text-center'>Date_From</TableCell>
-                    <TableCell className='label border text-center'>Date_To</TableCell>
-                    <TableCell className='label border text-center'>Days</TableCell>
-                    <TableCell className='label border text-center'>Time_In</TableCell>
-                    <TableCell className='label border text-center'>Time_Out</TableCell>
+                    <TableCell className='label border text-center' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border text-center' style={{ width: '18.28%' }}>Date_From</TableCell>
+                    <TableCell className='label border text-center' style={{ width: '18.28%' }}>Date_To</TableCell>
+                    <TableCell className='label border text-center' style={{ width: '18.28%' }}>Days</TableCell>
+                    <TableCell className='label border text-center' style={{ width: '18.28%' }}>Time_In</TableCell>
+                    <TableCell className='label border text-center' style={{ width: '18.28%' }}>Time_Out</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -229,12 +229,12 @@ export default function AddVacation() {
                       <>
                         {filteredData.vacation && filteredData.vacation?.map((vacation, index) => (
                           <TableRow key={vacation?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            <TableCell className='border data_td text-center'>{vacation?.date}</TableCell>
-                            <TableCell className='border data_td text-center'>{vacation?.dateFrom}</TableCell>
-                            <TableCell className='border data_td text-center'>{vacation?.dateTo}</TableCell>
-                            <TableCell className='border data_td text-center'>{vacation?.days}</TableCell>
-                            <TableCell className='border data_td text-center'>{vacation?.timeIn}</TableCell>
-                            <TableCell className='border data_td text-center'>{vacation?.timeOut}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.date}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.dateFrom}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.dateTo}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.days}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeIn}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeOut}</TableCell>
                           </TableRow>
                         ))}
                     

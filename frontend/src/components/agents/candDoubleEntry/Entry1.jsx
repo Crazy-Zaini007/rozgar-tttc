@@ -539,19 +539,19 @@ export default function Entry1() {
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
-                    <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_In</TableCell>
-                    <TableCell className='label border'>Cash_Out</TableCell>
-                    <TableCell className='label border'>Candidate</TableCell>
-                    <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Date</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Category</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Payment_Via</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Payment_Type</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Slip_No</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Details</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Payment_In</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Cash_Out</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Candidate</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Invoice</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >Payment_In_Curr</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >CUR_Rate</TableCell>
+                    <TableCell className='label text-center' style={{ width: '18.28%' }} >CUR_Amount</TableCell>
 
 
                   </TableRow>
@@ -566,19 +566,19 @@ export default function Entry1() {
                           .filter((paymentItem) => paymentItem.cand_Name !== undefined)
                           .map((paymentItem, index) => (
                             <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                              <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
-                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.cand_Name}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }} >{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.cand_Name}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
 
                             </TableRow>
                           ))}
@@ -591,11 +591,11 @@ export default function Entry1() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border'>Total_Payment_In</TableCell>
+                          <TableCell className='label text-center' style={{ width: '18.28%' }} >Total_Payment_In</TableCell>
                           <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
+                          <TableCell className='label text-center' style={{ width: '18.28%' }} >Total_Payment_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
@@ -605,11 +605,11 @@ export default function Entry1() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
+                          <TableCell className='label text-center' style={{ width: '18.28%' }} >Total_Visa_Price_In_PKR</TableCell>
                           <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
+                          <TableCell className='label text-center' style={{ width: '18.28%' }} >Total_Visa_Price_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
@@ -618,11 +618,11 @@ export default function Entry1() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining PKR</TableCell>
+                          <TableCell className='label text-center' style={{ width: '18.28%' }} >Remaining PKR</TableCell>
                           <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
+                          <TableCell className='label text-center' style={{ width: '18.28%' }} >Remaining Total_Payment_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow>
                       </>

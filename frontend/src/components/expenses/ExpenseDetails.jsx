@@ -126,7 +126,7 @@ export default function ExpenseDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ expenseId, name: editedEntry.name, expCategory: editedEntry.expCategory, payment_Out: editedEntry.payment_Out, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, slip_Pic: editedEntry.slip_Pic, details: editedEntry.details, curr_Country: editedEntry.curr_Country, curr_Rate: editedEntry.curr_Rate, curr_Amount: editedEntry.curr_Amount, dateFrom: editedEntry.dateFrom })
+        body: JSON.stringify({ expenseId, name: editedEntry.name, expCategory: editedEntry.expCategory, payment_Out: editedEntry.payment_Out, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, slip_Pic: editedEntry.slip_Pic, details: editedEntry.details, curr_Country: editedEntry.curr_Country, curr_Rate: editedEntry.curr_Rate, curr_Amount: editedEntry.curr_Amount, date: editedEntry.date })
       })
 
       const json = await response.json()
@@ -220,7 +220,7 @@ export default function ExpenseDetails() {
     filteredExpenses.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        dateFrom:payments.date,
+        date:payments.date,
         person_Name:payments.name,
         expCategory:payments.expCategory,
         ExpAmount:payments.payment_Out,
@@ -360,24 +360,15 @@ export default function ExpenseDetails() {
             <div className="col-md-12 filters">
               <Paper className='py-1 mb-2 px-3'>
                 <div className="row">
-                  <div className="col-auto px-1">
-                    <label htmlFor="">Date From:</label>
-                    <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
-                      <option value="">All</option>
-                      {[...new Set(expenses.map(data => data.date))].map(date => (
-                        <option value={date} key={date}>{date}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-auto px-1">
-                    <label htmlFor="">Date To:</label>
-                    <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
-                      <option value="">All</option>
-                      {[...new Set(expenses.map(data => data.date))].map(date => (
-                        <option value={date} key={date}>{date}</option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Name:</label>
                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>

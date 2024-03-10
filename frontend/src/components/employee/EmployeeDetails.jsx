@@ -884,22 +884,22 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                         <TableHead>
 
                                             <TableRow>
-                                                <TableCell className='label border'>SN</TableCell>
-                                                <TableCell className='label border'>Date</TableCell>
-                                                <TableCell className='label border'>Employee</TableCell>
-                                                <TableCell className='label border'>Father_Name</TableCell>
-                                                <TableCell className='label border'>Email</TableCell>
-                                                <TableCell className='label border'>Phone</TableCell>
-                                                <TableCell className='label border'>Emergency_Phone</TableCell>
-                                                <TableCell className='label border'>DOB</TableCell>
-                                                <TableCell className='label border'>CNIC</TableCell>
-                                                <TableCell className='label border'>Salary_Type</TableCell>
-                                                <TableCell className='label border'>Salary</TableCell>
-                                                <TableCell className='label border'>Address</TableCell>
-                                                <TableCell className='label border'>Open</TableCell>
-                                                <TableCell className='label border'>Close</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Employee</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Father_Name</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Email</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Phone</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Emergency_Phone</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>DOB</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>CNIC</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Salary_Type</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Salary</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Address</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
+                                                <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell>
                                                 {route !=="/rozgar/reports/payroll_reports" &&
-                                                <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell>
+                                                <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}> Actions</TableCell>
                                                 }
                                             </TableRow>
                                         </TableHead>
@@ -911,51 +911,51 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                                    {editMode3 && editedRowIndex3=== index ? 
                                                    (
                                                     <>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='number' value={index} readonly />
 
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='date' value={editedEntry3.entry_Date}  readonly />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.employeeName}  onChange={(e) => handleEmployeeInputChange(e, 'employeeName')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.fatherName}  onChange={(e) => handleEmployeeInputChange(e, 'fatherName')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='email' value={editedEntry3.email}  onChange={(e) => handleEmployeeInputChange(e, 'email')} />
                                                     </TableCell>
                                                  
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.phone}  onChange={(e) => handleEmployeeInputChange(e, 'phone')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.emergencyPhone}  onChange={(e) => handleEmployeeInputChange(e, 'emergencyPhone')} />
                                                         
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='date' value={editedEntry3.dob}  onChange={(e) => handleEmployeeInputChange(e, 'dob')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.cnic}  onChange={(e) => handleEmployeeInputChange(e, 'cnic')} />
                                                        
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.salaryType}  onChange={(e) => handleEmployeeInputChange(e, 'salaryType')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='number' value={editedEntry3.salary}  onChange={(e) => handleEmployeeInputChange(e, 'salary')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='text' value={editedEntry3.address}  onChange={(e) => handleEmployeeInputChange(e, 'address')} />
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='checkbox' value={editedEntry3.open}  disabled />
                                                        
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                     <input type='checkbox' value={editedEntry3.close}  disabled />
                                                     </TableCell>
                                                     {route !=="/rozgar/reports/payroll_reports" && 
@@ -971,45 +971,45 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                                     </>
                                                    ):(
                                                     <>
-                                                    <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.entry_Date}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center' onClick={() => handleRowClick(entry.employeeName)}>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.employeeName)}>
                                                         {entry.employeeName}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.fatherName}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.email}
                                                     </TableCell>
                                                  
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.phone}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.emergencyPhone}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.dob}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.cnic}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.salaryType}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.salary}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.address}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                         {entry.close === false ? "Not Closed" : "Closed"}
                                                     </TableCell>
                                                     {route !=="/rozgar/reports/payroll_reports" && 
@@ -1094,29 +1094,12 @@ const [newDateFrom, setNewDateFrom] = useState('')
                             <div className="row">
                             <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
-                  <select value={newDateFrom} onChange={(e) => setNewDateFrom(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(employees
-                      .filter(data => data.employeeName === selectedEmployee)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date To:</label>
-                  <select value={newDateTo} onChange={(e) => setNewDateTo(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(employees
-                      .filter(data => data.employeeName === selectedEmployee)
-                      .flatMap(data => data.payment)
-                      .map(data => data.date)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
                 </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Payment Via:</label>
@@ -1155,19 +1138,20 @@ const [newDateFrom, setNewDateFrom] = useState('')
                             <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
-                                        <TableCell className='label border'>Date</TableCell>
-                                        <TableCell className='label border'>Category</TableCell>
-                                        <TableCell className='label border'>Payment_Via</TableCell>
-                                        <TableCell className='label border'>Payment_Type</TableCell>
-                                        <TableCell className='label border'>Slip_No</TableCell>
-                                        <TableCell className='label border'>Details</TableCell>
-                                        <TableCell className='label border'>Payment_Out</TableCell>
-                                        <TableCell className='label border'>Invoice</TableCell>
-                                        <TableCell className='label border'>Payment_In_Curr</TableCell>
-                                        <TableCell className='label border'>CUR_Rate</TableCell>
-                                        <TableCell className='label border'>CUR_Amount</TableCell>
-                                        <TableCell className='label border'>Slip_Pic</TableCell>
-                                        {route !=="/rozgar/reports/payroll_reports" && <TableCell align='left' className='edw_label border' colSpan={1}>
+                                       <TableCell className='label border'style={{ width: '18.28%' }}>SN</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Slip_Pic</TableCell>
+                                        {route !=="/rozgar/reports/payroll_reports" && <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                                             Actions
                                         </TableCell>}
                                         
@@ -1182,6 +1166,9 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                                     <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                         {editMode && editedRowIndex === index ? (
                                                             <>
+                                                            <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index+1} readonly />
+                              </TableCell>
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                                                                 </TableCell>
@@ -1243,18 +1230,19 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                                                                <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.payment_Out_Curr}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index+1}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Out_Curr}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                                                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
 
 
                                                             </>
@@ -1395,15 +1383,15 @@ const [newDateFrom, setNewDateFrom] = useState('')
                             <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
-                                        <TableCell className='label border'>SN</TableCell>
-                                        <TableCell className='label border'>Date</TableCell>
-                                        <TableCell className='label border'>Date_From</TableCell>
-                                        <TableCell className='label border'>Date_To</TableCell>
-                                        <TableCell className='label border'>Days</TableCell>
-                                        <TableCell className='label border'>Time_In</TableCell>
-                                        <TableCell className='label border'>Time_Out</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Date_From</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Date_To</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Days</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Time_In</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Time_Out</TableCell>
                                         {route!=="/rozgar/reports/payroll_reports" &&
-                                        <TableCell className='label border'>Action</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
                                         }
                                     </TableRow>
                                 </TableHead>
@@ -1443,12 +1431,12 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{vacation?.date}</TableCell>
-                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{vacation?.dateFrom}</TableCell>
-                                                            <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{vacation?.dateTo}</TableCell>
-                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.days}</TableCell>
-                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeIn}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.date}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.dateFrom}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.dateTo}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }} >{vacation?.days}</TableCell>
+                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }} >{vacation?.timeIn}</TableCell>
                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeOut}</TableCell>
                                                         
 

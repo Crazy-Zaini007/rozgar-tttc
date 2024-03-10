@@ -667,24 +667,15 @@ export default function CashinHand() {
                     <div className="col-md-12 filters">
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
-                          <div className="col-auto px-1">
-                            <label htmlFor="">Date From:</label>
-                            <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
-                              <option value="">All</option>
-                              {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.date))].map(dateValue => (
-                                <option value={dateValue} key={dateValue}>{dateValue}</option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="col-auto px-1">
-                            <label htmlFor="">Date To:</label>
-                            <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
-                              <option value="">All</option>
-                              {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.date))].map(dateValue => (
-                                <option value={dateValue} key={dateValue}>{dateValue}</option>
-                              ))}
-                            </select>
-                          </div>
+                        <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                          
 
                           <div className="col-auto px-1">
@@ -867,24 +858,15 @@ export default function CashinHand() {
                   <div className="col-md-12 filters">
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
-                          <div className="col-auto px-1">
-                            <label htmlFor="">Date From:</label>
-                            <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
-                              <option value="">All</option>
-                              {[...new Set(overAllPayments && overAllPayments.map(data => data.date))].map(dateValue => (
-                                <option value={dateValue} key={dateValue}>{dateValue}</option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="col-auto px-1">
-                            <label htmlFor="">Date To:</label>
-                            <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
-                              <option value="">All</option>
-                              {[...new Set(overAllPayments && overAllPayments.map(data => data.date))].map(dateValue => (
-                                <option value={dateValue} key={dateValue}>{dateValue}</option>
-                              ))}
-                            </select>
-                          </div>
+                        <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                           
                           <div className="col-auto px-1">
                             <label htmlFor="">Supp/Agent/Cand:</label>

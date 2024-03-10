@@ -1,5 +1,5 @@
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addExpense, getExpenses, delExpense, updateExpense } = require('../../controllers/expenses/ExpenseController')
+const { addExpense, getExpenses,addMultipleExpense, delExpense, updateExpense } = require('../../controllers/expenses/ExpenseController')
 const express = require('express');
 const router = express.Router()
 router.use(userAuth)
@@ -7,6 +7,7 @@ router.use(userAuth)
 // adding a single Expense
 router.post('/add/expense', addExpense)
 
+router.post('/add/multiple/expense', addMultipleExpense)
 // Geting Expenses
 router.get('/get/expenses', getExpenses)
 

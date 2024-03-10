@@ -1270,6 +1270,25 @@ export default function Sidebar() {
           setOption15(false)
 
           break;
+          case '/rozgar/expenses/add/mul_expense':
+          setActiveItem(89)
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(true)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(false)
+
+          break;
         case '/rozgar/expenses/expenses_details':
           setActiveItem(48)
           setOption1(false)
@@ -2100,6 +2119,7 @@ export default function Sidebar() {
             {option9 &&
               <>
                 <li className=' my-2' style={activeItem === 47 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(47, `/rozgar/expenses/add_new_expense`)}><i className="fas fa-plus me-2"></i>Add Expense</li>
+                <li className=' my-2' style={activeItem === 89 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(89, `/rozgar/expenses/add/mul_expense`)}><i className="fas fa-plus me-2"></i>Add Mutiple Expense</li>
                 <li className=' my-2' style={activeItem === 48 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(48, `/rozgar/expenses/expenses_details`)}><i className="fas fa-info-circle me-2"></i>Expenses Details</li>
 
               </>

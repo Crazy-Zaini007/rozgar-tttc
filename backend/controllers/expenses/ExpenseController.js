@@ -28,12 +28,7 @@ const addExpense = async (req, res) => {
             res.status(404).json({ message: "User not found" })
         }
         if (user && user.role === "Admin") {
-            if (slip_Pic) {
-                const uploadImage = await cloudinary.uploader.upload(slip_Pic, {
-                    upload_preset: 'rozgar'
-                })
-            }
-
+           
             let nextInvoiceNumber = 0;
 
             // Check if InvoiceNumber document exists
@@ -60,7 +55,7 @@ const addExpense = async (req, res) => {
             if (slip_Pic) {
               uploadImage = await cloudinary.uploader.upload(slip_Pic, {
                 upload_preset: "rozgar",
-              });
+              })
             }
         
             const newExpense = new Expenses({
@@ -113,6 +108,121 @@ const addExpense = async (req, res) => {
     }
 
 }
+
+// adding multiple Expenses
+const addMultipleExpense=async(req,res)=>{
+
+    try {
+        const multiplepayment=req.body
+
+        const userId = req.user._id
+        const user = await User.findById(userId)
+        if (!user) {
+            res.status(404).json({ message: "User not found" })
+        }
+
+        if (user && user.role === "Admin") {
+            const updatedPayments = [];
+
+            for(const payment of multiplepayment){
+                const {
+                    name,
+                    expCategory,
+                    payment_Out,
+                    payment_Via,
+                    payment_Type,
+                    slip_No,
+                    slip_Pic,
+                    details,
+                    curr_Country,
+                    curr_Rate,
+                    curr_Amount,
+                    date} = payment
+
+                    let nextInvoiceNumber = 0;
+
+                    // Check if InvoiceNumber document exists
+                    const currentInvoiceNumber = await InvoiceNumber.findOne({});
+        
+                    if (!currentInvoiceNumber) {
+                        // If not, create a new one
+                        const newInvoiceNumberDoc = new InvoiceNumber();
+                        await newInvoiceNumberDoc.save();
+                    }
+        
+                    // Get the updated invoice number
+                    const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+                        {},
+                        { $inc: { invoice_Number: 1 } },
+                        { new: true, upsert: true } // Use upsert: true to create a new document if it doesn't exist
+                    );
+        
+                    if (updatedInvoiceNumber) {
+                        nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+                    }
+                    // uploading image to cloudinary
+                    let uploadImage;
+                    if (slip_Pic) {
+                      uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+                        upload_preset: "rozgar",
+                      });
+                    }
+                
+                    const newExpense = new Expenses({
+                        name,
+                        expCategory,
+                        payment_Out,
+                        payment_Via,
+                        payment_Type,
+                        slip_No,
+                        slip_Pic: uploadImage?.secure_url || '',
+                        details,
+                        curr_Country,
+                        curr_Rate,
+                        curr_Amount,
+                        date,
+                        invoice: nextInvoiceNumber
+                    })
+                      updatedPayments.push(newExpense);
+        
+                    const cashInHandDoc = await CashInHand.findOne({});
+        
+                    if (!cashInHandDoc) {
+                        const newCashInHandDoc = new CashInHand();
+                        await newCashInHandDoc.save();
+                    }
+        
+                    const cashInHandUpdate = {
+                        $inc: {}
+                    };
+        
+                    if (payment_Via.toLowerCase() === "cash") {
+                        cashInHandUpdate.$inc.cash = -payment_Out;
+                        cashInHandUpdate.$inc.total_Cash = -payment_Out;
+        
+                    } else {
+                        cashInHandUpdate.$inc.bank_Cash = -payment_Out;
+                  cashInHandUpdate.$inc.total_Cash = -payment_Out;
+        
+                    }
+                    
+                    await CashInHand.updateOne({}, cashInHandUpdate);
+                    await newExpense.save()
+
+            }
+            res.status(200).json({ message: `${updatedPayments.length} Expenses added Successfully` })
+
+        }
+        
+
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message })
+
+    }
+
+
+} 
 
 // Getting All Expenses
 const getExpenses = async (req, res) => {
@@ -295,4 +405,4 @@ const updateExpense = async (req, res) => {
     }
 }
 
-module.exports = { addExpense, getExpenses, delExpense, updateExpense }
+module.exports = { addExpense,addMultipleExpense, getExpenses, delExpense, updateExpense }

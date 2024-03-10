@@ -4,8 +4,20 @@ import { ToastContainer } from 'react-toastify';
 import EntryHook from '../hooks/entryHooks/EntryHook';
 import { useSelector } from 'react-redux';
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar } from '@mui/material';
 import spinner from './spinner.gif'
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import AddCardIcon from '@mui/icons-material/AddCard';
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import CircularProgress from '@mui/material/CircularProgress';
+
+import { green, pink,deepOrange,purple,red   } from '@mui/material/colors';
 export default function AdminDashboard() {
 
   const { user } = useAuthContext()
@@ -107,170 +119,185 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
         <div className="col-md-12 admin-main p-0">
           <div className="row p-0 ">
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 p-1  rounded">
-             <div className="data p-3 rounded border m-0 ">
+             <Paper className="data p-3 rounded border m-0 ">
              <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side">
-                {loading1 ? <img height='35px' src={spinner}/>:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa issued") ||(entry.final_Status.toLowerCase() === "visa issue") ).length:0 }</h5> }
-                
-                <h6 className='ml-2'>Total Visa Issued</h6>
+                <Avatar   sx={{ width: 40, height: 40, bgcolor: green[400]  }}><ConfirmationNumberIcon/></Avatar>
+              
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios-filled/50/467EDC/ticket.png" alt="ticket"/>
+            {loading1 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa issued") ||(entry.final_Status.toLowerCase() === "visa issue") ).length:0 }</h5> }
+                
+                <h6 className='ml-2'>Total Visa Issued</h6>
+            
             </div>
           </div> 
           
 
-             </div>
+             </Paper>
             </div>
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1  ">
-            <div className="data p-3 rounded border ">
+            <Paper className="data p-3 rounded border ">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
-              {loading1 ? <img height='35px' src={spinner}/>:<h5>{enteries ? enteries.filter(entry => !(entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly")).length:0 }</h5> }
-            
-                <h6 className='ml-2'>Total Fly <br /> </h6>
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: purple [400]  }}><AirplaneTicketIcon/></Avatar>
+             
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios-filled/50/467EDC/airplane-take-off.png" alt="airplane-take-off"/>
+            {loading1 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{enteries ? enteries.filter(entry => !(entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly")).length:0 }</h5> }
+                <h6 className='ml-2'>Total Fly <br /> </h6>
             </div>
           </div> 
           
 
-            </div>
+            </Paper>
 
 
             </div>
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
            
-            <div className="data p-3 border rounded">
+            <Paper className="data p-3 border rounded">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
-              {loading2 ? <img height='35px' src={spinner}/>:<h5>{ cashInHand ? cashInHand.total_Cash:0}</h5> }
-
-                <h6 className='ml-2'>Cash In Hand</h6>
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: green [500]  }}><MonetizationOnIcon/></Avatar>
+           
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios-filled/50/467EDC/cash-in-hand.png" alt="cash-in-hand"/>
+            {loading2 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ cashInHand ? cashInHand.total_Cash:0}</h5> }
+<h6 className='ml-2'>Cash In Hand</h6>
             </div>
           </div> 
           
-            </div>
+            </Paper>
             </div>
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1">          
-            <div className="data p-3 rounded border">
+            <Paper className="data p-3 rounded border">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side">
-              {loading4 ? <img height='35px' src={spinner}/>:<h5>{ todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0}</h5> }
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: green [500]  }}><AddCardIcon/></Avatar>
 
-                <h6 className='ml-2'>Today Cash In</h6>
+            
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/external-others-inmotus-design/50/467EDC/external-Cash-In-atm-others-inmotus-design-2.png" alt="external-Cash-In-atm-others-inmotus-design-2"/>
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0}</h5> }
+
+<h6 className='ml-2'>Today Cash In</h6>
             </div>
           </div> 
           
-            </div>
+            </Paper>
             </div>
          
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1">
-             <div className="data p-3 rounded border">
+             <Paper className="data p-3 rounded border">
              <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side">
-              {loading4 ? <img height='35px' src={spinner}/>:<h5>{ todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0}</h5> }
-
-                <h6 className='ml-2'>Today Cash Out</h6>
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: red [500]  }}><CreditCardIcon/></Avatar>
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/external-others-inmotus-design/50/467EDC/external-Cash-Out-atm-others-inmotus-design-3.png" alt="external-Cash-Out-atm-others-inmotus-design-3"/>
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0}</h5> }
+
+                <h6 className='ml-2'>Today Cash Out</h6>
             </div>
           </div> 
           
 
-             </div>
+             </Paper>
             </div>
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
-            <div className="data p-3 rounded border">
+            <Paper className="data p-3 rounded border">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
-              {loading4 ? <img height='35px' src={spinner}/>:<h5>{ todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0}</h5> }
-                
-                <h6 className='ml-2'>Today Advance In</h6>
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: green [500]  }}><ArrowDownwardIcon/></Avatar>
+
+             
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios-filled/50/467EDC/cash-in-hand.png" alt="cash-in-hand"/>
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0}</h5> }
+                
+                <h6 className='ml-2'>Today Advance In</h6>
             </div>
           </div> 
           
 
-            </div>
+            </Paper>
 
 
             </div>
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
            
-            <div className="data p-3 rounded border">
+            <Paper className="data p-3 rounded border">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
-              {loading4 ? <img height='35px' src={spinner}/>:<h5>{ todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0}</h5> }
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: red [500]  }}><ArrowUpwardIcon/></Avatar>
 
-                <h6 className='ml-2'>Today Advance Out</h6>
+              
               </div>
             </div>
             <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios/50/467EDC/cash-in-hand.png" alt="cash-in-hand"/>
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0}</h5> }
+
+<h6 className='ml-2'>Today Advance Out</h6>
+            
             </div>
           </div> 
           
-            </div>
+            </Paper>
             </div>
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">          
-            <div className="data p-3 rounded border">
+            <Paper className="data p-3 rounded border">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side">
-              {loading4 ? <img height='35px' src={spinner}/>:<h5>{ totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0}</h5> }
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: green [500]  }}><CreditScoreIcon/></Avatar>
+
+              
+              </div>
+            </div>
+            <div className="side ">
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0}</h5> }
                 <h6 className='ml-2'>Total Advance In</h6>
-              </div>
-            </div>
-            <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios-filled/50/467EDC/cash-in-hand.png" alt="cash-in-hand"/>
+            
             </div>
           </div> 
           
-            </div>
+            </Paper>
             </div>
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">          
-            <div className="data p-3 rounded border">
+            <Paper className="data p-3 rounded border">
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side">
-              {loading4 ? <img height='35px' src={spinner}/>:<h5>{ totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0}</h5> }
+              <Avatar   sx={{ width: 40, height: 40, bgcolor: red [500]  }}><TrendingDownIcon/></Avatar>
+
+              
+              </div>
+            </div>
+            <div className="side ">
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0}</h5> }
                 
                 <h6 className='ml-2'>Total Advance Out</h6>
-              </div>
-            </div>
-            <div className="side ">
-            <img width="35" height="35" src="https://img.icons8.com/ios/50/467EDC/cash-in-hand.png" alt="cash-in-hand"/>
+            
             </div>
           </div> 
           
-            </div>
+            </Paper>
             </div>
           </div>
         </div>
@@ -279,7 +306,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
           <h3 className="text-center my-2"><strong>Day Book</strong> </h3>
          {loading3 && 
           <div className="image text-center">
-<img height='35px' src={spinner}/>
+<CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />
           </div>
          }
                       {!loading3 &&

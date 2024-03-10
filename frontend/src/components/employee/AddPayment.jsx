@@ -343,17 +343,17 @@ const TransformFile = (file) => {
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
-                    <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_Out</TableCell>
-                    <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
 
 
                   </TableRow>
@@ -366,17 +366,17 @@ const TransformFile = (file) => {
                       <>
                         {filteredData.payment && filteredData.payment?.map((paymentItem, index) => (
                           <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                            <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.payment_Out_Curr}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Out_Curr}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
 
                           </TableRow>
                         ))}
