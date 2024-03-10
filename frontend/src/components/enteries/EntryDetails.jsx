@@ -252,11 +252,43 @@ const EntryDetails = () => {
   const [section4, setSection4] = useState(false)
 
 
+  
+  // Filtering the Enteries
+  const [date, setDate] = useState('')
+  const [trade, setTrade] = useState('')
+  const [company, setCompany] = useState('')
+  const [country, setCountry] = useState('')
+  // const [flight_Date,, setFlight_Date] = useState('')
+  const [final_Status, setFinal_Status] = useState('')
+  const [entry_Mode, setEntry_Mode] = useState('')
+  const [reference_Out, setReference_Out] = useState('')
+  const [reference_In, setReference_In] = useState('')
+  const [reference_Out_Type, setReference_Out_Type] = useState('')
+  const [reference_In_Type, setReference_In_Type] = useState('')
+  const [flight_Date, setFlight_Date] = useState('')
+  const filteredEntries = enteries.filter(entry => {
+    return (
+      entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
+      entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      entry.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+      entry.reference_Out_Name.toLowerCase().includes(reference_Out.toLowerCase()) &&
+      entry.reference_In_Name.toLowerCase().includes(reference_In.toLowerCase()) &&
+      entry.reference_Out.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
+      entry.reference_In.toLowerCase().includes(reference_In_Type.toLowerCase())
+
+
+    );
+  })
+
   const downloadExcel = () => {
     const data = [];
 
     // Iterate over entries and push all fields
-    enteries.forEach((entry, index) => {
+    filteredEntries.forEach((entry, index) => {
       const rowData = {
         SN: index + 1,
         Name: entry.name,
@@ -374,6 +406,120 @@ const EntryDetails = () => {
               </div>
             }
 
+
+            {/* Filters */}
+            {enteries && enteries.length > 0 &&
+              <div className="col-md-12 filters">
+                <Paper className='py-1 mb-2 px-3'>
+                  <div className="row">
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Date:</label>
+                      <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
+                          <option value={dateValue} key={dateValue}>{dateValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Trade:</label>
+                      <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
+                          <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Company:</label>
+                      <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.company))].map(companyValue => (
+                          <option key={companyValue} value={companyValue}>{companyValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Country:</label>
+                      <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.country))].map(countryValue => (
+                          <option key={countryValue} value={countryValue}>{countryValue}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Final Status:</label>
+                      <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
+                          <option key={final_StatusValue} value={final_StatusValue}>{final_StatusValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Flight Date:</label>
+                      <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
+                          <option key={flight_DateValue} value={flight_DateValue}>{flight_DateValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Entry Mode:</label>
+                      <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
+                          <option key={entry_ModeValue} value={entry_ModeValue}>{entry_ModeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference Out:</label>
+                      <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference In:</label>
+                      <select value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference In Type:</label>
+                      <select value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference Out Type:</label>
+                      <select value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+
+
+                        
+                      </select>
+                    </div>
+
+                  </div>
+                </Paper>
+              </div>
+            }
 
             {!loading1 &&
               <div className='col-md-12'>
@@ -505,7 +651,7 @@ const EntryDetails = () => {
 
 
                       <TableBody>
-                        {enteries && enteries.length > 0 ? enteries.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
+                        {filteredEntries && filteredEntries.length > 0 ? filteredEntries.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
                           <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                             {/* ... (previous cells) */}
                             {editMode && editedRowIndex === index ? (
@@ -1656,7 +1802,7 @@ const EntryDetails = () => {
                   <TablePagination
                     rowsPerPageOptions={rowsPerPageOptions}
                     component='div'
-                    count={enteries.length}
+                    count={filteredEntries.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     style={{

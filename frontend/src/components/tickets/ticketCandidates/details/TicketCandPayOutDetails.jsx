@@ -335,102 +335,130 @@ export default function TicketCandPaymentOutDetails() {
 
   const printMainTable = () => {
     // Convert JSX to HTML string
-    const printContentString = `
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Date</th>
-            <th>Candidates</th>
-            <th>PP#</th>
-            <th>EM</th>
-            <th>Company</th>
-            <th>Country</th>
-            <th>Trade</th>
-            <th>FS</th>
-            <th>FD</th>
-            <th>TVPO_PKR</th>
-            <th>TPO_PKR</th>
-            <th>Total_Cash_Out</th>
-            <th>RPO_PKR</th>
-            <th>TVPO_Oth_Curr</th>
-            <th>TPO_Curr</th>
-            <th>RPO_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filteredTotalPaymentOut.map((entry, index) => `
-            <tr key="${entry?._id}">
-              <td>${index + 1}</td>
-              <td>${String(entry.supplierName)}</td>
-              <td>${String(entry.pp_No)}</td>
-              <td>${String(entry.entry_Mode)}</td>
-              <td>${String(entry.company)}</td>
-              <td>${String(entry.country)}</td>
-              <td>${String(entry.trade)}</td>
-              <td>${String(entry.final_Status)}</td>
-              <td>${String(entry.flight_Date)}</td>
-              <td>${String(entry.total_Visa_Price_Out_PKR)}</td>
-              <td>${String(entry.total_Payment_Out)}</td>
-              <td>${String(entry.total_Cash_Out)}</td>
-              <td>${String(entry.remaining_Balance)}</td>
-              <td>${String(entry.country)}</td>
-              <td>${String(entry.total_Visa_Price_Out_Curr)}</td>
-              <td>${String(entry.total_Payment_Out_Curr)}</td>
-              <td>${String(entry.remaining_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-      <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
+    let printContentString = '';
+
+    if (filteredTotalPaymentOut.length === 1) {
+        const { supplierName, contact, pp_No, trade, company, total_Visa_Price_Out_PKR,total_Cash_Out, country, flight_Date, total_Payment_Out } = filteredTotalPaymentOut[0];
+
+        printContentString += `
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <p>Candidate Name: <b>${supplierName}</b></p>
+                            <p>Country: <b>${country}</b></p>
+                            <p>Fly: <b>${flight_Date}</b></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <p>Contact: <b>${contact}</b></p>
+                            <p>Company: <b>${company}</b></p>
+                            <p>Trade: <b>${trade}</b></p>
+                          
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <p>Passport No: <b>${pp_No}</b></p>
+                            <p>Rozgar Visa Price: <b>${total_Visa_Price_Out_PKR}</b></p>
+                            <p>Total In: <b>${total_Payment_Out}</b></p>
+                            <p>Remaining: <b>${total_Visa_Price_Out_PKR - total_Payment_Out + total_Cash_Out}</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    printContentString += `
+        <table class='print-table'>
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Date</th>
+                    <th>Candidates</th>
+                    <th>PP#</th>
+                    <th>EM</th>
+                    <th>Company</th>
+                    <th>Country</th>
+                    <th>Trade</th>
+                    <th>FS</th>
+                    <th>FD</th>
+                    <th>TVPO_PKR</th>
+                    <th>TPO_PKR</th>
+                    <th>Total_Cash_Out</th>
+                    <th>RPO_PKR</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${filteredTotalPaymentOut.map((entry, index) => `
+                    <tr key="${entry?._id}">
+                        <td>${index + 1}</td>
+                        <td>${String(entry.createdAt)}</td>
+                        <td>${String(entry.supplierName)}</td>
+                        <td>${String(entry.pp_No)}</td>
+                        <td>${String(entry.entry_Mode)}</td>
+                        <td>${String(entry.company)}</td>
+                        <td>${String(entry.country)}</td>
+                        <td>${String(entry.trade)}</td>
+                        <td>${String(entry.final_Status)}</td>
+                        <td>${String(entry.flight_Date)}</td>
+                        <td>${String(entry.total_Visa_Price_out_PKR)}</td>
+                        <td>${String(entry.total_Payment_Out)}</td>
+                        <td>${String(entry.total_Cash_Out)}</td>
+                        <td>${String(entry.remaining_Balance)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        <style>
+            /* Add your custom print styles here */
+            body {
+                background-color: #fff;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            .print-table th, .print-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            .print-table th {
+                background-color: #f2f2f2;
+            }
+        </style>
     `;
 
     // Create a new window for printing
     const printWindow = window.open('', '_blank');
     if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Candidates Payment Out Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
+        // Write the print content to the new window
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Candidates Payment Out Details</title>
+                    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+                </head>
+                <body class='bg-dark'>${printContentString}</body>
+            </html>
+        `);
 
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
+        // Trigger print dialog
+        printWindow.print();
+        // Close the new window after printing
+        printWindow.onafterprint = function () {
+            printWindow.close();
+        };
     } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
+        // Handle if the new window cannot be opened
+        alert('Could not open print window. Please check your browser settings.');
     }
-  };
+};
+
 
 
   // individual payments filters

@@ -251,12 +251,42 @@ const EntryReports = () => {
   const [section3, setSection3] = useState(false)
   const [section4, setSection4] = useState(false)
 
+  // Filtering the Enteries
+  const [date, setDate] = useState('')
+  const [trade, setTrade] = useState('')
+  const [company, setCompany] = useState('')
+  const [country, setCountry] = useState('')
+  // const [flight_Date,, setFlight_Date] = useState('')
+  const [final_Status, setFinal_Status] = useState('')
+  const [entry_Mode, setEntry_Mode] = useState('')
+  const [reference_Out, setReference_Out] = useState('')
+  const [reference_In, setReference_In] = useState('')
+  const [reference_Out_Type, setReference_Out_Type] = useState('')
+  const [reference_In_Type, setReference_In_Type] = useState('')
+  const [flight_Date, setFlight_Date] = useState('')
+  const filteredEntries = enteries.filter(entry => {
+    return (
+      entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
+      entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      entry.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+      entry.reference_Out_Name.toLowerCase().includes(reference_Out.toLowerCase()) &&
+      entry.reference_In_Name.toLowerCase().includes(reference_In.toLowerCase()) &&
+      entry.reference_Out.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
+      entry.reference_In.toLowerCase().includes(reference_In_Type.toLowerCase())
+
+
+    );
+  })
 
   const downloadExcel = () => {
     const data = [];
 
     // Iterate over entries and push all fields
-    enteries.forEach((entry, index) => {
+    filteredEntries.forEach((entry, index) => {
       const rowData = {
         SN: index + 1,
         Name: entry.name,
@@ -334,32 +364,6 @@ const EntryReports = () => {
     XLSX.writeFile(wb, 'Entries.xlsx');
   };
 
-  // Filtering the Enteries
-  const [date, setDate] = useState('')
-  const [trade, setTrade] = useState('')
-  const [company, setCompany] = useState('')
-  const [country, setCountry] = useState('')
-  // const [flight_Date,, setFlight_Date] = useState('')
-  const [final_Status, setFinal_Status] = useState('')
-  const [entry_Mode, setEntry_Mode] = useState('')
-  const [reference_Out, setReference_Out] = useState('')
-  const [reference_In, setReference_In] = useState('')
-  const [flight_Date, setFlight_Date] = useState('')
-  const filteredEntries = enteries.filter(entry => {
-    return (
-      entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
-      entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
-      entry.company.toLowerCase().includes(company.toLowerCase()) &&
-      entry.country.toLowerCase().includes(country.toLowerCase()) &&
-      entry.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
-      entry.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-      entry.reference_Out_Name.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      entry.reference_In_Name.toLowerCase().includes(reference_In.toLowerCase())
-
-
-    );
-  });
 
   return (
     <>
@@ -484,6 +488,27 @@ const EntryReports = () => {
                         {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
                           <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
                         ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference In Type:</label>
+                      <select value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference Out Type:</label>
+                      <select value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+
+
+                        
                       </select>
                     </div>
 
