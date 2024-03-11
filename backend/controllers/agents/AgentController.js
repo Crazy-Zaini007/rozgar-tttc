@@ -948,7 +948,7 @@ const updateSinglePaymentIn = async (req, res) => {
           $inc: {},
         };
   
-        if (payment_Via.toLowerCase() === "cash" ) {
+        if (payment_Via.toLowerCase() === "cash"  ) {
           cashInHandUpdate.$inc.cash = newBalance;
           cashInHandUpdate.$inc.total_Cash = newBalance;
         }

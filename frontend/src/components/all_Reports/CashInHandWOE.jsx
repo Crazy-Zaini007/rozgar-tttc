@@ -214,22 +214,40 @@ export default function CashInHandWOE() {
 
 
   // individual payments filters
-  const [date, setDate] = useState('')
+  const [cash_Type,setCash_Type]=useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+
   const [name, setName] = useState('')
   const [expe_Category, setExpe_Category] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
-
   const filteredExpenses = expenses.filter(expense => {
+    let isDateInRange = true;
+  
+    // Check if the expense date is within the selected date range
+    if (dateFrom && dateTo) {
+      isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
+    }
+  
+    // Filter payment_Via based on the selected cash_Type
+    let filteredPaymentVia = true;
+    if (cash_Type === 'cash') {
+      filteredPaymentVia = expense.payment_Via.toLowerCase().includes('cash');
+    } else if (cash_Type === 'banks') {
+      filteredPaymentVia = !expense.payment_Via.toLowerCase().includes('cash');
+    }
+  
     return (
-      expense.date.toLowerCase().includes(date.toLowerCase()) &&
+      isDateInRange &&
       expense.name.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
-    )
-  })
-
+      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      filteredPaymentVia
+    );
+  });
+  
   // Calculate total cash in hand
 const totalCashInHand = cashInHand.total_Cash ? cashInHand.total_Cash : 0;
 
@@ -356,49 +374,61 @@ const total = totalCashInHand + totalExpenses;
             <div className="col-md-12 filters">
               <Paper className='py-1 mb-2 px-3'>
                 <div className="row">
-                  <div className="col-auto px-1">
-                    <label htmlFor="">Date:</label>
-                    <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
-                      <option value="">All</option>
-                      {[...new Set(expenses.map(data => data.date))].map(dateValue => (
-                        <option value={dateValue} key={dateValue}>{dateValue}</option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Name:</label>
                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.name} key={data._id}>{data.name}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.name))].map(name => (
+                          <option key={name} value={name}>{name}</option>
+                        ))}
+                      
                     </select>
                   </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Expense Category:</label>
                     <select value={expe_Category} onChange={(e) => setExpe_Category(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.expCategory} key={data._id}>{data.expCategory}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.expCategory))].map(expCategory => (
+                          <option key={expCategory} value={expCategory}>{expCategory}</option>
+                        ))}
+                    
                     </select>
                   </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Payment Via:</label>
                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.payment_Via} key={data._id}>{data.payment_Via}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.payment_Via))].map(payment_Via => (
+                          <option key={payment_Via} value={payment_Via}>{payment_Via}</option>
+                        ))}
+                     
                     </select>
                   </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Payment Type:</label>
                     <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
-                      {expenses && expenses.map((data) => (
-                        <option value={data.payment_Type} key={data._id}>{data.payment_Type}</option>
-                      ))}
+                      {[...new Set(expenses && expenses.map(data => data.payment_Type))].map(payment_Type => (
+                          <option key={payment_Type} value={payment_Type}>{payment_Type}</option>
+                        ))}
+                      
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Cash Type:</label>
+                    <select value={cash_Type} onChange={(e) => setCash_Type(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      <option value="cash">Cash</option>
+                      <option value="banks">Banks</option>
                     </select>
                   </div>
                 </div>

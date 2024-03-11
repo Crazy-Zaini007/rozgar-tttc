@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 export default function AddMulExpenses() {
     const { user } = useAuthContext()
 
-    const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', expCategory: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+    const [multiplePayment, setMultiplePayment] = useState([{date:'',name: '', expCategory: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
     const [triggerEffect, setTriggerEffect] = useState(false);
   
     const handleFileChange = (e) => {

@@ -122,7 +122,10 @@ export default function Entry1() {
             <td>${String(selectedPersonDetails?.flight_Date)}</td>
             <td>${String(selectedPersonDetails?.visa_Price_In_PKR)}</td>
             <td>${String(selectedPersonDetails?.total_In)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_In_PKR)-String(selectedPersonDetails?.total_In)+String(selectedPersonDetails?.cash_Out)}</td>
+            <td>${String(
+              (selectedPersonDetails?.visa_Price_In_PKR - selectedPersonDetails?.total_In) +
+              selectedPersonDetails?.cash_Out
+            )}</td>
             <td>${String(selectedPersonDetails?.visa_Price_In_Curr)}</td>
             <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 

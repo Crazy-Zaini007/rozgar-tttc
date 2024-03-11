@@ -354,6 +354,25 @@ export default function Sidebar() {
           setOption15(false)
 
           break;
+          case '/rozgar/bank_cash':
+            setActiveItem(90);
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+  
+            break;
         case '/rozgar/enteries/add_new_entry':
           setActiveItem(3);
           setOption1(true)
@@ -1904,6 +1923,7 @@ export default function Sidebar() {
           <ul className="pt-2 mt-2">
             <li className=' my-2' style={activeItem === 1 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(1, `/rozgar/dashboard`)}><i className="fas fa-chart-line me-2"></i>Dashboard</li>
             <li className=' my-2' style={activeItem === 2 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(2, `/rozgar/cash_in_hand`)}><i className="fas fa-hand-holding-usd me-2"></i>Cash in Hand </li>
+            <li className=' my-2' style={activeItem === 90 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(90, `/rozgar/bank_cash`)}><i className="fas fa-university me-2"></i>Banks Cash </li>
           </ul>
           <Divider className='mx-4'></Divider>
 

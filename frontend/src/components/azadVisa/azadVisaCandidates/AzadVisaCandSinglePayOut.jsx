@@ -17,6 +17,7 @@ import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import AzadVisaHook from '../../../hooks/azadVisaHooks/AzadVisaHooks';
 import * as XLSX from 'xlsx';
+import Entry1 from './doubleEnrty/Entry1';
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -325,6 +326,8 @@ export default function AzadVisaCandSinglePayOut() {
             Upload New List
             <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
           </label>}
+          <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setSingle(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
+
         </Paper>
       </div>
       {single === 0 &&
@@ -614,7 +617,9 @@ export default function AzadVisaCandSinglePayOut() {
           </div>
         </>
       }
-
+  {single === 2 &&
+        <Entry1></Entry1>
+      }
 
     </>
   )

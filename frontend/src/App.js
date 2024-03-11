@@ -13,6 +13,8 @@ import Login from './components/Login';
 import NewEntry from './components/enteries/NewEntry';
 import Dashboard from './components/Dashboard';
 import CashinHand from './components/CashinHand';
+import BankCash from './components/BankCash';
+
 import EntryDetails from './components/enteries/EntryDetails';
 import EntryReports from './components/enteries/EntryReports';
 // Supplier Section
@@ -133,6 +135,8 @@ function App() {
 
           <Route  path='/rozgar/dashboard' element={user && <Dashboard></Dashboard> }></Route>
           <Route  path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand> }></Route>
+          <Route  path='/rozgar/bank_cash' element={user && <BankCash></BankCash> }></Route>
+
 
           {/* Enteries Routes */}
           <Route  path='/rozgar/enteries/add_new_entry' element={user && <NewEntry></NewEntry> }></Route>

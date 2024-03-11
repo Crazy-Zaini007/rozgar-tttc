@@ -17,6 +17,7 @@ import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../hooks/agentHooks/AgentHook';
 import * as XLSX from 'xlsx';
+import Entry1 from './candDoubleEntry/Entry1'
 
 export default function AgentCandPaymentOut() {
   const dispatch = useDispatch();
@@ -120,7 +121,10 @@ export default function AgentCandPaymentOut() {
             <td>${String(selectedPersonDetails?.flight_Date)}</td>
             <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)}</td>
             <td>${String(selectedPersonDetails?.total_In)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)-String(selectedPersonDetails?.total_In) +String(selectedPersonDetails?.cash_Out)}</td>
+            <td>${String(
+              (selectedPersonDetails?.visa_Price_Out_PKR - selectedPersonDetails?.total_In) +
+              selectedPersonDetails?.cash_Out
+            )}</td>
             <td>${String(selectedPersonDetails?.visa_Price_Out_Curr)}</td>
             <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
@@ -446,6 +450,7 @@ export default function AgentCandPaymentOut() {
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
+                <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
               </Paper>
             </div>
             {single === 1 &&
@@ -829,6 +834,11 @@ export default function AgentCandPaymentOut() {
 
                 </div>
               </>
+            }
+             {/* Double Entries */}
+
+             {single===2 && 
+            <Entry1></Entry1>
             }
 
 

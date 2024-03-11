@@ -17,7 +17,7 @@ import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import TicketHook from '../../../hooks/ticketHooks/TicketHook';
 import * as XLSX from 'xlsx';
-
+import Entry1 from './doubleEnrty/Entry1';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function TicketCandSinglePayOut() {
@@ -322,6 +322,8 @@ export default function TicketCandSinglePayOut() {
             Upload New List
             <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
           </label>}
+          <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setSingle(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
+
         </Paper>
       </div>
       {single === 0 &&
@@ -611,7 +613,9 @@ export default function TicketCandSinglePayOut() {
           </div>
         </>
       }
-
+     {single === 2 &&
+        <Entry1></Entry1>
+      }
 
     </>
   )

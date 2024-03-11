@@ -78,6 +78,7 @@ export default function SupCandSinglePaymentIn() {
   const [supplierNames, setSupplierNames] = useState([]);
   const [selectedPersonDetails, setSelectedPersonDetails] = useState({});
 
+  
   const printPersonsTable = () => {
     // Convert JSX to HTML string
     const printContentString = `
@@ -115,7 +116,10 @@ export default function SupCandSinglePaymentIn() {
             <td>${String(selectedPersonDetails?.flight_Date)}</td>
             <td>${String(selectedPersonDetails?.visa_Price_In_PKR)}</td>
             <td>${String(selectedPersonDetails?.total_In)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_In_PKR)-String(selectedPersonDetails?.total_In)+String(selectedPersonDetails?.cash_Out)}</td>
+            <td>${String(
+              (selectedPersonDetails?.visa_Price_In_PKR - selectedPersonDetails?.total_In) +
+              selectedPersonDetails?.cash_Out
+            )}</td>
             <td>${String(selectedPersonDetails?.visa_Price_In_Curr)}</td>
             <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
@@ -169,6 +173,7 @@ export default function SupCandSinglePaymentIn() {
       alert('Could not open print window. Please check your browser settings.');
     }
   }
+
 
   const handleOpen = () => {
     setOption(!option);

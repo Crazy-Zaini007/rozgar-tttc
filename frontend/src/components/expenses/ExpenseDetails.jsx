@@ -187,6 +187,7 @@ export default function ExpenseDetails() {
 
             
   // individual payments filters
+  const [cash_Type,setCash_Type]=useState('')
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
@@ -194,14 +195,20 @@ export default function ExpenseDetails() {
   const [expe_Category, setExpe_Category] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
-
   const filteredExpenses = expenses.filter(expense => {
     let isDateInRange = true;
   
     // Check if the expense date is within the selected date range
     if (dateFrom && dateTo) {
-      isDateInRange =
-        expense.date >= dateFrom && expense.date <= dateTo;
+      isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
+    }
+  
+    // Filter payment_Via based on the selected cash_Type
+    let filteredPaymentVia = true;
+    if (cash_Type === 'cash') {
+      filteredPaymentVia = expense.payment_Via.toLowerCase().includes('cash');
+    } else if (cash_Type === 'banks') {
+      filteredPaymentVia = !expense.payment_Via.toLowerCase().includes('cash');
     }
   
     return (
@@ -209,7 +216,8 @@ export default function ExpenseDetails() {
       expense.name.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      filteredPaymentVia
     );
   });
   
@@ -376,9 +384,7 @@ export default function ExpenseDetails() {
                       {[...new Set(expenses && expenses.map(data => data.name))].map(name => (
                           <option key={name} value={name}>{name}</option>
                         ))}
-                      {/* {expenses && expenses.map((data) => (
-                        <option value={data.name} key={data._id}>{data.name}</option>
-                      ))} */}
+                      
                     </select>
                   </div>
                   <div className="col-auto px-1">
@@ -409,6 +415,14 @@ export default function ExpenseDetails() {
                           <option key={payment_Type} value={payment_Type}>{payment_Type}</option>
                         ))}
                       
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Cash Type:</label>
+                    <select value={cash_Type} onChange={(e) => setCash_Type(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      <option value="cash">Cash</option>
+                      <option value="banks">Banks</option>
                     </select>
                   </div>
                 </div>

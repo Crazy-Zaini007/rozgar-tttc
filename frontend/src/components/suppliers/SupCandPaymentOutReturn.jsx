@@ -124,7 +124,10 @@ export default function SupCandPaymentOutReturn() {
             <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)}</td>
             <td>${String(selectedPersonDetails?.total_In)}</td>
             <td>${String(selectedPersonDetails?.cash_Out)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)-String(selectedPersonDetails?.total_In) +String(selectedPersonDetails?.cash_Out)}</td>
+            <td>${String(
+              (selectedPersonDetails?.visa_Price_Out_PKR - selectedPersonDetails?.total_In) +
+              selectedPersonDetails?.cash_Out
+            )}</td>
             <td>${String(selectedPersonDetails?.visa_Price_Out_Curr)}</td>
             <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
