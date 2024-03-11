@@ -972,7 +972,7 @@ export default function AzadVisaAgentPayOutDetails() {
                                 <TablePagination
                                     rowsPerPageOptions={rowsPerPageOptions}
                                     component='div'
-                                    count={ticketAgent_Payments_Out.length}
+                                    count={filteredTotalPaymentIn.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     style={{

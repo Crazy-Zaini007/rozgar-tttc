@@ -1055,7 +1055,7 @@ export default function AzadVisaCandPaymentOutDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={azadCand_Payments_Out.length}
+                  count={filteredTotalPaymentOut.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

@@ -1069,7 +1069,7 @@ export default function ProtectorPaymentOutDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={protector_Payments_Out.length}
+                  count={filteredTotalPaymentOut.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

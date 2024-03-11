@@ -969,7 +969,7 @@ export default function VisitAgentPayOutDetails() {
                                 <TablePagination
                                     rowsPerPageOptions={rowsPerPageOptions}
                                     component='div'
-                                    count={visitAgent_Payments_Out.length}
+                                    count={filteredTotalPaymentIn.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     style={{

@@ -1089,7 +1089,7 @@ export default function SupCandPaymentOutDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={supp_Payments_Out.length}
+                  count={filteredTotalPaymentOut.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

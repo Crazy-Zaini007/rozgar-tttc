@@ -1058,7 +1058,7 @@ export default function TicketCandPaymentOutDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={ticketCand_Payments_Out.length}
+                  count={filteredTotalPaymentOut.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

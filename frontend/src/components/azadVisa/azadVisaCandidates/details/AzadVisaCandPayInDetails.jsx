@@ -1055,7 +1055,7 @@ export default function AzadVisaCandPaymentInDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={azadCand_Payments_In.length}
+                  count={filteredTotalPaymentIn.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

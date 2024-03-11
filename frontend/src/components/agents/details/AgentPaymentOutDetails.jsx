@@ -1089,7 +1089,7 @@ export default function AgentPaymentOutDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={agent_Payments_Out.length}
+                  count={filteredTotalPaymentOut.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

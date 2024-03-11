@@ -973,7 +973,7 @@ export default function AzadVisaSupPayOutDetails() {
                                 <TablePagination
                                     rowsPerPageOptions={rowsPerPageOptions}
                                     component='div'
-                                    count={ticketSupplier_Payments_Out.length}
+                                    count={filteredTotalPaymentIn.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     style={{

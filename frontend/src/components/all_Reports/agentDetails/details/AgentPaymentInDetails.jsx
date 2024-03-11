@@ -1009,7 +1009,7 @@ export default function AgentPaymentInDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={agent_Payments_In.length}
+                  count={filteredTotalPaymentIn.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

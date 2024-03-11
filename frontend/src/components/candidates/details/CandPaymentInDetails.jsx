@@ -1054,7 +1054,7 @@ export default function CandPaymentInDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={candidate_Payments_In.length}
+                  count={filteredTotalPaymentIn.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{

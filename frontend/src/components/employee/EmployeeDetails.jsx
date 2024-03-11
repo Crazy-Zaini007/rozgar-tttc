@@ -1054,7 +1054,7 @@ const [newDateFrom, setNewDateFrom] = useState('')
                                 <TablePagination
                                     rowsPerPageOptions={rowsPerPageOptions}
                                     component='div'
-                                    count={employees.length}
+                                    count={filteredTotalEmployee.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     style={{
