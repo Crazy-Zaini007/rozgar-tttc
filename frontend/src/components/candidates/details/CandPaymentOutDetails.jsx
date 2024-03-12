@@ -334,7 +334,12 @@ export default function CandPaymentOutDetails() {
 
     )
   })
+  const [details, setDetails] = useState("")
 
+  const handleCandidate = (candidate) => {
+    setDetails(candidate)
+    
+  }
   const printMainTable = () => {
     // Convert JSX to HTML string
     let printContentString = '';
@@ -493,6 +498,36 @@ export default function CandPaymentOutDetails() {
 
   const printPaymentsTable = () => {
     // Convert JSX to HTML string
+    let printContentString = '';
+    printContentString += `
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <p>Candidate Name: <b>${details.supplierName}</b></p>
+                            <p>Country: <b>${details.country}</b></p>
+                            <p>Fly: <b>${details.flight_Date}</b></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <p>Contact: <b>${details.contact}</b></p>
+                            <p>Company: <b>${details.company}</b></p>
+                            <p>Trade: <b>${details.trade}</b></p>
+                          
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <p>Passport No: <b>${details.pp_No}</b></p>
+                            <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
+                            <p>Total In: <b>${details.total_Payment_Out}</b></p>
+                            <p>Remaining: <b>${details.total_Visa_Price_Out_PKR - total_Payment_Out + total_Cash_Out}</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
     const printContentString = `
     <table class='print-table'>
       <thead>
@@ -1081,9 +1116,33 @@ export default function CandPaymentOutDetails() {
         <>
           {/* Display Table for selectedSupplier's payment details array */}
           <div className="col-md-12 my-2">
+          <div className="row candidate_Details">
+            <div className="col-md-12">
+              <button className='btn btn-warning btn-sm text-white shadow' onClick={() => setDetails("")}>Back</button>
+            </div>
+            <h4 className='text-center my-2'>Candidate Payment Details</h4>
+            <hr/>
+            <div className="col-md-4">
+              <p>Candidate: <b>{details.supplierName}</b></p>
+              <p>Country: <b>{details.country}</b></p>
+              <p>Fly: <b>{details.flight_Date}</b></p>
+              <p>Trade: <b>{details.trade}</b></p>
+
+            </div>
+            <div className="col-md-4">
+              <p>Passport: <b>{details.pp_No}</b></p>
+              <p>Contact: <b>{details.contact}</b></p>
+              <p>Company: <b>{details.company}</b></p>
+            </div>
+            <div className="col-md-4">
+              <p>Rozgar Visa Price: <b>{details.total_Visa_Price_Out_PKR}</b></p>
+              <p>Total In: <b>{details.total_Payment_Out}</b></p>
+              <p>Remaning: <b>{details.total_Visa_Price_Out_PKR - details.total_Payment_Out +details.total_Cash_Out}</b></p>
+            </div>
+          </div>
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
-                <h4 className='d-inline '>Candidate Name: <span>{selectedSupplier}</span></h4>
+               
 
               </div>
               <div className="right">
@@ -1300,6 +1359,7 @@ export default function CandPaymentOutDetails() {
                     </>
                   ))}
                    <TableRow>
+                        <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>

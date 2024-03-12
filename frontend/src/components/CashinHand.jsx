@@ -659,7 +659,7 @@ export default function CashinHand() {
                 </Paper>
               </div>
 
-              {option === 0 &&
+              {option === 0  &&
                 <div className="col-md-12 payment_details">
                   <div className="row">
                     <div className="col-md-12 filters">

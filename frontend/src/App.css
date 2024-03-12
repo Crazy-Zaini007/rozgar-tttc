@@ -1401,3 +1401,15 @@
   height: 100%;
   width: 100%;
 }
+
+
+.candidate_Details h4{
+font-size: 20px;
+color: var(--accent-lighter-blue);
+}
+.candidate_Details p{
+  font-size: 14px;
+}
+.candidate_Details p b{
+  font-size: 14px;
+}

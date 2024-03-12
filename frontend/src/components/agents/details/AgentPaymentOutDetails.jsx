@@ -1335,6 +1335,7 @@ export default function AgentPaymentOutDetails() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
+                            <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
                             <TableCell className='border data_td text-center bg-warning text-white'>
           {/* Calculate the total sum of payment_In */}
