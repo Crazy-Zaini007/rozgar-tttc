@@ -6,14 +6,44 @@ import CategoryHook from '../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../hooks/settingHooks/PaymentTypeHook'
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
-
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
+import CircularProgress from '@mui/material/CircularProgress';
 
-export default function CashinHand() {
-  const dispatch = useDispatch();
-  const apiUrl = process.env.REACT_APP_API_URL;
+export default function BankCash() {
+  const { user } = useAuthContext()
+  const [single,setSingle]=useState(0)
+const[banks,setBanks]=useState('')
+const[total,setTotal]=useState()
+const[loading2,setLoading2]=useState(false)
+const dispatch = useDispatch();
+const apiUrl = process.env.REACT_APP_API_URL;
+
+
+const getBankCash = async () => {
+ debugger
+  try {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
+
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`
+      }
+    })
+
+    const json = await response.json();
+    if (response.ok) {
+     setBanks(json.data)
+     setTotal(json.bank_Cash)
+    }
+  }
+  catch (error) {
+    console.error('Fetch error:', error);
+    setNewMessage(toast.error('Server is not Responding...'));
+    setLoading(false);
+  }
+}
 
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
@@ -43,10 +73,11 @@ export default function CashinHand() {
 
 
 
-  const { user } = useAuthContext()
   const fetchData = async () => {
     try {
-
+      setLoading2(true)
+      await getBankCash()
+      setLoading2(false)
       await getCashInHandData();
     await getOverAllPayments()
         
@@ -612,6 +643,20 @@ export default function CashinHand() {
     <>
       <div className="main">
         <div className="container py-2 cash_in_hand">
+          <div className="row payment_details">
+              <div className='col-md-12 '>
+              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+                <div className="left d-flex">
+                  <button className='btn m-1 show_btn' style={single===0 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(0)}>Bank Cash</button>
+                  <button className='btn m-1 show_btn' style={single===1 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(1)}>All Banks</button>
+
+                </div>
+                
+              </Paper>
+            </div>
+          </div>
+         {single===0 &&
+         <>
           {current === 0 &&
             <div className="row justify-content-center mt-3">
               <div className="col-lg-6 col-12  mt-md-4 mt-3  shadow px-0 pb-md-4 pb-3 rounded">
@@ -619,7 +664,7 @@ export default function CashinHand() {
                   <h4 className='text-center'>Bank Account Details</h4>
                 </div>
                 <div className="account-text mt-md-4 mt-3 text-center">
-                  <h6 className='my-2' onClick={() => setCurrent(1)}>{cashInHand.bank_Cash?cashInHand.bank_Cash:0}</h6>
+                  <h6 className='my-2' onClick={() => setCurrent(1)}>{loading2 ? <CircularProgress></CircularProgress>: total && total}</h6>
                   <h5 className='my-2'>Bank Cash </h5>
                   <Link className="cash_in_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
                   <Link className="cash_out_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
@@ -627,6 +672,39 @@ export default function CashinHand() {
               </div>
             </div>
           }
+         </>
+         }
+
+         {single===1 &&
+        <div className="col-md-12 payment_details my-2 text-center">
+           {loading2 && <CircularProgress></CircularProgress>}
+           {!loading2 &&
+           <TableContainer className='detail_table' component={Paper}  sx={{ maxHeight: 600 }}>
+           <Table stickyHeader>
+             <TableHead className="thead">
+               <TableRow>
+                 {banks && banks.map((data)=>(
+                   <>
+                   <TableCell className='label border text-center' style={{ width: '18.28%' }}>{data.payment_Via}</TableCell>
+                   </>
+                 ))}
+               <TableCell className='label border text-center' style={{ width: '18.28%' }}>TOTAL</TableCell>
+
+               </TableRow>
+             </TableHead>
+             <TableBody>
+             {banks && banks.map((data)=>(
+                   <>
+                   <TableCell className='border data_td text-center ' style={{ width: '18.28%' }}>{data.total_payment}</TableCell>
+                   </>
+                 ))}
+                   <TableCell className='border data_td text-center text-white bg-success' style={{ width: '18.28%' }}>{total && total}</TableCell>
+             </TableBody>
+           </Table>
+          </TableContainer>
+           }
+        </div>
+         }
 
 
 

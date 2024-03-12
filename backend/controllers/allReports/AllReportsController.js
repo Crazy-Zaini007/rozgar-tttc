@@ -895,7 +895,7 @@ const getAllPaymentsByDate = async (req, res) =>{
             { model: Protector, schemaType: 'payment_Out_Schema' },
             { model: CDWC, schemaType: 'payment_In_Schema' }, 
             { model: CDWOC, schemaType: 'payment_In_Schema' }, 
-        ];
+        ]
 
         // Initialize object to store payments grouped by the same date
         const paymentsByDate = {};
@@ -989,7 +989,177 @@ const getAllPaymentsByDate = async (req, res) =>{
     }
 }
 
+const getAllBanksPayments = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.role !== "Admin") {
+            return res.status(404).json({ message: "You are not an Admin" });
+        }
+
+        // Array of collections to query for payment_In
+        const inCollections = [
+            { model: Agents, schemaType: 'payment_In_Schema' },
+            { model: Suppliers, schemaType: 'payment_In_Schema' },
+            { model: Candidates, schemaType: 'payment_In_Schema' },
+            { model: AzadSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: TicketSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: VisitSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: AzadSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: TicketSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: VisitSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: AzadCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: TicketCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: VisitCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: CashInHand, schemaType: 'CashInHandSchema' },
+            { model: CDWC, schemaType: 'payment_In_Schema' }, 
+            { model: CDWOC, schemaType: 'payment_In_Schema' }, 
+        ];
+
+        // Array of collections to query for payment_Out
+        const outCollections = [
+            { model: Agents, schemaType: 'payment_Out_Schema' },
+            { model: Suppliers, schemaType: 'payment_Out_Schema' },
+            { model: Candidates, schemaType: 'payment_Out_Schema' },
+            { model: AzadSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: TicketSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: VisitSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: AzadSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: TicketSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: VisitSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: AzadCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: TicketCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: VisitCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: CashInHand, schemaType: 'CashInHandSchema' }, // Including CashInHand schema for payment_Out
+            { model: Protector, schemaType: 'payment_Out_Schema' },
+            { model: CDWC, schemaType: 'payment_In_Schema' }, 
+            { model: CDWOC, schemaType: 'payment_In_Schema' }, 
+        ];
+
+        // Initialize objects to store combined payments in and out separately
+        const combinedPaymentsIn = {};
+        const combinedPaymentsOut = {};
+
+        // Process payments for payment_In
+        for (const { model, schemaType } of inCollections) {
+            const items = await model.find();
+
+            for (const item of items) {
+                if (item[schemaType] && item[schemaType].payment) {
+                    for (const payment of item[schemaType].payment) {
+                        const paymentVia = payment.payment_Via;
+                        if (paymentVia.toLowerCase() !== 'cash') { 
+                            
+                            if (!combinedPaymentsIn[paymentVia]) {
+                                combinedPaymentsIn[paymentVia] = 0;
+                            }
+                            combinedPaymentsIn[paymentVia] += payment.payment_In || 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Process payments for payment_Out
+        for (const { model, schemaType } of outCollections) {
+            const items = await model.find();
+
+            for (const item of items) {
+                if (item[schemaType] && item[schemaType].payment) {
+                    for (const payment of item[schemaType].payment) {
+                        const paymentVia = payment.payment_Via;
+                        if (paymentVia.toLowerCase() !== 'cash') { // Ignore cash payments
+                          
+                            if (!combinedPaymentsOut[paymentVia]) {
+                                combinedPaymentsOut[paymentVia] = 0;
+                            }
+                            combinedPaymentsOut[paymentVia] += payment.payment_Out || 0;
+                        }
+                    }
+                }
+            }
+        }
+        
+  // Process payments for CashInHand schema
+  const cashInHandPayments = await CashInHand.find();
+  for (const cash of cashInHandPayments) {
+      if (cash.payment) {
+          for (const payment of cash.payment) {
+              const paymentVia = payment.payment_Via;
+              if (paymentVia.toLowerCase() !== 'cash') {
+                
+                  if (!combinedPaymentsOut[paymentVia]) {
+                      combinedPaymentsOut[paymentVia] = 0;
+                  }
+                  combinedPaymentsOut[paymentVia] += payment.payment_Out || 0
+              }
+              if (paymentVia.toLowerCase() !== 'cash') {
+                
+                if (!combinedPaymentsIn[paymentVia]) {
+                    combinedPaymentsIn[paymentVia] = 0;
+                }
+                combinedPaymentsIn[paymentVia] += payment.payment_In || 0
+            }
+          }
+      }
+  }
+
+  // Process payments for Expenses schema
+  const expensesPayments = await Expenses.find();
+  for (const expense of expensesPayments) {
+    const paymentVia = expense.payment_Via;
+    if (paymentVia.toLowerCase() !== 'cash') { // Ignore cash payments
+      
+        if (!combinedPaymentsOut[paymentVia]) {
+            combinedPaymentsOut[paymentVia] = 0;
+        }
+        combinedPaymentsOut[paymentVia] += expense.payment_Out || 0;
+    }
+  }
+
+// Process payments for Expenses schema
+  const employeesPayments = await Employees.find();
+ for (const employee of employeesPayments) {
+      if (employee.payment) {
+          for (const payment of employee.payment) {
+            const paymentVia = payment.payment_Via;
+            if (paymentVia.toLowerCase() !== 'cash') { // Ignore cash payments
+              
+                if (!combinedPaymentsOut[paymentVia]) {
+                    combinedPaymentsOut[paymentVia] = 0;
+                }
+                combinedPaymentsOut[paymentVia] += payment.payment_Out || 0;
+            }
+          }
+      }
+  }
+        // Combine payments in and out separately for each payment_via and subtract payment_Out from payment_In
+      // Combine payments in and out separately for each payment_via
+const combinedArray = [];
+const allPaymentMethods = new Set([...Object.keys(combinedPaymentsIn), ...Object.keys(combinedPaymentsOut)]);
+
+for (const paymentVia of allPaymentMethods) {
+    const totalPaymentIn = combinedPaymentsIn[paymentVia] || 0;
+    const totalPaymentOut = combinedPaymentsOut[paymentVia] || 0;
+    const totalPayment = totalPaymentIn - totalPaymentOut;
+    combinedArray.push({ payment_Via: paymentVia, total_payment: totalPayment });
+}
+const totalPaymentAcrossBanks = combinedArray.reduce((total, cash) => total + cash.total_payment, 0);
+
+// Send the resulting combined payments in the response
+res.status(200).json({ data: combinedArray,bank_Cash:totalPaymentAcrossBanks });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 
 module.exports = {
-    getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments
+    getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments,getAllBanksPayments
 }
