@@ -690,7 +690,6 @@ export default function CashinHand() {
                             <select value={payment_Via1} onChange={(e) => setPayment_Via1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.payment_Via))]
-                                    .filter(dateValue => dateValue.toLowerCase() === 'cash')
                                     .map(dateValue => (
                                         <option value={dateValue} key={dateValue}>{dateValue}</option>
                                     ))}
@@ -1132,8 +1131,10 @@ export default function CashinHand() {
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
-                            <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                          ))}
+                            data.payment_Via.toLowerCase() === 'cash' && (
+                                <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                            )
+                            ))}
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
