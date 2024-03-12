@@ -498,8 +498,8 @@ export default function CandPaymentOutDetails() {
 
   const printPaymentsTable = () => {
     // Convert JSX to HTML string
-    let printContentString = '';
-    printContentString += `
+    let printContentString1 = '';
+    printContentString1 += `
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-4">
@@ -528,7 +528,7 @@ export default function CandPaymentOutDetails() {
                 </div>
             </div>
         `
-    const printContentString = `
+     printContentString1 = `
     <table class='print-table'>
       <thead>
         <tr>
