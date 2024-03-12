@@ -1116,9 +1116,7 @@ export default function CandPaymentInDetails() {
               {/* Display Table for selectedSupplier's payment details array */}
               <div className="col-md-12 my-2">
               <div className="row candidate_Details">
-            <div className="col-md-12">
-              <button className='btn btn-warning btn-sm text-white shadow' onClick={() => setDetails("")}>Back</button>
-            </div>
+           
             <h4 className='text-center my-2'>Candidate Payment Details</h4>
             <hr/>
             <div className="col-md-4">
