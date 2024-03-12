@@ -1147,7 +1147,7 @@
   display: inline;
 }
 
-.payment_details .filters select {
+.payment_details .filters select,.payment_details .filters input {
   width: 100%;
   height: 30px;
   border: 1px solid var(--grays-dm-white);
@@ -1161,7 +1161,7 @@
   letter-spacing: 1px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
-.payment_details .filters select:focus {
+.payment_details .filters select:focus,.payment_details .filters input:focus {
   outline: none;
   border: 1px solid var(--accent-lighter-blue) !important;
 }
