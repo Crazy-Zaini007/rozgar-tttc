@@ -572,7 +572,7 @@
   display: inline;
 }
 
-.entry_details .filters select {
+.entry_details .filters select, .entry_details .filters input  {
   width: 100%;
   height: 30px;
   border: 1px solid var(--grays-dm-white);
@@ -586,7 +586,7 @@
   letter-spacing: 1px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
-.entry_details .filters select:focus {
+.entry_details .filters select:focus,.entry_details .filters input:focus {
   outline: none;
   border: 1px solid var(--accent-lighter-blue) !important;
 }
