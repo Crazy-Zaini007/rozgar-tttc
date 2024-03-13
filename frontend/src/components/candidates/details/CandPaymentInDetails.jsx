@@ -320,7 +320,7 @@ export default function CandPaymentInDetails() {
   const filteredTotalPaymentIn = candidate_Payments_In.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-      payment.supplierName.toLowerCase().includes(name.toLowerCase()) &&
+      // payment.supplierName.toLowerCase().includes(name.toLowerCase()) &&
       payment.pp_No.toLowerCase().includes(pp_No.toLowerCase()) &&
       payment.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
       payment.company.toLowerCase().includes(company.toLowerCase()) &&
