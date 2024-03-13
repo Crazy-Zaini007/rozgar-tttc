@@ -321,19 +321,23 @@ export default function CandPaymentOutDetails() {
   const [flight_Date, setFlight_Date] = useState('')
 
   const filteredTotalPaymentOut = candidate_Payments_Out.filter(payment => {
-    return (
-      payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-    (!payment.supplierName || payment.supplierName.toLowerCase().includes(name.toLowerCase())) &&
-      payment.pp_No.toLowerCase().includes(pp_No.toLowerCase())&&
-      payment.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase())&&
-      payment.company.toLowerCase().includes(company.toLowerCase()) &&
-      payment.country.toLowerCase().includes(country.toLowerCase()) &&
-      payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
-      payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-      payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())
+    // Check if supplierName exists and matches the provided name
+    if (payment?.supplierName && payment.supplierName.toLowerCase().includes(name.toLowerCase())) {
+        return (
+            payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
+            payment.pp_No.toLowerCase().includes(pp_No.toLowerCase()) &&
+            payment.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+            payment.company.toLowerCase().includes(company.toLowerCase()) &&
+            payment.country.toLowerCase().includes(country.toLowerCase()) &&
+            payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
+            payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
+            payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())
+        );
+    }
+    // If supplierName doesn't exist or doesn't match, exclude the payment
+    return false;
+})
 
-    )
-  })
   const [details, setDetails] = useState("")
 
   const handleCandidate = (candidate) => {
