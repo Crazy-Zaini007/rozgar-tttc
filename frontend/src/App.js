@@ -10,10 +10,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 
 // Enteries Section
-import NewEntry from './components/enteries/NewEntry';
-import Dashboard from './components/Dashboard';
-import CashinHand from './components/CashinHand';
-import BankCash from './components/BankCash';
+
 
 import EntryDetails from './components/enteries/EntryDetails';
 import EntryReports from './components/enteries/EntryReports';
@@ -106,7 +103,7 @@ import OverAllSupReport from './components/all_Reports/supplierDetails/OverAllSu
 import CashInHandWOE from './components/all_Reports/CashInHandWOE.jsx';
 import ProfitLose from './components/all_Reports/ProfitLose.jsx'
 import DayBook from './components/all_Reports/DayBook.jsx'
-import User from './components/user/User.jsx'
+
 
 // Employees Section
 import AddEmployee from './components/employee/AddEmployee.jsx'
@@ -133,15 +130,11 @@ function App() {
           <Route path='/rozgar/login' element={!user ? <Login></Login>:<Navigate to='/rozgar/dashboard'></Navigate>}></Route>
           {/* When user is Logged in */}
 
-          <Route  path='/rozgar/dashboard' element={user && <Dashboard></Dashboard> }></Route>
-          <Route  path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand> }></Route>
-          <Route  path='/rozgar/bank_cash' element={user && <BankCash></BankCash> }></Route>
+          
 
 
           {/* Enteries Routes */}
-          <Route  path='/rozgar/enteries/add_new_entry' element={user && <NewEntry></NewEntry> }></Route>
-          <Route  path='/rozgar/enteries/entry_details' element={user && <EntryDetails></EntryDetails> }></Route>
-          <Route  path='/rozgar/enteries/reports_details' element={user && <EntryReports></EntryReports> }></Route>
+         
 
           {/* Supplier Routes */}
           <Route  path='/rozgar/supplier/payment_in' element={user && <SupPaymentIn></SupPaymentIn> }></Route>
@@ -234,7 +227,7 @@ function App() {
           <Route  path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
 
           <Route  path='/rozgar/reports/day_book' element={user && <DayBook></DayBook> }></Route>
-          <Route  path='/rozgar/user/account' element={user && <User></User> }></Route>
+          
 
           {/* Employee Routes */}
           <Route  path='/rozgar/employees/add' element={user && <AddEmployee></AddEmployee> }></Route>
