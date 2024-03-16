@@ -3,6 +3,7 @@ import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// import Sidebar from './components/Sidebar';
 import { useAuthContext } from './hooks/userHooks/UserAuthHook'
 // User Login/Signup Section
 import Signup from './components/Signup';
