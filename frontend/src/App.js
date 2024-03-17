@@ -3,7 +3,7 @@ import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-// import Sidebar from './components/Sidebar';
+import Sidebar from './components/Sidebar';
 import { useAuthContext } from './hooks/userHooks/UserAuthHook'
 // User Login/Signup Section
 import Signup from './components/Signup';
@@ -11,7 +11,10 @@ import Login from './components/Login';
 
 // Enteries Section
 
-
+import NewEntry from './components/enteries/NewEntry';
+import Dashboard from './components/Dashboard';
+import CashinHand from './components/CashinHand';
+import BankCash from './components/BankCash.jsx'
 import EntryDetails from './components/enteries/EntryDetails';
 import EntryReports from './components/enteries/EntryReports';
 // Supplier Section
@@ -103,7 +106,7 @@ import OverAllSupReport from './components/all_Reports/supplierDetails/OverAllSu
 import CashInHandWOE from './components/all_Reports/CashInHandWOE.jsx';
 import ProfitLose from './components/all_Reports/ProfitLose.jsx'
 import DayBook from './components/all_Reports/DayBook.jsx'
-
+import User from './components/user/User.jsx'
 
 // Employees Section
 import AddEmployee from './components/employee/AddEmployee.jsx'
@@ -121,7 +124,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
 
-        
+        {user && <Sidebar/>}
         {/* <Navbar/> */}
         <Routes>
 
@@ -129,12 +132,16 @@ function App() {
           <Route path='/' element={!user && <Signup></Signup>}></Route>
           <Route path='/rozgar/login' element={!user ? <Login></Login>:<Navigate to='/rozgar/dashboard'></Navigate>}></Route>
           {/* When user is Logged in */}
-
+          <Route exact path='/rozgar/dashboard' element={user && <Dashboard></Dashboard> }></Route>
+          <Route exact path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand> }></Route>
+          <Route exact path='/rozgar/bank_cash' element={user && <BankCash></BankCash> }></Route>
           
 
 
           {/* Enteries Routes */}
-         
+          <Route exact path='/rozgar/enteries/add_new_entry' element={user && <NewEntry></NewEntry>}></Route>
+          <Route exact path='/rozgar/enteries/entry_details' element={user && <EntryDetails></EntryDetails>}></Route>
+          <Route exact path='/rozgar/enteries/reports_details' element={user && <EntryReports></EntryReports>}></Route>
 
           {/* Supplier Routes */}
           <Route  path='/rozgar/supplier/payment_in' element={user && <SupPaymentIn></SupPaymentIn> }></Route>
@@ -225,7 +232,7 @@ function App() {
           <Route  path='/rozgar/reports/cash_in_hand/with_out_expenses' element={user && <CashInHandWOE></CashInHandWOE> }></Route>
           <Route  path='/rozgar/reports/profit_lose' element={user && <ProfitLose></ProfitLose> }></Route>
           <Route  path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
-
+          <Route  path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
           <Route  path='/rozgar/reports/day_book' element={user && <DayBook></DayBook> }></Route>
           
 
@@ -235,6 +242,9 @@ function App() {
           <Route  path='/rozgar/employees/add_leave' element={user && <AddVacation></AddVacation> }></Route>
           <Route  path='/rozgar/employees/employees_details' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
 
+
+{/* User */}
+<Route  path='/rozgar/user/account' element={user && <User></User> }></Route>
 
         </Routes>
       </BrowserRouter>
