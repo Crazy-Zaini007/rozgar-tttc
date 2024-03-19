@@ -120,7 +120,7 @@ export default function ExpenseDetails() {
 
     let expenseId = editedEntry._id
     try {
-      const response = await fetch(`${apiUrl}/auth/expenses/updateFrom/expense`, {
+      const response = await fetch(`${apiUrl}/auth/expenses/update/expense`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ export default function ExpenseDetails() {
       expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
       filteredPaymentVia
     );
-  });
+  })
   
 
   const downloadExcel = () => {
@@ -247,7 +247,7 @@ export default function ExpenseDetails() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'expenses.xlsx');
-  };
+  }
 
 {/* <td>${String(entry?.curr_Country)}</td>
             <td>${String(entry?.curr_Rate)}</td>

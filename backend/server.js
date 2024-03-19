@@ -46,6 +46,15 @@ const Protectors =require('./routes/protectors/protector_Route')
 //Employees
 const Employees =require('./routes/employees/employee_Route')
 
+
+// Notifications
+const Notifications=require('./routes/notifications/notify_Route')
+
+// Notes
+const Notes =require('./routes/notes/note_Route')
+
+//Backup
+const Backup=require('./routes/backup/backup_Route')
 //express app
 const app = express()
 const server = http.createServer(app)
@@ -123,6 +132,14 @@ app.use('/auth/protectors',Protectors)
 
 // Employees
 app.use('/auth/employees',Employees)
+
+// Notifications
+app.use('/auth/notifications',Notifications)
+// Notes
+app.use('/auth/notes',Notes)
+
+// Backup
+app.use('/auth/backup',Backup)
 
 //PORT number
 const PORT = process.env.PORT

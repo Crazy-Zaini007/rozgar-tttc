@@ -133,7 +133,9 @@ const Payment_InSchema = new mongoose.Schema(
         details: {
           type: String,
         },
-        date: {},
+        date: {
+        type: String,
+        },
         curr_Rate: {
           type: Number,
           default: 0,
@@ -151,7 +153,7 @@ const Payment_InSchema = new mongoose.Schema(
         },
         cand_Name: {
           type: String,
-        },
+        }
       },
     ],
     open: {

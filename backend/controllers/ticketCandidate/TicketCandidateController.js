@@ -11,6 +11,7 @@ const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchem
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
+const Notifications=require('../../database/notifications/NotificationModel.js')
 
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
@@ -807,6 +808,61 @@ const updateAgentTotalPaymentIn = async (req, res) => {
             "Candidate_Payment_In_Schema.pp_No": pp_No,
           })
           if(azadCandidateIn){
+            
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+            const newNotification=new Notifications({
+              type:"Offer Letter",
+              content:`${name}'s Final Status is updated to Offer Letter.`,
+              date:new Date().toISOString().split("T")[0]
+            })
+            await newNotification.save()
+          }
+          if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+            const newNotification=new Notifications({
+              type:"E Number",
+              content:`${name}'s Final Status is updated to E Number.`,
+              date:new Date().toISOString().split("T")[0]
+  
+            })
+            await newNotification.save()
+          }
+  
+          if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+            const newNotification=new Notifications({
+              type:"QVC",
+              content:`${name}'s Final Status is updated to QVC.`,
+              date:new Date().toISOString().split("T")[0]
+  
+            })
+            await newNotification.save()
+          }
+          if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+            const newNotification=new Notifications({
+              type:"Visa Issued",
+              content:`${name}'s Final Status is updated to Visa Issued.`,
+              date:new Date().toISOString().split("T")[0]
+  
+            })
+            await newNotification.save()
+          }
+          if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+            const newNotification=new Notifications({
+              type:"PTN",
+              content:`${name}'s Final Status is updated to PTN.`,
+              date:new Date().toISOString().split("T")[0]
+            })
+            await newNotification.save()
+          }
+  
+          if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+            const newNotification=new Notifications({
+              type:"Ticket",
+              content:`${name}'s Final Status is updated to Ticket.`,
+              date:new Date().toISOString().split("T")[0]
+            })
+            await newNotification.save()
+          }
+          
             entryMode=azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode
             azadCandidateIn.Candidate_Payment_In_Schema.company=company
             azadCandidateIn.Candidate_Payment_In_Schema.country=country
@@ -2089,6 +2145,61 @@ const updateAgentTotalPaymentOut = async (req, res) => {
             "Candidate_Payment_Out_Schema.pp_No": pp_No,
           })
           if(azadCandidateIn){
+            
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+            const newNotification=new Notifications({
+              type:"Offer Letter",
+              content:`${name}'s Final Status is updated to Offer Letter.`,
+              date:new Date().toISOString().split("T")[0]
+            })
+            await newNotification.save()
+          }
+          if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+            const newNotification=new Notifications({
+              type:"E Number",
+              content:`${name}'s Final Status is updated to E Number.`,
+              date:new Date().toISOString().split("T")[0]
+  
+            })
+            await newNotification.save()
+          }
+  
+          if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+            const newNotification=new Notifications({
+              type:"QVC",
+              content:`${name}'s Final Status is updated to QVC.`,
+              date:new Date().toISOString().split("T")[0]
+  
+            })
+            await newNotification.save()
+          }
+          if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+            const newNotification=new Notifications({
+              type:"Visa Issued",
+              content:`${name}'s Final Status is updated to Visa Issued.`,
+              date:new Date().toISOString().split("T")[0]
+  
+            })
+            await newNotification.save()
+          }
+          if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+            const newNotification=new Notifications({
+              type:"PTN",
+              content:`${name}'s Final Status is updated to PTN.`,
+              date:new Date().toISOString().split("T")[0]
+            })
+            await newNotification.save()
+          }
+  
+          if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+            const newNotification=new Notifications({
+              type:"Ticket",
+              content:`${name}'s Final Status is updated to Ticket.`,
+              date:new Date().toISOString().split("T")[0]
+            })
+            await newNotification.save()
+          }
+          
             entryMode=azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode
             azadCandidateIn.Candidate_Payment_Out_Schema.company=company
             azadCandidateIn.Candidate_Payment_Out_Schema.country=country

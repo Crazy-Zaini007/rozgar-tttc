@@ -24,7 +24,8 @@ export default function AgentCandPaymentInDetails() {
   const [loading3, setLoading3] = useState(false)
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
-  const [loading6, setLoading6] = useState(false)
+ 
+  const [show,setShow]=useState(false)
 
   const [, setNewMessage] = useState('')
 
@@ -40,7 +41,6 @@ export default function AgentCandPaymentInDetails() {
 
   const { getPaymentsIn } = AgentHook()
   const { user } = useAuthContext()
-  const dispatch = useDispatch()
   const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -50,7 +50,6 @@ export default function AgentCandPaymentInDetails() {
       setIsLoading(true)
       await getPaymentsIn();
       setIsLoading(false);
-
       await Promise.all([
         getCategoryData(),
         getPaymentViaData(),
@@ -1509,6 +1508,7 @@ export default function AgentCandPaymentInDetails() {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
+                <button className='btn shadow btn-sm m-1 bg-info text-white' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
               <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
 
@@ -1532,7 +1532,7 @@ export default function AgentCandPaymentInDetails() {
                     <TableCell className='label border' style={{ width: '18.28%' }}>Total_In_PKR</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Total_Cash_Out</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Remaining</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>
+                    {show ===true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
                     <TableCell className='label border' style={{ width: '18.28%' }}>Remaining_Oth_Curr</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
                   </TableRow>
@@ -1613,9 +1613,9 @@ export default function AgentCandPaymentInDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_PKR -editedEntry2.total_In +editedEntry2.cash_Out} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              {show && <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
-                              </TableCell>
+                              </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.remaining_Curr} readonly />
                               </TableCell>
@@ -1638,7 +1638,7 @@ export default function AgentCandPaymentInDetails() {
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.total_In}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR-person?.total_In +person?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>
+                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.remaining_Curr}</TableCell>
 
 

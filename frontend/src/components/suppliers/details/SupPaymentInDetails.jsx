@@ -25,6 +25,7 @@ export default function SupPaymentInDetails() {
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
   const [loading6, setLoading6] = useState(false)
+  const [show,setShow]=useState(false)
 
   const [, setNewMessage] = useState('')
 
@@ -255,7 +256,7 @@ export default function SupPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+        body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No,personId:editedEntry2._id, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
       })
 
       const json = await response.json()
@@ -1494,6 +1495,7 @@ export default function SupPaymentInDetails() {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
+              <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
               <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
               </div>
@@ -1513,7 +1515,7 @@ export default function SupPaymentInDetails() {
                     <TableCell className='label border'>Final_Status</TableCell>
                     <TableCell className='label border'>Flight_Date</TableCell>
                     <TableCell className='label border'>VPI_PKR</TableCell>
-                    <TableCell className='label border'>VPI_Oth_Curr</TableCell>
+                    {show ===true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
                     <TableCell className='label border'>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -1583,9 +1585,9 @@ export default function SupPaymentInDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_PKR} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              {show && <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
-                              </TableCell>
+                              </TableCell>}
 
 
                             </>
@@ -1602,8 +1604,7 @@ export default function SupPaymentInDetails() {
                               <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_In_Curr}</TableCell>
-
+                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
 
                             </>
                           )}
@@ -1626,25 +1627,7 @@ export default function SupPaymentInDetails() {
                                   <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn'>Edit</button>
                                   <button className='btn delete_btn' onClick={() => deletePerson(person)}  disabled={loading2}>{loading2 ? "Deleting..." : "Delete"}</button>
                                 </div>
-                                {/* Deleting Modal  */}
-                                <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div className="modal-dialog p-0">
-                                    <div className="modal-content p-0">
-                                      <div className="modal-header border-0">
-                                        <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                        {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                      </div>
-                                      <div className="modal-body text-center p-0">
-
-                                        <p>Do you want to Delete the Person?</p>
-                                      </div>
-                                      <div className="text-end m-2">
-                                        <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                        <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                               
                               </>
                             )}
                           </TableCell>

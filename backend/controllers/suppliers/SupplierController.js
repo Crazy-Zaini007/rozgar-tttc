@@ -11,7 +11,8 @@ const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchem
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
-
+const Notifications=require('../../database/notifications/NotificationModel.js')
+const Backup=require('../../database/backup/BackupModel.js')
 const InvoiceNumber = require("../../database/invoiceNumber/InvoiceNumberSchema");
 const CashInHand = require("../../database/cashInHand/CashInHandSchema");
 const mongoose = require("mongoose");
@@ -158,6 +159,23 @@ const addPaymentIn = async (req, res) => {
 
         await CashInHand.updateOne({}, cashInHandUpdate);
 
+        const newBackup=new Backup({
+          name: supplierName,
+          category:category,
+          payment_Via:payment_Via,
+          payment_Type:payment_Type,
+          slip_No: slip_No ? slip_No : '',
+          payment_In: newPaymentIn,
+          slip_Pic: uploadImage?.secure_url || '',
+          details:details,
+          payment_In_Curr: curr_Country ? curr_Country : "",
+          curr_Rate: curr_Rate ? curr_Rate : 0,
+          curr_Amount: newCurrAmount ? newCurrAmount : 0,
+          date:new Date().toISOString().split("T")[0],
+          invoice: nextInvoiceNumber,
+          cand_Name,
+            })
+            await newBackup.save()
         await existingSupplier.save();
         const updatedSupplier = await Suppliers.findById(existingSupplier._id);
         res.status(200).json({
@@ -209,6 +227,23 @@ const addPaymentIn = async (req, res) => {
         }
         await CashInHand.updateOne({}, cashInHandUpdate);
 
+        const newBackup=new Backup({
+          name: supplierName,
+          category:category,
+          payment_Via:payment_Via,
+          payment_Type:payment_Type,
+          slip_No: slip_No ? slip_No : '',
+          payment_In: newPaymentIn,
+          slip_Pic: uploadImage?.secure_url || '',
+          details:details,
+          payment_In_Curr: curr_Country ? curr_Country : "",
+          curr_Rate: curr_Rate ? curr_Rate : 0,
+          curr_Amount: newCurrAmount ? newCurrAmount : 0,
+          date:new Date().toISOString().split("T")[0],
+          invoice: nextInvoiceNumber,
+          cand_Name:cand_Name,
+            })
+            await newBackup.save()
         await existingSupplier.save();
 
         const updatedSupplier = await Suppliers.findById(existingSupplier._id);
@@ -391,6 +426,23 @@ const addMultiplePaymentsIn = async (req, res) => {
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_In: newPaymentIn,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_In_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+              cand_Name:cand_Name,
+                })
+                await newBackup.save()
             await existingSupplier.save();
            
 
@@ -436,6 +488,22 @@ const addMultiplePaymentsIn = async (req, res) => {
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_In: newPaymentIn,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_In_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+                })
+                await newBackup.save()
             await existingSupplier.save();
 
           }
@@ -632,6 +700,24 @@ const addPaymentInReturn = async (req, res) => {
 
 
             await CashInHand.updateOne({}, cashInHandUpdate);
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              cash_Out: newCashOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_In_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+              cand_Name:cand_Name,
+    
+                })
+                await newBackup.save()
             await existingSupplier.save();
 
             const updatedSupplier = await Suppliers.findById(existingSupplier._id);
@@ -682,10 +768,27 @@ const addPaymentInReturn = async (req, res) => {
             }
 
             await CashInHand.updateOne({}, cashInHandUpdate);
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              cash_Out: newCashOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_In_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+    
+                })
+                await newBackup.save()
             await existingSupplier.save();
 
             const updatedSupplier = await Suppliers.findById(existingSupplier._id);
-            await existingSupplier.save()
+         
 
             res.status(200).json({
               data: updatedSupplier,
@@ -1310,6 +1413,61 @@ const updatePaymentInPerson=async(req,res)=>{
       if(existingSupplier){
         const personIn = existingSupplier.payment_In_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
+          
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newNotification=new Notifications({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newNotification=new Notifications({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newNotification=new Notifications({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newNotification=new Notifications({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newNotification=new Notifications({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newNotification=new Notifications({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        
           entryMode=personIn.entry_Mode
             personIn.company = company;
             personIn.country = country;
@@ -1971,6 +2129,23 @@ const addPaymentOut = async (req, res) => {
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_Out: newPaymentOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_Out_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+              cand_Name:cand_Name,
+                })
+                await newBackup.save()
             await existingSupplier.save();
             const updatedSupplier = await Suppliers.findById(existingSupplier._id);
 
@@ -2024,7 +2199,22 @@ const addPaymentOut = async (req, res) => {
 
             await existingSupplier.save();
             const updatedSupplier = await Suppliers.findById(existingSupplier._id);
-
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_Out: newPaymentOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_Out_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+                })
+                await newBackup.save()
             res.status(200).json({
               data: updatedSupplier,
               message: `Payment Out: ${payment_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
@@ -2210,7 +2400,23 @@ const addMultiplePaymentsOut = async (req, res) => {
             }
 
             await CashInHand.updateOne({}, cashInHandUpdate);
-
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_Out: newPaymentOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_Out_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+              cand_Name:cand_Name,
+                })
+                await newBackup.save()
             await existingSupplier.save();
             const updatedSupplier = await Suppliers.findById(existingSupplier._id);
           }
@@ -2255,6 +2461,22 @@ const addMultiplePaymentsOut = async (req, res) => {
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_Out: newPaymentOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_Out_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+                })
+                await newBackup.save()
             await existingSupplier.save();
             const updatedSupplier = await Suppliers.findById(existingSupplier._id);
 
@@ -2446,6 +2668,23 @@ const addPaymentOutReturn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            cash_Out: newCashOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+            cand_Name:cand_Name,
+              })
+              await newBackup.save()
           await existingSupplier.save();
 
           const updatedSupplier = await Suppliers.findById(existingSupplier._id);
@@ -2498,8 +2737,25 @@ const addPaymentOutReturn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
-
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            cash_Out: newCashOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+              })
+              await newBackup.save()
+              
           const updatedSupplier = await Suppliers.findById(existingSupplier._id);
+
           await existingSupplier.save();
 
           res.status(200).json({
@@ -3130,6 +3386,61 @@ const updatePaymentOutPerson=async(req,res)=>{
       if(existingSupplier){
         const personIn = existingSupplier.payment_Out_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
+          
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newNotification=new Notifications({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newNotification=new Notifications({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newNotification=new Notifications({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newNotification=new Notifications({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newNotification=new Notifications({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newNotification=new Notifications({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        
           entryMode=personIn.entry_Mode
             personIn.company = company;
             personIn.country = country;

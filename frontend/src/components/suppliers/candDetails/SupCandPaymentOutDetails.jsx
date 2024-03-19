@@ -24,7 +24,8 @@ export default function SupCandPaymentOutDetails() {
   const [loading3, setLoading3] = useState(false)
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
-  const [loading6, setLoading6] = useState(false)
+  const [show,setShow]=useState(false)
+
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
@@ -257,7 +258,7 @@ export default function SupCandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+        body: JSON.stringify({ supplierName: selectedSupplier,personId:editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
       })
 
       const json = await response.json()
@@ -1499,6 +1500,7 @@ export default function SupCandPaymentOutDetails() {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
+              <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
               <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
               </div>
@@ -1521,7 +1523,7 @@ export default function SupCandPaymentOutDetails() {
                     <TableCell className='label border'>Total_In_PKR</TableCell>
                     <TableCell className='label border'>Total_Cash_Out</TableCell>
                     <TableCell className='label border'>Remaining</TableCell>
-                    <TableCell className='label border'>VPI_Oth_Curr</TableCell>
+                    {show ===true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
                     <TableCell className='label border'>Remaining_Oth_Curr</TableCell>
                     <TableCell className='label border'>Action</TableCell>
                   </TableRow>
@@ -1602,9 +1604,9 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_Out_PKR -editedEntry2.total_In +editedEntry2.cash_Out} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              {show && <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
-                              </TableCell>
+                              </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.remaining_Curr} readonly />
                               </TableCell>
@@ -1627,7 +1629,7 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td text-center'>{person?.total_In}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_Out_PKR-person?.total_In +person?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_Out_Curr}</TableCell>
+                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_Out_Curr}</TableCell>}
                               <TableCell className='border data_td text-center'>{person?.remaining_Curr}</TableCell>
 
                             </>

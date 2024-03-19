@@ -10,6 +10,7 @@ export default function OverAllVisaWise() {
   const { getEntries } = EntryHook();
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
+  const [show,setShow]=useState(false)
 
   // fteching Data from DB
   const fetchData = async () => {
@@ -191,7 +192,8 @@ export default function OverAllVisaWise() {
                   {filteredEntries.length > 0 &&
                     <>
                      
-                      {/* <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download </button> */}
+                     <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
+                      
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
 
                     </>
@@ -290,8 +292,8 @@ export default function OverAllVisaWise() {
                           <TableCell className='label border'>Reference_Type</TableCell>
                           <TableCell className='label border'>Reference_Name</TableCell>
                           <TableCell className='label border'>Rozgar_Visa_Price</TableCell>
-                          <TableCell className='label border'>Agency_Visa_Price</TableCell>
-                          <TableCell className='label border'>Visa_Profit</TableCell>
+                          {show &&<TableCell className='label border'>Agency_Visa_Price</TableCell>}
+                         {show &&  <TableCell className='label border'>Visa_Profit</TableCell>}
 
                         </TableRow>
                       </TableHead>
@@ -308,8 +310,8 @@ export default function OverAllVisaWise() {
                                 <TableCell className='border data_td  '>{entry.reference_Out}</TableCell>
                                 <TableCell className='border data_td text-center'>{entry.reference_Out_Name===entry.name ? "/":entry.reference_Out_Name}</TableCell>
                                 <TableCell className='border data_td '>{entry.visa_Sales_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td bg-success text-white'>{entry.visa_Sales_Rate_PKR-entry.visa_Purchase_Rate_PKR}</TableCell>
+                                {show && <TableCell className='border data_td '>{entry.visa_Purchase_Rate_PKR}</TableCell>}
+                                {show && <TableCell className='border data_td bg-success text-white'>{entry.visa_Sales_Rate_PKR-entry.visa_Purchase_Rate_PKR}</TableCell>}
 
                           </TableRow>
                         ))}
@@ -329,19 +331,19 @@ export default function OverAllVisaWise() {
         return total + parseFloat(entry.visa_Sales_Rate_PKR);
       }, 0)}
     </TableCell>
-    <TableCell className='border data_td text-center bg-success text-white'>
+    {show && <TableCell className='border data_td text-center bg-success text-white'>
       {/* Calculate the total sum of visa_Price_In_PKR */}
       {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
         return total + parseFloat(entry.visa_Purchase_Rate_PKR);
       }, 0)}
-    </TableCell>
+    </TableCell>}
    
-    <TableCell className='border data_td text-center bg-success text-white'>
+   {show &&  <TableCell className='border data_td text-center bg-success text-white'>
       {/* Calculate the total sum of visa_Price_In_PKR */}
       {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
         return total + parseFloat(entry.visa_Sales_Rate_PKR) - parseFloat(entry.visa_Purchase_Rate_PKR) 
       }, 0)}
-    </TableCell>
+    </TableCell>}
   </TableRow>
                       </TableBody>
                   </Table>

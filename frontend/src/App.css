@@ -704,7 +704,7 @@
 }
 
 .entry_details .detail_table .data_td {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 1px;
   width: auto;
@@ -714,7 +714,7 @@
   font-size: 12px;
 }
 .entry_details label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--black);
   font-weight: 600;
   letter-spacing: 1px;
@@ -1255,7 +1255,7 @@
 .payment_details .detail_table .label {
   background-color: var(--grays-dm-input-bg);
   color: white;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   display: inline-flexbox;
   width: 18.28%;
@@ -1290,7 +1290,7 @@
 }
 
 .payment_details .detail_table .data_td {
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 1px;
   width: 18.28%;
@@ -1413,3 +1413,159 @@ color: var(--accent-lighter-blue);
 .candidate_Details p b{
   font-size: 14px;
 }
+
+/* notifications */
+.notifications select {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 20px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+
+.notifications select:focus {
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+}
+
+ .notifications .toast-header img{
+  height:30px;
+  width:30px;
+}
+.notifications .toast-header strong{
+  
+  letter-spacing: 1px;
+}
+ .notifications .toast-header small{
+  font-size:12px;
+  color: var(--accent-lighter-blue);
+
+}
+ .notifications .toast-header button{
+font-size: 12px;
+box-shadow: 0px 0px 10px 1px solid var(--white)
+
+}
+ .notifications .toast-body p{
+font-size: 12px;
+color: var(--darkgrey);
+letter-spacing: 1px;
+font-weight: 500;
+}
+.notifications img{
+width: 60%;
+height: 60%;
+}
+
+.notifications p{
+  font-size: 14px;
+  color: var(--black);
+  letter-spacing: 1px;
+}
+
+/* Notes */
+.notes .add_btn{
+  font-size: 12px;
+  color: var(--white);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background: var(--accent-stonger-blue);
+  font-weight: 600;
+}
+.notes .filters label{
+  font-size: 14px;
+}
+.notes .filters select,.notes .filters input{
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 2px;
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+.notes .filters select:focus,.notes .filters input:focus{
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue);
+}
+
+.notes .note h6{
+  color: var(--accent-stong-blue);
+
+}
+.notes form label{
+  color:var(--black);
+  font-size:14px;
+  font-weight:600;
+}
+.notes form input{
+  width:100%;
+  height:45px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 20px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+.notes form textarea{
+  width:100%;
+  min-height:50vh;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: var(--black);
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+.notes form textarea:focus,.notes form input:focus{
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue);
+}
+.notes form button{
+background:var(--cool-Green);
+color:white;
+}
+.notes form button:hover{
+  background:var(--cool-Green);
+  color:white;
+  }
+
+  .notes .note h6{
+    font-size: 14px;
+    color:var(--);
+  }
+  .notes .note small{
+    font-size:10px;
+    color:var(--accent-stong-blue);
+    font-weight:600;
+    letter-spacing:1px;
+  }
+  .notes .note .btn{
+    font-size: 10px;
+    color: var(--white);
+    box-shadow: 10px 10px 10px 10px solid var(--black);
+    background: var(--accent-stonger-blue);
+    font-weight: 600;
+  }
+  .notes img{
+    width: 60%;
+    height: 60%;
+    }

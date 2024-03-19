@@ -118,7 +118,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
       <h4>Admin Dashboard</h4>
         <div className="col-md-12 admin-main p-0">
           <div className="row p-0 ">
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 p-1  rounded">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1   rounded">
              <Paper className="data p-3 rounded border m-0 ">
              <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">

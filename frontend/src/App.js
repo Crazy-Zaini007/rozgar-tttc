@@ -114,28 +114,34 @@ import AddPayment from './components/employee/AddPayment.jsx'
 import AddVacation from './components/employee/AddVacation.jsx'
 import EmployeeDetails from './components/employee/EmployeeDetails.jsx'
 
+// Notifications
+import Notifications from './components/Notifications.jsx'
+//Notes
+import Notes from './components/Notes.jsx'
+
+// Backup
+import Backup from './components/Backup.jsx'
 
 function App() {
   // user Info
   const { user } = useAuthContext()
-    
-  
+
+
   return (
     <div className="App">
       <BrowserRouter>
 
-        {user && <Sidebar/>}
+        {user && <Sidebar />}
         {/* <Navbar/> */}
         <Routes>
 
           {/* User Signup/Login Routes */}
-          <Route path='/' element={!user && <Signup></Signup>}></Route>
-          <Route path='/rozgar/login' element={!user ? <Login></Login>:<Navigate to='/rozgar/dashboard'></Navigate>}></Route>
+          <Route path='/' element={!user ? <Signup></Signup> : <Dashboard></Dashboard>}></Route>
+          <Route path='/rozgar/login' element={!user ? <Login></Login> : <Navigate to='/'></Navigate>}></Route>
           {/* When user is Logged in */}
-          <Route exact path='/rozgar/dashboard' element={user && <Dashboard></Dashboard> }></Route>
-          <Route exact path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand> }></Route>
-          <Route exact path='/rozgar/bank_cash' element={user && <BankCash></BankCash> }></Route>
-          
+          <Route exact path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand>}></Route>
+          <Route exact path='/rozgar/bank_cash' element={user && <BankCash></BankCash>}></Route>
+
 
 
           {/* Enteries Routes */}
@@ -144,107 +150,113 @@ function App() {
           <Route exact path='/rozgar/enteries/reports_details' element={user && <EntryReports></EntryReports>}></Route>
 
           {/* Supplier Routes */}
-          <Route  path='/rozgar/supplier/payment_in' element={user && <SupPaymentIn></SupPaymentIn> }></Route>
-          <Route  path='/rozgar/supplier/payment_out' element={user && <SupPaymentOut></SupPaymentOut> }></Route>
-          <Route  path='/rozgar/supplier/details' element={user && <SupDetails></SupDetails> }></Route>
-          <Route  path='/rozgar/supplier/payment_return' element={user && <SupPayReturn></SupPayReturn> }></Route>
-          <Route  path='/rozgar/supplier/cand_vise_payment_in' element={user && <SupCandPaymentIn></SupCandPaymentIn> }></Route>
-          <Route  path='/rozgar/supplier/cand_vise_payment_out' element={user && <SupCandPaymentOut></SupCandPaymentOut> }></Route>
-          <Route  path='/rozgar/supplier/cand_vise_payment_details' element={user && <SupCandDetails></SupCandDetails> }></Route>
-          <Route  path='/rozgar/supplier/cand_vise_payment_return' element={user && <SupCandPayReturn></SupCandPayReturn> }></Route>
+          <Route path='/rozgar/supplier/payment_in' element={user && <SupPaymentIn></SupPaymentIn>}></Route>
+          <Route path='/rozgar/supplier/payment_out' element={user && <SupPaymentOut></SupPaymentOut>}></Route>
+          <Route path='/rozgar/supplier/details' element={user && <SupDetails></SupDetails>}></Route>
+          <Route path='/rozgar/supplier/payment_return' element={user && <SupPayReturn></SupPayReturn>}></Route>
+          <Route path='/rozgar/supplier/cand_vise_payment_in' element={user && <SupCandPaymentIn></SupCandPaymentIn>}></Route>
+          <Route path='/rozgar/supplier/cand_vise_payment_out' element={user && <SupCandPaymentOut></SupCandPaymentOut>}></Route>
+          <Route path='/rozgar/supplier/cand_vise_payment_details' element={user && <SupCandDetails></SupCandDetails>}></Route>
+          <Route path='/rozgar/supplier/cand_vise_payment_return' element={user && <SupCandPayReturn></SupCandPayReturn>}></Route>
           {/* Agents Routes */}
-          <Route  path='/rozgar/agents/payment_in' element={user && <AgentPaymentIn></AgentPaymentIn> }></Route>
-          <Route  path='/rozgar/agents/payment_out' element={user && <AgentPaymentOut></AgentPaymentOut> }></Route>
-          <Route  path='/rozgar/agents/details' element={user && <AgentDetails></AgentDetails> }></Route>
-          <Route  path='/rozgar/agents/payment_return' element={user && <AgentPayReturn></AgentPayReturn> }></Route>
-          <Route  path='/rozgar/agents/cand_vise_payment_in' element={user && <AgentCandPaymentIn></AgentCandPaymentIn> }></Route>
-          <Route  path='/rozgar/agents/cand_vise_payment_out' element={user && <AgentCandPaymentOut></AgentCandPaymentOut> }></Route>
-          <Route  path='/rozgar/agents/cand_vise_payment_details' element={user && <AgentCandDetails></AgentCandDetails> }></Route>
-          <Route  path='/rozgar/agents/cand_vise_payment_return' element={user && <AgentCandPayReturn></AgentCandPayReturn> }></Route>
+          <Route path='/rozgar/agents/payment_in' element={user && <AgentPaymentIn></AgentPaymentIn>}></Route>
+          <Route path='/rozgar/agents/payment_out' element={user && <AgentPaymentOut></AgentPaymentOut>}></Route>
+          <Route path='/rozgar/agents/details' element={user && <AgentDetails></AgentDetails>}></Route>
+          <Route path='/rozgar/agents/payment_return' element={user && <AgentPayReturn></AgentPayReturn>}></Route>
+          <Route path='/rozgar/agents/cand_vise_payment_in' element={user && <AgentCandPaymentIn></AgentCandPaymentIn>}></Route>
+          <Route path='/rozgar/agents/cand_vise_payment_out' element={user && <AgentCandPaymentOut></AgentCandPaymentOut>}></Route>
+          <Route path='/rozgar/agents/cand_vise_payment_details' element={user && <AgentCandDetails></AgentCandDetails>}></Route>
+          <Route path='/rozgar/agents/cand_vise_payment_return' element={user && <AgentCandPayReturn></AgentCandPayReturn>}></Route>
 
           {/* Ticket Routes */}
-          <Route  path='/rozgar/tickets/payment_in' element={user && <TicketPayIn></TicketPayIn> }></Route>
-          <Route  path='/rozgar/tickets/payment_out' element={user && <TicketPayOut></TicketPayOut> }></Route>
-          <Route  path='/rozgar/tickets/payment_return' element={user && <TicketPayReturn></TicketPayReturn> }></Route>
-          <Route  path='/rozgar/tickets/details' element={user && <TicketDetails></TicketDetails> }></Route>
+          <Route path='/rozgar/tickets/payment_in' element={user && <TicketPayIn></TicketPayIn>}></Route>
+          <Route path='/rozgar/tickets/payment_out' element={user && <TicketPayOut></TicketPayOut>}></Route>
+          <Route path='/rozgar/tickets/payment_return' element={user && <TicketPayReturn></TicketPayReturn>}></Route>
+          <Route path='/rozgar/tickets/details' element={user && <TicketDetails></TicketDetails>}></Route>
 
           {/* Candidates Routes */}
-          <Route  path='/rozgar/candidates/payment_in' element={user && <CandPaymentIn></CandPaymentIn> }></Route>
-          <Route  path='/rozgar/candidates/payment_out' element={user && <CandPaymentOut></CandPaymentOut> }></Route>
-          <Route  path='/rozgar/candidates/details' element={user && <CandDetails></CandDetails> }></Route>
-          <Route  path='/rozgar/candidates/payment_return' element={user && <CandPayReturn></CandPayReturn> }></Route>
-          
+          <Route path='/rozgar/candidates/payment_in' element={user && <CandPaymentIn></CandPaymentIn>}></Route>
+          <Route path='/rozgar/candidates/payment_out' element={user && <CandPaymentOut></CandPaymentOut>}></Route>
+          <Route path='/rozgar/candidates/details' element={user && <CandDetails></CandDetails>}></Route>
+          <Route path='/rozgar/candidates/payment_return' element={user && <CandPayReturn></CandPayReturn>}></Route>
+
           {/* AzadVisa Routes */}
-          <Route  path='/rozgar/azad/payment_in' element={user && <AzadVisaPayIn></AzadVisaPayIn> }></Route>
-          <Route  path='/rozgar/azad/payment_out' element={user && <AzadVisaPayOut></AzadVisaPayOut> }></Route>
-          <Route  path='/rozgar/azad/details' element={user && <AzadVisaDetails></AzadVisaDetails> }></Route>
-          <Route  path='/rozgar/azad/payment_return' element={user && <AzadVisaPayReturn></AzadVisaPayReturn> }></Route>
+          <Route path='/rozgar/azad/payment_in' element={user && <AzadVisaPayIn></AzadVisaPayIn>}></Route>
+          <Route path='/rozgar/azad/payment_out' element={user && <AzadVisaPayOut></AzadVisaPayOut>}></Route>
+          <Route path='/rozgar/azad/details' element={user && <AzadVisaDetails></AzadVisaDetails>}></Route>
+          <Route path='/rozgar/azad/payment_return' element={user && <AzadVisaPayReturn></AzadVisaPayReturn>}></Route>
 
           {/* VisitVisa Routes */}
-          <Route  path='/rozgar/visits/payment_in' element={user && <VisitPayIn></VisitPayIn> }></Route>
-          <Route  path='/rozgar/visits/payment_out' element={user && <VisitPayOut></VisitPayOut> }></Route>
-          <Route  path='/rozgar/visits/details' element={user && <VisitDetails></VisitDetails> }></Route>
-          <Route  path='/rozgar/visits/payment_return' element={user && <VisitPayReturn></VisitPayReturn> }></Route>
+          <Route path='/rozgar/visits/payment_in' element={user && <VisitPayIn></VisitPayIn>}></Route>
+          <Route path='/rozgar/visits/payment_out' element={user && <VisitPayOut></VisitPayOut>}></Route>
+          <Route path='/rozgar/visits/details' element={user && <VisitDetails></VisitDetails>}></Route>
+          <Route path='/rozgar/visits/payment_return' element={user && <VisitPayReturn></VisitPayReturn>}></Route>
 
 
           {/* Protector Routes  */}
-          <Route  path='/rozgar/protector/payment_out' element={user && <ProtectorPaymentOut></ProtectorPaymentOut> }></Route>
-          <Route  path='/rozgar/protector/details' element={user && <ProtectorDetails></ProtectorDetails> }></Route>
+          <Route path='/rozgar/protector/payment_out' element={user && <ProtectorPaymentOut></ProtectorPaymentOut>}></Route>
+          <Route path='/rozgar/protector/details' element={user && <ProtectorDetails></ProtectorDetails>}></Route>
 
 
           {/* Credits Debits With Cash IN hand Routes */}
-          <Route  path='/rozgar/credites&debits/payment_in/with_cash_in_hand' element={user && <CDWCPaymentIn></CDWCPaymentIn> }></Route>
-          <Route  path='/rozgar/credites&debits/payment_out/with_cash_in_hand' element={user && <CDWCPaymentOut></CDWCPaymentOut> }></Route>
-          <Route  path='/rozgar/credites&debits/details/with_cash_in_hand' element={user && <CDWCDetails></CDWCDetails> }></Route>
+          <Route path='/rozgar/credites&debits/payment_in/with_cash_in_hand' element={user && <CDWCPaymentIn></CDWCPaymentIn>}></Route>
+          <Route path='/rozgar/credites&debits/payment_out/with_cash_in_hand' element={user && <CDWCPaymentOut></CDWCPaymentOut>}></Route>
+          <Route path='/rozgar/credites&debits/details/with_cash_in_hand' element={user && <CDWCDetails></CDWCDetails>}></Route>
 
 
           {/* Credits Debits WithOut Cash IN hand Routes */}
-          <Route  path='/rozgar/credites&debits/payment_in/without_cash_in_hand' element={user && <CDWOCPaymentIn></CDWOCPaymentIn> }></Route>
-          <Route  path='/rozgar/credites&debits/payment_out/without_cash_in_hand' element={user && <CDWOCPaymentOut></CDWOCPaymentOut> }></Route>
-          <Route  path='/rozgar/credites&debits/details/without_cash_in_hand' element={user && <CDWOCDetails></CDWOCDetails> }></Route>
+          <Route path='/rozgar/credites&debits/payment_in/without_cash_in_hand' element={user && <CDWOCPaymentIn></CDWOCPaymentIn>}></Route>
+          <Route path='/rozgar/credites&debits/payment_out/without_cash_in_hand' element={user && <CDWOCPaymentOut></CDWOCPaymentOut>}></Route>
+          <Route path='/rozgar/credites&debits/details/without_cash_in_hand' element={user && <CDWOCDetails></CDWOCDetails>}></Route>
 
 
           {/* Setting Routes */}
-          <Route  path='/rozgar/setting/visa_section' element={user && <VisaSection></VisaSection> }></Route>
-          <Route  path='/rozgar/setting/ticket_section' element={user && <TicketSection></TicketSection> }></Route>
-          <Route  path='/rozgar/setting/visit_section' element={user && <VisitSection></VisitSection> }></Route>
-          <Route  path='/rozgar/setting/azad_section' element={user && <AzadSection></AzadSection> }></Route>
-          <Route  path='/rozgar/setting/crediter_debiter_section' element={user && <CrediterDebiterSection></CrediterDebiterSection> }></Route>
-          <Route  path='/rozgar/setting/protector_section' element={user && <ProtectorSection></ProtectorSection> }></Route>
-          <Route  path='/rozgar/setting/other_section' element={user && <OtherSection></OtherSection> }></Route>
+          <Route path='/rozgar/setting/visa_section' element={user && <VisaSection></VisaSection>}></Route>
+          <Route path='/rozgar/setting/ticket_section' element={user && <TicketSection></TicketSection>}></Route>
+          <Route path='/rozgar/setting/visit_section' element={user && <VisitSection></VisitSection>}></Route>
+          <Route path='/rozgar/setting/azad_section' element={user && <AzadSection></AzadSection>}></Route>
+          <Route path='/rozgar/setting/crediter_debiter_section' element={user && <CrediterDebiterSection></CrediterDebiterSection>}></Route>
+          <Route path='/rozgar/setting/protector_section' element={user && <ProtectorSection></ProtectorSection>}></Route>
+          <Route path='/rozgar/setting/other_section' element={user && <OtherSection></OtherSection>}></Route>
 
 
           {/* Expense Routes */}
-          <Route  path='/rozgar/expenses/add_new_expense' element={user && <AddExpense></AddExpense> }></Route>
-          <Route  path='/rozgar/expenses/add/mul_expense' element={user && <AddMulExpenses></AddMulExpenses> }></Route>
-          <Route  path='/rozgar/expenses/expenses_details' element={user && <ExpenseDetails></ExpenseDetails> }></Route>
-          
+          <Route path='/rozgar/expenses/add_new_expense' element={user && <AddExpense></AddExpense>}></Route>
+          <Route path='/rozgar/expenses/add/mul_expense' element={user && <AddMulExpenses></AddMulExpenses>}></Route>
+          <Route path='/rozgar/expenses/expenses_details' element={user && <ExpenseDetails></ExpenseDetails>}></Route>
+
           {/* Reports */}
-          <Route  path='/rozgar/reports/overall_visa_wise' element={user && <OverAllVisaWise></OverAllVisaWise> }></Route>
-          <Route  path='/rozgar/reports/overall_payment_visa_wise' element={user && <OverAllVisaPayment></OverAllVisaPayment> }></Route>
-          <Route  path='/rozgar/reports/receivable_reports' element={user && <ReceivableReports></ReceivableReports> }></Route>
-          <Route  path='/rozgar/reports/payable_reports' element={user && <PayableReports></PayableReports> }></Route>
-          <Route  path='/rozgar/reports/invoice' element={user && <Invoice></Invoice> }></Route>
-          <Route  path='/rozgar/reports/expenses_reports' element={user && <ExpenseOverAllReport></ExpenseOverAllReport> }></Route>
-          <Route  path='/rozgar/reports/agents_reports' element={user && <OverAllAgentReport></OverAllAgentReport> }></Route>
-          <Route  path='/rozgar/reports/candidates_reports' element={user && <OverAllCandReport></OverAllCandReport> }></Route>
-          <Route  path='/rozgar/reports/suppliers_reports' element={user && <OverAllSupReport></OverAllSupReport> }></Route>
-          <Route  path='/rozgar/reports/cash_in_hand/with_out_expenses' element={user && <CashInHandWOE></CashInHandWOE> }></Route>
-          <Route  path='/rozgar/reports/profit_lose' element={user && <ProfitLose></ProfitLose> }></Route>
-          <Route  path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
-          <Route  path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
-          <Route  path='/rozgar/reports/day_book' element={user && <DayBook></DayBook> }></Route>
-          
+          <Route path='/rozgar/reports/overall_visa_wise' element={user && <OverAllVisaWise></OverAllVisaWise>}></Route>
+          <Route path='/rozgar/reports/overall_payment_visa_wise' element={user && <OverAllVisaPayment></OverAllVisaPayment>}></Route>
+          <Route path='/rozgar/reports/receivable_reports' element={user && <ReceivableReports></ReceivableReports>}></Route>
+          <Route path='/rozgar/reports/payable_reports' element={user && <PayableReports></PayableReports>}></Route>
+          <Route path='/rozgar/reports/invoice' element={user && <Invoice></Invoice>}></Route>
+          <Route path='/rozgar/reports/expenses_reports' element={user && <ExpenseOverAllReport></ExpenseOverAllReport>}></Route>
+          <Route path='/rozgar/reports/agents_reports' element={user && <OverAllAgentReport></OverAllAgentReport>}></Route>
+          <Route path='/rozgar/reports/candidates_reports' element={user && <OverAllCandReport></OverAllCandReport>}></Route>
+          <Route path='/rozgar/reports/suppliers_reports' element={user && <OverAllSupReport></OverAllSupReport>}></Route>
+          <Route path='/rozgar/reports/cash_in_hand/with_out_expenses' element={user && <CashInHandWOE></CashInHandWOE>}></Route>
+          <Route path='/rozgar/reports/profit_lose' element={user && <ProfitLose></ProfitLose>}></Route>
+          <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
+          <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
+          <Route path='/rozgar/reports/day_book' element={user && <DayBook></DayBook>}></Route>
+
 
           {/* Employee Routes */}
-          <Route  path='/rozgar/employees/add' element={user && <AddEmployee></AddEmployee> }></Route>
-          <Route  path='/rozgar/employees/add_payment' element={user && <AddPayment></AddPayment> }></Route>
-          <Route  path='/rozgar/employees/add_leave' element={user && <AddVacation></AddVacation> }></Route>
-          <Route  path='/rozgar/employees/employees_details' element={user && <EmployeeDetails></EmployeeDetails> }></Route>
+          <Route path='/rozgar/employees/add' element={user && <AddEmployee></AddEmployee>}></Route>
+          <Route path='/rozgar/employees/add_payment' element={user && <AddPayment></AddPayment>}></Route>
+          <Route path='/rozgar/employees/add_leave' element={user && <AddVacation></AddVacation>}></Route>
+          <Route path='/rozgar/employees/employees_details' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
 
+          {/* Notifications */}
+          <Route path='/rozgar/notifications' element={user && <Notifications></Notifications>}></Route>
+          {/* Notes */}
+          <Route path='/rozgar/notes' element={user && <Notes></Notes>}></Route>
 
-{/* User */}
-<Route  path='/rozgar/user/account' element={user && <User></User> }></Route>
+          {/* Backup */}
+          <Route path='/rozgar/backup' element={user && <Backup></Backup>}></Route>
+          {/* User */}
+          <Route path='/rozgar/user/account' element={user && <User></User>}></Route>
 
         </Routes>
       </BrowserRouter>

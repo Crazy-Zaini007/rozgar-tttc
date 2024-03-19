@@ -25,6 +25,7 @@ export default function SupPaymentOutDetails() {
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
   const [loading6, setLoading6] = useState(false)
+  const [show,setShow]=useState(false)
 
   const [, setNewMessage] = useState('')
 
@@ -255,7 +256,7 @@ export default function SupPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+        body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name,personId:editedEntry2._id, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
       })
 
       const json = await response.json()
@@ -1487,6 +1488,7 @@ export default function SupPaymentOutDetails() {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
+              <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
               </div>
@@ -1507,7 +1509,7 @@ export default function SupPaymentOutDetails() {
                     <TableCell className='label border'>Final_Status</TableCell>
                     <TableCell className='label border'>Flight_Date</TableCell>
                     <TableCell className='label border'>VPO_PKR</TableCell>
-                    <TableCell className='label border'>VPO_Oth_Curr</TableCell>
+                    {show ===true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
                     <TableCell className='label border'>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -1577,9 +1579,9 @@ export default function SupPaymentOutDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_Out_PKR} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              {show && <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
-                              </TableCell>
+                              </TableCell>}
 
 
                             </>
@@ -1596,8 +1598,7 @@ export default function SupPaymentOutDetails() {
                               <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_Out_PKR}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_Out_Curr}</TableCell>
-
+                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_Out_Curr}</TableCell>}
 
                             </>
                           )}

@@ -22,6 +22,7 @@ export default function CandPaymentOutDetails() {
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
+  const [show,setShow]=useState(false)
 
   const [, setNewMessage] = useState('')
 
@@ -714,7 +715,7 @@ export default function CandPaymentOutDetails() {
               <div className="right d-flex">
                 {candidate_Payments_Out.length > 0 &&
                   <>
-                   
+                    <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
                     <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                     <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
 
@@ -841,7 +842,7 @@ export default function CandPaymentOutDetails() {
                       <TableCell className='label border'>TPO_PKR</TableCell>
                       <TableCell className='label border'>Total_Cash_Out</TableCell>
                       <TableCell className='label border'>RPO_PKR</TableCell>
-                      <TableCell className='label border'>TVPO_Oth_Curr</TableCell>
+                      {show &&  <TableCell className='label border'>TVPI_Oth_Curr</TableCell>}
                       <TableCell className='label border'>TPO_Curr</TableCell>
                       <TableCell className='label border'>RPO_Curr</TableCell>
                       <TableCell className='label border'>Close</TableCell>
@@ -932,9 +933,9 @@ export default function CandPaymentOutDetails() {
                                   <TableCell className='border data_td p-1 '>
                                     <input type='number' value={editedEntry1.remaining_Balance} readonly />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_Out_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_Out_Curr')} readonly />
-                                  </TableCell>
+                                  {show &&  <TableCell className='border data_td p-1 '>
+                                        <input type='number' min='0' value={editedEntry1.total_Visa_Price_Out_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_Out_Curr')} readonly />
+                                      </TableCell>}
                                   <TableCell className='border data_td p-1 '>
                                     <input type='number' min='0' value={editedEntry1.total_Payment_Out_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_Out_Curr')}  />
                                   </TableCell>
@@ -1000,9 +1001,9 @@ export default function CandPaymentOutDetails() {
                                   <TableCell className='border data_td text-center'>
                                     {entry.remaining_Balance}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.total_Visa_Price_Out_Curr}
-                                  </TableCell>
+                                  {show &&  <TableCell className='border data_td text-center'>
+                                        {entry.total_Visa_Price_Out_Curr}
+                                      </TableCell>}
                                   <TableCell className='border data_td text-center'>
                                     {entry.total_Payment_Out_Curr}
                                   </TableCell>

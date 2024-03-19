@@ -22,7 +22,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 
 const getBankCash = async () => {
- debugger
   try {
     const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
 

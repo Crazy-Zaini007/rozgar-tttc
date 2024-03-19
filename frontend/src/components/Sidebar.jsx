@@ -315,7 +315,7 @@ export default function Sidebar() {
       const route = location.pathname;
       // console.log('Current Route:', route);
       switch (route) {
-        case '/rozgar/dashboard':
+        case '/':
           setActiveItem(1);
           setOption1(false)
           setOption2(false)
@@ -354,25 +354,79 @@ export default function Sidebar() {
           setOption15(false)
 
           break;
-          case '/rozgar/bank_cash':
-            setActiveItem(90);
-            setOption1(false)
-            setOption2(false)
-            setOption3(false)
-            setOption4(false)
-            setOption5(false)
-            setOption6(false)
-            setOption7(false)
-            setOption8(false)
-            setOption9(false)
-            setOption10(false)
-            setOption11(false)
-            setOption12(false)
-            setOption13(false)
-            setOption14(false)
-            setOption15(false)
-  
-            break;
+        case '/rozgar/bank_cash':
+          setActiveItem(90);
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(false)
+
+          break;
+        case '/rozgar/notifications':
+          setActiveItem(91);
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(false)
+          break;
+        case '/rozgar/notes':
+          setActiveItem(92);
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(false)
+          break;
+        case '/rozgar/backup':
+          setActiveItem(93);
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(false)
+          break;
         case '/rozgar/enteries/add_new_entry':
           setActiveItem(3);
           setOption1(true)
@@ -1289,7 +1343,7 @@ export default function Sidebar() {
           setOption15(false)
 
           break;
-          case '/rozgar/expenses/add/mul_expense':
+        case '/rozgar/expenses/add/mul_expense':
           setActiveItem(89)
           setOption1(false)
           setOption2(false)
@@ -1801,81 +1855,81 @@ export default function Sidebar() {
 
           break;
 
-          case '/rozgar/employees/add':
-            setActiveItem(85)
-            setOption1(false)
-            setOption2(false)
-            setOption3(false)
-            setOption4(false)
-            setOption5(false)
-            setOption6(false)
-            setOption7(false)
-            setOption8(false)
-            setOption9(false)
-            setOption10(false)
-            setOption11(false)
-            setOption12(false)
-            setOption13(false)
-            setOption14(false)
-            setOption15(true)
-            break;
+        case '/rozgar/employees/add':
+          setActiveItem(85)
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(true)
+          break;
 
-            case '/rozgar/employees/add_payment':
-              setActiveItem(86)
-              setOption1(false)
-              setOption2(false)
-              setOption3(false)
-              setOption4(false)
-              setOption5(false)
-              setOption6(false)
-              setOption7(false)
-              setOption8(false)
-              setOption9(false)
-              setOption10(false)
-              setOption11(false)
-              setOption12(false)
-              setOption13(false)
-              setOption14(false)
-              setOption15(true)
-              break;
+        case '/rozgar/employees/add_payment':
+          setActiveItem(86)
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(true)
+          break;
 
-              case '/rozgar/employees/add_leave':
-                setActiveItem(87)
-                setOption1(false)
-                setOption2(false)
-                setOption3(false)
-                setOption4(false)
-                setOption5(false)
-                setOption6(false)
-                setOption7(false)
-                setOption8(false)
-                setOption9(false)
-                setOption10(false)
-                setOption11(false)
-                setOption12(false)
-                setOption13(false)
-                setOption14(false)
-                setOption15(true)
-                break;
+        case '/rozgar/employees/add_leave':
+          setActiveItem(87)
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(true)
+          break;
 
-                case '/rozgar/employees/employees_details':
-                  setActiveItem(88)
-                  setOption1(false)
-                  setOption2(false)
-                  setOption3(false)
-                  setOption4(false)
-                  setOption5(false)
-                  setOption6(false)
-                  setOption7(false)
-                  setOption8(false)
-                  setOption9(false)
-                  setOption10(false)
-                  setOption11(false)
-                  setOption12(false)
-                  setOption13(false)
-                  setOption14(false)
-                  setOption15(true)
-                  break;
+        case '/rozgar/employees/employees_details':
+          setActiveItem(88)
+          setOption1(false)
+          setOption2(false)
+          setOption3(false)
+          setOption4(false)
+          setOption5(false)
+          setOption6(false)
+          setOption7(false)
+          setOption8(false)
+          setOption9(false)
+          setOption10(false)
+          setOption11(false)
+          setOption12(false)
+          setOption13(false)
+          setOption14(false)
+          setOption15(true)
+          break;
         default:
           setActiveItem(1)
           break;
@@ -1897,7 +1951,7 @@ export default function Sidebar() {
 
 
   const handleLogout = () => {
-    if (window.confirm('Are you sure you want to Logout from your Account?')){
+    if (window.confirm('Are you sure you want to Logout from your Account?')) {
       if (user) {
         setTimeout(() => {
           navigate("/rozgar/login")
@@ -1921,7 +1975,7 @@ export default function Sidebar() {
             {/* <div className='text-center image mx-auto '><img className='mx-auto' src={logo} alt="" /></div> */}
           </div>
           <ul className="pt-2 mt-2">
-            <li className=' my-2' style={activeItem === 1 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(1, `/rozgar/dashboard`)}><i className="fas fa-chart-line me-2"></i>Dashboard</li>
+            <li className=' my-2' style={activeItem === 1 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(1, `/`)}><i className="fas fa-chart-line me-2"></i>Dashboard</li>
             <li className=' my-2' style={activeItem === 2 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(2, `/rozgar/cash_in_hand`)}><i className="fas fa-hand-holding-usd me-2"></i>Cash in Hand </li>
             <li className=' my-2' style={activeItem === 90 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(90, `/rozgar/bank_cash`)}><i className="fas fa-university me-2"></i>Banks Cash </li>
           </ul>
@@ -2237,6 +2291,12 @@ export default function Sidebar() {
           {option14 &&
             <Divider className='mx-4'></Divider>
           }
+          <ul className=" mt-2">
+            <li className=' my-2' style={activeItem === 91 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(91, `/rozgar/notifications`)}><i className="fas fa-bell me-2"></i>Reminders</li>
+            <li className=' my-2' style={activeItem === 92 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(92, `/rozgar/notes`)}><i className="fas fa-sticky-note me-2"></i>Notes</li>
+            <li className=' my-2' style={activeItem === 93 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(93, `/rozgar/backup`)}><i className="fas fa-database me-2"></i>Backup</li>
+
+          </ul>
           <ul className='mt-4'>
             <li className=' my-2' onClick={handleLogout}><i className=" me-2"><LogoutRoundedIcon fontSize='small'></LogoutRoundedIcon></i> Logout</li>
           </ul>

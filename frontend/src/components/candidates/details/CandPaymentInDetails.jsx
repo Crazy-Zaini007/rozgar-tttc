@@ -22,6 +22,8 @@ export default function CandPaymentInDetails() {
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
+  const [show,setShow]=useState(false)
+
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
@@ -713,7 +715,7 @@ return false;
                   <div className="right d-flex">
                     {candidate_Payments_In.length > 0 &&
                       <>
-                        {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                        <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
                         <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                         <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
                       </>
@@ -838,7 +840,7 @@ return false;
                             <TableCell className='label border'>TPI_PKR</TableCell>
                             <TableCell className='label border'>Total_Cash_Out</TableCell>
                             <TableCell className='label border'>RPI_PKR</TableCell>
-                            <TableCell className='label border'>TVPI_Oth_Curr</TableCell>
+                           {show &&  <TableCell className='label border'>TVPI_Oth_Curr</TableCell>}
                             <TableCell className='label border'>TPI_Curr</TableCell>
                             <TableCell className='label border'>RPI_Curr</TableCell>
                             <TableCell className='label border'>Close</TableCell>
@@ -929,9 +931,9 @@ return false;
                                       <TableCell className='border data_td p-1 '>
                                         <input type='number' value={editedEntry1.remaining_Balance} readonly />
                                       </TableCell>
-                                      <TableCell className='border data_td p-1 '>
+                                     {show &&  <TableCell className='border data_td p-1 '>
                                         <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
-                                      </TableCell>
+                                      </TableCell>}
                                       <TableCell className='border data_td p-1 '>
                                         <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} readonly />
                                       </TableCell>
@@ -997,9 +999,9 @@ return false;
                                       <TableCell className='border data_td text-center'>
                                         {entry.remaining_Balance}
                                       </TableCell>
-                                      <TableCell className='border data_td text-center'>
+                                     {show &&  <TableCell className='border data_td text-center'>
                                         {entry.total_Visa_Price_In_Curr}
-                                      </TableCell>
+                                      </TableCell>}
                                       <TableCell className='border data_td text-center'>
                                         {entry.total_Payment_In_Curr}
                                       </TableCell>

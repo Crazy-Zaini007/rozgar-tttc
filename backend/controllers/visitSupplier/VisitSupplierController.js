@@ -11,6 +11,7 @@ const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchem
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
+const Notifications=require('../../database/notifications/NotificationModel.js')
 
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
@@ -836,6 +837,60 @@ const updateSupPaymentInPerson=async(req,res)=>{
         if(existingSupplier){
           const personIn = existingSupplier.Supplier_Payment_In_Schema.persons.find(person => person._id.toString() === personId.toString());
           if (personIn) {
+            
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newNotification=new Notifications({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newNotification=new Notifications({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newNotification=new Notifications({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newNotification=new Notifications({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newNotification=new Notifications({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newNotification=new Notifications({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+       
             entryMode=personIn.entry_Mode
               personIn.company = company;
               personIn.country = country;
@@ -2117,6 +2172,61 @@ const updateSupPaymentOutPerson=async(req,res)=>{
         if(existingSupplier){
           const personIn = existingSupplier.Supplier_Payment_Out_Schema.persons.find(person => person._id.toString() === personId.toString());
           if (personIn) {
+            
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newNotification=new Notifications({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newNotification=new Notifications({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newNotification=new Notifications({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newNotification=new Notifications({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newNotification=new Notifications({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newNotification=new Notifications({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+       
             entryMode=personIn.entry_Mode
               personIn.company = company;
               personIn.country = country;
@@ -3502,6 +3612,61 @@ const updateAgentPaymentInPerson=async(req,res)=>{
         if(existingSupplier){
           const personIn = existingSupplier.Agent_Payment_In_Schema.persons.find(person => person._id.toString() === personId.toString());
           if (personIn) {
+            
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newNotification=new Notifications({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newNotification=new Notifications({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newNotification=new Notifications({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newNotification=new Notifications({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newNotification=new Notifications({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newNotification=new Notifications({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        
             entryMode=personIn.entry_Mode
               personIn.company = company;
               personIn.country = country;
@@ -4781,6 +4946,61 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
         if(existingSupplier){
           const personIn = existingSupplier.Agent_Payment_Out_Schema.persons.find(person => person._id.toString() === personId.toString());
           if (personIn) {
+            
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newNotification=new Notifications({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newNotification=new Notifications({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newNotification=new Notifications({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newNotification=new Notifications({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newNotification.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newNotification=new Notifications({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newNotification=new Notifications({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newNotification.save()
+        }
+       
             entryMode=personIn.entry_Mode
               personIn.company = company;
               personIn.country = country;
