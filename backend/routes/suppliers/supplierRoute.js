@@ -19,7 +19,9 @@ const { addPaymentIn,
     updatePaymentOutPerson,
     deleteAgentPaymentOutSchema,
     updateAgentTotalPaymentOut,
-    getAllPaymentsOut } = require('../../controllers/suppliers/SupplierController')
+    getAllPaymentsOut,
+    changePaymentInStatus,
+    changePaymentOutStatus } = require('../../controllers/suppliers/SupplierController')
 const router = express.Router()
 
 router.use(userAuth)
@@ -65,4 +67,9 @@ router.get('/get/payment_out_details', getAllPaymentsOut)
 router.delete('/delete/all/payment_out', deleteAgentPaymentOutSchema)
 // Updating All PaymentOut of a suppliers
 router.patch('/update/all/payment_out', updateAgentTotalPaymentOut)
+
+
+
+router.patch('/update/payment_in/status', changePaymentInStatus)
+router.patch('/update/payment_out/status', changePaymentOutStatus)
 module.exports = router

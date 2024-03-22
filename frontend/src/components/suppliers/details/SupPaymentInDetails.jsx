@@ -16,6 +16,7 @@ import FinalStatusHook from '../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader'
+import{Link} from 'react-router-dom'
 
 export default function SupPaymentInDetails() {
   const [isLoading, setIsLoading] = useState(false)
@@ -405,11 +406,14 @@ export default function SupPaymentInDetails() {
 
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
+  const [status, setStatus] = useState(true)
 
   const filteredTotalPaymentIn = supp_Payments_In.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-      payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())
+      payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())&&
+      payment.status === status
+
     )
   })
 
@@ -428,8 +432,8 @@ export default function SupPaymentInDetails() {
             <th>TVPI_Oth_Curr</th>
             <th>TPI_Curr</th>
             <th>RPI_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
+            <th>Status</th>
+           
           </tr>
         </thead>
         <tbody>
@@ -444,8 +448,8 @@ export default function SupPaymentInDetails() {
               <td>${String(entry.total_Visa_Price_In_Curr)}</td>
               <td>${String(entry.total_Payment_In_Curr)}</td>
               <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
+              <td>${String(entry.status===true?"Open":"Closed")}</td>
+             
 
 
 
@@ -644,6 +648,7 @@ export default function SupPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
+  const [status1, setStatus1] = useState(true)
 
 
   const filteredPersons = supp_Payments_In
@@ -660,7 +665,8 @@ export default function SupPaymentInDetails() {
           persons.country?.toLowerCase().includes(country.toLowerCase()) &&
           persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
           persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())
+          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
+          persons.status === status1
 
         ),
     }))
@@ -683,6 +689,7 @@ export default function SupPaymentInDetails() {
         <th>Flight_Date</th>
         <th>VPI_PKR</th>
         <th>VPI_Oth_Curr</th>
+        <th>Status</th>
         
         </tr>
       </thead>
@@ -702,6 +709,8 @@ export default function SupPaymentInDetails() {
             <td>${String(person?.flight_Date)}</td>
             <td>${String(person?.visa_Price_In_PKR)}</td>
             <td>${String(person?.visa_Price_In_Curr)}</td>
+            <td>${String(person?.status===true?"Open":"Closed")}</td>
+
           </tr>
         `).join('')
     )}
@@ -768,8 +777,7 @@ export default function SupPaymentInDetails() {
         Total_Visa_Price_In_Curr:payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr:payments.total_Payment_In_Curr,
         Remaining_Curr:payments.total_Visa_Price_In_Curr-payments.total_Payment_In_Curr,
-        close:payments.close,
-        open:payments.open
+        Status:payments.status===true?"Open":"Closed"
         
       }
 
@@ -831,7 +839,7 @@ export default function SupPaymentInDetails() {
         flight_Date:payments.flight_Date,
         visa_Price_In_PKR:payments.visa_Price_In_PKR,
         visa_Price_In_Curr:payments.visa_Price_In_Curr,
-        
+        Status:payments.status===true?"Open":"Closed",
       }
 
       data.push(rowData);
@@ -845,6 +853,40 @@ export default function SupPaymentInDetails() {
 
 
 
+  // Changing Status
+  const changeStatus=async()=>{
+    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
+      setLoading5(true)
+
+      try {
+        const response = await fetch(`${apiUrl}/auth/suppliers/update/payment_in/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ supplierName: selectedSupplier })
+        })
+
+        const json = await response.json()
+
+        if (!response.ok) {
+          setNewMessage(toast.error(json.message));
+          setLoading5(false)
+        }
+        if (response.ok) {
+          fetchData()
+          setNewMessage(toast.success(json.message));
+          setLoading5(false)
+          setEditMode1(!editMode1)
+        }
+      }
+      catch (error) {
+        setNewMessage(toast.error('Server is not responding...'))
+        setLoading5(false)
+      }
+    }
+  }
 
   return (
     <>
@@ -894,6 +936,15 @@ export default function SupPaymentInDetails() {
                     ))}
                   </select>
                 </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status ? "true" : "false"} onChange={(e) => setStatus(e.target.value === "true")} className='m-0 p-1'>
+                    {[...new Set(supp_Payments_In.map(data => data.status))].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
+                    ))}
+                  </select>
+
+                </div>
               </div>
             </Paper>
           </div>
@@ -916,8 +967,7 @@ export default function SupPaymentInDetails() {
                         <TableCell className='label border'>TVPI_Oth_Curr</TableCell>
                         <TableCell className='label border'>TPO_Curr</TableCell>
                         <TableCell className='label border'>RPI_Curr</TableCell>
-                        <TableCell className='label border'>Close</TableCell>
-                        <TableCell className='label border'>Open</TableCell>
+                        <TableCell className='label border'>Status</TableCell>
                         <TableCell align='left' className='edw_label border' colSpan={1}>
                           Actions
                         </TableCell>
@@ -965,11 +1015,9 @@ export default function SupPaymentInDetails() {
                                     <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr - editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='checkbox' value={editedEntry1.close} onChange={(e) => handleTotalPaymentInputChange(e, 'close')} />
+                                    <input type='checkbox' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly/>
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='checkbox' value={editedEntry1.open} onChange={(e) => handleTotalPaymentInputChange(e, 'open')} />
-                                  </TableCell>
+                                 
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -1011,10 +1059,7 @@ export default function SupPaymentInDetails() {
                                     {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    {entry.close === false ? "Not Closed" : "Closed"}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
+                                    {entry.status === true ? "Open" : "Closed"}
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
@@ -1119,6 +1164,16 @@ export default function SupPaymentInDetails() {
 
               </div>
               <div className="right">
+              <div className="dropdown d-inline ">
+                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  {loading5?"Updating":"Change Status"}
+                  </button>
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><Link className="dropdown-item" onClick={()=>changeStatus()}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item"  onClick={()=>changeStatus()}>Khata Close</Link></li>
+                    
+                  </ul>
+                </div>
                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
@@ -1368,6 +1423,20 @@ export default function SupPaymentInDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+              <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status1 ? "true" : "false"} onChange={(e) => setStatus1(e.target.value === "true")} className='m-0 p-1'>
+                    {[...new Set(supp_Payments_In
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .flatMap(data => data.persons)
+                      .map(data => data.status)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
+
+                    ))}
+
+                  </select>
+                </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Entry Date:</label>
                   <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
@@ -1516,6 +1585,7 @@ export default function SupPaymentInDetails() {
                     <TableCell className='label border'>Flight_Date</TableCell>
                     <TableCell className='label border'>VPI_PKR</TableCell>
                     {show ===true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border'>Status</TableCell>
                     <TableCell className='label border'>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -1588,7 +1658,9 @@ export default function SupPaymentInDetails() {
                               {show && <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
                               </TableCell>}
-
+                              <TableCell className='border data_td p-1 '>
+                                <input type='checkbox' value={editedEntry2.status} readonly disabled/>
+                              </TableCell>
 
                             </>
                           ) : (
@@ -1605,7 +1677,7 @@ export default function SupPaymentInDetails() {
                               <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR}</TableCell>
                               {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
-
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status===true?"Open":"Closed"}</TableCell>
                             </>
                           )}
                           <TableCell className='border data_td p-1 '>

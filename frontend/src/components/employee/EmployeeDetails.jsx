@@ -1082,23 +1082,25 @@ const [newDateFrom, setNewDateFrom] = useState('')
 
                             </div>
                             <div className="right">
-                            <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
-                             <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
+                            
                                 {selectedEmployee && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-12 filters">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="row border">
+                            <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                             <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
-                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                  <input type="date" value={newDateFrom} onChange={(e) => setNewDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date To:</label>
-                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                  <input type="date" value={newDateTo} onChange={(e) => setNewDateTo(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                                 <div className="col-auto px-1">
@@ -1132,8 +1134,18 @@ const [newDateFrom, setNewDateFrom] = useState('')
                             </div>
                         </Paper>
                     </div>
+
                     <div className="col-md-12 detail_table my-2">
-                        <h6>Payments Details</h6>
+                    <div className="d-flex justify-content-between">
+              <div className="left d-flex">
+                <h6>Payments Details</h6>
+              </div>
+              <div className="right">
+              <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+              <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
+              </div>
+            </div>
+                        <h6></h6>
                         <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
                             <Table stickyHeader>
                                 <TableHead className="thead">
@@ -1321,8 +1333,11 @@ const [newDateFrom, setNewDateFrom] = useState('')
                             </Table>
                         </TableContainer>
                     </div>
-
-                    <div className="col-md-12 filters">
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="row border p-0">
+                            <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                              
@@ -1496,6 +1511,13 @@ const [newDateFrom, setNewDateFrom] = useState('')
                             </Table>
                         </TableContainer>
                     </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+
+                   
                 </>
             )}
 

@@ -73,8 +73,8 @@ export default function Entry1() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-  const [open, setOpen] = useState(true)
-  const [close, setClose] = useState(false)
+  // const [open, setOpen] = useState(true)
+  // const [close, setClose] = useState(false)
   const [cand_Name, setCand_Name] = useState('')
   const [date, setDate] = useState('')
   let curr_Amount = payment_In / curr_Rate
@@ -249,8 +249,8 @@ export default function Entry1() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+          // open,
+          // close,
           date,
           cand_Name
         }),
@@ -279,8 +279,8 @@ export default function Entry1() {
         setCurr_Rate('');
         setDate('')
         setCand_Name('')
-        setOpen(true)
-        setClose(false);
+        // setOpen(true)
+        // setClose(false);
       }
 
     } catch (error) {
@@ -318,7 +318,7 @@ export default function Entry1() {
         {!option && <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-              {close === false &&
+              {/* {close === false &&
                 <label htmlFor="">
                   Open
                   <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
@@ -329,7 +329,7 @@ export default function Entry1() {
                   Close
                   <input type="checkbox" value={close} onClick={() => setClose(!close)} />
                 </label>
-              }
+              } */}
 
               <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
               {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}

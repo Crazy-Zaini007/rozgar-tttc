@@ -170,7 +170,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
               </div>
             </div>
             <div className="side ">
-            {loading2 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ cashInHand ? cashInHand.total_Cash:0}</h5> }
+            {loading2 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0}</h5> }
 <h6 className='ml-2'>Cash In Hand</h6>
             </div>
           </div> 

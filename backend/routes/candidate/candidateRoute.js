@@ -1,6 +1,7 @@
 const express = require('express');
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addPaymentIn, deleteSinglePaymentIn, addPaymentInReturn, updateSinglePaymentIn, addMultiplePaymentsIn,updateAgentTotalPaymentIn,deleteAgentPaymentInSchema, getAllPaymentsIn, addPaymentOut, addPaymentOutReturn, deleteSinglePaymentOut, updateSinglePaymentOut, addMultiplePaymentsOut,updateAgentTotalPaymentOut,deleteAgentPaymentOutSchema, getAllPaymentsOut } = require('../../controllers/candidates/CandidateController')
+const { addPaymentIn, deleteSinglePaymentIn, addPaymentInReturn, updateSinglePaymentIn, addMultiplePaymentsIn,updateAgentTotalPaymentIn,deleteAgentPaymentInSchema, getAllPaymentsIn, addPaymentOut, addPaymentOutReturn, deleteSinglePaymentOut, updateSinglePaymentOut, addMultiplePaymentsOut,updateAgentTotalPaymentOut,deleteAgentPaymentOutSchema, getAllPaymentsOut,changePaymentInStatus,
+    changePaymentOutStatus } = require('../../controllers/candidates/CandidateController')
 const router = express.Router()
 
 router.use(userAuth)
@@ -37,4 +38,8 @@ router.get('/get/payment_out_details', getAllPaymentsOut)
 router.delete('/delete/all/payment_out', deleteAgentPaymentOutSchema)
 // Updating All PaymentOut of a suppliers
 router.patch('/update/all/payment_out', updateAgentTotalPaymentOut)
+
+
+router.patch('/update/payment_in/status', changePaymentInStatus)
+router.patch('/update/payment_out/status', changePaymentOutStatus)
 module.exports = router

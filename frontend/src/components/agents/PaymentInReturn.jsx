@@ -73,8 +73,8 @@ export default function PaymentInReturn() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-  const [open, setOpen] = useState(true)
-  const [close, setClose] = useState(false)
+  // const [open, setOpen] = useState(true)
+  // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
   let curr_Amount = cash_Out / curr_Rate
   const handleOpen = () => {
@@ -148,8 +148,8 @@ export default function PaymentInReturn() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+          // open,
+          // close,
           date
         }),
       });
@@ -176,8 +176,8 @@ export default function PaymentInReturn() {
         setCurr_Country('');
         setSelectedSupplier('')
         setCurr_Rate('');
-        setOpen(true)
-        setClose(false);
+        // setOpen(true)
+        // setClose(false);
         setDate('')
       }
 
@@ -197,7 +197,7 @@ export default function PaymentInReturn() {
         {!option && <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-              {close === false &&
+              {/* {close === false &&
                 <label htmlFor="">
                   Open
                   <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
@@ -208,7 +208,7 @@ export default function PaymentInReturn() {
                   Close
                   <input type="checkbox" value={close} onClick={() => setClose(!close)} />
                 </label>
-              }
+              } */}
 
               <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
               {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}

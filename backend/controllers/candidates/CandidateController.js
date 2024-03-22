@@ -31,7 +31,7 @@ const addPaymentIn = async (req, res) => {
                 res.status(404).json({ message: "Only Admin is allowed!" })
             }
             if (user.role === "Admin") {
-                const { supplierName, category, payment_Via, payment_Type, slip_No, payment_In, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, open, close, date, cand_Name } = req.body
+                const { supplierName, category, payment_Via, payment_Type, slip_No, payment_In, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, close, date } = req.body
                 if (!supplierName) {
                     return res.status(400).json({ message: "supplier Name is required" })
                 }
@@ -130,8 +130,8 @@ const addPaymentIn = async (req, res) => {
                             "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
                         $set: {
-                            "payment_In_Schema.open": open,
-                            "payment_In_Schema.close": close,// Make sure close is defined
+                            
+                            "payment_In_Schema.status": close,
                         },
                         $push: {
                             'payment_In_Schema.payment': payment
@@ -236,7 +236,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open, close
+                    close
                 } = payment;
 
                 const newPaymentIn = parseInt(payment_In, 10);
@@ -305,8 +305,8 @@ const addMultiplePaymentsIn = async (req, res) => {
 
                     },
                     $set: {
-                        "payment_In_Schema.open": open, // Set to true if you always want to open
-                        "payment_In_Schema.close": close, // Set to false if you always want to close
+                       
+                        "payment_In_Schema.status": close, 
                     },
                     $push: {
                         "payment_In_Schema.payment": newPayment,
@@ -385,7 +385,7 @@ const addPaymentInReturn = async (req, res) => {
                 res.status(404).json({ message: "Only Admin is allowed!" })
             }
             if (user.role === "Admin") {
-                const { supplierName, category, payment_Via, payment_Type, slip_No, cash_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, open, close, date, cand_Name } = req.body
+                const { supplierName, category, payment_Via, payment_Type, slip_No, cash_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, close, date, } = req.body
                 if (!supplierName) {
                     return res.status(400).json({ message: "supplier Name is required" })
                 }
@@ -478,8 +478,8 @@ const addPaymentInReturn = async (req, res) => {
 
                         },
                         $set: {
-                            "payment_In_Schema.open": open,
-                            "payment_In_Schema.close": close, // Make sure close is defined
+                         
+                            "payment_In_Schema.status": close,
                         },
                         $push: {
                             'payment_In_Schema.payment': payment
@@ -647,7 +647,7 @@ const updateSinglePaymentIn = async (req, res) => {
     if (user && user.role === "Admin") {
 
         try {
-            const { supplierName, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_In, cash_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date, cand_Name } = req.body;
+            const { supplierName, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_In, cash_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date } = req.body;
 
             const newPaymentIn = parseInt(payment_In, 10);
             const newCashOut = parseInt(cash_Out, 10);
@@ -825,9 +825,8 @@ const updateAgentTotalPaymentIn = async (req, res) => {
   if (user && user.role === "Admin") {
     try {
 
-      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
-      req.body;
-     
+      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =req.body;
+     console.log('final_Status',final_Status.toLowerCase())
       let entryMode
 
 const candidateIn=await Candidate.findOne({
@@ -1322,7 +1321,7 @@ if(entry){
    
   
     } catch (error) {
-      
+      console.log(error)
     res.status(500).json({ message: error });
       
     }
@@ -1334,8 +1333,46 @@ if(entry){
 }
 
 
-
-
+// changing Status 
+const changePaymentInStatus = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+  const{supplierName}=req.body
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+  
+        const existingSupplier = await Candidate.findOne({
+            "payment_In_Schema.supplierName": supplierName,
+        });
+  
+        if (!existingSupplier) {
+            return res.status(404).json({ message: "Candidate not found" });
+        }
+  
+        // Toggle the status of the payment in schema
+        existingSupplier.payment_In_Schema.status = !existingSupplier.payment_In_Schema.status;
+  
+        // Save changes to the database
+        await existingSupplier.save();
+  
+        // Prepare response message based on the updated status
+        let responseMessage;
+        if (existingSupplier.payment_In_Schema.status) {
+            responseMessage = "Candidate Status updated to Closed Successfully!";
+        } else {
+            responseMessage = "Candidate Status updated to Open Successfully!";
+        }
+  
+        return res.status(200).json({ message: responseMessage });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+  
+  
 
 // Getting All Supplier Payments In
 const getAllPaymentsIn = async (req, res) => {
@@ -1376,8 +1413,8 @@ const getAllPaymentsIn = async (req, res) => {
                         remaining_Balance: paymentInSchema.remaining_Balance,
                         curr_Country: paymentInSchema.curr_Country,
                         payment: paymentInSchema.payment || [],
-                        open: paymentInSchema.open || false,
-                        close: paymentInSchema.close || false,
+                        status: paymentInSchema.status ,
+                       
                         createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
                         updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
                     }
@@ -1408,7 +1445,7 @@ const addPaymentOut = async (req, res) => {
                 res.status(404).json({ message: "Only Admin is allowed!" })
             }
             if (user.role === "Admin") {
-                const { supplierName, category, payment_Via, payment_Type, slip_No, payment_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, open, close, date, cand_Name } = req.body
+                const { supplierName, category, payment_Via, payment_Type, slip_No, payment_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount,close, date } = req.body
                 if (!supplierName) {
                     return res.status(400).json({ message: "supplier Name is required" })
                 }
@@ -1502,8 +1539,7 @@ const addPaymentOut = async (req, res) => {
                             "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
                         $set: {
-                            "payment_Out_Schema.open": open,
-                            "payment_Out_Schema.close": close
+                            "payment_Out_Schema.status": close
                         },
                         $push: {
                             'payment_Out_Schema.payment': payment
@@ -1580,7 +1616,7 @@ const addPaymentOutReturn = async (req, res) => {
                 res.status(404).json({ message: "Only Admin is allowed!" })
             }
             if (user.role === "Admin") {
-                const { supplierName, category, payment_Via, payment_Type, slip_No, cash_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, open, close, date, cand_Name } = req.body
+                const { supplierName, category, payment_Via, payment_Type, slip_No, cash_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, open, close, date } = req.body
                 if (!supplierName) {
                     return res.status(400).json({ message: "supplier Name is required" })
                 }
@@ -1841,7 +1877,7 @@ const updateSinglePaymentOut = async (req, res) => {
         return;
     }
     if (user && user.role === "Admin") {
-        const { supplierName, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date, cash_Out, cand_Name } = req.body;
+        const { supplierName, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date, cash_Out } = req.body;
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
@@ -1978,7 +2014,7 @@ const addMultiplePaymentsOut = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open,
+                    
                     close
                 } = payment;
 
@@ -2063,8 +2099,8 @@ const addMultiplePaymentsOut = async (req, res) => {
 
                     },
                     $set: {
-                        "payment_Out_Schema.open": open, // Set to true if you always want to open
-                        "payment_Out_Schema.close": close, // Set to true if you always want to open
+                        
+                        "payment_Out_Schema.status": close, // Set to true if you always want to open
                         // Set to false if you always want to close
                     },
                     $push: {
@@ -2716,6 +2752,46 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
 };
 
 
+// changing Status 
+const changePaymentOutStatus = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+  const{supplierName}=req.body
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+  
+        const existingSupplier = await Candidate.findOne({
+            "payment_Out_Schema.supplierName": supplierName,
+        });
+  
+        if (!existingSupplier) {
+            return res.status(404).json({ message: "Candidate not found" });
+        }
+  
+        // Toggle the status of the payment in schema
+        existingSupplier.payment_Out_Schema.status = !existingSupplier.payment_Out_Schema.status;
+  
+        // Save changes to the database
+        await existingSupplier.save();
+  
+        // Prepare response message based on the updated status
+        let responseMessage;
+        if (existingSupplier.payment_Out_Schema.status) {
+            responseMessage = "Candidate Status updated to Closed Successfully!";
+        } else {
+            responseMessage = "Candidate Status updated to Open Successfully!";
+        }
+  
+        return res.status(200).json({ message: responseMessage });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+  
+  
 // Getting All Supplier Payments Out
 const getAllPaymentsOut = async (req, res) => {
     try {
@@ -2754,8 +2830,7 @@ const getAllPaymentsOut = async (req, res) => {
                         remaining_Balance: paymentOutSchema.remaining_Balance,
                         curr_Country: paymentOutSchema.curr_Country,
                         payment: paymentOutSchema.payment || [],
-                        open: paymentOutSchema.open || false,
-                        close: paymentOutSchema.close || false,
+                        status: paymentOutSchema.status,
                         createdAt: moment(paymentOutSchema.createdAt).format('YYYY-MM-DD'),
                         updatedAt: moment(paymentOutSchema.updatedAt).format('YYYY-MM-DD'),
                     }
@@ -2771,4 +2846,4 @@ const getAllPaymentsOut = async (req, res) => {
 };
 
 
-module.exports = { addPaymentIn, deleteSinglePaymentIn, addPaymentInReturn, updateSinglePaymentIn, addMultiplePaymentsIn, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn, addPaymentOut, addPaymentOutReturn, deleteSinglePaymentOut, updateSinglePaymentOut, addMultiplePaymentsOut, updateAgentTotalPaymentOut, deleteAgentPaymentOutSchema, getAllPaymentsOut }
+module.exports = { addPaymentIn, deleteSinglePaymentIn, addPaymentInReturn, updateSinglePaymentIn, addMultiplePaymentsIn, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn, addPaymentOut, addPaymentOutReturn, deleteSinglePaymentOut, updateSinglePaymentOut, addMultiplePaymentsOut, updateAgentTotalPaymentOut, deleteAgentPaymentOutSchema, getAllPaymentsOut,  changePaymentInStatus, changePaymentOutStatus }

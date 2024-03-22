@@ -45,8 +45,6 @@ const addPaymentIn = async (req, res) => {
       curr_Country,
       curr_Rate,
       curr_Amount,
-      open,
-      close,
       date,
       cand_Name,
     } = req.body;
@@ -126,10 +124,7 @@ const addPaymentIn = async (req, res) => {
             "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
 
           },
-          $set: {
-            "payment_In_Schema.open": open,
-            "payment_In_Schema.close": close,
-          },
+   
           $push: {
             "payment_In_Schema.payment": payment,
           },
@@ -195,10 +190,7 @@ const addPaymentIn = async (req, res) => {
             "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
 
           },
-          $set: {
-            "payment_In_Schema.open": open,
-            "payment_In_Schema.close": close,
-          },
+
           $push: {
             "payment_In_Schema.payment": payment,
           },
@@ -309,8 +301,7 @@ const addMultiplePaymentsIn = async (req, res) => {
           curr_Amount,
           date,
           cand_Name,
-          open,
-          close
+
         } = payment;
 
         const newPaymentIn = parseInt(payment_In, 10);
@@ -396,10 +387,6 @@ const addMultiplePaymentsIn = async (req, res) => {
                 "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
-              $set: {
-                "payment_In_Schema.open": open,
-                "payment_In_Schema.close": close
-              },
               $push: {
                 "payment_In_Schema.payment": newPayment,
               },
@@ -457,10 +444,6 @@ const addMultiplePaymentsIn = async (req, res) => {
                 "payment_In_Schema.remaining_Balance": -payment_In,
                 "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
-              },
-              $set: {
-                "payment_In_Schema.open": open,
-                "payment_In_Schema.close": close
               },
               $push: {
                 "payment_In_Schema.payment": newPayment,
@@ -563,8 +546,6 @@ const addPaymentInReturn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
           date,
           cand_Name,
         } = req.body;
@@ -670,10 +651,6 @@ const addPaymentInReturn = async (req, res) => {
                 "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? -newCurrAmount : 0,
                 "payment_In_Schema.remaining_Curr": newCurrAmount ? newCurrAmount : 0,
               },
-              $set: {
-                "payment_In_Schema.open": open,
-                "payment_In_Schema.close": close, // Make sure close is defined
-              },
               $push: {
                 "payment_In_Schema.payment": payment,
               },
@@ -738,10 +715,6 @@ const addPaymentInReturn = async (req, res) => {
                 "payment_In_Schema.remaining_Balance": newCashOut,
                 "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? -newCurrAmount : 0,
                 "payment_In_Schema.remaining_Curr": newCurrAmount ? newCurrAmount : 0,
-              },
-              $set: {
-                "payment_In_Schema.open": open,
-                "payment_In_Schema.close": close, // Make sure close is defined
               },
               $push: {
                 "payment_In_Schema.payment": payment,
@@ -1918,6 +1891,54 @@ console.log('updated successfully!')
 }
 
 
+// changing Status 
+const changePaymentInStatus = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+      const{supplierName}=req.body
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const existingSupplier = await Suppliers.findOne({
+          "payment_In_Schema.supplierName": supplierName,
+      });
+
+      if (!existingSupplier) {
+          return res.status(404).json({ message: "Supplier not found" });
+      }
+
+      // Update status of all persons to false
+      if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
+          existingSupplier.payment_In_Schema.persons.forEach(person => {
+              person.status = false;
+          });
+      }
+
+      // Toggle the status of the payment in schema
+      existingSupplier.payment_In_Schema.status = !existingSupplier.payment_In_Schema.status;
+
+      // Save changes to the database
+      await existingSupplier.save();
+
+      // Prepare response message based on the updated status
+      let responseMessage;
+      if (existingSupplier.payment_In_Schema.status) {
+          responseMessage = "Supplier Status updated to Closed Successfully!";
+      } else {
+          responseMessage = "Supplier Status updated to Open Successfully!";
+      }
+
+      return res.status(200).json({ message: responseMessage });
+  } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+
 
 
 // Getting All Supplier Payments In
@@ -1952,8 +1973,7 @@ const getAllPaymentsIn = async (req, res) => {
             curr_Country: paymentInSchema.curr_Country,
             persons: paymentInSchema.persons || [],
             payment: paymentInSchema.payment || [],
-            open: paymentInSchema.open || false,
-            close: paymentInSchema.close || false,
+            status: paymentInSchema.status ,
             createdAt: moment(paymentInSchema.createdAt).format("YYYY-MM-DD"),
             updatedAt: moment(paymentInSchema.updatedAt).format("YYYY-MM-DD"),
           };
@@ -1992,8 +2012,7 @@ const addPaymentOut = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+        
           date,
           cand_Name,
         } = req.body;
@@ -2098,10 +2117,6 @@ const addPaymentOut = async (req, res) => {
                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
-              $set: {
-                "payment_Out_Schema.open": open,
-                "payment_Out_Schema.close": close
-              },
               $push: {
                 "payment_Out_Schema.payment": payment,
               },
@@ -2167,10 +2182,7 @@ const addPaymentOut = async (req, res) => {
                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
-              $set: {
-                "payment_Out_Schema.open": open,
-                "payment_Out_Schema.close": close
-              },
+           
               $push: {
                 "payment_Out_Schema.payment": payment,
               },
@@ -2277,8 +2289,7 @@ const addMultiplePaymentsOut = async (req, res) => {
           curr_Amount,
           date,
           cand_Name,
-          open,
-          close
+        
         } = payment;
 
         if (!supplierName) {
@@ -2371,10 +2382,6 @@ const addMultiplePaymentsOut = async (req, res) => {
                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
-              $set: {
-                "payment_Out_Schema.open": open,
-                "payment_Out_Schema.close": close
-              },
               $push: {
                 "payment_Out_Schema.payment": newPayment,
               },
@@ -2431,10 +2438,7 @@ const addMultiplePaymentsOut = async (req, res) => {
                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
-              $set: {
-                "payment_Out_Schema.open": open,
-                "payment_Out_Schema.close": close
-              },
+       
               $push: {
                 "payment_Out_Schema.payment": newPayment,
               },
@@ -2531,8 +2535,7 @@ const addPaymentOutReturn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+       
           date,
           cand_Name,
         } = req.body;
@@ -2638,11 +2641,7 @@ const addPaymentOutReturn = async (req, res) => {
               "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? -newCurrAmount : 0,
               "payment_Out_Schema.remaining_Curr": newCurrAmount ? newCurrAmount : 0,
             },
-            $set: {
-              "payment_Out_Schema.open": open,
-              "payment_Out_Schema.close": close,
-              // Make sure close is defined
-            },
+        
             $push: {
               "payment_Out_Schema.payment": payment,
             },
@@ -2705,11 +2704,6 @@ const addPaymentOutReturn = async (req, res) => {
               "payment_Out_Schema.remaining_Balance": newCashOut,
               "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? -newCurrAmount : 0,
               "payment_Out_Schema.remaining_Curr": newCurrAmount ? newCurrAmount : 0,
-            },
-            $set: {
-              "payment_Out_Schema.open": open,
-              "payment_Out_Schema.close": close,
-              // Make sure close is defined
             },
             $push: {
               "payment_Out_Schema.payment": payment,
@@ -3895,6 +3889,53 @@ console.log('updated successfully!')
 
 
 
+// changing Status 
+const changePaymentOutStatus = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+      const{supplierName}=req.body
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const existingSupplier = await Suppliers.findOne({
+          "payment_Out_Schema.supplierName": supplierName,
+      });
+
+      if (!existingSupplier) {
+          return res.status(404).json({ message: "Supplier not found" });
+      }
+
+      // Update status of all persons to false
+      if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons) {
+          existingSupplier.payment_Out_Schema.persons.forEach(person => {
+              person.status = false;
+          });
+      }
+
+      // Toggle the status of the payment in schema
+      existingSupplier.payment_Out_Schema.status = !existingSupplier.payment_In_Schema.status;
+
+      // Save changes to the database
+      await existingSupplier.save();
+
+      // Prepare response message based on the updated status
+      let responseMessage;
+      if (existingSupplier.payment_Out_Schema.status) {
+          responseMessage = "Supplier Status updated to Closed Successfully!";
+      } else {
+          responseMessage = "Supplier Status updated to Open Successfully!";
+      }
+
+      return res.status(200).json({ message: responseMessage });
+  } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 // Getting All Supplier Payments Out
 const getAllPaymentsOut = async (req, res) => {
   try {
@@ -3927,8 +3968,7 @@ const getAllPaymentsOut = async (req, res) => {
             curr_Country: paymentOutSchema.curr_Country,
             persons: paymentOutSchema.persons || [],
             payment: paymentOutSchema.payment || [],
-            open: paymentOutSchema.open || false,
-            close: paymentOutSchema.close || false,
+            status: paymentOutSchema.status,
             createdAt: moment(paymentOutSchema.createdAt).format("YYYY-MM-DD"),
             updatedAt: moment(paymentOutSchema.updatedAt).format("YYYY-MM-DD"),
           };
@@ -3961,5 +4001,7 @@ module.exports = {
   updatePaymentOutPerson,
   deleteAgentPaymentOutSchema,
   updateAgentTotalPaymentOut,
-  getAllPaymentsOut
+  getAllPaymentsOut,
+  changePaymentInStatus,
+  changePaymentOutStatus
 };

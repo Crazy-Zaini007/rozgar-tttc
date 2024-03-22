@@ -68,8 +68,8 @@ export default function SupCandSinglePaymentIn() {
   const [details, setDetails] = useState("");
   const [curr_Country, setCurr_Country] = useState("");
   const [curr_Rate, setCurr_Rate] = useState();
-  const [open, setOpen] = useState(true);
-  const [close, setClose] = useState(false);
+  // const [open, setOpen] = useState(true);
+  // const [close, setClose] = useState(false);
   const [cand_Name, setCand_Name] = useState("");
   const [date, setDate] = useState("");
   let curr_Amount = payment_In / curr_Rate;
@@ -241,8 +241,8 @@ export default function SupCandSinglePaymentIn() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+          // open,
+          // close,
           date,
           cand_Name,
         }),
@@ -269,8 +269,8 @@ export default function SupCandSinglePaymentIn() {
         setCurr_Rate("");
         setDate("");
         setCand_Name("");
-        setOpen(true);
-        setClose(false);
+        // setOpen(true);
+        // setClose(false);
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -306,7 +306,7 @@ export default function SupCandSinglePaymentIn() {
           <TableContainer component={Paper}>
             <form className="py-3 px-2" onSubmit={handleForm}>
               <div className="text-end ">
-                {close === false && (
+                {/* {close === false && (
                   <label htmlFor="">
                     Open
                     <input
@@ -325,7 +325,7 @@ export default function SupCandSinglePaymentIn() {
                       onClick={() => setClose(!close)}
                     />
                   </label>
-                )}
+                )} */}
 
                 <button className="btn submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}

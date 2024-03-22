@@ -16,7 +16,7 @@ import FinalStatusHook from '../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader'
-
+import { Link } from 'react-router-dom'
 export default function AgentCandPaymentInDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
@@ -24,8 +24,8 @@ export default function AgentCandPaymentInDetails() {
   const [loading3, setLoading3] = useState(false)
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
- 
-  const [show,setShow]=useState(false)
+
+  const [show, setShow] = useState(false)
 
   const [, setNewMessage] = useState('')
 
@@ -83,7 +83,7 @@ export default function AgentCandPaymentInDetails() {
   const trades = useSelector((state) => state.setting.trades);
 
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In);
-  
+
   const rowsPerPageOptions = [10, 15, 30];
 
   const [page, setPage] = useState(0);
@@ -152,7 +152,7 @@ export default function AgentCandPaymentInDetails() {
 
 
   const deletePaymentIn = async (payment) => {
-    if (window.confirm('Are you sure you want to delete this record?')){
+    if (window.confirm('Are you sure you want to delete this record?')) {
       setLoading1(true)
       debugger
       let paymentId = payment._id
@@ -165,9 +165,9 @@ export default function AgentCandPaymentInDetails() {
           },
           body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount, cand_Name: payment.cand_Name })
         })
-  
+
         const json = await response.json()
-  
+
         if (!response.ok) {
           setNewMessage(toast.error(json.message));
           setLoading1(false)
@@ -184,14 +184,14 @@ export default function AgentCandPaymentInDetails() {
         setLoading1(false)
       }
     }
-   
+
   }
 
 
   const deletePerson = async (person) => {
-    if (window.confirm('Are you sure you want to delete this record?')){
+    if (window.confirm('Are you sure you want to delete this record?')) {
       setLoading2(true)
-    
+
       let personId = person._id
       try {
         const response = await fetch(`${apiUrl}/auth/agents/delete/person/payment_in`, {
@@ -202,9 +202,9 @@ export default function AgentCandPaymentInDetails() {
           },
           body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr })
         })
-  
+
         const json = await response.json()
-  
+
         if (!response.ok) {
           setNewMessage(toast.error(json.message));
           setLoading2(false)
@@ -221,7 +221,7 @@ export default function AgentCandPaymentInDetails() {
         setLoading2(false)
       }
     }
-    
+
   }
 
 
@@ -255,7 +255,7 @@ export default function AgentCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier,personId:editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
       })
 
       const json = await response.json()
@@ -289,7 +289,7 @@ export default function AgentCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount,curr_Rate:editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date, cand_Name: editedEntry.cand_Name })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date, cand_Name: editedEntry.cand_Name })
       })
 
       const json = await response.json()
@@ -367,9 +367,9 @@ export default function AgentCandPaymentInDetails() {
 
 
   const deleteTotalpayment = async (person) => {
-    if (window.confirm('Are you sure you want to delete this record?')){
+    if (window.confirm('Are you sure you want to delete this record?')) {
       setLoading5(true)
-    
+
       try {
         const response = await fetch(`${apiUrl}/auth/agents/delete/all/payment_in`, {
           method: 'DELETE',
@@ -379,9 +379,9 @@ export default function AgentCandPaymentInDetails() {
           },
           body: JSON.stringify({ supplierName: person.supplierName })
         })
-  
+
         const json = await response.json()
-  
+
         if (!response.ok) {
           setNewMessage(toast.error(json.message));
           setLoading5(false)
@@ -398,18 +398,22 @@ export default function AgentCandPaymentInDetails() {
         setLoading5(false)
       }
     }
-    
+
   }
 
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
+  const [status, setStatus] = useState(true)
+
 
   const filteredTotalPaymentIn = agent_Payments_In.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-      payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())
+      payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
+      payment.status === status
     )
   })
+
 
   const printMainTable = () => {
     // Convert JSX to HTML string
@@ -426,8 +430,7 @@ export default function AgentCandPaymentInDetails() {
             <th>TVPI Oth Curr</th>
             <th>TPI Curr</th>
             <th>RPI Curr</th>
-            <th>Close</th>
-            <th>Open</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -442,8 +445,7 @@ export default function AgentCandPaymentInDetails() {
               <td>${String(entry.total_Visa_Price_In_Curr)}</td>
               <td>${String(entry.total_Payment_In_Curr)}</td>
               <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
+              <td>${String(entry.status === true ? "Open" : "Closed")}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -494,9 +496,9 @@ export default function AgentCandPaymentInDetails() {
     }
   };
 
- 
+
   // individual payments filters
-  
+
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
@@ -504,27 +506,27 @@ export default function AgentCandPaymentInDetails() {
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredIndividualPayments = agent_Payments_In
-  .filter((data) => data.supplierName === selectedSupplier)
-  .map((filteredData) => ({
-    ...filteredData,
-    payment: filteredData.payment
-      .filter((paymentItem) => paymentItem.cand_Name !== undefined)
-      .filter((paymentItem) => {
-        let isDateInRange = true;
+    .filter((data) => data.supplierName === selectedSupplier)
+    .map((filteredData) => ({
+      ...filteredData,
+      payment: filteredData.payment
+        .filter((paymentItem) => paymentItem.cand_Name !== undefined)
+        .filter((paymentItem) => {
+          let isDateInRange = true;
 
-        // Check if the payment item's date is within the selected date range
-        if (dateFrom && dateTo) {
-          isDateInRange =
-            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
-        }
+          // Check if the payment item's date is within the selected date range
+          if (dateFrom && dateTo) {
+            isDateInRange =
+              paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+          }
 
-        return (
-          isDateInRange &&
-          paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-          paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
-        );
-      }),
-  }))
+          return (
+            isDateInRange &&
+            paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+            paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+          );
+        }),
+    }))
 
 
   const printPaymentsTable = () => {
@@ -548,7 +550,6 @@ export default function AgentCandPaymentInDetails() {
         <th>CUR Rate</th>
         <th>CUR Amount</th>
         <th>Candidate</th>
-
         </tr>
       </thead>
       <tbody>
@@ -644,6 +645,8 @@ export default function AgentCandPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
+  const [status1, setStatus1] = useState(true)
+
 
 
   const filteredPersons = agent_Payments_In
@@ -660,7 +663,9 @@ export default function AgentCandPaymentInDetails() {
           persons.country?.toLowerCase().includes(country.toLowerCase()) &&
           persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
           persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())
+          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+          persons.status === status1
+
 
         ),
     }))
@@ -687,6 +692,7 @@ export default function AgentCandPaymentInDetails() {
         <th>Remaining PKR</th>
         <th>VPI Oth Curr</th>
         <th>Remaining Curr</th>
+        <th>Status</th>
         
         </tr>
       </thead>
@@ -707,9 +713,11 @@ export default function AgentCandPaymentInDetails() {
             <td>${String(person?.visa_Price_In_PKR)}</td>
             <td>${String(person?.toatl_In)}</td>
             <td>${String(person?.cash_Out)}</td>
-            <td>${String(person?.visa_Price_In_PKR)-String(person?.toatl_In)+String(person?.cash_Out)}</td>
+            <td>${String(person?.visa_Price_In_PKR) - String(person?.toatl_In) + String(person?.cash_Out)}</td>
             <td>${String(person?.visa_Price_In_Curr)}</td>
             <td>${String(person?.remaining_Curr)}</td>
+            <td>${String(person?.status === true ? "Open" : "Closed")}</td>
+
           </tr>
         `).join('')
     )}
@@ -769,17 +777,15 @@ export default function AgentCandPaymentInDetails() {
     filteredTotalPaymentIn.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        Agents:payments.supplierName,
-        Total_Visa_Price_In_PKR:payments.total_Visa_Price_In_PKR,
-        Total_Payment_In:payments.total_Payment_In,
-        Total_Cash_Out:payments.total_Cash_Out,
-        Remaining_PKR: payments.total_Visa_Price_In_PKR-payments.total_Payment_In+payments.total_Cash_Out,
-        Total_Visa_Price_In_Curr:payments.total_Visa_Price_In_Curr,
-        Total_Payment_In_Curr:payments.total_Payment_In_Curr,
-        Remaining_Curr:payments.total_Visa_Price_In_Curr-payments.total_Payment_In_Curr,
-        close:payments.close,
-        open:payments.open
-        
+        Agents: payments.supplierName,
+        Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
+        Total_Payment_In: payments.total_Payment_In,
+        Total_Cash_Out: payments.total_Cash_Out,
+        Remaining_PKR: payments.total_Visa_Price_In_PKR - payments.total_Payment_In + payments.total_Cash_Out,
+        Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
+        Total_Payment_In_Curr: payments.total_Payment_In_Curr,
+        Remaining_Curr: payments.total_Visa_Price_In_Curr - payments.total_Payment_In_Curr,
+        Status: payments.status === true ? "Open" : "Closed",
       }
 
       data.push(rowData);
@@ -798,19 +804,19 @@ export default function AgentCandPaymentInDetails() {
     filteredIndividualPayments.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        Date:payments.date,
-        Category:payments.category,
-        payment_Via:payments.payment_Via,
-        payment_Type:payments.payment_Type,
+        Date: payments.date,
+        Category: payments.category,
+        payment_Via: payments.payment_Via,
+        payment_Type: payments.payment_Type,
         slip_No: payments.slip_No,
-        details:payments.details,
-        payment_In:payments.payment_In,
-        cash_Out:payments.cash_Out,
-        invoice:payments.invoice,
-        candidate_Name:payments.cand_Name,
-        payment_In_Curr:payments.payment_In_Curr,
-        curr_Rate:payments.curr_Rate,
-        curr_Amount:payments.curr_Amount
+        details: payments.details,
+        payment_In: payments.payment_In,
+        cash_Out: payments.cash_Out,
+        invoice: payments.invoice,
+        candidate_Name: payments.cand_Name,
+        payment_In_Curr: payments.payment_In_Curr,
+        curr_Rate: payments.curr_Rate,
+        curr_Amount: payments.curr_Amount
       }
 
       data.push(rowData);
@@ -822,29 +828,30 @@ export default function AgentCandPaymentInDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
   }
 
-  
+
   const downloadPersons = () => {
     const data = [];
     // Iterate over entries and push all fields
     filteredPersons.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        entry_Date:payments.entry_Date,
-        Category:payments.category,
-        name:payments.name,
-        pp_No:payments.pp_No,
+        entry_Date: payments.entry_Date,
+        Category: payments.category,
+        name: payments.name,
+        pp_No: payments.pp_No,
         entry_Mode: payments.entry_Mode,
-        company:payments.company,
-        trade:payments.trade,
-        country:payments.country,
-        final_Status:payments.final_Status,
-        flight_Date:payments.flight_Date,
-        visa_Price_In_PKR:payments.visa_Price_In_PKR,
-        total_In:payments.total_In,
-        total_Cash_Out:payments.cash_Out,
-        Remaining_PKR:payments.visa_Price_In_PKR-payments.total_In+payments.cash_Out,
-        visa_Price_In_Curr:payments.visa_Price_In_Curr,
-        remaining_Curr:payments.remaining_Curr,
+        company: payments.company,
+        trade: payments.trade,
+        country: payments.country,
+        final_Status: payments.final_Status,
+        flight_Date: payments.flight_Date,
+        visa_Price_In_PKR: payments.visa_Price_In_PKR,
+        total_In: payments.total_In,
+        total_Cash_Out: payments.cash_Out,
+        Remaining_PKR: payments.visa_Price_In_PKR - payments.total_In + payments.cash_Out,
+        visa_Price_In_Curr: payments.visa_Price_In_Curr,
+        remaining_Curr: payments.remaining_Curr,
+        Status: payments.status === true ? "Open" : "Closed",
       }
 
       data.push(rowData);
@@ -856,6 +863,42 @@ export default function AgentCandPaymentInDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
 
+
+
+  // Changing Status
+  const changeStatus = async () => {
+    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
+      setLoading5(true)
+
+      try {
+        const response = await fetch(`${apiUrl}/auth/agents/update/payment_in/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ supplierName: selectedSupplier })
+        })
+
+        const json = await response.json()
+
+        if (!response.ok) {
+          setNewMessage(toast.error(json.message));
+          setLoading5(false)
+        }
+        if (response.ok) {
+          fetchData()
+          setNewMessage(toast.success(json.message));
+          setLoading5(false)
+          setEditMode1(!editMode1)
+        }
+      }
+      catch (error) {
+        setNewMessage(toast.error('Server is not responding...'))
+        setLoading5(false)
+      }
+    }
+  }
 
   return (
     <>
@@ -877,7 +920,7 @@ export default function AgentCandPaymentInDetails() {
               </div>
             </Paper>
           </div>
-          
+
 
           {isLoading &&
             <div className='col-md-12 text-center my-4'>
@@ -905,6 +948,15 @@ export default function AgentCandPaymentInDetails() {
                     ))}
                   </select>
                 </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status ? "true" : "false"} onChange={(e) => setStatus(e.target.value === "true")} className='m-0 p-1'>
+                    {[...new Set(agent_Payments_In.map(data => data.status))].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
+                    ))}
+                  </select>
+
+                </div>
               </div>
             </Paper>
           </div>
@@ -926,8 +978,7 @@ export default function AgentCandPaymentInDetails() {
                         <TableCell className='label border' style={{ width: '18.28%' }}>TVPI_Oth_Curr</TableCell>
                         <TableCell className='label border' style={{ width: '18.28%' }}>TPI_Curr</TableCell>
                         <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
-                        <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell>
-                        <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
+                        <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
                         <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                           Actions
                         </TableCell>
@@ -1021,16 +1072,13 @@ export default function AgentCandPaymentInDetails() {
                                     {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                    {entry.close === false ? "Not Closed" : "Closed"}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                    <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
+                                    <span>{entry.status === true ? "Open" : "Closed"}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                       {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
-                                      <button className='btn delete_btn'  onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
+                                      <button className='btn delete_btn' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
                                     </div>
                                     <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
                                       <div className="modal-dialog p-0">
@@ -1057,44 +1105,44 @@ export default function AgentCandPaymentInDetails() {
 
                           </React.Fragment>
                         ))}
-                        <TableRow>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-    <TableCell className='border data_td text-center bg-info text-white'>
-        {/* Calculate the total sum of payment_In */}
-        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
-            return isNaN(paymentIn) ? total : total + paymentIn;
-        }, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-success text-white'>
-        {/* Calculate the total sum of cash_Out */}
-        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-            const cashOut = parseFloat(paymentItem.total_Payment_In);
-            return isNaN(cashOut) ? total : total + cashOut;
-        }, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-danger text-white'>
-        {/* Calculate the total sum of cash_Out */}
-        {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-            const cashOut = parseFloat(paymentItem.total_Cash_Out);
-            return isNaN(cashOut) ? total : total + cashOut;
-        }, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-        const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
-        const cashOut = parseFloat(paymentItem.total_Cash_Out);
-        const paymentOut = parseFloat(paymentItem.total_Payment_In);
-        
-        // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
-        const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
-        return total + netCashOut;
-    }, 0)}
-</TableCell>
-</TableRow>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                        <TableCell className='border data_td text-center bg-info text-white'>
+                          {/* Calculate the total sum of payment_In */}
+                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
+                            return isNaN(paymentIn) ? total : total + paymentIn;
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-success text-white'>
+                          {/* Calculate the total sum of cash_Out */}
+                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                            const cashOut = parseFloat(paymentItem.total_Payment_In);
+                            return isNaN(cashOut) ? total : total + cashOut;
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-danger text-white'>
+                          {/* Calculate the total sum of cash_Out */}
+                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                            const cashOut = parseFloat(paymentItem.total_Cash_Out);
+                            return isNaN(cashOut) ? total : total + cashOut;
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-warning text-white'>
+                          {/* Calculate the total sum of cash_Out */}
+                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
+                            const cashOut = parseFloat(paymentItem.total_Cash_Out);
+                            const paymentOut = parseFloat(paymentItem.total_Payment_In);
+
+                            // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
+                            const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+                            return total + netCashOut;
+                          }, 0)}
+                        </TableCell>
+                      </TableRow>
 
                     </TableBody>
 
@@ -1131,7 +1179,18 @@ export default function AgentCandPaymentInDetails() {
 
               </div>
               <div className="right">
-              <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                <div className="dropdown d-inline ">
+                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    {loading5 ? "Updating" : "Change Status"}
+                  </button>
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><Link className="dropdown-item" onClick={() => changeStatus()}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item" onClick={() => changeStatus()}>Khata Close</Link></li>
+
+                  </ul>
+                </div>
+
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn btn-sm' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
@@ -1143,12 +1202,12 @@ export default function AgentCandPaymentInDetails() {
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
-                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date To:</label>
-                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
-                 
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1' />
+
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Payment Via:</label>
@@ -1157,7 +1216,7 @@ export default function AgentCandPaymentInDetails() {
                     {[...new Set(agent_Payments_In
                       .filter(data => data.supplierName === selectedSupplier)
                       .flatMap(data => data.payment)
-                     
+
                       .map(data => data.payment_Via)
                     )].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
@@ -1171,7 +1230,7 @@ export default function AgentCandPaymentInDetails() {
                     {[...new Set(agent_Payments_In
                       .filter(data => data.supplierName === selectedSupplier)
                       .flatMap(data => data.payment)
-                     
+
                       .map(data => data.payment_Type)
                     )].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
@@ -1183,11 +1242,11 @@ export default function AgentCandPaymentInDetails() {
           </div>
           <div className="col-md-12 detail_table my-2">
             <h6>Payment In Details</h6>
-            <TableContainer component={Paper}  sx={{ maxHeight: 600 }}>
+            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                  <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
@@ -1214,8 +1273,8 @@ export default function AgentCandPaymentInDetails() {
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
-                             <TableCell className='border data_td p-1 '>
-                                <input type='text' value={index+1} readonly />
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
@@ -1282,7 +1341,7 @@ export default function AgentCandPaymentInDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index+1}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
@@ -1345,33 +1404,33 @@ export default function AgentCandPaymentInDetails() {
                     </>
                   ))}
                   <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-warning text-white'>
-          {/* Calculate the total sum of payment_In */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const paymentIn = parseFloat(paymentItem.payment_In);
-              return isNaN(paymentIn) ? sum : sum + paymentIn;
-            }, 0);
-          }, 0)}
-        </TableCell>
-        <TableCell className='border data_td text-center bg-info text-white'>
-          {/* Calculate the total sum of cash_Out */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const cashOut = parseFloat(paymentItem.cash_Out);
-              return isNaN(cashOut) ? sum : sum + cashOut;
-            }, 0);
-          }, 0)}
-        </TableCell>
-                            
-                          </TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                    <TableCell className='border data_td text-center bg-warning text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_In);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.cash_Out);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+
+                  </TableRow>
 
                 </TableBody>
 
@@ -1382,6 +1441,20 @@ export default function AgentCandPaymentInDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+                <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status1 ? "true" : "false"} onChange={(e) => setStatus1(e.target.value === "true")} className='m-0 p-1'>
+                    {[...new Set(agent_Payments_In
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .flatMap(data => data.persons)
+                      .map(data => data.status)
+                    )].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
+
+                    ))}
+
+                  </select>
+                </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Entry Date:</label>
                   <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
@@ -1508,8 +1581,8 @@ export default function AgentCandPaymentInDetails() {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
-                <button className='btn shadow btn-sm m-1 bg-info text-white' onClick={()=>setShow(!show)}>{show===false ?"Show":"Hide"}</button>
-              <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
+                <button className='btn shadow btn-sm m-1 bg-info text-white' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
 
               </div>
@@ -1532,8 +1605,9 @@ export default function AgentCandPaymentInDetails() {
                     <TableCell className='label border' style={{ width: '18.28%' }}>Total_In_PKR</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Total_Cash_Out</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Remaining</TableCell>
-                    {show ===true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
+                    {show === true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
                     <TableCell className='label border' style={{ width: '18.28%' }}>Remaining_Oth_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -1606,18 +1680,21 @@ export default function AgentCandPaymentInDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.total_In} readonly />
                               </TableCell>
-                              
+
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.cash_Out} readonly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_In_PKR -editedEntry2.total_In +editedEntry2.cash_Out} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
                               </TableCell>
                               {show && <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.remaining_Curr} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='checkbox' value={editedEntry2.status} readonly disabled/>
                               </TableCell>
 
 
@@ -1637,9 +1714,11 @@ export default function AgentCandPaymentInDetails() {
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.total_In}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR-person?.total_In +person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
                               {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.remaining_Curr}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status === true ? "Open" : "Closed"}</TableCell>
+
 
 
                             </>
@@ -1688,46 +1767,46 @@ export default function AgentCandPaymentInDetails() {
 
                         </TableRow>
                       ))}
-                        <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-warning text-white'>
-          {/* Calculate the total sum of payment_In */}
-          {filteredPersons.reduce((total, filteredData) => {
-            return total + filteredData.persons.reduce((sum, paymentItem) => {
-              const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
-              return isNaN(paymentIn) ? sum : sum + paymentIn;
-            }, 0);
-          }, 0)}
-        </TableCell>
-        <TableCell className='border data_td text-center bg-info text-white'>
-          {/* Calculate the total sum of cash_Out */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const cashOut = parseFloat(paymentItem.total_In);
-              return isNaN(cashOut) ? sum : sum + cashOut;
-            }, 0);
-          }, 0)}
-        </TableCell>
-        <TableCell className='border data_td text-center bg-danger text-white'>
-          {/* Calculate the total sum of cash_Out */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const cashOut = parseFloat(paymentItem.cash_Out);
-              return isNaN(cashOut) ? sum : sum + cashOut;
-            }, 0);
-          }, 0)}
-        </TableCell>
-                            
-                          </TableRow>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                        <TableCell className='border data_td text-center bg-warning text-white'>
+                          {/* Calculate the total sum of payment_In */}
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-info text-white'>
+                          {/* Calculate the total sum of cash_Out */}
+                          {filteredIndividualPayments.reduce((total, filteredData) => {
+                            return total + filteredData.payment.reduce((sum, paymentItem) => {
+                              const cashOut = parseFloat(paymentItem.total_In);
+                              return isNaN(cashOut) ? sum : sum + cashOut;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-danger text-white'>
+                          {/* Calculate the total sum of cash_Out */}
+                          {filteredIndividualPayments.reduce((total, filteredData) => {
+                            return total + filteredData.payment.reduce((sum, paymentItem) => {
+                              const cashOut = parseFloat(paymentItem.cash_Out);
+                              return isNaN(cashOut) ? sum : sum + cashOut;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+
+                      </TableRow>
                     </>
                   ))}
                 </TableBody>

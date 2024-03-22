@@ -16,6 +16,7 @@ import FinalStatusHook from '../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader'
+import{Link} from 'react-router-dom'
 
 export default function CandPaymentOutDetails() {
   const [isLoading, setIsLoading] = useState(false)
@@ -252,7 +253,7 @@ export default function CandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ name: editedEntry1.supplierName,pp_No:editedEntry1.pp_No,entry_Mode:editedEntry1.entry_Mode,company:editedEntry1.company,country:editedEntry1.country,trade:editedEntry1.trade,final_Status:editedEntry1.final_Status,flight_Date:editedEntry1.flight_Date, total_Payment_Out: editedEntry1.total_Payment_Out, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_Out_Curr: editedEntry1.total_Payment_Out_Curr, open: editedEntry1.open, close: editedEntry1.close  })
+        body: JSON.stringify({ name: editedEntry1.supplierName,pp_No:editedEntry1.pp_No,contact:editedEntry1.contact,entry_Mode:editedEntry1.entry_Mode,company:editedEntry1.company,country:editedEntry1.country,trade:editedEntry1.trade,final_Status:editedEntry1.final_Status,flight_Date:editedEntry1.flight_Date, total_Payment_Out: editedEntry1.total_Payment_Out, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_Out_Curr: editedEntry1.total_Payment_Out_Curr, open: editedEntry1.open, close: editedEntry1.close  })
       })
 
       const json = await response.json()
@@ -320,6 +321,7 @@ export default function CandPaymentOutDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
+  const [status, setStatus] = useState(true)
 
   const filteredTotalPaymentOut = candidate_Payments_Out.filter(payment => {
     // Check if supplierName exists and matches the provided name
@@ -332,7 +334,9 @@ export default function CandPaymentOutDetails() {
             payment.country.toLowerCase().includes(country.toLowerCase()) &&
             payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
             payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-            payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())
+            payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())&&
+            payment.status === status
+
         );
     }
     // If supplierName doesn't exist or doesn't match, exclude the payment
@@ -401,6 +405,8 @@ export default function CandPaymentOutDetails() {
                     <th>TPO_PKR</th>
                     <th>Total_Cash_Out</th>
                     <th>RPO_PKR</th>
+                    <th>Status</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -420,6 +426,8 @@ export default function CandPaymentOutDetails() {
                         <td>${String(entry.total_Payment_Out)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
                         <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.status===true?"Open":"Closed")}</td>
+
                     </tr>
                 `).join('')}
             </tbody>
@@ -657,8 +665,7 @@ export default function CandPaymentOutDetails() {
         Total_Visa_Price_Out_Curr:payments.total_Visa_Price_Out_Curr,
         Total_Payment_Out_Curr:payments.total_Payment_Out_Curr,
         Remaining_Curr:payments.remaining_Curr,
-        close:payments.close,
-        open:payments.open
+        Status:payments.status===true?"Open":"Closed",
       }
 
       data.push(rowData);
@@ -702,6 +709,40 @@ export default function CandPaymentOutDetails() {
 
 
 
+  // Changing Status
+  const changeStatus=async()=>{
+    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
+      setLoading5(true)
+
+      try {
+        const response = await fetch(`${apiUrl}/auth/candidates/update/payment_out/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ supplierName: selectedSupplier })
+        })
+
+        const json = await response.json()
+
+        if (!response.ok) {
+          setNewMessage(toast.error(json.message));
+          setLoading5(false)
+        }
+        if (response.ok) {
+          fetchData()
+          setNewMessage(toast.success(json.message));
+          setLoading5(false)
+          setEditMode1(!editMode1)
+        }
+      }
+      catch (error) {
+        setNewMessage(toast.error('Server is not responding...'))
+        setLoading5(false)
+      }
+    }
+  }
 
   return (
     <>
@@ -815,7 +856,15 @@ export default function CandPaymentOutDetails() {
                     ))}
                   </select>
                 </div>
-                
+                <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status ? "true" : "false"} onChange={(e) => setStatus(e.target.value === "true")} className='m-0 p-1'>
+                    {[...new Set(candidate_Payments_Out.map(data => data.status))].map(dateValue => (
+                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
+                    ))}
+                  </select>
+
+                </div>
               </div>
             </Paper>
           </div>
@@ -845,8 +894,8 @@ export default function CandPaymentOutDetails() {
                       {show &&  <TableCell className='label border'>TVPI_Oth_Curr</TableCell>}
                       <TableCell className='label border'>TPO_Curr</TableCell>
                       <TableCell className='label border'>RPO_Curr</TableCell>
-                      <TableCell className='label border'>Close</TableCell>
-                      <TableCell className='label border'>Open</TableCell>
+                      <TableCell className='label border'>Status</TableCell>
+                      
                       <TableCell align='left' className='edw_label border' colSpan={1}>
                         Actions
                       </TableCell>
@@ -864,7 +913,7 @@ export default function CandPaymentOutDetails() {
                                 // Edit Mode
                                 <>
                                  <TableCell className='border data_td p-1 '>
-                                    <input type='date' value={outerIndex + 1} readonly />
+                                    <input type='number' value={outerIndex + 1} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
                                     <input type='date' value={editedEntry1.createdAt} readonly />
@@ -944,11 +993,9 @@ export default function CandPaymentOutDetails() {
                                   </TableCell>
 
                                   <TableCell className='border data_td p-1 '>
-                                  <input type='checkbox' value={editedEntry1.close}  onChange={(e) => handleTotalPaymentInputChange(e, 'close')}  />
+                                  <input type='checkbox' value={editedEntry1.status}  onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly disabled/>
                                 </TableCell>
-                                <TableCell className='border data_td p-1 '>
-                                  <input type='checkbox' value={editedEntry1.open}  onChange={(e) => handleTotalPaymentInputChange(e, 'open')}  />
-                                </TableCell>
+                               
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -1011,10 +1058,7 @@ export default function CandPaymentOutDetails() {
                                     {entry.remaining_Curr}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    {entry.close === false ? "Not Closed" : "Closed"}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
+                                    <span>{entry.status === true ? "Open" : "Closed"}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
@@ -1149,6 +1193,16 @@ export default function CandPaymentOutDetails() {
 
               </div>
               <div className="right">
+              <div className="dropdown d-inline ">
+                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  {loading5?"Updating":"Change Status"}
+                  </button>
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><Link className="dropdown-item" onClick={()=>changeStatus()}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item"  onClick={()=>changeStatus()}>Khata Close</Link></li>
+                    
+                  </ul>
+                </div>
                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}

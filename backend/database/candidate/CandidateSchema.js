@@ -65,6 +65,10 @@ const Payment_InSchema = new mongoose.Schema(
     curr_Country: {
       type: String,
     },
+    status:{
+      type:Boolean,
+      default:true
+          },
     payment: [
       {
         name: {
@@ -122,14 +126,7 @@ const Payment_InSchema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+
   },
   { timestamps: true }
 );
@@ -199,6 +196,10 @@ const Payment_OutSchema = new mongoose.Schema(
     curr_Country: {
       type: String,
     },
+    status:{
+      type:Boolean,
+      default:true
+          },
     payment: [
       {
         name: {
@@ -255,14 +256,7 @@ const Payment_OutSchema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+   
   },
   { timestamps: true }
 );

@@ -100,9 +100,9 @@ import ReceivableReports from './components/all_Reports/ReceivableReports.jsx'
 import PayableReports from './components/all_Reports/PayableReports.jsx'
 import Invoice from './components/all_Reports/Invoice.jsx'
 import ExpenseOverAllReport from './components/all_Reports/ExpenseOverAllReport'
-import OverAllAgentReport from './components/all_Reports/agentDetails/OverAllAgentDetails'
-import OverAllCandReport from './components/all_Reports/candidateDetails/OverAllCandDetails'
-import OverAllSupReport from './components/all_Reports/supplierDetails/OverAllSupDetails'
+// import OverAllAgentReport from './components/all_Reports/agentDetails/OverAllAgentDetails'
+// import OverAllCandReport from './components/all_Reports/candidateDetails/OverAllCandDetails'
+// import OverAllSupReport from './components/all_Reports/supplierDetails/OverAllSupDetails'
 import CashInHandWOE from './components/all_Reports/CashInHandWOE.jsx';
 import ProfitLose from './components/all_Reports/ProfitLose.jsx'
 import DayBook from './components/all_Reports/DayBook.jsx'
@@ -232,9 +232,9 @@ function App() {
           <Route path='/rozgar/reports/payable_reports' element={user && <PayableReports></PayableReports>}></Route>
           <Route path='/rozgar/reports/invoice' element={user && <Invoice></Invoice>}></Route>
           <Route path='/rozgar/reports/expenses_reports' element={user && <ExpenseOverAllReport></ExpenseOverAllReport>}></Route>
-          <Route path='/rozgar/reports/agents_reports' element={user && <OverAllAgentReport></OverAllAgentReport>}></Route>
-          <Route path='/rozgar/reports/candidates_reports' element={user && <OverAllCandReport></OverAllCandReport>}></Route>
-          <Route path='/rozgar/reports/suppliers_reports' element={user && <OverAllSupReport></OverAllSupReport>}></Route>
+          <Route path='/rozgar/reports/agents_reports' element={user && <AgentDetails></AgentDetails>}></Route>
+          <Route path='/rozgar/reports/candidates_reports' element={user && <CandDetails></CandDetails>}></Route>
+          <Route path='/rozgar/reports/suppliers_reports' element={user && <SupDetails></SupDetails>}></Route>
           <Route path='/rozgar/reports/cash_in_hand/with_out_expenses' element={user && <CashInHandWOE></CashInHandWOE>}></Route>
           <Route path='/rozgar/reports/profit_lose' element={user && <ProfitLose></ProfitLose>}></Route>
           <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails>}></Route>

@@ -76,7 +76,7 @@ export default function PaymentOutReturn() {
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
 
-  const [open, setOpen] = useState(true)
+  // const [open, setOpen] = useState(true)
   const [close, setClose] = useState(false)
   const [date, setDate] = useState('');
   let curr_Amount = cash_Out / curr_Rate
@@ -152,7 +152,7 @@ export default function PaymentOutReturn() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
+          // open,
           close,
           date
         }),
@@ -181,7 +181,7 @@ export default function PaymentOutReturn() {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        setOpen(true)
+        // setOpen(true)
         setClose(false);
 
       }
@@ -199,18 +199,11 @@ export default function PaymentOutReturn() {
         {!option && <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-              {close === false &&
-                <label htmlFor="">
-                  Open
-                  <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
-                </label>
-              }
-              {open === true &&
+             
                 <label htmlFor="">
                   Close
                   <input type="checkbox" value={close} onClick={() => setClose(!close)} />
                 </label>
-              }
               <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
               {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
