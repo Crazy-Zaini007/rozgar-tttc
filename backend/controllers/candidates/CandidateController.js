@@ -131,7 +131,7 @@ const addPaymentIn = async (req, res) => {
                         },
                         $set: {
                             
-                            "payment_In_Schema.status": close,
+                            "payment_In_Schema.status": close?"Closed":"Open"?"Closed":"Open",
                         },
                         $push: {
                             'payment_In_Schema.payment': payment
@@ -306,7 +306,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                     },
                     $set: {
                        
-                        "payment_In_Schema.status": close, 
+                        "payment_In_Schema.status": close?"Closed":"Open", 
                     },
                     $push: {
                         "payment_In_Schema.payment": newPayment,
@@ -479,7 +479,7 @@ const addPaymentInReturn = async (req, res) => {
                         },
                         $set: {
                          
-                            "payment_In_Schema.status": close,
+                            "payment_In_Schema.status": close?"Closed":"Open",
                         },
                         $push: {
                             'payment_In_Schema.payment': payment
@@ -1538,7 +1538,7 @@ const addPaymentOut = async (req, res) => {
                             "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
                         $set: {
-                            "payment_Out_Schema.status": close
+                            "payment_Out_Schema.status": close?"Closed":"Open"
                         },
                         $push: {
                             'payment_Out_Schema.payment': payment
@@ -1712,8 +1712,8 @@ const addPaymentOutReturn = async (req, res) => {
 
                         },
                         $set: {
-                            "payment_Out_Schema.open": open,
-                            "payment_Out_Schema.close": close
+                           
+                            "payment_Out_Schema.close": close?"Closed":"Open"
                         },
                         $push: {
                             'payment_Out_Schema.payment': payment
@@ -2099,7 +2099,7 @@ const addMultiplePaymentsOut = async (req, res) => {
                     },
                     $set: {
                         
-                        "payment_Out_Schema.status": close, // Set to true if you always want to open
+                        "payment_Out_Schema.status": close?"Closed":"Open", // Set to true if you always want to open
                         // Set to false if you always want to close
                     },
                     $push: {
