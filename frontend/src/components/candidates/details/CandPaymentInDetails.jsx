@@ -320,7 +320,8 @@ export default function CandPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  const [status, setStatus] = useState(true)
+  const [status, setStatus] = useState('')
+  
 
   const filteredTotalPaymentIn = candidate_Payments_In.filter(payment => {
    // Check if supplierName exists and matches the provided name
@@ -334,8 +335,7 @@ export default function CandPaymentInDetails() {
         payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
         payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
         payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())&&
-      payment.status === status
-
+        payment.status.toLowerCase().includes(status.toLowerCase())
     );
 }
 return false;
@@ -426,7 +426,7 @@ return false;
                         <td>${String(entry.total_Payment_In)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
                         <td>${String(entry.remaining_Balance)}</td>
-                        <td>${String(entry.status===true?"Open":"Closed")}</td>
+                        <td>${String(entry.status)}</td>
 
                     </tr>
                 `).join('')}
@@ -665,7 +665,7 @@ return false;
         Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr: payments.total_Payment_In_Curr,
         Remaining_Curr: payments.remaining_Curr,
-        Status: payments.status===true?"Open":"Closed",
+        Status: payments.status,
       }
 
       data.push(rowData);
@@ -710,9 +710,11 @@ return false;
 
   
   // Changing Status
-  const changeStatus=async()=>{
+ 
+  const changeStatus=async(myStatus)=>{
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
+      let newStatus=myStatus
 
       try {
         const response = await fetch(`${apiUrl}/auth/candidates/update/payment_in/status`, {
@@ -721,7 +723,7 @@ return false;
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
         })
 
         const json = await response.json()
@@ -858,10 +860,10 @@ return false;
                     </div>
                     <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
-                  <select value={status ? "true" : "false"} onChange={(e) => setStatus(e.target.value === "true")} className='m-0 p-1'>
-                    {[...new Set(candidate_Payments_In.map(data => data.status))].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
-                    ))}
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                  <option value="" >All</option>
+                      <option value="Open" >Open</option>
+                      <option value="Closed" >Closed</option>
                   </select>
 
                 </div>
@@ -992,7 +994,7 @@ return false;
                                       </TableCell>
 
                                       <TableCell className='border data_td p-1 '>
-                                        <input type='checkbox' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly disabled/>
+                                        <input type='text' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly disabled/>
                                       </TableCell>
                                      
                                       {/* ... Other cells in edit mode */}
@@ -1058,7 +1060,7 @@ return false;
                                       </TableCell>
                                      
                                       <TableCell className='border data_td text-center'>
-                                        <span>{entry.status === true ? "Open" : "Closed"}</span>
+                                        <span>{entry.status }</span>
                                       </TableCell>
                                       {/* ... Other cells in non-edit mode */}
                                       <TableCell className='border data_td p-1 '>
@@ -1196,8 +1198,8 @@ return false;
                   {loading5?"Updating":"Change Status"}
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><Link className="dropdown-item" onClick={()=>changeStatus()}>Khata Open</Link></li>
-                    <li><Link className="dropdown-item"  onClick={()=>changeStatus()}>Khata Close</Link></li>
+                  <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
+                  <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
                     
                   </ul>
                 </div>

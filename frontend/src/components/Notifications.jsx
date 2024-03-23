@@ -77,9 +77,9 @@ export default function Notifications() {
                            
                               <div className="left">
                               <img src={reminderIcon} className="rounded me-2" alt="..." />
-                            <strong className='text-primary'>
+                            <h6 className='text-primary'>
                              {data.type}
-                            </strong>
+                            </h6>
                               </div>
                               <div className="right">
                               <small>

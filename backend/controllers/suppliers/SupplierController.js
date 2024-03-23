@@ -1896,7 +1896,7 @@ const changePaymentInStatus = async (req, res) => {
   try {
       const userId = req.user._id;
       const user = await User.findById(userId);
-      const{supplierName}=req.body
+      const{supplierName,newStatus}=req.body
 
       if (!user) {
           return res.status(404).json({ message: "User not found" });
@@ -1913,22 +1913,25 @@ const changePaymentInStatus = async (req, res) => {
       // Update status of all persons to false
       if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
           existingSupplier.payment_In_Schema.persons.forEach(person => {
-              person.status = false;
+            if(existingSupplier.payment_In_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+             
           });
       }
 
       // Toggle the status of the payment in schema
-      existingSupplier.payment_In_Schema.status = !existingSupplier.payment_In_Schema.status;
+      existingSupplier.payment_In_Schema.status = newStatus;
 
       // Save changes to the database
       await existingSupplier.save();
 
       // Prepare response message based on the updated status
       let responseMessage;
-      if (existingSupplier.payment_In_Schema.status) {
-          responseMessage = "Supplier Status updated to Closed Successfully!";
-      } else {
+      if (existingSupplier.payment_In_Schema.status==="Open") {
           responseMessage = "Supplier Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Supplier Status updated to Closed Successfully!";
       }
 
       return res.status(200).json({ message: responseMessage });
@@ -3894,8 +3897,8 @@ const changePaymentOutStatus = async (req, res) => {
   try {
       const userId = req.user._id;
       const user = await User.findById(userId);
-      const{supplierName}=req.body
-
+      const{supplierName,newStatus}=req.body
+    
       if (!user) {
           return res.status(404).json({ message: "User not found" });
       }
@@ -3911,22 +3914,24 @@ const changePaymentOutStatus = async (req, res) => {
       // Update status of all persons to false
       if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons) {
           existingSupplier.payment_Out_Schema.persons.forEach(person => {
-              person.status = false;
-          });
+            if(existingSupplier.payment_Out_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+          })
       }
-
+      
       // Toggle the status of the payment in schema
-      existingSupplier.payment_Out_Schema.status = !existingSupplier.payment_In_Schema.status;
+      existingSupplier.payment_Out_Schema.status = newStatus;
 
       // Save changes to the database
       await existingSupplier.save();
 
       // Prepare response message based on the updated status
       let responseMessage;
-      if (existingSupplier.payment_Out_Schema.status) {
-          responseMessage = "Supplier Status updated to Closed Successfully!";
-      } else {
+      if (existingSupplier.payment_Out_Schema.status==="Open") {
           responseMessage = "Supplier Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Supplier Status updated to Closed Successfully!";
       }
 
       return res.status(200).json({ message: responseMessage });

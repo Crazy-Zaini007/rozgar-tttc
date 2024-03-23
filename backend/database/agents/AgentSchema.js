@@ -41,9 +41,9 @@ const Payment_InSchema = new mongoose.Schema(
       type: String,
     },
     status:{
-type:Boolean,
-default:true
-    },
+      type:String,
+      default:"Open"
+          },
     persons: [
       {
         name: {
@@ -102,8 +102,8 @@ default:true
           type: String,
         },
         status:{
-          type:Boolean,
-          default:true
+          type:String,
+          default:"Open"
               }
       },
     ],
@@ -212,8 +212,8 @@ const Payment_OutSchema = new mongoose.Schema(
       type: String,
     },
     status:{
-      type:Boolean,
-      default:true
+      type:String,
+      default:"Open"
           },
     persons: [
       {
@@ -273,9 +273,9 @@ const Payment_OutSchema = new mongoose.Schema(
           type: String,
         },
         status:{
-          type:Boolean,
-          default:true
-        }
+          type:String,
+          default:"Open"
+              }
       },
     ],
     payment: [

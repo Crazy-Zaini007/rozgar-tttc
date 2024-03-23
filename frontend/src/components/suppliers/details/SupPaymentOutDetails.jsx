@@ -405,13 +405,13 @@ export default function SupPaymentOutDetails() {
 
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
-  const [status, setStatus] = useState(true)
+  const [status, setStatus] = useState('')
 
   const filteredTotalPaymentOut = supp_Payments_Out.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
       payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
-      payment.status === status
+      payment.status.toLowerCase().includes(status.toLowerCase())
     )
   })
 
@@ -445,7 +445,7 @@ export default function SupPaymentOutDetails() {
               <td>${String(entry.total_Visa_Price_Out_Curr)}</td>
               <td>${String(entry.total_Payment_Out_Curr)}</td>
               <td>${String(entry.total_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr)}</td>
-              <td>${String(entry.status===true?"Open":"Closed")}</td>         
+              <td>${String(entry.status)}</td>         
             </tr>
           `).join('')}
         </tbody>
@@ -640,8 +640,7 @@ export default function SupPaymentOutDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  const [status1, setStatus1] = useState(true)
-
+  const [status1, setStatus1] = useState("")
 
   const filteredPersons = supp_Payments_Out
     .filter((data) => data.supplierName === selectedSupplier)
@@ -658,8 +657,7 @@ export default function SupPaymentOutDetails() {
           persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
           persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
           persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
-          persons.status === status1
-
+          persons.status?.toLowerCase().includes(status1.toLowerCase())
 
         ),
     }))
@@ -702,7 +700,7 @@ export default function SupPaymentOutDetails() {
             <td>${String(person?.flight_Date)}</td>
             <td>${String(person?.visa_Price_Out_PKR)}</td>
             <td>${String(person?.visa_Price_Out_Curr)}</td>
-            <td>${String(person?.status===true?"Open":"Closed")}</td>
+            <td>${String(person?.status)}</td>
           </tr>
         `).join('')
     )}
@@ -769,7 +767,7 @@ export default function SupPaymentOutDetails() {
         Total_Visa_Price_Out_Curr:payments.total_Visa_Price_Out_Curr,
         Total_Payment_Out_Curr:payments.total_Payment_Out_Curr,
         Remaining_Curr:payments.total_Visa_Price_Out_Curr-payments.total_Payment_Out_Curr,
-        Status:payments.status===true?"Open":"Closed"
+        Status:payments.status
         
       }
 
@@ -831,7 +829,7 @@ export default function SupPaymentOutDetails() {
         flight_Date:payments.flight_Date,
         visa_Price_Out_PKR:payments.visa_Price_Out_PKR,
         visa_Price_Out_Curr:payments.visa_Price_Out_Curr,
-        Status:payments.status===true?"Open":"Closed",
+        Status:payments.status,
       }
 
       data.push(rowData);
@@ -845,10 +843,12 @@ export default function SupPaymentOutDetails() {
 
 
   // Changing Status
-  const changeStatus=async()=>{
+  
+  const changeStatus=async(myStatus)=>{
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
+     
+      let newStatus=myStatus
       setLoading5(true)
-
       try {
         const response = await fetch(`${apiUrl}/auth/suppliers/update/payment_out/status`, {
           method: 'PATCH',
@@ -856,7 +856,7 @@ export default function SupPaymentOutDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
         })
 
         const json = await response.json()
@@ -929,10 +929,10 @@ export default function SupPaymentOutDetails() {
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
-                  <select value={status ? "true" : "false"} onChange={(e) => setStatus(e.target.value === "true")} className='m-0 p-1'>
-                    {[...new Set(supp_Payments_Out.map(data => data.status))].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
-                    ))}
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                  <option value="" >All</option>
+                      <option value="Open" >Open</option>
+                      <option value="Closed" >Closed</option>
                   </select>
 
                 </div>
@@ -1004,7 +1004,7 @@ export default function SupPaymentOutDetails() {
                                     <input type='number' min='0' value={editedEntry1.total_Visa_Price_Out_Curr - editedEntry1.total_Payment_Out_Curr} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='checkbox' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly/>
+                                    <input type='text' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly/>
                                   </TableCell>
                                   
                                   {/* ... Other cells in edit mode */}
@@ -1048,7 +1048,7 @@ export default function SupPaymentOutDetails() {
                                     {entry.total_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    <span>{entry.status === true ? "Open" : "Closed"}</span>
+                                    <span>{entry.status}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
@@ -1158,8 +1158,8 @@ export default function SupPaymentOutDetails() {
                   {loading5?"Updating":"Change Status"}
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><Link className="dropdown-item" onClick={()=>changeStatus()}>Khata Open</Link></li>
-                    <li><Link className="dropdown-item"  onClick={()=>changeStatus()}>Khata Close</Link></li>
+                  <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
                     
                   </ul>
                 </div>
@@ -1414,16 +1414,10 @@ export default function SupPaymentOutDetails() {
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
-                  <select value={status1 ? "true" : "false"} onChange={(e) => setStatus1(e.target.value === "true")} className='m-0 p-1'>
-                    {[...new Set(supp_Payments_Out
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.persons)
-                      .map(data => data.status)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
-
-                    ))}
-
+                  <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
+                  <option value="" >All</option>
+                      <option value="Open" >Open</option>
+                      <option value="Closed" >Closed</option>
                   </select>
                 </div>
                 <div className="col-auto px-1">
@@ -1651,7 +1645,7 @@ export default function SupPaymentOutDetails() {
                                 <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
-                                <input type='checkbox' value={editedEntry2.status} readonly disabled/>
+                                <input type='text' value={editedEntry2.status} readonly disabled/>
                               </TableCell>
 
                             </>
@@ -1669,7 +1663,7 @@ export default function SupPaymentOutDetails() {
                               <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_Out_PKR}</TableCell>
                               {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_Out_Curr}</TableCell>}
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status===true?"Open":"Closed"}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
 
                             </>
                           )}

@@ -65,6 +65,10 @@ const Candidate_Payment_InSchema = new mongoose.Schema(
     curr_Country: {
       type: String,
     },
+     status:{
+          type:String,
+          default:"Open"
+              },
     payment: [
       {
         name: {
@@ -116,19 +120,9 @@ const Candidate_Payment_InSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
-        cand_Name: {
-          type: String,
-        },
+       
       },
-    ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+    ]
   },
   { timestamps: true }
 );
@@ -198,6 +192,10 @@ const Candidate_Payment_OutSchema = new mongoose.Schema(
     curr_Country: {
       type: String,
     },
+    status:{
+      type:String,
+      default:"Open"
+          },
     payment: [
       {
         name: {
@@ -249,19 +247,10 @@ const Candidate_Payment_OutSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
-        cand_Name: {
-          type: String,
-        },
+       
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+  
   },
   { timestamps: true }
 );

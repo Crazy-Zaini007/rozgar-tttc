@@ -1390,59 +1390,61 @@ const updatePaymentInPerson=async(req,res)=>{
         const personIn = existingSupplier.payment_In_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
           
-        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
-          const newNotification=new Notifications({
-            type:"Offer Letter",
-            content:`${name}'s Final Status is updated to Offer Letter.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
-          const newNotification=new Notifications({
-            type:"E Number",
-            content:`${name}'s Final Status is updated to E Number.`,
-            date:new Date().toISOString().split("T")[0]
+          if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
+            const newNotification = new Notifications({
+              type: "Offer Letter",
+              content: `${name}'s Final Status is updated to Offer Letter.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
+    
+            const newNotification = new Notifications({
+              type: "E Number",
+              content: `${name}'s Final Status is updated to E Number.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
+            const newNotification = new Notifications({
+              type: "QVC",
+              content: `${name}'s Final Status is updated to QVC.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
+            const newNotification = new Notifications({
+              type: "Visa Issued",
+              content: `${name}'s Final Status is updated to Visa Issued.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
+            const newNotification = new Notifications({
+              type: "PTN",
+              content: `${name}'s Final Status is updated to PTN.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
+            const newNotification = new Notifications({
+              type: "Ticket",
+              content: `${name}'s Final Status is updated to Ticket.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
 
-          })
-          await newNotification.save()
-        }
-
-        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
-          const newNotification=new Notifications({
-            type:"QVC",
-            content:`${name}'s Final Status is updated to QVC.`,
-            date:new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
-          const newNotification=new Notifications({
-            type:"Visa Issued",
-            content:`${name}'s Final Status is updated to Visa Issued.`,
-            date:new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
-          const newNotification=new Notifications({
-            type:"PTN",
-            content:`${name}'s Final Status is updated to PTN.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
-
-        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
-            type:"Ticket",
-            content:`${name}'s Final Status is updated to Ticket.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
        
           entryMode=personIn.entry_Mode
             personIn.company = company;
@@ -1900,7 +1902,7 @@ const changePaymentInStatus = async (req, res) => {
   try {
       const userId = req.user._id;
       const user = await User.findById(userId);
-      const{supplierName}=req.body
+      const{supplierName,newStatus}=req.body
 
       if (!user) {
           return res.status(404).json({ message: "User not found" });
@@ -1917,22 +1919,24 @@ const changePaymentInStatus = async (req, res) => {
       // Update status of all persons to false
       if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
           existingSupplier.payment_In_Schema.persons.forEach(person => {
-              person.status = false;
-          });
+            if(existingSupplier.payment_In_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+          })
       }
 
       // Toggle the status of the payment in schema
-      existingSupplier.payment_In_Schema.status = !existingSupplier.payment_In_Schema.status;
+      existingSupplier.payment_In_Schema.status = newStatus
 
       // Save changes to the database
       await existingSupplier.save();
 
       // Prepare response message based on the updated status
       let responseMessage;
-      if (existingSupplier.payment_In_Schema.status) {
-          responseMessage = "Agent Status updated to Closed Successfully!";
-      } else {
+      if (existingSupplier.payment_In_Schema.status==="Open") {
           responseMessage = "Agent Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Agent Status updated to Closed Successfully!";
       }
 
       return res.status(200).json({ message: responseMessage });
@@ -3388,67 +3392,62 @@ const updatePaymentOutPerson=async(req,res)=>{
         const personIn = existingSupplier.payment_Out_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
           
-        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
-          const newNotification=new Notifications({
-            type:"Offer Letter",
-            content:`${name}'s Final Status is updated to Offer Letter.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
-          const newNotification=new Notifications({
-            type:"E Number",
-            content:`${name}'s Final Status is updated to E Number.`,
-            date:new Date().toISOString().split("T")[0]
+          if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
+            const newNotification = new Notifications({
+              type: "Offer Letter",
+              content: `${name}'s Final Status is updated to Offer Letter.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
+    
+            const newNotification = new Notifications({
+              type: "E Number",
+              content: `${name}'s Final Status is updated to E Number.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
+            const newNotification = new Notifications({
+              type: "QVC",
+              content: `${name}'s Final Status is updated to QVC.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
+            const newNotification = new Notifications({
+              type: "Visa Issued",
+              content: `${name}'s Final Status is updated to Visa Issued.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
+            const newNotification = new Notifications({
+              type: "PTN",
+              content: `${name}'s Final Status is updated to PTN.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
+          
+          if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
+            const newNotification = new Notifications({
+              type: "Ticket",
+              content: `${name}'s Final Status is updated to Ticket.`,
+              date: new Date().toISOString().split("T")[0]
+            });
+            await newNotification.save();
+          }
 
-          })
-          await newNotification.save()
-        }
-
-        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
-          const newNotification=new Notifications({
-            type:"QVC",
-            content:`${name}'s Final Status is updated to QVC.`,
-            date:new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
-          const newNotification=new Notifications({
-            type:"Visa Issued",
-            content:`${name}'s Final Status is updated to Visa Issued.`,
-            date:new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
-          const newNotification=new Notifications({
-            type:"PTN",
-            content:`${name}'s Final Status is updated to PTN.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
-
-        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
-            type:"Ticket",
-            content:`${name}'s Final Status is updated to Ticket.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
-        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
-            type:"Ticket",
-            content:`${name}'s Final Status is updated to Ticket.`,
-            date:new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
-        }
+          
           entryMode=personIn.entry_Mode
             personIn.company = company;
             personIn.country = country;
@@ -3906,7 +3905,7 @@ const changePaymentOutStatus = async (req, res) => {
   try {
       const userId = req.user._id;
       const user = await User.findById(userId);
-      const{supplierName}=req.body
+      const{supplierName,newStatus}=req.body
 
       if (!user) {
           return res.status(404).json({ message: "User not found" });
@@ -3923,22 +3922,24 @@ const changePaymentOutStatus = async (req, res) => {
       // Update status of all persons to false
       if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons) {
           existingSupplier.payment_Out_Schema.persons.forEach(person => {
-              person.status = false;
+            if(existingSupplier.payment_Out_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
           });
       }
 
       // Toggle the status of the payment in schema
-      existingSupplier.payment_Out_Schema.status = !existingSupplier.payment_Out_Schema.status;
+      existingSupplier.payment_Out_Schema.status = newStatus;
 
       // Save changes to the database
       await existingSupplier.save();
 
       // Prepare response message based on the updated status
       let responseMessage;
-      if (existingSupplier.payment_Out_Schema.status) {
-          responseMessage = "Agent Status updated to Closed Successfully!";
-      } else {
+      if (existingSupplier.payment_Out_Schema.status==="Open") {
           responseMessage = "Agent Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Agent Status updated to Closed Successfully!";
       }
 
       return res.status(200).json({ message: responseMessage });

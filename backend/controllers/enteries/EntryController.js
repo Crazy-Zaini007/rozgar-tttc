@@ -139,61 +139,61 @@ const addEntry = async (req, res) => {
           });
         sendResponse = false;
       }
-
       if (!existingPPNO) {
 
-        if (final_Status.toLowerCase() === 'offer letter' || final_Status.toLowerCase() === 'offer_letter') {
+        if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
           const newNotification = new Notifications({
             type: "Offer Letter",
             content: `${name}'s Final Status is updated to Offer Letter.`,
             date: new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
+          });
+          await newNotification.save();
         }
-        if (final_Status.toLowerCase() === 'e number' || final_Status.toLowerCase() === 'e_number') {
+        
+        if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
+  
           const newNotification = new Notifications({
             type: "E Number",
             content: `${name}'s Final Status is updated to E Number.`,
             date: new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
+          });
+          await newNotification.save();
         }
-
-        if (final_Status.toLowerCase() === 'qvc' || final_Status.toLowerCase() === 'q_v_c') {
+        
+        if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
           const newNotification = new Notifications({
             type: "QVC",
             content: `${name}'s Final Status is updated to QVC.`,
             date: new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
+          });
+          await newNotification.save();
         }
-        if (final_Status.toLowerCase() === 'visa issued' || final_Status.toLowerCase() === 'visa_issued' || final_Status.toLowerCase() === 'vissa issued' || final_Status.toLowerCase() === 'vissa_issued') {
+        
+        if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
           const newNotification = new Notifications({
             type: "Visa Issued",
             content: `${name}'s Final Status is updated to Visa Issued.`,
             date: new Date().toISOString().split("T")[0]
-
-          })
-          await newNotification.save()
+          });
+          await newNotification.save();
         }
-        if (final_Status.toLowerCase() === 'ptn' || final_Status.toLowerCase() === 'p_t_n') {
+        
+        if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
           const newNotification = new Notifications({
             type: "PTN",
             content: `${name}'s Final Status is updated to PTN.`,
             date: new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
+          });
+          await newNotification.save();
         }
-
-        if (final_Status.toLowerCase() === 'ticket' || final_Status.toLowerCase() === 'tiket') {
+        
+        if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
           const newNotification = new Notifications({
             type: "Ticket",
             content: `${name}'s Final Status is updated to Ticket.`,
             date: new Date().toISOString().split("T")[0]
-          })
-          await newNotification.save()
+          });
+          await newNotification.save();
         }
 
         // uploading image to cloudinary
@@ -3284,6 +3284,8 @@ const addMultipleEnteries = async (req, res) => {
 
       for (const entryData of entries) {
         let final_Status = entryData.final_Status
+        let name=entryData.name
+        
         entryData.flight_Date =
           entryData.flight_Date !== undefined && entryData.flight_Date !== ""
             ? entryData.flight_Date
@@ -3306,60 +3308,60 @@ const addMultipleEnteries = async (req, res) => {
         }
         if (!existingPPNO) {
 
-          if (final_Status.toLowerCase() === 'offer letter' || final_Status.toLowerCase() === 'offer_letter') {
+          if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
             const newNotification = new Notifications({
               type: "Offer Letter",
               content: `${name}'s Final Status is updated to Offer Letter.`,
               date: new Date().toISOString().split("T")[0]
-            })
-            await newNotification.save()
+            });
+            await newNotification.save();
           }
-          if (final_Status.toLowerCase() === 'e number' || final_Status.toLowerCase() === 'e_number') {
+          
+          if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
+    
             const newNotification = new Notifications({
               type: "E Number",
               content: `${name}'s Final Status is updated to E Number.`,
               date: new Date().toISOString().split("T")[0]
-
-            })
-            await newNotification.save()
+            });
+            await newNotification.save();
           }
-
-          if (final_Status.toLowerCase() === 'qvc' || final_Status.toLowerCase() === 'q_v_c') {
+          
+          if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
             const newNotification = new Notifications({
               type: "QVC",
               content: `${name}'s Final Status is updated to QVC.`,
               date: new Date().toISOString().split("T")[0]
-
-            })
-            await newNotification.save()
+            });
+            await newNotification.save();
           }
-          if (final_Status.toLowerCase() === 'visa issued' || final_Status.toLowerCase() === 'visa_issued' || final_Status.toLowerCase() === 'vissa issued' || final_Status.toLowerCase() === 'vissa_issued') {
+          
+          if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
             const newNotification = new Notifications({
               type: "Visa Issued",
               content: `${name}'s Final Status is updated to Visa Issued.`,
               date: new Date().toISOString().split("T")[0]
-
-            })
-            await newNotification.save()
+            });
+            await newNotification.save();
           }
-          if (final_Status.toLowerCase() === 'ptn' || final_Status.toLowerCase() === 'p_t_n') {
+          
+          if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
             const newNotification = new Notifications({
               type: "PTN",
               content: `${name}'s Final Status is updated to PTN.`,
               date: new Date().toISOString().split("T")[0]
-            })
-            await newNotification.save()
+            });
+            await newNotification.save();
           }
-
-          if (final_Status.toLowerCase() === 'ticket' || final_Status.toLowerCase() === 'tiket') {
+          
+          if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
             const newNotification = new Notifications({
               type: "Ticket",
               content: `${name}'s Final Status is updated to Ticket.`,
               date: new Date().toISOString().split("T")[0]
-            })
-            await newNotification.save()
+            });
+            await newNotification.save();
           }
-
 
           const newEntry = new Entries(entryData);
 
@@ -7023,61 +7025,60 @@ const updateEntry = async (req, res) => {
         azad_Visa_Purchase_Rate_Oth_Cur,
       } = req.body;
       // Update pictures if provided
-
-
-      if (final_Status.toLowerCase() === 'offer letter' || final_Status.toLowerCase() === 'offer_letter') {
+      if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
         const newNotification = new Notifications({
           type: "Offer Letter",
           content: `${name}'s Final Status is updated to Offer Letter.`,
           date: new Date().toISOString().split("T")[0]
-        })
-        await newNotification.save()
+        });
+        await newNotification.save();
       }
-      if (final_Status.toLowerCase() === 'e number' || final_Status.toLowerCase() === 'e_number') {
+      
+      if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
+
         const newNotification = new Notifications({
           type: "E Number",
           content: `${name}'s Final Status is updated to E Number.`,
           date: new Date().toISOString().split("T")[0]
-
-        })
-        await newNotification.save()
+        });
+        await newNotification.save();
       }
-
-      if (final_Status.toLowerCase() === 'qvc' || final_Status.toLowerCase() === 'q_v_c') {
+      
+      if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
         const newNotification = new Notifications({
           type: "QVC",
           content: `${name}'s Final Status is updated to QVC.`,
           date: new Date().toISOString().split("T")[0]
-        })
-        await newNotification.save()
+        });
+        await newNotification.save();
       }
-      if (final_Status.toLowerCase() === 'visa issued' || final_Status.toLowerCase() === 'visa_issued' || final_Status.toLowerCase() === 'vissa issued' || final_Status.toLowerCase() === 'vissa_issued') {
+      
+      if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
         const newNotification = new Notifications({
           type: "Visa Issued",
           content: `${name}'s Final Status is updated to Visa Issued.`,
           date: new Date().toISOString().split("T")[0]
-
-        })
-        await newNotification.save()
+        });
+        await newNotification.save();
       }
-      if (final_Status.toLowerCase() === 'ptn' || final_Status.toLowerCase() === 'p_t_n') {
+      
+      if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
         const newNotification = new Notifications({
           type: "PTN",
           content: `${name}'s Final Status is updated to PTN.`,
           date: new Date().toISOString().split("T")[0]
-        })
-        await newNotification.save()
+        });
+        await newNotification.save();
       }
-
-      if (final_Status.toLowerCase() === 'ticket' || final_Status.toLowerCase() === 'tiket') {
+      
+      if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
         const newNotification = new Notifications({
           type: "Ticket",
           content: `${name}'s Final Status is updated to Ticket.`,
           date: new Date().toISOString().split("T")[0]
-        })
-        await newNotification.save()
+        });
+        await newNotification.save();
       }
-
 
       if (picture) {
         try {

@@ -66,8 +66,8 @@ const Payment_InSchema = new mongoose.Schema(
       type: String,
     },
     status:{
-      type:Boolean,
-      default:true
+      type:String,
+      default:"Open"
           },
     payment: [
       {
@@ -121,9 +121,7 @@ const Payment_InSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
-        cand_Name: {
-          type: String,
-        },
+ 
       },
     ],
 
@@ -197,8 +195,8 @@ const Payment_OutSchema = new mongoose.Schema(
       type: String,
     },
     status:{
-      type:Boolean,
-      default:true
+      type:String,
+      default:"Open"
           },
     payment: [
       {
@@ -251,9 +249,7 @@ const Payment_OutSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
-        cand_Name: {
-          type: String,
-        },
+
       },
     ],
    

@@ -403,13 +403,13 @@ export default function SupCandPaymentInDetails() {
 
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
-  const [status, setStatus] = useState(true)
+  const [status, setStatus] = useState('')
 
   const filteredTotalPaymentIn = supp_Payments_In.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
       payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
-      payment.status === status
+      payment.status.toLowerCase().includes(status.toLowerCase())
     )
   })
 
@@ -444,7 +444,7 @@ export default function SupCandPaymentInDetails() {
               <td>${String(entry.total_Visa_Price_In_Curr)}</td>
               <td>${String(entry.total_Payment_In_Curr)}</td>
               <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.status===true?"Open":"Closed")}</td>
+              <td>${String(entry.status)}</td>
             
             </tr>
           `).join('')}
@@ -649,8 +649,7 @@ export default function SupCandPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  const [status1, setStatus1] = useState(true)
-
+  const [status1, setStatus1] = useState("")
 
   const filteredPersons = supp_Payments_In
     .filter((data) => data.supplierName === selectedSupplier)
@@ -667,7 +666,7 @@ export default function SupCandPaymentInDetails() {
           persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
           persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
           persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
-          persons.status === status1
+          persons.status?.toLowerCase().includes(status1.toLowerCase())
         ),
     }))
 
@@ -718,7 +717,7 @@ export default function SupCandPaymentInDetails() {
           <td>${String(person?.visa_Price_In_PKR)-String(person?.toatl_In)+String(person?.cash_Out)}</td>
           <td>${String(person?.visa_Price_In_Curr)}</td>
           <td>${String(person?.remaining_Curr)}</td>
-          <td>${String(person?.status===true?"Open":"Closed")}</td>
+          <td>${String(person?.status)}</td>
           </tr>
         `).join('')
     )}
@@ -787,7 +786,7 @@ export default function SupCandPaymentInDetails() {
         Total_Visa_Price_In_Curr:payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr:payments.total_Payment_In_Curr,
         Remaining_Curr:payments.total_Visa_Price_In_Curr-payments.total_Payment_In_Curr,
-        Status:payments.status===true?"Open":"Closed",
+        Status:payments.status,
         
       }
 
@@ -854,7 +853,7 @@ export default function SupCandPaymentInDetails() {
         Remaining_PKR:payments.visa_Price_In_PKR-payments.total_In+payments.cash_Out,
         visa_Price_In_Curr:payments.visa_Price_In_Curr,
         remaining_Curr:payments.remaining_Curr,
-        Status:payments.status===true?"Open":"Closed",
+        Status:payments.status,
 
         
       }
@@ -871,10 +870,11 @@ export default function SupCandPaymentInDetails() {
 
   
   // Changing Status
-  const changeStatus=async()=>{
+
+  const changeStatus=async(myStatus)=>{
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
-
+      let newStatus=myStatus
       try {
         const response = await fetch(`${apiUrl}/auth/suppliers/update/payment_in/status`, {
           method: 'PATCH',
@@ -882,7 +882,7 @@ export default function SupCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
         })
 
         const json = await response.json()
@@ -955,10 +955,10 @@ export default function SupCandPaymentInDetails() {
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
-                  <select value={status ? "true" : "false"} onChange={(e) => setStatus(e.target.value === "true")} className='m-0 p-1'>
-                    {[...new Set(supp_Payments_In.map(data => data.status))].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
-                    ))}
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                  <option value="" >All</option>
+                      <option value="Open" >Open</option>
+                      <option value="Closed" >Closed</option>
                   </select>
 
                 </div>
@@ -1032,7 +1032,7 @@ export default function SupCandPaymentInDetails() {
                                     <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr - editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='checkbox' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly />
+                                    <input type='text' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly />
                                   </TableCell>
                                   
                                   {/* ... Other cells in edit mode */}
@@ -1076,7 +1076,7 @@ export default function SupCandPaymentInDetails() {
                                     {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    {entry.status === true ? "Open" : "Closed"}
+                                    {entry.status}
                                   </TableCell>
 
                                   {/* ... Other cells in non-edit mode */}
@@ -1188,9 +1188,9 @@ export default function SupCandPaymentInDetails() {
                   {loading5?"Updating":"Change Status"}
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><Link className="dropdown-item" onClick={()=>changeStatus()}>Khata Open</Link></li>
-                    <li><Link className="dropdown-item"  onClick={()=>changeStatus()}>Khata Close</Link></li>
-                    
+                  <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
+                  
                   </ul>
                 </div>
               <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
@@ -1448,14 +1448,10 @@ export default function SupCandPaymentInDetails() {
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
-                  <select value={status1 ? "true" : "false"} onChange={(e) => setStatus1(e.target.value === "true")} className='m-0 p-1'>
-                    {[...new Set(supp_Payments_In
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.persons)
-                      .map(data => data.status)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue ? "Open" : "Close"}</option>
-                    ))}
+                  <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
+                  <option value="" >All</option>
+                      <option value="Open" >Open</option>
+                      <option value="Closed" >Closed</option>
                   </select>
                 </div>
                 <div className="col-auto px-1">
@@ -1720,7 +1716,7 @@ export default function SupCandPaymentInDetails() {
                               <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR-person?.total_In +person?.cash_Out}</TableCell>
                               {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
                               <TableCell className='border data_td text-center'>{person?.remaining_Curr}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status===true?"Open":"Closed"}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
 
                             </>
                           )}

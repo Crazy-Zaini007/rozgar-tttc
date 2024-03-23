@@ -9,7 +9,6 @@ const Supplier_Payment_InSchema = new mongoose.Schema(
     supplierName: {
       type: String,
     },
-
     total_Azad_Visa_Price_In_PKR: {
       type: Number,
       default: 0,
@@ -46,6 +45,10 @@ const Supplier_Payment_InSchema = new mongoose.Schema(
       type: String,
 
     },
+    status:{
+      type:String,
+      default:"Open"
+          },
     persons: [
       {
         name: {
@@ -84,7 +87,14 @@ const Supplier_Payment_InSchema = new mongoose.Schema(
         flight_Date: {
           type: String,
         },
-        entry_Date: {},
+        entry_Date: {
+          type: String,
+
+        },
+        status:{
+          type:String,
+          default:"Open"
+              },
       },
     ],
     payment: [
@@ -140,14 +150,6 @@ const Supplier_Payment_InSchema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true }
 );
@@ -193,6 +195,10 @@ const Supplier_Payment_OutSchema = new mongoose.Schema(
     curr_Country: {
       type: String,
     },
+    status:{
+      type:String,
+      default:"Open"
+          },
     persons: [
       {
         name: {
@@ -232,8 +238,13 @@ const Supplier_Payment_OutSchema = new mongoose.Schema(
           type: String,
         },
         entry_Date: {
+          type: String,
 
         },
+        status:{
+          type:String,
+          default:"Open"
+              },
       },
     ],
     payment: [
@@ -290,18 +301,9 @@ const Supplier_Payment_OutSchema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
   },
-  { timestamps: true }
-);
-
+  { timestamps: true}
+)
 //Agent Payment_In Schema
 const Agent_Payment_InSchema = new mongoose.Schema(
   {
@@ -341,12 +343,13 @@ const Agent_Payment_InSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-
-
-
     curr_Country: {
       type: String,
     },
+    status:{
+      type:String,
+      default:"Open"
+          },
     persons: [
       {
         name: {
@@ -385,7 +388,13 @@ const Agent_Payment_InSchema = new mongoose.Schema(
         flight_Date: {
           type: String,
         },
-        entry_Date: {},
+        entry_Date: {
+          type: String,
+        },
+        status:{
+          type:String,
+          default:"Open"
+              },
       },
     ],
     payment: [
@@ -442,14 +451,7 @@ const Agent_Payment_InSchema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+
   },
   { timestamps: true }
 );
@@ -493,6 +495,10 @@ const Agent_Payment_OutSchema = new mongoose.Schema(
       default: 0,
     },
     curr_Country: {},
+    status:{
+      type:String,
+      default:"Open"
+          },
     persons: [
       {
         name: {
@@ -531,7 +537,13 @@ const Agent_Payment_OutSchema = new mongoose.Schema(
         flight_Date: {
           type: String,
         },
-        entry_Date: {},
+        entry_Date: {
+          type: String,
+        },
+        status:{
+          type:String,
+          default:"Open"
+              },
       },
     ],
     payment: [
@@ -588,14 +600,7 @@ const Agent_Payment_OutSchema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+
   },
   { timestamps: true }
 );

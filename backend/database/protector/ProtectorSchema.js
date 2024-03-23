@@ -40,6 +40,10 @@ const Payment_OutSchema = new mongoose.Schema({
         type: String
 
     },
+    status:{
+        type:String,
+        default:"Open"
+            },
     persons: [
         {
             name: {
@@ -74,8 +78,13 @@ const Payment_OutSchema = new mongoose.Schema({
                 type: String
             },
             entry_Date: {
+                type: String,
     
-            }
+            },
+            status:{
+                type:String,
+                default:"Open"
+                    },
         }
     ],
     payment: [
@@ -130,17 +139,6 @@ const Payment_OutSchema = new mongoose.Schema({
             }
         }
     ],
-    open: {
-        type: Boolean,
-        default: true,
-
-    },
-    close: {
-        type: Boolean,
-        default: false
-
-    }
-
 }, { timestamps: true })
 
 //  Protector Schema
