@@ -1672,7 +1672,7 @@ export default function SupPaymentInDetails() {
                               <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR}</TableCell>
                               {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status===true?"Open":"Closed"}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
                             </>
                           )}
                           <TableCell className='border data_td p-1 '>

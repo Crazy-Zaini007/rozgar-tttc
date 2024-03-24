@@ -1700,7 +1700,7 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td text-center'>{person?.visa_Price_Out_PKR - person?.total_In + person?.cash_Out}</TableCell>
                               {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_Out_Curr}</TableCell>}
                               <TableCell className='border data_td text-center'>{person?.remaining_Curr}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status === true ? "Open" : "Closed"}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
 
                             </>
                           )}
