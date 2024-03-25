@@ -56,7 +56,7 @@ const addPaymentIn = async (req, res) => {
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-    });
+    })
 
     if (!existingSupplier) {
       res.status(404).json({

@@ -368,7 +368,7 @@ const addEntry = async (req, res) => {
         let paymentInfo = {};
 
         //Handling Suppliers
-
+        const suppliers=await Suppliers.find({})
         //Saving the Entry Details to the Suppliers Payment In Section if reference_Out==="Supplier"
         if (
           reference_Out === "SUPPLIERS" ||
@@ -379,11 +379,18 @@ const addEntry = async (req, res) => {
           reference_Out === "supplier"
         ) {
           try {
+            let existingPaymentInSupplier;
             // Check if the supplier with the given name exists
-            const existingPaymentInSupplier = await Suppliers.findOne({
-              "payment_In_Schema.supplierName": reference_Out_Name,
-            });
-
+            for(const supplier of suppliers){
+              if(supplier.payment_In_Schema){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+                  existingPaymentInSupplier=supplier
+                  break
+                }
+              }
+             
+            }
+           
             if (!existingPaymentInSupplier) {
               // If the supplier does not exist, create a new one
               const newPaymentInSupplier = new Suppliers({
@@ -521,10 +528,14 @@ const addEntry = async (req, res) => {
           reference_In === "supplier"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutSupplier = await Suppliers.findOne({
-              "payment_Out_Schema.supplierName": reference_In_Name,
-            });
+            let existingPaymentOutSupplier;
+            for(const supplier of suppliers){
+              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+                existingPaymentOutSupplier=supplier
+                break
+              }
+            }
+           
 
             if (!existingPaymentOutSupplier) {
               // If the supplier does not exist, create a new one
@@ -661,7 +672,7 @@ const addEntry = async (req, res) => {
         }
 
         //Handling Agents
-
+        const agents=await Agents.find({})
         //Saving the Entry Details to the Agents Payment In Section if reference_Out==="Agents"
         if (
           reference_Out === "AGENTS" ||
@@ -672,10 +683,14 @@ const addEntry = async (req, res) => {
           reference_Out === "agent"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentInAgent = await Agents.findOne({
-              "payment_In_Schema.supplierName": reference_Out_Name,
-            });
+            let existingPaymentInAgent;
+            for(const agent of agents){
+              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+                existingPaymentInAgent=agent
+                break
+              }
+            }
+           
 
             if (!existingPaymentInAgent) {
               // If the supplier does not exist, create a new one
@@ -816,10 +831,14 @@ const addEntry = async (req, res) => {
           reference_In === "agent"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutAgent = await Agents.findOne({
-              "payment_Out_Schema.supplierName": reference_In_Name,
-            });
+            let existingPaymentOutAgent
+            for(const agent of agents){
+              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+                existingPaymentOutAgent=agent
+                break
+              }
+            }
+      
 
             if (!existingPaymentOutAgent) {
               // If the supplier does not exist, create a new one
@@ -1076,7 +1095,7 @@ const addEntry = async (req, res) => {
         }
 
         //Handling Azad Visa Suppliers
-
+        const azadSuppliers= await AzadSupplier.find({})
         //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Supplier
         if (
           azad_Visa_Reference_Out === "SUPPLIERS" ||
@@ -1087,12 +1106,16 @@ const addEntry = async (req, res) => {
           azad_Visa_Reference_Out === "suppliers"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentInAzadSupplier = await AzadSupplier.findOne({
-              "Supplier_Payment_In_Schema.supplierName":
-                azad_Visa_Reference_Out_Name,
-            });
-
+            let existingPaymentInAzadSupplier
+            for (const supplier of azadSuppliers){
+              if(supplier.Supplier_Payment_In_Schema){
+                if(supplier.Supplier_Payment_In_Schema && supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInAzadSupplier = supplier;
+                  break
+                }
+              }
+             }
+          
             if (!existingPaymentInAzadSupplier) {
               // If the supplier does not exist, create a new one
               const newPaymentInAzadSupplier = new AzadSupplier({
@@ -1229,11 +1252,16 @@ const addEntry = async (req, res) => {
           azad_Visa_Reference_In === "suppliers"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutAzadSupplier = await AzadSupplier.findOne({
-              "Supplier_Payment_Out_Schema.supplierName":
-                azad_Visa_Reference_In_Name,
-            });
+            let existingPaymentOutAzadSupplier
+            for (const supplier of azadSuppliers){
+              if(supplier.Supplier_Payment_Out_Schema){
+                if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutAzadSupplier = supplier;
+                  break
+                }
+              }
+             }
+           
 
             if (!existingPaymentOutAzadSupplier) {
               // If the supplier does not exist, create a new one
@@ -1372,12 +1400,17 @@ const addEntry = async (req, res) => {
           azad_Visa_Reference_Out === "agents"
         ) {
           try {
+            let existingPaymentInAzadAgent
+            for (const supplier of azadSuppliers){
+              if(supplier.Agent_Payment_In_Schema){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInAzadAgent = supplier;
+                  break
+                }
+              }
+             }
             // Check if the supplier with the given name exists
-            const existingPaymentInAzadAgent = await AzadSupplier.findOne({
-              "Agent_Payment_In_Schema.supplierName":
-                azad_Visa_Reference_Out_Name,
-            });
-
+          
             if (!existingPaymentInAzadAgent) {
               // If the supplier does not exist, create a new one
               const newPaymentInAzadAgent = new AzadSupplier({
@@ -1514,11 +1547,16 @@ const addEntry = async (req, res) => {
           azad_Visa_Reference_In === "agents"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutAzadAgent = await AzadSupplier.findOne({
-              "Agent_Payment_Out_Schema.supplierName":
-                azad_Visa_Reference_In_Name,
-            });
+            let existingPaymentOutAzadAgent
+            for (const supplier of azadSuppliers){
+              if(supplier.Agent_Payment_Out_Schema){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutAzadAgent = supplier;
+                  break
+                }
+              }
+             }
+           
             if (!existingPaymentOutAzadAgent) {
               // If the supplier does not exist, create a new one
               const newPaymentOutAzadAgent = new AzadSupplier({
@@ -1773,7 +1811,7 @@ const addEntry = async (req, res) => {
         }
 
         //Handling Ticket Suppliers
-
+        const ticketSuppliers=await TicketSuppliers.find({})
         //Saving the Entry Details to the Ticket Payment In Section if azad_Visa_Reference_Out_Name is Supplier
         if (
           ticket_Reference_Out === "SUPPLIERS" ||
@@ -1784,13 +1822,16 @@ const addEntry = async (req, res) => {
           ticket_Reference_Out === "suppliers"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentInTicketSupplier =
-              await TicketSuppliers.findOne({
-                "Supplier_Payment_In_Schema.supplierName":
-                  ticket_Reference_Out_Name,
-              });
-
+            let existingPaymentInTicketSupplier
+            for (const supplier of ticketSuppliers){
+              if(supplier.Supplier_Payment_In_Schema){
+                if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInTicketSupplier = supplier;
+                  break
+                }
+              }
+             }
+           
             if (!existingPaymentInTicketSupplier) {
               // If the supplier does not exist, create a new one
               const newPaymentInTicketSupplier = new TicketSuppliers({
@@ -1917,12 +1958,16 @@ const addEntry = async (req, res) => {
           ticket_Reference_In === "suppliers"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutTicketSupplier =
-              await TicketSuppliers.findOne({
-                "Supplier_Payment_Out_Schema.supplierName":
-                  ticket_Reference_In_Name,
-              });
+            let existingPaymentOutTicketSupplier
+            for (const supplier of ticketSuppliers){
+              if(supplier.Supplier_Payment_Out_Schema){
+                if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutTicketSupplier = supplier;
+                  break
+                }
+              }
+             }
+           
 
             if (!existingPaymentOutTicketSupplier) {
               // If the supplier does not exist, create a new one
@@ -2060,10 +2105,16 @@ const addEntry = async (req, res) => {
           ticket_Reference_Out === "agents"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentInTicketAgent = await TicketSuppliers.findOne({
-              "Agent_Payment_In_Schema.supplierName": ticket_Reference_Out_Name,
-            });
+            let existingPaymentInTicketAgent
+            for (const supplier of ticketSuppliers){
+              if(supplier.Agent_Payment_In_Schema){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInTicketAgent = supplier;
+                  break
+                }
+              }
+             }
+         
 
             if (!existingPaymentInTicketAgent) {
               // If the supplier does not exist, create a new one
@@ -2190,13 +2241,17 @@ const addEntry = async (req, res) => {
           ticket_Reference_In === "agents"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutTicketAgent = await TicketSuppliers.findOne(
-              {
-                "Agent_Payment_Out_Schema.supplierName":
-                  ticket_Reference_In_Name,
+
+            let existingPaymentOutTicketAgent
+            for (const supplier of ticketSuppliers){
+              if(supplier.Agent_Payment_Out_Schema){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutTicketAgent = supplier;
+                  break
+                }
               }
-            );
+             }
+           
 
             if (!existingPaymentOutTicketAgent) {
               // If the supplier does not exist, create a new one
@@ -2450,7 +2505,7 @@ const addEntry = async (req, res) => {
         }
 
         // Handling Visit Suppliers
-
+        const visitSuppliers=await VisitSuppliers.find({})
         //Saving the Entry Details to the Ticket Payment In Section if azad_Visa_Reference_Out_Name is Supplier
         if (
           visit_Reference_Out === "SUPPLIERS" ||
@@ -2461,13 +2516,16 @@ const addEntry = async (req, res) => {
           visit_Reference_Out === "suppliers"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentInVisitSupplier = await VisitSuppliers.findOne(
-              {
-                "Supplier_Payment_In_Schema.supplierName":
-                  visit_Reference_Out_Name,
+            let existingPaymentInVisitSupplier
+            for (const supplier of visitSuppliers){
+              if(supplier.Supplier_Payment_In_Schema){
+                if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInVisitSupplier = supplier;
+                  break
+                }
               }
-            );
+             }
+           
 
             if (!existingPaymentInVisitSupplier) {
               // If the supplier does not exist, create a new one
@@ -2594,13 +2652,17 @@ const addEntry = async (req, res) => {
           visit_Reference_In === "suppliers"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutVisitSupplier =
-              await VisitSuppliers.findOne({
-                "Supplier_Payment_Out_Schema.supplierName":
-                  visit_Reference_In_Name,
-              });
 
+            let existingPaymentOutVisitSupplier
+            for (const supplier of visitSuppliers){
+              if(supplier.Supplier_Payment_Out_Schema){
+                if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutVisitSupplier = supplier;
+                  break
+                }
+              }
+             }
+           
             if (!existingPaymentOutVisitSupplier) {
               // If the supplier does not exist, create a new one
               const newPaymentOutVisitSupplier = new VisitSuppliers({
@@ -2733,11 +2795,17 @@ const addEntry = async (req, res) => {
           visit_Reference_Out === "agents"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentInVisitAgent = await VisitSuppliers.findOne({
-              "Agent_Payment_In_Schema.supplierName": visit_Reference_Out_Name,
-            });
 
+            let existingPaymentInVisitAgent
+            for (const supplier of visitSuppliers){
+              if(supplier.Agent_Payment_In_Schema){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInVisitAgent = supplier;
+                  break
+                }
+              }
+             }
+          
             if (!existingPaymentInVisitAgent) {
               // If the supplier does not exist, create a new one
               const newPaymentInVisitAgent = new VisitSuppliers({
@@ -2864,10 +2932,17 @@ const addEntry = async (req, res) => {
           visit_Reference_In === "agent"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutVisitAgent = await VisitSuppliers.findOne({
-              "Agent_Payment_Out_Schema.supplierName": visit_Reference_In_Name,
-            });
+
+            let existingPaymentOutVisitAgent
+            for (const supplier of visitSuppliers){
+              if(supplier.Agent_Payment_Out_Schema){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutVisitAgent = supplier;
+                  break
+                }
+              }
+             }
+           
 
             if (!existingPaymentOutVisitAgent) {
               // If the supplier does not exist, create a new one
@@ -3115,6 +3190,7 @@ const addEntry = async (req, res) => {
           }
         }
 
+        const protectors=await Protector.find({})
         if (
           protector_Reference_In === "PRPTECTORS" ||
           protector_Reference_In === "PRPTECTOR" ||
@@ -3124,10 +3200,15 @@ const addEntry = async (req, res) => {
           protector_Reference_In === "protector"
         ) {
           try {
-            // Check if the supplier with the given name exists
-            const existingPaymentOutProtector = await Protector.findOne({
-              "payment_Out_Schema.supplierName": protector_Reference_In_Name,
-            });
+            let existingPaymentOutProtector
+            for(const protector of protectors){
+              if(protector.payment_Out_Schema){
+                if(protector.payment_Out_Schema.supplierName.toLowerCase()===protector_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutProtector=protector
+                }
+              }
+            }
+          
 
             if (!existingPaymentOutProtector) {
               // If the supplier does not exist, create a new one
@@ -3364,6 +3445,7 @@ const addMultipleEnteries = async (req, res) => {
           }
 
           const newEntry = new Entries(entryData);
+          const suppliers=await Suppliers.find({})
 
           if (
             entryData.reference_Out === "SUPPLIERS" ||
@@ -3373,10 +3455,18 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_Out === "Suppliers" ||
             entryData.reference_Out === "Supplier"
           ) {
-            const existingPaymentInSupplier = await Suppliers.findOne({
-              "payment_In_Schema.supplierName": entryData.reference_Out_Name,
-            });
-
+            let existingPaymentInSupplier;
+            // Check if the supplier with the given name exists
+            for(const supplier of suppliers){
+              if(supplier.payment_In_Schema){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+                  existingPaymentInSupplier=supplier
+                  break
+                }
+              }
+             
+            }
+        
             if (!existingPaymentInSupplier) {
               const newPaymentInSupplier = new Suppliers({
                 payment_In_Schema: {
@@ -3483,9 +3573,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_In === "Suppliers" ||
             entryData.reference_In === "Supplier"
           ) {
-            const existingPaymentOutSupplier = await Suppliers.findOne({
-              "payment_Out_Schema.supplierName": entryData.reference_In_Name,
-            });
+            let existingPaymentOutSupplier;
+            for(const supplier of suppliers){
+              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+                existingPaymentOutSupplier=supplier
+                break
+              }
+            }
 
             if (!existingPaymentOutSupplier) {
               const newPaymentOutSupplier = new Suppliers({
@@ -3588,6 +3682,8 @@ const addMultipleEnteries = async (req, res) => {
                 existingPaymentOutSupplier;
             }
           }
+
+        const agents=await Agents.find({})
           //Saving the Entry Details to the Agents Payment In Section if reference_Out==="Agents"
           if (
             entryData.reference_Out === "AGENTS" ||
@@ -3599,9 +3695,13 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInAgent = await Agents.findOne({
-                "payment_In_Schema.supplierName": entryData.reference_Out_Name,
-              });
+              let existingPaymentInAgent;
+            for(const agent of agents){
+              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+                existingPaymentInAgent=agent
+                break
+              }
+            }
 
               if (!existingPaymentInAgent) {
                 // If the supplier does not exist, create a new one
@@ -3721,9 +3821,13 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutAgent = await Agents.findOne({
-                "payment_Out_Schema.supplierName": entryData.reference_In_Name,
-              });
+              let existingPaymentOutAgent
+            for(const agent of agents){
+              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+                existingPaymentOutAgent=agent
+                break
+              }
+            }
 
               if (!existingPaymentOutAgent) {
                 // If the supplier does not exist, create a new one
@@ -3947,6 +4051,7 @@ const addMultipleEnteries = async (req, res) => {
           }
 
           //Handling Azad Visa Suppliers
+          const azadSuppliers= await AzadSupplier.find({})
 
           //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Supplier
           if (
@@ -3959,10 +4064,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInAzadSupplier = await AzadSupplier.findOne({
-                "Supplier_Payment_In_Schema.supplierName":
-                  entryData.azad_Visa_Reference_Out_Name,
-              });
+              let existingPaymentInAzadSupplier
+              for (const supplier of azadSuppliers){
+                if(supplier.Supplier_Payment_In_Schema){
+                  if(supplier.Supplier_Payment_In_Schema && supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                    existingPaymentInAzadSupplier = supplier;
+                    break
+                  }
+                }
+               }
 
               if (!existingPaymentInAzadSupplier) {
                 // If the supplier does not exist, create a new one
@@ -4083,12 +4193,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
-                {
-                  "Supplier_Payment_Out_Schema.supplierName":
-                    azad_Visa_Reference_In_Name,
+              let existingPaymentOutAzadSupplier
+            for (const supplier of azadSuppliers){
+              if(supplier.Supplier_Payment_Out_Schema){
+                if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutAzadSupplier = supplier;
+                  break
                 }
-              );
+              }
+             }
 
               if (!existingPaymentOutAzadSupplier) {
                 // If the supplier does not exist, create a new one
@@ -4210,10 +4323,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInAzadAgent = await AzadSupplier.findOne({
-                "Agent_Payment_In_Schema.supplierName":
-                  entryData.azad_Visa_Reference_Out_Name,
-              });
+              let existingPaymentInAzadAgent
+            for (const supplier of azadSuppliers){
+              if(supplier.Agent_Payment_In_Schema){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInAzadAgent = supplier;
+                  break
+                }
+              }
+             }
 
               if (!existingPaymentInAzadAgent) {
                 // If the supplier does not exist, create a new one
@@ -4334,10 +4452,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutAzadAgent = await AzadSupplier.findOne({
-                "Agent_Payment_Out_Schema.supplierName":
-                  entryData.azad_Visa_Reference_In_Name,
-              });
+              let existingPaymentOutAzadAgent
+            for (const supplier of azadSuppliers){
+              if(supplier.Agent_Payment_Out_Schema){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutAzadAgent = supplier;
+                  break
+                }
+              }
+             }
 
               if (!existingPaymentOutAzadAgent) {
                 // If the supplier does not exist, create a new one
@@ -4568,6 +4691,7 @@ const addMultipleEnteries = async (req, res) => {
           }
 
           //Handling Ticket Suppliers
+          const ticketSuppliers=await TicketSuppliers.find({})
 
           //Saving the Entry Details to the Ticket Payment In Section if azad_Visa_Reference_Out_Name is Supplier
           if (
@@ -4580,11 +4704,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInTicketSupplier =
-                await TicketSuppliers.findOne({
-                  "Supplier_Payment_In_Schema.supplierName":
-                    entryData.ticket_Reference_Out_Name,
-                });
+              let existingPaymentInTicketSupplier
+              for (const supplier of ticketSuppliers){
+                if(supplier.Supplier_Payment_In_Schema){
+                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                    existingPaymentInTicketSupplier = supplier;
+                    break
+                  }
+                }
+               }
 
               if (!existingPaymentInTicketSupplier) {
                 // If the supplier does not exist, create a new one
@@ -4704,11 +4832,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutTicketSupplier =
-                await TicketSuppliers.findOne({
-                  "Supplier_Payment_Out_Schema.supplierName":
-                    ticket_Reference_In_Name,
-                });
+              let existingPaymentOutTicketSupplier
+              for (const supplier of ticketSuppliers){
+                if(supplier.Supplier_Payment_Out_Schema){
+                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                    existingPaymentOutTicketSupplier = supplier;
+                    break
+                  }
+                }
+               }
 
               if (!existingPaymentOutTicketSupplier) {
                 // If the supplier does not exist, create a new one
@@ -4830,11 +4962,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInTicketAgent =
-                await TicketSuppliers.findOne({
-                  "Agent_Payment_In_Schema.supplierName":
-                    entryData.ticket_Reference_Out_Name,
-                });
+              let existingPaymentInTicketAgent
+              for (const supplier of ticketSuppliers){
+                if(supplier.Agent_Payment_In_Schema){
+                  if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                    existingPaymentInTicketAgent = supplier;
+                    break
+                  }
+                }
+               }
 
               if (!existingPaymentInTicketAgent) {
                 // If the supplier does not exist, create a new one
@@ -4953,11 +5089,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutTicketAgent =
-                await TicketSuppliers.findOne({
-                  "Agent_Payment_Out_Schema.supplierName":
-                    entryData.ticket_Reference_In_Name,
-                });
+              let existingPaymentOutTicketAgent
+            for (const supplier of ticketSuppliers){
+              if(supplier.Agent_Payment_Out_Schema){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutTicketAgent = supplier;
+                  break
+                }
+              }
+             }
 
               if (!existingPaymentOutTicketAgent) {
                 // If the supplier does not exist, create a new one
@@ -5185,6 +5325,7 @@ const addMultipleEnteries = async (req, res) => {
           }
 
           // Handling Visit Suppliers
+          const visitSuppliers=await VisitSuppliers.find({})
 
           //Saving the Entry Details to the Ticket Payment In Section if azad_Visa_Reference_Out_Name is Supplier
           if (
@@ -5197,11 +5338,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInVisitSupplier =
-                await VisitSuppliers.findOne({
-                  "Supplier_Payment_In_Schema.supplierName":
-                    entryData.visit_Reference_Out_Name,
-                });
+              let existingPaymentInVisitSupplier
+              for (const supplier of visitSuppliers){
+                if(supplier.Supplier_Payment_In_Schema){
+                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                    existingPaymentInVisitSupplier = supplier;
+                    break
+                  }
+                }
+               }
 
               if (!existingPaymentInVisitSupplier) {
                 // If the supplier does not exist, create a new one
@@ -5320,11 +5465,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutVisitSupplier =
-                await VisitSuppliers.findOne({
-                  "Supplier_Payment_Out_Schema.supplierName":
-                    entryData.visit_Reference_In_Name,
-                });
+              let existingPaymentOutVisitSupplier
+              for (const supplier of visitSuppliers){
+                if(supplier.Supplier_Payment_Out_Schema){
+                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                    existingPaymentOutVisitSupplier = supplier;
+                    break
+                  }
+                }
+               }
 
               if (!existingPaymentOutVisitSupplier) {
                 // If the supplier does not exist, create a new one
@@ -5445,10 +5594,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentInVisitAgent = await VisitSuppliers.findOne({
-                "Agent_Payment_In_Schema.supplierName":
-                  entryData.visit_Reference_Out_Name,
-              });
+              let existingPaymentInVisitAgent
+            for (const supplier of visitSuppliers){
+              if(supplier.Agent_Payment_In_Schema){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                  existingPaymentInVisitAgent = supplier;
+                  break
+                }
+              }
+             }
 
               if (!existingPaymentInVisitAgent) {
                 // If the supplier does not exist, create a new one
@@ -5563,12 +5717,15 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             try {
               // Check if the supplier with the given name exists
-              const existingPaymentOutVisitAgent = await VisitSuppliers.findOne(
-                {
-                  "Agent_Payment_Out_Schema.supplierName":
-                    entryData.visit_Reference_In_Name,
+              let existingPaymentOutVisitAgent
+              for (const supplier of visitSuppliers){
+                if(supplier.Agent_Payment_Out_Schema){
+                  if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                    existingPaymentOutVisitAgent = supplier;
+                    break
+                  }
                 }
-              );
+               }
 
               if (!existingPaymentOutVisitAgent) {
                 // If the supplier does not exist, create a new one
@@ -5793,6 +5950,11 @@ const addMultipleEnteries = async (req, res) => {
             }
           }
 
+
+
+
+          const protectors=await Protector.find({})
+
           if (
             entryData.protector_Reference_In === "PRPTECTORS" ||
             entryData.protector_Reference_In === "PRPTECTOR" ||
@@ -5802,11 +5964,14 @@ const addMultipleEnteries = async (req, res) => {
             entryData.protector_Reference_In === "protector"
           ) {
             try {
-              // Check if the supplier with the given name exists
-              const existingPaymentOutProtector = await Protector.findOne({
-                "payment_Out_Schema.supplierName":
-                  entryData.protector_Reference_In_Name,
-              });
+              let existingPaymentOutProtector
+            for(const protector of protectors){
+              if(protector.payment_Out_Schema){
+                if(protector.payment_Out_Schema.supplierName.toLowerCase()===protector_Reference_In_Name.toLowerCase()){
+                  existingPaymentOutProtector=protector
+                }
+              }
+            }
 
               if (!existingPaymentOutProtector) {
                 // If the supplier does not exist, create a new one
