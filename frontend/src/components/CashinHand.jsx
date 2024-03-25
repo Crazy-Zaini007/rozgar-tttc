@@ -316,7 +316,7 @@ export default function CashinHand() {
         paymentItem.payment_Type.toLowerCase().includes(payment_Type1.toLowerCase())
       );
     })
-  : [];
+  : []
 
 
 

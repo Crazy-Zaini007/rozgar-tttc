@@ -229,7 +229,7 @@ export default function CashInHandWOE() {
     if (dateFrom && dateTo) {
       isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
     }
-  
+    
     // Filter payment_Via based on the selected cash_Type
     let filteredPaymentVia = true;
     if (cash_Type === 'cash') {

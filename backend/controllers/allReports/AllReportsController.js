@@ -843,6 +843,7 @@ let totalAdvancePaymentOut = 0
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
 // Controller to get payments of the same date and combine payment_In and payment_Out
 const getAllPaymentsByDate = async (req, res) =>{
     try {
@@ -1159,7 +1160,322 @@ res.status(200).json({ data: combinedArray,bank_Cash:totalPaymentAcrossBanks });
     }
 }
 
+// Getting all noram payments
+
+const getNormalPayments = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (user.role !== "Admin") {
+            res.status(404).json({ message: "You are not an Admin" });
+            return;
+        }
+
+       const normalPayments=[]
+        // Array of collections to query for payment_In
+        const inCollections = [
+            { model: Agents, schemaType: 'payment_In_Schema' },
+            { model: Suppliers, schemaType: 'payment_In_Schema' },
+            { model: Candidates, schemaType: 'payment_In_Schema' },
+            { model: AzadSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: TicketSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: VisitSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: AzadSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: TicketSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: VisitSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: AzadCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: TicketCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: VisitCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: CDWC, schemaType: 'payment_In_Schema' }, 
+            { model: CDWOC, schemaType: 'payment_In_Schema' }, 
+        ];
+
+        // Initialize total advance payment for payment_In
+
+        // Process payments for each schema for payment_In
+        for (const { model, schemaType } of inCollections) {
+            const items = await model.find();
+
+            for (const item of items) {
+                // Check if the payment schema exists and has the expected structure
+                if (item[schemaType] && item[schemaType].payment) {
+                    for (const payment of item[schemaType].payment) {
+                        // Check if payment type is "Advance"
+                        if (payment.payment_Type.toLowerCase() === "normal") {
+                            normalPayments.push(payment)
+
+                        }
+                    }
+                }
+            }
+        }
+
+          
+
+
+        // Array of collections to query for payment_Out
+        const outCollections = [
+            { model: Agents, schemaType: 'payment_Out_Schema' },
+            { model: Suppliers, schemaType: 'payment_Out_Schema' },
+            { model: Candidates, schemaType: 'payment_Out_Schema' },
+            { model: AzadSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: TicketSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: VisitSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: AzadSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: TicketSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: VisitSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: AzadCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: TicketCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: VisitCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: Protector, schemaType: 'payment_Out_Schema' },
+            { model: CDWC, schemaType: 'payment_In_Schema' }, 
+            { model: CDWOC, schemaType: 'payment_In_Schema' }, 
+        ];
+
+        
+        const employees=await Employees.find()
+        const expenses=await Expenses.find()
+
+        // Initialize total advance payment for payment_Out
+
+        // Process payments for each schema for payment_Out
+        for (const { model, schemaType } of outCollections) {
+            const items = await model.find();
+
+            for (const item of items) {
+                // Check if the payment schema exists and has the expected structure
+                if (item[schemaType] && item[schemaType].payment) {
+                    for (const payment of item[schemaType].payment) {
+                        // Check if payment type is "Advance"
+                        if (payment.payment_Type.toLowerCase() === "normal") {
+                            normalPayments.push(payment)
+                           
+                        }
+                    }
+                }
+            }
+        }
+
+        
+        // for(const employee of employees){
+        //     if(employee.payment){
+        //         const payments=employee.payment
+        //         if(payments){
+        //             for(const payment of payments){
+        //                 if(payment.payment_Type.toLowerCase() === "normal"){
+        //                     normalPayments.push(payment)
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // for(const expense of expenses){
+        //     if(expense){
+        //         if(expense){
+                  
+        //                 if(expense.payment_Type.toLowerCase() === "normal"){
+        //                     normalPayments.push(payment)
+                           
+        //                 }
+                    
+        //         }
+        //     }
+        // }
+
+          // Initialize total advance payment for payment_In
+
+          // Process payments for each schema for payment_In
+          for (const { model, schemaType } of outCollections) {
+              const items = await model.find();
+  
+              for (const item of items) {
+                  // Check if the payment schema exists and has the expected structure
+                  if (item[schemaType] && item[schemaType].payment) {
+                      for (const payment of item[schemaType].payment) {
+                          // Check if payment type is "Advance"
+                          if (payment.payment_Type.toLowerCase() === "normal" ) {
+                            normalPayments.push(payment)
+                             
+                          }
+                      }
+                  }
+              }
+          }
+        // Send the resulting total advance payments in the response
+        res.status(200).json({data:normalPayments});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+// Getting all Advance payments
+
+const getAdvancePayments = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (user.role !== "Admin") {
+            res.status(404).json({ message: "You are not an Admin" });
+            return;
+        }
+
+       const advancePayments=[]
+        // Array of collections to query for payment_In
+        const inCollections = [
+            { model: Agents, schemaType: 'payment_In_Schema' },
+            { model: Suppliers, schemaType: 'payment_In_Schema' },
+            { model: Candidates, schemaType: 'payment_In_Schema' },
+            { model: AzadSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: TicketSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: VisitSuppliers, schemaType: 'Agent_Payment_In_Schema' },
+            { model: AzadSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: TicketSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: VisitSuppliers, schemaType: 'Supplier_Payment_In_Schema' },
+            { model: AzadCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: TicketCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: VisitCandidates, schemaType: 'Candidate_Payment_In_Schema' },
+            { model: CDWC, schemaType: 'payment_In_Schema' }, 
+            { model: CDWOC, schemaType: 'payment_In_Schema' }, 
+        ];
+
+        // Initialize total advance payment for payment_In
+
+        // Process payments for each schema for payment_In
+        for (const { model, schemaType } of inCollections) {
+            const items = await model.find();
+
+            for (const item of items) {
+                // Check if the payment schema exists and has the expected structure
+                if (item[schemaType] && item[schemaType].payment) {
+                    for (const payment of item[schemaType].payment) {
+                        // Check if payment type is "Advance"
+                        if (payment.payment_Type.toLowerCase() === "advance") {
+                            
+                            advancePayments.push(payment)
+
+                        }
+                    }
+                }
+            }
+        }
+
+          
+
+
+        // Array of collections to query for payment_Out
+        const outCollections = [
+            { model: Agents, schemaType: 'payment_Out_Schema' },
+            { model: Suppliers, schemaType: 'payment_Out_Schema' },
+            { model: Candidates, schemaType: 'payment_Out_Schema' },
+            { model: AzadSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: TicketSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: VisitSuppliers, schemaType: 'Agent_Payment_Out_Schema' },
+            { model: AzadSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: TicketSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: VisitSuppliers, schemaType: 'Supplier_Payment_Out_Schema' },
+            { model: AzadCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: TicketCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: VisitCandidates, schemaType: 'Candidate_Payment_Out_Schema' },
+            { model: Protector, schemaType: 'payment_Out_Schema' },
+            { model: CDWC, schemaType: 'payment_In_Schema' }, 
+            { model: CDWOC, schemaType: 'payment_In_Schema' }, 
+        ];
+
+        
+        const employees=await Employees.find()
+        const expenses=await Expenses.find()
+
+        // Initialize total advance payment for payment_Out
+
+        // Process payments for each schema for payment_Out
+        for (const { model, schemaType } of outCollections) {
+            const items = await model.find();
+
+            for (const item of items) {
+                // Check if the payment schema exists and has the expected structure
+                if (item[schemaType] && item[schemaType].payment) {
+                    for (const payment of item[schemaType].payment) {
+                        // Check if payment type is "Advance"
+                        if (payment.payment_Type.toLowerCase() === "advance") {
+                            advancePayments.push(payment)
+
+                        }
+                    }
+                }
+            }
+        }
+
+        
+        // for(const employee of employees){
+        //     if(employee.payment){
+        //         const payments=employee.payment
+        //         if(payments){
+        //             for(const payment of payments){
+        //                 if(payment.payment_Type.toLowerCase() === "advance"){
+        //                     advancePayments.push(payment)
+                           
+
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // for(const expense of expenses){
+        //     if(expense){
+        //         if(expense){
+                  
+        //                 if(expense.payment_Type.toLowerCase() === "advance"){
+        //                     advancePayments.push(payment)
+                           
+        //                 }
+                    
+        //         }
+        //     }
+        // }
+
+          // Initialize total advance payment for payment_In
+
+          // Process payments for each schema for payment_In
+          for (const { model, schemaType } of outCollections) {
+              const items = await model.find();
+  
+              for (const item of items) {
+                  // Check if the payment schema exists and has the expected structure
+                  if (item[schemaType] && item[schemaType].payment) {
+                      for (const payment of item[schemaType].payment) {
+                          // Check if payment type is "Advance"
+                          if (payment.payment_Type.toLowerCase() === "advance" ) {
+                            advancePayments.push(payment)
+                             
+                          }
+                      }
+                  }
+              }
+          }
+        // Send the resulting total advance payments in the response
+        res.status(200).json({data:advancePayments} );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 module.exports = {
-    getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments,getAllBanksPayments
+    getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments,getAllBanksPayments,getNormalPayments,getAdvancePayments
 }

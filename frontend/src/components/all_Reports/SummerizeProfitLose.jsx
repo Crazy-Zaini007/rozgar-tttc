@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-export default function ProfitLose() {
+export default function SummerizeProfitLose() {
   const dispatch = useDispatch();
   // getting data from redux store 
 
@@ -219,7 +219,7 @@ export default function ProfitLose() {
             <div className="col-md-12">
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Profit/Lose Report</h4>
+                  <h4>Summerize Profit/Loss Report</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredData && filteredData.length > 0 &&

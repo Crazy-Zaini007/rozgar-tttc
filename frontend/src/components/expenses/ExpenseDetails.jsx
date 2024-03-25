@@ -218,7 +218,7 @@ export default function ExpenseDetails() {
       expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
       expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
       filteredPaymentVia
-    );
+    )
   })
   
 
