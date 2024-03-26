@@ -522,18 +522,9 @@ export default function CashinHand() {
       <td></td>
       <td></td>
       <td>Total</td>
-      <td>${filteredPayment ? 
-        String(filteredPayment.reduce((total, cash) => total + (cash.payment_In || 0)))
-        : '0'}
-      </td>
-      <td>${filteredPayment ? 
-        String(filteredPayment.reduce((total, cash) => total + (cash.payment_Out || 0)))
-        : '0'}
-      </td>
-      <td>${filteredPayment ? 
-        String(filteredPayment.reduce((total, cash) => total + (cash.cash_Out || 0)))
-        : '0'}
-      </td>
+      <td>${String(filteredPayment.reduce((total, entry) => total + (entry.payment_In || 0), 0))}</td>
+      <td>${String(filteredPayment.reduce((total, entry) => total + (entry.payment_Out || 0), 0))}</td>
+      <td>${String(filteredPayment.reduce((total, entry) => total + (entry.cash_Out || 0), 0))}</td>
       </tr>
     </tbody>
     </table>
@@ -988,17 +979,23 @@ export default function CashinHand() {
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
-      {/* Calculate the total sum of payment_In */}
-      {filteredPayment.reduce((total, cash) => total + (cash.payment_In|| 0))}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-danger text-white'>
-      {/* Calculate the total sum of payment_In */}
-      {filteredPayment.reduce((total, cash) => total +  (cash.payment_Out|| 0))}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-warning text-white'>
-      {/* Calculate the total sum of payment_Out */}
-      {filteredPayment.reduce((total, cash) => total + (cash.cash_Out|| 0))}
-    </TableCell>
+    {/* Calculate the total sum of payment_In */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.payment_In || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-danger text-white'>
+    {/* Calculate the total sum of payment_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.payment_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.cash_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
                             
                           </TableRow>
                           </TableBody>

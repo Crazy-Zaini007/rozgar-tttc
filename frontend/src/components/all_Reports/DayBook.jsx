@@ -698,9 +698,24 @@ const downloadEmployeesPayments = () => {
                                   <TableCell></TableCell>
                                   <TableCell></TableCell>
                                   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                                  <TableCell className='border data_td text-center bg-success text-white text-bold'>{todayPayments.reduce((total, payment) => total + (payment.payment_In|| 0))}</TableCell>
-                                  <TableCell className='border data_td text-center bg-danger text-white text-bold'>{todayPayments.reduce((total, payment) => total +(payment.payment_Out|| 0))}</TableCell>
-                                  <TableCell className='border data_td text-center bg-warning text-white text-bold'>{todayPayments.reduce((total, payment) => total + (payment.cash_Out|| 0))}</TableCell>
+                                  <TableCell className='border data_td text-center bg-success text-white'>
+    {/* Calculate the total sum of payment_In */}
+    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+      return total + (entry.payment_In || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-danger text-white'>
+    {/* Calculate the total sum of payment_Out */}
+    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+      return total + (entry.payment_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+      return total + (entry.cash_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
                                   
                                   
                                 </TableRow>
