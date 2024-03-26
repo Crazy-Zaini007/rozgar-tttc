@@ -489,6 +489,7 @@ export default function CashinHand() {
         <th>Details</th>
         <th>Cash_In</th>
         <th>Cash_Out</th>
+        <th>Cash_Return</th>
         <th>Invoice</th>
         </tr>
       </thead>
@@ -505,6 +506,7 @@ export default function CashinHand() {
             <td>${String(entry?.slip_No)}</td>
             <td>${String(entry?.details)}</td>
             <td>${String(entry?.payment_In)}</td>
+            <td>${String(entry?.payment_Out)}</td>
             <td>${String(entry?.cash_Out)}</td>
             <td>${String(entry?.invoice)}</td>
           </tr>
@@ -522,6 +524,10 @@ export default function CashinHand() {
       <td>Total</td>
       <td>${filteredPayment ? 
         String(filteredPayment.reduce((total, cash) => total + cash.payment_In, 0))
+        : '0'}
+      </td>
+      <td>${filteredPayment ? 
+        String(filteredPayment.reduce((total, cash) => total + cash.payment_Out, 0))
         : '0'}
       </td>
       <td>${filteredPayment ? 
@@ -936,6 +942,7 @@ export default function CashinHand() {
                               <TableCell className='label border'style={{ width: '18.28%' }}>Slip_No</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_In</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Return</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Details</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Invoice</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Slip_Pic</TableCell>
@@ -958,7 +965,8 @@ export default function CashinHand() {
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Type}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.cash_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
@@ -983,6 +991,10 @@ export default function CashinHand() {
       {filteredPayment.reduce((total, cash) => total + cash.payment_In, 0)}
     </TableCell>
     <TableCell className='border data_td text-center bg-danger text-white'>
+      {/* Calculate the total sum of payment_In */}
+      {filteredPayment.reduce((total, cash) => total + cash.payment_Out, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-warning text-white'>
       {/* Calculate the total sum of payment_Out */}
       {filteredPayment.reduce((total, cash) => total + cash.cash_Out, 0)}
     </TableCell>

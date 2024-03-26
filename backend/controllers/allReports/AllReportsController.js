@@ -53,10 +53,18 @@ const getAllPayments = async (req, res) => {
             if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
                 const paymentInDetails = agent.payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.payment_In_Schema.supplierName,
-                    type: 'Agent',
+                    type: 'Agent_Payment_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(paymentInDetails);
+            }
+            if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+                const paymentOutDetails = agent.payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_Out_Schema.supplierName,
+                    type: 'Agent_Payment_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentOutDetails);
             }
 
         })
@@ -67,12 +75,19 @@ const getAllPayments = async (req, res) => {
             if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
                 const supplierPaymentInDetails = agent.payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.payment_In_Schema.supplierName,
-                    type: 'Supplier',
+                    type: 'Supplier_Payment_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(supplierPaymentInDetails);
             }
-
+            if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+                const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_Out_Schema.supplierName,
+                    type: 'Supplier_Payment_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(supplierPaymentOutDetails);
+            }
         })
 
         // Iterate through agents
@@ -81,10 +96,18 @@ const getAllPayments = async (req, res) => {
             if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
                 const candPaymentInDetails = agent.payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.payment_In_Schema.supplierName,
-                    type: 'Candidate',
+                    type: 'Candidate_Payment_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(candPaymentInDetails);
+            }
+            if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+                const candPaymentOutDetails = agent.payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_Out_Schema.supplierName,
+                    type: 'Candidate_Payment_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(candPaymentOutDetails);
             }
 
         })
@@ -95,10 +118,18 @@ const getAllPayments = async (req, res) => {
             if (agent.Agent_Payment_In_Schema && agent.Agent_Payment_In_Schema.payment) {
                 const azadAgentsPaymentInDetails = agent.Agent_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Agent_Payment_In_Schema.supplierName,
-                    type: 'Azad Agent',
+                    type: 'Azad_Agent_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(azadAgentsPaymentInDetails);
+            }
+            if (agent.Agent_Payment_Out_Schema && agent.Agent_Payment_Out_Schema.payment) {
+                const azadAgentsPaymentOutDetails = agent.Agent_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+                    type: 'Azad_Agent_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(azadAgentsPaymentOutDetails);
             }
 
         })
@@ -109,10 +140,18 @@ const getAllPayments = async (req, res) => {
             if (agent.Agent_Payment_In_Schema && agent.Agent_Payment_In_Schema.payment) {
                 const ticketAgentsPaymentInDetails = agent.Agent_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Agent_Payment_In_Schema.supplierName,
-                    type: 'Ticket Agent',
+                    type: 'Ticket_Agent_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(ticketAgentsPaymentInDetails);
+            }
+            if (agent.Agent_Payment_Out_Schema && agent.Agent_Payment_Out_Schema.payment) {
+                const ticketAgentsPaymentOutDetails = agent.Agent_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+                    type: 'Ticket_Agent_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(ticketAgentsPaymentOutDetails);
             }
 
         })
@@ -123,12 +162,19 @@ const getAllPayments = async (req, res) => {
             if (agent.Agent_Payment_In_Schema && agent.Agent_Payment_In_Schema.payment) {
                 const visitAgentsPaymentInDetails = agent.Agent_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Agent_Payment_In_Schema.supplierName,
-                    type: 'Visit Agent',
+                    type: 'Visit_Agent_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(visitAgentsPaymentInDetails);
             }
-
+            if (agent.Agent_Payment_Out_Schema && agent.Agent_Payment_Out_Schema.payment) {
+                const visitAgentsPaymentOutDetails = agent.Agent_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+                    type: 'Visit_Agent_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(visitAgentsPaymentOutDetails);
+            }
         })
 
         // Iterate through agents
@@ -137,12 +183,19 @@ const getAllPayments = async (req, res) => {
             if (agent.Supplier_Payment_In_Schema && agent.Supplier_Payment_In_Schema.payment) {
                 const azadSuppliersPaymentInDetails = agent.Supplier_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Supplier_Payment_In_Schema.supplierName,
-                    type: 'Azad Supplier',
+                    type: 'Azad_Supplier_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(azadSuppliersPaymentInDetails);
             }
-
+            if (agent.Supplier_Payment_Out_Schema && agent.Supplier_Payment_Out_Schema.payment) {
+                const azadSuppliersPaymentOutDetails = agent.Supplier_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+                    type: 'Azad_Supplier_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(azadSuppliersPaymentOutDetails);
+            }
         })
 
         // Iterate through agents
@@ -151,13 +204,21 @@ const getAllPayments = async (req, res) => {
             if (agent.Supplier_Payment_In_Schema && agent.Supplier_Payment_In_Schema.payment) {
                 const ticketSuppliersPaymentInDetails = agent.Supplier_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Supplier_Payment_In_Schema.supplierName,
-                    type: 'Ticket Supplier',
+                    type: 'Ticket_Supplier_In',
 
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(ticketSuppliersPaymentInDetails);
             }
+            if (agent.Supplier_Payment_Out_Schema && agent.Supplier_Payment_Out_Schema.payment) {
+                const ticketSuppliersPaymentOutDetails = agent.Supplier_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+                    type: 'Ticket_Supplier_Out',
 
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(ticketSuppliersPaymentOutDetails);
+            }
         })
 
 
@@ -167,10 +228,18 @@ const getAllPayments = async (req, res) => {
             if (agent.Supplier_Payment_In_Schema && agent.Supplier_Payment_In_Schema.payment) {
                 const visitSuppliersPaymentInDetails = agent.Supplier_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Supplier_Payment_In_Schema.supplierName,
-                    type: 'Visit Supplier',
+                    type: 'Visit_Supplier_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(visitSuppliersPaymentInDetails);
+            }
+            if (agent.Supplier_Payment_Out_Schema && agent.Supplier_Payment_Out_Schema.payment) {
+                const visitSuppliersPaymentOutDetails = agent.Supplier_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+                    type: 'Visit_Supplier_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(visitSuppliersPaymentOutDetails);
             }
 
         })
@@ -180,11 +249,20 @@ const getAllPayments = async (req, res) => {
             if (agent.Candidate_Payment_In_Schema && agent.Candidate_Payment_In_Schema.payment) {
                 const azadCandPaymentInDetails = agent.Candidate_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Candidate_Payment_In_Schema.supplierName,
-                    type: 'Azad Candidate',
+                    type: 'Azad_Candidate_In',
 
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(azadCandPaymentInDetails);
+            }
+            if (agent.Candidate_Payment_Out_Schema && agent.Candidate_Payment_Out_Schema.payment) {
+                const azadCandPaymentOutDetails = agent.Candidate_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+                    type: 'Azad_Candidate_Out',
+
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(azadCandPaymentOutDetails);
             }
 
         })
@@ -195,10 +273,18 @@ const getAllPayments = async (req, res) => {
             if (agent.Candidate_Payment_In_Schema && agent.Candidate_Payment_In_Schema.payment) {
                 const ticketCandPaymentInDetails = agent.Candidate_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Candidate_Payment_In_Schema.supplierName,
-                    type: 'Ticket Candidate',
+                    type: 'Ticket_Candidate_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(ticketCandPaymentInDetails);
+            }
+            if (agent.Candidate_Payment_Out_Schema && agent.Candidate_Payment_Out_Schema.payment) {
+                const ticketCandPaymentOutDetails = agent.Candidate_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+                    type: 'Ticket_Candidate_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(ticketCandPaymentOutDetails);
             }
 
         })
@@ -209,10 +295,18 @@ const getAllPayments = async (req, res) => {
             if (agent.Candidate_Payment_In_Schema && agent.Candidate_Payment_In_Schema.payment) {
                 const visitCandPaymentInDetails = agent.Candidate_Payment_In_Schema.payment.map(payment => ({
                     supplierName: agent.Candidate_Payment_In_Schema.supplierName,
-                    type: 'Visit Candidate',
+                    type: 'Visit_Candidate_In',
                     ...payment.toObject(),
                 }));
                 mergedPayments = mergedPayments.concat(visitCandPaymentInDetails);
+            }
+            if (agent.Candidate_Payment_Out_Schema && agent.Candidate_Payment_Out_Schema.payment) {
+                const visitCandPaymentOutDetails = agent.Candidate_Payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+                    type: 'Visit_Candidate_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(visitCandPaymentOutDetails);
             }
 
         })
