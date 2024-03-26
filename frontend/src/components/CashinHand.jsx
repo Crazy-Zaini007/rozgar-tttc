@@ -523,15 +523,15 @@ export default function CashinHand() {
       <td></td>
       <td>Total</td>
       <td>${filteredPayment ? 
-        String(filteredPayment.reduce((total, cash) => total + cash.payment_In, 0))
+        String(filteredPayment.reduce((total, cash) => total + (cash.payment_In || 0)))
         : '0'}
       </td>
       <td>${filteredPayment ? 
-        String(filteredPayment.reduce((total, cash) => total + cash.payment_Out, 0))
+        String(filteredPayment.reduce((total, cash) => total + (cash.payment_Out || 0)))
         : '0'}
       </td>
       <td>${filteredPayment ? 
-        String(filteredPayment.reduce((total, cash) => total + cash.cash_Out, 0))
+        String(filteredPayment.reduce((total, cash) => total + (cash.cash_Out || 0)))
         : '0'}
       </td>
       </tr>
@@ -597,6 +597,7 @@ export default function CashinHand() {
         Slip_No:payments.slip_No,
         Details:payments.details,
         Payment_In:payments.payment_In,
+        Payment_Out:payments.payment_Out,
         Cash_Out:payments.cash_Out,
         Invoice:payments.invoice       
       };
@@ -988,15 +989,15 @@ export default function CashinHand() {
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
       {/* Calculate the total sum of payment_In */}
-      {filteredPayment.reduce((total, cash) => total + cash.payment_In, 0)}
+      {filteredPayment.reduce((total, cash) => total + (cash.payment_In|| 0))}
     </TableCell>
     <TableCell className='border data_td text-center bg-danger text-white'>
       {/* Calculate the total sum of payment_In */}
-      {filteredPayment.reduce((total, cash) => total + cash.payment_Out, 0)}
+      {filteredPayment.reduce((total, cash) => total +  (cash.payment_Out|| 0))}
     </TableCell>
     <TableCell className='border data_td text-center bg-warning text-white'>
       {/* Calculate the total sum of payment_Out */}
-      {filteredPayment.reduce((total, cash) => total + cash.cash_Out, 0)}
+      {filteredPayment.reduce((total, cash) => total + (cash.cash_Out|| 0))}
     </TableCell>
                             
                           </TableRow>

@@ -126,6 +126,7 @@ const fetchData = async () => {
         <th>Slip No</th>
         <th>Cash In</th>
         <th>Cash Out</th>
+        <th>Cash Retrun</th>
         <th>Details</th>
         <th>Invoice</th>
         
@@ -143,6 +144,7 @@ const fetchData = async () => {
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
           <td>${String(entry.payment_In)}</td>
+          <td>${String(entry.payment_Out)}</td>
           <td>${String(entry.cash_Out)}</td>
           <td>${String(entry.details)}</td>
           <td>${String(entry.invoice)}</td>   
@@ -211,6 +213,7 @@ const downloadExcel = () => {
       Payment_Type:payments.payment_Type,
       Slip_No:payments.slip_No,
       Cash_In:payments.payment_In,
+      Payment_Out:payments.payment_Out,
       Cash_Out:payments.cash_Out,
       Details:payments.details,
       Invoice:payments.invoice,      
@@ -635,6 +638,7 @@ const downloadEmployeesPayments = () => {
                             <TableCell className='label border'>Slip_No</TableCell>
                             <TableCell className='label border'>Cash_In</TableCell>
                             <TableCell className='label border'>Cash_Out</TableCell>
+                            <TableCell className='label border'>Cash_Return</TableCell>
                             <TableCell className='label border'>Details</TableCell>
                             <TableCell className='label border'>Invoice</TableCell>
                             <TableCell className='label border'>Slip_Pic</TableCell>
@@ -657,7 +661,8 @@ const downloadEmployeesPayments = () => {
                                       <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.cash_Out}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
@@ -693,8 +698,9 @@ const downloadEmployeesPayments = () => {
                                   <TableCell></TableCell>
                                   <TableCell></TableCell>
                                   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                                  <TableCell className='border data_td text-center bg-success text-white text-bold'>{todayPayments.reduce((total, payment) => total + payment.payment_In, 0)}</TableCell>
-                                  <TableCell className='border data_td text-center bg-danger text-white text-bold'>{todayPayments.reduce((total, payment) => total + payment.cash_Out, 0)}</TableCell>
+                                  <TableCell className='border data_td text-center bg-success text-white text-bold'>{todayPayments.reduce((total, payment) => total + (payment.payment_In|| 0))}</TableCell>
+                                  <TableCell className='border data_td text-center bg-danger text-white text-bold'>{todayPayments.reduce((total, payment) => total +(payment.payment_Out|| 0))}</TableCell>
+                                  <TableCell className='border data_td text-center bg-warning text-white text-bold'>{todayPayments.reduce((total, payment) => total + (payment.cash_Out|| 0))}</TableCell>
                                   
                                   
                                 </TableRow>
