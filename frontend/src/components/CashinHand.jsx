@@ -966,7 +966,7 @@ export default function CashinHand() {
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
