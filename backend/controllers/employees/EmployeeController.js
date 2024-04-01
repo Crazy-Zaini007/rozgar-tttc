@@ -183,7 +183,7 @@ const getEmployees = async (req, res) => {
 // Adding Salary month
 const addNewSalaryMonth = async (req, res) => {
   const { employeeId, month, salary } = req.body;
-
+  const newSalary=Number(salary)
   try {
     const employee = await Employees.findById(employeeId);
 
@@ -207,7 +207,7 @@ const addNewSalaryMonth = async (req, res) => {
 
     // Add the new payment object to the payments array
     employee.payments.push(newPayment);
-    employee.remaining+=salary
+    employee.remaining+=newSalary
     await employee.save();
 
     res.status(200).json({ message: "New Salary Month added successfully" });
