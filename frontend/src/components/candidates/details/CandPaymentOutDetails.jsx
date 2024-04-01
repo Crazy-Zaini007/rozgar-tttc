@@ -683,18 +683,18 @@ export default function CandPaymentOutDetails() {
     filteredIndividualPayments.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        Date:payments.date,
-        Category:payments.category,
-        payment_Via:payments.payment_Via,
-        payment_Type:payments.payment_Type,
+        Date: payments.date,
+        Category: payments.category,
+        payment_Via: payments.payment_Via,
+        payment_Type: payments.payment_Type,
         slip_No: payments.slip_No,
-        details:payments.details,
-        payment_Out:payments.payment_Out,
-        cash_Out:payments.cash_Out,
-        invoice:payments.invoice,
-        payment_Out_Curr:payments.payment_Out_Curr,
-        curr_Rate:payments.curr_Rate,
-        curr_Amount:payments.curr_Amount
+        details: payments.details,
+        payment_In: payments.payment_In,
+        cash_Out: payments.cash_Out,
+        invoice: payments.invoice,
+        payment_In_Curr: payments.payment_In_Curr,
+        curr_Rate: payments.curr_Rate,
+        curr_Amount: payments.curr_Amount
       }
 
       data.push(rowData);
@@ -707,6 +707,63 @@ export default function CandPaymentOutDetails() {
   }
 
 
+  const downloadCombinedPayments = () => {
+    const combinedData = [];
+    const anotherData=[]
+
+    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
+
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            Date: payment.date,
+            Category: payment.category,
+            Payment_Via: payment.payment_Via,
+            Payment_Type: payment.payment_Type,
+            Slip_No: payment.slip_No,
+            Details: payment.details,
+            Payment_In: payment.payment_Out,
+            Cash_Out: payment.cash_Out,
+            Invoice: payment.invoice,
+            Payment_In_Curr: payment.payment_Out_Curr,
+            Curr_Rate: payment.curr_Rate,
+            Curr_Amount: payment.curr_Amount
+        };
+
+        combinedData.push(rowData);
+    });
+   
+      const rowData = {
+        Date: details.createdAt,
+        Candidate: details.supplierName,
+        Ep_No: details.pp_No,
+        Entry_Mode: details.entry_Mode,
+        company: details.company,
+        country: details.country,
+        trade: details.trade,
+        final_Status: details.final_Status,
+        flight_Date: details.flight_Date,
+        Total_Visa_Price_In_PKR: details.total_Visa_Price_Out_PKR,
+        Total_Payment_In: details.total_Payment_Out,
+        Total_Cash_Out: details.total_Cash_Out,
+        Remaining_PKR: details.remaining_Balance,
+        Total_Visa_Price_In_Curr: details.total_Visa_Price_Out_Curr,
+        Total_Payment_In_Curr: details.total_Payment_Out_Curr,
+        Remaining_Curr: details.remaining_Curr,
+        Status: details.status,
+      }
+
+      anotherData.push(rowData);
+  
+    const ws1 = XLSX.utils.json_to_sheet(combinedData);
+    const ws2 = XLSX.utils.json_to_sheet(anotherData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Visa Price Details');
+    XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
+}
+  
 
   // Changing Status
 
@@ -1204,6 +1261,7 @@ export default function CandPaymentOutDetails() {
                     
                   </ul>
                 </div>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}

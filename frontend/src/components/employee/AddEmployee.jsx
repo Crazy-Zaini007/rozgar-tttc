@@ -13,7 +13,7 @@ export default function AVPP() {
   const [emergencyPhone, setEmergencyPhone] = useState('')
   const [dob, setDob] = useState('')
   const [salaryType, setSalaryType] = useState('')
-  const [salary, setSalary] = useState('')
+  
   const [address, setAddress] = useState('')
 
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ export default function AVPP() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ employeeName, fatherName, email, cnic, phone, emergencyPhone,dob,salaryType,salary,address }),
+        body: JSON.stringify({ employeeName, fatherName, email, cnic, phone, emergencyPhone,dob,salaryType,address }),
       });
 
       const json = await response.json();
@@ -54,7 +54,6 @@ export default function AVPP() {
         setEmergencyPhone('')
         setDob('')
         setSalaryType('')
-        setSalary('')
         setAddress('')
 
 
@@ -111,10 +110,7 @@ export default function AVPP() {
               <label>Salary Type</label>
               <input type="text" value={salaryType} onChange={(e) => setSalaryType(e.target.value)} required />
             </div>
-            <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-              <label>Salary</label>
-              <input type="number" value={salary} onChange={(e) => setSalary(e.target.value)} required />
-            </div>
+          
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
               <label>Address</label>
               <textarea type="text" value={address} onChange={(e) => setAddress(e.target.value)}  />

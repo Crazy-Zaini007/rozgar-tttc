@@ -233,7 +233,7 @@ export default function Invoice() {
                   <div className="row">
                   <div className="col-auto px-1">
                       <label htmlFor="">Name:</label>
-                      <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
+                      <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.name))].map(tradeValue => (
                           <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
@@ -242,7 +242,7 @@ export default function Invoice() {
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">PP No:</label>
-                      <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
+                      <select value={pp_No} onChange={(e) => setPP_NO(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.pp_No))].map(tradeValue => (
                           <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
@@ -312,7 +312,7 @@ export default function Invoice() {
                 </Paper>
               </div>
             }
-
+            
             {!loading1 &&
             <div className='col-md-12'>
               <Paper className='py-3 mb-1 px-2 detail_table'>

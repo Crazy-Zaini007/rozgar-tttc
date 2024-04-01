@@ -111,14 +111,14 @@ export default function NormalPayments() {
     <td>${String(entry?.payment_Type)}</td>
     <td>${String(entry.slip_No)}</td>
     <td>${String(entry.details)}</td>
-    <td>${String(entry.payment_In || 0)}</td> // Use proper conditional check
-    <td>${String(entry.payment_Out || 0)}</td> // Use proper conditional check
-    <td>${String(entry.cash_Out || 0)}</td> // Use proper conditional check
+    <td>${String(entry.payment_In || 0)}</td>
+    <td>${String(entry.payment_Out || 0)}</td>
+    <td>${String(entry.cash_Out || 0)}</td>
     <td>${String(entry.invoice)}</td>
   </tr>
 `).join('')}
 
-      }
+      
       <tr>
       <td></td>
       <td></td>

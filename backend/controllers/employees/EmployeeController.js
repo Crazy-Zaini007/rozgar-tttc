@@ -29,9 +29,9 @@ const addEmployee = async (req, res) => {
         dob,
         cnic,
         salaryType,
-        salary,
+        
       } = req.body
-      console.log('fatherName',fatherName)
+      
       const existngEmployee = await Employees.findOne({ email })
       if (existngEmployee) {
         res.status(400).json({ message: `Employee with ${email} already existed` })
@@ -48,7 +48,6 @@ const addEmployee = async (req, res) => {
           dob,
           cnic,
           salaryType,
-          salary,
           entry_Date: new Date().toISOString().split("T")[0]
         })
         await newEmployee.save()
@@ -124,7 +123,6 @@ const updateEmployee = async (req, res) => {
         dob,
         cnic,
         salaryType,
-        salary,
 
       } = req.body
 
@@ -146,7 +144,6 @@ const updateEmployee = async (req, res) => {
         employee.dob = dob
         employee.cnic = cnic
         employee.salaryType = salaryType
-        employee.salary = salary
         await employee.save()
         res.status(200).json({ message: `Employee updated Successfully !` })
 
@@ -181,6 +178,123 @@ const getEmployees = async (req, res) => {
   }
 }
 
+
+
+// Adding Salary month
+const addNewSalaryMonth = async (req, res) => {
+  const { employeeId, month, salary } = req.body;
+
+  try {
+    const employee = await Employees.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Check if the month already exists
+    const existingMonth = employee.payments.find(payment => payment.month.toLowerCase() === month.toLowerCase());
+    if (existingMonth) {
+      return res.status(400).json({ message: "This Salary Month already added" });
+    }
+
+    // Create a new object for the month and salary
+    const newPayment = {
+      month,
+      salary,
+      remain:salary,
+      payment: []
+    };
+
+    // Add the new payment object to the payments array
+    employee.payments.push(newPayment);
+    employee.remaining+=salary
+    await employee.save();
+
+    res.status(200).json({ message: "New Salary Month added successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+// Deleting a Salary Month
+const deleteSalaryMonth = async (req, res) => {
+  const { employeeId, monthId, salary } = req.body;
+
+  try {
+    const employee = await Employees.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Check if the month already exists
+    const existingMonth = employee.payments.find(payment => payment._id.toString() === monthId.toString());
+    if(existingMonth){
+      employee.payments = employee.payments.filter(payment => payment._id.toString() !== monthId.toString());
+// Add the new payment object to the payments array
+   
+employee.remaining-=existingMonth.salary
+await employee.save();
+
+res.status(200).json({ message: "Salary Month deleted successfully" });
+    }
+
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
+  }
+}
+
+// Updating Salary Month
+const updateSalaryMonth = async (req, res) => {
+  const { employeeId, monthId,month,salary } = req.body;
+
+  try {
+    const employee = await Employees.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Check if the month already exists
+    let monthToUpdate = employee.payments.find(payment => payment._id.toString() === monthId.toString());
+if(monthToUpdate.month!== month ){
+  const existingMonth = employee.payments.find(payment => payment.month.toLowerCase() === month.toLowerCase());
+  if (existingMonth) {
+    return res.status(400).json({ message: "This Salary Month already added" });
+  }
+  monthToUpdate.month=month
+  const salaryDiff=monthToUpdate.salary-salary
+  let newSaLaryDiff=Number(salaryDiff)
+  monthToUpdate.salary=salary
+  monthToUpdate.remain-=newSaLaryDiff
+  employee.remaining-=newSaLaryDiff
+  await employee.save();
+
+  res.status(200).json({ message: "Salary Month deleted successfully" });
+}
+if(monthToUpdate.month=== month){
+  monthToUpdate.month=month
+  const salaryDiff=monthToUpdate.salary-salary
+  let newSaLaryDiff=Number(salaryDiff)
+  monthToUpdate.salary=salary
+  monthToUpdate.remain-=newSaLaryDiff
+  employee.remaining-=newSaLaryDiff
+  await employee.save();
+  res.status(200).json({ message: "Salary Month deleted successfully" });
+}
+   
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+
 //adding salary to an employee
 const addSalary = async (req, res) => {
 
@@ -195,6 +309,7 @@ const addSalary = async (req, res) => {
     if (user) {
       const {
         employeeId,
+        month,
         category,
         payment_Via,
         payment_Type,
@@ -212,12 +327,19 @@ const addSalary = async (req, res) => {
 
       if (!employee) {
         res.status(404).json({ message: "Employee not found" })
-
-
       }
       if (employee) {
-        let nextInvoiceNumber = 0;
+        const parsedPaymentOut = Number(payment_Out);
+        
 
+
+    // Find the payment object corresponding to the provided month
+    const paymentObject = employee.payments.find(payment => payment.month.toLowerCase() === month.toLowerCase());
+
+    if (!paymentObject) {
+      return res.status(404).json({ message: "Salary Month for the provided month not found" });
+    }
+        let nextInvoiceNumber = 0;
             // Check if InvoiceNumber document exists
             const currentInvoiceNumber = await InvoiceNumber.findOne({});
 
@@ -232,18 +354,18 @@ const addSalary = async (req, res) => {
                 {},
                 { $inc: { invoice_Number: 1 } },
                 { new: true, upsert: true } // Use upsert: true to create a new document if it doesn't exist
-            );
-
+            )
             if (updatedInvoiceNumber) {
                 nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
             }
 
         const payment = {
+          _id: new mongoose.Types.ObjectId(),
           category,
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_Out:parsedPaymentOut,
           payment_Out_Curr,
           slip_Pic,
           date,
@@ -273,11 +395,13 @@ const addSalary = async (req, res) => {
         }
         await CashInHand.updateOne({}, cashInHandUpdate);
 
-        employee.payment.push(payment)
+        paymentObject.payment.push(payment)
+        paymentObject.remain-=payment_Out
         employee.open=open,
         employee.close=close
+        employee.remaining-=payment_Out
         await employee.save()
-        res.status(200).json({ message: `Paymany Out: ${payment_Out} added Successfully to ${employee.employeeName}!` })
+        res.status(200).json({ message: `Salary amount: ${payment_Out} added Successfully to ${employee.employeeName}!` })
       }
     }
   } catch (error) {
@@ -304,7 +428,8 @@ const delSalary = async (req, res) => {
     if (user) {
       const {
         employeeId,
-        paymentId
+        paymentId,
+        
       } = req.body
       if (!employeeId) {
         res.status(404).json({ message: "Employee Id not found" })
@@ -317,31 +442,43 @@ const delSalary = async (req, res) => {
         res.status(404).json({ message: "Employee not found" })
       }
       if (employee) {
-        const paymentToDelete=employee.payment.find(p=>p._id.toString() === paymentId)
-        employee.payment=employee.payment.filter(p=>p._id.toString() !== paymentId)
-        const cashInHandDoc = await CashInHand.findOne({});
+        // Find the payment object corresponding to the provided month
+        let allMonths = employee.payments;
 
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
+        for (const month of allMonths){
+          let allPayments=month.payment
+         let paymentFind=allPayments.find(p=>p._id.toString()===paymentId.toString())
+         if(paymentFind){
+          
+         let paymentToDelete=allPayments.filter(p=>p._id.toString() !==paymentId.toString())
+         const cashInHandDoc = await CashInHand.findOne({});
+         if (!cashInHandDoc) {
+           const newCashInHandDoc = new CashInHand();
+           await newCashInHandDoc.save();
+         }
+ 
+         const cashInHandUpdate = {
+           $inc: {},
+         };
+ 
+         if (paymentFind.payment_Via.toLowerCase() === "cash") {
+           cashInHandUpdate.$inc.cash = paymentFind.payment_Out;
+           cashInHandUpdate.$inc.total_Cash = paymentFind.payment_Out;
+         }
+         else{
+           cashInHandUpdate.$inc.bank_Cash = -paymentFind.payment_Out;
+           cashInHandUpdate.$inc.total_Cash = -paymentFind.payment_Out;
+         }
+         await CashInHand.updateOne({}, cashInHandUpdate);
+         employee.remaining+=paymentFind.payment_Out
+         month.remain+=paymentFind.payment_Out
+         await employee.save()
+         res.status(200).json({ message: `Payment deleted Successfully !` })
+         break
+               }
+         }
         }
-
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-
-        if (paymentToDelete.payment_Via.toLowerCase() === "cash") {
-          cashInHandUpdate.$inc.cash = paymentToDelete.payment_Out;
-          cashInHandUpdate.$inc.total_Cash = paymentToDelete.payment_Out;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = -paymentToDelete.payment_Out;
-          cashInHandUpdate.$inc.total_Cash = -paymentToDelete.payment_Out;
-        }
-        await CashInHand.updateOne({}, cashInHandUpdate);
-        await employee.save()
-        res.status(200).json({ message: `Payment deleted Successfully !` })
-      }
+   
     }
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -351,7 +488,6 @@ const delSalary = async (req, res) => {
 
 //updating an employee'payment
 const updateSalary = async (req, res) => {
-
   try {
     const userId = req.user._id
     const user = await User.findById(userId)
@@ -389,60 +525,59 @@ const updateSalary = async (req, res) => {
         res.status(404).json({ message: "Employee not found" })
       }
       if (employee) {
-        let paymentToUpdate=employee.payment.find(p=>p._id.toString() === paymentId)
-        if(!paymentToUpdate){
-        res.status(404).json({ message: "Payment not found" })
-
-        }
-        if(paymentToUpdate){
+        let allMonths = employee.payments;
+        for (const month of allMonths){
+          let allPayments=month.payment
+         let paymentToUpdate=allPayments.find(p=>p._id.toString()===paymentId.toString())
+         if(paymentToUpdate){
           let uploadImage;
-
           if (slip_Pic) {
               uploadImage = await cloudinary.uploader.upload(slip_Pic, {
                   upload_preset: 'rozgar'
               });
           }
-         
           const cashInHandDoc = await CashInHand.findOne({});
 
-                    if (!cashInHandDoc) {
-                        const newCashInHandDoc = new CashInHand();
-                        await newCashInHandDoc.save();
-                    }
+          if (!cashInHandDoc) {
+              const newCashInHandDoc = new CashInHand();
+              await newCashInHandDoc.save();
+          }
+          const cashInHandUpdate = {
+              $inc: {}
+          }
+          const newPaymenOut=Number(payment_Out)
+          const newAmount = paymentToUpdate.payment_Out - newPaymenOut
+          if (paymentToUpdate.payment_Via.toLowerCase() === "cash") {
+            
+              cashInHandUpdate.$inc.cash = newAmount;
+              cashInHandUpdate.$inc.total_Cash = newAmount;
 
-                    const cashInHandUpdate = {
-                        $inc: {}
-                    }
+          } else  {
+              cashInHandUpdate.$inc.bank_Cash = newAmount;
+              cashInHandUpdate.$inc.total_Cash = newAmount;
 
-                    const newAmount = paymentToUpdate.payment_Out - payment_Out
-                    if (paymentToUpdate.payment_Via.toLowerCase() === "cash") {
-                      
-                        cashInHandUpdate.$inc.cash = newAmount;
-                        cashInHandUpdate.$inc.total_Cash = newAmount;
-
-                    } else  {
-                        cashInHandUpdate.$inc.bank_Cash = newAmount;
-                        cashInHandUpdate.$inc.total_Cash = newAmount;
-
-                    }
-
-                    await CashInHand.updateOne({}, cashInHandUpdate);
-                    paymentToUpdate.category = category
-                    paymentToUpdate.payment_Via = payment_Via
-                    paymentToUpdate.payment_Type = payment_Type
-                    paymentToUpdate.slip_No = slip_No
-                    paymentToUpdate.payment_Out = payment_Out
-                    paymentToUpdate.payment_Out_Curr = payment_Out_Curr
-                    paymentToUpdate.slip_Pic = uploadImage?.slip_Pic || ""
-                    paymentToUpdate.details = details
-                    paymentToUpdate.date = date
-                    paymentToUpdate.curr_Rate = curr_Rate
-                    paymentToUpdate.curr_Amount = curr_Amount
-                    employee.open=open,
-                    employee.close=close
-          await employee.save()
-          res.status(200).json({ message: `Payment updated Successfully !` })
-        }
+          }
+          await CashInHand.updateOne({}, cashInHandUpdate);
+          paymentToUpdate.category = category
+          paymentToUpdate.payment_Via = payment_Via
+          paymentToUpdate.payment_Type = payment_Type
+          paymentToUpdate.slip_No = slip_No
+          paymentToUpdate.payment_Out = newPaymenOut
+          paymentToUpdate.payment_Out_Curr = payment_Out_Curr
+          paymentToUpdate.slip_Pic = uploadImage?.slip_Pic || ""
+          paymentToUpdate.details = details
+          paymentToUpdate.date = date
+          paymentToUpdate.curr_Rate = curr_Rate
+          paymentToUpdate.curr_Amount = curr_Amount
+          employee.open=open,
+          employee.close=close
+          employee.remaining+=newAmount
+          month.payment = allPayments;
+          month.remain+=newAmount
+         await employee.save()
+            res.status(200).json({ message: `Payment updated Successfully !` })
+               }
+         }
     
 
       }
@@ -629,4 +764,4 @@ const updateVacation = async (req, res) => {
 }
 
 
-module.exports = {addEmployee,delEmployee,updateEmployee,getEmployees,addSalary,delSalary,updateSalary,addVacation,delVacation,updateVacation};
+module.exports = {addEmployee,delEmployee,updateEmployee,getEmployees,addNewSalaryMonth,deleteSalaryMonth,updateSalaryMonth,addSalary,delSalary,updateSalary,addVacation,delVacation,updateVacation };

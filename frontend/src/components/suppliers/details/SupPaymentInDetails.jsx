@@ -793,63 +793,135 @@ export default function SupPaymentInDetails() {
 
   const downloadIndividualPayments = () => {
     const data = [];
-    // Iterate over entries and push all fields
-    filteredIndividualPayments.forEach((payments, index) => {
-      const rowData = {
-        SN: index + 1,
-        Date:payments.date,
-        Category:payments.category,
-        payment_Via:payments.payment_Via,
-        payment_Type:payments.payment_Type,
-        slip_No: payments.slip_No,
-        details:payments.details,
-        payment_In:payments.payment_In,
-        cash_Out:payments.cash_Out,
-        invoice:payments.invoice,
-        payment_In_Curr:payments.payment_In_Curr,
-        curr_Rate:payments.curr_Rate,
-        curr_Amount:payments.curr_Amount
-      }
+    // Flatten the array of objects to get an array of individual payments
+    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payments);
 
-      data.push(rowData);
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            Date: payment.date,
+            Category: payment.category,
+            payment_Via: payment.payment_Via,
+            payment_Type: payment.payment_Type,
+            slip_No: payment.slip_No,
+            details: payment.details,
+            payment_In: payment.payment_In,
+            cash_Out: payment.cash_Out,
+            invoice: payment.invoice,
+            candidate_Name: payment.cand_Name,
+            payment_In_Curr: payment.payment_In_Curr,
+            curr_Rate: payment.curr_Rate,
+            curr_Amount: payment.curr_Amount
+        };
+
+        data.push(rowData);
     });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-  }
+}
 
-  
   const downloadPersons = () => {
     const data = [];
-    // Iterate over entries and push all fields
-    filteredPersons.forEach((payments, index) => {
-      const rowData = {
-        SN: index + 1,
-        entry_Date:payments.entry_Date,
-        Category:payments.category,
-        name:payments.name,
-        pp_No:payments.pp_No,
-        entry_Mode: payments.entry_Mode,
-        company:payments.company,
-        trade:payments.trade,
-        country:payments.country,
-        final_Status:payments.final_Status,
-        flight_Date:payments.flight_Date,
-        visa_Price_In_PKR:payments.visa_Price_In_PKR,
-        visa_Price_In_Curr:payments.visa_Price_In_Curr,
-        Status:payments.status
-      }
+    // Flatten the array of objects to get an array of individual payments
+    const individualPayments = filteredPersons.flatMap(payment => payment.persons);
 
-      data.push(rowData);
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            entry_Date: payment.entry_Date,
+            name: payment.name,
+            pp_No: payment.pp_No,
+            entry_Mode: payment.entry_Mode,
+            company: payment.company,
+            trade: payment.trade,
+            country: payment.country,
+            final_Status: payment.final_Status,
+            flight_Date: payment.flight_Date,
+            visa_Price_In_PKR: payment.visa_Price_In_PKR,
+            total_In: payment.total_In,
+            total_Cash_Out: payment.cash_Out,
+            Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+            visa_Price_In_Curr: payment.visa_Price_In_Curr,
+            remaining_Curr: payment.remaining_Curr,
+            Status: payment.status
+        };
+
+        data.push(rowData);
     });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-  }
+}
+
+  const downloadCombinedPayments = () => {
+    const combinedData = [];
+    const anotherData=[]
+
+    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
+
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            Date: payment.date,
+            Category: payment.category,
+            Payment_Via: payment.payment_Via,
+            Payment_Type: payment.payment_Type,
+            Slip_No: payment.slip_No,
+            Details: payment.details,
+            Payment_In: payment.payment_In,
+            Cash_Out: payment.cash_Out,
+            Invoice: payment.invoice,
+            Candidate_Name: payment.cand_Name,
+            Payment_In_Curr: payment.payment_In_Curr,
+            Curr_Rate: payment.curr_Rate,
+            Curr_Amount: payment.curr_Amount
+        };
+
+        combinedData.push(rowData);
+    });
+
+    const individualPerons = filteredPersons.flatMap(payment => payment.persons);
+    
+
+    // Iterate over individual payments and push all fields
+    individualPerons.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            Entry_Date: payment.entry_Date,
+            Name: payment.name,
+            PP_No: payment.pp_No,
+            Entry_Mode: payment.entry_Mode,
+            Company: payment.company,
+            Trade: payment.trade,
+            Country: payment.country,
+            Final_Status: payment.final_Status,
+            Flight_Date: payment.flight_Date,
+            Visa_Price_In_PKR: payment.visa_Price_In_PKR,
+            Total_In: payment.total_In,
+            Total_Cash_Out: payment.cash_Out,
+            Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+            Visa_Price_In_Curr: payment.visa_Price_In_Curr,
+            Remaining_Curr: payment.remaining_Curr,
+            Status: payment.status
+        };
+
+        anotherData.push(rowData);
+    });
+    const ws1 = XLSX.utils.json_to_sheet(combinedData);
+    const ws2 = XLSX.utils.json_to_sheet(anotherData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
+    XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
+}
 
 
 
@@ -1176,7 +1248,8 @@ export default function SupPaymentInDetails() {
                     <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>    
                   </ul>
                 </div>
-               <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
 

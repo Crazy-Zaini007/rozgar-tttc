@@ -716,8 +716,7 @@ const downloadEmployeesPayments = () => {
       return total + (entry.cash_Out || 0); // Use proper conditional check
     }, 0)}
   </TableCell>
-                                  
-                                  
+                                                  
                                 </TableRow>
                         </TableBody>
                       </Table>

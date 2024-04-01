@@ -1202,7 +1202,7 @@
 }
 
 .payment_details .detail_table input:focus,
-.entry_details .detail_table select:focus {
+.payment_details .detail_table select:focus {
   outline: none;
   border: 2px solid var(--accent-lighter-blue) !important;
 }

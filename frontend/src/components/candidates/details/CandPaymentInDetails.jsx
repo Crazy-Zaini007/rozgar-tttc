@@ -298,7 +298,6 @@ export default function CandPaymentInDetails() {
           fetchData();
           setNewMessage(toast.success(json.message));
           setLoading5(false)
-          setEditMode1(!editMode1)
         }
       }
       catch (error) {
@@ -669,7 +668,7 @@ return false;
       }
 
       data.push(rowData);
-    });
+    })
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -708,6 +707,62 @@ return false;
   }
 
 
+  const downloadCombinedPayments = () => {
+    const combinedData = [];
+    const anotherData=[]
+
+    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
+
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            Date: payment.date,
+            Category: payment.category,
+            Payment_Via: payment.payment_Via,
+            Payment_Type: payment.payment_Type,
+            Slip_No: payment.slip_No,
+            Details: payment.details,
+            Payment_In: payment.payment_In,
+            Cash_Out: payment.cash_Out,
+            Invoice: payment.invoice,
+            Payment_In_Curr: payment.payment_In_Curr,
+            Curr_Rate: payment.curr_Rate,
+            Curr_Amount: payment.curr_Amount
+        };
+
+        combinedData.push(rowData);
+    });
+   
+      const rowData = {
+        Date: details.createdAt,
+        Candidate: details.supplierName,
+        Ep_No: details.pp_No,
+        Entry_Mode: details.entry_Mode,
+        company: details.company,
+        country: details.country,
+        trade: details.trade,
+        final_Status: details.final_Status,
+        flight_Date: details.flight_Date,
+        Total_Visa_Price_In_PKR: details.total_Visa_Price_In_PKR,
+        Total_Payment_In: details.total_Payment_In,
+        Total_Cash_Out: details.total_Cash_Out,
+        Remaining_PKR: details.remaining_Balance,
+        Total_Visa_Price_In_Curr: details.total_Visa_Price_In_Curr,
+        Total_Payment_In_Curr: details.total_Payment_In_Curr,
+        Remaining_Curr: details.remaining_Curr,
+        Status: details.status,
+      }
+
+      anotherData.push(rowData);
+  
+    const ws1 = XLSX.utils.json_to_sheet(combinedData);
+    const ws2 = XLSX.utils.json_to_sheet(anotherData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Visa Price Details');
+    XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
+}
   
   // Changing Status
  
@@ -1203,6 +1258,7 @@ return false;
                     
                   </ul>
                 </div>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                     <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                     <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                     {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}

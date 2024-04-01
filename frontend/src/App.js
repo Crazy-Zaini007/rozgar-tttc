@@ -107,6 +107,12 @@ import LossReport from './components/all_Reports/LossReport.jsx'
 import ProfitLossReport from './components/all_Reports/ProfitLoseReport.jsx'
 import NormalPayments from './components/all_Reports/NormalPayments.jsx'
 import AdvancePayments from './components/all_Reports/AdvancePayments.jsx'
+import AgentsReports from './components/all_Reports/AgentsReports.jsx'
+import SuppliersReports from './components/all_Reports/SuppliersReports.jsx'
+import CandidatesReports from './components/all_Reports/CandidatesReports.jsx'
+
+
+
 
 
 
@@ -119,6 +125,8 @@ import AddEmployee from './components/employee/AddEmployee.jsx'
 import AddPayment from './components/employee/AddPayment.jsx'
 import AddVacation from './components/employee/AddVacation.jsx'
 import EmployeeDetails from './components/employee/EmployeeDetails.jsx'
+import AddSalaryMonth from './components/employee/AddSalaryMonth.jsx'
+
 
 // Notifications
 import Notifications from './components/Notifications.jsx'
@@ -238,9 +246,9 @@ function App() {
           <Route path='/rozgar/reports/payable_reports' element={user && <PayableReports></PayableReports>}></Route>
           <Route path='/rozgar/reports/invoice' element={user && <Invoice></Invoice>}></Route>
           <Route path='/rozgar/reports/expenses_reports' element={user && <ExpenseOverAllReport></ExpenseOverAllReport>}></Route>
-          <Route path='/rozgar/reports/agents_reports' element={user && <AgentDetails></AgentDetails>}></Route>
-          <Route path='/rozgar/reports/candidates_reports' element={user && <CandDetails></CandDetails>}></Route>
-          <Route path='/rozgar/reports/suppliers_reports' element={user && <SupDetails></SupDetails>}></Route>
+          <Route path='/rozgar/reports/agents_reports' element={user && <AgentsReports></AgentsReports>}></Route>
+          <Route path='/rozgar/reports/candidates_reports' element={user && <CandidatesReports></CandidatesReports>}></Route>
+          <Route path='/rozgar/reports/suppliers_reports' element={user && <SuppliersReports></SuppliersReports>}></Route>
           <Route path='/rozgar/reports/cash_in_hand/with_out_expenses' element={user && <CashInHandWOE></CashInHandWOE>}></Route>
           <Route path='/rozgar/reports/summerize_profit_lose' element={user && <SummerizeProfitLose></SummerizeProfitLose>}></Route>
           <Route path='/rozgar/reports/profit_lose_report' element={user && <ProfitLossReport></ProfitLossReport>}></Route>
@@ -254,7 +262,6 @@ function App() {
 
 
           <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
-          <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
           <Route path='/rozgar/reports/day_book' element={user && <DayBook></DayBook>}></Route>
 
 
@@ -263,6 +270,8 @@ function App() {
           <Route path='/rozgar/employees/add_payment' element={user && <AddPayment></AddPayment>}></Route>
           <Route path='/rozgar/employees/add_leave' element={user && <AddVacation></AddVacation>}></Route>
           <Route path='/rozgar/employees/employees_details' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
+          <Route path='/rozgar/employees/salary_month' element={user && <AddSalaryMonth></AddSalaryMonth>}></Route>
+
 
           {/* Notifications */}
           <Route path='/rozgar/notifications' element={user && <Notifications></Notifications>}></Route>

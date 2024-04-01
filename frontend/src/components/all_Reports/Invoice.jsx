@@ -84,6 +84,7 @@ export default function Invoice() {
         <th>SN</th>
         <th>Date</th>
         <th>Supp/Agent/Cand</th>
+        <th>Type</th>
         <th>Category</th>
         <th>Payment_Via</th>
         <th>Payment_Type</th>
@@ -91,6 +92,7 @@ export default function Invoice() {
         <th>Details</th>
         <th>Cash_In</th>
         <th>Cash_Out</th>
+        <th>Cash_Return</th>
         <th>Invoice</th>
         </tr>
       </thead>
@@ -100,12 +102,14 @@ export default function Invoice() {
             <td>${index + 1}</td>
             <td>${String(entry?.date)}</td>
             <td>${String(entry?.supplierName)}</td>
+            <td>${String(entry?.type)}</td>
             <td>${String(entry?.category)}</td>
             <td>${String(entry?.payment_Via)}</td>
             <td>${String(entry?.payment_Type)}</td>
             <td>${String(entry?.slip_No)}</td>
             <td>${String(entry?.details)}</td>
             <td>${String(entry?.payment_In)}</td>
+            <td>${String(entry?.payment_Out)}</td>
             <td>${String(entry?.cash_Out)}</td>
             <td>${String(entry?.invoice)}</td>
           </tr>
@@ -166,12 +170,14 @@ export default function Invoice() {
         SN: index + 1,
         date:payments.date,
         supplierName:payments.supplierName,
+        Reference_Type:payments.type,
         category:payments.category,
         payment_Via:payments.payment_Via,
         payment_Type:payments.payment_Type,
         slip_No:payments.slip_No,
-        payment_In:payments.payment_In,
-        cash_Out:payments.cash_Out,
+        Cash_In:payments.payment_In,
+        Cash_Out:payments.payment_Out,
+        Cash_Return:payments.cash_Out,
         details:payments.details,
         invoice:payments.invoice,
       };
@@ -289,12 +295,14 @@ export default function Invoice() {
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
                               <TableCell className='label border'>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
                               <TableCell className='label border'>Payment_Via</TableCell>
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_In</TableCell>
                               <TableCell className='label border'>Cash_Out</TableCell>
+                              <TableCell className='label border'>Cash_Return</TableCell>
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
@@ -311,12 +319,14 @@ export default function Invoice() {
                                         <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.date}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.cash_Out}</TableCell>
+                                        <TableCell className='border data_td text-center bg-success  text-white'><i className="fa-solid fa-arrow-down me-2 text-white text-bold"></i>{cash.payment_In}</TableCell>
+                                        <TableCell className='border data_td text-center bg-danger  text-white'><i className="fa-solid fa-arrow-up me-2 text-white text-bold"></i>{cash.payment_Out}</TableCell>
+                                        <TableCell className='border data_td text-center bg-warning  text-white'><i className="fa-solid fa-arrow-up me-2 text-white text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-white text-bold"></i>{cash.cash_Out}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
@@ -334,15 +344,27 @@ export default function Invoice() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
+                            <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>
-      {/* Calculate the total sum of payment_In */}
-      {filteredPayment.reduce((total, cash) => total + cash.payment_In, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-danger text-white'>
-      {/* Calculate the total sum of payment_Out */}
-      {filteredPayment.reduce((total, cash) => total + cash.cash_Out, 0)}
-    </TableCell>
+                           
+    <TableCell className='border data_td text-center bg-success text-white'>
+    {/* Calculate the total sum of payment_In */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.payment_In || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-danger text-white'>
+    {/* Calculate the total sum of payment_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.payment_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.cash_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
                             
                           </TableRow>
                           

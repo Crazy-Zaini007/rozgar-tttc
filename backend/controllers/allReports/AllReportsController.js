@@ -1490,10 +1490,7 @@ const getAdvancePayments = async (req, res) => {
             { model: CDWOC, schemaType: 'payment_In_Schema' }, 
         ];
 
-        
-        const employees=await Employees.find()
-        const expenses=await Expenses.find()
-
+      
         // Initialize total advance payment for payment_Out
 
         // Process payments for each schema for payment_Out
@@ -1513,35 +1510,6 @@ const getAdvancePayments = async (req, res) => {
                 }
             }
         }
-
-        
-        // for(const employee of employees){
-        //     if(employee.payment){
-        //         const payments=employee.payment
-        //         if(payments){
-        //             for(const payment of payments){
-        //                 if(payment.payment_Type.toLowerCase() === "advance"){
-        //                     advancePayments.push(payment)
-                           
-
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // for(const expense of expenses){
-        //     if(expense){
-        //         if(expense){
-                  
-        //                 if(expense.payment_Type.toLowerCase() === "advance"){
-        //                     advancePayments.push(payment)
-                           
-        //                 }
-                    
-        //         }
-        //     }
-        // }
 
           // Initialize total advance payment for payment_In
 
@@ -1569,7 +1537,171 @@ const getAdvancePayments = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+// Controller to get all payments with supplierName
+const getAgentsPayments = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.role==="Admin") {
+            res.status(404).json({ message: "you are not Admin" });
+            return;
+        }
+
+        // Find all agents
+        const agents = await Agents.find();
+     
+
+        // Initialize an empty array to store merged payments
+        let mergedPayments = [];
+
+        // Iterate through agents
+        agents.forEach(agent => {
+            // Check if payment_In_Schema exists and has the expected structure
+            if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+                const paymentInDetails = agent.payment_In_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_In_Schema.supplierName,
+                    type: 'Agent_Payment_In',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentInDetails);
+            }
+            if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+                const paymentOutDetails = agent.payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_Out_Schema.supplierName,
+                    type: 'Agent_Payment_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentOutDetails);
+            }
+
+        })
+
+
+        // Send the resulting mergedPayments array in the response
+        res.status(200).json({ data: mergedPayments });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+// Controller to get all payments with supplierName
+const getSuppliersPayments = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.role==="Admin") {
+            res.status(404).json({ message: "you are not Admin" });
+            return;
+        }
+
+        // Find all agents
+        const suppliers = await Suppliers.find();
+     
+
+        // Initialize an empty array to store merged payments
+        let mergedPayments = [];
+
+        // Iterate through agents
+        suppliers.forEach(agent => {
+            // Check if payment_In_Schema exists and has the expected structure
+            if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+                const paymentInDetails = agent.payment_In_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_In_Schema.supplierName,
+                    type: 'Supp_Payment_In',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentInDetails);
+            }
+            if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+                const paymentOutDetails = agent.payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_Out_Schema.supplierName,
+                    type: 'Supp_Payment_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentOutDetails);
+            }
+
+        })
+
+
+        // Send the resulting mergedPayments array in the response
+        res.status(200).json({ data: mergedPayments });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+
+// Controller to get all payments with supplierName
+const getCandidatesPayments = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        if (!user.role==="Admin") {
+            res.status(404).json({ message: "you are not Admin" });
+            return;
+        }
+
+        // Find all agents
+        const candidates = await Candidates.find();
+     
+
+        // Initialize an empty array to store merged payments
+        let mergedPayments = [];
+
+        // Iterate through agents
+        candidates.forEach(agent => {
+            // Check if payment_In_Schema exists and has the expected structure
+            if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+                const paymentInDetails = agent.payment_In_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_In_Schema.supplierName,
+                    type: 'Cand_Payment_In',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentInDetails);
+            }
+            if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+                const paymentOutDetails = agent.payment_Out_Schema.payment.map(payment => ({
+                    supplierName: agent.payment_Out_Schema.supplierName,
+                    type: 'Cand_Payment_Out',
+                    ...payment.toObject(),
+                }));
+                mergedPayments = mergedPayments.concat(paymentOutDetails);
+            }
+
+        })
+
+
+        // Send the resulting mergedPayments array in the response
+        res.status(200).json({ data: mergedPayments });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 module.exports = {
-    getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments,getAllBanksPayments,getNormalPayments,getAdvancePayments
+    getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments,getAllBanksPayments,getNormalPayments,getAdvancePayments,getAgentsPayments,getSuppliersPayments,getCandidatesPayments
 }

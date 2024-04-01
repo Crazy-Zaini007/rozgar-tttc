@@ -1,5 +1,5 @@
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addEmployee,delEmployee,updateEmployee,getEmployees,addSalary,delSalary,updateSalary,addVacation,delVacation,updateVacation } = require('../../controllers/employees/EmployeeController')
+const { addEmployee,delEmployee,updateEmployee,getEmployees,addNewSalaryMonth,deleteSalaryMonth,updateSalaryMonth,addSalary,delSalary,updateSalary,addVacation,delVacation,updateVacation } = require('../../controllers/employees/EmployeeController')
 const express = require('express');
 const router = express.Router()
 
@@ -14,6 +14,13 @@ router.delete('/delete/employee', delEmployee)
 router.patch('/update/employee', updateEmployee)
 
 router.get('/get/employees', getEmployees)
+
+//Add Salary Month
+router.post('/add/salary_month', addNewSalaryMonth)
+router.delete('/delete/salary_month', deleteSalaryMonth)
+router.patch('/update/salary_month', updateSalaryMonth)
+
+
 
 //Employees Payments
 router.post('/add/employee/payment', addSalary)

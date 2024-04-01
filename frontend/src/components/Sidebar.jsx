@@ -1969,7 +1969,24 @@ export default function Sidebar() {
           setOption14(false)
           setOption15(true)
           break;
-
+          case '/rozgar/employees/salary_month':
+            setActiveItem(99)
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(true)
+            break;
         case '/rozgar/employees/add_payment':
           setActiveItem(86)
           setOption1(false)
@@ -2308,6 +2325,7 @@ export default function Sidebar() {
             {option15 &&
               <>
                 <li className=' my-2' style={activeItem === 85 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(85, `/rozgar/employees/add`)}><i className="fas fa-plus me-2"></i>Add Employee</li>
+                <li className=' my-2' style={activeItem === 99 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(99, `/rozgar/employees/salary_month`)}><i className="fas fa-money-check-alt me-2"></i>Add Salary Month</li>
                 <li className=' my-2' style={activeItem === 86 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(86, `/rozgar/employees/add_payment`)}><i className="fa-solid fa-money-check me-2"></i>Add Payment</li>
                 <li className=' my-2' style={activeItem === 87 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(87, `/rozgar/employees/add_leave`)}><i className="fa-solid fa-person-walking-arrow-right me-2"></i>Add Vacation</li>
                 <li className=' my-2' style={activeItem === 88 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(88, `/rozgar/employees/employees_details`)}><i className="fas fa-info-circle me-2"></i>Employees Details</li>

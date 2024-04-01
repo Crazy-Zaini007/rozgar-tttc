@@ -66,7 +66,6 @@ export default function AddVacation() {
     const employee = employees.find(emp => emp.employeeName === employeeName); // Find the employee object based on the selected name
   if (employee) {
     setEmployeeId(employee._id); // Set the employeeId as the _id of the selected employee
-  console.log('employeeId',employeeId)
   }
   }
   }, [user, dispatch,employeeName])

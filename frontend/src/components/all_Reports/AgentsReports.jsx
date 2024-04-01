@@ -1,11 +1,10 @@
 import React, { useState, useEffect,useRef } from 'react';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
-import { useSelector, useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-export default function AdvancePayments() {
+export default function AgnetsReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
@@ -13,7 +12,7 @@ export default function AdvancePayments() {
   const getData = async () => {
 
     try {
-      const response = await fetch(`${apiUrl}/auth/reports/get/all/advance/payments`, {
+      const response = await fetch(`${apiUrl}/auth/reports/get/agents/reports`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -69,17 +68,21 @@ export default function AdvancePayments() {
   // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
+  const [type, setType] = useState('')
+  const [supplier, setSupplier] = useState('')
 
   const filteredPayments = payments && payments.filter(paymentItem => {
     let isDateInRange = true;
-    // Check if the payment item's date is within the selected date range
     if (dateFrom && dateTo) {
       const paymentDate = new Date(paymentItem.date);
       const fromDate = new Date(dateFrom);
       const toDate = new Date(dateTo);
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
-    return isDateInRange;
+    return isDateInRange &&
+    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
+    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase())
+
   })
 
   const printExpenseTable = () => {
@@ -90,6 +93,8 @@ export default function AdvancePayments() {
         <tr>
         <th>SN</th>
         <th>Date</th>
+        <th>Agents</th>
+        <th>Type</th>
         <th>Category</th>
         <th>Payment Via</th>
         <th>Payment Type</th>
@@ -106,20 +111,22 @@ export default function AdvancePayments() {
   <tr key="${entry?._id}">
     <td>${index + 1}</td>
     <td>${String(entry?.date)}</td>
+    <td>${String(entry?.supplierName)}</td>
+    <td>${String(entry?.type)}</td>
     <td>${String(entry?.category)}</td>
     <td>${String(entry?.payment_Via)}</td>
     <td>${String(entry?.payment_Type)}</td>
     <td>${String(entry.slip_No)}</td>
     <td>${String(entry.details)}</td>
-    <td>${String(entry.payment_In || 0)}</td>
-    <td>${String(entry.payment_Out || 0)}</td> 
-    <td>${String(entry.cash_Out || 0)}</td>
+    <td>${String(entry.payment_In || 0)}</td> 
+    <td>${String(entry.payment_Out || 0)}</td>
+    <td>${String(entry.cash_Out || 0)}</td> 
     <td>${String(entry.invoice)}</td>
   </tr>
 `).join('')}
-
-      
       <tr>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -162,7 +169,7 @@ export default function AdvancePayments() {
       printWindow.document.write(`
       <html>
         <head>
-          <title>Payable Reports</title>
+          <title>Agents Reports</title>
         </head>
         <body class='bg-dark'>${printContentString}</body>
       </html>
@@ -185,7 +192,9 @@ export default function AdvancePayments() {
     filteredPayments.forEach((payments, index) => {
         const rowData = {
             SN: index + 1,
-            date: payments.date,
+            Date: payments.date,
+            Agents: payments.supplierName,
+            Type: payments.type,
             Category: payments.category,
             Payment_Via: payments.payment_Via,
             Payment_Type: payments.payment_Type,
@@ -204,7 +213,7 @@ export default function AdvancePayments() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Payable Reports.xlsx');
+    XLSX.writeFile(wb, 'Agents Reports.xlsx');
   };
 
 
@@ -216,7 +225,7 @@ export default function AdvancePayments() {
             <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Advance Payments Reports</h4>
+                  <h4>Agents Payments Reports</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
@@ -247,7 +256,24 @@ export default function AdvancePayments() {
                       <label htmlFor="">Date To:</label>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
-
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Agent Name:</label>
+                      <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(payments.map(data => data.supplierName))].map(supplier => (
+                          <option key={supplier} value={supplier}>{supplier}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Type:</label>
+                      <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(payments.map(data => data.type))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </Paper>
               </div>
@@ -262,6 +288,8 @@ export default function AdvancePayments() {
                         <TableRow>
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
+                          <TableCell className='label border'>Agents</TableCell>
+                          <TableCell className='label border'>Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
                           <TableCell className='label border'>Payment_Via</TableCell>
                           <TableCell className='label border'>Payment_Type</TableCell>
@@ -276,6 +304,8 @@ export default function AdvancePayments() {
                         {filteredPayments && filteredPayments.length>0 ? filteredPayments.map((entry,index)=>(
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
+                                <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
+                                <TableCell className='border data_td  '>{entry.type}</TableCell>
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
@@ -293,6 +323,8 @@ export default function AdvancePayments() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                             <TableCell>No_Data_found</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
@@ -305,9 +337,11 @@ export default function AdvancePayments() {
   <TableCell></TableCell>
   <TableCell></TableCell>
   <TableCell></TableCell>
+  <TableCell></TableCell>
+  <TableCell></TableCell>
   <TableCell></TableCell>        
   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-  <TableCell className='border data_td text-center bg-success text-white'>
+    <TableCell className='border data_td text-center bg-success text-white'>
     {/* Calculate the total sum of payment_In */}
     {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
       return total + (entry.payment_In || 0); // Use proper conditional check
