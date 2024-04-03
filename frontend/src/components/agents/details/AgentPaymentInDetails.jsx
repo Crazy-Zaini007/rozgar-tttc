@@ -26,6 +26,8 @@ export default function AgentPaymentInDetails() {
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
   const [show, setShow] = useState(false)
+  const [show1, setShow1] = useState(false)
+  const [show2, setShow2] = useState(false)
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
@@ -115,8 +117,6 @@ export default function AgentPaymentInDetails() {
     setOption(!option)
 
   }
-
-
   // Editing for single Payment In 
   const [editMode, setEditMode] = useState(false);
   const [editedEntry, setEditedEntry] = useState({});
@@ -257,7 +257,7 @@ export default function AgentPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
       })
 
       const json = await response.json()
@@ -787,31 +787,31 @@ export default function AgentPaymentInDetails() {
 
     // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Date: payment.date,
-            Category: payment.category,
-            payment_Via: payment.payment_Via,
-            payment_Type: payment.payment_Type,
-            slip_No: payment.slip_No,
-            details: payment.details,
-            payment_In: payment.payment_In,
-            cash_Out: payment.cash_Out,
-            invoice: payment.invoice,
-            candidate_Name: payment.cand_Name,
-            payment_In_Curr: payment.payment_In_Curr,
-            curr_Rate: payment.curr_Rate,
-            curr_Amount: payment.curr_Amount
-        };
+      const rowData = {
+        SN: index + 1,
+        Date: payment.date,
+        Category: payment.category,
+        payment_Via: payment.payment_Via,
+        payment_Type: payment.payment_Type,
+        slip_No: payment.slip_No,
+        details: payment.details,
+        payment_In: payment.payment_In,
+        cash_Out: payment.cash_Out,
+        invoice: payment.invoice,
+        candidate_Name: payment.cand_Name,
+        payment_In_Curr: payment.payment_In_Curr,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
 
-        data.push(rowData);
+      data.push(rowData);
     });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-}
+  }
 
   const downloadPersons = () => {
     const data = [];
@@ -820,89 +820,89 @@ export default function AgentPaymentInDetails() {
 
     // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            entry_Date: payment.entry_Date,
-            name: payment.name,
-            pp_No: payment.pp_No,
-            entry_Mode: payment.entry_Mode,
-            company: payment.company,
-            trade: payment.trade,
-            country: payment.country,
-            final_Status: payment.final_Status,
-            flight_Date: payment.flight_Date,
-            visa_Price_In_PKR: payment.visa_Price_In_PKR,
-            total_In: payment.total_In,
-            total_Cash_Out: payment.cash_Out,
-            Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
-            visa_Price_In_Curr: payment.visa_Price_In_Curr,
-            remaining_Curr: payment.remaining_Curr,
-            Status: payment.status
-        };
+      const rowData = {
+        SN: index + 1,
+        entry_Date: payment.entry_Date,
+        name: payment.name,
+        pp_No: payment.pp_No,
+        entry_Mode: payment.entry_Mode,
+        company: payment.company,
+        trade: payment.trade,
+        country: payment.country,
+        final_Status: payment.final_Status,
+        flight_Date: payment.flight_Date,
+        visa_Price_In_PKR: payment.visa_Price_In_PKR,
+        total_In: payment.total_In,
+        total_Cash_Out: payment.cash_Out,
+        Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+        visa_Price_In_Curr: payment.visa_Price_In_Curr,
+        remaining_Curr: payment.remaining_Curr,
+        Status: payment.status
+      };
 
-        data.push(rowData);
+      data.push(rowData);
     });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-}
+  }
 
   const downloadCombinedPayments = () => {
     const combinedData = [];
-    const anotherData=[]
+    const anotherData = []
 
     const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
 
     // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Date: payment.date,
-            Category: payment.category,
-            Payment_Via: payment.payment_Via,
-            Payment_Type: payment.payment_Type,
-            Slip_No: payment.slip_No,
-            Details: payment.details,
-            Payment_In: payment.payment_In,
-            Cash_Out: payment.cash_Out,
-            Invoice: payment.invoice,
-            Candidate_Name: payment.cand_Name,
-            Payment_In_Curr: payment.payment_In_Curr,
-            Curr_Rate: payment.curr_Rate,
-            Curr_Amount: payment.curr_Amount
-        };
+      const rowData = {
+        SN: index + 1,
+        Date: payment.date,
+        Category: payment.category,
+        Payment_Via: payment.payment_Via,
+        Payment_Type: payment.payment_Type,
+        Slip_No: payment.slip_No,
+        Details: payment.details,
+        Payment_In: payment.payment_In,
+        Cash_Out: payment.cash_Out,
+        Invoice: payment.invoice,
+        Candidate_Name: payment.cand_Name,
+        Payment_In_Curr: payment.payment_In_Curr,
+        Curr_Rate: payment.curr_Rate,
+        Curr_Amount: payment.curr_Amount
+      };
 
-        combinedData.push(rowData);
+      combinedData.push(rowData);
     });
 
     const individualPerons = filteredPersons.flatMap(payment => payment.persons);
-    
+
 
     // Iterate over individual payments and push all fields
     individualPerons.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Entry_Date: payment.entry_Date,
-            Name: payment.name,
-            PP_No: payment.pp_No,
-            Entry_Mode: payment.entry_Mode,
-            Company: payment.company,
-            Trade: payment.trade,
-            Country: payment.country,
-            Final_Status: payment.final_Status,
-            Flight_Date: payment.flight_Date,
-            Visa_Price_In_PKR: payment.visa_Price_In_PKR,
-            Total_In: payment.total_In,
-            Total_Cash_Out: payment.cash_Out,
-            Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
-            Visa_Price_In_Curr: payment.visa_Price_In_Curr,
-            Remaining_Curr: payment.remaining_Curr,
-            Status: payment.status
-        };
+      const rowData = {
+        SN: index + 1,
+        Entry_Date: payment.entry_Date,
+        Name: payment.name,
+        PP_No: payment.pp_No,
+        Entry_Mode: payment.entry_Mode,
+        Company: payment.company,
+        Trade: payment.trade,
+        Country: payment.country,
+        Final_Status: payment.final_Status,
+        Flight_Date: payment.flight_Date,
+        Visa_Price_In_PKR: payment.visa_Price_In_PKR,
+        Total_In: payment.total_In,
+        Total_Cash_Out: payment.cash_Out,
+        Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+        Visa_Price_In_Curr: payment.visa_Price_In_Curr,
+        Remaining_Curr: payment.remaining_Curr,
+        Status: payment.status
+      };
 
-        anotherData.push(rowData);
+      anotherData.push(rowData);
     });
     const ws1 = XLSX.utils.json_to_sheet(combinedData);
     const ws2 = XLSX.utils.json_to_sheet(anotherData);
@@ -910,14 +910,14 @@ export default function AgentPaymentInDetails() {
     XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
     XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
     XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
-}
+  }
 
   // Changing Status
 
   const changeStatus = async (myStatus) => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
-      let newStatus=myStatus
+      let newStatus = myStatus
 
       try {
         const response = await fetch(`${apiUrl}/auth/agents/update/payment_in/status`, {
@@ -926,7 +926,7 @@ export default function AgentPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
+          body: JSON.stringify({ supplierName: selectedSupplier, newStatus })
         })
 
         const json = await response.json()
@@ -939,7 +939,7 @@ export default function AgentPaymentInDetails() {
           fetchData()
           setNewMessage(toast.success(json.message));
           setLoading5(false)
-          setEditMode1(!editMode1)
+
         }
       }
       catch (error) {
@@ -961,7 +961,7 @@ export default function AgentPaymentInDetails() {
               <div className="right d-flex">
                 {agent_Payments_In.length > 0 &&
                   <>
-                    {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                    <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow1(!show1)}>{show1 === false ? "Show" : "Hide"}</button>
                     <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                     <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
 
@@ -1004,9 +1004,9 @@ export default function AgentPaymentInDetails() {
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
                   <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
-                  <option value="" >All</option>
-                      <option value="Open" >Open</option>
-                      <option value="Closed" >Closed</option>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
                   </select>
 
                 </div>
@@ -1028,9 +1028,11 @@ export default function AgentPaymentInDetails() {
                         <TableCell className='label border' style={{ width: '18.28%' }}>TPI_PKR</TableCell>
                         <TableCell className='label border' style={{ width: '18.28%' }}>Total_Cash_Out</TableCell>
                         <TableCell className='label border' style={{ width: '18.28%' }}>RPI_PKR</TableCell>
-                        <TableCell className='label border' style={{ width: '18.28%' }}>TVPI_Oth_Curr</TableCell>
-                        <TableCell className='label border' style={{ width: '18.28%' }}>TPI_Curr</TableCell>
-                        <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
+                        {show1 && <>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>TVPI_Oth_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>TPI_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
+                        </>}
                         <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
                         <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                           Actions
@@ -1068,16 +1070,18 @@ export default function AgentPaymentInDetails() {
                                   <TableCell className='border data_td p-1 '>
                                     <input type='number' value={editedEntry1.total_Visa_Price_In_PKR - editedEntry1.total_Payment_In + editedEntry1.total_Cash_Out} readonly />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr - editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
-                                  </TableCell>
-                                 
+                                  {show1 && <>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
+                                    </TableCell>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} />
+                                    </TableCell>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr - editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
+                                    </TableCell>
+                                  </>}
+
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -1109,15 +1113,17 @@ export default function AgentPaymentInDetails() {
                                   <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     {entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                    {entry.total_Visa_Price_In_Curr}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                    {entry.total_Payment_In_Curr}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                    {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
-                                  </TableCell>
+                                  {show1 && <>
+                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                      {entry.total_Visa_Price_In_Curr}
+                                    </TableCell>
+                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                      {entry.total_Payment_In_Curr}
+                                    </TableCell>
+                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                      {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
+                                    </TableCell>
+                                  </>}
 
                                   <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     <span>{entry.status}</span>
@@ -1230,10 +1236,11 @@ export default function AgentPaymentInDetails() {
                     {loading5 ? "Updating" : "Change Status"}
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
                     <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
                   </ul>
                 </div>
+                <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
@@ -1302,9 +1309,11 @@ export default function AgentPaymentInDetails() {
                     <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                    {show2 && <>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                    </>}
                     <TableCell className='label border' style={{ width: '18.28%' }}>Slip_Pic</TableCell>
                     <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                       Actions
@@ -1364,20 +1373,22 @@ export default function AgentPaymentInDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.invoice} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
-                                  <option className="my-1 py-2" value="">choose</option>
-                                  {currencies && currencies.map((data) => (
-                                    <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
-                                  ))}
-                                </select>
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
-                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                               </TableCell>
@@ -1394,9 +1405,11 @@ export default function AgentPaymentInDetails() {
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                              </>}
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
 
 
@@ -1487,9 +1500,9 @@ export default function AgentPaymentInDetails() {
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
                   <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
-                  <option value="" >All</option>
-                      <option value="Open" >Open</option>
-                      <option value="Closed" >Closed</option>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
                   </select>
                 </div>
                 <div className="col-auto px-1">
@@ -1713,7 +1726,11 @@ export default function AgentPaymentInDetails() {
                                 <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry2.status} readonly disabled/>
+                                <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
+                                  <option value="Open">Open</option>
+                                  <option value="Closed">Closed</option>
+                                </select>
+
                               </TableCell>
                             </>
                           ) : (

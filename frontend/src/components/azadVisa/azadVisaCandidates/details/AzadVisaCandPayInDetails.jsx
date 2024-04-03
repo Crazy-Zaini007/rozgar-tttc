@@ -16,12 +16,15 @@ import FinalStatusHook from '../../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader'
+import { Link } from 'react-router-dom'
 
 export default function AzadVisaCandPaymentInDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading5, setLoading5] = useState(false)
+  const [show, setShow] = useState(false)
+  const [show2, setShow2] = useState(false)
 
   const [, setNewMessage] = useState('')
 
@@ -251,7 +254,7 @@ export default function AzadVisaCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ name: editedEntry1.supplierName,pp_No:editedEntry1.pp_No,entry_Mode:editedEntry1.entry_Mode,contact:editedEntry1.contact,company:editedEntry1.company,country:editedEntry1.country,trade:editedEntry1.trade,final_Status:editedEntry1.final_Status,flight_Date:editedEntry1.flight_Date, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close  })
+        body: JSON.stringify({ name: editedEntry1.supplierName,pp_No:editedEntry1.pp_No,entry_Mode:editedEntry1.entry_Mode,contact:editedEntry1.contact,company:editedEntry1.company,country:editedEntry1.country,trade:editedEntry1.trade,final_Status:editedEntry1.final_Status,flight_Date:editedEntry1.flight_Date, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, status: editedEntry1.status  })
       })
 
       const json = await response.json()
@@ -318,6 +321,8 @@ export default function AzadVisaCandPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
+  const [status, setStatus] = useState('')
+
   const filteredTotalPaymentIn = azadCand_Payments_In.filter(payment => {
     // Check if supplierName exists and matches the provided name
     if (payment?.supplierName && payment.supplierName.toLowerCase().includes(name.toLowerCase())) {
@@ -329,7 +334,8 @@ export default function AzadVisaCandPaymentInDetails() {
          payment.country.toLowerCase().includes(country.toLowerCase()) &&
          payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
          payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-         payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())
+         payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase())&&
+         payment.status.toLowerCase().includes(status.toLowerCase())
      );
  }
  return false;
@@ -391,6 +397,7 @@ export default function AzadVisaCandPaymentInDetails() {
                     <th>TPI_PKR</th>
                     <th>Total_Cash_Out</th>
                     <th>RPI_PKR</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -410,6 +417,7 @@ export default function AzadVisaCandPaymentInDetails() {
                         <td>${String(entry.total_Payment_In)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
                         <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.status)}</td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -614,8 +622,8 @@ export default function AzadVisaCandPaymentInDetails() {
         Total_Visa_Price_In_Curr:payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr:payments.total_Payment_In_Curr,
         Remaining_Curr:payments.remaining_Curr,
-        close:payments.close,
-        open:payments.open
+        Status:payments.status,
+       
         
       }
 
@@ -658,9 +666,7 @@ export default function AzadVisaCandPaymentInDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
   }
 
-
-
-
+ 
 
   return (
     <>
@@ -674,7 +680,7 @@ export default function AzadVisaCandPaymentInDetails() {
               <div className="right d-flex">
                 {azadCand_Payments_In.length > 0 &&
                   <>
-                    {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                     <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                     <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                     <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
                   </>
@@ -773,7 +779,15 @@ export default function AzadVisaCandPaymentInDetails() {
                     ))}
                   </select>
                 </div>
-                
+                <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
+                  </select>
+
+                </div>
               </div>
             </Paper>
           </div>
@@ -800,11 +814,13 @@ export default function AzadVisaCandPaymentInDetails() {
                       <TableCell className='label border'>TPI_PKR</TableCell>
                       <TableCell className='label border'>Total_Cash_Out</TableCell>
                       <TableCell className='label border'>RPI_PKR</TableCell>
-                      <TableCell className='label border'>TVPI_Oth_Curr</TableCell>
-                      <TableCell className='label border'>TPI_Curr</TableCell>
-                      <TableCell className='label border'>RPI_Curr</TableCell>
-                      <TableCell className='label border'>Close</TableCell>
-                      <TableCell className='label border'>Open</TableCell>
+                      {show && <>
+                          <TableCell className='label border'>TVPI_Oth_Curr</TableCell>
+                          <TableCell className='label border'>TPI_Curr</TableCell>
+                          <TableCell className='label border'>RPI_Curr</TableCell>
+                        </>}
+                      <TableCell className='label border'>Status</TableCell>
+                      
                       <TableCell align='left' className='edw_label border' colSpan={1}>
                         Actions
                       </TableCell>
@@ -891,22 +907,26 @@ export default function AzadVisaCandPaymentInDetails() {
                                   <TableCell className='border data_td p-1 '>
                                     <input type='number' value={editedEntry1.remaining_Balance} readonly />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')}  />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.remaining_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
-                                  </TableCell>
+                                  {show && <>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
+                                    </TableCell>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} readonly />
+                                    </TableCell>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.remaining_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
+                                    </TableCell>
+                                  </>}
 
                                   <TableCell className='border data_td p-1 '>
-                                  <input type='checkbox' value={editedEntry1.close}  onChange={(e) => handleTotalPaymentInputChange(e, 'close')}  />
-                                </TableCell>
-                                <TableCell className='border data_td p-1 '>
-                                  <input type='checkbox' value={editedEntry1.open}  onChange={(e) => handleTotalPaymentInputChange(e, 'open')}  />
-                                </TableCell>
+                                                                <select name="" id="" value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')}>
+                                                                    <option value="Open">Open</option>
+                                                                    <option value="Closed">Closed</option>
+                                                                </select>
+                                                            
+                                                            </TableCell>
+                                
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -959,45 +979,28 @@ export default function AzadVisaCandPaymentInDetails() {
                                   <TableCell className='border data_td text-center'>
                                     {entry.remaining_Balance}
                                   </TableCell>
+                                  {show && <>
+                                    <TableCell className='border data_td text-center'>
+                                      {entry.total_Visa_Price_In_Curr}
+                                    </TableCell>
+                                    <TableCell className='border data_td text-center'>
+                                      {entry.total_Payment_In_Curr}
+                                    </TableCell>
+                                    <TableCell className='border data_td text-center'>
+                                      {entry.remaining_Curr}
+                                    </TableCell>
+                                  </>}
                                   <TableCell className='border data_td text-center'>
-                                    {entry.total_Visa_Price_In_Curr}
+                                    {entry.status}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.total_Payment_In_Curr}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.remaining_Curr}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.close === false ? "Not Closed" : "Closed"}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
-                                  </TableCell>
+                                  
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                       <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
                                       <button className='btn delete_btn' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
                                     </div>
-                                    <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                      <div className="modal-dialog p-0">
-                                        <div className="modal-content p-0">
-                                          <div className="modal-header border-0">
-                                            <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                            {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                          </div>
-                                          <div className="modal-body text-center p-0">
-
-                                            <p>Do you want to Delete the Record?</p>
-                                          </div>
-                                          <div className="text-end m-2">
-                                            <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                            <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                   
                                   </TableCell>
                                 </>
                               )}
@@ -1084,6 +1087,7 @@ export default function AzadVisaCandPaymentInDetails() {
                 <h4 className='d-inline '>Candidate Name: <span>{selectedSupplier}</span></h4>
               </div>
               <div className="right">
+              <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
               <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
@@ -1150,9 +1154,11 @@ export default function AzadVisaCandPaymentInDetails() {
                     <TableCell className='label border'>Payment_In</TableCell>
                     <TableCell className='label border'>Cash_Out</TableCell>
                     <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+                    {show2 && <>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                    </>}
                     <TableCell className='label border'>Slip_Pic</TableCell>
                     <TableCell align='left' className='edw_label border' colSpan={1}>
                       Actions
@@ -1212,20 +1218,22 @@ export default function AzadVisaCandPaymentInDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.invoice} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
-                                  <option className="my-1 py-2" value="">choose</option>
-                                  {currencies && currencies.map((data) => (
-                                    <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
-                                  ))}
-                                </select>
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
-                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                               </TableCell>
@@ -1242,9 +1250,11 @@ export default function AzadVisaCandPaymentInDetails() {
                               <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
                               <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                              </>}
                               <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
 
 
@@ -1269,25 +1279,7 @@ export default function AzadVisaCandPaymentInDetails() {
                                   <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
                                   <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
                                 </div>
-                                {/* Deleting Modal  */}
-                                <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="pDeleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div className="modal-dialog p-0">
-                                    <div className="modal-content p-0">
-                                      <div className="modal-header border-0">
-                                        <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                        {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                      </div>
-                                      <div className="modal-body text-center p-0">
-
-                                        <p>Do you want to Delete the Record?</p>
-                                      </div>
-                                      <div className="text-end m-2">
-                                        <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                        <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                
                               </>
                             )}
                           </TableCell>

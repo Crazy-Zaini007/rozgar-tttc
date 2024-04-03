@@ -76,8 +76,8 @@ export default function VisitSupSinglePayOut() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-  const [open, setOpen] = useState(true)
-  const [close, setClose] = useState(false)
+  // const [open, setOpen] = useState(true)
+  // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
   let curr_Amount = payment_Out / curr_Rate
 
@@ -154,8 +154,8 @@ export default function VisitSupSinglePayOut() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+          // open,
+          // close,
           date
         }),
       });
@@ -182,8 +182,8 @@ export default function VisitSupSinglePayOut() {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        setOpen(true)
-        setClose(false);
+        // setOpen(true)
+        // setClose(false);
       }
 
     } catch (error) {
@@ -334,7 +334,7 @@ export default function VisitSupSinglePayOut() {
           {!option && <TableContainer component={Paper}>
             <form className='py-3 px-2' onSubmit={handleForm}>
               <div className="text-end ">
-                {close === false &&
+                {/* {close === false &&
                   <label htmlFor="">
                     Open
                     <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
@@ -345,7 +345,7 @@ export default function VisitSupSinglePayOut() {
                     Close
                     <input type="checkbox" value={close} onClick={() => setClose(!close)} />
                   </label>
-                }
+                } */}
 
                 <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
                 {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}

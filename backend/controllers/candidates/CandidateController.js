@@ -131,7 +131,7 @@ const addPaymentIn = async (req, res) => {
                         },
                         $set: {
                             
-                            "payment_In_Schema.status": close?"Closed":"Open"?"Closed":"Open",
+                            "payment_In_Schema.status": close?"Closed":"Open"
                         },
                         $push: {
                             'payment_In_Schema.payment': payment
@@ -825,7 +825,7 @@ const updateAgentTotalPaymentIn = async (req, res) => {
   if (user && user.role === "Admin") {
     try {
 
-      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =req.body;
+      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status} =req.body;
      
       let entryMode
 
@@ -841,11 +841,10 @@ const candidateIn=await Candidate.findOne({
     candidateIn.payment_In_Schema.entry_Mode=entry_Mode
     candidateIn.payment_In_Schema.final_Status=final_Status
     candidateIn.payment_In_Schema.trade=trade
+    candidateIn.payment_In_Schema.status=status
     candidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await candidateIn.save()
-  
   }
-  
   const candidateOut=await Candidate.findOne({
     "payment_Out_Schema.supplierName": name.toString(),
     "payment_Out_Schema.entry_Mode": entryMode.toString(),
@@ -859,7 +858,6 @@ const candidateIn=await Candidate.findOne({
     candidateOut.payment_Out_Schema.trade=trade
     candidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await candidateOut.save()
-  
   }
   
   if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
@@ -2177,7 +2175,7 @@ const updateAgentTotalPaymentOut = async (req, res) => {
   if (user && user.role === "Admin") {
     try {
 
-      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status} =
       req.body;
      
       let entryMode
@@ -2194,6 +2192,7 @@ const updateAgentTotalPaymentOut = async (req, res) => {
     candidateOut.payment_Out_Schema.entry_Mode=entry_Mode
     candidateOut.payment_Out_Schema.final_Status=final_Status
     candidateOut.payment_Out_Schema.trade=trade
+    candidateOut.payment_Out_Schema.status=status
     candidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await candidateOut.save()
   

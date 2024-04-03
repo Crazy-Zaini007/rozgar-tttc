@@ -16,6 +16,7 @@ import TradeHook from '../../../../hooks/settingHooks/TradeHook'
 import CompanyHook from '../../../../hooks/settingHooks/CompanyHook'
 import CountryHook from '../../../../hooks/settingHooks/CountryHook'
 import SyncLoader from 'react-spinners/SyncLoader'
+import { Link } from 'react-router-dom'
 
 export default function AzadVisaSupPayOutDetails() {
     const [isLoading, setIsLoading] = useState(false)
@@ -24,6 +25,9 @@ export default function AzadVisaSupPayOutDetails() {
     const [loading3, setLoading3] = useState(false)
     const [loading4, setLoading4] = useState(false)
     const [loading5, setLoading5] = useState(false)
+    const [show, setShow] = useState(false)
+    const [show1, setShow1] = useState(false)
+    const [show2, setShow2] = useState(false)
 
     const apiUrl = process.env.REACT_APP_API_URL;
     const [, setNewMessage] = useState('')
@@ -256,7 +260,7 @@ export default function AzadVisaSupPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+                body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
             })
 
             const json = await response.json()
@@ -350,11 +354,13 @@ export default function AzadVisaSupPayOutDetails() {
 
     const [date1, setDate1] = useState('')
     const [supplier1, setSupplier1] = useState('')
+    const [status, setStatus] = useState('')
 
     const filteredTotalPaymentIn = azadSupplier_Payments_Out.filter(payment => {
         return (
             payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-            payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())
+            payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
+            payment.status.toLowerCase().includes(status.toLowerCase())
         )
     })
 
@@ -373,8 +379,8 @@ export default function AzadVisaSupPayOutDetails() {
             <th>TVPO_Oth_Curr</th>
             <th>TPO_Curr</th>
             <th>RPO_Curr</th>
-            <th>Close</th>
-            <th>Open</th>
+            <th>Status</th>
+           
           </tr>
         </thead>
         <tbody>
@@ -389,8 +395,8 @@ export default function AzadVisaSupPayOutDetails() {
               <td>${String(entry.total_Azad_Visa_Price_Out_Curr)}</td>
               <td>${String(entry.total_Payment_Out_Curr)}</td>
               <td>${String(entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>             
+              <td>${String(entry.status)}</td>
+                    
             </tr>
           `).join('')}
         </tbody>
@@ -579,6 +585,7 @@ export default function AzadVisaSupPayOutDetails() {
     const [trade, setTrade] = useState('')
     const [final_Status, setFinal_Status] = useState('')
     const [flight_Date, setFlight_Date] = useState('')
+    const [status1, setStatus1] = useState("")
 
 
     const filteredPersons = azadSupplier_Payments_Out
@@ -595,7 +602,8 @@ export default function AzadVisaSupPayOutDetails() {
                     persons.country?.toLowerCase().includes(country.toLowerCase()) &&
                     persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
                     persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-                    persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())
+                    persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
+                    persons.status?.toLowerCase().includes(status1.toLowerCase())
 
                 ),
         }))
@@ -618,6 +626,7 @@ export default function AzadVisaSupPayOutDetails() {
         <th>Flight_Date</th>
         <th>VPO_PKR</th>
         <th>VPO_Oth_Curr</th>
+        <th>Status</th>
         
         </tr>
       </thead>
@@ -637,6 +646,8 @@ export default function AzadVisaSupPayOutDetails() {
             <td>${String(person?.flight_Date)}</td>
             <td>${String(person?.azad_Visa_Price_Out_PKR)}</td>
             <td>${String(person?.azad_Visa_Price_Out_Curr)}</td>
+            <td>${String(person?.status)}</td>
+
           </tr>
         `).join('')
         )}
@@ -704,8 +715,7 @@ export default function AzadVisaSupPayOutDetails() {
         Total_Visa_Price_In_Curr:payments.total_Azad_Visa_Price_Out_Curr,
         Total_Payment_Out_Curr:payments.total_Payment_Out_Curr,
         Remaining_Curr:payments.total_Azad_Visa_Price_Out_Curr-payments.total_Payment_Out_Curr,
-        close:payments.close,
-        open:payments.open
+        Status:payments.status
         
       }
 
@@ -767,6 +777,7 @@ export default function AzadVisaSupPayOutDetails() {
         flight_Date:payments.flight_Date,
         visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
         visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
+        Status:payments.status
         
       }
 
@@ -779,7 +790,99 @@ export default function AzadVisaSupPayOutDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
 
+  const downloadCombinedPayments = () => {
+    const combinedData = [];
+    const anotherData=[]
+    
+    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
 
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
+            SN: index + 1,
+            Date: payment.date,
+            Category: payment.category,
+            Payment_Via: payment.payment_Via,
+            Payment_Type: payment.payment_Type,
+            Slip_No: payment.slip_No,
+            Details: payment.details,
+            Payment_In: payment.payment_Out,
+            Cash_Out: payment.cash_Out,
+            Invoice: payment.invoice,
+            Payment_In_Curr: payment.payment_Out_Curr,
+            Curr_Rate: payment.curr_Rate,
+            Curr_Amount: payment.curr_Amount
+        };
+
+        combinedData.push(rowData);
+    });
+
+    const individualPerons = filteredPersons.flatMap(payment => payment.persons);
+    
+
+    // Iterate over individual payments and push all fields
+    individualPerons.forEach((payments, index) => {
+        const rowData = {
+        SN: index + 1,
+        Entry_Date:payments.entry_Date,
+        Category:payments.category,
+        name:payments.name,
+        PP_No:payments.pp_No,
+        Entry_Mode: payments.entry_Mode,
+        Company:payments.company,
+        Trade:payments.trade,
+        Country:payments.country,
+        Final_Status:payments.final_Status,
+        Flight_Date:payments.flight_Date,
+        Visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
+        Visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
+        Status:payments.status,
+        };
+
+        anotherData.push(rowData);
+    });
+    const ws1 = XLSX.utils.json_to_sheet(combinedData);
+    const ws2 = XLSX.utils.json_to_sheet(anotherData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
+    XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
+}
+
+
+const changeStatus = async (myStatus) => {
+    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
+      setLoading5(true)
+      let newStatus=myStatus
+
+      try {
+        const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/update/payment_out/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
+        })
+        
+        const json = await response.json()
+
+        if (!response.ok) {
+          setNewMessage(toast.error(json.message));
+          setLoading5(false)
+        }
+        if (response.ok) {
+          fetchData()
+          setNewMessage(toast.success(json.message));
+          setLoading5(false)
+        }
+      }
+      catch (error) {
+        setNewMessage(toast.error('Server is not responding...'))
+        setLoading5(false)
+      }
+    }
+  }
 
 
     return (
@@ -794,7 +897,7 @@ export default function AzadVisaSupPayOutDetails() {
                             <div className="right d-flex">
                                 {azadSupplier_Payments_Out.length > 0 &&
                                     <>
-                                        {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                                         <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow1(!show1)}>{show1 === false ? "Show" : "Hide"}</button>
                                         <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                                         <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
                                     </>
@@ -832,6 +935,14 @@ export default function AzadVisaSupPayOutDetails() {
                                         ))}
                                     </select>
                                 </div>
+                                <div className="col-auto px-1">
+                  <label htmlFor="">Khata:</label>
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
+                  </select>
+                </div>
                             </div>
                         </Paper>
                     </div>
@@ -851,11 +962,13 @@ export default function AzadVisaSupPayOutDetails() {
                                                 <TableCell className='label border'>TAVPayOut_PKR</TableCell>
                                                 <TableCell className='label border'>Total_Cash_Out</TableCell>
                                                 <TableCell className='label border'>RPayOut_PKR</TableCell>
+                                                {show1 && <>
                                                 <TableCell className='label border'>TAVPriceOut_Oth_Curr</TableCell>
                                                 <TableCell className='label border'>TPO_Curr</TableCell>
                                                 <TableCell className='label border'>RPO_Curr</TableCell>
-                                                <TableCell className='label border'>Open</TableCell>
-                                                <TableCell className='label border'>Close</TableCell>
+                                               </>}
+                                                <TableCell className='label border'>Status</TableCell>
+                                                
                                                 <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -883,7 +996,8 @@ export default function AzadVisaSupPayOutDetails() {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.total_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out}
                                                     </TableCell>
-                                                    <TableCell className='border data_td text-center'>
+                                                    {show1 && <>
+                                                        <TableCell className='border data_td text-center'>
                                                         {entry.total_Azad_Visa_Price_Out_Curr}
                                                     </TableCell>
                                                     <TableCell className='border data_td text-center'>
@@ -892,11 +1006,9 @@ export default function AzadVisaSupPayOutDetails() {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr}
                                                     </TableCell>
+                                                    </>}
                                                     <TableCell className='border data_td text-center'>
-                                                        <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
-                                                    </TableCell>
-                                                    <TableCell className='border data_td text-center'>
-                                                        {entry.close === false ? "Not Closed" : "Closed"}
+                                                        {entry.status}
                                                     </TableCell>
                                                     <TableCell className='border data_td p-1 '>
                                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -998,8 +1110,21 @@ export default function AzadVisaSupPayOutDetails() {
 
                             </div>
                             <div className="right">
-                              <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
-                                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
+                            <div className="dropdown d-inline ">
+                            <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            {loading5 ? "Updating" : "Change Status"}
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
+                            <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
+                            </ul>
+                            </div>
+                           <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                           <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
+                            <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+
+                            <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
+
                                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
                             </div>
@@ -1064,9 +1189,11 @@ export default function AzadVisaSupPayOutDetails() {
                                         <TableCell className='label border'>Payment_Out</TableCell>
                                         <TableCell className='label border'>Cash_Out</TableCell>
                                         <TableCell className='label border'>Invoice</TableCell>
-                                        <TableCell className='label border'>Payment_Out_Curr</TableCell>
-                                        <TableCell className='label border'>CUR_Rate</TableCell>
-                                        <TableCell className='label border'>CUR_Amount</TableCell>
+                                        {show2 &&  <>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out_Curr</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                                        <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                                        </>}
                                         <TableCell className='label border'>Slip_Pic</TableCell>
                                         <TableCell align='left' className='edw_label border' colSpan={1}>
                                             Actions
@@ -1129,6 +1256,7 @@ export default function AzadVisaSupPayOutDetails() {
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='text' value={editedEntry.invoice} readonly />
                                                                 </TableCell>
+                                                                {show2 && <>
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
                                                                         <option className="my-1 py-2" value="">choose</option>
@@ -1141,8 +1269,9 @@ export default function AzadVisaSupPayOutDetails() {
                                                                     <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
                                                                 </TableCell>
                                                                 <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                                                    <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
                                                                 </TableCell>
+                                                               </>}
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                                                                 </TableCell>
@@ -1159,9 +1288,11 @@ export default function AzadVisaSupPayOutDetails() {
                                                                 <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
                                                                 <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
+                                                                {show2 && <>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.payment_Out_Curr}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                                                               </>}
                                                                 <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
 
 
@@ -1250,6 +1381,14 @@ export default function AzadVisaSupPayOutDetails() {
                     <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
+                            <div className="col-auto px-1">
+                                <label htmlFor="">Khata:</label>
+                                <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
+                                    <option value="" >All</option>
+                                    <option value="Open" >Open</option>
+                                    <option value="Closed" >Closed</option>
+                                </select>
+                                </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Entry Date:</label>
                                     <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
@@ -1377,6 +1516,7 @@ export default function AzadVisaSupPayOutDetails() {
                                 <h6>Persons Details</h6>
                             </div>
                             <div className="right">
+                                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
                             </div>
@@ -1396,7 +1536,8 @@ export default function AzadVisaSupPayOutDetails() {
                                         <TableCell className='label border'>Final_Status</TableCell>
                                         <TableCell className='label border'>Flight_Date</TableCell>
                                         <TableCell className='label border'>AVPI_PKR</TableCell>
-                                        <TableCell className='label border'>AVPI_Oth_Curr</TableCell>
+                                        {show && <TableCell className='label border'>AVPI_Oth_Curr</TableCell>}
+                                        <TableCell className='label border'>Status</TableCell>
                                         <TableCell className='label border'>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -1464,12 +1605,18 @@ export default function AzadVisaSupPayOutDetails() {
                                                                 <input type='date' value={editedEntry2.flight_Date} onChange={(e) => handlePersonInputChange(e, 'flight_Date')} />
                                                             </TableCell>
                                                             <TableCell className='border data_td p-1 '>
-                                                                <input type='number' value={editedEntry2.azad_Visa_Price_In_PKR} readonly />
+                                                                <input type='number' value={editedEntry2.azad_Visa_Price_Out_PKR} readonly />
                                                             </TableCell>
+                                                            {show &&  <TableCell className='border data_td p-1 '>
+                                                                <input type='number' value={editedEntry2.azad_Visa_Price_Out_Curr} readonly />
+                                                            </TableCell>}
                                                             <TableCell className='border data_td p-1 '>
-                                                                <input type='number' value={editedEntry2.azad_Visa_Price_In_Curr} readonly />
+                                                                <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
+                                                                    <option value="Open">Open</option>
+                                                                    <option value="Closed">Closed</option>
+                                                                </select>
+                                                            
                                                             </TableCell>
-
 
                                                         </>
                                                     ) : (
@@ -1484,10 +1631,9 @@ export default function AzadVisaSupPayOutDetails() {
                                                             <TableCell className='border data_td text-center'>{person?.country}</TableCell>
                                                             <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
                                                             <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_In_PKR}</TableCell>
-                                                            <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_In_Curr}</TableCell>
-
-
+                                                            <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_PKR}</TableCell>
+                                                            {show && <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_Curr}</TableCell>}
+                                                            <TableCell className='border data_td text-center'>{person?.status}</TableCell>
                                                         </>
                                                     )}
                                                     <TableCell className='border data_td p-1 '>

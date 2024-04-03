@@ -1374,7 +1374,7 @@ const updatePaymentInPerson=async(req,res)=>{
   if (user && user.role === "Admin") {
     try {
 
-      const {supplierName,personId,name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+      const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
       req.body;
      
       let entryMode
@@ -1447,6 +1447,7 @@ const updatePaymentInPerson=async(req,res)=>{
             personIn.entry_Mode = entry_Mode;
             personIn.final_Status = final_Status;
             personIn.trade = trade;
+            personIn.status = status;
             personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
             await existingSupplier.save()
         } else {
@@ -3371,7 +3372,7 @@ const updatePaymentOutPerson=async(req,res)=>{
   if (user && user.role === "Admin") {
     try {
 
-      const {supplierName,personId,name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+      const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
       req.body;
      
       let entryMode
@@ -3444,6 +3445,7 @@ const updatePaymentOutPerson=async(req,res)=>{
             personIn.entry_Mode = entry_Mode;
             personIn.final_Status = final_Status;
             personIn.trade = trade;
+            personIn.status = status;
             personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
             await existingSupplier.save()
         } else {

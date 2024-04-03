@@ -59,14 +59,12 @@ export default function OverAllVisaWise() {
   const[flight_Date,setFlight_Date]=useState('')
   const filteredEntries = enteries.filter(entry => {
     return (
-      entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
-      entry.company.toLowerCase().includes(company.toLowerCase()) &&
-      entry.country.toLowerCase().includes(country.toLowerCase()) &&
-      entry.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
-      entry.reference_Out.toLowerCase().includes(reference_Out.toLowerCase())
-
-
+      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      entry.reference_Out?.toLowerCase().includes(reference_Out.toLowerCase())
     );
   });
 

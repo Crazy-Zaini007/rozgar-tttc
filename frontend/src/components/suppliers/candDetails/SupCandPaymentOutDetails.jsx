@@ -26,6 +26,8 @@ export default function SupCandPaymentOutDetails() {
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
   const [show, setShow] = useState(false)
+  const [show1, setShow1] = useState(false)
+  const [show2, setShow2] = useState(false)
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -259,7 +261,7 @@ export default function SupCandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date ,status: editedEntry2.status})
       })
 
       const json = await response.json()
@@ -810,31 +812,31 @@ export default function SupCandPaymentOutDetails() {
 
     // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Date: payment.date,
-            Category: payment.category,
-            payment_Via: payment.payment_Via,
-            payment_Type: payment.payment_Type,
-            slip_No: payment.slip_No,
-            details: payment.details,
-            payment_In: payment.payment_In,
-            cash_Out: payment.cash_Out,
-            invoice: payment.invoice,
-            candidate_Name: payment.cand_Name,
-            payment_In_Curr: payment.payment_In_Curr,
-            curr_Rate: payment.curr_Rate,
-            curr_Amount: payment.curr_Amount
-        };
+      const rowData = {
+        SN: index + 1,
+        Date: payment.date,
+        Category: payment.category,
+        payment_Via: payment.payment_Via,
+        payment_Type: payment.payment_Type,
+        slip_No: payment.slip_No,
+        details: payment.details,
+        payment_In: payment.payment_In,
+        cash_Out: payment.cash_Out,
+        invoice: payment.invoice,
+        candidate_Name: payment.cand_Name,
+        payment_In_Curr: payment.payment_In_Curr,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
 
-        data.push(rowData);
+      data.push(rowData);
     });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-}
+  }
 
   const downloadPersons = () => {
     const data = [];
@@ -843,89 +845,89 @@ export default function SupCandPaymentOutDetails() {
 
     // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Entry_Date: payment.entry_Date,
-            Name: payment.name,
-            PP_No: payment.pp_No,
-            Entry_Mode: payment.entry_Mode,
-            Company: payment.company,
-            Trade: payment.trade,
-            Country: payment.country,
-            Final_Status: payment.final_Status,
-            Flight_Date: payment.flight_Date,
-            Visa_Price_In_PKR: payment.visa_Price_Out_PKR,
-            Total_In: payment.total_In,
-            Total_Cash_Out: payment.cash_Out,
-            Remaining_PKR: payment.visa_Price_Out_PKR - payment.total_In + payment.cash_Out,
-            Visa_Price_In_Curr: payment.visa_Price_Out_Curr,
-            Remaining_Curr: payment.remaining_Curr,
-            Status: payment.status
-        };
+      const rowData = {
+        SN: index + 1,
+        Entry_Date: payment.entry_Date,
+        Name: payment.name,
+        PP_No: payment.pp_No,
+        Entry_Mode: payment.entry_Mode,
+        Company: payment.company,
+        Trade: payment.trade,
+        Country: payment.country,
+        Final_Status: payment.final_Status,
+        Flight_Date: payment.flight_Date,
+        Visa_Price_In_PKR: payment.visa_Price_Out_PKR,
+        Total_In: payment.total_In,
+        Total_Cash_Out: payment.cash_Out,
+        Remaining_PKR: payment.visa_Price_Out_PKR - payment.total_In + payment.cash_Out,
+        Visa_Price_In_Curr: payment.visa_Price_Out_Curr,
+        Remaining_Curr: payment.remaining_Curr,
+        Status: payment.status
+      };
 
-        data.push(rowData);
+      data.push(rowData);
     });
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-}
+  }
 
   const downloadCombinedPayments = () => {
     const combinedData = [];
-    const anotherData=[]
-    
+    const anotherData = []
+
     const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
 
     // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Date: payment.date,
-            Category: payment.category,
-            Payment_Via: payment.payment_Via,
-            Payment_Type: payment.payment_Type,
-            Slip_No: payment.slip_No,
-            Details: payment.details,
-            Payment_In: payment.payment_Out,
-            Cash_Out: payment.cash_Out,
-            Invoice: payment.invoice,
-            Candidate_Name: payment.cand_Name,
-            Payment_In_Curr: payment.payment_Out_Curr,
-            Curr_Rate: payment.curr_Rate,
-            Curr_Amount: payment.curr_Amount
-        };
+      const rowData = {
+        SN: index + 1,
+        Date: payment.date,
+        Category: payment.category,
+        Payment_Via: payment.payment_Via,
+        Payment_Type: payment.payment_Type,
+        Slip_No: payment.slip_No,
+        Details: payment.details,
+        Payment_In: payment.payment_Out,
+        Cash_Out: payment.cash_Out,
+        Invoice: payment.invoice,
+        Candidate_Name: payment.cand_Name,
+        Payment_In_Curr: payment.payment_Out_Curr,
+        Curr_Rate: payment.curr_Rate,
+        Curr_Amount: payment.curr_Amount
+      };
 
-        combinedData.push(rowData);
+      combinedData.push(rowData);
     });
 
     const individualPerons = filteredPersons.flatMap(payment => payment.persons);
-    
+
 
     // Iterate over individual payments and push all fields
     individualPerons.forEach((payment, index) => {
-        const rowData = {
-            SN: index + 1,
-            Entry_Date: payment.entry_Date,
-            Name: payment.name,
-            PP_No: payment.pp_No,
-            Entry_Mode: payment.entry_Mode,
-            Company: payment.company,
-            Trade: payment.trade,
-            Country: payment.country,
-            Final_Status: payment.final_Status,
-            Flight_Date: payment.flight_Date,
-            Visa_Price_In_PKR: payment.visa_Price_Out_PKR,
-            total_In: payment.total_In,
-            total_Cash_Out: payment.cash_Out,
-            Remaining_PKR: payment.visa_Price_Out_PKR - payment.total_In + payment.cash_Out,
-            Visa_Price_In_Curr: payment.visa_Price_Out_Curr,
-            Remaining_Curr: payment.remaining_Curr,
-            Status: payment.status
-        };
+      const rowData = {
+        SN: index + 1,
+        Entry_Date: payment.entry_Date,
+        Name: payment.name,
+        PP_No: payment.pp_No,
+        Entry_Mode: payment.entry_Mode,
+        Company: payment.company,
+        Trade: payment.trade,
+        Country: payment.country,
+        Final_Status: payment.final_Status,
+        Flight_Date: payment.flight_Date,
+        Visa_Price_In_PKR: payment.visa_Price_Out_PKR,
+        total_In: payment.total_In,
+        total_Cash_Out: payment.cash_Out,
+        Remaining_PKR: payment.visa_Price_Out_PKR - payment.total_In + payment.cash_Out,
+        Visa_Price_In_Curr: payment.visa_Price_Out_Curr,
+        Remaining_Curr: payment.remaining_Curr,
+        Status: payment.status
+      };
 
-        anotherData.push(rowData);
+      anotherData.push(rowData);
     });
     const ws1 = XLSX.utils.json_to_sheet(combinedData);
     const ws2 = XLSX.utils.json_to_sheet(anotherData);
@@ -933,13 +935,13 @@ export default function SupCandPaymentOutDetails() {
     XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
     XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
     XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
-};
+  };
 
 
   // Changing Status
   const changeStatus = async (myStatus) => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
-      let newStatus=myStatus
+      let newStatus = myStatus
 
       setLoading5(true)
 
@@ -950,7 +952,7 @@ export default function SupCandPaymentOutDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
+          body: JSON.stringify({ supplierName: selectedSupplier, newStatus })
         })
 
         const json = await response.json()
@@ -986,7 +988,7 @@ export default function SupCandPaymentOutDetails() {
               <div className="right d-flex">
                 {supp_Payments_Out.length > 0 &&
                   <>
-                    {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                    <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow1(!show1)}>{show1 === false ? "Show" : "Hide"}</button>
                     <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                     <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
                   </>
@@ -1024,9 +1026,9 @@ export default function SupCandPaymentOutDetails() {
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
                   <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
-                  <option value="" >All</option>
-                      <option value="Open" >Open</option>
-                      <option value="Closed" >Closed</option>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
                   </select>
 
                 </div>
@@ -1047,9 +1049,11 @@ export default function SupCandPaymentOutDetails() {
                         <TableCell className='label border'>TPO_PKR</TableCell>
                         <TableCell className='label border'>Total_Cash_Out</TableCell>
                         <TableCell className='label border'>RPO_PKR</TableCell>
-                        <TableCell className='label border'>TVPO_Oth_Curr</TableCell>
-                        <TableCell className='label border'>TPO_Curr</TableCell>
-                        <TableCell className='label border'>RPO_Curr</TableCell>
+                        {show1 && <>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>TVPO_Oth_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>TPO_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>RPO_Curr</TableCell>
+                        </>}
                         <TableCell className='label border'>Status</TableCell>
                         <TableCell align='left' className='edw_label border' colSpan={1}>
                           Actions
@@ -1132,15 +1136,17 @@ export default function SupCandPaymentOutDetails() {
                                   <TableCell className='border data_td text-center'>
                                     {entry.total_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.total_Visa_Price_Out_Curr}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.total_Payment_Out_Curr}
-                                  </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.total_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr}
-                                  </TableCell>
+                                  {show1 && <>
+                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                      {entry.total_Visa_Price_Out_Curr}
+                                    </TableCell>
+                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                      {entry.total_Payment_Out_Curr}
+                                    </TableCell>
+                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                      {entry.total_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr}
+                                    </TableCell>
+                                  </>}
                                   <TableCell className='border data_td text-center'>
                                     {entry.status}
                                   </TableCell>
@@ -1236,11 +1242,12 @@ export default function SupCandPaymentOutDetails() {
                     {loading5 ? "Updating" : "Change Status"}
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
-                  <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
+                    <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
+                    <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
 
                   </ul>
                 </div>
+                <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
@@ -1311,9 +1318,11 @@ export default function SupCandPaymentOutDetails() {
                     <TableCell className='label border'>Cash_Out</TableCell>
                     <TableCell className='label border'>Candidate</TableCell>
                     <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_Out_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+                    {show2 && <>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out_Curr</TableCell>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                    </>}
                     <TableCell className='label border'>Slip_Pic</TableCell>
                     <TableCell align='left' className='edw_label border' colSpan={1}>
                       Actions
@@ -1376,20 +1385,22 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.invoice} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
-                                  <option className="my-1 py-2" value="">choose</option>
-                                  {currencies && currencies.map((data) => (
-                                    <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
-                                  ))}
-                                </select>
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
-                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                               </TableCell>
@@ -1407,9 +1418,11 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.cand_Name}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Out_Curr}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Out_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                              </>}
                               <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                             </>
                           )}
@@ -1498,9 +1511,9 @@ export default function SupCandPaymentOutDetails() {
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
                   <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
-                  <option value="" >All</option>
-                      <option value="Open" >Open</option>
-                      <option value="Closed" >Closed</option>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
                   </select>
                 </div>
                 <div className="col-auto px-1">
@@ -1654,8 +1667,10 @@ export default function SupCandPaymentOutDetails() {
                     <TableCell className='label border'>Total_In_PKR</TableCell>
                     <TableCell className='label border'>Total_Cash_Out</TableCell>
                     <TableCell className='label border'>Remaining</TableCell>
-                    {show === true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
-                    <TableCell className='label border'>Remaining_Oth_Curr</TableCell>
+                    {show === true && <>
+                      <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>
+                      <TableCell className='label text-center' style={{ width: '18.28%' }}>Remaining_Oth_Curr</TableCell>
+                    </>}
                     <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
                     <TableCell className='label border'>Action</TableCell>
                   </TableRow>
@@ -1736,14 +1751,21 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.visa_Price_Out_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
                               </TableCell>
-                              {show && <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
-                              </TableCell>}
+                              {show && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
+                                </TableCell>
+
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry2.remaining_Curr} readonly />
+                                </TableCell>
+                              </>}
                               <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.remaining_Curr} readonly />
-                              </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='checkbox' value={editedEntry2.status} readonly disabled/>
+                                <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
+                                  <option value="Open">Open</option>
+                                  <option value="Closed">Closed</option>
+                                </select>
+
                               </TableCell>
 
                             </>
@@ -1763,8 +1785,10 @@ export default function SupCandPaymentOutDetails() {
                               <TableCell className='border data_td text-center'>{person?.total_In}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{person?.visa_Price_Out_PKR - person?.total_In + person?.cash_Out}</TableCell>
-                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_Out_Curr}</TableCell>}
-                              <TableCell className='border data_td text-center'>{person?.remaining_Curr}</TableCell>
+                              {show && <>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_Out_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.remaining_Curr}</TableCell>
+                              </>}
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
 
                             </>

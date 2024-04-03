@@ -379,7 +379,7 @@ const updateVSP = async (req, res) => {
 
                         
                           let uploadImage
-                          if(picture){
+                          if(picture && !picture.startsWith("https://res.cloudinary.com")){
                               // uploading picture to cloudinary
                                uploadImage = await cloudinary.uploader.upload(picture, {
                                   upload_preset: 'rozgar'
@@ -623,7 +623,6 @@ const deleteVSP = async (req, res) => {
             const cashInHandUpdate = {
               $inc: {}
             };
-
 
             cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
 
@@ -1427,7 +1426,7 @@ const updateVPP = async (req, res) => {
                           }
 
                           let uploadImage
-                    if(picture){
+                    if(picture && !picture.startsWith("https://res.cloudinary.com")){
                     
                     
                          uploadImage = await cloudinary.uploader.upload(picture, {
@@ -2476,7 +2475,7 @@ const updateTSP = async (req, res) => {
 
                         
                           let uploadImage
-                          if(picture){
+                          if(picture && !picture.startsWith("https://res.cloudinary.com")){
                               // uploading picture to cloudinary
                                uploadImage = await cloudinary.uploader.upload(picture, {
                                   upload_preset: 'rozgar'
@@ -3525,7 +3524,7 @@ const updateTPP = async (req, res) => {
                           }
 
                           let uploadImage
-                    if(picture){
+                    if(picture && !picture.startsWith("https://res.cloudinary.com")){
                         // uploading picture to cloudinary
                          uploadImage = await cloudinary.uploader.upload(picture, {
                             upload_preset: 'rozgar'
@@ -4573,7 +4572,7 @@ const updateAVSP = async (req, res) => {
                           }
 
                           let uploadImage
-                          if(picture){
+                          if(picture && !picture.startsWith("https://res.cloudinary.com")){
                               // uploading picture to cloudinary
                                uploadImage = await cloudinary.uploader.upload(picture, {
                                   upload_preset: 'rozgar'
@@ -5622,7 +5621,7 @@ const updateAVPP = async (req, res) => {
                           }
 
                           let uploadImage
-                          if(picture){
+                          if(picture && !picture.startsWith("https://res.cloudinary.com")){
                               // uploading picture to cloudinary
                                uploadImage = await cloudinary.uploader.upload(picture, {
                                   upload_preset: 'rozgar'
@@ -6671,7 +6670,7 @@ const updateVISP = async (req, res) => {
                           }
 
                           let uploadImage
-                          if(picture){
+                          if(picture && !picture.startsWith("https://res.cloudinary.com")){
                               // uploading picture to cloudinary
                                uploadImage = await cloudinary.uploader.upload(picture, {
                                   upload_preset: 'rozgar'
@@ -7718,7 +7717,7 @@ const updateVIPP = async (req, res) => {
 
                         
                           let uploadImage
-                          if(picture){
+                          if(picture && !picture.startsWith("https://res.cloudinary.com")){
                               // uploading picture to cloudinary
                                uploadImage = await cloudinary.uploader.upload(picture, {
                                   upload_preset: 'rozgar'
@@ -18066,7 +18065,7 @@ const updateCPP = async (req, res) => {
                     }
 
                     let uploadImage
-                    if(picture){
+                    if(picture && !picture.startsWith("https://res.cloudinary.com")){
                         // uploading picture to cloudinary
                          uploadImage = await cloudinary.uploader.upload(picture, {
                             upload_preset: 'rozgar'
@@ -18298,7 +18297,7 @@ const updateProtector = async (req, res) => {
                        }
 
                        let uploadImage
-                       if(picture){
+                       if(picture && !picture.startsWith("https://res.cloudinary.com")){
                            // uploading picture to cloudinary
                             uploadImage = await cloudinary.uploader.upload(picture, {
                                upload_preset: 'rozgar'

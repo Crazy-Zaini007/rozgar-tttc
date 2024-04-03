@@ -20,7 +20,7 @@ export default function Invoice() {
         },
       });
 
-      const json = await response.json();
+      const json = await response.json()
       if (response.ok) {
         setPayments(json.data)
       // Dispatch the action with received data

@@ -81,7 +81,7 @@ export default function Entry1() {
   const [curr_Rate, setCurr_Rate] = useState()
   const [open, setOpen] = useState(true)
   const [close, setClose] = useState(false)
-
+  
   const [date, setDate] = useState('')
   let curr_Amount = payment_In / curr_Rate
   const handleOpen = () => {

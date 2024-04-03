@@ -3192,12 +3192,12 @@ const addEntry = async (req, res) => {
 
         const protectors=await Protector.find({})
         if (
-          protector_Reference_In === "PRPTECTORS" ||
+         ( protector_Reference_In === "PRPTECTORS" ||
           protector_Reference_In === "PRPTECTOR" ||
           protector_Reference_In === "Protectors" ||
           protector_Reference_In === "Protector" ||
           protector_Reference_In === "protectors" ||
-          protector_Reference_In === "protector"
+          protector_Reference_In === "protector") && protector_Reference_In_Name
         ) {
           try {
             let existingPaymentOutProtector
@@ -3459,7 +3459,7 @@ const addMultipleEnteries = async (req, res) => {
             // Check if the supplier with the given name exists
             for(const supplier of suppliers){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.reference_Out_Name.toLowerCase()){
                   existingPaymentInSupplier=supplier
                   break
                 }
@@ -3575,7 +3575,7 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             let existingPaymentOutSupplier;
             for(const supplier of suppliers){
-              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()){
                 existingPaymentOutSupplier=supplier
                 break
               }
@@ -3697,7 +3697,7 @@ const addMultipleEnteries = async (req, res) => {
               // Check if the supplier with the given name exists
               let existingPaymentInAgent;
             for(const agent of agents){
-              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===entryData.reference_Out_Name.toLowerCase()){
                 existingPaymentInAgent=agent
                 break
               }
@@ -3823,7 +3823,7 @@ const addMultipleEnteries = async (req, res) => {
               // Check if the supplier with the given name exists
               let existingPaymentOutAgent
             for(const agent of agents){
-              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()){
                 existingPaymentOutAgent=agent
                 break
               }
@@ -4067,7 +4067,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInAzadSupplier
               for (const supplier of azadSuppliers){
                 if(supplier.Supplier_Payment_In_Schema){
-                  if(supplier.Supplier_Payment_In_Schema && supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                  if(supplier.Supplier_Payment_In_Schema && supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_Out_Name.toLowerCase()){
                     existingPaymentInAzadSupplier = supplier;
                     break
                   }
@@ -4196,7 +4196,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutAzadSupplier
             for (const supplier of azadSuppliers){
               if(supplier.Supplier_Payment_Out_Schema){
-                if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_In_Name.toLowerCase()){
                   existingPaymentOutAzadSupplier = supplier;
                   break
                 }
@@ -4326,7 +4326,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInAzadAgent
             for (const supplier of azadSuppliers){
               if(supplier.Agent_Payment_In_Schema){
-                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_Out_Name.toLowerCase()){
                   existingPaymentInAzadAgent = supplier;
                   break
                 }
@@ -4455,7 +4455,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutAzadAgent
             for (const supplier of azadSuppliers){
               if(supplier.Agent_Payment_Out_Schema){
-                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_In_Name.toLowerCase()){
                   existingPaymentOutAzadAgent = supplier;
                   break
                 }
@@ -4707,7 +4707,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInTicketSupplier
               for (const supplier of ticketSuppliers){
                 if(supplier.Supplier_Payment_In_Schema){
-                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_Out_Name.toLowerCase()){
                     existingPaymentInTicketSupplier = supplier;
                     break
                   }
@@ -4835,7 +4835,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutTicketSupplier
               for (const supplier of ticketSuppliers){
                 if(supplier.Supplier_Payment_Out_Schema){
-                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_In_Name.toLowerCase()){
                     existingPaymentOutTicketSupplier = supplier;
                     break
                   }
@@ -4965,7 +4965,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInTicketAgent
               for (const supplier of ticketSuppliers){
                 if(supplier.Agent_Payment_In_Schema){
-                  if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                  if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_Out_Name.toLowerCase()){
                     existingPaymentInTicketAgent = supplier;
                     break
                   }
@@ -5092,7 +5092,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutTicketAgent
             for (const supplier of ticketSuppliers){
               if(supplier.Agent_Payment_Out_Schema){
-                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_In_Name.toLowerCase()){
                   existingPaymentOutTicketAgent = supplier;
                   break
                 }
@@ -5341,7 +5341,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInVisitSupplier
               for (const supplier of visitSuppliers){
                 if(supplier.Supplier_Payment_In_Schema){
-                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                  if(supplier.Supplier_Payment_In_Schema.supplierName.toLowerCase()===entryData.visit_Reference_Out_Name.toLowerCase()){
                     existingPaymentInVisitSupplier = supplier;
                     break
                   }
@@ -5468,7 +5468,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutVisitSupplier
               for (const supplier of visitSuppliers){
                 if(supplier.Supplier_Payment_Out_Schema){
-                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                  if(supplier.Supplier_Payment_Out_Schema.supplierName.toLowerCase()===entryData.visit_Reference_In_Name.toLowerCase()){
                     existingPaymentOutVisitSupplier = supplier;
                     break
                   }
@@ -5597,7 +5597,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInVisitAgent
             for (const supplier of visitSuppliers){
               if(supplier.Agent_Payment_In_Schema){
-                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                if(supplier.Agent_Payment_In_Schema.supplierName.toLowerCase()===entryData.visit_Reference_Out_Name.toLowerCase()){
                   existingPaymentInVisitAgent = supplier;
                   break
                 }
@@ -5720,7 +5720,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutVisitAgent
               for (const supplier of visitSuppliers){
                 if(supplier.Agent_Payment_Out_Schema){
-                  if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                  if(supplier.Agent_Payment_Out_Schema.supplierName.toLowerCase()===entryData.visit_Reference_In_Name.toLowerCase()){
                     existingPaymentOutVisitAgent = supplier;
                     break
                   }
@@ -5956,18 +5956,18 @@ const addMultipleEnteries = async (req, res) => {
           const protectors=await Protector.find({})
 
           if (
-            entryData.protector_Reference_In === "PRPTECTORS" ||
+            (entryData.protector_Reference_In === "PRPTECTORS" ||
             entryData.protector_Reference_In === "PRPTECTOR" ||
             entryData.protector_Reference_In === "Protectors" ||
             entryData.protector_Reference_In === "Protector" ||
             entryData.protector_Reference_In === "protectors" ||
-            entryData.protector_Reference_In === "protector"
+            entryData.protector_Reference_In === "protector") && entryData.protector_Reference_In_Name
           ) {
             try {
               let existingPaymentOutProtector
             for(const protector of protectors){
               if(protector.payment_Out_Schema){
-                if(protector.payment_Out_Schema.supplierName.toLowerCase()===protector_Reference_In_Name.toLowerCase()){
+                if(protector.payment_Out_Schema.supplierName.toLowerCase()===entryData.protector_Reference_In_Name.toLowerCase()){
                   existingPaymentOutProtector=protector
                 }
               }

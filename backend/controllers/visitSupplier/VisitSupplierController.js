@@ -47,8 +47,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
             curr_Country,
             curr_Rate,
             curr_Amount,
-            open,
-            close,
+       
             date
         } = req.body;
         const newPaymentIn = parseInt(payment_In, 10);
@@ -115,10 +114,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
                     "Supplier_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
                 },
-                $set: {
-                    "Supplier_Payment_Out_Schema.open": open,
-                    "Supplier_Payment_Out_Schema.close": close,
-                },
+           
                 $push: {
                     'Supplier_Payment_In_Schema.payment': payment
                 }
@@ -205,8 +201,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open,
-                    close
+                  
                 } = payment;
 
                 const newPaymentIn = parseInt(payment_In, 10);
@@ -281,10 +276,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
                        
 
                     },
-                    $set: {
-                        "Supplier_Payment_In_Schema.open": open,
-                        "Supplier_Payment_In_Schema.close": close,// Set to false if you always want to close
-                    },
+             
                     $push: {
                         'Supplier_Payment_In_Schema.payment': newPayment
                     }
@@ -439,10 +431,7 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
                             "Supplier_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? -newCurrAmount : 0,
 
                         },
-                        $set: {
-                            "Supplier_Payment_Out_Schema.open": open,
-                            "Supplier_Payment_Out_Schema.close": close,// Make sure close is defined
-                        },
+             
                         $push: {
                             'Supplier_Payment_In_Schema.payment': payment
                         }
@@ -825,7 +814,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
     if (user && user.role === "Admin") {
       try {
   
-        const {supplierName,personId,name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+        const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
         req.body;
        
         let entryMode
@@ -897,6 +886,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
               personIn.entry_Mode = entry_Mode;
               personIn.final_Status = final_Status;
               personIn.trade = trade;
+              personIn.status = status;
               personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
               await existingSupplier.save()
           } else {
@@ -1365,20 +1355,20 @@ const getAllAzadSupplierPaymentsIn = async (req, res) => {
                     const paymentInSchema = supplier.Supplier_Payment_In_Schema;
 
                     return {
-                        supplier_Id: paymentInSchema.supplier_Id,
-                        supplierName: paymentInSchema.supplierName,
-                        total_Azad_Visa_Price_In_PKR: paymentInSchema.total_Azad_Visa_Price_In_PKR,
-                        total_Azad_Visa_Price_In_Curr: paymentInSchema.total_Azad_Visa_Price_In_Curr,
-                        total_Payment_In: paymentInSchema.total_Payment_In,
-                        total_Cash_Out: paymentInSchema.total_Cash_Out,
-                        remaining_Balance: paymentInSchema.remaining_Balance,
-                        curr_Country: paymentInSchema.curr_Country,
-                        persons: paymentInSchema.persons || [],
-                        payment: paymentInSchema.payment || [],
-                        open: paymentInSchema.open || false,
-                        close: paymentInSchema.close || false,
-                        createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
-                        updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
+                      supplier_Id: paymentInSchema.supplier_Id,
+                      supplierName: paymentInSchema.supplierName,
+                      total_Azad_Visa_Price_In_PKR: paymentInSchema.total_Azad_Visa_Price_In_PKR,
+                      total_Azad_Visa_Price_In_Curr: paymentInSchema.total_Azad_Visa_Price_In_Curr,
+                      total_Payment_In_Curr: paymentInSchema.total_Payment_In_Curr,
+                      total_Payment_In: paymentInSchema.total_Payment_In,
+                      total_Cash_Out: paymentInSchema.total_Cash_Out,
+                      remaining_Balance: paymentInSchema.remaining_Balance,
+                      curr_Country: paymentInSchema.curr_Country,
+                      persons: paymentInSchema.persons || [],
+                      payment: paymentInSchema.payment || [],
+                      status: paymentInSchema.status,
+                      createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
+                      updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
                     };
                 })
 
@@ -1406,7 +1396,7 @@ const addAzadSupplierPaymentOut = async (req, res) => {
                 res.status(404).json({ message: "Only Admin is allowed!" })
             }
             if (user.role === "Admin") {
-                const { supplierName, category, payment_Via, payment_Type, slip_No, payment_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, open, close, date } = req.body
+                const { supplierName, category, payment_Via, payment_Type, slip_No, payment_Out, slip_Pic, details, curr_Country, curr_Rate, curr_Amount, date } = req.body
                 if (!supplierName) {
                     return res.status(400).json({ message: "supplier Name is required" })
                 }
@@ -1499,10 +1489,7 @@ const addAzadSupplierPaymentOut = async (req, res) => {
 
                             
                         },
-                        $set: {
-                           "Supplier_Payment_Out_Schema.open":open,
-                            "Supplier_Payment_Out_Schema.close":close// Make sure close is defined
-                        },
+                      
                         $push: {
                             'Supplier_Payment_Out_Schema.payment': payment
                         }
@@ -1592,8 +1579,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open,
-                    close
+                    
                 } = payment;
 
                 if (!supplierName) {
@@ -1671,10 +1657,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
                        
 
                     },
-                    $set: {
-                        "Supplier_Payment_Out_Schema.open":open,
-                        "Supplier_Payment_Out_Schema.close":close// Set to false if you always want to close
-                    },
+                 
                     $push: {
                         'Supplier_Payment_Out_Schema.payment': newPayment
                     }
@@ -1825,10 +1808,7 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
 
 
                         },
-                        $set: {
-                            "Supplier_Payment_Out_Schema.open": open,
-                            "Supplier_Payment_Out_Schema.close": close,
-                        },
+                      
                         $push: {
                             'Supplier_Payment_Out_Schema.payment': payment
                         }
@@ -2160,7 +2140,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
     if (user && user.role === "Admin") {
       try {
   
-        const {supplierName,personId,name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+        const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
         req.body;
        
         let entryMode
@@ -2233,6 +2213,7 @@ const updateSupPaymentOutPerson=async(req,res)=>{
               personIn.entry_Mode = entry_Mode;
               personIn.final_Status = final_Status;
               personIn.trade = trade;
+              personIn.status = status;
               personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
               await existingSupplier.save()
           } else {
@@ -2765,19 +2746,19 @@ const getAllAzadSupplierPaymentsOut = async (req, res) => {
                     const paymentOutSchema = supplier.Supplier_Payment_Out_Schema;
 
                     return {
-                        supplier_Id: paymentOutSchema.supplier_Id,
-                        supplierName: paymentOutSchema.supplierName,
-                        total_Azad_Visa_Price_Out_PKR: paymentOutSchema.total_Azad_Visa_Price_Out_PKR,
-                        total_Azad_Visa_Price_Out_Curr: paymentOutSchema.total_Azad_Visa_Price_Out_Curr,
-                        total_Payment_Out: paymentOutSchema.total_Payment_Out,
-                        remaining_Balance: paymentOutSchema.remaining_Balance,
-                        curr_Country: paymentOutSchema.curr_Country,
-                        persons: paymentOutSchema.persons || [],
-                        payment: paymentOutSchema.payment || [],
-                        open: paymentOutSchema.open || false,
-                        close: paymentOutSchema.close || false,
-                        createdAt: moment(paymentOutSchema.createdAt).format('YYYY-MM-DD'),
-                        updatedAt: moment(paymentOutSchema.updatedAt).format('YYYY-MM-DD'),
+                      supplier_Id: paymentOutSchema.supplier_Id,
+                      supplierName: paymentOutSchema.supplierName,
+                      total_Azad_Visa_Price_Out_PKR: paymentOutSchema.total_Azad_Visa_Price_Out_PKR,
+                      total_Azad_Visa_Price_Out_Curr: paymentOutSchema.total_Azad_Visa_Price_Out_Curr,
+                      total_Payment_Out_Curr: paymentOutSchema.total_Payment_Out_Curr,
+                      total_Payment_Out: paymentOutSchema.total_Payment_Out,
+                      remaining_Balance: paymentOutSchema.remaining_Balance,
+                      curr_Country: paymentOutSchema.curr_Country,
+                      persons: paymentOutSchema.persons || [],
+                      payment: paymentOutSchema.payment || [],
+                      status: paymentOutSchema.status,
+                      createdAt: moment(paymentOutSchema.createdAt).format('YYYY-MM-DD'),
+                      updatedAt: moment(paymentOutSchema.updatedAt).format('YYYY-MM-DD'),
                     };
                 });
 
@@ -2820,8 +2801,7 @@ const addAzadAgentPaymentIn = async (req, res) => {
             curr_Country,
             curr_Rate,
             curr_Amount,
-            open,
-            close,
+            
             date
         } = req.body;
         const newPaymentIn = parseInt(payment_In, 10);
@@ -2888,10 +2868,7 @@ const addAzadAgentPaymentIn = async (req, res) => {
                     "Agent_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
                 },
-                $set: {
-                    "Agent_Payment_In_Schema.open": open,
-                    "Agent_Payment_In_Schema.close": close,
-                },
+              
                 $push: {
                     'Agent_Payment_In_Schema.payment': payment
                 }
@@ -2980,8 +2957,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open,
-                    close
+                 
                 } = payment;
 
                 const newPaymentIn = parseInt(payment_In, 10);
@@ -3056,10 +3032,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
                        
 
                     },
-                    $set: {
-                        "Agent_Payment_In_Schema.open": open,
-                        "Agent_Payment_In_Schema.close": close,// Set to false if you always want to close
-                    },
+                  
                     $push: {
                         'Agent_Payment_In_Schema.payment': newPayment
                     }
@@ -3215,10 +3188,7 @@ const addAzadAgentPaymentInReturn = async (req, res) => {
                             "Agent_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? -newCurrAmount : 0,
 
                         },
-                        $set: {
-                            "Agent_Payment_In_Schema.open": open,
-                            "Agent_Payment_In_Schema.close": close,// Make sure close is defined
-                        },
+                      
                         $push: {
                             'Agent_Payment_In_Schema.payment': payment
                         }
@@ -3600,7 +3570,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
     if (user && user.role === "Admin") {
       try {
   
-        const {supplierName,personId,name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+        const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
         req.body;
        
         let entryMode
@@ -3673,6 +3643,7 @@ const updateAgentPaymentInPerson=async(req,res)=>{
               personIn.entry_Mode = entry_Mode;
               personIn.final_Status = final_Status;
               personIn.trade = trade;
+              personIn.status = status;
               personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
               await existingSupplier.save()
           } else {
@@ -4139,20 +4110,20 @@ const getAllAzadAgentPaymentsIn = async (req, res) => {
                     const paymentInSchema = supplier.Agent_Payment_In_Schema;
 
                     return {
-                        supplier_Id: paymentInSchema.supplier_Id,
-                        supplierName: paymentInSchema.supplierName,
-                        total_Azad_Visa_Price_In_PKR: paymentInSchema.total_Azad_Visa_Price_In_PKR,
-                        total_Azad_Visa_Price_In_Curr: paymentInSchema.total_Azad_Visa_Price_In_Curr,
-                        total_Payment_In: paymentInSchema.total_Payment_In,
-                        total_Cash_Out: paymentInSchema.total_Cash_Out,
-                        remaining_Balance: paymentInSchema.remaining_Balance,
-                        curr_Country: paymentInSchema.curr_Country,
-                        persons: paymentInSchema.persons || [],
-                        payment: paymentInSchema.payment || [],
-                        open: paymentInSchema.open || false,
-                        close: paymentInSchema.close || false,
-                        createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
-                        updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
+                      supplier_Id: paymentInSchema.supplier_Id,
+                      supplierName: paymentInSchema.supplierName,
+                      total_Azad_Visa_Price_In_PKR: paymentInSchema.total_Azad_Visa_Price_In_PKR,
+                      total_Azad_Visa_Price_In_Curr: paymentInSchema.total_Azad_Visa_Price_In_Curr,
+                      total_Payment_In_Curr: paymentInSchema.total_Payment_In_Curr,
+                      total_Payment_In: paymentInSchema.total_Payment_In,
+                      total_Cash_Out: paymentInSchema.total_Cash_Out,
+                      remaining_Balance: paymentInSchema.remaining_Balance,
+                      curr_Country: paymentInSchema.curr_Country,
+                      persons: paymentInSchema.persons || [],
+                      payment: paymentInSchema.payment || [],
+                      status: paymentInSchema.status,
+                      createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
+                      updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
                     };
                 })
 
@@ -4277,10 +4248,7 @@ const addAzadAgentPaymentOut = async (req, res) => {
 
                             
                         },
-                        $set: {
-                           "Agent_Payment_Out_Schema.open":open,
-                            "Agent_Payment_Out_Schema.close":close// Make sure close is defined
-                        },
+                    
                         $push: {
                             'Agent_Payment_Out_Schema.payment': payment
                         }
@@ -4370,8 +4338,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open,
-                    close
+                    
                 } = payment;
 
                 if (!supplierName) {
@@ -4450,10 +4417,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
                        
 
                     },
-                    $set: {
-                        "Agent_Payment_Out_Schema.open":open,
-                        "Agent_Payment_Out_Schema.close":close// Set to false if you always want to close
-                    },
+                   
                     $push: {
                         'Agent_Payment_Out_Schema.payment': newPayment
                     }
@@ -4603,10 +4567,7 @@ const addAzadAgentPaymentOutReturn = async (req, res) => {
                             'Agent_Payment_Out_Schema.remaining_Balance': newCashOut,
                             "Agent_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
-                        $set: {
-                            "Agent_Payment_Out_Schema.open": open,
-                            "Agent_Payment_Out_Schema.close": close,
-                        },
+                      
                         $push: {
                             'Agent_Payment_Out_Schema.payment': payment
                         }
@@ -4934,7 +4895,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
     if (user && user.role === "Admin") {
       try {
   
-        const {supplierName,personId,name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+        const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
         req.body;
        
         let entryMode
@@ -5007,6 +4968,7 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
               personIn.entry_Mode = entry_Mode;
               personIn.final_Status = final_Status;
               personIn.trade = trade;
+              personIn.status = status;
               personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
               await existingSupplier.save()
           } else {
@@ -5536,19 +5498,19 @@ const getAllAzadAgentPaymentsOut = async (req, res) => {
                     const paymentOutSchema = supplier.Agent_Payment_Out_Schema;
 
                     return {
-                        supplier_Id: paymentOutSchema.supplier_Id,
-                        supplierName: paymentOutSchema.supplierName,
-                        total_Azad_Visa_Price_Out_PKR: paymentOutSchema.total_Azad_Visa_Price_Out_PKR,
-                        total_Azad_Visa_Price_Out_Curr: paymentOutSchema.total_Azad_Visa_Price_Out_Curr,
-                        total_Payment_Out: paymentOutSchema.total_Payment_Out,
-                        remaining_Balance: paymentOutSchema.remaining_Balance,
-                        curr_Country: paymentOutSchema.curr_Country,
-                        persons: paymentOutSchema.persons || [],
-                        payment: paymentOutSchema.payment || [],
-                        open: paymentOutSchema.open || false,
-                        close: paymentOutSchema.close || false,
-                        createdAt: moment(paymentOutSchema.createdAt).format('YYYY-MM-DD'),
-                        updatedAt: moment(paymentOutSchema.updatedAt).format('YYYY-MM-DD'),
+                      supplier_Id: paymentOutSchema.supplier_Id,
+                      supplierName: paymentOutSchema.supplierName,
+                      total_Azad_Visa_Price_Out_PKR: paymentOutSchema.total_Azad_Visa_Price_Out_PKR,
+                      total_Azad_Visa_Price_Out_Curr: paymentOutSchema.total_Azad_Visa_Price_Out_Curr,
+                      total_Payment_Out_Curr: paymentOutSchema.total_Payment_Out_Curr,
+                      total_Payment_Out: paymentOutSchema.total_Payment_Out,
+                      remaining_Balance: paymentOutSchema.remaining_Balance,
+                      curr_Country: paymentOutSchema.curr_Country,
+                      persons: paymentOutSchema.persons || [],
+                      payment: paymentOutSchema.payment || [],
+                      status: paymentOutSchema.status,
+                      createdAt: moment(paymentOutSchema.createdAt).format('YYYY-MM-DD'),
+                      updatedAt: moment(paymentOutSchema.updatedAt).format('YYYY-MM-DD'),
                     };
                 });
 
@@ -5561,7 +5523,204 @@ const getAllAzadAgentPaymentsOut = async (req, res) => {
 };
 
 
+// changing Status 
+const changeSupplierPaymentInStatus = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+      const{supplierName,newStatus}=req.body
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const existingSupplier = await VisitSuppliers.findOne({
+          "Supplier_Payment_In_Schema.supplierName": supplierName,
+      });
+
+      if (!existingSupplier) {
+          return res.status(404).json({ message: "Supplier not found" });
+      }
+
+      // Update status of all persons to false
+      if (existingSupplier.Supplier_Payment_In_Schema && existingSupplier.Supplier_Payment_In_Schema.persons) {
+          existingSupplier.Supplier_Payment_In_Schema.persons.forEach(person => {
+            if(existingSupplier.Supplier_Payment_In_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+          })
+      }
+
+      // Toggle the status of the payment in schema
+      existingSupplier.Supplier_Payment_In_Schema.status = newStatus
+
+      // Save changes to the database
+      await existingSupplier.save();
+
+      // Prepare response message based on the updated status
+      let responseMessage;
+      if (existingSupplier.Supplier_Payment_In_Schema.status==="Open") {
+          responseMessage = "Visit Supplier Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Visit Supplier Status updated to Closed Successfully!";
+      }
+
+      return res.status(200).json({ message: responseMessage });
+  } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// changing Status 
+const changeSupplierPaymentOutStatus = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+      const{supplierName,newStatus}=req.body
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const existingSupplier = await VisitSuppliers.findOne({
+          "Supplier_Payment_Out_Schema.supplierName": supplierName,
+      });
+
+      if (!existingSupplier) {
+          return res.status(404).json({ message: "Supplier not found" });
+      }
+
+      // Update status of all persons to false
+      if (existingSupplier.Supplier_Payment_Out_Schema && existingSupplier.Supplier_Payment_Out_Schema.persons) {
+          existingSupplier.Supplier_Payment_Out_Schema.persons.forEach(person => {
+            if(existingSupplier.Supplier_Payment_Out_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+          })
+      }
+
+      // Toggle the status of the payment in schema
+      existingSupplier.Supplier_Payment_Out_Schema.status = newStatus
+
+      // Save changes to the database
+      await existingSupplier.save();
+
+      // Prepare response message based on the updated status
+      let responseMessage;
+      if (existingSupplier.Supplier_Payment_Out_Schema.status==="Open") {
+          responseMessage = "Visit Supplier Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Visit Supplier Status updated to Closed Successfully!";
+      }
+
+      return res.status(200).json({ message: responseMessage });
+  } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// changing Status 
+const changeAgentPaymentInStatus = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+      const{supplierName,newStatus}=req.body
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const existingSupplier = await VisitSuppliers.findOne({
+          "Agent_Payment_In_Schema.supplierName": supplierName,
+      });
+
+      if (!existingSupplier) {
+          return res.status(404).json({ message: "Agent not found" });
+      }
+
+      // Update status of all persons to false
+      if (existingSupplier.Agent_Payment_In_Schema && existingSupplier.Agent_Payment_In_Schema.persons) {
+          existingSupplier.Agent_Payment_In_Schema.persons.forEach(person => {
+            if(existingSupplier.Agent_Payment_In_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+          })
+      }
+
+      // Toggle the status of the payment in schema
+      existingSupplier.Agent_Payment_In_Schema.status = newStatus
+
+      // Save changes to the database
+      await existingSupplier.save();
+
+      // Prepare response message based on the updated status
+      let responseMessage;
+      if (existingSupplier.Agent_Payment_In_Schema.status==="Open") {
+          responseMessage = "Visit Agent Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Visit Agent Status updated to Closed Successfully!";
+      }
+
+      return res.status(200).json({ message: responseMessage });
+  } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// changing Status 
+const changeAgentPaymentOutStatus = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+      const{supplierName,newStatus}=req.body
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const existingSupplier = await VisitSuppliers.findOne({
+          "Agent_Payment_Out_Schema.supplierName": supplierName,
+      });
+
+      if (!existingSupplier) {
+          return res.status(404).json({ message: "Agent not found" });
+      }
+
+      // Update status of all persons to false
+      if (existingSupplier.Agent_Payment_Out_Schema && existingSupplier.Agent_Payment_Out_Schema.persons) {
+          existingSupplier.Agent_Payment_Out_Schema.persons.forEach(person => {
+            if(existingSupplier.Agent_Payment_Out_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+              person.status = "Closed"
+            }
+          })
+      }
+
+      // Toggle the status of the payment in schema
+      existingSupplier.Agent_Payment_Out_Schema.status = newStatus
+
+      // Save changes to the database
+      await existingSupplier.save();
+
+      // Prepare response message based on the updated status
+      let responseMessage;
+      if (existingSupplier.Agent_Payment_Out_Schema.status==="Open") {
+          responseMessage = "Visit Agent Status updated to Open Successfully!";
+      } else {
+          responseMessage = "Visit Agent Status updated to Closed Successfully!";
+      }
+
+      return res.status(200).json({ message: responseMessage });
+  } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 
 
-module.exports = { addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut, addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut}
+
+
+module.exports = {addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut, addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut,changeSupplierPaymentInStatus,changeSupplierPaymentOutStatus,changeAgentPaymentInStatus,changeAgentPaymentOutStatus}

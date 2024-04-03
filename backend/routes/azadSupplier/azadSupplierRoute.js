@@ -1,6 +1,6 @@
 const express = require('express');
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut, addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut } = require('../../controllers/azadSupplier/AzadSupplierController')
+const { addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut, addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut,changeSupplierPaymentInStatus,changeSupplierPaymentOutStatus,changeAgentPaymentInStatus,changeAgentPaymentOutStatus } = require('../../controllers/azadSupplier/AzadSupplierController')
 const {addAzadCandPaymentIn, addAzadCandMultiplePaymentsIn, addAzadCandPaymentInReturn, deleteSingleAzadCandPaymentIn, updateSingleAzadCandPaymentIn,deleteAzadCandPaymentInSchema, getAzadCandAllPaymentsIn, addAzadCandPaymentOut, addAzadCandPaymentOutReturn, deleteAzadCandSinglePaymentOut, updateAzadCandSinglePaymentOut, addAzadCandMultiplePaymentsOut,deleteAzadCandPaymentOutSchema, getAzadCandAllPaymentsOut } = require('../../controllers/azadCandidate/AzadCandidateController')
 
 const router = express.Router()
@@ -20,11 +20,17 @@ router.patch('/suppliers/update/single/payment_in', updateSingleAzadSupplierPaym
 router.post('/suppliers/add/multiple/payment_in', addAzadSupplierMultiplePaymentsIn)
 // Deleting a single payments In Person
 router.delete('/suppliers/delete/person/payment_in', deleteAzadSupplierPaymentInPerson)
+// Updating a single payments In Person
+router.patch('/suppliers/payment_in/update/single/person', updateSupPaymentInPerson)
 // getting all suppliers Payments In Details
 router.delete('/suppliers/delete/all/payment_in', deleteAzadSupplierPaymentInSchema)
 // Deleting All PaymentIn of a suppliers
 router.get('/suppliers/get/payment_in_details', getAllAzadSupplierPaymentsIn)
 
+router.patch('/suppliers/payment_in/status', changeSupplierPaymentInStatus)
+
+
+//
 
 // Adding a new Payment Out
 router.post('/suppliers/add/payment_out', addAzadSupplierPaymentOut)
@@ -36,13 +42,16 @@ router.post('/suppliers/payment_out/cash_out', addAzadSupplierPaymentOutReturn)
 router.patch('/suppliers/update/single/payment_out', updateAzadSupplierSinglePaymentOut)
 // Adding multiple payments Out
 router.post('/suppliers/add/multiple/payment_out', addAzadSupplierMultiplePaymentsOut)
-// Deleting a single payments In Person
+// Deleting a single payments Out Person
 router.delete('/suppliers/delete/person/payment_out', deleteAzadSupplierPaymentOutPerson)
+// Updating a single payments Out Person
+router.patch('/suppliers/payment_out/update/single/person', updateSupPaymentOutPerson)
 
 router.delete('/suppliers/delete/all/payment_out', deleteAzadSupplierPaymentOutSchema)
 // getting all suppliers Payments Out Details
 router.get('/suppliers/get/payment_out_details', getAllAzadSupplierPaymentsOut)
 
+router.patch('/suppliers/payment_out/status', changeSupplierPaymentOutStatus)
 
 // Azad Agetns Section
 // Adding a new payment in 
@@ -57,10 +66,14 @@ router.patch('/agents/update/single/payment_in', updateSingleAzadAgentPaymentIn)
 router.post('/agents/add/multiple/payment_in', addAzadAgentMultiplePaymentsIn)
 // Deleting a single payments In Person
 router.delete('/agents/delete/person/payment_in', deleteAzadAgentPaymentInPerson)
+// Updating a single payments In Person
+router.patch('/agents/payment_in/update/single/person', updateAgentPaymentInPerson)
+
 router.delete('/agents/delete/all/payment_in', deleteAzadAgentPaymentInSchema)
 // getting all suppliers Payments In Details
 router.get('/agents/get/payment_in_details', getAllAzadAgentPaymentsIn)
 
+router.patch('/agents/payment_in/status', changeAgentPaymentInStatus)
 
 // Adding a new Payment Out
 router.post('/agents/add/payment_out', addAzadAgentPaymentOut)
@@ -74,12 +87,13 @@ router.patch('/agents/update/single/payment_out', updateAzadAgentSinglePaymentOu
 router.post('/agents/add/multiple/payment_out', addAzadAgentMultiplePaymentsOut)
 // Deleting a single payments In Person
 router.delete('/agents/delete/person/payment_out', deleteAzadAgentPaymentOutPerson)
+// Updating a single payments Out Person
+router.patch('/agents/payment_out/update/single/person', updateAgentPaymentOutPerson)
 // getting all suppliers Payments Out Details
 router.get('/agents/get/payment_out_details', getAllAzadAgentPaymentsOut)
 
 router.delete('/agents/delete/all/payment_out', deleteAzadAgentPaymentOutSchema)
-
-
+router.patch('/agents/payment_out/status', changeAgentPaymentOutStatus)
 
 // Azad Candidate Section
 // Adding a new payment in 
@@ -94,10 +108,7 @@ router.patch('/candidates/update/single/payment_in', updateSingleAzadCandPayment
 router.post('/candidates/add/multiple/payment_in', addAzadCandMultiplePaymentsIn)
 // getting all suppliers Payments In Details
 router.delete('/candidates/delete/all/payment_in', deleteAzadCandPaymentInSchema)
-
 router.get('/candidates/get/payment_in_details', getAzadCandAllPaymentsIn)
-
-
 // Adding a new Payment Out
 router.post('/candidates/add/payment_out', addAzadCandPaymentOut)
 // Deleting a single payments Out

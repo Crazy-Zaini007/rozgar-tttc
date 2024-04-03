@@ -12,7 +12,6 @@ const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSch
 const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
 const Notifications=require('../../database/notifications/NotificationModel.js')
-
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
 const mongoose = require('mongoose')
@@ -109,7 +108,7 @@ const addAzadCandPaymentIn = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
+              
                 };
 
                 try {
@@ -123,8 +122,8 @@ const addAzadCandPaymentIn = async (req, res) => {
                             "Candidate_Payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
                         $set: {
-                            "Candidate_Payment_In_Schema.open": open,
-                            "Candidate_Payment_In_Schema.close": close,// Make sure close is defined
+                           
+                            "Candidate_Payment_In_Schema.status": close ? "Closed" : "Open"
                         },
                         $push: {
                             'Candidate_Payment_In_Schema.payment': payment
@@ -216,8 +215,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    
-                    open, close
+                    close
                 } = payment;
 
                 const newPaymentIn = parseInt(payment_In, 10);
@@ -298,8 +296,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
 
                     },
                     $set: {
-                        "Candidate_Payment_In_Schema.open": open, // Set to true if you always want to open
-                        "Candidate_Payment_In_Schema.close": close, // Set to false if you always want to close
+                        
+                        "Candidate_Payment_In_Schema.status": close ? "Closed" : "Open",
                     },
                     $push: {
                         "Candidate_Payment_In_Schema.payment": newPayment,
@@ -444,7 +442,7 @@ const addAzadCandPaymentInReturn = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
+                   
                 };
 
                 try {
@@ -461,8 +459,8 @@ const addAzadCandPaymentInReturn = async (req, res) => {
 
                         },
                         $set: {
-                            "Candidate_Payment_In_Schema.open": open,
-                            "Candidate_Payment_In_Schema.close": close, // Make sure close is defined
+                            
+                            "Candidate_Payment_In_Schema.status": close ? "Closed" : "Open",
                         },
                         $push: {
                             'Candidate_Payment_In_Schema.payment': payment
@@ -694,9 +692,6 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = newCurrAmount;
             paymentToUpdate.date = date;
-            paymentToUpdate.cand_Name = cand_Name
-
-
             // Save the updated supplier
 
             await existingSupplier.save();
@@ -797,7 +792,7 @@ const updateAgentTotalPaymentIn = async (req, res) => {
     if (user && user.role === "Admin") {
       try {
   
-        const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+        const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status} =
         req.body;
        
         let entryMode
@@ -869,6 +864,7 @@ const updateAgentTotalPaymentIn = async (req, res) => {
             azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
             azadCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
             azadCandidateIn.Candidate_Payment_In_Schema.trade=trade
+            azadCandidateIn.Candidate_Payment_In_Schema.status = status;
             azadCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
             await azadCandidateIn.save()
           
@@ -1332,6 +1328,7 @@ const getAzadCandAllPaymentsIn = async (req, res) => {
                         entry_Mode: paymentInSchema.entry_Mode,
                         company: paymentInSchema.company,
                         country: paymentInSchema.country,
+                        contact: paymentInSchema.contact,
                         trade: paymentInSchema.trade,
                         final_Status: paymentInSchema.final_Status,
                         flight_Date: paymentInSchema.flight_Date,
@@ -1344,10 +1341,9 @@ const getAzadCandAllPaymentsIn = async (req, res) => {
                         remaining_Balance: paymentInSchema.remaining_Balance,
                         curr_Country: paymentInSchema.curr_Country,
                         payment: paymentInSchema.payment || [],
-                        open: paymentInSchema.open || false,
-                        close: paymentInSchema.close || false,
-                        createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
-                        updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
+                        status: paymentInSchema.status,
+                        createdAt: moment(paymentInSchema.createdAt).format("YYYY-MM-DD"),
+                        updatedAt: moment(paymentInSchema.updatedAt).format("YYYY-MM-DD"),
                     }
                 })
             res.status(200).json({ data: formattedDetails });
@@ -1453,7 +1449,7 @@ const addAzadCandPaymentOut = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
+                 
                 }
 
                 try {
@@ -1467,8 +1463,8 @@ const addAzadCandPaymentOut = async (req, res) => {
                             "Candidate_Payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
                         $set: {
-                            "Candidate_Payment_Out_Schema.open": open,
-                            "Candidate_Payment_Out_Schema.close": close
+                            
+                            "Candidate_Payment_Out_Schema.status": close ? "Closed" : "Open",
                         },
                         $push: {
                             'Candidate_Payment_Out_Schema.payment': payment
@@ -1629,8 +1625,8 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
 
                         },
                         $set: {
-                            "Candidate_Payment_Out_Schema.open": open,
-                            "Candidate_Payment_Out_Schema.close": close
+                            
+                            "Candidate_Payment_Out_Schema.status": close ? "Closed" : "Open",
                         },
                         $push: {
                             'Candidate_Payment_Out_Schema.payment': payment
@@ -1858,7 +1854,7 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
             paymentToUpdate.details = details;
             paymentToUpdate.payment_Out = newPaymentOut;
             paymentToUpdate.cash_Out = newCashOut,
-                paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
+            paymentToUpdate.slip_Pic = uploadImage?.secure_url || "";
             paymentToUpdate.payment_Out_Curr = curr_Country;
             paymentToUpdate.curr_Rate = curr_Rate;
             paymentToUpdate.curr_Amount = curr_Amount;
@@ -1920,7 +1916,6 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
                     curr_Rate,
                     curr_Amount,
                     date,
-                    open,
                     close
                 } = payment;
 
@@ -2007,8 +2002,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
 
                     },
                     $set: {
-                        "Candidate_Payment_Out_Schema.open": open, // Set to true if you always want to open
-                        "Candidate_Payment_Out_Schema.close": close, // Set to true if you always want to open
+                       
+                        "Candidate_Payment_Out_Schema.status": close ? "Closed" : "Open",
                         // Set to false if you always want to close
                     },
                     $push: {
@@ -2134,7 +2129,7 @@ const updateAgentTotalPaymentOut = async (req, res) => {
     if (user && user.role === "Admin") {
       try {
   
-        const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date} =
+        const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status} =
         req.body;
        
         let entryMode
@@ -2206,6 +2201,7 @@ const updateAgentTotalPaymentOut = async (req, res) => {
             azadCandidateIn.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
             azadCandidateIn.Candidate_Payment_Out_Schema.final_Status=final_Status
             azadCandidateIn.Candidate_Payment_Out_Schema.trade=trade
+            azadCandidateIn.Candidate_Payment_Out_Schema.status = status;
             azadCandidateIn.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
             await azadCandidateIn.save()
           
@@ -2664,23 +2660,29 @@ const getAzadCandAllPaymentsOut = async (req, res) => {
                 .map(candidate => {
                     const paymentOutSchema = candidate.Candidate_Payment_Out_Schema
                     return {
-                        supplier_Id: paymentOutSchema.supplier_Id,
-                        supplierName: paymentOutSchema.supplierName,
-                        pp_No: paymentOutSchema.pp_No,
-                        entry_Mode: paymentOutSchema.entry_Mode,
-                        company: paymentOutSchema.company,
-                        final_Status: paymentOutSchema.final_Status,
-                        flight_Date: paymentOutSchema.flight_Date,
-                        total_Visa_Price_Out_PKR: paymentOutSchema.total_Visa_Price_Out_PKR,
-                        total_Visa_Price_Out_Curr: paymentOutSchema.total_Visa_Price_Out_Curr,
-                        total_Payment_Out: paymentOutSchema.total_Payment_Out,
-                        remaining_Balance: paymentOutSchema.remaining_Balance,
-                        curr_Country: paymentOutSchema.curr_Country,
-                        payment: paymentOutSchema.payment || [],
-                        open: paymentOutSchema.open || false,
-                        close: paymentOutSchema.close || false,
-                        createdAt: moment(paymentOutSchema.createdAt).format('YYYY-MM-DD'),
-                        updatedAt: moment(paymentOutSchema.updatedAt).format('YYYY-MM-DD'),
+            supplier_Id: paymentOutSchema.supplier_Id,
+            supplierName: paymentOutSchema.supplierName,
+            pp_No: paymentOutSchema.pp_No,
+            entry_Mode: paymentOutSchema.entry_Mode,
+            company: paymentOutSchema.company,
+            country: paymentOutSchema.country,
+            contact: paymentOutSchema.contact,
+            trade: paymentOutSchema.trade,
+            final_Status: paymentOutSchema.final_Status,
+            flight_Date: paymentOutSchema.flight_Date,
+            total_Visa_Price_Out_Curr:
+            paymentOutSchema.total_Visa_Price_Out_Curr,
+            total_Payment_Out_Curr: paymentOutSchema.total_Payment_Out_Curr,
+            remaining_Curr: paymentOutSchema.remaining_Curr,
+            total_Visa_Price_Out_PKR: paymentOutSchema.total_Visa_Price_Out_PKR,
+            total_Payment_Out: paymentOutSchema.total_Payment_Out,
+            total_Cash_Out: paymentOutSchema.total_Cash_Out,
+            remaining_Balance: paymentOutSchema.remaining_Balance,
+            curr_Country: paymentOutSchema.curr_Country,
+            payment: paymentOutSchema.payment || [],
+            status: paymentOutSchema.status,
+            createdAt: moment(paymentOutSchema.createdAt).format("YYYY-MM-DD"),
+            updatedAt: moment(paymentOutSchema.updatedAt).format("YYYY-MM-DD"),
                     }
                 })
 
