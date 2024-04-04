@@ -55,7 +55,7 @@ export default function AssetsPaymentsDetails() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const assets_Payments = useSelector((state) => state.assets.assets_Payments);
+  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
  
 
   const rowsPerPageOptions = [10, 15, 30];
@@ -71,8 +71,8 @@ export default function AssetsPaymentsDetails() {
   };
   const [option, setOption] = useState(false)
   const [selectedSupplier, setSelectedSupplier] = useState('');
-  const handleRowClick = (supplierName) => {
-    setSelectedSupplier(supplierName);
+  const handleRowClick = (assetName) => {
+    setSelectedSupplier(assetName);
     setOption(!option)
   };
   const handleOption = () => {
@@ -125,7 +125,7 @@ export default function AssetsPaymentsDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, payment_Out: payment.payment_Out, curr_Amount: payment.curr_Amount })
+          body: JSON.stringify({ paymentId, assetName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, payment_Out: payment.payment_Out, curr_Amount: payment.curr_Amount })
         })
   
         const json = await response.json()
@@ -160,7 +160,7 @@ export default function AssetsPaymentsDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({supplierName:entry.supplierName })
+          body: JSON.stringify({assetName:entry.assetName })
         })
   
         const json = await response.json()
@@ -190,13 +190,13 @@ export default function AssetsPaymentsDetails() {
 
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`${apiUrl}/auth/assets/update/single/payment`, {
+      const response = await fetch(`${apiUrl}/auth/assets/update/single/payment_in`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, payment_Out: editedEntry.payment_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date,curr_Rate:editedEntry.curr_Rate })
+        body: JSON.stringify({ paymentId, assetName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, payment_Out: editedEntry.payment_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date,curr_Rate:editedEntry.curr_Rate })
       })
 
       const json = await response.json()
@@ -223,10 +223,10 @@ export default function AssetsPaymentsDetails() {
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
 
-  const filteredTotalPaymentIn = assets_Payments.filter(payment => {
+  const filteredTotalPaymentIn = assetsPayments.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-      payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())
+      payment.assetName.toLowerCase().includes(supplier1.toLowerCase())
     )
   })
 
@@ -249,7 +249,7 @@ export default function AssetsPaymentsDetails() {
             <tr key="${entry?._id}">
               <td>${index + 1}</td>
               <td>${String(entry.createdAt)}</td>
-              <td>${String(entry.supplierName)}</td>
+              <td>${String(entry.assetName)}</td>
               <td>${String(entry.total_Payment_In)}</td>
               <td>${String(entry.total_Payment_Out)}</td>
               <td>${String(entry.balance)}</td>
@@ -311,8 +311,8 @@ export default function AssetsPaymentsDetails() {
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
 
-  const filteredIndividualPayments = assets_Payments
-  .filter((data) => data.supplierName === selectedSupplier)
+  const filteredIndividualPayments = assetsPayments
+  .filter((data) => data.assetName === selectedSupplier)
   .map((filteredData) => ({
     ...filteredData,
     payment: filteredData.payment
@@ -440,7 +440,7 @@ export default function AssetsPaymentsDetails() {
       const rowData = {
         SN: index + 1,
         Date:payments.createdAt,
-        supplierName:payments.supplierName,
+        assetName:payments.assetName,
         total_Payment_In:payments.total_Payment_In,
         total_Payment_Out:payments.total_Payment_Out,
 
@@ -451,7 +451,7 @@ export default function AssetsPaymentsDetails() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'assets_Payments.xlsx');
+    XLSX.writeFile(wb, 'assetsPayments.xlsx');
   };
 
 
@@ -519,17 +519,17 @@ export default function AssetsPaymentsDetails() {
                   <label htmlFor="">Date:</label>
                   <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {[...new Set(assets_Payments.map(data => data.createdAt))].map(dateValue => (
+                    {[...new Set(assetsPayments.map(data => data.createdAt))].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
                     ))}
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Suppliers:</label>
+                  <label htmlFor="">Assets:</label>
                   <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {assets_Payments && assets_Payments.map((data) => (
-                      <option value={data.supplierName} key={data._id}>{data.supplierName} </option>
+                    {assetsPayments && assetsPayments.map((data) => (
+                      <option value={data.assetName} key={data._id}>{data.assetName} </option>
                     ))}
                   </select>
                 </div>
@@ -563,8 +563,8 @@ export default function AssetsPaymentsDetails() {
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         {entry.createdAt}
                       </TableCell>
-                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.supplierName)}>
-                        {entry.supplierName}
+                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.assetName)}>
+                        {entry.assetName}
                       </TableCell>
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{entry.total_Payment_In}
@@ -667,8 +667,8 @@ export default function AssetsPaymentsDetails() {
                   <label htmlFor="">Payment Via:</label>
                   <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {[...new Set(assets_Payments
-                      .filter(data => data.supplierName === selectedSupplier)
+                    {[...new Set(assetsPayments
+                      .filter(data => data.assetName === selectedSupplier)
                       .flatMap(data => data.payment)
                      
                       .map(data => data.payment_Via)
@@ -681,8 +681,8 @@ export default function AssetsPaymentsDetails() {
                   <label htmlFor="">Payment Type:</label>
                   <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {[...new Set(assets_Payments
-                      .filter(data => data.supplierName === selectedSupplier)
+                    {[...new Set(assetsPayments
+                      .filter(data => data.assetName === selectedSupplier)
                       .flatMap(data => data.payment)
                      
                       .map(data => data.payment_Type)

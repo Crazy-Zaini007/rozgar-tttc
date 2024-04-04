@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const payment_In_Schema = new mongoose.Schema(
   {
-    supplierName: {
+    assetName: {
       type: String,
     },
     total_Payment_In: {

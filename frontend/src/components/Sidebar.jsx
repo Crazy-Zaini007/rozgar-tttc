@@ -16,12 +16,13 @@ export default function Sidebar() {
   const [option7, setOption7] = useState(false)
   const [option8, setOption8] = useState(false)
   const [option9, setOption9] = useState(false)
-  const [option10, setOption10] = useState(false)
-  const [option11, setOption11] = useState(false)
-  const [option12, setOption12] = useState(false)
-  const [option13, setOption13] = useState(false)
-  const [option14, setOption14] = useState(false)
-  const [option15, setOption15] = useState(false)
+  const [option10,setOption10] = useState(false)
+  const [option11,setOption11] = useState(false)
+  const [option12,setOption12] = useState(false)
+  const [option13,setOption13] = useState(false)
+  const [option14,setOption14] = useState(false)
+  const [option15,setOption15] = useState(false)
+  const [option16,setOption16] = useState(false)
 
 
   const handleOption1 = () => {
@@ -40,6 +41,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
 
   }
@@ -59,6 +62,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
 
   }
@@ -78,6 +83,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption4 = () => {
@@ -96,6 +103,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption5 = () => {
@@ -114,6 +123,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption6 = () => {
@@ -132,6 +143,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption7 = () => {
@@ -150,6 +163,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption8 = () => {
@@ -168,6 +183,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption9 = () => {
@@ -186,6 +203,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption10 = () => {
@@ -204,6 +223,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption11 = () => {
@@ -222,6 +243,8 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption12 = () => {
@@ -240,6 +263,7 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
 
   }
   const handleOption13 = () => {
@@ -258,6 +282,8 @@ export default function Sidebar() {
     setOption13(true)
     setOption14(false)
     setOption15(false)
+    setOption16(false)
+
 
   }
   const handleOption14 = () => {
@@ -276,6 +302,7 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(true)
     setOption15(false)
+    setOption16(false)
 
   }
 
@@ -295,6 +322,27 @@ export default function Sidebar() {
     setOption13(false)
     setOption14(false)
     setOption15(true)
+    setOption16(false)
+
+  }
+  const handleOption16 = () => {
+    setOption1(false)
+    setOption2(false)
+    setOption3(false)
+    setOption4(false)
+    setOption5(false)
+    setOption6(false)
+    setOption7(false)
+    setOption8(false)
+    setOption9(false)
+    setOption10(false)
+    setOption11(false)
+    setOption12(false)
+    setOption13(false)
+    setOption14(false)
+    setOption15(false)
+    setOption16(true)
+
   }
 
   const navigate = useNavigate()
@@ -332,6 +380,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+          
 
 
           break;
@@ -352,6 +402,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+
 
           break;
         case '/rozgar/bank_cash':
@@ -371,6 +423,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/notifications':
@@ -390,6 +443,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+
           break;
         case '/rozgar/notes':
           setActiveItem(92);
@@ -408,6 +463,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+
           break;
         case '/rozgar/backup':
           setActiveItem(93);
@@ -426,6 +483,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+
           break;
         case '/rozgar/enteries/add_new_entry':
           setActiveItem(3);
@@ -444,6 +503,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/enteries/entry_details':
@@ -463,6 +523,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -483,6 +544,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
 
           break;
@@ -503,6 +565,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/supplier/payment_out':
@@ -522,6 +585,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/supplier/payment_return':
@@ -541,6 +605,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/supplier/details':
@@ -561,6 +626,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/supplier/cand_vise_payment_in':
@@ -580,6 +646,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -600,6 +667,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -620,6 +688,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -640,6 +709,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -660,7 +730,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
-
+          setOption16(false)
 
           break;
         case '/rozgar/setting/ticket_section':
@@ -680,6 +750,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
 
           break;
@@ -700,6 +771,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/setting/azad_section':
@@ -719,6 +791,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/setting/crediter_debiter_section':
@@ -738,6 +811,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/setting/protector_section':
@@ -757,8 +831,29 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
+          case '/rozgar/setting/assets_section':
+            setActiveItem(107)
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(true)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+            setOption16(false)
+  
+            break;
         case '/rozgar/setting/other_section':
           setActiveItem(18)
           setOption1(false)
@@ -776,6 +871,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/agents/payment_in':
@@ -795,6 +891,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/agents/payment_out':
@@ -814,6 +911,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/agents/payment_return':
@@ -833,6 +931,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/agents/details':
@@ -852,6 +951,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -872,6 +972,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -892,6 +993,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -912,6 +1014,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -932,6 +1035,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -952,6 +1056,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/candidates/payment_out':
@@ -971,6 +1076,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/candidates/payment_return':
@@ -990,6 +1096,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/candidates/details':
@@ -1009,6 +1116,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/candidates/cand_vise_payment_in':
@@ -1028,6 +1136,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1048,6 +1157,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1068,6 +1178,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1088,6 +1199,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1108,6 +1220,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/tickets/payment_out':
@@ -1127,6 +1240,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/tickets/payment_return':
@@ -1146,6 +1260,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/tickets/details':
@@ -1165,6 +1280,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1185,6 +1301,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/visits/payment_out':
@@ -1204,6 +1321,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
 
           break;
@@ -1225,6 +1343,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
 
           break;
@@ -1245,6 +1364,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/azad/payment_in':
@@ -1264,6 +1384,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
 
           break;
@@ -1284,6 +1405,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/azad/payment_return':
@@ -1303,6 +1425,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/azad/details':
@@ -1322,6 +1445,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/expenses/add_new_expense':
@@ -1341,6 +1465,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/expenses/add/mul_expense':
@@ -1360,6 +1485,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/expenses/expenses_details':
@@ -1379,6 +1505,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/credites&debits/payment_in/with_cash_in_hand':
@@ -1398,6 +1525,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/credites&debits/payment_out/with_cash_in_hand':
@@ -1417,6 +1545,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1437,6 +1566,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1457,6 +1587,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/credites&debits/payment_out/without_cash_in_hand':
@@ -1476,6 +1607,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1496,9 +1628,71 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
+          case '/rozgar/assets/payment_in':
+            setActiveItem(103)
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+            setOption16(true)
+  
+            break;
+          case '/rozgar/assets/payment_out':
+            setActiveItem(104)
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+            setOption16(true)
+  
+            break;
+  
+          case '/rozgar/assets/details':
+            setActiveItem(105)
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+            setOption16(true)
+  
+            break;
 
         case '/rozgar/reports/invoice':
           setActiveItem(67)
@@ -1517,6 +1711,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1537,6 +1732,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1557,6 +1753,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+
           break;
 
         case '/rozgar/reports/cash_in_hand':
@@ -1576,6 +1774,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
+
           break;
 
         case '/rozgar/reports/overall_visa_wise':
@@ -1595,6 +1795,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1615,6 +1816,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1635,6 +1837,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1655,6 +1858,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
           case '/rozgar/reports/normal_payments':
@@ -1674,6 +1878,7 @@ export default function Sidebar() {
             setOption13(false)
             setOption14(false)
             setOption15(false)
+            setOption16(false)
   
             break;
             case '/rozgar/reports/advance_payments':
@@ -1693,6 +1898,7 @@ export default function Sidebar() {
               setOption13(false)
               setOption14(false)
               setOption15(false)
+              setOption16(false)
     
               break;
 
@@ -1713,6 +1919,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
           case '/rozgar/reports/profit_lose_report':
@@ -1732,6 +1939,7 @@ export default function Sidebar() {
             setOption13(false)
             setOption14(false)
             setOption15(false)
+            setOption16(false)
   
             break;
             case '/rozgar/reports/profit_report':
@@ -1751,6 +1959,7 @@ export default function Sidebar() {
               setOption13(false)
               setOption14(false)
               setOption15(false)
+              setOption16(false)
     
               break;
               case '/rozgar/reports/lose_report':
@@ -1770,6 +1979,7 @@ export default function Sidebar() {
                 setOption13(false)
                 setOption14(false)
                 setOption15(false)
+                setOption16(false)
       
                 break;
 
@@ -1790,6 +2000,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1810,6 +2021,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1830,6 +2042,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/reports/suppliers_reports':
@@ -1849,6 +2062,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
           case '/rozgar/reports/ticket_reports':
@@ -1868,6 +2082,7 @@ export default function Sidebar() {
             setOption13(false)
             setOption14(false)
             setOption15(false)
+            setOption16(false)
   
             break;
             case '/rozgar/reports/azadVisa_reports':
@@ -1887,6 +2102,7 @@ export default function Sidebar() {
               setOption13(false)
               setOption14(false)
               setOption15(false)
+              setOption16(false)
     
               break;
               case '/rozgar/reports/visitVisa_reports':
@@ -1906,6 +2122,7 @@ export default function Sidebar() {
                 setOption13(false)
                 setOption14(false)
                 setOption15(false)
+                setOption16(false)
       
                 break;
 
@@ -1926,6 +2143,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1946,6 +2164,7 @@ export default function Sidebar() {
           setOption13(true)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
         case '/rozgar/protector/payment_return':
@@ -1965,6 +2184,7 @@ export default function Sidebar() {
           setOption13(true)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -1985,6 +2205,7 @@ export default function Sidebar() {
           setOption13(true)
           setOption14(false)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -2005,6 +2226,7 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(true)
           setOption15(false)
+          setOption16(false)
 
           break;
 
@@ -2025,6 +2247,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(true)
+          setOption16(false)
+
           break;
           case '/rozgar/employees/salary_month':
             setActiveItem(99)
@@ -2043,6 +2267,8 @@ export default function Sidebar() {
             setOption13(false)
             setOption14(false)
             setOption15(true)
+          setOption16(false)
+
             break;
         case '/rozgar/employees/add_payment':
           setActiveItem(86)
@@ -2061,6 +2287,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(true)
+          setOption16(false)
+
           break;
 
         case '/rozgar/employees/add_leave':
@@ -2080,6 +2308,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(true)
+          setOption16(false)
+
           break;
 
         case '/rozgar/employees/employees_details':
@@ -2099,6 +2329,8 @@ export default function Sidebar() {
           setOption13(false)
           setOption14(false)
           setOption15(true)
+          setOption16(false)
+
           break;
         default:
           setActiveItem(1)
@@ -2113,7 +2345,6 @@ export default function Sidebar() {
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
-
 
   // Logout 
 
@@ -2353,6 +2584,24 @@ export default function Sidebar() {
           {option11 &&
             <Divider className='mx-4'></Divider>
           }
+
+             <ul className='mt-2'>
+            <div className="dropdown">
+              <button className="btn text-start" onClick={handleOption16} style={option16 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
+                <i className="fas fa-shopping-basket mx-2"></i>Assets{option16 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              </button>
+            </div>
+            {option16 &&
+              <>
+                <li className=' my-2' style={activeItem === 103 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(103, `/rozgar/assets/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 104 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(104, `/rozgar/assets/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 105 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(105, `/rozgar/assets/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+              </>
+            }
+          </ul>
+          {option16 &&
+            <Divider className='mx-4'></Divider>
+          }
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption9} style={option9 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
@@ -2407,6 +2656,7 @@ export default function Sidebar() {
                 <li className=' my-2' style={activeItem === 16 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(16, `/rozgar/setting/azad_section`)}><i className="fa-solid fa-circle-dot mx-2"></i>Azad Section</li>
                 <li className=' my-2' style={activeItem === 17 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(17, `/rozgar/setting/crediter_debiter_section`)}><i className="fa-solid fa-circle-dot mx-2"></i>Crediter/Debiter Section</li>
                 <li className=' my-2' style={activeItem === 66 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(66, `/rozgar/setting/protector_section`)}><i className="fa-solid fa-circle-dot mx-2"></i>Protector Section</li>
+                <li className=' my-2' style={activeItem === 107 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(107, `/rozgar/setting/assets_section`)}><i className="fa-solid fa-circle-dot mx-2"></i>Assets Section</li>
                 <li className=' my-2' style={activeItem === 18 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(18, `/rozgar/setting/other_section`)}><i className="fa-solid fa-circle-dot mx-2"></i>Other Section</li>
               </>
             }
@@ -2462,8 +2712,6 @@ export default function Sidebar() {
               <>
 
                 <li className=' my-2' style={activeItem === 84 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(84, `/rozgar/user/account`)}><i className="fa fa-user mx-2"></i>Manage Account</li>
-
-
               </>
             }
           </ul>

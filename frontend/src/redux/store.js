@@ -13,7 +13,8 @@ import creditsDebitsWOCReducer from './reducers/creditsDebitsWOCSlice'
 import cashInHand from './reducers/cashInHandSlice'
 import protectors from './reducers/protectorSlice'
 import employees from './reducers/employeeSlice'
-import assets from './reducers/assetsSlice'
+import assetsPayments from './reducers/assetsSlice'
+
 
 
 export const store = configureStore({
@@ -32,6 +33,6 @@ export const store = configureStore({
     cashInHand:cashInHand,
     protectors:protectors,
     employees:employees,
-    assets:assets
+    assetsPayments:assetsPayments
   }
 })

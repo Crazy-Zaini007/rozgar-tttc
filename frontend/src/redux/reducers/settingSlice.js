@@ -40,7 +40,9 @@ const initialState = {
   categories: [],
   expenseCategories: [],
   currencies: [],
-  protectors:[]
+  protectors:[],
+  assets:[]
+
 }
 
 export const settingSlice = createSlice({
@@ -116,7 +118,6 @@ export const settingSlice = createSlice({
     addVisitPurchaseParty: (state, action) => {
       state.visitPurchaseParties.push(action.payload)
     },
-
 
 
     // 4- Azad Visa Section Reducers
@@ -296,12 +297,21 @@ export const settingSlice = createSlice({
       state.protectors.push(action.payload);
     },
 
+    // Assets
+    // a- getting assets
+    getAssets: (state, action) => {
+      state.assets = action.payload
+    },
+
+    //b- adding Currencies
+    addAssets: (state, action) => {
+      state.assets.push(action.payload);
+    },
 
   },
 })
 
-
 // Action creators are generated for each case reducer function
-export const { getVisaSalesParty, addVisaSalesParty, getVisaPurchaseParty, addVisaPurchaseParty, getTicketSalesParty, addTicketSalesParty, getTicketPurchaseParty, addTicketPurchaseParty, getVisitSalesParty, addVisitSalesParty, getVisitPurchaseParty, addVisitPurchaseParty, getAzadVisaSalesParty, addAzadVisaSalesParty, getAzadVisaPurchaseParty, addAzadVisaPurchaseParty, getCrediterPurchaseParty, addCrediterPurchaseParty, getCompany, addCompany, getTrades, addTrade, getCurrCountry, addCurrCountry, getPaymentVia, addPaymentVia, getPaymentType, addPaymentType, getEntryMode, addEntryMode, getFinalStatus, addFinalStatus, getCountry, addCountry, getCategory, addCategory, getExpeCategory, addExpeCategory, getCurrency, addCurrency,getProtector,addProtector } = settingSlice.actions
+export const { getVisaSalesParty, addVisaSalesParty, getVisaPurchaseParty, addVisaPurchaseParty, getTicketSalesParty, addTicketSalesParty, getTicketPurchaseParty, addTicketPurchaseParty, getVisitSalesParty, addVisitSalesParty, getVisitPurchaseParty, addVisitPurchaseParty, getAzadVisaSalesParty, addAzadVisaSalesParty, getAzadVisaPurchaseParty, addAzadVisaPurchaseParty, getCrediterPurchaseParty, addCrediterPurchaseParty, getCompany, addCompany, getTrades, addTrade, getCurrCountry, addCurrCountry, getPaymentVia, addPaymentVia, getPaymentType, addPaymentType, getEntryMode, addEntryMode, getFinalStatus, addFinalStatus, getCountry, addCountry, getCategory, addCategory, getExpeCategory, addExpeCategory, getCurrency, addCurrency,getProtector,addProtector,getAssets,addAssets } = settingSlice.actions
 
 export default settingSlice.reducer

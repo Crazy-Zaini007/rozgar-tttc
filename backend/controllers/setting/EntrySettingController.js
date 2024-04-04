@@ -36,6 +36,8 @@ const CDWOC=require('../../database/creditsDebitsWOC/CDWOCSchema')
 const Expenses=require('../../database/expenses/ExpenseSchema')
 const Employees =require('../../database/employees/EmployeeSchema')
 const CashInHand=require('../../database/cashInHand/CashInHandSchema')
+const Assets =require('../../database/assets/AssetsSchema')
+const MyAssets =require('../../database/setting/MyAssetsModel')
 
 const cloudinary = require('../cloudinary')
 
@@ -49,21 +51,7 @@ const addVSP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+       
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -102,7 +90,7 @@ const addVSP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -1097,21 +1085,7 @@ const addVPP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+      
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -1150,7 +1124,7 @@ const addVPP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -2147,21 +2121,7 @@ const addTSP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+       
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -2197,7 +2157,7 @@ const addTSP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -3195,21 +3155,7 @@ const addTPP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+       
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -3246,7 +3192,7 @@ const addTPP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -4243,21 +4189,7 @@ const addAVSP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+       
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -5291,21 +5223,7 @@ const addAVPP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+        
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -5344,7 +5262,7 @@ const addAVPP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -6341,21 +6259,7 @@ const addVISP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+        
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -6393,7 +6297,7 @@ const addVISP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -7388,21 +7292,7 @@ const addVIPP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+       
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -7440,7 +7330,7 @@ const addVIPP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -17953,21 +17843,7 @@ const addCPP = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+      
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -18006,7 +17882,8 @@ const addCPP = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -18179,21 +18056,7 @@ const addProtector = async (req, res) => {
         if (!supplierName) {
             return res.status(400).json({ message: "Supplier Name is required" })
         }
-        if (!supplierCompany) {
-            return res.status(400).json({ message: "Supplier Company is required" })
-        }
-        if (!country) {
-            return res.status(400).json({ message: "Country Name is required" })
-        }
-        if (!contact) {
-            return res.status(400).json({ message: "Contact Number is required" })
-        }
-        if (!address) {
-            return res.status(400).json({ message: "Address is required" })
-        }
-        if (!picture) {
-            return res.status(400).json({ message: "Supplier Picture required" })
-        }
+       
         const userId = req.user._id
         const user = await User.findById(userId)
         if (!user) {
@@ -18232,7 +18095,7 @@ const addProtector = async (req, res) => {
                         country,
                         contact,
                         address,
-                        picture: uploadImage?.secure_url || " "
+                        picture: uploadImage?.secure_url || ""
                     })
 
                     await newSupplier.save()
@@ -18425,5 +18288,214 @@ const getProtector = async (req, res) => {
 }
 
 
+// 23- Assets Controllers
 
-module.exports = {addVSP,updateVSP,deleteVSP, getVSP, addVPP,updateVPP,deleteVPP, getVPP, addTSP,updateTSP,deleteTSP, getTSP, addTPP,updateTPP,deleteTPP, getTPP, addAVSP,updateAVSP,deleteAVSP, getAVSP, addAVPP,updateAVPP,deleteAVPP, getAVPP, addVISP,updateVISP,deleteVISP, getVISP, addVIPP,updateVIPP,deleteVIPP, getVIPP, addCompany,updateCompany,deleteCompany, getCompany, addTrade,updateTrade,deleteTrade, getTrade, addCurrCountry,updateCurrCountry,deleteCurrCountry, getCurrCountry, addPaymentVia,updatePaymentVia,deletePaymentVia, getPaymentVia, addPaymentType,updatePaymentType,deletePaymentType, getPaymentType, addEntryMode,updateEntryMode,deleteEntryMode, getEntryMode, addFinalStatus,updateFinalStatus,deleteFinalStatus, getFinalStatus, addCountry,updateCountry,deleteCountry, getCountry, addCategory,updateCategory,deleteCategory, getCategory, addExpeCategory,updateExpenseCategory,deleteExpenseCategory, getExpeCategory, addCurrency,updateCurrency,deleteCurrency, getCurrency, addCPP,updateCPP,deleteCPP, getCPP,addProtector,updateProtector,deleteProtector,getProtector }
+//Adding a New Assets 
+
+const addAssets = async (req, res) => {
+  try {
+      const { assetName, picture } = req.body
+      console.log(assetName)
+      if (!assetName) {
+          return res.status(400).json({ message: "Asset Name is required" })
+      }
+      // if (!supplierCompany) {
+      //     return res.status(400).json({ message: "Supplier Company is required" })
+      // }
+      // if (!country) {
+      //     return res.status(400).json({ message: "Country Name is required" })
+      // }
+      // if (!contact) {
+      //     return res.status(400).json({ message: "Contact Number is required" })
+      // }
+      // if (!address) {
+      //     return res.status(400).json({ message: "Address is required" })
+      // }
+      // if (!picture) {
+      //     return res.status(400).json({ message: "Supplier Picture required" })
+      // }
+      const userId = req.user._id
+      const user = await User.findById(userId)
+      if (!user) {
+          res.status(404).json({ message: "User not found" })
+      }
+
+      if (user) {
+          // Checking User Role 
+          if (user.role !== "Admin") {
+              res.status(404).json({ message: "Only Admin is allowed!" })
+          }
+
+
+          if (user.role === "Admin") {
+
+              // Check if a Supplier with the same name already exists
+
+              const existingSupplier = await MyAssets.findOne({ assetName });
+              if (existingSupplier) {
+                  return res.status(400).json({ message: "An Asset with this Name already exists" });
+              }
+
+              if (!existingSupplier) {
+
+                let uploadImage 
+                if(picture){
+                   // uploading picture to cloudinary
+                  uploadImage = await cloudinary.uploader.upload(picture, {
+                    upload_preset: 'rozgar'
+                })
+                }
+
+                  const newAsset = new MyAssets({
+                       assetName,
+                      // supplierCompany,
+                      // country,
+                      // contact,
+                      // address,
+                      picture: uploadImage?.secure_url || ""
+                  })
+                  await newAsset.save()
+                  res.status(200).json({  message: `New Asset: ${assetName} added successfully` })
+              }
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message })
+  }
+}
+
+
+const updateAssets = async (req, res) => {
+try {
+    const { assetId,assetName, picture } = req.body
+    if (!assetId) {
+        return res.status(400).json({ message: "Asset Id is required" })
+    }
+   
+    const userId = req.user._id
+    const user = await User.findById(userId)
+    if (!user) {
+        res.status(404).json({ message: "User not found" })
+    }
+
+    if (user) {
+        // Checking User Role 
+        if (user.role !== "Admin") {
+            res.status(404).json({ message: "Only Admin is allowed!" })
+        }
+
+        if (user.role === "Admin") {
+            // Check if a Supplier with the same name already exists
+
+            const existingSupplier = await MyAssets.findById(assetId);
+            if (!existingSupplier) {
+                return res.status(400).json({ message: "Asset not found!" });
+            }
+            if (existingSupplier) {
+                
+                  const asset=await Assets.findOne({
+                    "payment_In_Schema.assetName": existingSupplier.supplierName,
+                  })
+                  if(asset){
+                    asset.payment_In_Schema.assetName=assetName
+                    await asset.save()
+                  }
+
+                  let uploadImage
+                  if(picture && !picture.startsWith("https://res.cloudinary.com")){
+                      // uploading picture to cloudinary
+                       uploadImage = await cloudinary.uploader.upload(picture, {
+                          upload_preset: 'rozgar'
+                      })
+                  }
+                  existingSupplier.assetName=assetName
+                  // existingSupplier.supplierCompany=supplierCompany
+                  // existingSupplier.country=country
+                  // existingSupplier.contact=contact
+                  // existingSupplier.address=address
+                  if (picture && uploadImage) {
+                      existingSupplier.picture = uploadImage.secure_url;
+                    }      
+
+                await existingSupplier.save()
+                res.status(200).json({  message: `Asset updated successfully` })
+            }
+        }
+    }
+} catch (error) {
+    res.status(500).json({ message: error.message })
+}
+}
+
+
+const deleteAssets = async (req, res) => {
+try {
+    const { assetId } = req.body
+    if (!assetId) {
+        return res.status(400).json({ message: "Asset Id is required" })
+    }
+   
+    const userId = req.user._id
+    const user = await User.findById(userId)
+    if (!user) {
+        res.status(404).json({ message: "User not found" })
+    }
+
+    if (user) {
+        // Checking User Role 
+        if (user.role !== "Admin") {
+            res.status(404).json({ message: "Only Admin is allowed!" })
+        }
+
+        if (user.role === "Admin") {
+            // Check if a Supplier with the same name already exists
+
+            const existingSupplier = await MyAssets.findById(assetId);
+            if (!existingSupplier) {
+                return res.status(400).json({ message: "Asset not found!" });
+            }
+            if (existingSupplier) {
+                  const asset=await Assets.findOne({
+                    "payment_In_Schema.assetName": existingSupplier.assetName,
+                  })
+                  if(asset){
+                    asset.payment_In_Schema=null
+                    await asset.save()
+                  }
+                const deleteAsset=await MyAssets.findByIdAndDelete(assetId)
+
+                res.status(200).json({  message: `Asset deleted successfully` })
+            }
+        }
+    }
+} catch (error) {
+    res.status(500).json({ message: error.message })
+}
+}
+
+// getting Crediter Purchase Parties
+
+const getAssets = async (req, res) => {
+  try {
+      const userId = req.user._id
+
+      const user = await User.findById(userId)
+      if (!user) {
+          res.status(404).json({ message: "User not found" })
+      }
+
+      if (user) {
+
+          const assets = await MyAssets.find({})
+          res.status(200).json({ data: assets })
+
+      }
+
+  } catch (error) {
+      res.status(500).json({ message: error.message })
+
+  }
+}
+
+
+module.exports = {addVSP,updateVSP,deleteVSP, getVSP, addVPP,updateVPP,deleteVPP, getVPP, addTSP,updateTSP,deleteTSP, getTSP, addTPP,updateTPP,deleteTPP, getTPP, addAVSP,updateAVSP,deleteAVSP, getAVSP, addAVPP,updateAVPP,deleteAVPP, getAVPP, addVISP,updateVISP,deleteVISP, getVISP, addVIPP,updateVIPP,deleteVIPP, getVIPP, addCompany,updateCompany,deleteCompany, getCompany, addTrade,updateTrade,deleteTrade, getTrade, addCurrCountry,updateCurrCountry,deleteCurrCountry, getCurrCountry, addPaymentVia,updatePaymentVia,deletePaymentVia, getPaymentVia, addPaymentType,updatePaymentType,deletePaymentType, getPaymentType, addEntryMode,updateEntryMode,deleteEntryMode, getEntryMode, addFinalStatus,updateFinalStatus,deleteFinalStatus, getFinalStatus, addCountry,updateCountry,deleteCountry, getCountry, addCategory,updateCategory,deleteCategory, getCategory, addExpeCategory,updateExpenseCategory,deleteExpenseCategory, getExpeCategory, addCurrency,updateCurrency,deleteCurrency, getCurrency, addCPP,updateCPP,deleteCPP, getCPP,addProtector,updateProtector,deleteProtector,getProtector,addAssets,updateAssets,deleteAssets,getAssets }

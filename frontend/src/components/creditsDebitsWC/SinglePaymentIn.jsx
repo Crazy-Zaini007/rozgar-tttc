@@ -385,7 +385,7 @@ export default function SinglePaymentIn() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining Balance</TableCell>
+                          <TableCell className='label border'>Balance</TableCell>
                           <TableCell className='data_td text-center bg-info text-white text-bold'>{filteredData.balance}</TableCell>
                         </TableRow>
                       </>

@@ -15,14 +15,14 @@ import CategoryHook from '../../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
-import CDWCHook from '../../hooks/creditsDebitsWCHooks/CDWCHook';
-import CPPHook from '../../hooks/settingHooks/CPPHook';
+import AssetsHook from '../../hooks/assetsHooks/AssetsHook'
+import NewAssetsHook from '../../hooks/settingHooks/NewAssetsHook';
 import * as XLSX from 'xlsx';
 import Entry1 from './doubleEntry/Entry1'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
-export default function CDWCPaymentOut() {
+export default function AssetsPaymentOut() {
   const dispatch = useDispatch();
   // getting data from redux store 
 
@@ -30,15 +30,15 @@ export default function CDWCPaymentOut() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const CDWC_Payments_Out = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_Out)
-  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties);
+  const assets = useSelector((state) => state.setting.assets)
+  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
-  const { getPaymentsOut } = CDWCHook()
-  const { getCPPData } = CPPHook()
+  const { getPayments } = AssetsHook()
+  const { getAssetsData } = NewAssetsHook()
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -51,8 +51,8 @@ export default function CDWCPaymentOut() {
         getCategoryData(),
         getPaymentViaData(),
         getPaymentTypeData(),
-        getPaymentsOut(),
-        getCPPData()
+        getPayments(),
+        getAssetsData()
       ]);
 
 
@@ -70,7 +70,7 @@ export default function CDWCPaymentOut() {
 
   // Form input States
 
-  const [supplierName, setSupplierName] = useState('')
+  const [assetName, setSupplierName] = useState('')
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -80,9 +80,6 @@ export default function CDWCPaymentOut() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-
-  const [open, setOpen] = useState(true)
-  const [close, setClose] = useState(false)
   const [date, setDate] = useState('');
   let curr_Amount = payment_Out / curr_Rate
 
@@ -139,14 +136,14 @@ export default function CDWCPaymentOut() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/assets/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({
-          supplierName,
+          assetName,
           category,
           payment_Via,
           payment_Type,
@@ -157,8 +154,7 @@ export default function CDWCPaymentOut() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
+         
           date
         }),
       });
@@ -173,7 +169,7 @@ export default function CDWCPaymentOut() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsOut();
+        getPayments();
         setLoading(false);
         setSupplierName('')
         setCategory('');
@@ -186,8 +182,7 @@ export default function CDWCPaymentOut() {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        setOpen(true)
-        setClose(false);
+    
 
       }
 
@@ -205,7 +200,7 @@ export default function CDWCPaymentOut() {
     setSingle(index)
   }
 
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  const [multiplePayment, setMultiplePayment] = useState([{date:'',assetName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
   const [triggerEffect, setTriggerEffect] = useState(false);
 
   
@@ -287,7 +282,7 @@ export default function CDWCPaymentOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/multiple/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/assets/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -330,7 +325,7 @@ export default function CDWCPaymentOut() {
           <div className="row">
             <div className="col-md-12">
               <Paper className='py-3 mb-1 px-2'>
-                <h4>Credits&Debits Payment Out</h4>
+                <h4>Assets Payment Out</h4>
                 <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
                 <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
                 {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
@@ -355,7 +350,7 @@ export default function CDWCPaymentOut() {
                           <thead >
                             <tr >
                             <th >Date</th>
-                              <th >Name</th>
+                              <th >Asset Name</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
                               <th >Payment_Type</th>
@@ -404,34 +399,23 @@ export default function CDWCPaymentOut() {
                   {!option && <TableContainer component={Paper}>
                     <form className='py-3 px-2' onSubmit={handleForm}>
                       <div className="text-end ">
-                        {close === false &&
-                          <label htmlFor="">
-                            Open
-                            <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
-                          </label>
-                        }
-                        {open === true &&
-                          <label htmlFor="">
-                            Close
-                            <input type="checkbox" value={close} onClick={() => setClose(!close)} />
-                          </label>
-                        }
+                       
                         <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
                         {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
                       </div>
                       <div className="row p-0 m-0 my-1">
 
                         <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                          <label >Name</label>
-                          <select required value={supplierName} onChange={(e) => {
+                          <label >Asset Name</label>
+                          <select required value={assetName} onChange={(e) => {
                             setSelectedSupplier(e.target.value);
                             setSupplierName(e.target.value)
                           }}>
-                            <option value="">Choose Supplier</option>
-                            {crediterPurchaseParties &&
-                              crediterPurchaseParties.map((data) => (
-                                <option key={data._id} value={data.supplierName}>
-                                  {data.supplierName}
+                            <option value="">Choose Asset</option>
+                            {assets &&
+                              assets.map((data) => (
+                                <option key={data._id} value={data.assetName}>
+                                  {data.assetName}
                                 </option>
                               ))
                             }
@@ -549,8 +533,8 @@ export default function CDWCPaymentOut() {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {CDWC_Payments_Out
-                              .filter((data) => data.supplierName === selectedSupplier)
+                            {assetsPayments
+                              .filter((data) => data.assetName === selectedSupplier)
                               .map((filteredData) => (
                                 // Map through the payment array
                                 <>
@@ -587,7 +571,7 @@ export default function CDWCPaymentOut() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                                    <TableCell className='label border'>Remaining Balance</TableCell>
+                                    <TableCell className='label border'>Balance</TableCell>
                                     <TableCell className='data_td text-center bg-info text-white text-bold'>{filteredData.balance}</TableCell>
                                   </TableRow>
                                 </>

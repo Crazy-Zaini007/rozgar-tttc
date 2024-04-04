@@ -1,6 +1,6 @@
 const express = require('express');
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addVSP, updateVSP, deleteVSP, getVSP, addVPP, updateVPP, deleteVPP, getVPP, addTSP, updateTSP, deleteTSP, getTSP, addTPP, updateTPP, deleteTPP, getTPP, addAVSP, updateAVSP, deleteAVSP, getAVSP, addAVPP, updateAVPP, deleteAVPP, getAVPP, addVISP, updateVISP, deleteVISP, getVISP, addVIPP, updateVIPP, deleteVIPP, getVIPP, addCompany, updateCompany, deleteCompany, getCompany, addTrade, updateTrade, deleteTrade, getTrade, addCurrCountry, updateCurrCountry, deleteCurrCountry, getCurrCountry, addPaymentVia, updatePaymentVia, deletePaymentVia, getPaymentVia, addPaymentType, updatePaymentType, deletePaymentType, getPaymentType, addEntryMode, updateEntryMode, deleteEntryMode, getEntryMode, addFinalStatus, updateFinalStatus, deleteFinalStatus, getFinalStatus, addCountry, updateCountry, deleteCountry, getCountry, addCategory, updateCategory, deleteCategory, getCategory, addExpeCategory, updateExpenseCategory, deleteExpenseCategory, getExpeCategory, addCurrency, updateCurrency, deleteCurrency, getCurrency, addCPP, updateCPP, deleteCPP, getCPP, addProtector, updateProtector, deleteProtector, getProtector } = require('../../controllers/setting/EntrySettingController')
+const { addVSP, updateVSP, deleteVSP, getVSP, addVPP, updateVPP, deleteVPP, getVPP, addTSP, updateTSP, deleteTSP, getTSP, addTPP, updateTPP, deleteTPP, getTPP, addAVSP, updateAVSP, deleteAVSP, getAVSP, addAVPP, updateAVPP, deleteAVPP, getAVPP, addVISP, updateVISP, deleteVISP, getVISP, addVIPP, updateVIPP, deleteVIPP, getVIPP, addCompany, updateCompany, deleteCompany, getCompany, addTrade, updateTrade, deleteTrade, getTrade, addCurrCountry, updateCurrCountry, deleteCurrCountry, getCurrCountry, addPaymentVia, updatePaymentVia, deletePaymentVia, getPaymentVia, addPaymentType, updatePaymentType, deletePaymentType, getPaymentType, addEntryMode, updateEntryMode, deleteEntryMode, getEntryMode, addFinalStatus, updateFinalStatus, deleteFinalStatus, getFinalStatus, addCountry, updateCountry, deleteCountry, getCountry, addCategory, updateCategory, deleteCategory, getCategory, addExpeCategory, updateExpenseCategory, deleteExpenseCategory, getExpeCategory, addCurrency, updateCurrency, deleteCurrency, getCurrency, addCPP, updateCPP, deleteCPP, getCPP, addProtector, updateProtector, deleteProtector, getProtector,addAssets,updateAssets,deleteAssets,getAssets  } = require('../../controllers/setting/EntrySettingController')
 
 const router = express.Router()
 
@@ -195,11 +195,16 @@ router.delete('/delete_cpp', deleteCPP)
 //20 - Protector Parties Routes
 // a- adding Protector Parties  route
 router.post('/add_protector', addProtector)
-// b- getting Protector Parties route
 router.get('/get_protector', getProtector)
 router.patch('/update_protector', updateProtector)
 router.delete('/delete_protector', deleteProtector)
 
+
+// Assets Routes
+router.post('/add_asset', addAssets)
+router.get('/get_asset', getAssets)
+router.patch('/update_asset', updateAssets)
+router.delete('/delete_asset', deleteAssets)
 module.exports = router
 
 

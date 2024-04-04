@@ -71,6 +71,10 @@ import CDWOCPaymentIn from './components/creditsDebitsWOC/CDWOCPaymentIn.jsx'
 import CDWOCPaymentOut from './components/creditsDebitsWOC/CDWOCPaymentOut.jsx'
 import CDWOCDetails from './components/creditsDebitsWOC/CDWOCDetails.jsx'
 
+// Assets
+import AssetsPaymentIn from './components/assets/AssetsPaymentIn.jsx'
+import AssetsPaymentOut from './components/assets/AssetsPaymentOut.jsx'
+import AssetsDetails from './components/assets/AssetsDetails.jsx'
 
 // Setting Section
 import VisaSection from './components/setting/sections/VisaSection';
@@ -79,6 +83,8 @@ import VisitSection from './components/setting/sections/VisitSection';
 import AzadSection from './components/setting/sections/AzadSection';
 import CrediterDebiterSection from './components/setting/sections/Crediter_Debiter_Section';
 import ProtectorSection from './components/setting/sections/ProtectorSection.jsx'
+import AssetsSection from './components/setting/sections/AssetSection.jsx'
+
 import OtherSection from './components/setting/sections/OtherSection';
 
 // Protector
@@ -222,6 +228,11 @@ function App() {
           <Route path='/rozgar/credites&debits/payment_out/without_cash_in_hand' element={user && <CDWOCPaymentOut></CDWOCPaymentOut>}></Route>
           <Route path='/rozgar/credites&debits/details/without_cash_in_hand' element={user && <CDWOCDetails></CDWOCDetails>}></Route>
 
+    {/* Assets Routes */}
+         <Route path='/rozgar/assets/payment_in' element={user && <AssetsPaymentIn></AssetsPaymentIn>}></Route>
+          <Route path='/rozgar/assets/payment_out' element={user && <AssetsPaymentOut></AssetsPaymentOut>}></Route>
+          <Route path='/rozgar/assets/details' element={user && <AssetsDetails></AssetsDetails>}></Route>
+
 
           {/* Setting Routes */}
           <Route path='/rozgar/setting/visa_section' element={user && <VisaSection></VisaSection>}></Route>
@@ -230,6 +241,8 @@ function App() {
           <Route path='/rozgar/setting/azad_section' element={user && <AzadSection></AzadSection>}></Route>
           <Route path='/rozgar/setting/crediter_debiter_section' element={user && <CrediterDebiterSection></CrediterDebiterSection>}></Route>
           <Route path='/rozgar/setting/protector_section' element={user && <ProtectorSection></ProtectorSection>}></Route>
+          <Route path='/rozgar/setting/assets_section' element={user && <AssetsSection></AssetsSection>}></Route>
+
           <Route path='/rozgar/setting/other_section' element={user && <OtherSection></OtherSection>}></Route>
 
 

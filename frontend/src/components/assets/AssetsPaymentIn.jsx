@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { toast } from 'react-toastify';
 
-export default function CDWCPaymentIn() {
+export default function AssetsPaymentIn() {
 
   const { user } = useAuthContext();
   const [single, setSingle] = useState(0)
@@ -20,7 +20,7 @@ export default function CDWCPaymentIn() {
   }
 
   
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_In: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  const [multiplePayment, setMultiplePayment] = useState([{date:'',assetName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_In: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
   const [triggerEffect, setTriggerEffect] = useState(false);
 
   
@@ -102,7 +102,7 @@ export default function CDWCPaymentIn() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/multiple/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/assets/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export default function CDWCPaymentIn() {
           <div className="row">
             <div className="col-md-12">
               <Paper className='py-3 mb-1 px-2'>
-                <h4>Credits&Debits Payment IN</h4>
+                <h4>Assets Payment IN</h4>
                 <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
                 {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
@@ -176,7 +176,7 @@ export default function CDWCPaymentIn() {
                           <thead >
                             <tr >
                             <th >Date</th>
-                              <th >Name</th>
+                              <th >Asset Name</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
                               <th >Payment_Type</th>
@@ -225,8 +225,6 @@ export default function CDWCPaymentIn() {
               <Entry1></Entry1>
             }
           </div>
-
-
         </div>
       </div>
 

@@ -53,6 +53,8 @@ const Notifications=require('./routes/notifications/notify_Route')
 // Notes
 const Notes =require('./routes/notes/note_Route')
 
+// Assets
+const Assets =require('./routes/assets/Assets_Route')
 //Backup
 const Backup=require('./routes/backup/backup_Route')
 //express app
@@ -141,6 +143,8 @@ app.use('/auth/notes',Notes)
 // Backup
 app.use('/auth/backup',Backup)
 
+// Assets
+app.use('/auth/assets',Assets)
 //PORT number
 const PORT = process.env.PORT
 

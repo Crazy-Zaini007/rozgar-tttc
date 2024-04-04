@@ -15,9 +15,9 @@ import CategoryHook from '../../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
-import CDWCHook from '../../hooks/creditsDebitsWCHooks/CDWCHook';
-import CPPHook from '../../hooks/settingHooks/CPPHook';
-// import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import AssetsHook from '../../hooks/assetsHooks/AssetsHook'
+import NewAssetsHook from '../../hooks/settingHooks/NewAssetsHook';
+
 
 export default function SinglePaymentIn() {
   const dispatch = useDispatch();
@@ -27,8 +27,8 @@ export default function SinglePaymentIn() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In)
-  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties);
+  const assets = useSelector((state) => state.setting.assets)
+  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
 
   const [selectedSupplier, setSelectedSupplier] = useState('');
 
@@ -36,8 +36,8 @@ export default function SinglePaymentIn() {
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
-  const { getPaymentsIn } = CDWCHook()
-  const { getCPPData } = CPPHook()
+  const { getPayments } = AssetsHook()
+  const { getAssetsData } = NewAssetsHook()
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -50,8 +50,8 @@ export default function SinglePaymentIn() {
         getCategoryData(),
         getPaymentViaData(),
         getPaymentTypeData(),
-        getPaymentsIn(),
-        getCPPData()
+        getPayments(),
+        getAssetsData()
 
       ]);
 
@@ -68,7 +68,7 @@ export default function SinglePaymentIn() {
   const [option, setOption] = useState(false)
 
   // Form input States
-  const [supplierName, setSupplierName] = useState('')
+  const [assetName, setSupplierName] = useState('')
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -78,8 +78,7 @@ export default function SinglePaymentIn() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-  const [open, setOpen] = useState(true)
-  const [close, setClose] = useState(false)
+  
   const [date, setDate] = useState('')
   let curr_Amount = payment_In / curr_Rate
   const handleOpen = () => {
@@ -134,14 +133,14 @@ export default function SinglePaymentIn() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/assets/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify({
-          supplierName,
+          assetName,
           category,
           payment_Via,
           payment_Type,
@@ -152,8 +151,6 @@ export default function SinglePaymentIn() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
-          close,
           date
         }),
       });
@@ -166,7 +163,7 @@ export default function SinglePaymentIn() {
 
       }
       if (response.ok) {
-        getPaymentsIn();
+        getPayments();
         setNewMessage(toast.success(json.message));
         setLoading(false);
         setSupplierName('')
@@ -180,8 +177,7 @@ export default function SinglePaymentIn() {
         setCurr_Country('');
         setSelectedSupplier('')
         setCurr_Rate('');
-        setOpen(true)
-        setClose(false);
+   
         setDate('')
       }
 
@@ -201,18 +197,7 @@ export default function SinglePaymentIn() {
         {!option && <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-              {close === false &&
-                <label htmlFor="">
-                  Open
-                  <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
-                </label>
-              }
-              {open === true &&
-                <label htmlFor="">
-                  Close
-                  <input type="checkbox" value={close} onClick={() => setClose(!close)} />
-                </label>
-              }
+             
 
               <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
               {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
@@ -220,16 +205,16 @@ export default function SinglePaymentIn() {
             <div className="row p-0 m-0 my-1">
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label >Name</label>
-                <select required value={supplierName} onChange={(e) => {
+                <label >Asset Name</label>
+                <select required value={assetName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
-                  <option value="">Choose Supplier</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
-                      <option key={data._id} value={data.supplierName}>
-                        {data.supplierName}
+                  <option value="">Choose Asset</option>
+                  {assets &&
+                    assets.map((data) => (
+                      <option key={data._id} value={data.assetName}>
+                        {data.assetName}
                       </option>
                     ))
                   }
@@ -319,7 +304,6 @@ export default function SinglePaymentIn() {
         </TableContainer>}
       </div>
 
-
       {/* Details */}
       <div className="row payment_details mt-0">
         <div className="col-md-12 my-2">
@@ -347,8 +331,8 @@ export default function SinglePaymentIn() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {CDWC_Payments_In
-                    .filter((data) => data.supplierName === selectedSupplier)
+                  {assetsPayments
+                    .filter((data) => data.assetName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>
@@ -385,7 +369,7 @@ export default function SinglePaymentIn() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining Balance</TableCell>
+                          <TableCell className='label border'>Balance</TableCell>
                           <TableCell className='data_td text-center bg-info text-white text-bold'>{filteredData.balance}</TableCell>
                         </TableRow>
                       </>
