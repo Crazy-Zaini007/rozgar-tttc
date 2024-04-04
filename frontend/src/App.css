@@ -76,6 +76,10 @@
   border-radius: 2px;
   height: 100%;
   width: 100%;
+  cursor: pointer;
+}
+.admin-dashboard .data a{
+  text-decoration: none;
 }
 
 .admin-dashboard .data h5 {

@@ -1,5 +1,26 @@
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { getAllPayments,getPersons,getTotalPayments,getTotalAdvancePayments,getAllPaymentsByDate,getEmployeesPayments,getProtectorPayments,getAllBanksPayments,getNormalPayments,getAdvancePayments,getAgentsPayments,getSuppliersPayments,getCandidatesPayments } = require('../../controllers/allReports/AllReportsController')
+const { getAllPayments,
+    getPersons,
+    getTotalPayments,
+    getTotalAdvancePayments,
+    getAllPaymentsByDate,
+    getEmployeesPayments,
+    getProtectorPayments,
+    getAllBanksPayments,
+    getNormalPayments,
+    getAdvancePayments,
+    getAgentsPayments,
+    getSuppliersPayments,
+    getCandidatesPayments,
+    getAzadSuppPayments,
+    getAzadAgentPayments,
+    getAzadCandPayments,
+    getTicketSuppPayments,
+    getTicketAgentPayments,
+    getTicketCandPayments,
+    getVisitSuppPayments,
+    getVisitAgentPayments,
+    getVisitCandPayments} = require('../../controllers/allReports/AllReportsController')
 const express = require('express');
 const router = express.Router()
 router.use(userAuth)
@@ -9,6 +30,7 @@ router.use(userAuth)
 router.get('/get/all/payments', getAllPayments)
 router.get('/get/all/protector/payments', getProtectorPayments)
 router.get('/get/all/employees/payments', getEmployeesPayments)
+
 router.get('/get/all/normal/payments', getNormalPayments)
 router.get('/get/all/advance/payments', getAdvancePayments)
 
@@ -31,6 +53,20 @@ router.get('/get/agents/reports', getAgentsPayments)
 router.get('/get/suppliers/reports', getSuppliersPayments)
 router.get('/get/candidates/reports', getCandidatesPayments)
 
+// Azad Reports
+router.get('/get/azad/agents/reports', getAzadAgentPayments)
+router.get('/get/azad/suppliers/reports', getAzadSuppPayments)
+router.get('/get/azad/candidates/reports', getAzadCandPayments)
+
+// Ticket Reports
+router.get('/get/ticket/agents/reports', getTicketAgentPayments)
+router.get('/get/ticket/suppliers/reports', getTicketSuppPayments)
+router.get('/get/ticket/candidates/reports', getTicketCandPayments)
+
+// Visit Reports
+router.get('/get/visit/agents/reports', getVisitAgentPayments)
+router.get('/get/visit/suppliers/reports', getVisitSuppPayments)
+router.get('/get/visit/candidates/reports', getVisitCandPayments)
 module.exports = router
 
 

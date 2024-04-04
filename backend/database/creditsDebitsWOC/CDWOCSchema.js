@@ -17,6 +17,9 @@ const payment_In_Schema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    status:{
+      type: String,
+    },
     payment: [
       {
         name: {
@@ -71,14 +74,7 @@ const payment_In_Schema = new mongoose.Schema(
         },
       },
     ],
-    open: {
-      type: Boolean,
-      default: true,
-    },
-    close: {
-      type: Boolean,
-      default: false,
-    },
+    
   },
   { timestamps: true }
 );

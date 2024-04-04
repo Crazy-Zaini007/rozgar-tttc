@@ -1,10 +1,10 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
+import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-export default function CandidatesReports() {
+export default function VisitCandReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
@@ -13,7 +13,7 @@ export default function CandidatesReports() {
   const getData = async () => {
 
     try {
-      const response = await fetch(`${apiUrl}/auth/reports/get/candidates/reports`, {
+      const response = await fetch(`${apiUrl}/auth/reports/get/visit/candidates/reports`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -222,13 +222,11 @@ export default function CandidatesReports() {
 
   return (
     <>
-      <div className="main">
-        <div className="container-fluid entry_details">
-            <div className="row">
+     
             <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Candidates Payments Reports</h4>
+                  <h4>Visit Candidates Payments Reports</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
@@ -310,6 +308,7 @@ export default function CandidatesReports() {
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
                                 <TableCell className='border data_td  '>{entry.type}</TableCell>
+                                
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
@@ -371,9 +370,7 @@ export default function CandidatesReports() {
               </Paper>
             </div>
             }
-            </div>
-        </div>
-      </div>
+            
     </>
   )
 }

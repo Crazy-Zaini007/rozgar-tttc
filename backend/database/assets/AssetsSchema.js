@@ -17,9 +17,6 @@ const payment_In_Schema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    status:{
-      type: String,
-    },
     payment: [
       {
         name: {
@@ -81,9 +78,9 @@ const payment_In_Schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const CDWCSchema = new mongoose.Schema({
+const AssetsSchema = new mongoose.Schema({
   payment_In_Schema: payment_In_Schema,
 })
 
-const CDWC = mongoose.model("creditsdebitswithcashinhand", CDWCSchema);
-module.exports = CDWC;
+const Assets = mongoose.model("assets", AssetsSchema);
+module.exports = Assets

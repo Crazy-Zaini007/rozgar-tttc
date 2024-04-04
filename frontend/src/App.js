@@ -110,11 +110,10 @@ import AdvancePayments from './components/all_Reports/AdvancePayments.jsx'
 import AgentsReports from './components/all_Reports/AgentsReports.jsx'
 import SuppliersReports from './components/all_Reports/SuppliersReports.jsx'
 import CandidatesReports from './components/all_Reports/CandidatesReports.jsx'
-
-
-
-
-
+import AzadReports from './components/all_Reports/azadReports/AzadReoprts.jsx'
+import TicketReports from './components/all_Reports/ticketReports/TicketReoprts.jsx'
+import VisitReports from './components/all_Reports/visitReports/VisitReports.jsx'
+import EmployeeReports from './components/all_Reports/EmployeeReports.jsx'
 
 
 import DayBook from './components/all_Reports/DayBook.jsx'
@@ -256,15 +255,12 @@ function App() {
           <Route path='/rozgar/reports/lose_report' element={user && <LossReport></LossReport>}></Route>
           <Route path='/rozgar/reports/normal_payments' element={user && <NormalPayments></NormalPayments>}></Route>
           <Route path='/rozgar/reports/advance_payments' element={user && <AdvancePayments></AdvancePayments>}></Route>
-
-          
-
-
-
-          <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeDetails></EmployeeDetails>}></Route>
+          <Route path='/rozgar/reports/azadVisa_reports' element={user && <AzadReports></AzadReports>}></Route>
+          <Route path='/rozgar/reports/ticket_reports' element={user && <TicketReports></TicketReports>}></Route>
+          <Route path='/rozgar/reports/visitVisa_reports' element={user && <VisitReports></VisitReports>}></Route>
+          <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeReports></EmployeeReports>}></Route>
           <Route path='/rozgar/reports/day_book' element={user && <DayBook></DayBook>}></Route>
-
-
+          
           {/* Employee Routes */}
           <Route path='/rozgar/employees/add' element={user && <AddEmployee></AddEmployee>}></Route>
           <Route path='/rozgar/employees/add_payment' element={user && <AddPayment></AddPayment>}></Route>

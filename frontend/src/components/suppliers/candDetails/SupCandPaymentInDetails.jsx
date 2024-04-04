@@ -714,9 +714,9 @@ export default function SupCandPaymentInDetails() {
           <td>${String(person?.final_Status)}</td>
           <td>${String(person?.flight_Date)}</td>
           <td>${String(person?.visa_Price_In_PKR)}</td>
-          <td>${String(person?.toatl_In)}</td>
+          <td>${String(person?.total_In)}</td>
           <td>${String(person?.cash_Out)}</td>
-          <td>${String(person?.visa_Price_In_PKR) - String(person?.toatl_In) + String(person?.cash_Out)}</td>
+          <td>${String(person?.visa_Price_In_PKR) - String(person?.total_In) + String(person?.cash_Out)}</td>
           <td>${String(person?.visa_Price_In_Curr)}</td>
           <td>${String(person?.remaining_Curr)}</td>
           <td>${String(person?.status)}</td>

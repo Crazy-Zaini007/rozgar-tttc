@@ -4,16 +4,15 @@ import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-export default function CandidatesReports() {
+export default function EmployeeReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
+  console.log('payments',payments)
   const apiUrl = process.env.REACT_APP_API_URL;
-  
   const getData = async () => {
-
     try {
-      const response = await fetch(`${apiUrl}/auth/reports/get/candidates/reports`, {
+      const response = await fetch(`${apiUrl}/auth/reports/get/all/employees/payments`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -81,8 +80,7 @@ export default function CandidatesReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
-    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase())
+    paymentItem.employeeName.toLowerCase().includes(supplier.toLowerCase())
 
   })
 
@@ -94,16 +92,16 @@ export default function CandidatesReports() {
         <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Candidates</th>
-        <th>Type</th>
+        <th>Employee</th>
         <th>Category</th>
         <th>Payment Via</th>
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Details</th>
-        <th>Cash In</th>
         <th>Cash Out</th>
-        <th>Cash Return</th>
+        <th>Salary Month</th>
+        <th>Salary</th>
+        <th>Remaining</th>
         <th>Invoice</th>
         </tr>
       </thead>
@@ -112,21 +110,19 @@ export default function CandidatesReports() {
   <tr key="${entry?._id}">
     <td>${index + 1}</td>
     <td>${String(entry?.date)}</td>
-    <td>${String(entry?.supplierName)}</td>
-    <td>${String(entry?.type)}</td>
+    <td>${String(entry?.employeeName)}</td>
     <td>${String(entry?.category)}</td>
     <td>${String(entry?.payment_Via)}</td>
     <td>${String(entry?.payment_Type)}</td>
     <td>${String(entry.slip_No)}</td>
     <td>${String(entry.details)}</td>
-    <td>${String(entry.payment_In || 0)}</td>
-    <td>${String(entry.payment_Out || 0)}</td> 
-    <td>${String(entry.cash_Out || 0)}</td> 
+    <td>${String(entry.payment_Out || 0)}</td>
+    <td>${String(entry.month)}</td>
+    <td>${String(entry.salary)}</td>
+    <td>${String(entry.remain)}</td>
     <td>${String(entry.invoice)}</td>
   </tr>
 `).join('')}
-
-      
       <tr>
       <td></td>
       <td></td>
@@ -135,11 +131,8 @@ export default function CandidatesReports() {
       <td></td>
       <td></td>
       <td></td>
-      <td></td>
       <td>Total</td>
-      <td>${String(filteredPayments.reduce((total, entry) => total + (entry.payment_In || 0), 0))}</td>
       <td>${String(filteredPayments.reduce((total, entry) => total + (entry.payment_Out || 0), 0))}</td>
-      <td>${String(filteredPayments.reduce((total, entry) => total + (entry.cash_Out || 0), 0))}</td>
       </tr>
       
     </tbody>
@@ -172,7 +165,7 @@ export default function CandidatesReports() {
       printWindow.document.write(`
       <html>
         <head>
-          <title>Candidates Reports</title>
+          <title>Agents Reports</title>
         </head>
         <body class='bg-dark'>${printContentString}</body>
       </html>
@@ -196,16 +189,16 @@ export default function CandidatesReports() {
         const rowData = {
             SN: index + 1,
             Date: payments.date,
-            Candidates: payments.supplierName,
-            Type: payments.type,
+            Employees: payments.employeeName,
             Category: payments.category,
             Payment_Via: payments.payment_Via,
             Payment_Type: payments.payment_Type,
             Slip_No: payments.slip_No,
             Details: payments.details,
-            Cash_In: payments.payment_In || 0,
             Cash_Out: payments.payment_Out || 0,
-            Cash_Return: payments.cash_Out || 0,
+            Salary_Month: payments.month,
+            Salary: payments.salary,
+            Remaining: payments.remain,
             Invoice: payments.Invoice,
         };
         
@@ -216,7 +209,7 @@ export default function CandidatesReports() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Candidates Reports.xlsx');
+    XLSX.writeFile(wb, 'Agents Reports.xlsx');
   };
 
 
@@ -228,7 +221,7 @@ export default function CandidatesReports() {
             <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Candidates Payments Reports</h4>
+                  <h4>Employees Payments Reports</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
@@ -260,10 +253,10 @@ export default function CandidatesReports() {
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Candidate Name:</label>
+                      <label htmlFor="">EmployeeName Name:</label>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.supplierName))].map(supplier => (
+                        {[...new Set(payments.map(data => data.employeeName))].map(supplier => (
                           <option key={supplier} value={supplier}>{supplier}</option>
                         ))}
                       </select>
@@ -291,15 +284,16 @@ export default function CandidatesReports() {
                         <TableRow>
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Candidates</TableCell>
-                          <TableCell className='label border'>Type</TableCell>
+                          <TableCell className='label border'>Employees</TableCell>
                           <TableCell className='label border'>Category</TableCell>
                           <TableCell className='label border'>Payment_Via</TableCell>
                           <TableCell className='label border'>Payment_Type</TableCell>
+                          <TableCell className='label border'>Details</TableCell>
                           <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border '>Cash_In</TableCell>
                           <TableCell className='label border '>Cash_Out</TableCell>
-                          <TableCell className='label border '>Cash_Return</TableCell>
+                          <TableCell className='label border '>Salary_Month</TableCell>
+                          <TableCell className='label border '>Salary</TableCell>
+                          <TableCell className='label border '>Remain</TableCell>
                           <TableCell className='label border '>Invoice</TableCell>
                         </TableRow>
                       </TableHead>
@@ -308,22 +302,21 @@ export default function CandidatesReports() {
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
-                                <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
-                                <TableCell className='border data_td  '>{entry.type}</TableCell>
+                                <TableCell className='border data_td  '>{entry.employeeName}</TableCell>
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
+                                <TableCell className='border data_td '>{entry.details}</TableCell>
                                 <TableCell className='border data_td '>{entry.slip_No}</TableCell>
-                                <TableCell className='border data_td bg-success text-white'>{entry.payment_In}</TableCell>
                                 <TableCell className='border data_td bg-danger text-white'>{entry.payment_Out}</TableCell>
-                                <TableCell className='border data_td bg-warning text-white'>{entry.cash_Out}</TableCell>
+                                <TableCell className='border data_td '>{entry.month}</TableCell>
+                                <TableCell className='border data_td '>{entry.salary}</TableCell>
+                                <TableCell className='border data_td '>{entry.remain}</TableCell>
                                 <TableCell className='border data_td '>{entry.invoice}</TableCell>
                           
                           </TableRow>
                         )):
                         <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
@@ -344,22 +337,10 @@ export default function CandidatesReports() {
   <TableCell></TableCell>
   <TableCell></TableCell>        
   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-    <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.payment_In || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
   <TableCell className='border data_td text-center bg-danger text-white'>
     {/* Calculate the total sum of payment_Out */}
     {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
       return total + (entry.payment_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
     }, 0)}
   </TableCell>
 </TableRow>

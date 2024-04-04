@@ -22,7 +22,6 @@ import AgentHook from '../../hooks/agentHooks/AgentHook';
 export default function AgentCandSinglePaymentIn() {
   const dispatch = useDispatch();
   // getting data from redux store
-
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
@@ -57,7 +56,6 @@ export default function AgentCandSinglePaymentIn() {
   }, [user, dispatch]);
 
   const [option, setOption] = useState(false);
-
   // Form input States
   const [supplierName, setSupplierName] = useState("");
   const [category, setCategory] = useState("");
@@ -79,7 +77,7 @@ export default function AgentCandSinglePaymentIn() {
   const [supplierNames, setSupplierNames] = useState([]);
   const [selectedPersonDetails, setSelectedPersonDetails] = useState({});
 
-  
+
   const printPersonsTable = () => {
     // Convert JSX to HTML string
     const printContentString = `
@@ -118,9 +116,9 @@ export default function AgentCandSinglePaymentIn() {
             <td>${String(selectedPersonDetails?.visa_Price_In_PKR)}</td>
             <td>${String(selectedPersonDetails?.total_In)}</td>
             <td>${String(
-              (selectedPersonDetails?.visa_Price_In_PKR - selectedPersonDetails?.total_In) +
-              selectedPersonDetails?.cash_Out
-            )}</td>
+      (selectedPersonDetails?.visa_Price_In_PKR - selectedPersonDetails?.total_In) +
+      selectedPersonDetails?.cash_Out
+    )}</td>
             <td>${String(selectedPersonDetails?.visa_Price_In_Curr)}</td>
             <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
@@ -555,75 +553,75 @@ export default function AgentCandSinglePaymentIn() {
               )}
 
               {cand_Name && (
-               <>
-                <div className="row p-0 m-0 mt-2">
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Candidate Name</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.name}
-                      readOnly
-                    />
+                <>
+                  <div className="row p-0 m-0 mt-2">
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Candidate Name</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.name}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>PP#</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.pp_No}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Entry Mode</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.entry_Mode}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Visa Price In PKR</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.visa_Price_In_PKR}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label >Total In PKR</label>
+                      <input type="text" value={selectedPersonDetails.total_In} readOnly />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Remaining PKR</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.remaining_Price}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Visa Price In Curr</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.Visa_Price_In_Curr}
+                        readOnly
+                      />
+                    </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Remaining Curr</label>
+                      <input
+                        type="text"
+                        value={selectedPersonDetails.remaining_Curr}
+                        readOnly
+                      />
+                    </div>
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>PP#</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.pp_No}
-                      readOnly
-                    />
+                  <div className="row p-0 m-0 mt-2 justify-content-center">
+                    <div className="col-md-2 col-sm-12">
+                      <button className='btn shadow bg-success text-white' onClick={printPersonsTable}>Print</button>
+                    </div>
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Entry Mode</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.entry_Mode}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Visa Price In PKR</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.visa_Price_In_PKR}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Total In PKR</label>
-                  <input type="text" value={selectedPersonDetails.total_In} readOnly />
-                </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Remaining PKR</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.remaining_Price}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Visa Price In Curr</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.Visa_Price_In_Curr}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Remaining Curr</label>
-                    <input
-                      type="text"
-                      value={selectedPersonDetails.remaining_Curr}
-                      readOnly
-                    />
-                  </div>
-                </div>
-                <div className="row p-0 m-0 mt-2 justify-content-center">
-                <div className="col-md-2 col-sm-12">
-                <button className='btn shadow bg-success text-white' onClick={printPersonsTable}>Print</button>
-                </div>
-              </div>
-               </>
+                </>
               )}
             </form>
           </TableContainer>
@@ -761,11 +759,11 @@ export default function AgentCandSinglePaymentIn() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell className='label border'>Remaining PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
+                          <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR - filteredData.total_Payment_In + filteredData.total_Cash_Out}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
+                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr - filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow>
                       </>
                     ))}

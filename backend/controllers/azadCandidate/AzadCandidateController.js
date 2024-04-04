@@ -3025,8 +3025,7 @@ const getAzadCandAllPaymentsOut = async (req, res) => {
             trade: paymentOutSchema.trade,
             final_Status: paymentOutSchema.final_Status,
             flight_Date: paymentOutSchema.flight_Date,
-            total_Visa_Price_Out_Curr:
-              paymentOutSchema.total_Visa_Price_Out_Curr,
+            total_Visa_Price_Out_Curr:paymentOutSchema.total_Visa_Price_Out_Curr,
             total_Payment_Out_Curr: paymentOutSchema.total_Payment_Out_Curr,
             remaining_Curr: paymentOutSchema.remaining_Curr,
             total_Visa_Price_Out_PKR: paymentOutSchema.total_Visa_Price_Out_PKR,

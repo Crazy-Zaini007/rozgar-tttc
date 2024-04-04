@@ -13,6 +13,9 @@ import creditsDebitsWOCReducer from './reducers/creditsDebitsWOCSlice'
 import cashInHand from './reducers/cashInHandSlice'
 import protectors from './reducers/protectorSlice'
 import employees from './reducers/employeeSlice'
+import assets from './reducers/assetsSlice'
+
+
 export const store = configureStore({
   reducer: {
     setting: settingReducer,
@@ -28,6 +31,7 @@ export const store = configureStore({
     creditsDebitsWOC: creditsDebitsWOCReducer,
     cashInHand:cashInHand,
     protectors:protectors,
-    employees:employees
+    employees:employees,
+    assets:assets
   }
 })

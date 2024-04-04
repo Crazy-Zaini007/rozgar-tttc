@@ -1,19 +1,18 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
+import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-export default function CandidatesReports() {
+export default function VisitSuppReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
-  
   const getData = async () => {
 
     try {
-      const response = await fetch(`${apiUrl}/auth/reports/get/candidates/reports`, {
+      const response = await fetch(`${apiUrl}/auth/reports/get/visit/suppliers/reports`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -94,7 +93,7 @@ export default function CandidatesReports() {
         <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Candidates</th>
+        <th>Suppliers</th>
         <th>Type</th>
         <th>Category</th>
         <th>Payment Via</th>
@@ -125,8 +124,6 @@ export default function CandidatesReports() {
     <td>${String(entry.invoice)}</td>
   </tr>
 `).join('')}
-
-      
       <tr>
       <td></td>
       <td></td>
@@ -172,7 +169,7 @@ export default function CandidatesReports() {
       printWindow.document.write(`
       <html>
         <head>
-          <title>Candidates Reports</title>
+          <title>Suppliers Reports</title>
         </head>
         <body class='bg-dark'>${printContentString}</body>
       </html>
@@ -196,7 +193,7 @@ export default function CandidatesReports() {
         const rowData = {
             SN: index + 1,
             Date: payments.date,
-            Candidates: payments.supplierName,
+            Suppliers: payments.supplierName,
             Type: payments.type,
             Category: payments.category,
             Payment_Via: payments.payment_Via,
@@ -216,19 +213,17 @@ export default function CandidatesReports() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Candidates Reports.xlsx');
+    XLSX.writeFile(wb, 'Suppliers Reports.xlsx');
   };
 
 
   return (
     <>
-      <div className="main">
-        <div className="container-fluid entry_details">
-            <div className="row">
+      
             <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Candidates Payments Reports</h4>
+                  <h4>Visit Suppliers Payments Reports</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
@@ -260,7 +255,7 @@ export default function CandidatesReports() {
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Candidate Name:</label>
+                      <label htmlFor="">Supplier Name:</label>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.supplierName))].map(supplier => (
@@ -291,7 +286,7 @@ export default function CandidatesReports() {
                         <TableRow>
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Candidates</TableCell>
+                          <TableCell className='label border'>Suppliers</TableCell>
                           <TableCell className='label border'>Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
                           <TableCell className='label border'>Payment_Via</TableCell>
@@ -310,6 +305,7 @@ export default function CandidatesReports() {
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
                                 <TableCell className='border data_td  '>{entry.type}</TableCell>
+                               
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
@@ -371,9 +367,7 @@ export default function CandidatesReports() {
               </Paper>
             </div>
             }
-            </div>
-        </div>
-      </div>
+           
     </>
   )
 }

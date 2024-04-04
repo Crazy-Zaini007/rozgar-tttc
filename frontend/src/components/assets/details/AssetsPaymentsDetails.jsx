@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
+import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
 import CategoryHook from '../../../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
@@ -12,7 +12,7 @@ import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-export default function PaymentInDetails() {
+export default function AssetsPaymentsDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1,setLoading1]=useState(false)
 
@@ -21,7 +21,7 @@ export default function PaymentInDetails() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const [, setNewMessage] = useState('')
-  const { getPaymentsIn } = CDWCHook()
+  const { getPayments } = AssetsHook()
   const { user } = useAuthContext()
   const dispatch = useDispatch()
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -29,7 +29,7 @@ export default function PaymentInDetails() {
   const fetchData = async () => {
     try {
       setIsLoading(true)
-      await getPaymentsIn();
+      await getPayments();
       setIsLoading(false);
 
       await Promise.all([
@@ -55,7 +55,7 @@ export default function PaymentInDetails() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
+  const assets_Payments = useSelector((state) => state.assets.assets_Payments);
  
 
   const rowsPerPageOptions = [10, 15, 30];
@@ -119,7 +119,7 @@ export default function PaymentInDetails() {
       setIsLoading(true)
       let paymentId = payment._id
       try {
-        const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/delete/single/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/assets/delete/single/payment_in`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function PaymentInDetails() {
           setIsLoading(false)
         }
         if (response.ok) {
-          getPaymentsIn();
+          getPayments();
           setNewMessage(toast.success(json.message));
           setIsLoading(false)
           setEditMode(!editMode)
@@ -146,13 +146,15 @@ export default function PaymentInDetails() {
         setIsLoading(false)
       }
     }
+   
   }
 
+  
   const deleteTotalPayment = async (entry) => {
     if (window.confirm('Are you sure you want to delete this record?')){
       setIsLoading(true)
       try {
-        const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/delete/total/payment_in`, {
+        const response = await fetch(`${apiUrl}/auth/assets/delete/total/payment`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -168,7 +170,7 @@ export default function PaymentInDetails() {
           setIsLoading(false)
         }
         if (response.ok) {
-          getPaymentsIn();
+          getPayments();
           setNewMessage(toast.success(json.message));
           setIsLoading(false)
           setEditMode(!editMode)
@@ -188,7 +190,7 @@ export default function PaymentInDetails() {
 
     let paymentId = editedEntry._id
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/update/single/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/assets/update/single/payment`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -221,7 +223,7 @@ export default function PaymentInDetails() {
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
 
-  const filteredTotalPaymentIn = CDWC_Payments_In.filter(payment => {
+  const filteredTotalPaymentIn = assets_Payments.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
       payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())
@@ -236,12 +238,10 @@ export default function PaymentInDetails() {
           <tr>
             <th>SN</th>
             <th>Date</th>
-            <th>Suppliers</th>
+            <th>Assets</th>
             <th>TPI_PKR</th>
             <th>TPO_PKR</th>
             <th>Balance</th>
-            <th>Close</th>
-            <th>Open</th>
           </tr>
         </thead>
         <tbody>
@@ -253,8 +253,8 @@ export default function PaymentInDetails() {
               <td>${String(entry.total_Payment_In)}</td>
               <td>${String(entry.total_Payment_Out)}</td>
               <td>${String(entry.balance)}</td>
-              <td>${String(entry.close)}</td>
-              <td>${String(entry.open)}</td>
+            
+             
             </tr>
           `).join('')}
         </tbody>
@@ -311,7 +311,7 @@ export default function PaymentInDetails() {
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
 
-  const filteredIndividualPayments = CDWC_Payments_In
+  const filteredIndividualPayments = assets_Payments
   .filter((data) => data.supplierName === selectedSupplier)
   .map((filteredData) => ({
     ...filteredData,
@@ -443,8 +443,6 @@ export default function PaymentInDetails() {
         supplierName:payments.supplierName,
         total_Payment_In:payments.total_Payment_In,
         total_Payment_Out:payments.total_Payment_Out,
-        open:payments.open,
-        close:payments.close,
 
       };
       data.push(rowData);
@@ -453,7 +451,7 @@ export default function PaymentInDetails() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'CDWC_Payments_In.xlsx');
+    XLSX.writeFile(wb, 'assets_Payments.xlsx');
   };
 
 
@@ -496,7 +494,7 @@ export default function PaymentInDetails() {
           <div className='col-md-12 '>
             <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
-                <h4>Payment Details</h4>
+                <h4>Assets Payment Details</h4>
               </div>
               <div className="right d-flex">
                 {filteredTotalPaymentIn.length > 0 &&
@@ -521,7 +519,7 @@ export default function PaymentInDetails() {
                   <label htmlFor="">Date:</label>
                   <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {[...new Set(CDWC_Payments_In.map(data => data.createdAt))].map(dateValue => (
+                    {[...new Set(assets_Payments.map(data => data.createdAt))].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
                     ))}
                   </select>
@@ -530,7 +528,7 @@ export default function PaymentInDetails() {
                   <label htmlFor="">Suppliers:</label>
                   <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {CDWC_Payments_In && CDWC_Payments_In.map((data) => (
+                    {assets_Payments && assets_Payments.map((data) => (
                       <option value={data.supplierName} key={data._id}>{data.supplierName} </option>
                     ))}
                   </select>
@@ -551,8 +549,7 @@ export default function PaymentInDetails() {
                     <TableCell className='label border' style={{ width: '18.28%' }}>TPI_PKR</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>TPO_PKR</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Balance</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell>
+                   
                     <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                         Actions
                       </TableCell>
@@ -578,12 +575,7 @@ export default function PaymentInDetails() {
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                         {entry.balance}
                       </TableCell>
-                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                        <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
-                      </TableCell>
-                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                        {entry.close === false ? "Not Closed" : "Closed"}
-                      </TableCell>
+                      
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                       <button className='btn delete_btn' onClick={() => deleteTotalPayment(entry)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
                      
@@ -648,7 +640,7 @@ export default function PaymentInDetails() {
           <div className="col-md-12 my-2">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
-                <h4 className='d-inline '>Supplier Name: <span>{selectedSupplier}</span></h4>
+                <h4 className='d-inline '>Asset Name: <span>{selectedSupplier}</span></h4>
 
               </div>
               <div className="right">
@@ -675,7 +667,7 @@ export default function PaymentInDetails() {
                   <label htmlFor="">Payment Via:</label>
                   <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {[...new Set(CDWC_Payments_In
+                    {[...new Set(assets_Payments
                       .filter(data => data.supplierName === selectedSupplier)
                       .flatMap(data => data.payment)
                      
@@ -689,7 +681,7 @@ export default function PaymentInDetails() {
                   <label htmlFor="">Payment Type:</label>
                   <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
-                    {[...new Set(CDWC_Payments_In
+                    {[...new Set(assets_Payments
                       .filter(data => data.supplierName === selectedSupplier)
                       .flatMap(data => data.payment)
                      

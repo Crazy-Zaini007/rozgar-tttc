@@ -1,11 +1,9 @@
 import {React,useState,useEffect} from 'react'
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook'
-import { ToastContainer } from 'react-toastify';
 import EntryHook from '../hooks/entryHooks/EntryHook';
 import { useSelector } from 'react-redux';
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Avatar } from '@mui/material';
-import spinner from './spinner.gif'
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -16,8 +14,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import CircularProgress from '@mui/material/CircularProgress';
-
 import { green, pink,deepOrange,purple,red   } from '@mui/material/colors';
+import { Link } from 'react-router-dom';
 export default function AdminDashboard() {
 
   const { user } = useAuthContext()
@@ -120,27 +118,29 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
           <div className="row p-0 ">
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1   rounded">
              <Paper className="data p-3 rounded border m-0 ">
-             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
+           <Link to='/rozgar/enteries/reports_details'>
+           <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side">
                 <Avatar   sx={{ width: 40, height: 40, bgcolor: green[400]  }}><ConfirmationNumberIcon/></Avatar>
               
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading1 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa issued") ||(entry.final_Status.toLowerCase() === "visa issue") ).length:0 }</h5> }
                 
                 <h6 className='ml-2'>Total Visa Issued</h6>
             
             </div>
           </div> 
-          
-
+           </Link>
+        
              </Paper>
             </div>
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1  ">
             <Paper className="data p-3 rounded border ">
+            <Link to='/rozgar/enteries/reports_details'>
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -148,17 +148,20 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
              
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end ">
             {loading1 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{enteries ? enteries.filter(entry => !(entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly")).length:0 }</h5> }
                 <h6 className='ml-2'>Total Fly <br /> </h6>
             </div>
           </div> 
+            </Link>
           
             </Paper>
+           
             </div>
             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
            
             <Paper className="data p-3 border rounded">
+            <Link to='/rozgar/cash_in_hand'>
             <div className="d-flex justify-content-between pt-2 pb-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -166,11 +169,12 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
            
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading2 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0}</h5> }
-<h6 className='ml-2'>Cash In Hand</h6>
+            <h6 className='ml-2'>Cash In Hand</h6>
             </div>
           </div> 
+            </Link>
           
             </Paper>
             </div>
@@ -184,7 +188,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
             
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0}</h5> }
 
 <h6 className='ml-2'>Today Cash In</h6>
@@ -202,7 +206,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
               <Avatar   sx={{ width: 40, height: 40, bgcolor: red [500]  }}><CreditCardIcon/></Avatar>
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0}</h5> }
 
                 <h6 className='ml-2'>Today Cash Out</h6>
@@ -223,7 +227,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
              
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0}</h5> }
                 
                 <h6 className='ml-2'>Today Advance In</h6>
@@ -246,7 +250,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
               
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0}</h5> }
 
 <h6 className='ml-2'>Today Advance Out</h6>
@@ -266,7 +270,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
               
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0}</h5> }
                 <h6 className='ml-2'>Total Advance In</h6>
             
@@ -286,7 +290,7 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
               
               </div>
             </div>
-            <div className="side ">
+            <div className="side text-end">
             {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0}</h5> }
                 
                 <h6 className='ml-2'>Total Advance Out</h6>

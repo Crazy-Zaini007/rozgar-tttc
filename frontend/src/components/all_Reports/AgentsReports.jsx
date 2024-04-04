@@ -304,9 +304,9 @@ export default function AgnetsReports() {
                         {filteredPayments && filteredPayments.length>0 ? filteredPayments.map((entry,index)=>(
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
+                                <TableCell className='border data_td  '>{entry.date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
                                 <TableCell className='border data_td  '>{entry.type}</TableCell>
-                                <TableCell className='border data_td  '>{entry.date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
