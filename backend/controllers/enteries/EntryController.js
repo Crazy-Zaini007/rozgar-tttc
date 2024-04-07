@@ -11,7 +11,7 @@ const TicketCandidate = require("../../database/ticketCandidates/TicketCandidate
 const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchema");
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
-const Notifications = require('../../database/notifications/NotificationModel.js')
+const Reminders = require('../../database/reminders/RemindersModel')
 const mongoose = require("mongoose");
 const moment = require("moment");
 // Adding a new Single Entry Controller
@@ -142,58 +142,58 @@ const addEntry = async (req, res) => {
       if (!existingPPNO) {
 
         if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Offer Letter",
             content: `${name}'s Final Status is updated to Offer Letter.`,
             date: new Date().toISOString().split("T")[0]
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         
         if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
   
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "E Number",
             content: `${name}'s Final Status is updated to E Number.`,
             date: new Date().toISOString().split("T")[0]
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         
         if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "QVC",
             content: `${name}'s Final Status is updated to QVC.`,
             date: new Date().toISOString().split("T")[0]
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         
         if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Visa Issued",
             content: `${name}'s Final Status is updated to Visa Issued.`,
             date: new Date().toISOString().split("T")[0]
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         
         if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "PTN",
             content: `${name}'s Final Status is updated to PTN.`,
             date: new Date().toISOString().split("T")[0]
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         
         if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Ticket",
             content: `${name}'s Final Status is updated to Ticket.`,
             date: new Date().toISOString().split("T")[0]
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         // uploading image to cloudinary
@@ -3390,58 +3390,58 @@ const addMultipleEnteries = async (req, res) => {
         if (!existingPPNO) {
 
           if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
-            const newNotification = new Notifications({
+            const newReminder = new Reminders({
               type: "Offer Letter",
               content: `${name}'s Final Status is updated to Offer Letter.`,
               date: new Date().toISOString().split("T")[0]
             });
-            await newNotification.save();
+            await newReminder.save();
           }
           
           if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
     
-            const newNotification = new Notifications({
+            const newReminder = new Reminders({
               type: "E Number",
               content: `${name}'s Final Status is updated to E Number.`,
               date: new Date().toISOString().split("T")[0]
             });
-            await newNotification.save();
+            await newReminder.save();
           }
           
           if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
-            const newNotification = new Notifications({
+            const newReminder = new Reminders({
               type: "QVC",
               content: `${name}'s Final Status is updated to QVC.`,
               date: new Date().toISOString().split("T")[0]
             });
-            await newNotification.save();
+            await newReminder.save();
           }
           
           if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
-            const newNotification = new Notifications({
+            const newReminder = new Reminders({
               type: "Visa Issued",
               content: `${name}'s Final Status is updated to Visa Issued.`,
               date: new Date().toISOString().split("T")[0]
             });
-            await newNotification.save();
+            await newReminder.save();
           }
           
           if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
-            const newNotification = new Notifications({
+            const newReminder = new Reminders({
               type: "PTN",
               content: `${name}'s Final Status is updated to PTN.`,
               date: new Date().toISOString().split("T")[0]
             });
-            await newNotification.save();
+            await newReminder.save();
           }
           
           if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
-            const newNotification = new Notifications({
+            const newReminder = new Reminders({
               type: "Ticket",
               content: `${name}'s Final Status is updated to Ticket.`,
               date: new Date().toISOString().split("T")[0]
             });
-            await newNotification.save();
+            await newReminder.save();
           }
 
           const newEntry = new Entries(entryData);
@@ -6298,137 +6298,156 @@ const delEntry = async (req, res) => {
       // Suppliers Sections
 
       // Update the Supplierd With PaymentIn by removing the person from the persons array
-      const existingSupplierPaymentOut = await Suppliers.findOne({
-        "payment_Out_Schema.supplierName": reference_In_Name,
-      });
-      let supplierOutPersonIndex;
-      if (existingSupplierPaymentOut) {
-        // Find the index of the person in the persons array
-        supplierOutPersonIndex =
-          existingSupplierPaymentOut.payment_Out_Schema.persons.findIndex(
-            (person) =>
-              person.name === name &&
-              person.entry_Mode === entry_Mode &&
-              person.pp_No === pp_No
-          );
-      }
-
-      // If the person is found, remove it from the persons array
-      if (supplierOutPersonIndex !== -1) {
-        existingSupplierPaymentOut.payment_Out_Schema.persons.splice(
-          supplierOutPersonIndex,
-          1
-        );
-        existingSupplierPaymentOut.payment_Out_Schema.total_Visa_Price_Out_PKR +=
-          newVisaPurchaseRatePKR /* Adjust based on your needs */;
-        existingSupplierPaymentOut.payment_Out_Schema.total_Visa_Price_Out_Curr +=
-          newVisaPurchaseRateOthCur /* Adjust based on your needs */;
-        existingSupplierPaymentOut.payment_Out_Schema.remaining_Curr +=
-          newVisaPurchaseRateOthCur /* Adjust based on your needs */;
-        existingSupplierPaymentOut.payment_Out_Schema.remaining_Balance +=
-          newVisaPurchaseRatePKR /* Adjust based on your needs */;
-        await existingSupplierPaymentOut.save();
-      }
-
-      // Update the Agent With PaymentIn by removing the person from the persons array
-      const existingSupplierPaymentIn = await Suppliers.findOne({
-        "payment_In_Schema.supplierName": reference_Out_Name,
-      });
-      // Find the index of the person in the persons array
-
-      if (existingSupplierPaymentIn) {
-        let supplierInPersonIndex;
-        supplierInPersonIndex =
-          existingSupplierPaymentIn.payment_In_Schema.persons.findIndex(
-            (person) =>
-              person.name === name &&
-              person.entry_Mode === entry_Mode &&
-              person.pp_No === pp_No
-          );
-        // If the person is found, remove it from the persons array
-        if (supplierInPersonIndex !== -1) {
-          existingSupplierPaymentIn.payment_In_Schema.persons.splice(
-            supplierInPersonIndex,
-            1
-          );
-          existingSupplierPaymentIn.payment_In_Schema.total_Visa_Price_In_PKR +=
-            newVisaSalesRatePKR /* Adjust based on your needs */;
-          existingSupplierPaymentIn.payment_In_Schema.total_Visa_Price_In_Curr +=
-            newVisaSaleRateOthCur /* Adjust based on your needs */;
-          existingSupplierPaymentIn.payment_In_Schema.remaining_Curr +=
-            newVisaSaleRateOthCur /* Adjust based on your needs */;
-          existingSupplierPaymentIn.payment_In_Schema.remaining_Balance +=
-            newVisaSalesRatePKR /* Adjust based on your needs */;
-          await existingSupplierPaymentIn.save();
+      if(reference_In_Name !== undefined &&
+        reference_In_Name !== null &&
+        reference_In_Name !== "" && ( reference_In.toLowerCase()==='supplier' || reference_In.toLowerCase()==='suppliers')){
+          const existingSupplierPaymentOut = await Suppliers.findOne({
+            "payment_Out_Schema.supplierName": reference_In_Name,
+          });
+          let supplierOutPersonIndex;
+          if (existingSupplierPaymentOut) {
+            // Find the index of the person in the persons array
+            supplierOutPersonIndex =
+              existingSupplierPaymentOut.payment_Out_Schema.persons.findIndex(
+                (person) =>
+                  person.name === name &&
+                  person.entry_Mode === entry_Mode &&
+                  person.pp_No === pp_No
+              );
+          }
+    
+          // If the person is found, remove it from the persons array
+          if (supplierOutPersonIndex !== -1) {
+    
+            existingSupplierPaymentOut?.payment_Out_Schema?.persons.splice(
+              supplierOutPersonIndex,
+              1
+            );
+            existingSupplierPaymentOut.payment_Out_Schema.total_Visa_Price_Out_PKR +=
+              newVisaPurchaseRatePKR /* Adjust based on your needs */;
+            existingSupplierPaymentOut.payment_Out_Schema.total_Visa_Price_Out_Curr +=
+              newVisaPurchaseRateOthCur /* Adjust based on your needs */;
+            existingSupplierPaymentOut.payment_Out_Schema.remaining_Curr +=
+              newVisaPurchaseRateOthCur /* Adjust based on your needs */;
+            existingSupplierPaymentOut.payment_Out_Schema.remaining_Balance +=
+              newVisaPurchaseRatePKR /* Adjust based on your needs */;
+            await existingSupplierPaymentOut.save();
+          }
         }
-      }
+     
+        if(reference_Out_Name !== undefined &&
+          reference_Out_Name !== null &&
+          reference_Out_Name !== "" && ( reference_Out.toLowerCase()==='supplier' || reference_Out.toLowerCase()==='suppliers')){
+ // Update the Agent With PaymentIn by removing the person from the persons array
+ const existingSupplierPaymentIn = await Suppliers.findOne({
+  "payment_In_Schema.supplierName": reference_Out_Name,
+});
+// Find the index of the person in the persons array
 
+if (existingSupplierPaymentIn) {
+  let supplierInPersonIndex;
+  supplierInPersonIndex =
+    existingSupplierPaymentIn?.payment_In_Schema?.persons.findIndex(
+      (person) =>
+        person.name === name &&
+        person.entry_Mode === entry_Mode &&
+        person.pp_No === pp_No
+    );
+  // If the person is found, remove it from the persons array
+  if (supplierInPersonIndex !== -1) {
+    existingSupplierPaymentIn.payment_In_Schema.persons.splice(
+      supplierInPersonIndex,
+      1
+    );
+    existingSupplierPaymentIn.payment_In_Schema.total_Visa_Price_In_PKR +=
+      newVisaSalesRatePKR /* Adjust based on your needs */;
+    existingSupplierPaymentIn.payment_In_Schema.total_Visa_Price_In_Curr +=
+      newVisaSaleRateOthCur /* Adjust based on your needs */;
+    existingSupplierPaymentIn.payment_In_Schema.remaining_Curr +=
+      newVisaSaleRateOthCur /* Adjust based on your needs */;
+    existingSupplierPaymentIn.payment_In_Schema.remaining_Balance +=
+      newVisaSalesRatePKR /* Adjust based on your needs */;
+    await existingSupplierPaymentIn.save();
+  }
+}
+          }
+     
       // Agnets Sections
 
-      // Update the Agent With PaymentIn by removing the person from the persons array
-      const existingAgentPaymentOut = await Agents.findOne({
-        "payment_Out_Schema.supplierName": reference_In_Name,
-      });
-      if (existingAgentPaymentOut) {
-        let agentOutPersonIndex;
-        // Find the index of the person in the persons array
-        agentOutPersonIndex =
-          existingAgentPaymentOut.payment_Out_Schema.persons.findIndex(
-            (person) =>
-              person.name === name &&
-              person.entry_Mode === entry_Mode &&
-              person.pp_No === pp_No
-          );
-        // If the person is found, remove it from the persons array
-        if (agentOutPersonIndex !== -1) {
-          existingAgentPaymentOut.payment_Out_Schema.persons.splice(
-            agentOutPersonIndex,
-            1
-          );
-          existingAgentPaymentOut.payment_Out_Schema.total_Visa_Price_Out_PKR +=
-            newVisaPurchaseRatePKR /* Adjust based on your needs */;
-          existingAgentPaymentOut.payment_Out_Schema.total_Visa_Price_Out_Curr +=
-            newVisaPurchaseRateOthCur /* Adjust based on your needs */;
-          existingAgentPaymentOut.payment_Out_Schema.remaining_Curr +=
-            newVisaPurchaseRateOthCur /* Adjust based on your needs */;
-          existingAgentPaymentOut.payment_Out_Schema.remaining_Balance +=
-            newVisaPurchaseRatePKR /* Adjust based on your needs */;
-          await existingAgentPaymentOut.save();
+      if(reference_In_Name !== undefined &&
+        reference_In_Name !== null &&
+        reference_In_Name !== "" && ( reference_In.toLowerCase()==='agent' || reference_In.toLowerCase()==='agents')){
+// Update the Agent With PaymentIn by removing the person from the persons array
+const existingAgentPaymentOut = await Agents.findOne({
+  "payment_Out_Schema.supplierName": reference_In_Name,
+});
+if (existingAgentPaymentOut) {
+  let agentOutPersonIndex;
+  // Find the index of the person in the persons array
+  agentOutPersonIndex =
+    existingAgentPaymentOut?.payment_Out_Schema?.persons.findIndex(
+      (person) =>
+        person.name === name &&
+        person.entry_Mode === entry_Mode &&
+        person.pp_No === pp_No
+    );
+  // If the person is found, remove it from the persons array
+  if (agentOutPersonIndex !== -1) {
+    existingAgentPaymentOut.payment_Out_Schema.persons.splice(
+      agentOutPersonIndex,
+      1
+    );
+    existingAgentPaymentOut.payment_Out_Schema.total_Visa_Price_Out_PKR +=
+      newVisaPurchaseRatePKR /* Adjust based on your needs */;
+    existingAgentPaymentOut.payment_Out_Schema.total_Visa_Price_Out_Curr +=
+      newVisaPurchaseRateOthCur /* Adjust based on your needs */;
+    existingAgentPaymentOut.payment_Out_Schema.remaining_Curr +=
+      newVisaPurchaseRateOthCur /* Adjust based on your needs */;
+    existingAgentPaymentOut.payment_Out_Schema.remaining_Balance +=
+      newVisaPurchaseRatePKR /* Adjust based on your needs */;
+    await existingAgentPaymentOut.save();
+  }
+}
         }
-      }
+      
 
-      // Update the Agent With PaymentIn by removing the person from the persons array
-      const existingAgentPaymentIn = await Agents.findOne({
-        "payment_In_Schema.supplierName": reference_Out_Name,
-      });
-      // Find the index of the person in the persons array
-      if (existingAgentPaymentIn) {
-        let agentInPersonIndex;
-        agentInPersonIndex =
-          existingAgentPaymentIn.payment_In_Schema.persons.findIndex(
-            (person) =>
-              person.name === name &&
-              person.entry_Mode === entry_Mode &&
-              person.pp_No === pp_No
-          );
+        if(reference_Out_Name !== undefined &&
+          reference_Out_Name !== null &&
+          reference_Out_Name !== "" && ( reference_Out.toLowerCase()==='agent' || reference_Out.toLowerCase()==='agents')){
+// Update the Agent With PaymentIn by removing the person from the persons array
+const existingAgentPaymentIn = await Agents.findOne({
+  "payment_In_Schema.supplierName": reference_Out_Name,
+});
+// Find the index of the person in the persons array
+if (existingAgentPaymentIn) {
+  let agentInPersonIndex;
+  agentInPersonIndex =
+    existingAgentPaymentIn?.payment_In_Schema?.persons.findIndex(
+      (person) =>
+        person.name === name &&
+        person.entry_Mode === entry_Mode &&
+        person.pp_No === pp_No
+    );
 
-        // If the person is found, remove it from the persons array
-        if (agentInPersonIndex !== -1) {
-          existingAgentPaymentIn.payment_In_Schema.persons.splice(
-            agentInPersonIndex,
-            1
-          );
-          existingAgentPaymentIn.payment_In_Schema.total_Visa_Price_In_PKR +=
-            newVisaSalesRatePKR /* Adjust based on your needs */;
-          existingAgentPaymentIn.payment_In_Schema.total_Visa_Price_In_Curr +=
-            newVisaSaleRateOthCur /* Adjust based on your needs */;
-          existingAgentPaymentIn.payment_In_Schema.remaining_Curr +=
-            newVisaSaleRateOthCur /* Adjust based on your needs */;
-          existingAgentPaymentIn.payment_In_Schema.remaining_Balance +=
-            newVisaSalesRatePKR /* Adjust based on your needs */;
-          await existingAgentPaymentIn.save();
-        }
-      }
+  // If the person is found, remove it from the persons array
+  if (agentInPersonIndex !== -1) {
+    existingAgentPaymentIn.payment_In_Schema.persons.splice(
+      agentInPersonIndex,
+      1
+    );
+    existingAgentPaymentIn.payment_In_Schema.total_Visa_Price_In_PKR +=
+      newVisaSalesRatePKR /* Adjust based on your needs */;
+    existingAgentPaymentIn.payment_In_Schema.total_Visa_Price_In_Curr +=
+      newVisaSaleRateOthCur /* Adjust based on your needs */;
+    existingAgentPaymentIn.payment_In_Schema.remaining_Curr +=
+      newVisaSaleRateOthCur /* Adjust based on your needs */;
+    existingAgentPaymentIn.payment_In_Schema.remaining_Balance +=
+      newVisaSalesRatePKR /* Adjust based on your needs */;
+    await existingAgentPaymentIn.save();
+  }
+}
+          }
+      
 
       // Deleting From Candidates
 
@@ -6484,7 +6503,7 @@ const delEntry = async (req, res) => {
           let azadSupplierOutPersonIndex;
           // Find the index of the person in the persons array
           azadSupplierOutPersonIndex =
-            existingAzadSupplierPaymentOut.Supplier_Payment_Out_Schema.persons.findIndex(
+            existingAzadSupplierPaymentOut?.Supplier_Payment_Out_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6493,7 +6512,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (azadSupplierOutPersonIndex !== -1) {
-            existingAzadSupplierPaymentOut.Supplier_Payment_Out_Schema.persons.splice(
+            existingAzadSupplierPaymentOut?.Supplier_Payment_Out_Schema?.persons.splice(
               azadSupplierOutPersonIndex,
               1
             );
@@ -6525,7 +6544,7 @@ const delEntry = async (req, res) => {
           let azadSupplierInPersonIndex;
 
           azadSupplierInPersonIndex =
-            existingAzadSupplierPaymentIn.Supplier_Payment_In_Schema.persons.findIndex(
+            existingAzadSupplierPaymentIn?.Supplier_Payment_In_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6534,7 +6553,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (azadSupplierInPersonIndex !== -1) {
-            existingAzadSupplierPaymentIn.Supplier_Payment_In_Schema.persons.splice(
+            existingAzadSupplierPaymentIn?.Supplier_Payment_In_Schema?.persons.splice(
               azadSupplierInPersonIndex,
               1
             );
@@ -6565,7 +6584,7 @@ const delEntry = async (req, res) => {
 
           // Find the index of the person in the persons array
           azadAgentOutPersonIndex =
-            existingAzadAgentPaymentOut.Agent_Payment_Out_Schema.persons.findIndex(
+            existingAzadAgentPaymentOut?.Agent_Payment_Out_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6573,7 +6592,7 @@ const delEntry = async (req, res) => {
             );
           // If the person is found, remove it from the persons array
           if (azadAgentOutPersonIndex !== -1) {
-            existingAzadAgentPaymentOut.Agent_Payment_Out_Schema.persons.splice(
+            existingAzadAgentPaymentOut?.Agent_Payment_Out_Schema?.persons.splice(
               azadAgentOutPersonIndex,
               1
             );
@@ -6604,7 +6623,7 @@ const delEntry = async (req, res) => {
           let azadAgentInPersonIndex;
 
           azadAgentInPersonIndex =
-            existingAzadAgentPaymentIn.Agent_Payment_In_Schema.persons.findIndex(
+            existingAzadAgentPaymentIn?.Agent_Payment_In_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6612,7 +6631,7 @@ const delEntry = async (req, res) => {
             );
           // If the person is found, remove it from the persons array
           if (azadAgentInPersonIndex !== -1) {
-            existingAzadAgentPaymentInAgent_Payment_In_Schema.persons.splice(
+            existingAzadAgentPaymentIn?.Agent_Payment_In_Schema?.persons.splice(
               azadAgentInPersonIndex,
               1
             );
@@ -6679,7 +6698,7 @@ const delEntry = async (req, res) => {
           let ticketSupplierOutPersonIndex;
 
           ticketSupplierOutPersonIndex =
-            existingTicketSupplierPaymentOut.Supplier_Payment_Out_Schema.persons.findIndex(
+            existingTicketSupplierPaymentOut?.Supplier_Payment_Out_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6688,7 +6707,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (ticketSupplierOutPersonIndex !== -1) {
-            existingTicketSupplierPaymentOut.Supplier_Payment_Out_Schema.persons.splice(
+            existingTicketSupplierPaymentOut?.Supplier_Payment_Out_Schema?.persons.splice(
               ticketSupplierOutPersonIndex,
               1
             );
@@ -6719,7 +6738,7 @@ const delEntry = async (req, res) => {
           let ticketSupplierInPersonIndex;
 
           ticketSupplierInPersonIndex =
-            existingTicketSupplierPaymentIn.Supplier_Payment_In_Schema.persons.findIndex(
+            existingTicketSupplierPaymentIn?.Supplier_Payment_In_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6728,7 +6747,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (ticketSupplierInPersonIndex !== -1) {
-            existingTicketSupplierPaymentIn.Supplier_Payment_In_Schema.persons.splice(
+            existingTicketSupplierPaymentIn?.Supplier_Payment_In_Schema?.persons.splice(
               ticketSupplierInPersonIndex,
               1
             );
@@ -6759,7 +6778,7 @@ const delEntry = async (req, res) => {
           let ticketAgentOutPersonIndex;
 
           ticketAgentOutPersonIndex =
-            existingTicketAgentPaymentOut.Agent_Payment_Out_Schema.persons.findIndex(
+            existingTicketAgentPaymentOut?.Agent_Payment_Out_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6768,7 +6787,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (ticketAgentOutPersonIndex !== -1) {
-            existingTicketAgentPaymentOut.Agent_Payment_Out_Schema.persons.splice(
+            existingTicketAgentPaymentOut?.Agent_Payment_Out_Schema?.persons.splice(
               ticketAgentOutPersonIndex,
               1
             );
@@ -6799,7 +6818,7 @@ const delEntry = async (req, res) => {
           let ticketAgentInPersonIndex;
 
           ticketAgentInPersonIndex =
-            existingTicketAgentPaymentIn.Agent_Payment_In_Schema.persons.findIndex(
+            existingTicketAgentPaymentIn?.Agent_Payment_In_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6808,7 +6827,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (ticketAgentInPersonIndex !== -1) {
-            existingTicketAgentPaymentIn.Agent_Payment_In_Schema.persons.splice(
+            existingTicketAgentPaymentIn?.Agent_Payment_In_Schema?.persons.splice(
               ticketAgentInPersonIndex,
               1
             );
@@ -6880,7 +6899,7 @@ const delEntry = async (req, res) => {
           let visitSupplierOutPersonIndex;
 
           visitSupplierOutPersonIndex =
-            existingVisitSupplierPaymentOut.Supplier_Payment_Out_Schema.persons.findIndex(
+            existingVisitSupplierPaymentOut?.Supplier_Payment_Out_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6888,7 +6907,7 @@ const delEntry = async (req, res) => {
             );
           // If the person is found, remove it from the persons array
           if (visitSupplierOutPersonIndex !== -1) {
-            existingVisitSupplierPaymentOut.Supplier_Payment_Out_Schema.persons.splice(
+            existingVisitSupplierPaymentOut?.Supplier_Payment_Out_Schema?.persons.splice(
               visitSupplierOutPersonIndex,
               1
             );
@@ -6919,7 +6938,7 @@ const delEntry = async (req, res) => {
           let visitSupplierInPersonIndex;
 
           visitSupplierInPersonIndex =
-            existingVisitSupplierPaymentIn.Supplier_Payment_In_Schema.persons.findIndex(
+            existingVisitSupplierPaymentIn?.Supplier_Payment_In_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6928,7 +6947,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (visitSupplierInPersonIndex !== -1) {
-            existingVisitSupplierPaymentIn.Supplier_Payment_In_Schema.persons.splice(
+            existingVisitSupplierPaymentIn?.Supplier_Payment_In_Schema?.persons.splice(
               visitSupplierInPersonIndex,
               1
             );
@@ -6959,7 +6978,7 @@ const delEntry = async (req, res) => {
           let visitAgentOutPersonIndex;
 
           visitAgentOutPersonIndex =
-            existingVisitAgentPaymentOut.Agent_Payment_Out_Schema.persons.findIndex(
+            existingVisitAgentPaymentOut?.Agent_Payment_Out_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -6968,7 +6987,7 @@ const delEntry = async (req, res) => {
 
           // If the person is found, remove it from the persons array
           if (visitAgentOutPersonIndex !== -1) {
-            existingVisitAgentPaymentOut.Agent_Payment_Out_Schema.persons.splice(
+            existingVisitAgentPaymentOut?.Agent_Payment_Out_Schema?.persons.splice(
               visitAgentOutPersonIndex,
               1
             );
@@ -6999,7 +7018,7 @@ const delEntry = async (req, res) => {
           let visitAgentInPersonIndex;
 
           visitAgentInPersonIndex =
-            existingVisitAgentPaymentIn.Agent_Payment_In_Schema.persons.findIndex(
+            existingVisitAgentPaymentIn?.Agent_Payment_In_Schema?.persons.findIndex(
               (person) =>
                 person.name === name &&
                 person.entry_Mode === entry_Mode &&
@@ -7007,7 +7026,7 @@ const delEntry = async (req, res) => {
             );
           // If the person is found, remove it from the persons array
           if (visitAgentInPersonIndex !== -1) {
-            existingVisitAgentPaymentIn.Agent_Payment_In_Schema.persons.splice(
+            existingVisitAgentPaymentIn?.Agent_Payment_In_Schema?.persons.splice(
               visitAgentInPersonIndex,
               1
             );
@@ -7069,7 +7088,7 @@ const delEntry = async (req, res) => {
         let protectorOutPersonIndex;
 
         protectorOutPersonIndex =
-          existingProtectorPaymentOut.payment_Out_Schema.persons.findIndex(
+          existingProtectorPaymentOut?.payment_Out_Schema?.persons.findIndex(
             (person) =>
               person.name === name &&
               person.entry_Mode === entry_Mode &&
@@ -7077,7 +7096,7 @@ const delEntry = async (req, res) => {
           );
         // If the person is found, remove it from the persons array
         if (protectorOutPersonIndex !== -1) {
-          existingProtectorPaymentOut.payment_Out_Schema.persons.splice(
+          existingProtectorPaymentOut?.payment_Out_Schema?.persons.splice(
             protectorOutPersonIndex,
             1
           );
@@ -7189,60 +7208,63 @@ const updateEntry = async (req, res) => {
         azad_Visa_Sales_Rate_Oth_Cur,
         azad_Visa_Purchase_Rate_Oth_Cur,
       } = req.body;
+      
+
       // Update pictures if provided
       if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
-        const newNotification = new Notifications({
+        const newReminder = new Reminders({
           type: "Offer Letter",
           content: `${name}'s Final Status is updated to Offer Letter.`,
           date: new Date().toISOString().split("T")[0]
         });
-        await newNotification.save();
+        await newReminder.save();
       }
       
       if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
 
-        const newNotification = new Notifications({
+        const newReminder = new Reminders({
           type: "E Number",
           content: `${name}'s Final Status is updated to E Number.`,
           date: new Date().toISOString().split("T")[0]
         });
-        await newNotification.save();
+        await newReminder.save();
       }
       
       if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
-        const newNotification = new Notifications({
+        const newReminder = new Reminders({
           type: "QVC",
           content: `${name}'s Final Status is updated to QVC.`,
           date: new Date().toISOString().split("T")[0]
         });
-        await newNotification.save();
+        await newReminder.save();
       }
       
       if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
-        const newNotification = new Notifications({
+        const newReminder = new Reminders({
           type: "Visa Issued",
           content: `${name}'s Final Status is updated to Visa Issued.`,
           date: new Date().toISOString().split("T")[0]
         });
-        await newNotification.save();
+        await newReminder.save();
       }
       
       if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
-        const newNotification = new Notifications({
+        const newReminder = new Reminders({
           type: "PTN",
           content: `${name}'s Final Status is updated to PTN.`,
           date: new Date().toISOString().split("T")[0]
         });
-        await newNotification.save();
+        await newReminder.save();
       }
       
       if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
-        const newNotification = new Notifications({
+        console.log('Yes Ticket',final_Status)
+        const newReminder = new Reminders({
           type: "Ticket",
           content: `${name}'s Final Status is updated to Ticket.`,
           date: new Date().toISOString().split("T")[0]
         });
-        await newNotification.save();
+        await newReminder.save();
       }
 
       if (picture) {

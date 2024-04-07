@@ -11,7 +11,10 @@ const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchem
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
-const Notifications=require('../../database/notifications/NotificationModel.js')
+const Reminders=require('../../database/reminders/RemindersModel')
+const Backup=require('../../database/backup/BackupModel.js')
+const Notifications=require('../../database/notifications/NotifyModel.js')
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
@@ -139,6 +142,33 @@ const cashInHandDoc = await CashInHand.findOne({});
         cashInHandUpdate.$inc.total_Cash = newPaymentIn;
       }
       await CashInHand.updateOne({}, cashInHandUpdate);
+
+      const newBackup=new Backup({
+        name: supplierName,
+        category:category,
+        payment_Via:payment_Via,
+        payment_Type:payment_Type,
+        slip_No: slip_No ? slip_No : '',
+        payment_In: newPaymentIn,
+        slip_Pic: uploadImage?.secure_url || '',
+        details:details,
+        payment_In_Curr: curr_Country ? curr_Country : "",
+        curr_Rate: curr_Rate ? curr_Rate : 0,
+        curr_Amount: newCurrAmount ? newCurrAmount : 0,
+        date:new Date().toISOString().split("T")[0],
+        invoice: nextInvoiceNumber,
+          })
+          await newBackup.save()
+
+      await existingSupplier.save()
+
+      const newNotification=new Notifications({
+        type:"Azad Supplier Payment In",
+        content:`${user.userName} added Payment_In: ${payment_In} of Azad Supplier: ${supplierName}`,
+        date: new Date().toISOString().split("T")[0]
+
+      })
+      await newNotification.save()
 
             const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
 
@@ -302,7 +332,32 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
                   }
       
                 await CashInHand.updateOne({}, cashInHandUpdate);
+                const newBackup=new Backup({
+                  name: supplierName,
+                  category:category,
+                  payment_Via:payment_Via,
+                  payment_Type:payment_Type,
+                  slip_No: slip_No ? slip_No : '',
+                  payment_In: newPaymentIn,
+                  slip_Pic: uploadImage?.secure_url || '',
+                  details:details,
+                  payment_In_Curr: curr_Country ? curr_Country : "",
+                  curr_Rate: curr_Rate ? curr_Rate : 0,
+                  curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                  date:new Date().toISOString().split("T")[0],
+                  invoice: nextInvoiceNumber,
+                    })
+                    await newBackup.save()
           
+                await existingSupplier.save()
+          
+                const newNotification=new Notifications({
+                  type:"Azad Supplier Payment In",
+                  content:`${user.userName} added Payment_In: ${payment_In} of Azad Supplier: ${supplierName}`,
+                  date: new Date().toISOString().split("T")[0]
+          
+                })
+                await newNotification.save()
             }
 
             res.status(200).json({
@@ -456,7 +511,31 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
                         cashInHandUpdate.$inc.total_Cash = -newCashOut;
                       }
           
-                    await CashInHand.updateOne({}, cashInHandUpdate);          
+                    await CashInHand.updateOne({}, cashInHandUpdate);     
+                    const newBackup=new Backup({
+                      name: supplierName,
+                      category:category,
+                      payment_Via:payment_Via,
+                      payment_Type:payment_Type,
+                      slip_No: slip_No ? slip_No : '',
+                      cash_Out: newCashOut,
+                      slip_Pic: uploadImage?.secure_url || '',
+                      details:details,
+                      payment_In_Curr: curr_Country ? curr_Country : "",
+                      curr_Rate: curr_Rate ? curr_Rate : 0,
+                      curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                      date:new Date().toISOString().split("T")[0],
+                      invoice: nextInvoiceNumber,
+            
+                        })
+                        await newBackup.save()
+                        const newNotification=new Notifications({
+                          type:"Azad Supplier Payment In Return",
+                          content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Supplier: ${supplierName}`,
+                          date: new Date().toISOString().split("T")[0]
+                
+                        })
+                        await newNotification.save()     
                     const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
 
                     res.status(200).json({ message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record` });
@@ -508,7 +587,25 @@ const deleteSingleAzadSupplierPaymentIn = async (req, res) => {
         try {
 
         
-
+          let paymentToDelete=existingSupplier.Supplier_Payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+          const newRecycle=new RecycleBin({
+            name:supplierName,
+            type:"Azad Supplier Payment In",
+            category:paymentToDelete.category,
+            payment_Via:paymentToDelete.payment_Via,
+            payment_Type:paymentToDelete.payment_Type,
+            slip_No:paymentToDelete.slip_No,
+            payment_In:paymentToDelete.payment_In,
+            cash_Out:paymentToDelete.cash_Out,
+            payment_In_Curr:paymentToDelete.payment_In_Curr,
+            slip_Pic:paymentToDelete.slip_Pic,
+            date:paymentToDelete.date,
+            curr_Rate:paymentToDelete.curr_Rate,
+            curr_Amount:paymentToDelete.curr_Amount,
+            invoice:paymentToDelete.invoice
+  
+          })
+          await newRecycle.save()
             // Add this line for logging
 
             await existingSupplier.updateOne({
@@ -546,7 +643,13 @@ const deleteSingleAzadSupplierPaymentIn = async (req, res) => {
                 cashInHandUpdate.$inc.total_Cash = -newPaymentIn;
               }
             await CashInHand.updateOne({}, cashInHandUpdate);
-      
+            const newNotification=new Notifications({
+              type:"Azad Supplier Payment In Deleted",
+              content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Azad Supplier: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
             const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
 
@@ -662,6 +765,13 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
             // Save the updated supplier
 
             await existingSupplier.save();
+            const newNotification=new Notifications({
+              type:"Azad Supplier Payment In Updated",
+              content:`${user.userName} updated Payment_In: ${payment_In} of Azad Supplier: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
 
             const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             console.log(updatedSupplier)
@@ -781,8 +891,15 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
                 }
 
             });
+            const newNotification=new Notifications({
+              type:"Azad Supplier Payment In Person Deleted",
+              content:`${user.userName} deleted Person having Visa Price In PKR: ${azad_Visa_Price_In_PKR} of Azad Supplier: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
 
-            const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+            
             res.status(200).json({ message: `Person with ID ${personId} deleted successfully from ${supplierName}` })
 
 
@@ -827,58 +944,58 @@ const updateSupPaymentInPerson=async(req,res)=>{
           if (personIn) {
             
         if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Offer Letter",
             content:`${name}'s Final Status is updated to Offer Letter.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"E Number",
             content:`${name}'s Final Status is updated to E Number.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"QVC",
             content:`${name}'s Final Status is updated to QVC.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Visa Issued",
             content:`${name}'s Final Status is updated to Visa Issued.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"PTN",
             content:`${name}'s Final Status is updated to PTN.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
        
         if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Ticket",
             content:`${name}'s Final Status is updated to Ticket.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
             entryMode=personIn.entry_Mode
               personIn.company = company;
@@ -1305,7 +1422,7 @@ const updateSupPaymentInPerson=async(req,res)=>{
   const entry=await Entries.findOne({name,pp_No,entry_Mode:entryMode})
   
   if(entry){
-  console.log('entry Found')
+
     entry.company=company
     entry.country=country
     entry.entry_Mode=entry_Mode
@@ -1315,7 +1432,13 @@ const updateSupPaymentInPerson=async(req,res)=>{
     await entry.save()
   
   }
+  const newNotification=new Notifications({
+    type:"Azad Supplier Payment In Person Updated",
+    content:`${user.userName} updated Person :${name} of Azad Supplier: ${supplierName}`,
+    date: new Date().toISOString().split("T")[0]
   
+  })
+  await newNotification.save()
   
       res.status(200).json({message:`${name} updated successfully!`})
   console.log('updated successfully!')
@@ -1329,8 +1452,6 @@ const updateSupPaymentInPerson=async(req,res)=>{
       
   
     }
-  
-  
   }
   
   
@@ -1517,8 +1638,30 @@ const addAzadSupplierPaymentOut = async (req, res) => {
           
                     await CashInHand.updateOne({}, cashInHandUpdate);
                     
-                    const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
-
+                    const newBackup=new Backup({
+                      name: supplierName,
+                      category:category,
+                      payment_Via:payment_Via,
+                      payment_Type:payment_Type,
+                      slip_No: slip_No ? slip_No : '',
+                      payment_Out: newPaymentOut,
+                      slip_Pic: uploadImage?.secure_url || '',
+                      details:details,
+                      payment_Out_Curr: curr_Country ? curr_Country : "",
+                      curr_Rate: curr_Rate ? curr_Rate : 0,
+                      curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                      date:new Date().toISOString().split("T")[0],
+                      invoice: nextInvoiceNumber,
+                        })
+                        await newBackup.save()
+                        const newNotification=new Notifications({
+                          type:"Azad Supplier Payment Out",
+                          content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Supplier: ${supplierName}`,
+                          date: new Date().toISOString().split("T")[0]
+                
+                        })
+                        await newNotification.save()
+                    
                     res.status(200).json({  message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record` });
 
                 } catch (error) {
@@ -1682,7 +1825,29 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
-
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            payment_Out: newPaymentOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+              })
+              await newBackup.save()
+              const newNotification=new Notifications({
+                type:"Azad Supplier Payment Out",
+                content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
 
             }
             res.status(200).json({  message: `${multiplePayment.length} Payments Out added Successfully` });
@@ -1836,7 +2001,31 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
           
                     await CashInHand.updateOne({}, cashInHandUpdate);
           
-
+                    const newBackup=new Backup({
+                      name: supplierName,
+                      category:category,
+                      payment_Via:payment_Via,
+                      payment_Type:payment_Type,
+                      slip_No: slip_No ? slip_No : '',
+                      cash_Out: newCashOut,
+                      slip_Pic: uploadImage?.secure_url || '',
+                      details:details,
+                      payment_Out_Curr: curr_Country ? curr_Country : "",
+                      curr_Rate: curr_Rate ? curr_Rate : 0,
+                      curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                      date:new Date().toISOString().split("T")[0],
+                      invoice: nextInvoiceNumber,
+                        })
+                        await newBackup.save()
+                        
+                    await existingSupplier.save();
+                    const newNotification=new Notifications({
+                      type:"Azad Supplier Payment Out Return",
+                      content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Supplier: ${supplierName}`,
+                      date: new Date().toISOString().split("T")[0]
+            
+                    })
+                    await newNotification.save()
                     const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
 
                     res.status(200).json({  message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record` });
@@ -1887,7 +2076,25 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
         const newPaymentOut = payment_Out - cash_Out
 
         try {
-           
+          let paymentToDelete=existingSupplier.Supplier_Payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+          const newRecycle=new RecycleBin({
+            name:supplierName,
+            type:"Azad Supplier Payment Out",
+            category:paymentToDelete.category,
+            payment_Via:paymentToDelete.payment_Via,
+            payment_Type:paymentToDelete.payment_Type,
+            slip_No:paymentToDelete.slip_No,
+            payment_Out:paymentToDelete.payment_Out,
+            cash_Out:paymentToDelete.cash_Out,
+            payment_Out_Curr:paymentToDelete.payment_Out_Curr,
+            slip_Pic:paymentToDelete.slip_Pic,
+            date:paymentToDelete.date,
+            curr_Rate:paymentToDelete.curr_Rate,
+            curr_Amount:paymentToDelete.curr_Amount,
+            invoice:paymentToDelete.invoice
+  
+          })
+          await newRecycle.save()
             // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
             await existingSupplier.updateOne({
                 $inc: {
@@ -1928,8 +2135,15 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
       
             await CashInHand.updateOne({}, cashInHandUpdate);
       
+            const newNotification=new Notifications({
+              type:"Azad Supplier Payment Out Deleted",
+              content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Azad Supplier: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
 
-            const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+            
             res.status(200).json({ message: `Payment Out deleted sucessfully from ${supplierName}` })
 
 
@@ -2045,11 +2259,15 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
             paymentToUpdate.date = date;
             // Save the updated supplier
             await existingSupplier.save();
+            const newNotification=new Notifications({
+              type:"Azad Supplier Payment Out Updated",
+              content:`${user.userName} updated Payment_Out: ${payment_Out} of Azad Supplier: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
 
-            const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
-
-
-            res.status(200).json({ message: "Payment Out details updated successfully", data: updatedSupplier });
+            res.status(200).json({ message: "Payment Out details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });
@@ -2105,7 +2323,13 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
                 }
 
             });
-
+            const newNotification=new Notifications({
+              type:"Azad Supplier Payment Out Person Deleted",
+              content:`${user.userName} deleted Person having Visa Price In PKR: ${azad_visa_Price_Out_PKR} of Azad Supplier: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
             // const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             res.status(200).json({ message: `Person with ID ${personId} deleted successfully from ${supplierName}` })
 
@@ -2152,57 +2376,57 @@ const updateSupPaymentOutPerson=async(req,res)=>{
           if (personIn) {
             
         if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Offer Letter",
             content:`${name}'s Final Status is updated to Offer Letter.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"E Number",
             content:`${name}'s Final Status is updated to E Number.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"QVC",
             content:`${name}'s Final Status is updated to QVC.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Visa Issued",
             content:`${name}'s Final Status is updated to Visa Issued.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"PTN",
             content:`${name}'s Final Status is updated to PTN.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Ticket",
             content:`${name}'s Final Status is updated to Ticket.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
        
             entryMode=personIn.entry_Mode
@@ -2640,11 +2864,16 @@ const updateSupPaymentOutPerson=async(req,res)=>{
   
   }
   
+  const newNotification=new Notifications({
+    type:"Azad Supplier Payment Out Person Updated",
+    content:`${user.userName} updated Person :${name} of Azad Supplier: ${supplierName}`,
+    date: new Date().toISOString().split("T")[0]
   
-      res.status(200).json({message:`${name} updated successfully!`})
-  console.log('updated successfully!')
-     
-    
+  })
+  await newNotification.save()
+
+    res.status(200).json({message:`${name} updated successfully!`})     
+  
       } catch (error) {
         console.error('Error:', error);
       res.status(500).json({ message: error });
@@ -2895,7 +3124,33 @@ const addAzadAgentPaymentIn = async (req, res) => {
 
       await CashInHand.updateOne({}, cashInHandUpdate);
 
-            const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+           
+        const newBackup=new Backup({
+          name: supplierName,
+          category:category,
+          payment_Via:payment_Via,
+          payment_Type:payment_Type,
+          slip_No: slip_No ? slip_No : '',
+          payment_In: newPaymentIn,
+          slip_Pic: uploadImage?.secure_url || '',
+          details:details,
+          payment_In_Curr: curr_Country ? curr_Country : "",
+          curr_Rate: curr_Rate ? curr_Rate : 0,
+          curr_Amount: newCurrAmount ? newCurrAmount : 0,
+          date:new Date().toISOString().split("T")[0],
+          invoice: nextInvoiceNumber,
+       
+            })
+            await newBackup.save()
+        await existingSupplier.save();
+
+        const newNotification=new Notifications({
+          type:"Azad Agent Payment In",
+          content:`${user.userName} added Payment_In: ${payment_In} of Azad Agent: ${supplierName}`,
+          date: new Date().toISOString().split("T")[0]
+
+        })
+        await newNotification.save()
 
             res.status(200).json({
                 
@@ -3058,7 +3313,32 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
                   }
           
                   await CashInHand.updateOne({}, cashInHandUpdate);
+                  const newBackup=new Backup({
+                    name: supplierName,
+                    category:category,
+                    payment_Via:payment_Via,
+                    payment_Type:payment_Type,
+                    slip_No: slip_No ? slip_No : '',
+                    payment_In: newPaymentIn,
+                    slip_Pic: uploadImage?.secure_url || '',
+                    details:details,
+                    payment_In_Curr: curr_Country ? curr_Country : "",
+                    curr_Rate: curr_Rate ? curr_Rate : 0,
+                    curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                    date:new Date().toISOString().split("T")[0],
+                    invoice: nextInvoiceNumber,
+                 
+                      })
+                      await newBackup.save()
+                  await existingSupplier.save();
           
+                  const newNotification=new Notifications({
+                    type:"Azad Agent Payment In",
+                    content:`${user.userName} added Payment_In: ${payment_In} of Azad Agent: ${supplierName}`,
+                    date: new Date().toISOString().split("T")[0]
+          
+                  })
+                  await newNotification.save()
           
             }
 
@@ -3213,7 +3493,32 @@ const addAzadAgentPaymentInReturn = async (req, res) => {
                     } 
           
                     await CashInHand.updateOne({}, cashInHandUpdate);          
-                    // const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+                    
+                    const newBackup=new Backup({
+                      name: supplierName,
+                      category:category,
+                      payment_Via:payment_Via,
+                      payment_Type:payment_Type,
+                      slip_No: slip_No ? slip_No : '',
+                      cash_Out: newCashOut,
+                      slip_Pic: uploadImage?.secure_url || '',
+                      details:details,
+                      payment_In_Curr: curr_Country ? curr_Country : "",
+                      curr_Rate: curr_Rate ? curr_Rate : 0,
+                      curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                      date:new Date().toISOString().split("T")[0],
+                      invoice: nextInvoiceNumber,
+                    
+            
+                        })
+                        await newBackup.save()
+                        const newNotification=new Notifications({
+                          type:"Azad Agent Payment In Return",
+                          content:`${user.userName} added Payment_Return: ${cash_Out}  of Azad Agent: ${supplierName}`,
+                          date: new Date().toISOString().split("T")[0]
+                
+                        })
+                        await newNotification.save()
 
                     res.status(200).json({ message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record` });
 
@@ -3263,7 +3568,25 @@ const deleteSingleAgentPaymentIn = async (req, res) => {
         const newPaymentIn = payment_In - cash_Out
 
         try {
-
+          let paymentToDelete=existingSupplier.Agent_Payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+          const newRecycle=new RecycleBin({
+            name:supplierName,
+            type:"Azad Agent Payment In",
+            category:paymentToDelete.category,
+            payment_Via:paymentToDelete.payment_Via,
+            payment_Type:paymentToDelete.payment_Type,
+            slip_No:paymentToDelete.slip_No,
+            payment_In:paymentToDelete.payment_In,
+            cash_Out:paymentToDelete.cash_Out,
+            payment_In_Curr:paymentToDelete.payment_In_Curr,
+            slip_Pic:paymentToDelete.slip_Pic,
+            date:paymentToDelete.date,
+            curr_Rate:paymentToDelete.curr_Rate,
+            curr_Amount:paymentToDelete.curr_Amount,
+            invoice:paymentToDelete.invoice
+  
+          })
+          await newRecycle.save()
             // Add this line for logging
 
             await existingSupplier.updateOne({
@@ -3301,7 +3624,13 @@ const deleteSingleAgentPaymentIn = async (req, res) => {
                 cashInHandUpdate.$inc.total_Cash = -newPaymentIn;
               }
             await CashInHand.updateOne({}, cashInHandUpdate);
-      
+            const newNotification=new Notifications({
+              type:"Azad Agent Payment In Deleted",
+              content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Azad Agent: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
             // const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
 
@@ -3416,6 +3745,13 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
             // Save the updated supplier
 
             await existingSupplier.save();
+            const newNotification=new Notifications({
+              type:"Azad Agent Payment In Updated",
+              content:`${user.userName} updated Payment_In: ${payment_In} of Azad Agent: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
 
             const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             console.log(updatedSupplier)
@@ -3537,6 +3873,14 @@ const deleteAzadAgentPaymentInPerson = async (req, res) => {
 
             });
 
+            const newNotification=new Notifications({
+              type:"Azad Agent Payment In Person Deleted",
+              content:`${user.userName} deleted Person having Visa Price In PKR: ${azad_Visa_Price_In_PKR} of Azad Agent: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
+
             // const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             res.status(200).json({ message: `Person with ID ${personId} deleted successfully from ${supplierName}` })
 
@@ -3582,57 +3926,57 @@ const updateAgentPaymentInPerson=async(req,res)=>{
           if (personIn) {
             
         if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Offer Letter",
             content:`${name}'s Final Status is updated to Offer Letter.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"E Number",
             content:`${name}'s Final Status is updated to E Number.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"QVC",
             content:`${name}'s Final Status is updated to QVC.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Visa Issued",
             content:`${name}'s Final Status is updated to Visa Issued.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"PTN",
             content:`${name}'s Final Status is updated to PTN.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Ticket",
             content:`${name}'s Final Status is updated to Ticket.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
        
             entryMode=personIn.entry_Mode
@@ -4068,9 +4412,15 @@ const updateAgentPaymentInPerson=async(req,res)=>{
     await entry.save()
   
   }
+
+  const newNotification=new Notifications({
+    type:"Azad Agent Payment In Person Updated",
+    content:`${user.userName} updated Person :${name} of Azad Agent: ${supplierName}`,
+    date: new Date().toISOString().split("T")[0]
+  
+  })
+  await newNotification.save()
       res.status(200).json({message:`${name} updated successfully!`})
-       console.log('updated successfully!')
-     
     
       } catch (error) {
         console.error('Error:', error)
@@ -4271,7 +4621,32 @@ const addAzadAgentPaymentOut = async (req, res) => {
           
                     await CashInHand.updateOne({}, cashInHandUpdate);
                     
-                    const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+                    const newBackup=new Backup({
+                      name: supplierName,
+                      category:category,
+                      payment_Via:payment_Via,
+                      payment_Type:payment_Type,
+                      slip_No: slip_No ? slip_No : '',
+                      payment_Out: newPaymentOut,
+                      slip_Pic: uploadImage?.secure_url || '',
+                      details:details,
+                      payment_Out_Curr: curr_Country ? curr_Country : "",
+                      curr_Rate: curr_Rate ? curr_Rate : 0,
+                      curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                      date:new Date().toISOString().split("T")[0],
+                      invoice: nextInvoiceNumber,
+                        })
+                        await newBackup.save()
+        
+                  
+        
+                    const newNotification=new Notifications({
+                      type:"Azad Agent Payment Out",
+                      content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Agent: ${supplierName}`,
+                      date: new Date().toISOString().split("T")[0]
+            
+                    })
+                    await newNotification.save()
 
                     res.status(200).json({  message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record` });
 
@@ -4439,6 +4814,32 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
 
           await CashInHand.updateOne({}, cashInHandUpdate);
 
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            payment_Out: newPaymentOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+              })
+              await newBackup.save()
+
+        
+
+          const newNotification=new Notifications({
+            type:"Azad Agent Payment Out",
+            content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
 
             }
 
@@ -4590,8 +4991,30 @@ const addAzadAgentPaymentOutReturn = async (req, res) => {
           
                     await CashInHand.updateOne({}, cashInHandUpdate);
           
-
-                    const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+                    const newBackup=new Backup({
+                      name: supplierName,
+                      category:category,
+                      payment_Via:payment_Via,
+                      payment_Type:payment_Type,
+                      slip_No: slip_No ? slip_No : '',
+                      cash_Out: newCashOut,
+                      slip_Pic: uploadImage?.secure_url || '',
+                      details:details,
+                      payment_Out_Curr: curr_Country ? curr_Country : "",
+                      curr_Rate: curr_Rate ? curr_Rate : 0,
+                      curr_Amount: newCurrAmount ? newCurrAmount : 0,
+                      date:new Date().toISOString().split("T")[0],
+                      invoice: nextInvoiceNumber,
+                        })
+                        await newBackup.save()
+                  
+                    const newNotification=new Notifications({
+                      type:"Azad Agent Payment Out Return",
+                      content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Agent: ${supplierName}`,
+                      date: new Date().toISOString().split("T")[0]
+            
+                    })
+                    await newNotification.save()
 
                     res.status(200).json({  message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record` });
 
@@ -4642,6 +5065,25 @@ const deleteAzadAgentSinglePaymentOut = async (req, res) => {
 
         try {
            
+          let paymentToDelete=existingSupplier.Agent_Payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+        const newRecycle=new RecycleBin({
+          name:supplierName,
+          type:"Azad Agent Payment Out",
+          category:paymentToDelete.category,
+          payment_Via:paymentToDelete.payment_Via,
+          payment_Type:paymentToDelete.payment_Type,
+          slip_No:paymentToDelete.slip_No,
+          payment_Out:paymentToDelete.payment_Out,
+          cash_Out:paymentToDelete.cash_Out,
+          payment_Out_Curr:paymentToDelete.payment_Out_Curr,
+          slip_Pic:paymentToDelete.slip_Pic,
+          date:paymentToDelete.date,
+          curr_Rate:paymentToDelete.curr_Rate,
+          curr_Amount:paymentToDelete.curr_Amount,
+          invoice:paymentToDelete.invoice
+
+        })
+        await newRecycle.save()
             // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
             await existingSupplier.updateOne({
                 $inc: {
@@ -4679,6 +5121,14 @@ const deleteAzadAgentSinglePaymentOut = async (req, res) => {
       
             await CashInHand.updateOne({}, cashInHandUpdate);
       
+            const newNotification=new Notifications({
+              type:"Azad Agent Payment Out Deleted",
+              content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Azad Agent: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
+
             const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment Out deleted sucessfully from ${supplierName}` })
 
@@ -4798,7 +5248,13 @@ const updateAzadAgentSinglePaymentOut = async (req, res) => {
             await existingSupplier.save();
 
             const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
-
+            const newNotification=new Notifications({
+              type:"Azad Agent Payment Out Updated",
+              content:`${user.userName} updated Payment_Out: ${payment_Out} of Azad Agent: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
 
             res.status(200).json({ message: "Payment Out details updated successfully", data: updatedSupplier });
         } catch (error) {
@@ -4826,7 +5282,7 @@ const deleteAzadAgentPaymentOutPerson = async (req, res) => {
     if (user && user.role === "Admin") {
 
         const { personId, supplierName, azad_visa_Price_Out_PKR, azad_Visa_Price_Out_Curr } = req.body
-        console.log(personId, supplierName, azad_visa_Price_Out_PKR,)
+        
         const newVisa_Price_Out_PKR = parseInt(azad_Visa_Price_Out_Curr, 10);
         const newVisa_Price_Out_Curr = parseInt(azad_visa_Price_Out_PKR, 10);
         const existingSupplier = await AzadSuppliers.findOne({ 'Agent_Payment_Out_Schema.supplierName': supplierName })
@@ -4857,7 +5313,14 @@ const deleteAzadAgentPaymentOutPerson = async (req, res) => {
 
             });
 
-            const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+            const newNotification=new Notifications({
+              type:"Azad Agent Payment Out Person Deleted",
+              content:`${user.userName} deleted Person having Visa Price In PKR: ${azad_visa_Price_Out_PKR} of Azad Agent: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+      
+            })
+            await newNotification.save()
+
             res.status(200).json({ message: `Person with ID ${personId} deleted successfully from ${supplierName}` })
 
 
@@ -4904,57 +5367,57 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
           if (personIn) {
             
         if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Offer Letter",
             content:`${name}'s Final Status is updated to Offer Letter.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"E Number",
             content:`${name}'s Final Status is updated to E Number.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"QVC",
             content:`${name}'s Final Status is updated to QVC.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Visa Issued",
             content:`${name}'s Final Status is updated to Visa Issued.`,
             date:new Date().toISOString().split("T")[0]
 
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"PTN",
             content:`${name}'s Final Status is updated to PTN.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
 
         if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
-          const newNotification=new Notifications({
+          const newReminder=new Reminders({
             type:"Ticket",
             content:`${name}'s Final Status is updated to Ticket.`,
             date:new Date().toISOString().split("T")[0]
           })
-          await newNotification.save()
+          await newReminder.save()
         }
         
             entryMode=personIn.entry_Mode
@@ -5391,7 +5854,13 @@ const updateAgentPaymentOutPerson=async(req,res)=>{
     await entry.save()
   
   }
+  const newNotification=new Notifications({
+    type:"Azad Agent Payment Out Person Updated",
+    content:`${user.userName} updated Person :${name} of Azad Agent: ${supplierName}`,
+    date: new Date().toISOString().split("T")[0]
   
+  })
+  await newNotification.save()
   
       res.status(200).json({message:`${name} updated successfully!`})
   console.log('updated successfully!')
@@ -5557,8 +6026,22 @@ const changeSupplierPaymentInStatus = async (req, res) => {
       let responseMessage;
       if (existingSupplier.Supplier_Payment_In_Schema.status==="Open") {
           responseMessage = "Azad Supplier Status updated to Open Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Open of Azad Supplier Payment In",
+            content:`${user.userName} Opened Khata with Azad Supplier: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       } else {
           responseMessage = "Azad Supplier Status updated to Closed Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Closed of Azad Supplier Payment In",
+            content:`${user.userName} Closed Khata with Azad Supplier: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       }
 
       return res.status(200).json({ message: responseMessage });
@@ -5606,8 +6089,22 @@ const changeSupplierPaymentOutStatus = async (req, res) => {
       let responseMessage;
       if (existingSupplier.Supplier_Payment_Out_Schema.status==="Open") {
           responseMessage = "Azad Supplier Status updated to Open Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Open of Azad Supplier Payment Out",
+            content:`${user.userName} Opened Khata with Azad Supplier: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       } else {
           responseMessage = "Azad Supplier Status updated to Closed Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Closed of Azad Supplier Payment Out",
+            content:`${user.userName} Closed Khata with Azad Supplier: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       }
 
       return res.status(200).json({ message: responseMessage });
@@ -5655,8 +6152,22 @@ const changeAgentPaymentInStatus = async (req, res) => {
       let responseMessage;
       if (existingSupplier.Agent_Payment_In_Schema.status==="Open") {
           responseMessage = "Azad Agent Status updated to Open Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Open of Azad Agent Payment In",
+            content:`${user.userName} Opened Khata with Azad Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       } else {
           responseMessage = "Azad Agent Status updated to Closed Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Closed of Azad Agent Payment In",
+            content:`${user.userName} Closed Khata with Azad Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       }
 
       return res.status(200).json({ message: responseMessage });
@@ -5704,8 +6215,23 @@ const changeAgentPaymentOutStatus = async (req, res) => {
       let responseMessage;
       if (existingSupplier.Agent_Payment_Out_Schema.status==="Open") {
           responseMessage = "Azad Agent Status updated to Open Successfully!";
+         
+          const newNotification=new Notifications({
+            type:"Khata Open of Azad Agent Payment Out",
+            content:`${user.userName} Opened Khata with Azad Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       } else {
           responseMessage = "Azad Agent Status updated to Closed Successfully!";
+          const newNotification=new Notifications({
+            type:"Khata Closed of Azad Agent Payment Out",
+            content:`${user.userName} Closed Khata with Azad Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0]
+  
+          })
+          await newNotification.save()
       }
 
       return res.status(200).json({ message: responseMessage });

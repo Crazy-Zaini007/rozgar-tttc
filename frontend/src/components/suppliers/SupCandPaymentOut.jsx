@@ -18,7 +18,7 @@ import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import SupplierHook from '../../hooks/supplierHooks/SupplierHook';
 import * as XLSX from 'xlsx';
 import Entry1 from './doubleEntry/Entry1'
-
+import CandPaymentOutOne from './addMore/CandPaymentOutOne'
 export default function SupCandPaymentOut() {
   const dispatch = useDispatch();
   // getting data from redux store 
@@ -28,6 +28,7 @@ export default function SupCandPaymentOut() {
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
+  const[show,setShow]=useState(false)
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
@@ -732,9 +733,20 @@ export default function SupCandPaymentOut() {
 
                 {/* Details */}
                 <div className="row payment_details mt-0">
-                  <div className="col-md-12 my-2">
-                    {selectedSupplier && <button className='btn detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
-                  </div>
+                <div className="col-md-12 my-2">
+          <div className="justify-content-between d-flex">
+            <div className="left">
+            {selectedSupplier && (
+            <button className="btn detail_btn" onClick={handleOpen}>
+              {option ? "Hide Details" : "Show Details"}
+            </button>
+          )}
+            </div>
+            <div className="right">
+            <button onClick={()=>setShow(!show)} className={`btn shadow btn-sm text-white text-bold ms-1 ${show ?"bg-danger":"bg-success"}`}>{!show ? <i className="fas fa-plus"></i>:<i className="fas fa-trash-alt"></i>}</button>
+            </div>
+          </div>
+        </div>
                   {option && (
                     <div className="col-md-12 detail_table">
                       <TableContainer component={Paper}>
@@ -835,6 +847,8 @@ export default function SupCandPaymentOut() {
                   )}
 
                 </div>
+      {show && <CandPaymentOutOne/>}
+
               </>
             }
          {single===2 && 

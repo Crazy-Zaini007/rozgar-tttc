@@ -814,7 +814,7 @@ export default function AgentCandPaymentOutDetails() {
         cash_Out: payment.cash_Out,
         invoice: payment.invoice,
         candidate_Name: payment.cand_Name,
-        payment_In_Curr: payment.payment_In_Curr,
+        payment_Out_Curr: payment.payment_Out_Curr,
         curr_Rate: payment.curr_Rate,
         curr_Amount: payment.curr_Amount
       };
@@ -1453,25 +1453,7 @@ export default function AgentCandPaymentOutDetails() {
                                   <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
                                   <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
                                 </div>
-                                {/* Deleting Modal  */}
-                                <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="pDeleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div className="modal-dialog p-0">
-                                    <div className="modal-content p-0">
-                                      <div className="modal-header border-0">
-                                        <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                        {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                      </div>
-                                      <div className="modal-body text-center p-0">
-
-                                        <p>Do you want to Delete the Record?</p>
-                                      </div>
-                                      <div className="text-end m-2">
-                                        <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                        <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                              
                               </>
                             )}
                           </TableCell>
@@ -1505,7 +1487,37 @@ export default function AgentCandPaymentOutDetails() {
                         }, 0);
                       }, 0)}
                     </TableCell>
-
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    {show2 && <>
+                      <TableCell className='border data_td text-center bg-warning text-white'>
+                      
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Rate);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
                   </TableRow>
 
                 </TableBody>

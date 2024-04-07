@@ -17,6 +17,7 @@ import PaymentTypeHook from "../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../hooks/settingHooks/CurrCountryHook";
 import SupplierHook from "../../hooks/supplierHooks/SupplierHook";
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import CandPaymmentInOne from './addMore/CandPaymentInOne'
 
 export default function SupCandSinglePaymentIn() {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ export default function SupCandSinglePaymentIn() {
   const { getPaymentViaData } = PaymentViaHook();
   const { getPaymentTypeData } = PaymentTypeHook();
   const { getPaymentsIn } = SupplierHook();
+  const[show,setShow]=useState(false)
 
   // getting Data from DB
   const { user } = useAuthContext();
@@ -632,12 +634,19 @@ export default function SupCandSinglePaymentIn() {
 
       {/* Details */}
       <div className="row payment_details mt-0">
-        <div className="col-md-12 my-2">
-          {selectedSupplier && (
+      <div className="col-md-12 my-2">
+          <div className="justify-content-between d-flex">
+            <div className="left">
+            {selectedSupplier && (
             <button className="btn detail_btn" onClick={handleOpen}>
               {option ? "Hide Details" : "Show Details"}
             </button>
           )}
+            </div>
+            <div className="right">
+            <button onClick={()=>setShow(!show)} className={`btn shadow btn-sm text-white text-bold ms-1 ${show ?"bg-danger":"bg-success"}`}>{!show ? <i className="fas fa-plus"></i>:<i className="fas fa-trash-alt"></i>}</button>
+            </div>
+          </div>
         </div>
         {option && (
           <div className="col-md-12 detail_table">
@@ -775,6 +784,8 @@ export default function SupCandSinglePaymentIn() {
           </div>
         )}
       </div>
+      {show && <CandPaymmentInOne/>}
+
     </>
   );
 }

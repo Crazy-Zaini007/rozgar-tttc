@@ -20,7 +20,6 @@ const[loading3,setLoading3]=useState(false)
 const[loading4,setLoading4]=useState(false)
 const[protector,setProtector]=useState()
 const[employees,setEmployees]=useState()
-
 const getProtectors=async()=>{
  
   try {
@@ -55,11 +54,6 @@ const getEmployees=async()=>{
     })
 
     const json = await response.json();
-    if (!response.ok) {
-      
-      console.log(json.message)
-
-    }
     if (response.ok) {
       
       setEmployees(json.data); // Dispatch the action with received data
@@ -106,7 +100,7 @@ const fetchData = async () => {
   
   
   const currentDate = new Date().toISOString().split('T')[0];
-  
+  console.log('currentDate',currentDate)
   // Filter payments based on the current date
   const todayPayments =overAllPayments && overAllPayments.filter(payment => payment.date === currentDate);
   

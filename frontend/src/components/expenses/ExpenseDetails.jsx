@@ -20,6 +20,7 @@ export default function ExpenseDetails() {
   const paymentType = useSelector((state) => state.setting.paymentType);
   const expenseCategories = useSelector((state) => state.setting.expenseCategories);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [show, setShow] = useState(false)
 
   
   const { getCurrCountryData } = CurrCountryHook()
@@ -356,7 +357,7 @@ export default function ExpenseDetails() {
                 <div className="right d-flex">
                   {filteredExpenses.length > 0 &&
                     <>
-                      {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                      <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
                     </>
@@ -445,9 +446,11 @@ export default function ExpenseDetails() {
                       <TableCell className='label border'>Slip_No</TableCell>
                       <TableCell className='label border'>Details</TableCell>
                       <TableCell className='label border'>Invoice</TableCell>
+                    {show && <>
                       <TableCell className='label border'>CUR_Country</TableCell>
                       <TableCell className='label border'>CUR_Rate</TableCell>
                       <TableCell className='label border'>CUR_Amount</TableCell>
+                    </>}
                       <TableCell className='label border'>Slip_Pic</TableCell>
                       <TableCell align='left' className='edw_label border' colSpan={1}>
                         Actions
@@ -509,7 +512,8 @@ export default function ExpenseDetails() {
                                 <TableCell className='border data_td p-1 '>
                                   <input type='text' value={editedEntry.invoice} readonly />
                                 </TableCell>
-                                <TableCell className='border data_td p-1 '>
+                                {show && <>
+                                  <TableCell className='border data_td p-1 '>
                                   <select value={editedEntry.curr_Country} onChange={(e) => handleInputChange(e, 'curr_Country')} >
                                     <option value="">choose</option>
                                     {currCountries && currCountries.map((data) => (
@@ -523,6 +527,7 @@ export default function ExpenseDetails() {
                                 <TableCell className='border data_td p-1 '>
                                   <input type='number' min='0' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
                                 </TableCell>
+                                </>}
                                 <TableCell className='border data_td p-1 '>
                                   <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                                 </TableCell>
@@ -551,9 +556,13 @@ export default function ExpenseDetails() {
                                 <TableCell className='border data_td text-center'>{expense?.slip_No}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.details}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.invoice}</TableCell>
+                                {show &&
+                                <>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Country}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Rate}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Amount}</TableCell>
+                                </>
+                                }
                                 <TableCell className='border data_td text-center'>{expense.slip_Pic ? <img src={expense.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                 <TableCell className='border data_td text-center'>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -575,8 +584,7 @@ export default function ExpenseDetails() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'> {filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)}</TableCell>
-                            
+                            <TableCell className='border data_td text-center bg-success text-white'> {filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)}</TableCell>    
                           </TableRow>
                   </TableBody>
                 </Table>

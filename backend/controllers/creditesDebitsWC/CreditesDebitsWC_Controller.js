@@ -3,6 +3,9 @@ const cloudinary = require('../cloudinary')
 const User = require('../../database/userdb/UserSchema')
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
+const Notifications=require('../../database/notifications/NotifyModel.js')
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
+
 const mongoose = require('mongoose')
 const moment = require('moment');
 const addPaymentIn = async (req, res) => {
@@ -28,8 +31,6 @@ const addPaymentIn = async (req, res) => {
             curr_Rate,
             curr_Amount,
             date,
-            open,
-            close
         } = req.body;
 
         let uploadImage;
@@ -40,6 +41,8 @@ const addPaymentIn = async (req, res) => {
         }
 
 
+const newPaymentIn=Number(payment_In)
+const newPaymentOut=Number(payment_Out)
 
         // Check if the supplier already exists
         const existingSupplier = await CDWC.findOne({
@@ -82,13 +85,10 @@ const addPaymentIn = async (req, res) => {
                 invoice: nextInvoiceNumber,
                 curr_Amount,
             });
-            existingSupplier.payment_In_Schema.total_Payment_In += payment_In ? payment_In : 0;
-            existingSupplier.payment_In_Schema.total_Payment_Out += payment_Out ? payment_Out : 0;
-            existingSupplier.payment_In_Schema.balance += payment_In ? payment_In : -payment_Out;
-            existingSupplier.payment_In_Schema.open = open;
-            existingSupplier.payment_In_Schema.close = close;
-
-
+            existingSupplier.payment_In_Schema.total_Payment_In += newPaymentIn ? newPaymentIn : 0;
+            existingSupplier.payment_In_Schema.total_Payment_Out += newPaymentOut ? newPaymentOut : 0;
+            existingSupplier.payment_In_Schema.balance += newPaymentIn ? newPaymentIn : -newPaymentOut;
+           
             const cashInHandDoc = await CashInHand.findOne({});
             if (!cashInHandDoc) {
                 const newCashInHandDoc = new CashInHand();
@@ -100,17 +100,23 @@ const addPaymentIn = async (req, res) => {
             };
 
             if (payment_Via.toLowerCase() === "cash") {
-                cashInHandUpdate.$inc.cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
+                cashInHandUpdate.$inc.cash = newPaymentIn ? newPaymentIn : -newPaymentOut
+                cashInHandUpdate.$inc.total_Cash = newPaymentIn ? newPaymentIn : -newPaymentOut
             }
             else  {
-                cashInHandUpdate.$inc.bank_Cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
+                cashInHandUpdate.$inc.bank_Cash = newPaymentIn ? newPaymentIn : -newPaymentOut
+                cashInHandUpdate.$inc.total_Cash = newPaymentIn ? newPaymentIn : -newPaymentOut
             } 
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
 
             await existingSupplier.save();
 
@@ -179,7 +185,13 @@ const addPaymentIn = async (req, res) => {
                 cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
             } 
             await CashInHand.updateOne({}, cashInHandUpdate);
-
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             await newSupplierEntry.save();
 
             res.status(200).json({ message: `Payment added to ${supplierName}` });
@@ -223,11 +235,11 @@ for(const payment of multiplePayment){
         curr_Rate,
         curr_Amount,
         date,
-        open,
-        close
+       
     } = payment
 
-
+    const newPaymentIn=Number(payment_In)
+    const newPaymentOut=Number(payment_Out)
       
 
         const agents=await CDWC.find({})
@@ -276,11 +288,10 @@ for(const payment of multiplePayment){
                 invoice: nextInvoiceNumber,
                 curr_Amount,
             });
-            existingSupplier.payment_In_Schema.total_Payment_In += payment_In ? payment_In : 0;
-            existingSupplier.payment_In_Schema.total_Payment_Out += payment_Out ? payment_Out : 0;
-            existingSupplier.payment_In_Schema.balance += payment_In ? payment_In : -payment_Out;
-            existingSupplier.payment_In_Schema.open = open;
-            existingSupplier.payment_In_Schema.close = close;
+            existingSupplier.payment_In_Schema.total_Payment_In += newPaymentIn ? newPaymentIn : 0;
+            existingSupplier.payment_In_Schema.total_Payment_Out += newPaymentOut ? newPaymentOut : 0;
+            existingSupplier.payment_In_Schema.balance += newPaymentIn ? newPaymentIn : -newPaymentOut;
+            
 
 
             const cashInHandDoc = await CashInHand.findOne({});
@@ -293,17 +304,23 @@ for(const payment of multiplePayment){
                 $inc: {}
             };
             if (payment_Via.toLowerCase() === "cash") {
-                cashInHandUpdate.$inc.cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
+                cashInHandUpdate.$inc.cash = newPaymentIn ? newPaymentIn : -newPaymentOut
+                cashInHandUpdate.$inc.total_Cash = newPaymentIn ? newPaymentIn : -newPaymentOut
             }
             else {
-                cashInHandUpdate.$inc.bank_Cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
+                cashInHandUpdate.$inc.bank_Cash = newPaymentIn ? newPaymentIn : -newPaymentOut
+                cashInHandUpdate.$inc.total_Cash = newPaymentIn ? newPaymentIn : -newPaymentOut
             } 
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
 
             await existingSupplier.save();
 
@@ -368,7 +385,13 @@ for(const payment of multiplePayment){
                 cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
             } 
             await CashInHand.updateOne({}, cashInHandUpdate);
-
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             await newSupplierEntry.save();
 
         }
@@ -419,7 +442,25 @@ const deleteSinglePaymentIn = async (req, res) => {
 
         try {
 
-
+            let paymentToDelete=existingSupplier.payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+            const newRecycle=new RecycleBin({
+              name:supplierName,
+              type:"CDWC Payment",
+              category:paymentToDelete.category,
+              payment_Via:paymentToDelete.payment_Via,
+              payment_Type:paymentToDelete.payment_Type,
+              slip_No:paymentToDelete.slip_No,
+              payment_In:paymentToDelete.payment_In,
+              payment_Out:paymentToDelete.payment_Out,
+              payment_In_Curr:paymentToDelete.payment_In_Curr,
+              slip_Pic:paymentToDelete.slip_Pic,
+              date:paymentToDelete.date,
+              curr_Rate:paymentToDelete.curr_Rate,
+              curr_Amount:paymentToDelete.curr_Amount,
+              invoice:paymentToDelete.invoice
+    
+            })
+            await newRecycle.save()
 
             await existingSupplier.updateOne({
                 $inc: {
@@ -456,7 +497,13 @@ const deleteSinglePaymentIn = async (req, res) => {
          
 
             await CashInHand.updateOne({}, cashInHandUpdate);
-
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"} deleted`,
+                content:`${user.userName} deleted ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             res.status(200).json({ message: `Payment with ID ${paymentId} deleted successfully from ${supplierName}` })
 
 
@@ -568,7 +615,13 @@ const updateSinglePaymentIn = async (req, res) => {
             await existingSupplier.save();
 
             const updatedSupplier = await CDWC.findById(existingSupplier._id);
-            console.log(updatedSupplier)
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"} updated`,
+                content:`${user.userName} updated ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             res.status(200).json({ message: "Payment details updated successfully", data: updatedSupplier });
         } catch (error) {
             console.error('Error updating payment details:', error);
@@ -672,7 +725,13 @@ const updateSinglePaymentOut = async (req, res) => {
             // Save the updated supplier
 
             await existingSupplier.save();
-
+            const newNotification=new Notifications({
+                type:`CDWC Payment ${payment_In? "In":"Out"} updated`,
+                content:`${user.userName} updated ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             const updatedSupplier = await CDWC.findById(existingSupplier._id);
             console.log(updatedSupplier)
             res.status(200).json({ message: "Payment details updated successfully", data: updatedSupplier });

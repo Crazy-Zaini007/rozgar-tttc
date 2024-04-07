@@ -1418,8 +1418,8 @@ color: var(--accent-lighter-blue);
   font-size: 14px;
 }
 
-/* notifications */
-.notifications select {
+/* reminders */
+.reminders select {
   width: 100%;
   height: 40px;
   border: 1px solid var(--grays-dm-white);
@@ -1434,45 +1434,45 @@ color: var(--accent-lighter-blue);
   text-transform: capitalize;
 }
 
-.notifications select:focus {
+.reminders select:focus {
   outline: none;
   border: 2px solid var(--accent-lighter-blue) !important;
 }
 
- .notifications .toast-header img{
+ .reminders .toast-header img{
   height:20px;
   width:20px;
 }
-.notifications .toast-header h6{
+.reminders .toast-header h6{
   letter-spacing: 1px;
   font-size: 12px;
   display: inline;
   color: black;
 }
- .notifications .toast-header small{
+ .reminders .toast-header small{
   font-size:12px;
   color: var(--accent-lighter-blue);
   font-weight: 500;
   letter-spacing: 1px;
 
 }
- .notifications .toast-header button{
+ .reminders .toast-header button{
 font-size: 10px;
 box-shadow: 0px 0px 10px 1px solid var(--white)
 
 }
- .notifications .toast-body p{
+ .reminders .toast-body p{
 font-size: 12px;
 color: black;
 letter-spacing: 1px;
 font-weight: 500;
 }
-.notifications img{
+.reminders img{
 width: 60%;
 height: 60%;
 }
 
-.notifications p{
+.reminders p{
   font-size: 14px;
   color: var(--black);
   letter-spacing: 1px;

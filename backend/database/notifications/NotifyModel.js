@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
-const NotificationSchema=new mongoose.Schema({
+// Notifications Schema
+const NotifySchema=new mongoose.Schema({
     type:{
         type:String
     },
@@ -12,5 +13,5 @@ const NotificationSchema=new mongoose.Schema({
     }
 },{timestamps:true})
 
-const Notifications = mongoose.model('notification', NotificationSchema)
+const Notifications = mongoose.model('notifications', NotifySchema)
 module.exports = Notifications

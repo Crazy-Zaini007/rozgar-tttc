@@ -6,6 +6,7 @@ const {
     updateSinglePaymentOut,
     addMultiplePaymentsOut,
     deletePaymentOutPerson,
+    updatePaymentOutPerson,
     deleteAgentPaymentOutSchema,
     getAllPaymentsOut
 } = require('../../controllers/protectors/ProtectorController')
@@ -23,6 +24,8 @@ router.patch('/update/single/payment_out', updateSinglePaymentOut)
 router.post('/add/multiple/payment_out', addMultiplePaymentsOut)
 // Deleting a single payments In Person
 router.delete('/delete/person/payment_out', deletePaymentOutPerson)
+router.patch('/payment_out/update/single/person', updatePaymentOutPerson)
+
 // getting all suppliers Payments Out Details
 router.get('/get/payment_out_details', getAllPaymentsOut)
 

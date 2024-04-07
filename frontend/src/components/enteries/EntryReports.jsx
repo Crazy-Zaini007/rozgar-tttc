@@ -222,7 +222,7 @@ const EntryReports = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ name: editedEntry.name, pp_No: editedEntry.pp_No, trade: editedEntry.trade, company: editedEntry.company, contact: editedEntry.contact, country: editedEntry.country, flight_Date: editedEntry.flight_Date, final_Status: editedEntry.final_Status, remarks: editedEntry.remarks, entry_Mode: editedEntry.entry_Mode,reference_Out:editedEntry.reference_Out, reference_Out_Name: editedEntry.reference_Out_Name, visa_Sales_Rate_PKR: editedEntry.visa_Sales_Rate_PKR, visa_Sale_Rate_Oth_Cur: editedEntry.visa_Sale_Rate_Oth_Cur, cur_Country_One: editedEntry.cur_Country_One,reference_In:editedEntry.reference_In, reference_In_Name: editedEntry.reference_In_Name, visa_Purchase_Rate_PKR: editedEntry.visa_Purchase_Rate_PKR, visa_Purchase_Rate_Oth_Cur: editedEntry.visa_Purchase_Rate_Oth_Cur, cur_Country_Two: editedEntry.cur_Country_Two, picture: editedEntry.picture,  visit_Sales_PKR: editedEntry.visit_Sales_PKR, visit_Sales_Rate_Oth_Curr: editedEntry.visit_Sales_Rate_Oth_Curr,  visit_Purchase_Rate_PKR: editedEntry.visit_Purchase_Rate_PKR, visit_Purchase_Rate_Oth_Cur: editedEntry.visit_Purchase_Rate_Oth_Cur,visit_Reference_In:editedEntry.visit_Reference_In, visit_Reference_In_Name: editedEntry.visit_Reference_In_Name,visit_Reference_Out:editedEntry.visit_Reference_Out, visit_Reference_Out_Name: editedEntry.visit_Reference_Out_Name, visit_Section_Picture: editedEntry.visit_Section_Picture, ticket_Sales_PKR: editedEntry.ticket_Sales_PKR, ticket_Sales_Rate_Oth_Cur: editedEntry.ticket_Sales_Rate_Oth_Cur,  ticket_Purchase_PKR: editedEntry.ticket_Purchase_PKR, ticket_Purchase_Rate_Oth_Cur: editedEntry.ticket_Purchase_Rate_Oth_Cur,ticket_Reference_In:editedEntry.ticket_Reference_In, ticket_Reference_In_Name: editedEntry.ticket_Reference_In_Name, ticket_Reference_Out_Name: editedEntry.ticket_Reference_Out_Name, ticket_Section_Picture: editedEntry.ticket_Section_Picture, azad_Visa_Sales_PKR: editedEntry.azad_Visa_Sales_PKR, azad_Visa_Sales_Rate_Oth_Cur: editedEntry.azad_Visa_Sales_Rate_Oth_Cur, azad_Visa_Purchase_PKR: editedEntry.azad_Visa_Purchase_PKR, azad_Visa_Purchase_Rate_Oth_Cur: editedEntry.azad_Visa_Purchase_Rate_Oth_Cur,azad_Visa_Reference_In:editedEntry.azad_Visa_Reference_In, azad_Visa_Reference_In_Name: editedEntry.azad_Visa_Reference_In_Name,azad_Visa_Reference_Out:editedEntry.azad_Visa_Reference_Out, azad_Visa_Reference_Out_Name: editedEntry.azad_Visa_Reference_Out_Name, azad_Visa_Section_Picture: editedEntry.azad_Visa_Section_Picture, protector_Price_In: editedEntry.protector_Price_In,protector_Price_In_Oth_Cur:editedEntry.protector_Price_In_Oth_Cur,protector_Reference_In:editedEntry.protector_Reference_In,protector_Reference_In_Name:editedEntry.protector_Reference_In_Name, protector_Price_Out: editedEntry.protector_Price_Out })
+        body: JSON.stringify({ name: editedEntry.name, pp_No: editedEntry.pp_No, trade: editedEntry.trade, company: editedEntry.company, contact: editedEntry.contact, country: editedEntry.country, flight_Date: editedEntry.flight_Date, final_Status: editedEntry.final_Status, remarks: editedEntry.remarks, entry_Mode: editedEntry.entry_Mode,reference_Out:editedEntry.reference_Out, reference_Out_Name: editedEntry.reference_Out_Name, visa_Sales_Rate_PKR: editedEntry.visa_Sales_Rate_PKR, visa_Sale_Rate_Oth_Cur: editedEntry.visa_Sale_Rate_Oth_Cur, cur_Country_One: editedEntry.cur_Country_One,reference_In:editedEntry.reference_In, reference_In_Name: editedEntry.reference_In_Name, visa_Purchase_Rate_PKR: editedEntry.visa_Purchase_Rate_PKR, visa_Purchase_Rate_Oth_Cur: editedEntry.visa_Purchase_Rate_Oth_Cur, cur_Country_Two: editedEntry.cur_Country_Two, picture: editedEntry.picture,  visit_Sales_PKR: editedEntry.visit_Sales_PKR, visit_Sales_Rate_Oth_Curr: editedEntry.visit_Sales_Rate_Oth_Curr,  visit_Purchase_Rate_PKR: editedEntry.visit_Purchase_Rate_PKR, visit_Purchase_Rate_Oth_Cur: editedEntry.visit_Purchase_Rate_Oth_Cur,visit_Reference_In:editedEntry.visit_Reference_In, visit_Reference_In_Name: editedEntry.visit_Reference_In_Name,visit_Reference_Out:editedEntry.visit_Reference_Out, visit_Reference_Out_Name: editedEntry.visit_Reference_Out_Name, visit_Section_Picture: editedEntry.visit_Section_Picture, ticket_Sales_PKR: editedEntry.ticket_Sales_PKR, ticket_Sales_Rate_Oth_Cur: editedEntry.ticket_Sales_Rate_Oth_Cur,  ticket_Purchase_PKR: editedEntry.ticket_Purchase_PKR, ticket_Purchase_Rate_Oth_Cur: editedEntry.ticket_Purchase_Rate_Oth_Cur,ticket_Reference_In:editedEntry.ticket_Reference_In, ticket_Reference_In_Name: editedEntry.ticket_Reference_In_Name,ticket_Reference_Out:editedEntry.ticket_Reference_Out, ticket_Reference_Out_Name: editedEntry.ticket_Reference_Out_Name, ticket_Section_Picture: editedEntry.ticket_Section_Picture, azad_Visa_Sales_PKR: editedEntry.azad_Visa_Sales_PKR, azad_Visa_Sales_Rate_Oth_Cur: editedEntry.azad_Visa_Sales_Rate_Oth_Cur, azad_Visa_Purchase_PKR: editedEntry.azad_Visa_Purchase_PKR, azad_Visa_Purchase_Rate_Oth_Cur: editedEntry.azad_Visa_Purchase_Rate_Oth_Cur,azad_Visa_Reference_In:editedEntry.azad_Visa_Reference_In, azad_Visa_Reference_In_Name: editedEntry.azad_Visa_Reference_In_Name,azad_Visa_Reference_Out:editedEntry.azad_Visa_Reference_Out, azad_Visa_Reference_Out_Name: editedEntry.azad_Visa_Reference_Out_Name, azad_Visa_Section_Picture: editedEntry.azad_Visa_Section_Picture, protector_Price_In: editedEntry.protector_Price_In,protector_Price_In_Oth_Cur:editedEntry.protector_Price_In_Oth_Cur,protector_Reference_In:editedEntry.protector_Reference_In,protector_Reference_In_Name:editedEntry.protector_Reference_In_Name, protector_Price_Out: editedEntry.protector_Price_Out })
       })
 
       const json = await response.json()
@@ -525,7 +525,7 @@ const EntryReports = () => {
                     <Table stickyHeader>
                       <TableHead>
                         <TableRow className='p-0 m-0'>
-                          <TableCell align="left" className='personel_label border py-2' colSpan={20}>
+                          <TableCell align="left" className='personel_label border py-2' colSpan={21}>
                             Personel Details
                           </TableCell>
 
@@ -557,6 +557,7 @@ const EntryReports = () => {
                           </TableCell>
                         </TableRow>
                         <TableRow>
+                          <TableCell className='label border'>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
                           <TableCell className='label border'>Name</TableCell>
                           <TableCell className='label border'>PP#</TableCell>
@@ -654,6 +655,9 @@ const EntryReports = () => {
                             {editMode && editedRowIndex === index ? (
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
+                               <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index+1} readOnly />
+                              </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.entry_Date} readOnly />
                               </TableCell>
@@ -1658,6 +1662,7 @@ const EntryReports = () => {
                             ) : (
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
+                                <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
                                 <TableCell className='border data_td '>{entry.pp_No}</TableCell>

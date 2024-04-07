@@ -342,7 +342,6 @@ export default function AgnetsReports() {
   <TableCell></TableCell>        
   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
     <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
     {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
       return total + (entry.payment_In || 0); // Use proper conditional check
     }, 0)}

@@ -57,7 +57,6 @@ const Payment_InSchema = new mongoose.Schema(
         },
         trade: {
           type: String,
-
         },
         contact: {
           type: String,

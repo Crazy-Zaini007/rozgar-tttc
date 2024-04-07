@@ -5,7 +5,7 @@ const InvoiceNumber = require("../../database/invoiceNumber/InvoiceNumberSchema"
 const CashInHand = require("../../database/cashInHand/CashInHandSchema");
 const mongoose = require("mongoose");
 const moment = require("moment");
-
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
 // adding an employee
 const addEmployee = async (req, res) => {
@@ -473,6 +473,25 @@ const delSalary = async (req, res) => {
          employee.remaining+=paymentFind.payment_Out
          month.remain+=paymentFind.payment_Out
          await employee.save()
+         
+         const newRecycle=new RecycleBin({
+           name:employee.employeeName,
+           type:"Employee Payment",
+           category:paymentFind.category,
+           payment_Via:paymentFind.payment_Via,
+           payment_Type:paymentFind.payment_Type,
+           slip_No:paymentFind.slip_No,
+           payment_Out:paymentFind.payment_Out,
+           payment_In_Curr:paymentToDelete.payment_In_Curr,
+           slip_Pic:paymentFind.slip_Pic,
+           date:paymentFind.date,
+           curr_Rate:paymentFind.curr_Rate,
+           curr_Amount:paymentFind.curr_Amount,
+           invoice:paymentFind.invoice
+ 
+         })
+         await newRecycle.save()
+
          res.status(200).json({ message: `Payment deleted Successfully !` })
          break
                }

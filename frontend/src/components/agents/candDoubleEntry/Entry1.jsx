@@ -17,6 +17,7 @@ import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import Entry2 from './Entry2'
+
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function Entry1() {
@@ -635,7 +636,6 @@ export default function Entry1() {
             </TableContainer>
           </div>
         )}
-
       </div>
       <Entry2></Entry2>
     </>

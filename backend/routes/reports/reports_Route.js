@@ -20,7 +20,9 @@ const { getAllPayments,
     getTicketCandPayments,
     getVisitSuppPayments,
     getVisitAgentPayments,
-    getVisitCandPayments} = require('../../controllers/allReports/AllReportsController')
+    getVisitCandPayments,
+    getNetVisaReports
+} = require('../../controllers/allReports/AllReportsController')
 const express = require('express');
 const router = express.Router()
 router.use(userAuth)
@@ -33,6 +35,9 @@ router.get('/get/all/employees/payments', getEmployeesPayments)
 
 router.get('/get/all/normal/payments', getNormalPayments)
 router.get('/get/all/advance/payments', getAdvancePayments)
+
+router.get('/get/visa_net_reports', getNetVisaReports)
+
 
 
 

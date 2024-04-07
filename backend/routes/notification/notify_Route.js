@@ -1,11 +1,11 @@
 const express = require('express');
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const {getNotifications,deleteNotification}=require('../../controllers/notifications/notifyController')
+const {getNotification,deleteNotification}=require('../../controllers/notifications/notify_Controller')
 
 const router = express.Router()
 router.use(userAuth)
 
-router.get('/get/notification', getNotifications)
+router.get('/get/notifications', getNotification)
 router.delete('/delete/notification', deleteNotification)
 
 module.exports = router

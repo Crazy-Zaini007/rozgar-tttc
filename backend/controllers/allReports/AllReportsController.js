@@ -14,6 +14,9 @@ const Employees = require("../../database/employees/EmployeeSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
 const CDWC = require("../../database/creditsDebitsWC/CDWCSchema");
 const CDWOC = require("../../database/creditsDebitsWOC/CDWOCSchema");
+const Enteries =require('../../database/enteries/EntrySchema')
+const Assets=require('../../database/assets/AssetsSchema')
+
 // Controller to get all payments with supplierName
 const getAllPayments = async (req, res) => {
   try {
@@ -478,7 +481,7 @@ const getEmployeesPayments = async (req, res) => {
         );
         mergedPayments = mergedPayments.concat(employeePayments);
       }
-    });
+    })
 
     // Send the resulting mergedPayments array in the response
     res.status(200).json({ data: mergedPayments });
@@ -704,12 +707,15 @@ const getTotalPayments = async (req, res) => {
       }
     }
 
-    for (const employee of employees) {
-      if (employee.payment) {
-        const payments = employee.payment;
-        if (payments) {
-          for (const payment of payments) {
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
             totalPaymentOut += payment.payment_Out;
+            }
           }
         }
       }
@@ -769,6 +775,8 @@ const getTotalAdvancePayments = async (req, res) => {
       { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
+
     ];
 
     // Initialize total advance payment for payment_In
@@ -852,6 +860,7 @@ const getTotalAdvancePayments = async (req, res) => {
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" }
     ];
 
     const employees = await Employees.find();
@@ -878,13 +887,17 @@ const getTotalAdvancePayments = async (req, res) => {
       }
     }
 
-    for (const employee of employees) {
-      if (employee.payment) {
-        const payments = employee.payment;
-        if (payments) {
-          for (const payment of payments) {
-            if (payment.payment_Type.toLowerCase() === "advance") {
-              totalAdvancePaymentOut += payment.payment_Out;
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              if(payment.payment_Type.toLowerCase() === "advance"){
+            totalAdvancePaymentOut += payment.payment_Out;
+               
+              }
             }
           }
         }
@@ -925,16 +938,17 @@ const getTotalAdvancePayments = async (req, res) => {
       }
     }
 
-    for (const employee of employees) {
-      if (employee.payment) {
-        const payments = employee.payment;
-        if (payments) {
-          for (const payment of payments) {
-            if (
-              payment.payment_Type.toLowerCase() === "advance" &&
-              payment.date === currentDate
-            ) {
-              todayAdvancePaymentOut += payment.payment_Out;
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              if(payment.payment_Type.toLowerCase() === "advance" && payment.date===currentDate){
+                todayAdvancePaymentOut += payment.payment_Out;
+               
+              }
             }
           }
         }
@@ -980,6 +994,21 @@ const getTotalAdvancePayments = async (req, res) => {
           for (const payment of payments) {
             if (payment.date === currentDate) {
               todayCashOut += payment.payment_Out;
+            }
+          }
+        }
+      }
+    }
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              if (payment.date === currentDate) {
+                todayCashOut += payment.payment_Out;
+              }
             }
           }
         }
@@ -1044,6 +1073,7 @@ const getAllPaymentsByDate = async (req, res) => {
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
     ];
 
     // Array of collections to query for payment_Out
@@ -1064,7 +1094,9 @@ const getAllPaymentsByDate = async (req, res) => {
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
-    ];
+      { model: Assets, schemaType: "payment_In_Schema" },
+
+    ]
 
     // Initialize object to store payments grouped by the same date
     const paymentsByDate = {};
@@ -1155,18 +1187,23 @@ const getAllPaymentsByDate = async (req, res) => {
     // Process payments for Expenses schema
     const employeesPayments = await Employees.find();
     for (const employee of employeesPayments) {
-      if (employee.payment) {
-        for (const payment of employee.payment) {
-          const paymentDate = payment.date;
-          if (!paymentsByDate[paymentDate]) {
-            paymentsByDate[paymentDate] = {
-              date: paymentDate,
-              total_payment_in: 0,
-              total_payment_out: 0,
-            };
+      if (employee.payments) {
+        const allMonths = employee.payments;
+        for (const month of allMonths) {
+          if (month.payment && month.payment.length > 0) {
+            const payments = month.payment;
+            for (const payment of payments) {
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_out += payment.payment_Out || 0;
+            }
           }
-          paymentsByDate[paymentDate].total_payment_out +=
-            payment.payment_Out || 0;
         }
       }
     }
@@ -1214,6 +1251,8 @@ const getAllBanksPayments = async (req, res) => {
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
+
     ];
 
     // Array of collections to query for payment_Out
@@ -1234,6 +1273,7 @@ const getAllBanksPayments = async (req, res) => {
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
     ];
 
     // Initialize objects to store combined payments in and out separately
@@ -1248,7 +1288,7 @@ const getAllBanksPayments = async (req, res) => {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
             const paymentVia = payment.payment_Via;
-            if (paymentVia.toLowerCase() !== "cash") {
+            if (paymentVia.toLowerCase() !== "cash" && payment.payment_In>0) {
               if (!combinedPaymentsIn[paymentVia]) {
                 combinedPaymentsIn[paymentVia] = 0;
               }
@@ -1267,7 +1307,7 @@ const getAllBanksPayments = async (req, res) => {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
             const paymentVia = payment.payment_Via;
-            if (paymentVia.toLowerCase() !== "cash") {
+            if (paymentVia.toLowerCase() !== "cash" && payment.payment_Out>0) {
               // Ignore cash payments
 
               if (!combinedPaymentsOut[paymentVia]) {
@@ -1382,7 +1422,7 @@ const getNormalPayments = async (req, res) => {
       return;
     }
 
-    const normalPayments = [];
+    const normalPayments = new Set();
     // Array of collections to query for payment_In
     const inCollections = [
       { model: Agents, schemaType: "payment_In_Schema" },
@@ -1399,8 +1439,49 @@ const getNormalPayments = async (req, res) => {
       { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
+
     ];
 
+
+    const assets=await Assets.find({})
+    const cdwcs=await CDWC.find({})
+    const cdwocs=await CDWOC.find({})
+
+
+    for (const asset of assets){
+      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+        const payments=asset.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
+            normalPayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwc of cdwcs){
+      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+        const payments=cdwc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
+            normalPayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwoc of cdwocs){
+      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+        const payments=cdwoc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
+            normalPayments.add(payment);
+
+          }
+        }
+      }
+    }
     // Initialize total advance payment for payment_In
 
     // Process payments for each schema for payment_In
@@ -1413,7 +1494,7 @@ const getNormalPayments = async (req, res) => {
           for (const payment of item[schemaType].payment) {
             // Check if payment type is "Advance"
             if (payment.payment_Type.toLowerCase() === "normal") {
-              normalPayments.push(payment);
+              normalPayments.add(payment);
             }
           }
         }
@@ -1437,11 +1518,45 @@ const getNormalPayments = async (req, res) => {
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
+
     ];
 
-    const employees = await Employees.find();
-    const expenses = await Expenses.find();
 
+    
+    for (const asset of assets){
+      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+        const payments=asset.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
+            normalPayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwc of cdwcs){
+      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+        const payments=cdwc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
+            normalPayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwoc of cdwocs){
+      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+        const payments=cdwoc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
+            normalPayments.add(payment);
+
+          }
+        }
+      }
+    }
     // Initialize total advance payment for payment_Out
 
     // Process payments for each schema for payment_Out
@@ -1454,34 +1569,42 @@ const getNormalPayments = async (req, res) => {
           for (const payment of item[schemaType].payment) {
             // Check if payment type is "Advance"
             if (payment.payment_Type.toLowerCase() === "normal") {
-              normalPayments.push(payment);
+              normalPayments.add(payment);
             }
           }
         }
       }
     }
 
- 
-    // Initialize total advance payment for payment_In
 
-    // Process payments for each schema for payment_In
-    for (const { model, schemaType } of outCollections) {
-      const items = await model.find();
+    const expenses=await Expenses.find({})
+    for (const expense of expenses){
+      if (expense.payment_Type.toLowerCase()==='normal'){
+        normalPayments.add(expense);
+      }
+    }
 
-      for (const item of items) {
-        // Check if the payment schema exists and has the expected structure
-        if (item[schemaType] && item[schemaType].payment) {
-          for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "normal") {
-              normalPayments.push(payment);
+    const employees=await Employees.find({})
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              if(payment.payment_Type.toLowerCase() === "normal"){
+                normalPayments.add(payment)
+              }
             }
           }
         }
       }
     }
+
+    const totalNormalPayments = [...normalPayments];
+
     // Send the resulting total advance payments in the response
-    res.status(200).json({ data: normalPayments });
+    res.status(200).json({ data: totalNormalPayments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -1489,7 +1612,6 @@ const getNormalPayments = async (req, res) => {
 };
 
 // Getting all Advance payments
-
 const getAdvancePayments = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -1505,7 +1627,7 @@ const getAdvancePayments = async (req, res) => {
       return;
     }
 
-    const advancePayments = [];
+    const advancePayments = new Set();
     // Array of collections to query for payment_In
     const inCollections = [
       { model: Agents, schemaType: "payment_In_Schema" },
@@ -1520,9 +1642,47 @@ const getAdvancePayments = async (req, res) => {
       { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
       { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
       { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
+      
     ];
+
+    const assets=await Assets.find({})
+    const cdwcs=await CDWC.find({})
+    const cdwocs=await CDWOC.find({})
+
+
+    for (const asset of assets){
+      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+        const payments=asset.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
+            advancePayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwc of cdwcs){
+      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+        const payments=cdwc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
+            advancePayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwoc of cdwocs){
+      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+        const payments=cdwoc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
+            advancePayments.add(payment);
+
+          }
+        }
+      }
+    }
 
     // Initialize total advance payment for payment_In
 
@@ -1536,7 +1696,7 @@ const getAdvancePayments = async (req, res) => {
           for (const payment of item[schemaType].payment) {
             // Check if payment type is "Advance"
             if (payment.payment_Type.toLowerCase() === "advance") {
-              advancePayments.push(payment);
+              advancePayments.add(payment);
             }
           }
         }
@@ -1558,11 +1718,45 @@ const getAdvancePayments = async (req, res) => {
       { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
       { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
       { model: Protector, schemaType: "payment_Out_Schema" },
-      { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
+      
     ];
 
-    // Initialize total advance payment for payment_Out
+    
+
+    
+    for (const asset of assets){
+      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+        const payments=asset.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
+            advancePayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwc of cdwcs){
+      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+        const payments=cdwc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
+            advancePayments.add(payment);
+
+          }
+        }
+      }
+    }
+    for (const cdwoc of cdwocs){
+      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+        const payments=cdwoc.payment_In_Schema.payment
+        for (const payment of payments){
+          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
+            advancePayments.add(payment);
+
+          }
+        }
+      }
+    }
 
     // Process payments for each schema for payment_Out
     for (const { model, schemaType } of outCollections) {
@@ -1574,7 +1768,7 @@ const getAdvancePayments = async (req, res) => {
           for (const payment of item[schemaType].payment) {
             // Check if payment type is "Advance"
             if (payment.payment_Type.toLowerCase() === "advance") {
-              advancePayments.push(payment);
+              advancePayments.add(payment);
             }
           }
         }
@@ -1583,29 +1777,42 @@ const getAdvancePayments = async (req, res) => {
 
     // Initialize total advance payment for payment_In
 
-    // Process payments for each schema for payment_In
-    for (const { model, schemaType } of outCollections) {
-      const items = await model.find();
+    
 
-      for (const item of items) {
-        // Check if the payment schema exists and has the expected structure
-        if (item[schemaType] && item[schemaType].payment) {
-          for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "advance") {
-              advancePayments.push(payment);
+    const expenses=await Expenses.find({})
+    for (const expense of expenses){
+      if (expense.payment_Type.toLowerCase()==='advance'){
+        advancePayments.add(expense);
+      }
+    }
+
+    const employees=await Employees.find({})
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              if(payment.payment_Type.toLowerCase() === "advance"){
+               advancePayments.add(payment)
+              }
             }
           }
         }
       }
     }
+
+    const totalAdvancePayments = [...advancePayments];
+
     // Send the resulting total advance payments in the response
-    res.status(200).json({ data: advancePayments });
+    res.status(200).json({ data: totalAdvancePayments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
 // Controller to get all payments with supplierName
 const getAgentsPayments = async (req, res) => {
   try {
@@ -2197,7 +2404,7 @@ const getVisitAgentPayments = async (req, res) => {
       return;
     }
 
-    if (!user.role === "Admin") {
+    if (user) {
       res.status(404).json({ message: "you are not Admin" });
       return;
     }
@@ -2306,6 +2513,152 @@ const getVisitCandPayments = async (req, res) => {
 }
 
 
+// Getting Net visa Reports
+
+const getNetVisaReports=async(req,res)=>{
+
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    if(user){
+      const enteries=await Enteries.find({})
+      const agents=await Agents.find({})
+      const suppliers =await Suppliers.find({})
+      const candidates =await Candidates.find({})
+
+      let allEntries=[]
+      for (const entry of enteries){
+       
+        for (const agent of agents){
+          if (agent.payment_In_Schema && agent.payment_In_Schema.persons){
+            const persons=agent.payment_In_Schema.persons
+            for (const person of persons){
+              if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+                const newEntry = {
+                  ...entry.toObject(),
+                  type:"AGENT_IN",
+                  cash_In: person.total_In,
+                  cash_Out:person.cash_Out,
+                  total_In:person.total_In-person.cash_Out,
+                  remaining:person.remaining_Price,
+                };
+                
+                allEntries.push(newEntry);
+
+              }
+            }
+          }
+          if (agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
+            const persons=agent.payment_Out_Schema.persons
+            for (const person of persons){
+              if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+                const newEntry = {
+                  ...entry.toObject(),
+                  type:"AGENT_OUT",
+                  cash_In: person.total_In,
+                  cash_Out:person.cash_Out,
+                  total_In:person.total_In-person.cash_Out,
+                  remaining:person.remaining_Price
+                };
+                
+                allEntries.push(newEntry);
+              }
+            }
+          }
+        }
+
+        // in Suppliers
+        for (const supplier of suppliers){
+          if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
+            const persons=supplier.payment_In_Schema.persons
+            for (const person of persons){
+              if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+                const newEntry = {
+                  ...entry.toObject(),
+                  type:"SUPPLIER_IN",
+                  cash_In: person.total_In,
+                  cash_Out:person.cash_Out,
+                  total_In:person.total_In-person.cash_Out,
+                  remaining:person.remaining_Price,
+                };
+                // Push the new entry to the allEntries array
+                allEntries.push(newEntry);
+
+              }
+            }
+          }
+          if (supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
+            const persons=supplier.payment_Out_Schema.persons
+            for (const person of persons){
+              if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+                const newEntry = {
+                  ...entry.toObject(),
+                  type:"SUPPLIER_OUT",
+                  cash_In: person.total_In,
+                  cash_Out:person.cash_Out,
+                  total_In:person.total_In-person.cash_Out,
+                  remaining:person.remaining_Price
+                };
+              
+                allEntries.push(newEntry);
+              }
+            }
+          }
+        }
+
+        // For Candidates
+        for (const candidate of candidates){
+          if (candidate.payment_In_Schema ){
+            
+            
+              if(candidate.payment_In_Schema?.supplierName?.toLowerCase()===entry?.name?.toLowerCase() && candidate.payment_In_Schema?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && candidate.payment_In_Schema?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+                const newEntry = {
+                  ...entry.toObject(),
+                  type:"CANDIDATE_IN",
+                  cash_In: candidate.payment_In_Schema.total_Payment_In,
+                  cash_Out:candidate.payment_In_Schema.total_Cash_Out,
+                  total_In:candidate.payment_In_Schema.total_Payment_In-candidate.payment_In_Schema.total_Cash_Out,
+                  remaining:candidate.payment_In_Schema.remaining_Balance
+                };
+                
+                allEntries.push(newEntry);
+
+              }
+            
+          }
+          if (candidate.payment_Out_Schema ){
+            
+           
+              if(candidate.payment_Out_Schema?.supplierName?.toLowerCase()===entry?.name?.toLowerCase() && candidate.payment_Out_Schema?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && candidate.payment_Out_Schema?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+                const newEntry = {
+                  ...entry.toObject(),
+                  type:"CANDIDATE_OUT",
+                  cash_In: candidate.payment_Out_Schema.total_Payment_Out,
+                  cash_Out:candidate.payment_Out_Schema.total_Cash_Out,
+                  total_In:candidate.payment_Out_Schema.total_Payment_Out-candidate.payment_Out_Schema.total_Cash_Out,
+                  remaining:candidate.payment_Out_Schema.remaining_Balance
+                };
+                
+                allEntries.push(newEntry);
+              }
+            
+          }
+        }
+      }
+      res.status(200).json({data:allEntries})
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message});
+    
+  }
+
+}
+
 
 
 module.exports = {
@@ -2330,5 +2683,6 @@ module.exports = {
   getTicketCandPayments,
   getVisitSuppPayments,
   getVisitAgentPayments,
-  getVisitCandPayments
+  getVisitCandPayments,
+  getNetVisaReports
 };

@@ -120,7 +120,7 @@ import AzadReports from './components/all_Reports/azadReports/AzadReoprts.jsx'
 import TicketReports from './components/all_Reports/ticketReports/TicketReoprts.jsx'
 import VisitReports from './components/all_Reports/visitReports/VisitReports.jsx'
 import EmployeeReports from './components/all_Reports/EmployeeReports.jsx'
-
+import NetVisaReports from './components/all_Reports/NetVisaReports.jsx'
 
 import DayBook from './components/all_Reports/DayBook.jsx'
 import User from './components/user/User.jsx'
@@ -133,8 +133,13 @@ import EmployeeDetails from './components/employee/EmployeeDetails.jsx'
 import AddSalaryMonth from './components/employee/AddSalaryMonth.jsx'
 
 
-// Notifications
+// Reminders
+import Reminders from './components/Reminders.jsx'
+//Notes
 import Notifications from './components/Notifications.jsx'
+
+//Recycle Bin
+import RecycleBin from './components/RecycleBin.jsx'
 //Notes
 import Notes from './components/Notes.jsx'
 
@@ -273,7 +278,7 @@ function App() {
           <Route path='/rozgar/reports/visitVisa_reports' element={user && <VisitReports></VisitReports>}></Route>
           <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeReports></EmployeeReports>}></Route>
           <Route path='/rozgar/reports/day_book' element={user && <DayBook></DayBook>}></Route>
-          
+          <Route path='/rozgar/reports/net_visa_reports' element={user && <NetVisaReports></NetVisaReports>}></Route>
           {/* Employee Routes */}
           <Route path='/rozgar/employees/add' element={user && <AddEmployee></AddEmployee>}></Route>
           <Route path='/rozgar/employees/add_payment' element={user && <AddPayment></AddPayment>}></Route>
@@ -282,8 +287,14 @@ function App() {
           <Route path='/rozgar/employees/salary_month' element={user && <AddSalaryMonth></AddSalaryMonth>}></Route>
 
 
+          {/* Reminders */}
+          <Route path='/rozgar/reminders' element={user && <Reminders></Reminders>}></Route>
           {/* Notifications */}
+
           <Route path='/rozgar/notifications' element={user && <Notifications></Notifications>}></Route>
+{/* Recycle Bin */}
+
+<Route path='/rozgar/recyclebin' element={user && <RecycleBin></RecycleBin>}></Route>
           {/* Notes */}
           <Route path='/rozgar/notes' element={user && <Notes></Notes>}></Route>
 

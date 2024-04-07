@@ -11,7 +11,10 @@ const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchem
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
-const Notifications = require("../../database/notifications/NotificationModel.js");
+const Reminders = require("../../database/reminders/RemindersModel");
+const Notifications=require('../../database/notifications/NotifyModel.js')
+const Backup=require('../../database/backup/BackupModel.js')
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
 const InvoiceNumber = require("../../database/invoiceNumber/InvoiceNumberSchema");
 const CashInHand = require("../../database/cashInHand/CashInHandSchema");
@@ -165,15 +168,35 @@ const addAzadCandPaymentIn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
-
-          const updatedSupplier = await AzadCandidate.findById(
-            existingSupplier._id
-          );
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            payment_In: newPaymentIn,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_In_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+              })
+              await newBackup.save()
+              const newNotification=new Notifications({
+                type:"Azad Candidate Payment In",
+                content:`${user.userName} added Payment_In: ${payment_In} of Azad Candidate: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
+      
 
           res
             .status(200)
             .json({
-              data: updatedSupplier,
+              
               message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.Candidate_Payment_In_Schema.supplierName}'s Record`,
             });
         } catch (error) {
@@ -338,6 +361,29 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
         }
 
         await CashInHand.updateOne({}, cashInHandUpdate);
+        const newBackup=new Backup({
+          name: supplierName,
+          category:category,
+          payment_Via:payment_Via,
+          payment_Type:payment_Type,
+          slip_No: slip_No ? slip_No : '',
+          payment_In: newPaymentIn,
+          slip_Pic: uploadImage?.secure_url || '',
+          details:details,
+          payment_In_Curr: curr_Country ? curr_Country : "",
+          curr_Rate: curr_Rate ? curr_Rate : 0,
+          curr_Amount: newCurrAmount ? newCurrAmount : 0,
+          date:new Date().toISOString().split("T")[0],
+          invoice: nextInvoiceNumber,
+            })
+            await newBackup.save()
+            const newNotification=new Notifications({
+              type:"Azad Candidate Payment In",
+              content:`${user.userName} added Payment_In: ${payment_In} of Azad Candidate: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
       }
 
       res.status(200).json({
@@ -381,10 +427,9 @@ const addAzadCandPaymentInReturn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          open,
           close,
           date,
-          cand_Name,
+        
         } = req.body;
         if (!supplierName) {
           return res.status(400).json({ message: "supplier Name is required" });
@@ -504,7 +549,31 @@ const addAzadCandPaymentInReturn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            cash_Out: newCashOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_In_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+  
+              })
+              await newBackup.save()
 
+              const newNotification=new Notifications({
+                type:"Azad Candidate Payment In Return",
+                content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Candidate: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
           const updatedSupplier = await AzadCandidate.findById(
             existingSupplier._id
           );
@@ -565,6 +634,25 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
 
     try {
       // Add this line for logging
+      let paymentToDelete=existingSupplier.Candidate_Payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+      const newRecycle=new RecycleBin({
+        name:supplierName,
+        type:"Azad Candidate Payment In",
+        category:paymentToDelete.category,
+        payment_Via:paymentToDelete.payment_Via,
+        payment_Type:paymentToDelete.payment_Type,
+        slip_No:paymentToDelete.slip_No,
+        payment_In:paymentToDelete.payment_In,
+        cash_Out:paymentToDelete.cash_Out,
+        payment_In_Curr:paymentToDelete.payment_In_Curr,
+        slip_Pic:paymentToDelete.slip_Pic,
+        date:paymentToDelete.date,
+        curr_Rate:paymentToDelete.curr_Rate,
+        curr_Amount:paymentToDelete.curr_Amount,
+        invoice:paymentToDelete.invoice
+
+      })
+      await newRecycle.save()
 
       await existingSupplier.updateOne({
         $inc: {
@@ -604,6 +692,13 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
       }
 
       await CashInHand.updateOne({}, cashInHandUpdate);
+      const newNotification=new Notifications({
+        type:"Azad Candidate Payment In Deleted",
+        content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Azad Candidate: ${supplierName}`,
+        date: new Date().toISOString().split("T")[0]
+
+      })
+      await newNotification.save()
       const updatedSupplier = await AzadCandidate.findById(
         existingSupplier._id
       );
@@ -738,18 +833,23 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
       paymentToUpdate.date = date;
 
       // Save the updated supplier
+      const newNotification=new Notifications({
+        type:"Azad Candidate Payment In Updated",
+        content:`${user.userName} updated Payment_In: ${payment_In} of Azad Candidate: ${supplierName}`,
+        date: new Date().toISOString().split("T")[0]
+
+      })
+      await newNotification.save()
 
       await existingSupplier.save();
 
-      const updatedSupplier = await AzadCandidate.findById(
-        existingSupplier._id
-      );
-      console.log(updatedSupplier);
+     
+    
       res
         .status(200)
         .json({
           message: "Payment In details updated successfully",
-          data: updatedSupplier,
+         
         });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -869,35 +969,35 @@ const updateAgentTotalPaymentIn = async (req, res) => {
           final_Status.toLowerCase() === "offer letter" ||
           final_Status.toLowerCase() === "offer_letter"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Offer Letter",
             content: `${name}'s Final Status is updated to Offer Letter.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         if (
           final_Status.toLowerCase() === "e number" ||
           final_Status.toLowerCase() === "e_number"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "E Number",
             content: `${name}'s Final Status is updated to E Number.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         if (
           final_Status.toLowerCase() === "qvc" ||
           final_Status.toLowerCase() === "q_v_c"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "QVC",
             content: `${name}'s Final Status is updated to QVC.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         if (
           final_Status.toLowerCase() === "visa issued" ||
@@ -905,35 +1005,35 @@ const updateAgentTotalPaymentIn = async (req, res) => {
           final_Status.toLowerCase() === "vissa issued" ||
           final_Status.toLowerCase() === "vissa_issued"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Visa Issued",
             content: `${name}'s Final Status is updated to Visa Issued.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         if (
           final_Status.toLowerCase() === "ptn" ||
           final_Status.toLowerCase() === "p_t_n"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "PTN",
             content: `${name}'s Final Status is updated to PTN.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         if (
           final_Status.toLowerCase() === "ticket" ||
           final_Status.toLowerCase() === "tiket"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Ticket",
             content: `${name}'s Final Status is updated to Ticket.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         entryMode = azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode;
@@ -1681,7 +1781,29 @@ const addAzadCandPaymentOut = async (req, res) => {
           const updatedSupplier = await AzadCandidate.findById(
             existingSupplier._id
           );
-
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            payment_Out: newPaymentOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+              })
+              await newBackup.save()
+              const newNotification=new Notifications({
+                type:"Azad Candidate Payment Out",
+                content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Candidate: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
           res
             .status(200)
             .json({
@@ -1727,7 +1849,6 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-    
           close,
           date,
          
@@ -1853,6 +1974,30 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
 
           await CashInHand.updateOne({}, cashInHandUpdate);
 
+          const newBackup=new Backup({
+            name: supplierName,
+            category:category,
+            payment_Via:payment_Via,
+            payment_Type:payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            cash_Out: newCashOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details:details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+              })
+                   await newBackup.save()
+        
+              const newNotification=new Notifications({
+                type:"Azad Candidate Payment Out Return",
+                content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Candidate: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
           const updatedSupplier = await AzadCandidate.findById(
             existingSupplier._id
           );
@@ -1912,6 +2057,25 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
     const newPaymentOut = payment_Out - cash_Out;
 
     try {
+      let paymentToDelete=existingSupplier.Candidate_Payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+      const newRecycle=new RecycleBin({
+        name:supplierName,
+        type:"Azad Candidate Payment Out",
+        category:paymentToDelete.category,
+        payment_Via:paymentToDelete.payment_Via,
+        payment_Type:paymentToDelete.payment_Type,
+        slip_No:paymentToDelete.slip_No,
+        payment_Out:paymentToDelete.payment_Out,
+        cash_Out:paymentToDelete.cash_Out,
+        payment_Out_Curr:paymentToDelete.payment_Out_Curr,
+        slip_Pic:paymentToDelete.slip_Pic,
+        date:paymentToDelete.date,
+        curr_Rate:paymentToDelete.curr_Rate,
+        curr_Amount:paymentToDelete.curr_Amount,
+        invoice:paymentToDelete.invoice
+
+      })
+      await newRecycle.save()
       // Update total_Visa_Price_In_PKR and other fields using $inc
       await existingSupplier.updateOne({
         $inc: {
@@ -1951,7 +2115,13 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
       }
 
       await CashInHand.updateOne({}, cashInHandUpdate);
+      const newNotification=new Notifications({
+        type:"Azad Candidate Payment Out Deleted",
+        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Azad Candidate: ${supplierName}`,
+        date: new Date().toISOString().split("T")[0]
 
+      })
+      await newNotification.save()
       const updatedSupplier = await AzadCandidate.findById(
         existingSupplier._id
       );
@@ -2086,6 +2256,13 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
 
       // Save the updated supplier
       await existingSupplier.save();
+      const newNotification=new Notifications({
+        type:"Azad Candidate Payment Out Updated",
+        content:`${user.userName} updated Payment_Out: ${payment_Out} of Azad Candidate: ${supplierName}`,
+        date: new Date().toISOString().split("T")[0]
+
+      })
+      await newNotification.save()
 
       const updatedSupplier = await AzadCandidate.findById(
         existingSupplier._id
@@ -2264,6 +2441,29 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
           cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
         }
         await CashInHand.updateOne({}, cashInHandUpdate);
+        const newBackup=new Backup({
+          name: supplierName,
+          category:category,
+          payment_Via:payment_Via,
+          payment_Type:payment_Type,
+          slip_No: slip_No ? slip_No : '',
+          payment_Out: newPaymentOut,
+          slip_Pic: uploadImage?.secure_url || '',
+          details:details,
+          payment_Out_Curr: curr_Country ? curr_Country : "",
+          curr_Rate: curr_Rate ? curr_Rate : 0,
+          curr_Amount: newCurrAmount ? newCurrAmount : 0,
+          date:new Date().toISOString().split("T")[0],
+          invoice: nextInvoiceNumber,
+            })
+            await newBackup.save()
+            const newNotification=new Notifications({
+              type:"Azad Candidate Payment Out",
+              content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Candidate: ${supplierName}`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
       }
 
       res
@@ -2388,35 +2588,35 @@ const updateAgentTotalPaymentOut = async (req, res) => {
           final_Status.toLowerCase() === "offer letter" ||
           final_Status.toLowerCase() === "offer_letter"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Offer Letter",
             content: `${name}'s Final Status is updated to Offer Letter.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         if (
           final_Status.toLowerCase() === "e number" ||
           final_Status.toLowerCase() === "e_number"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "E Number",
             content: `${name}'s Final Status is updated to E Number.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         if (
           final_Status.toLowerCase() === "qvc" ||
           final_Status.toLowerCase() === "q_v_c"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "QVC",
             content: `${name}'s Final Status is updated to QVC.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         if (
           final_Status.toLowerCase() === "visa issued" ||
@@ -2424,35 +2624,35 @@ const updateAgentTotalPaymentOut = async (req, res) => {
           final_Status.toLowerCase() === "vissa issued" ||
           final_Status.toLowerCase() === "vissa_issued"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Visa Issued",
             content: `${name}'s Final Status is updated to Visa Issued.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
         if (
           final_Status.toLowerCase() === "ptn" ||
           final_Status.toLowerCase() === "p_t_n"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "PTN",
             content: `${name}'s Final Status is updated to PTN.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         if (
           final_Status.toLowerCase() === "ticket" ||
           final_Status.toLowerCase() === "tiket"
         ) {
-          const newNotification = new Notifications({
+          const newReminder = new Reminders({
             type: "Ticket",
             content: `${name}'s Final Status is updated to Ticket.`,
             date: new Date().toISOString().split("T")[0],
           });
-          await newNotification.save();
+          await newReminder.save();
         }
 
         entryMode = azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode;

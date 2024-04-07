@@ -809,7 +809,7 @@ export default function AgentPaymentOutDetails() {
         cash_Out: payment.cash_Out,
         invoice: payment.invoice,
         candidate_Name: payment.cand_Name,
-        payment_In_Curr: payment.payment_In_Curr,
+        payment_Out_Curr: payment.payment_Out_Curr,
         curr_Rate: payment.curr_Rate,
         curr_Amount: payment.curr_Amount
       };
@@ -1499,6 +1499,37 @@ export default function AgentPaymentOutDetails() {
                         }, 0);
                       }, 0)}
                     </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    {show2 && <>
+                      <TableCell className='border data_td text-center bg-warning text-white'>
+                      
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Rate);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
 
                   </TableRow>
 

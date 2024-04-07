@@ -1314,6 +1314,37 @@ export default function AzadVisaCandPaymentOutDetails() {
             }, 0);
           }, 0)}
         </TableCell>
+        <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    {show2 && <>
+                      <TableCell className='border data_td text-center bg-warning text-white'>
+                      
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Rate);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
                             
                           </TableRow>
 

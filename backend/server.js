@@ -47,9 +47,14 @@ const Protectors =require('./routes/protectors/protector_Route')
 const Employees =require('./routes/employees/employee_Route')
 
 
-// Notifications
-const Notifications=require('./routes/notifications/notify_Route')
+// Reminders
+const Reminders=require('./routes/reminders/reminder_Route')
 
+// Notifications
+const Notifications=require('./routes/notification/notify_Route')
+
+// RecycleBin
+const RecycleBin=require('./routes/recyclebin/recyclebin_Route')
 // Notes
 const Notes =require('./routes/notes/note_Route')
 
@@ -135,13 +140,19 @@ app.use('/auth/protectors',Protectors)
 // Employees
 app.use('/auth/employees',Employees)
 
-// Notifications
-app.use('/auth/notifications',Notifications)
+// Reminders
+app.use('/auth/reminders',Reminders)
 // Notes
 app.use('/auth/notes',Notes)
 
 // Backup
 app.use('/auth/backup',Backup)
+
+// Notifications
+app.use('/auth/notifications',Notifications)
+
+// RecycleBin
+app.use('/auth/recyclebin',RecycleBin)
 
 // Assets
 app.use('/auth/assets',Assets)

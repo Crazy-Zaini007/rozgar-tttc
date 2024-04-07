@@ -3,6 +3,8 @@ const User = require('../../database/userdb/UserSchema')
 const Expenses = require('../../database/expenses/ExpenseSchema')
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
+
 const mongoose = require('mongoose')
 //Adding a new Expense
 const addExpense = async (req, res) => {
@@ -285,6 +287,23 @@ const delExpense = async (req, res) => {
 
 
             await CashInHand.updateOne({}, cashInHandUpdate);
+
+            const newRecycle=new RecycleBin({
+                name:expenseToDelete.name,
+                type:"Expenses Payment",
+                category:expenseToDelete.expCategory,
+                payment_Via:expenseToDelete.payment_Via,
+                payment_Type:expenseToDelete.payment_Type,
+                slip_No:expenseToDelete.slip_No,
+                payment_Out:expenseToDelete.payment_Out,
+                slip_Pic:expenseToDelete.slip_Pic,
+                date:expenseToDelete.date,
+                curr_Rate:expenseToDelete.curr_Rate,
+                curr_Amount:expenseToDelete.curr_Amount,
+                invoice:expenseToDelete.invoice
+      
+              })
+              await newRecycle.save()
 
             await Expenses.findByIdAndDelete(expenseId)
 

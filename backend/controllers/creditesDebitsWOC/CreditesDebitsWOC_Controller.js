@@ -2,6 +2,9 @@ const CDWOC = require('../../database/creditsDebitsWOC/CDWOCSchema')
 const cloudinary = require('../cloudinary')
 const User = require('../../database/userdb/UserSchema')
 const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema')
+const Notifications=require('../../database/notifications/NotifyModel.js')
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
+
 const moment = require('moment');
 
 const addPaymentIn = async (req, res) => {
@@ -28,11 +31,11 @@ const addPaymentIn = async (req, res) => {
             curr_Rate,
             curr_Amount,
             date,
-            open,
-            close
+          
         } = req.body;
 
-      
+        const newPaymentIn=Number(payment_In)
+        const newPaymentOut=Number(payment_Out)
         let uploadImage;
         if(slip_Pic){
              uploadImage = await cloudinary.uploader.upload(slip_Pic, {
@@ -83,12 +86,17 @@ const addPaymentIn = async (req, res) => {
                 invoice: nextInvoiceNumber,
                 curr_Amount,
             });
-            existingSupplier.payment_In_Schema.total_Payment_In += payment_In ? payment_In : 0;
-            existingSupplier.payment_In_Schema.total_Payment_Out += payment_Out ? payment_Out : 0;
-            existingSupplier.payment_In_Schema.balance += payment_In ? payment_In : -payment_Out;
-            existingSupplier.payment_In_Schema.open = open;
-            existingSupplier.payment_In_Schema.close = close;
-
+            existingSupplier.payment_In_Schema.total_Payment_In += newPaymentIn ? newPaymentIn : 0;
+            existingSupplier.payment_In_Schema.total_Payment_Out += newPaymentOut ? newPaymentOut : 0;
+            existingSupplier.payment_In_Schema.balance += newPaymentIn ? newPaymentIn : -newPaymentOut;
+           
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             await existingSupplier.save();
 
             res.status(200).json({
@@ -139,6 +147,15 @@ const addPaymentIn = async (req, res) => {
                 }
             })
 
+            
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
+
             await newSupplierEntry.save();
 
             res.status(200).json({ message: `Payment added to ${supplierName}` });
@@ -182,10 +199,11 @@ for(const payment of multiplePayment){
         curr_Rate,
         curr_Amount,
         date,
-        open,
-        close
+      
     } = payment
 
+    const newPaymentIn=Number(payment_In)
+const newPaymentOut=Number(payment_Out)
  
         const agents=await CDWOC.find({})
         let existingSupplier
@@ -233,12 +251,18 @@ for(const payment of multiplePayment){
                 invoice: nextInvoiceNumber,
                 curr_Amount,
             });
-            existingSupplier.payment_In_Schema.total_Payment_In += payment_In ? payment_In : 0;
-            existingSupplier.payment_In_Schema.total_Payment_Out += payment_Out ? payment_Out : 0;
-            existingSupplier.payment_In_Schema.balance += payment_In ? payment_In : -payment_Out;
-            existingSupplier.payment_In_Schema.open = open;
-            existingSupplier.payment_In_Schema.close = close;
+            existingSupplier.payment_In_Schema.total_Payment_In += newPaymentIn ? newPaymentIn : 0;
+            existingSupplier.payment_In_Schema.total_Payment_Out += newPaymentOut ? newPaymentOut : 0;
+            existingSupplier.payment_In_Schema.balance += newPaymentIn ? newPaymentIn : -newPaymentOut;
+          
 
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             await existingSupplier.save();
 
         } else {
@@ -285,6 +309,13 @@ for(const payment of multiplePayment){
             })
 
          
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"}`,
+                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             await newSupplierEntry.save();
 
         }
@@ -331,7 +362,25 @@ const deleteSinglePaymentIn = async (req, res) => {
         const newPayment = payment_In - payment_Out
 
         try {
-
+            let paymentToDelete=existingSupplier.payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+            const newRecycle=new RecycleBin({
+              name:supplierName,
+              type:"CDWOC Payment",
+              category:paymentToDelete.category,
+              payment_Via:paymentToDelete.payment_Via,
+              payment_Type:paymentToDelete.payment_Type,
+              slip_No:paymentToDelete.slip_No,
+              payment_In:paymentToDelete.payment_In,
+              payment_Out:paymentToDelete.payment_Out,
+              payment_In_Curr:paymentToDelete.payment_In_Curr,
+              slip_Pic:paymentToDelete.slip_Pic,
+              date:paymentToDelete.date,
+              curr_Rate:paymentToDelete.curr_Rate,
+              curr_Amount:paymentToDelete.curr_Amount,
+              invoice:paymentToDelete.invoice
+    
+            })
+            await newRecycle.save()
             // Add this line for logging
 
             await existingSupplier.updateOne({
@@ -347,7 +396,13 @@ const deleteSinglePaymentIn = async (req, res) => {
                 }
 
             });
-
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"} deleted`,
+                content:`${user.userName} deleted ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
 
 
@@ -431,11 +486,18 @@ const updateSinglePaymentIn = async (req, res) => {
 
 
             // Save the updated supplier
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"} updated`,
+                content:`${user.userName} updated ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
 
             await existingSupplier.save();
 
             const updatedSupplier = await CDWOC.findById(existingSupplier._id);
-            console.log(updatedSupplier)
+   
             res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
         } catch (error) {
             console.error('Error updating payment details:', error);
@@ -516,11 +578,18 @@ const updateSinglePaymentOut = async (req, res) => {
 
 
             // Save the updated supplier
+            const newNotification=new Notifications({
+                type:`CDWOC Payment ${payment_In? "In":"Out"} updated`,
+                content:`${user.userName} updated ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWOC Supplier: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
 
             await existingSupplier.save();
 
             const updatedSupplier = await CDWOC.findById(existingSupplier._id);
-            console.log(updatedSupplier)
+          
             res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
         } catch (error) {
             console.error('Error updating payment details:', error);

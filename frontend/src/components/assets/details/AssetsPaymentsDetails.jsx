@@ -15,6 +15,7 @@ import SyncLoader from 'react-spinners/SyncLoader'
 export default function AssetsPaymentsDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1,setLoading1]=useState(false)
+  const [show, setShow] = useState(false)
 
   const { getCurrencyData } = CurrencyHook()
   const { getCategoryData } = CategoryHook()
@@ -644,6 +645,7 @@ export default function AssetsPaymentsDetails() {
 
               </div>
               <div className="right">
+              <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
                 {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
@@ -710,9 +712,11 @@ export default function AssetsPaymentsDetails() {
                     <TableCell className='label border'>Payment_In</TableCell>
                     <TableCell className='label border'>Payment_Out</TableCell>
                     <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_In_Curr</TableCell>
+                    {show && <>
+                      <TableCell className='label border'>Payment_In_Curr</TableCell>
                     <TableCell className='label border'>CUR_Rate</TableCell>
                     <TableCell className='label border'>CUR_Amount</TableCell>
+                    </>}
                     <TableCell className='label border'>Slip_Pic</TableCell>
                     <TableCell align='left' className='edw_label border' colSpan={1}>
                       Actions
@@ -772,7 +776,8 @@ export default function AssetsPaymentsDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.invoice} readonly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              {show &&<>
+                                <TableCell className='border data_td p-1 '>
                                 <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
                                   <option className="my-1 py-2" value="">choose</option>
                                   {currencies && currencies.map((data) => (
@@ -786,6 +791,7 @@ export default function AssetsPaymentsDetails() {
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
                               </TableCell>
+                              </>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                               </TableCell>
@@ -802,9 +808,11 @@ export default function AssetsPaymentsDetails() {
                               <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
                               <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
+                              {show &&<>
+                                <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                              </>}
                               <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                             </>
                           )}
@@ -827,25 +835,7 @@ export default function AssetsPaymentsDetails() {
                                   <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
                                   <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
                                 </div>
-                                {/* Deleting Modal  */}
-                                <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="pDeleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div className="modal-dialog p-0">
-                                    <div className="modal-content p-0">
-                                      <div className="modal-header border-0">
-                                        <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                        {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                      </div>
-                                      <div className="modal-body text-center p-0">
-
-                                        <p>Do you want to Delete the Record?</p>
-                                      </div>
-                                      <div className="text-end m-2">
-                                        <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                        <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                               
                               </>
                             )}
                           </TableCell>
@@ -879,6 +869,37 @@ export default function AssetsPaymentsDetails() {
             }, 0);
           }, 0)}
         </TableCell>
+        <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    {show && <>
+                      <TableCell className='border data_td text-center bg-warning text-white'>
+                      
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_In_Curr);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Rate);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
                             
                           </TableRow>
                 </TableBody>

@@ -16,7 +16,7 @@ import PaymentViaHook from "../../hooks/settingHooks/PaymentViaHook";
 import PaymentTypeHook from "../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../hooks/settingHooks/CurrCountryHook";
 import AgentHook from '../../hooks/agentHooks/AgentHook';
-
+import CandPaymmentInOne from './addMore/CandPaymentInOne'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function AgentCandSinglePaymentIn() {
@@ -35,7 +35,7 @@ export default function AgentCandSinglePaymentIn() {
   const { getPaymentViaData } = PaymentViaHook();
   const { getPaymentTypeData } = PaymentTypeHook();
   const { getPaymentsIn } = AgentHook();
-
+const[show,setShow]=useState(false)
   // getting Data from DB
   const { user } = useAuthContext();
   const fetchData = async () => {
@@ -328,7 +328,6 @@ export default function AgentCandSinglePaymentIn() {
                 <button className="btn submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
-                {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
               </div>
               <div className="row p-0 m-0 my-1">
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -517,7 +516,7 @@ export default function AgentCandSinglePaymentIn() {
                 )}
                 {!section ? "Add Currency" : "Remove"}
               </span>
-              {/* Add Crrency section */}
+              
               {section && (
                 <div className="row p-0 m-0 mt-5">
                   <hr />
@@ -631,11 +630,18 @@ export default function AgentCandSinglePaymentIn() {
       {/* Details */}
       <div className="row payment_details mt-0">
         <div className="col-md-12 my-2">
-          {selectedSupplier && (
+          <div className="justify-content-between d-flex">
+            <div className="left">
+            {selectedSupplier && (
             <button className="btn detail_btn" onClick={handleOpen}>
               {option ? "Hide Details" : "Show Details"}
             </button>
           )}
+            </div>
+            <div className="right">
+            <button onClick={()=>setShow(!show)} className={`btn shadow btn-sm text-white text-bold ms-1 ${show ?"bg-danger":"bg-success"}`}>{!show ? <i className="fas fa-plus"></i>:<i className="fas fa-trash-alt"></i>}</button>
+            </div>
+          </div>
         </div>
         {option && (
           <div className="col-md-12 detail_table">
@@ -773,6 +779,7 @@ export default function AgentCandSinglePaymentIn() {
           </div>
         )}
       </div>
+      {show && <CandPaymmentInOne/>}
     </>
   );
 }

@@ -1,12 +1,12 @@
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { useState } from 'react';
 export default function NotifyHook() {
-    const[notifications,setNotifications]=useState('')
+    const[reminders,setReminders]=useState('')
     const { user } = useAuthContext();
     const apiUrl = process.env.REACT_APP_API_URL;
     const getNotifications = async () => {
         try {
-            const response = await fetch(`${apiUrl}/auth/notifications/get/notification`, {
+            const response = await fetch(`${apiUrl}/auth/notifications/get/notifications`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`,
                 },
@@ -15,7 +15,7 @@ export default function NotifyHook() {
             const json = await response.json();
             if (response.ok) {
 
-                setNotifications(json.data); // Dispatch the action with received data
+                setReminders(json.data); // Dispatch the action with received data
             }
         } catch (error) {
 
@@ -24,5 +24,5 @@ export default function NotifyHook() {
     }
 
 
-    return { getNotifications,notifications }
+    return { getNotifications,reminders }
 }
