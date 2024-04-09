@@ -2227,7 +2227,7 @@ export default function Sidebar() {
 
           break;
           case '/rozgar/reports/net_visa_reports':
-            setActiveItem(107)
+            setActiveItem(106)
             setOption1(false)
             setOption2(false)
             setOption3(false)
