@@ -192,6 +192,7 @@ const addAzadCandPaymentIn = async (req, res) => {
               })
               await newNotification.save()
       
+              await existingSupplier.save()
 
           res
             .status(200)
@@ -384,6 +385,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
     
             })
             await newNotification.save()
+            await existingSupplier.save()
+
       }
 
       res.status(200).json({
@@ -574,6 +577,8 @@ const addAzadCandPaymentInReturn = async (req, res) => {
       
               })
               await newNotification.save()
+              await existingSupplier.save()
+
           const updatedSupplier = await AzadCandidate.findById(
             existingSupplier._id
           );
@@ -699,6 +704,8 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
 
       })
       await newNotification.save()
+      await existingSupplier.save()
+
       const updatedSupplier = await AzadCandidate.findById(
         existingSupplier._id
       );
@@ -842,9 +849,6 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
       await newNotification.save()
 
       await existingSupplier.save();
-
-     
-    
       res
         .status(200)
         .json({
@@ -1804,6 +1808,8 @@ const addAzadCandPaymentOut = async (req, res) => {
       
               })
               await newNotification.save()
+              await existingSupplier.save()
+
           res
             .status(200)
             .json({
@@ -1998,6 +2004,8 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
       
               })
               await newNotification.save()
+              await existingSupplier.save()
+
           const updatedSupplier = await AzadCandidate.findById(
             existingSupplier._id
           );
@@ -2122,6 +2130,8 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
 
       })
       await newNotification.save()
+      await existingSupplier.save()
+
       const updatedSupplier = await AzadCandidate.findById(
         existingSupplier._id
       );
@@ -2263,6 +2273,7 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
 
       })
       await newNotification.save()
+                    await existingSupplier.save()
 
       const updatedSupplier = await AzadCandidate.findById(
         existingSupplier._id
@@ -2464,6 +2475,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
     
             })
             await newNotification.save()
+            await existingSupplier.save()
+
       }
 
       res

@@ -52,19 +52,6 @@ export default function AzadAgentReports() {
   }, []);
 
   
-  const rowsPerPageOptions = [10, 15, 30];
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')

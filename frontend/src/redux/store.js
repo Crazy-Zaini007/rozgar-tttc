@@ -15,8 +15,6 @@ import protectors from './reducers/protectorSlice'
 import employees from './reducers/employeeSlice'
 import assetsPayments from './reducers/assetsSlice'
 
-
-
 export const store = configureStore({
   reducer: {
     setting: settingReducer,

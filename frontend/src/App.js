@@ -15,6 +15,11 @@ import NewEntry from './components/enteries/NewEntry';
 import Dashboard from './components/Dashboard';
 import CashinHand from './components/CashinHand';
 import BankCash from './components/BankCash.jsx'
+import DirectPaymentIn from './components/DirectPaymentIn.jsx'
+import DirectPaymentOut from './components/DirectPaymentOut.jsx'
+
+
+
 import EntryDetails from './components/enteries/EntryDetails';
 import EntryReports from './components/enteries/EntryReports';
 // Supplier Section
@@ -121,6 +126,12 @@ import TicketReports from './components/all_Reports/ticketReports/TicketReoprts.
 import VisitReports from './components/all_Reports/visitReports/VisitReports.jsx'
 import EmployeeReports from './components/all_Reports/EmployeeReports.jsx'
 import NetVisaReports from './components/all_Reports/NetVisaReports.jsx'
+import OverAllVisaProfitReports from './components/all_Reports/OverAllVisaProfitReports.jsx'
+import CandVisaPaymentReports from './components/all_Reports/CandWisePaymentReports.jsx'
+import OverAllSystemPaymentReport from './components/all_Reports/OverAllSystemPaymentReport.jsx'
+
+
+
 
 import DayBook from './components/all_Reports/DayBook.jsx'
 import User from './components/user/User.jsx'
@@ -145,6 +156,7 @@ import Notes from './components/Notes.jsx'
 
 // Backup
 import Backup from './components/Backup.jsx'
+import CandWisePaymentReports from './components/all_Reports/CandWisePaymentReports.jsx';
 
 function App() {
   // user Info
@@ -165,6 +177,9 @@ function App() {
           {/* When user is Logged in */}
           <Route exact path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand>}></Route>
           <Route exact path='/rozgar/bank_cash' element={user && <BankCash></BankCash>}></Route>
+          <Route exact path='/rozgar/direct/payment_in' element={user && <DirectPaymentIn></DirectPaymentIn>}></Route>
+          <Route exact path='/rozgar/direct/payment_out' element={user && <DirectPaymentOut></DirectPaymentOut>}></Route>
+
 
 
 
@@ -279,6 +294,10 @@ function App() {
           <Route path='/rozgar/reports/payroll_reports' element={user && <EmployeeReports></EmployeeReports>}></Route>
           <Route path='/rozgar/reports/day_book' element={user && <DayBook></DayBook>}></Route>
           <Route path='/rozgar/reports/net_visa_reports' element={user && <NetVisaReports></NetVisaReports>}></Route>
+          <Route path='/rozgar/reports/overall_visa_profit_reports' element={user && <OverAllVisaProfitReports></OverAllVisaProfitReports>}></Route>
+          <Route path='/rozgar/reports/cand_visa_payment_reports' element={user && <CandVisaPaymentReports></CandVisaPaymentReports>}></Route>
+          <Route path='/rozgar/reports/overall_system_payment_reports' element={user && <OverAllSystemPaymentReport></OverAllSystemPaymentReport>}></Route>
+
           {/* Employee Routes */}
           <Route path='/rozgar/employees/add' element={user && <AddEmployee></AddEmployee>}></Route>
           <Route path='/rozgar/employees/add_payment' element={user && <AddPayment></AddPayment>}></Route>

@@ -8774,7 +8774,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentInSupplier.save();
-          paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -8944,7 +8944,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentInSupplier.save();
-          paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -9244,7 +9244,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentInSupplier.save();
-          paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -9414,7 +9414,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentInSupplier.save();
-          paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+       
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -9686,7 +9686,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentInSupplier.save();
-          paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+          
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -9826,7 +9826,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentInSupplier.save();
-          paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+      
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -10069,8 +10069,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -10581,8 +10580,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+          
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -11426,8 +11424,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -11938,8 +11935,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+        
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -12784,8 +12780,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -13296,8 +13291,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+       
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -14141,8 +14135,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+      
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -14653,8 +14646,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+         
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -15498,8 +15490,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+          
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -16010,8 +16001,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+        
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -16855,8 +16845,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+     
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =
@@ -17367,8 +17356,7 @@ const updateEntry = async (req, res) => {
           });
 
           await newPaymentOutAzadSupplier.save();
-          paymentInfo.newPaymentOutAzadSupplier =
-            newPaymentOutAzadSupplier;
+        
         } else {
           // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
           const existingPersonIndex =

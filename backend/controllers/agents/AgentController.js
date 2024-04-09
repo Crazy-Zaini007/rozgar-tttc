@@ -31,11 +31,6 @@ const addPaymentIn = async (req, res) => {
       return;
     }
 
-    if (user.role !== "Admin") {
-      res.status(404).json({ message: "Only Admin is allowed!" });
-      return;
-    }
-
     const {
       supplierName,
       category,

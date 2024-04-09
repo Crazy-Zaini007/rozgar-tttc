@@ -2,41 +2,23 @@ import React, { useState, useEffect,useRef } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
-import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
+import EntryHook from '../../hooks/entryHooks/EntryHook';
+import { useSelector } from 'react-redux';
 
-const NetVisaReports = () => {
+const OverAllVisaProfitReports = () => {
 
-  const { user } = useAuthContext();
+  const enteries = useSelector((state) => state.enteries.enteries);
+  const { getEntries } = EntryHook();
 
-  const [loading1, setLoading1] = useState(false)
+const [loading1, setLoading1] = useState(false)
 const[show,setShow]=useState(false)
-const[payments,setPayments]=useState('')
-  const apiUrl = process.env.REACT_APP_API_URL;
 
-  const getData = async () => {
-
-    try {
-      const response = await fetch(`${apiUrl}/auth/reports/get/visa_net_reports`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
-      });
-
-      const json = await response.json();
-      if (response.ok) {
-        setPayments(json.data)
-    
-      }
-    } catch (error) {
-     
-    }
-  }
   // fteching Data from DB
   const fetchData = async () => {
     try {
       setLoading1(true);
 
-      await getData();
+      await getEntries();
       
       setLoading1(false)
 
@@ -70,7 +52,7 @@ const[payments,setPayments]=useState('')
   const [reference_In_Type, setReference_In_Type] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
   
-  const filteredEntries =payments && payments.filter(entry => {
+  const filteredEntries =enteries && enteries.filter(entry => {
     return (
       entry.entry_Date?.toLowerCase().includes(date.toLowerCase()) &&
       entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
@@ -89,7 +71,7 @@ const[payments,setPayments]=useState('')
   useEffect(() => {
     fetchData()
   
-}, [date,trade,company,country,final_Status,entry_Mode,reference_Out,reference_In,reference_Out_Type,reference_In_Type,flight_Date]);
+}, []);
 
   const downloadExcel = () => {
     const data = [];
@@ -115,6 +97,8 @@ const[payments,setPayments]=useState('')
         Reference_Out_Name: entry.reference_Out_Name,
         Reference_In: entry.reference_In,
         Reference_In_Name: entry.reference_In_Name,
+        Visa_Profit: entry.visa_Sales_Rate_PKR-entry.visa_Purchase_Rate_PKR,
+
         // Visit  Section 
         Visit_Sales_Party: entry.visit_Sales_Party,
         Visit_Purchase_Party: entry.visit_Purchase_Party,
@@ -126,6 +110,7 @@ const[payments,setPayments]=useState('')
         Visit_Reference_Out_Name: entry.visit_Reference_Out_Name,
         Visit_Reference_In: entry.visit_Reference_In,
         Visit_Reference_In_Name: entry.visit_Reference_In_Name,
+        Visit_Profit: entry.visit_Sales_PKR-entry.visit_Purchase_Rate_PKR,
 
         // Ticket Section
         Ticket_Sale_Party: entry.ticket_Sales_Party,
@@ -138,6 +123,7 @@ const[payments,setPayments]=useState('')
         Ticket_Reference_Out_Name: entry.ticket_Reference_Out_Name,
         Ticket_Reference_In: entry.ticket_Reference_In,
         Ticket_Reference_In_Name: entry.ticket_Reference_In_Name,
+        Ticket_Profit: entry.ticket_Sales_PKR-entry.ticket_Purchase_PKR,
 
 
         // Azad Visa Section 
@@ -151,6 +137,7 @@ const[payments,setPayments]=useState('')
         Azad_Visa_Reference_Out_Name: entry.azad_Visa_Reference_Out_Name,
         Azad_Visa_Reference_In: entry.azad_Visa_Reference_In,
         Azad_Visa_Reference_In_Name: entry.azad_Visa_Reference_In_Name,
+        Azad_Profit: entry.azad_Visa_Sales_PKR-entry.azad_Visa_Purchase_PKR,
 
         // Add other fields for Section 3
 
@@ -159,17 +146,6 @@ const[payments,setPayments]=useState('')
         Protector_Price_Out: entry.protector_Price_Out,
         protector_Reference_In: entry.protector_Reference_In,
         Protector_Reference_In_Name: entry.protector_Reference_In_Name,
-        // Payments Reports
-        Visa_Profit: entry.visa_Sales_Rate_PKR-entry.visa_Purchase_Rate_PKR,
-        Reference_Type: entry.type,
-        Cash_In: entry.cash_In,
-        Cash_Out: entry.cash_Out,
-        Total_In: entry.total_In,
-        Remaining: entry.remaining,
-        Total_Payment_In_Curr:entry.total_Curr_In,
-        Remaining_Curr:entry.remain_Curr
-
-
       };
 
       data.push(rowData);
@@ -181,8 +157,6 @@ const[payments,setPayments]=useState('')
     XLSX.writeFile(wb, 'Entries.xlsx');
   };
 
-
-
   return (
     <>
       <div className='main'>
@@ -191,10 +165,10 @@ const[payments,setPayments]=useState('')
             <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Net Visa Reports</h4>
+                  <h4>Overall Visa Profit Reports</h4>
                 </div>
                 <div className="right d-flex">
-                  {payments.length > 0 &&
+                  {enteries.length > 0 &&
                     <>
                       <button className='btn btn-info m-1 btn-sm shadow text-white' onClick={()=>setShow(!show)}>{show ?"Hide":"Show"} </button>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download Excel </button>
@@ -223,7 +197,7 @@ const[payments,setPayments]=useState('')
 
 
             {/* Filters */}
-            {payments && payments.length > 0 &&
+            {enteries && enteries.length > 0 &&
               <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
@@ -231,7 +205,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Date:</label>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.entry_Date))].map(dateValue => (
+                        {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
                           <option value={dateValue} key={dateValue}>{dateValue}</option>
                         ))}
                       </select>
@@ -240,7 +214,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Trade:</label>
                       <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.trade))].map(tradeValue => (
+                        {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
                           <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
                         ))}
                       </select>
@@ -249,7 +223,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Company:</label>
                       <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.company))].map(companyValue => (
+                        {[...new Set(enteries.map(data => data.company))].map(companyValue => (
                           <option key={companyValue} value={companyValue}>{companyValue}</option>
                         ))}
                       </select>
@@ -258,7 +232,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Country:</label>
                       <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.country))].map(countryValue => (
+                        {[...new Set(enteries.map(data => data.country))].map(countryValue => (
                           <option key={countryValue} value={countryValue}>{countryValue}</option>
                         ))}
                       </select>
@@ -268,7 +242,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Final Status:</label>
                       <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.final_Status))].map(final_StatusValue => (
+                        {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
                           <option key={final_StatusValue} value={final_StatusValue}>{final_StatusValue}</option>
                         ))}
                       </select>
@@ -277,7 +251,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Flight Date:</label>
                       <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.flight_Date))].map(flight_DateValue => (
+                        {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
                           <option key={flight_DateValue} value={flight_DateValue}>{flight_DateValue}</option>
                         ))}
                       </select>
@@ -286,7 +260,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Entry Mode:</label>
                       <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.entry_Mode))].map(entry_ModeValue => (
+                        {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
                           <option key={entry_ModeValue} value={entry_ModeValue}>{entry_ModeValue}</option>
                         ))}
                       </select>
@@ -295,7 +269,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Reference Out:</label>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
+                        {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
                           <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
                         ))}
                       </select>
@@ -304,7 +278,7 @@ const[payments,setPayments]=useState('')
                       <label htmlFor="">Reference In:</label>
                       <select value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                        {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
                           <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
                         ))}
                       </select>
@@ -343,35 +317,35 @@ const[payments,setPayments]=useState('')
                     <Table stickyHeader>
                     <TableHead>
                         <TableRow className='p-0 m-0'>
-                          <TableCell align="left" className='personel_label border py-2' colSpan={21}>
+                          <TableCell align="left" className='personel_label border py-2' colSpan={show ?22:21}>
                             Personel Details
                           </TableCell>
-                          <TableCell align="left" className='personel_label border py-2' colSpan={show ?8 :7}>
-                              Payments Details
-                            </TableCell>
+                          
                         
                           {section1 &&
-                            <TableCell align="left" className='visit_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='visit_label border py-2' colSpan={10}>
                               Visit Sales Purchase Details
                             </TableCell>
                           }
                           {section2 &&
 
-                            <TableCell align="left" className='ticket_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='ticket_label border py-2' colSpan={10}>
                               Ticket Sales Purchase Details
                             </TableCell>
                           }
                           {section3 &&
-                            <TableCell align="left" className='azad_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='azad_label border py-2' colSpan={10}>
                               Azad Visa Sales Purchase Details
                             </TableCell>
                           }
                           {section4 &&
-                            <TableCell align="left" className='protector_label border py-2' colSpan={5}>
+                            <TableCell align="left" className='protector_label border py-2' colSpan={6}>
                               Protector Details
                             </TableCell>
                           }
-                           
+                            <TableCell align="left" className='personel_label border py-2' colSpan={1}>
+                              Net_Profit
+                            </TableCell>
                            
                         </TableRow>
                         <TableRow>
@@ -396,19 +370,14 @@ const[payments,setPayments]=useState('')
                           <TableCell className='label border'>RI</TableCell>
                           <TableCell className='label border'>RI_Name</TableCell>
                           <TableCell className='label border'>Picture</TableCell>
-                          <TableCell className='label border'>Reference_Type</TableCell>
+                         
                           {show &&
                            <>
                           <TableCell className='label border'>Visa_Profit</TableCell>
                          
                            </>
                            }
-                            <TableCell className='label border'>Cash_In</TableCell>
-                          <TableCell className='label border'>Cash_Out</TableCell>
-                          <TableCell className='label border'>Total_In</TableCell>
-                          <TableCell className='label border'>Remaining</TableCell>
-                          <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
-                          <TableCell className='label border'>Remaining_Curr</TableCell>
+                           
                           {section1 &&
                             <>
                               {/* Visit Sales Purchase Parties Section*/}
@@ -421,6 +390,8 @@ const[payments,setPayments]=useState('')
                               <TableCell className='label border'>RI</TableCell>
                               <TableCell className='label border'>RI_Name</TableCell>
                               <TableCell className='label border'>Picture</TableCell>
+                            <TableCell className='label border'>Visit_Visa_Profit</TableCell>
+
                             </>
                           }
 
@@ -437,6 +408,8 @@ const[payments,setPayments]=useState('')
                               <TableCell className='label border'>RI</TableCell>
                               <TableCell className='label border'>RI_Name</TableCell>
                               <TableCell className='label border'>Picture</TableCell>
+                            <TableCell className='label border'>Ticket_Visa_Profit</TableCell>
+
 
                             </>
                           }
@@ -453,6 +426,8 @@ const[payments,setPayments]=useState('')
                               <TableCell className='label border'>RI</TableCell>
                               <TableCell className='label border'>RI_Name</TableCell>
                               <TableCell className='label border'>Picture</TableCell>
+                            <TableCell className='label border'>Azad_Visa_Profit</TableCell>
+
 
                             </>
                           }
@@ -466,9 +441,14 @@ const[payments,setPayments]=useState('')
                               <TableCell className='label border'>RI</TableCell>
                               <TableCell className='label border'>RI_Name</TableCell>
                               <TableCell className='label border'>PP_Out</TableCell>
+                            <TableCell className='label border'>Protector_Profit</TableCell>
+
+
 
                             </>
                           }
+                            <TableCell className='label border bg-warning text-white'>Total_Profit</TableCell>
+
                           
                         </TableRow>
                       </TableHead>
@@ -497,22 +477,14 @@ const[payments,setPayments]=useState('')
                                 <TableCell className='border data_td '>{entry.reference_Out_Name}</TableCell>
                                 <TableCell className='border data_td  '>{entry.reference_In}</TableCell>
                                 <TableCell className='border data_td  '>{entry.reference_In_Name}</TableCell>
-                                <TableCell className='border data_td text-center'>{entry.picture ? <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /> : "No Picture"}</TableCell>
-
-
-                                <TableCell className='border data_td bg-primary text-white'>{entry.type}</TableCell>
+                                <TableCell className='border data_td text-center'>{entry.picture ? <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /> : "No Picture"}</TableCell>     
                                 {show &&
                                 <>
                                  <TableCell className='border data_td bg-success text-white'>{entry.visa_Sales_Rate_PKR-entry.visa_Purchase_Rate_PKR}</TableCell>
                                    
                                 </>
                                 }
-                                 <TableCell className='border data_td bg-success text-white'>{entry.cash_In}</TableCell>
-                                    <TableCell className='border data_td bg-danger text-white'>{entry.cash_Out}</TableCell>
-                                    <TableCell className='border data_td bg-warning text-white'>{entry.total_In}</TableCell>
-                                    <TableCell className='border data_td bg-info text-white'>{entry.remaining}</TableCell>
-                                    <TableCell className='border data_td bg-warning text-white'>{entry.total_Curr_In}</TableCell>
-                                    <TableCell className='border data_td bg-info text-white'>{entry.remain_Curr}</TableCell>
+                                 
                                 {section1 &&
                                   <>
                                     <TableCell className='border data_td'>{entry.visit_Sales_PKR}</TableCell>
@@ -524,7 +496,7 @@ const[payments,setPayments]=useState('')
                                     <TableCell className='border data_td'>{entry.visit_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Section_Picture ? <img src={entry.visit_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
-
+                                    <TableCell className='border data_td bg-success text-white'>{entry.visit_Sales_PKR-entry.visit_Purchase_Rate_PKR}</TableCell>
                                   </>
                                 }
 
@@ -541,7 +513,7 @@ const[payments,setPayments]=useState('')
                                     <TableCell className='border data_td'>{entry.ticket_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Section_Picture ? <img src={entry.ticket_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
-
+                                    <TableCell className='border data_td bg-success text-white'>{entry.ticket_Sales_PKR-entry.ticket_Purchase_PKR}</TableCell>
                                   </>
                                 }
 
@@ -558,6 +530,8 @@ const[payments,setPayments]=useState('')
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Section_Picture ? <img src={entry.azad_Visa_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td bg-success text-white'>{entry.azad_Visa_Sales_PKR-entry.azad_Visa_Purchase_PKR}</TableCell>
+
 
                                   </>
                                 }
@@ -570,18 +544,21 @@ const[payments,setPayments]=useState('')
                                     <TableCell className='border data_td'>{entry.protector_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.protector_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.protector_Price_Out}</TableCell>
+                                    <TableCell className='border data_td bg-success text-white'>{entry.protector_Price_In-entry.protector_Price_Out}</TableCell>
                                   </>
                                 }
+                                    <TableCell className='border data_td bg-warning text-white'>{(entry.visa_Sales_Rate_PKR+entry.visit_Sales_PKR+entry.ticket_Sales_PKR+entry.azad_Visa_Sales_PKR+entry.protector_Price_In)-(entry.visa_Purchase_Rate_PKR+entry.visit_Purchase_Rate_PKR+entry.ticket_Purchase_PKR+entry.azad_Visa_Purchase_PKR+entry.protector_Price_Out)}</TableCell>
+
                                
                           </TableRow>
                         )) :
                         <TableRow>
-                                    <TableCell className='border data_td'>No_Entry_Found</TableCell>
+                        <TableCell className='border data_td'>No_Entry_Found</TableCell>
 
                         </TableRow>
                         }
                         <TableRow>
-                          <TableCell colSpan={21}></TableCell>
+                          <TableCell colSpan={20}></TableCell>
                           <TableCell className='border data_td bg-secondary text-white'>Total</TableCell>
                           {show &&
                           <TableCell className='border data_td text-center bg-success text-white'>
@@ -590,41 +567,44 @@ const[payments,setPayments]=useState('')
                           }, 0)}
                         </TableCell>
                           }
-                          <TableCell className='border data_td text-center bg-success text-white'>
-    {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-      return total + (entry.cash_In || 0); 
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-danger text-white'>
-    {/* Calculate the total sum of payment_Out */}
-    {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-      return total + (entry.total_In || 0); 
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-info text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-      return total + (entry.remaining || 0); 
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-      return total + (entry.total_Curr_In || 0); 
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-info text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-      return total + (entry.remain_Curr || 0); 
-    }, 0)}
-  </TableCell>
+                         {section1 && <>
+                            <TableCell colSpan={9}></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+                          {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+                            return total + (entry.visit_Sales_PKR || 0) +(entry.visit_Purchase_Rate_PKR || 0); 
+                          }, 0)}
+                        </TableCell>
+                         </>}
+                         {section2 && <>
+                            <TableCell colSpan={9}></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+                          {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+                            return total + (entry.ticket_Sales_PKR || 0) +(entry.ticket_Purchase_PKR || 0); 
+                          }, 0)}
+                        </TableCell>
+                         </>}
+                         {section3 && <>
+                            <TableCell colSpan={9}></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+                          {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+                            return total + (entry.azad_Visa_Sales_PKR || 0) +(entry.azad_Visa_Purchase_PKR || 0); 
+                          }, 0)}
+                        </TableCell>
+                         </>}
+                         {section4 && <>
+                            <TableCell colSpan={5}></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+                          {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+                            return total + (entry.protector_Price_In || 0) +(entry.protector_Price_Out || 0); 
+                          }, 0)}
+                        </TableCell>
+                         </>}
+                        
+                            <TableCell className='border data_td text-center bg-warning text-white'>
+                          {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+                            return total + (entry.visa_Sales_Rate_PKR+entry.visit_Sales_PKR+entry.ticket_Sales_PKR+entry.azad_Visa_Sales_PKR+entry.protector_Price_In || 0) -(entry.visa_Purchase_Rate_PKR+entry.visit_Purchase_Rate_PKR+entry.ticket_Purchase_PKR+entry.azad_Visa_Purchase_PKR+entry.protector_Price_Out || 0); 
+                          }, 0)}
+                        </TableCell>
                         </TableRow>
                       </TableBody>
 
@@ -640,4 +620,4 @@ const[payments,setPayments]=useState('')
   );
 };
 
-export default NetVisaReports;
+export default OverAllVisaProfitReports;

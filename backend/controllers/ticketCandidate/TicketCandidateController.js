@@ -65,7 +65,7 @@ const addAzadCandPaymentIn = async (req, res) => {
                 const existingSupplier = await TicketCandidate.findOne({ 'Candidate_Payment_In_Schema.supplierName': supplierName });
                 if (!existingSupplier) {
                     res.status(404).json({
-                        message: "Supplier not Found"
+                        message: "Candidate not Found"
                     });
                 }
 
@@ -177,6 +177,8 @@ const addAzadCandPaymentIn = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                    await existingSupplier.save()
+
                     const updatedSupplier = await TicketCandidate.findById(existingSupplier._id);
 
                     res.status(200).json({ data: updatedSupplier, message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.Candidate_Payment_In_Schema.supplierName}'s Record` });
@@ -372,6 +374,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
               
                       })
                       await newNotification.save()
+                    await existingSupplier.save()
+
             }
 
 
@@ -559,6 +563,7 @@ const addAzadCandPaymentInReturn = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                          await existingSupplier.save()
 
                     const updatedSupplier = await TicketCandidate.findById(existingSupplier._id);
 
@@ -678,7 +683,7 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
         
               })
               await newNotification.save()
-            const updatedSupplier = await TicketCandidate.findById(existingSupplier._id);
+              await existingSupplier.save()
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
 
 
@@ -798,8 +803,6 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
               await newNotification.save()
             await existingSupplier.save();
 
-            const updatedSupplier = await TicketCandidate.findById(existingSupplier._id);
-            console.log(updatedSupplier)
             res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
         } catch (error) {
             console.error('Error updating payment details:', error);
@@ -1620,6 +1623,8 @@ const addAzadCandPaymentOut = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                    await existingSupplier.save()
+
                     res.status(200).json({ data: updatedSupplier, message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record` });
 
                 } catch (error) {
@@ -1732,7 +1737,7 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
                     date,
                     invoice: nextInvoiceNumber,
-                    cand_Name,
+                    
                 };
 
 
@@ -1803,6 +1808,7 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
                           })
                           await newNotification.save()
 
+                          await existingSupplier.save()
 
                     const updatedSupplier = await TicketCandidate.findById(existingSupplier._id);
 
@@ -1924,6 +1930,8 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
         
               })
               await newNotification.save()
+              await existingSupplier.save()
+
             const updatedSupplier = await TicketCandidate.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment Out deleted sucessfully from ${supplierName}` })
 
@@ -2234,6 +2242,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
               
                       })
                       await newNotification.save()
+                    await existingSupplier.save()
+
             }
 
 

@@ -181,7 +181,7 @@ const getAllPayments = async (req, res) => {
           }));
         mergedPayments = mergedPayments.concat(ticketAgentsPaymentOutDetails);
       }
-    });
+    })
 
     // Iterate through agents
     visitAgents.forEach((agent) => {
@@ -265,10 +265,9 @@ const getAllPayments = async (req, res) => {
           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
             type: "Ticket_Supplier_Out",
-
             ...payment.toObject(),
           }));
-        mergedPayments = mergedPayments.concat(
+           mergedPayments = mergedPayments.concat(
           ticketSuppliersPaymentOutDetails
         );
       }
@@ -518,6 +517,8 @@ const getPersons = async (req, res) => {
 
     // Initialize an empty array to store persons data
     let personsData = [];
+    let personsOutData = [];
+
 
     // Iterate through agents
     agents.forEach((agent) => {
@@ -571,10 +572,66 @@ const getPersons = async (req, res) => {
           ...modifiedPaymentInSchema,
         });
       }
+    })
+
+
+    // Persons Out
+    // Iterate through agents
+    agents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.persons) {
+        const personsArray = agent.payment_Out_Schema.persons.map((person) => ({
+          supplierName: agent.payment_Out_Schema.supplierName,
+          curr_Country: agent.payment_Out_Schema.curr_Country,
+          type: "Agent",
+          ...person.toObject(),
+        }));
+        personsOutData = personsOutData.concat(personsArray);
+      }
     });
 
+    // Iterate through suppliers
+    suppliers.forEach((supplier) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons) {
+        const personsArray = supplier.payment_Out_Schema.persons.map(
+          (person) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
+            curr_Country: supplier.payment_Out_Schema.curr_Country,
+            type: "Supplier",
+            ...person.toObject(),
+          })
+        );
+        personsOutData = personsOutData.concat(personsArray);
+      }
+    });
+
+    // Iterate through candidates
+    candidates.forEach((candidate) => {
+      const { payment_Out_Schema } = candidate;
+
+      // Modify payment_In_Schema
+      if (payment_Out_Schema) {
+        const modifiedPaymentOutSchema = {
+          ...payment_Out_Schema.toObject(),
+          total_In: payment_Out_Schema.total_Payment_In,
+          cash_Out: payment_Out_Schema.total_Cash_Out,
+          visa_Price_Out_PKR: payment_Out_Schema.total_Visa_Price_Out_PKR,
+          visa_Price_Out_Curr: payment_Out_Schema.total_Visa_Price_Out_Curr,
+          name: payment_Out_Schema.supplierName,
+        };
+
+        personsOutData.push({
+          supplierName: payment_Out_Schema.supplierName,
+          curr_Country: payment_Out_Schema.curr_Country,
+          type: "Candidate",
+          ...modifiedPaymentOutSchema,
+        });
+      }
+    })
+
     // Send the resulting personsData array in the response
-    res.status(200).json({ data: personsData });
+    res.status(200).json({ data: personsData,personsOutData });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -1422,189 +1479,599 @@ const getNormalPayments = async (req, res) => {
       return;
     }
 
-    const normalPayments = new Set();
-    // Array of collections to query for payment_In
-    const inCollections = [
-      { model: Agents, schemaType: "payment_In_Schema" },
-      { model: Suppliers, schemaType: "payment_In_Schema" },
-      { model: Candidates, schemaType: "payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
-      { model: Assets, schemaType: "payment_In_Schema" },
+    // Find all agents
+    const agents = await Agents.find();
+    const suppliers = await Suppliers.find();
+    const candidates = await Candidates.find();
+    const azadAgents = await AzadSuppliers.find();
+    const azadSuppliers = await AzadSuppliers.find();
+    const ticketAgents = await TicketSuppliers.find();
+    const ticketSuppliers = await TicketSuppliers.find();
+    const visitAgents = await VisitSuppliers.find();
+    const visitSuppliers = await VisitSuppliers.find();
+    const azadCandidates = await AzadCandidates.find();
+    const ticketCandidates = await TicketCandidates.find();
+    const visitCandidates = await VisitCandidates.find();
 
-    ];
+    // Initialize an empty array to store merged payments
+    let mergedPayments = [];
+
+    // Iterate through agents
+    agents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+        const paymentInDetails = agent.payment_In_Schema.payment.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Agent_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+        const paymentOutDetails = agent.payment_Out_Schema.payment.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Agent_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    suppliers.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+        const supplierPaymentInDetails = agent.payment_In_Schema.payment.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Supplier_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(supplierPaymentInDetails);
+      }
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+        const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Supplier_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(supplierPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    candidates.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+        const candPaymentInDetails = agent.payment_In_Schema.payment.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Candidate_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(candPaymentInDetails);
+      }
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+        const candPaymentOutDetails = agent.payment_Out_Schema.payment.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Candidate_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(candPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    azadAgents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Agent_Payment_In_Schema &&
+        agent.Agent_Payment_In_Schema.payment
+      ) {
+        const azadAgentsPaymentInDetails =
+          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            type: "Azad_Agent_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(azadAgentsPaymentInDetails);
+      }
+      if (
+        agent.Agent_Payment_Out_Schema &&
+        agent.Agent_Payment_Out_Schema.payment
+      ) {
+        const azadAgentsPaymentOutDetails =
+          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            type: "Azad_Agent_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(azadAgentsPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    ticketAgents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Agent_Payment_In_Schema &&
+        agent.Agent_Payment_In_Schema.payment
+      ) {
+        const ticketAgentsPaymentInDetails =
+          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            type: "Ticket_Agent_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(ticketAgentsPaymentInDetails);
+      }
+      if (
+        agent.Agent_Payment_Out_Schema &&
+        agent.Agent_Payment_Out_Schema.payment
+      ) {
+        const ticketAgentsPaymentOutDetails =
+          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            type: "Ticket_Agent_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(ticketAgentsPaymentOutDetails);
+      }
+    })
+
+    // Iterate through agents
+    visitAgents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Agent_Payment_In_Schema &&
+        agent.Agent_Payment_In_Schema.payment
+      ) {
+        const visitAgentsPaymentInDetails =
+          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            type: "Visit_Agent_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(visitAgentsPaymentInDetails);
+      }
+      if (
+        agent.Agent_Payment_Out_Schema &&
+        agent.Agent_Payment_Out_Schema.payment
+      ) {
+        const visitAgentsPaymentOutDetails =
+          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            type: "Visit_Agent_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(visitAgentsPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    azadSuppliers.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Supplier_Payment_In_Schema &&
+        agent.Supplier_Payment_In_Schema.payment
+      ) {
+        const azadSuppliersPaymentInDetails =
+          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            type: "Azad_Supplier_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(azadSuppliersPaymentInDetails);
+      }
+      if (
+        agent.Supplier_Payment_Out_Schema &&
+        agent.Supplier_Payment_Out_Schema.payment
+      ) {
+        const azadSuppliersPaymentOutDetails =
+          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            type: "Azad_Supplier_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(azadSuppliersPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    ticketSuppliers.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Supplier_Payment_In_Schema &&
+        agent.Supplier_Payment_In_Schema.payment
+      ) {
+        const ticketSuppliersPaymentInDetails =
+          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            type: "Ticket_Supplier_In",
+
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(ticketSuppliersPaymentInDetails);
+      }
+      if (
+        agent.Supplier_Payment_Out_Schema &&
+        agent.Supplier_Payment_Out_Schema.payment
+      ) {
+        const ticketSuppliersPaymentOutDetails =
+          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            type: "Ticket_Supplier_Out",
+            ...payment.toObject(),
+          }));
+           mergedPayments = mergedPayments.concat(
+          ticketSuppliersPaymentOutDetails
+        );
+      }
+    });
+
+    // Iterate through agents
+    visitSuppliers.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Supplier_Payment_In_Schema &&
+        agent.Supplier_Payment_In_Schema.payment
+      ) {
+        const visitSuppliersPaymentInDetails =
+          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            type: "Visit_Supplier_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(visitSuppliersPaymentInDetails);
+      }
+      if (
+        agent.Supplier_Payment_Out_Schema &&
+        agent.Supplier_Payment_Out_Schema.payment
+      ) {
+        const visitSuppliersPaymentOutDetails =
+          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            type: "Visit_Supplier_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(visitSuppliersPaymentOutDetails);
+      }
+    });
+    // Iterate through agents
+    azadCandidates.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Candidate_Payment_In_Schema &&
+        agent.Candidate_Payment_In_Schema.payment
+      ) {
+        const azadCandPaymentInDetails =
+          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            type: "Azad_Candidate_In",
+
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(azadCandPaymentInDetails);
+      }
+      if (
+        agent.Candidate_Payment_Out_Schema &&
+        agent.Candidate_Payment_Out_Schema.payment
+      ) {
+        const azadCandPaymentOutDetails =
+          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            type: "Azad_Candidate_Out",
+
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(azadCandPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    ticketCandidates.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Candidate_Payment_In_Schema &&
+        agent.Candidate_Payment_In_Schema.payment
+      ) {
+        const ticketCandPaymentInDetails =
+          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            type: "Ticket_Candidate_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(ticketCandPaymentInDetails);
+      }
+      if (
+        agent.Candidate_Payment_Out_Schema &&
+        agent.Candidate_Payment_Out_Schema.payment
+      ) {
+        const ticketCandPaymentOutDetails =
+          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            type: "Ticket_Candidate_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(ticketCandPaymentOutDetails);
+      }
+    });
+
+    // Iterate through agents
+    visitCandidates.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (
+        agent.Candidate_Payment_In_Schema &&
+        agent.Candidate_Payment_In_Schema.payment
+      ) {
+        const visitCandPaymentInDetails =
+          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            type: "Visit_Candidate_In",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(visitCandPaymentInDetails);
+      }
+      if (
+        agent.Candidate_Payment_Out_Schema &&
+        agent.Candidate_Payment_Out_Schema.payment
+      ) {
+        const visitCandPaymentOutDetails =
+          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            type: "Visit_Candidate_Out",
+            ...payment.toObject(),
+          }));
+        mergedPayments = mergedPayments.concat(visitCandPaymentOutDetails);
+      }
+    });
+
+  const assets=await Assets.find({})
+  const cdwcs=await CDWC.find({})
+  const cdwocs=await CDWOC.find({})
 
 
-    const assets=await Assets.find({})
-    const cdwcs=await CDWC.find({})
-    const cdwocs=await CDWOC.find({})
-
-
-    for (const asset of assets){
-      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
-        const payments=asset.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
-            normalPayments.add(payment);
-
+  for (const asset of assets){
+    if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+      const payments=asset.payment_In_Schema.payment
+      for (const payment of payments){
+        if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
+          const newPayment={
+            category:payment.category,
+            payment_Via:payment.payment_Via,
+            payment_Type:payment.payment_Type,
+            slip_No:payment.slip_No,
+            payment_In:payment.payment_In,
+            payment_In_Curr:payment.payment_In_Curr,
+            slip_Pic:payment.slip_Pic,
+            details:payment.details,
+            date:payment.date,
+            curr_Rate:payment.curr_Rate,
+            curr_Amount:payment.curr_Amount,
+            invoice:payment.invoice,
+            name:asset.payment_In_Schema.assetName,
+            type:"Assets_Payment_In",
           }
+          mergedPayments.push(newPayment);
+
         }
       }
     }
-    for (const cdwc of cdwcs){
-      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
-        const payments=cdwc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
-            normalPayments.add(payment);
-
+  }
+  for (const cdwc of cdwcs){
+    if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+      const payments=cdwc.payment_In_Schema.payment
+      for (const payment of payments){
+        if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
+         
+          const newPayment={
+            category:payment.category,
+            payment_Via:payment.payment_Via,
+            payment_Type:payment.payment_Type,
+            slip_No:payment.slip_No,
+            payment_In:payment.payment_In,
+            payment_In_Curr:payment.payment_In_Curr,
+            slip_Pic:payment.slip_Pic,
+            details:payment.details,
+            date:payment.date,
+            curr_Rate:payment.curr_Rate,
+            curr_Amount:payment.curr_Amount,
+            invoice:payment.invoice,
+            name:cdwc.payment_In_Schema.supplierName,
+            type:"CDWC_Payment_In",
+            
           }
+          mergedPayments.push(newPayment);
         }
       }
     }
-    for (const cdwoc of cdwocs){
-      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-        const payments=cdwoc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
-            normalPayments.add(payment);
+  }
+  for (const cdwoc of cdwocs){
+    if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+      const payments=cdwoc.payment_In_Schema.payment
+      for (const payment of payments){
+        if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
+          const newPayment={
+            category:payment.category,
+            payment_Via:payment.payment_Via,
+            payment_Type:payment.payment_Type,
+            slip_No:payment.slip_No,
+            payment_In:payment.payment_In,
+            payment_In_Curr:payment.payment_In_Curr,
+            slip_Pic:payment.slip_Pic,
+            details:payment.details,
+            date:payment.date,
+            curr_Rate:payment.curr_Rate,
+            curr_Amount:payment.curr_Amount,
+            invoice:payment.invoice,
+            name:cdwoc.payment_In_Schema.supplierName,
+            type:"CDWOC_Payment_In",
+           
 
           }
+          mergedPayments.push(newPayment)
+
         }
       }
     }
-    // Initialize total advance payment for payment_In
+  }
+  
+  for (const asset of assets){
+    if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+      const payments=asset.payment_In_Schema.payment
+      for (const payment of payments){
+        if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
+          const newPayment = {
+            category:payment.category,
+            payment_Via:payment.payment_Via,
+            payment_Type:payment.payment_Type,
+            slip_No:payment.slip_No,
+            payment_Out:payment.payment_Out,
+            payment_In_Curr:payment.payment_In_Curr,
+            slip_Pic:payment.slip_Pic,
+            details:payment.details,
+            date:payment.date,
+            curr_Rate:payment.curr_Rate,
+            curr_Amount:payment.curr_Amount,
+            invoice:payment.invoice,
+            name: asset.payment_In_Schema.assetName,
+            type: "Assets_Payment_Out",
+            
+          };
+          mergedPayments.push(newPayment);
 
-    // Process payments for each schema for payment_In
-    for (const { model, schemaType } of inCollections) {
-      const items = await model.find();
+        }
+      }
+    }
+  }
+  for (const cdwc of cdwcs){
+    if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+      const payments=cdwc.payment_In_Schema.payment
+      for (const payment of payments){
+        if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
+          const newPayment = {
+            category:payment.category,
+            payment_Via:payment.payment_Via,
+            payment_Type:payment.payment_Type,
+            slip_No:payment.slip_No,
+            payment_Out:payment.payment_Out,
+            payment_In_Curr:payment.payment_In_Curr,
+            slip_Pic:payment.slip_Pic,
+            details:payment.details,
+            date:payment.date,
+            curr_Rate:payment.curr_Rate,
+            curr_Amount:payment.curr_Amount,
+  
+            invoice:payment.invoice,
+            name: cdwc.payment_In_Schema.supplierName,
+            type: "CDWC_Payment_Out",
+        
+          };
+          mergedPayments.push(newPayment);
 
-      for (const item of items) {
-        // Check if the payment schema exists and has the expected structure
-        if (item[schemaType] && item[schemaType].payment) {
-          for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "normal") {
-              normalPayments.add(payment);
+        }
+      }
+    }
+  }
+  for (const cdwoc of cdwocs){
+    if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+      const payments=cdwoc.payment_In_Schema.payment
+      for (const payment of payments){
+        if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
+          const newPayment = {
+            category:payment.category,
+            payment_Via:payment.payment_Via,
+            payment_Type:payment.payment_Type,
+            slip_No:payment.slip_No,
+            payment_Out:payment.payment_Out,
+            payment_In_Curr:payment.payment_In_Curr,
+            slip_Pic:payment.slip_Pic,
+            details:payment.details,
+            date:payment.date,
+            curr_Rate:payment.curr_Rate,
+            curr_Amount:payment.curr_Amount,
+            invoice:payment.invoice,
+            name: cdwoc.payment_In_Schema.supplierName,
+            type: "CDWOC_Payment_Out",
+          };
+          mergedPayments.push(newPayment);
+
+        }
+      }
+    }
+  }
+  // Initialize total advance payment for payment_Out
+
+  const expenses=await Expenses.find({})
+  for (const expense of expenses){
+    if (expense.payment_Type.toLowerCase()==='normal'){
+      const newPayment = {
+        category:expense.expCategory,
+        payment_Via:expense.payment_Via,
+        payment_Type:expense.payment_Type,
+        slip_No:expense.slip_No,
+        payment_Out:expense.payment_Out,
+        payment_In_Curr:expense.payment_Out_Curr,
+        slip_Pic:expense.slip_Pic,
+        details:expense.details,
+        date:expense.date,
+        curr_Rate:expense.curr_Rate,
+        curr_Amount:expense.curr_Amount,
+        invoice:expense.invoice,
+        name: expense.name,
+        type: "Expense_Payment_Out",
+      };
+      mergedPayments.push(newPayment);
+    }
+  }
+
+  const employees=await Employees.find({})
+  for(const employee of employees){
+    if(employee.payments){
+      const allMonths=employee.payments
+      for (const month of allMonths){
+        if(month.payment && month.payment.length>0){
+          const payments= month.payment
+          for (const payment of payments){
+            if(payment.payment_Type.toLowerCase() === "normal"){
+              
+              const newPayment = {
+              category:payment.category,
+              payment_Via:payment.payment_Via,
+              payment_Type:payment.payment_Type,
+              slip_No:payment.slip_No,
+              payment_Out:payment.payment_Out,
+              payment_In_Curr:payment.payment_Out_Curr,
+              slip_Pic:payment.slip_Pic,
+              details:payment.details,
+              date:payment.date,
+              curr_Rate:payment.curr_Rate,
+              curr_Amount:payment.curr_Amount,
+              invoice:payment.invoice,
+                name: employee.employeeName,
+                type: "Employee_Payment_Out",
+            
+              };
+              mergedPayments.push(newPayment);
             }
           }
         }
       }
     }
-
-    // Array of collections to query for payment_Out
-    const outCollections = [
-      { model: Agents, schemaType: "payment_Out_Schema" },
-      { model: Suppliers, schemaType: "payment_Out_Schema" },
-      { model: Candidates, schemaType: "payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: Protector, schemaType: "payment_Out_Schema" },
-      { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
-      { model: Assets, schemaType: "payment_In_Schema" },
-
-    ];
-
+  }
 
     
-    for (const asset of assets){
-      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
-        const payments=asset.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
-            normalPayments.add(payment);
-
-          }
-        }
-      }
-    }
-    for (const cdwc of cdwcs){
-      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
-        const payments=cdwc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
-            normalPayments.add(payment);
-
-          }
-        }
-      }
-    }
-    for (const cdwoc of cdwocs){
-      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-        const payments=cdwoc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
-            normalPayments.add(payment);
-
-          }
-        }
-      }
-    }
-    // Initialize total advance payment for payment_Out
-
-    // Process payments for each schema for payment_Out
-    for (const { model, schemaType } of outCollections) {
-      const items = await model.find();
-
-      for (const item of items) {
-        // Check if the payment schema exists and has the expected structure
-        if (item[schemaType] && item[schemaType].payment) {
-          for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "normal") {
-              normalPayments.add(payment);
-            }
-          }
-        }
-      }
-    }
-
-
-    const expenses=await Expenses.find({})
-    for (const expense of expenses){
-      if (expense.payment_Type.toLowerCase()==='normal'){
-        normalPayments.add(expense);
-      }
-    }
-
-    const employees=await Employees.find({})
-    for(const employee of employees){
-      if(employee.payments){
-        const allMonths=employee.payments
-        for (const month of allMonths){
-          if(month.payment && month.payment.length>0){
-            const payments= month.payment
-            for (const payment of payments){
-              if(payment.payment_Type.toLowerCase() === "normal"){
-                normalPayments.add(payment)
-              }
-            }
-          }
-        }
-      }
-    }
-
-    const totalNormalPayments = [...normalPayments];
-
-    // Send the resulting total advance payments in the response
-    res.status(200).json({ data: totalNormalPayments });
+    res.status(200).json({ data: mergedPayments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -1627,186 +2094,599 @@ const getAdvancePayments = async (req, res) => {
       return;
     }
 
-    const advancePayments = new Set();
-    // Array of collections to query for payment_In
-    const inCollections = [
-      { model: Agents, schemaType: "payment_In_Schema" },
-      { model: Suppliers, schemaType: "payment_In_Schema" },
-      { model: Candidates, schemaType: "payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      
-    ];
-
-    const assets=await Assets.find({})
-    const cdwcs=await CDWC.find({})
-    const cdwocs=await CDWOC.find({})
-
-
-    for (const asset of assets){
-      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
-        const payments=asset.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
-            advancePayments.add(payment);
-
-          }
-        }
-      }
-    }
-    for (const cdwc of cdwcs){
-      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
-        const payments=cdwc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
-            advancePayments.add(payment);
-
-          }
-        }
-      }
-    }
-    for (const cdwoc of cdwocs){
-      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-        const payments=cdwoc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
-            advancePayments.add(payment);
-
-          }
-        }
-      }
-    }
-
-    // Initialize total advance payment for payment_In
-
-    // Process payments for each schema for payment_In
-    for (const { model, schemaType } of inCollections) {
-      const items = await model.find();
-
-      for (const item of items) {
-        // Check if the payment schema exists and has the expected structure
-        if (item[schemaType] && item[schemaType].payment) {
-          for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "advance") {
-              advancePayments.add(payment);
-            }
-          }
-        }
-      }
-    }
-
-    // Array of collections to query for payment_Out
-    const outCollections = [
-      { model: Agents, schemaType: "payment_Out_Schema" },
-      { model: Suppliers, schemaType: "payment_Out_Schema" },
-      { model: Candidates, schemaType: "payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: Protector, schemaType: "payment_Out_Schema" },
-      
-    ];
-
-    
-
-    
-    for (const asset of assets){
-      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
-        const payments=asset.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
-            advancePayments.add(payment);
-
-          }
-        }
-      }
-    }
-    for (const cdwc of cdwcs){
-      if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
-        const payments=cdwc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
-            advancePayments.add(payment);
-
-          }
-        }
-      }
-    }
-    for (const cdwoc of cdwocs){
-      if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-        const payments=cdwoc.payment_In_Schema.payment
-        for (const payment of payments){
-          if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
-            advancePayments.add(payment);
-
-          }
-        }
-      }
-    }
-
-    // Process payments for each schema for payment_Out
-    for (const { model, schemaType } of outCollections) {
-      const items = await model.find();
-
-      for (const item of items) {
-        // Check if the payment schema exists and has the expected structure
-        if (item[schemaType] && item[schemaType].payment) {
-          for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "advance") {
-              advancePayments.add(payment);
-            }
-          }
-        }
-      }
-    }
-
-    // Initialize total advance payment for payment_In
-
-    
-
-    const expenses=await Expenses.find({})
-    for (const expense of expenses){
-      if (expense.payment_Type.toLowerCase()==='advance'){
-        advancePayments.add(expense);
-      }
-    }
-
-    const employees=await Employees.find({})
-    for(const employee of employees){
-      if(employee.payments){
-        const allMonths=employee.payments
-        for (const month of allMonths){
-          if(month.payment && month.payment.length>0){
-            const payments= month.payment
-            for (const payment of payments){
-              if(payment.payment_Type.toLowerCase() === "advance"){
-               advancePayments.add(payment)
-              }
-            }
-          }
-        }
-      }
-    }
-
-    const totalAdvancePayments = [...advancePayments];
-
-    // Send the resulting total advance payments in the response
-    res.status(200).json({ data: totalAdvancePayments });
+     // Find all agents
+     const agents = await Agents.find();
+     const suppliers = await Suppliers.find();
+     const candidates = await Candidates.find();
+     const azadAgents = await AzadSuppliers.find();
+     const azadSuppliers = await AzadSuppliers.find();
+     const ticketAgents = await TicketSuppliers.find();
+     const ticketSuppliers = await TicketSuppliers.find();
+     const visitAgents = await VisitSuppliers.find();
+     const visitSuppliers = await VisitSuppliers.find();
+     const azadCandidates = await AzadCandidates.find();
+     const ticketCandidates = await TicketCandidates.find();
+     const visitCandidates = await VisitCandidates.find();
+ 
+     // Initialize an empty array to store merged payments
+     let mergedPayments = [];
+ 
+     // Iterate through agents
+     agents.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+         const paymentInDetails = agent.payment_In_Schema.payment.map(
+           (payment) => ({
+             supplierName: agent.payment_In_Schema.supplierName,
+             type: "Agent_Payment_In",
+             ...payment.toObject(),
+           })
+         );
+         mergedPayments = mergedPayments.concat(paymentInDetails);
+       }
+       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+         const paymentOutDetails = agent.payment_Out_Schema.payment.map(
+           (payment) => ({
+             supplierName: agent.payment_Out_Schema.supplierName,
+             type: "Agent_Payment_Out",
+             ...payment.toObject(),
+           })
+         );
+         mergedPayments = mergedPayments.concat(paymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     suppliers.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+         const supplierPaymentInDetails = agent.payment_In_Schema.payment.map(
+           (payment) => ({
+             supplierName: agent.payment_In_Schema.supplierName,
+             type: "Supplier_Payment_In",
+             ...payment.toObject(),
+           })
+         );
+         mergedPayments = mergedPayments.concat(supplierPaymentInDetails);
+       }
+       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+         const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(
+           (payment) => ({
+             supplierName: agent.payment_Out_Schema.supplierName,
+             type: "Supplier_Payment_Out",
+             ...payment.toObject(),
+           })
+         );
+         mergedPayments = mergedPayments.concat(supplierPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     candidates.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
+         const candPaymentInDetails = agent.payment_In_Schema.payment.map(
+           (payment) => ({
+             supplierName: agent.payment_In_Schema.supplierName,
+             type: "Candidate_Payment_In",
+             ...payment.toObject(),
+           })
+         );
+         mergedPayments = mergedPayments.concat(candPaymentInDetails);
+       }
+       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
+         const candPaymentOutDetails = agent.payment_Out_Schema.payment.map(
+           (payment) => ({
+             supplierName: agent.payment_Out_Schema.supplierName,
+             type: "Candidate_Payment_Out",
+             ...payment.toObject(),
+           })
+         );
+         mergedPayments = mergedPayments.concat(candPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     azadAgents.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Agent_Payment_In_Schema &&
+         agent.Agent_Payment_In_Schema.payment
+       ) {
+         const azadAgentsPaymentInDetails =
+           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Agent_Payment_In_Schema.supplierName,
+             type: "Azad_Agent_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(azadAgentsPaymentInDetails);
+       }
+       if (
+         agent.Agent_Payment_Out_Schema &&
+         agent.Agent_Payment_Out_Schema.payment
+       ) {
+         const azadAgentsPaymentOutDetails =
+           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+             type: "Azad_Agent_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(azadAgentsPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     ticketAgents.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Agent_Payment_In_Schema &&
+         agent.Agent_Payment_In_Schema.payment
+       ) {
+         const ticketAgentsPaymentInDetails =
+           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Agent_Payment_In_Schema.supplierName,
+             type: "Ticket_Agent_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(ticketAgentsPaymentInDetails);
+       }
+       if (
+         agent.Agent_Payment_Out_Schema &&
+         agent.Agent_Payment_Out_Schema.payment
+       ) {
+         const ticketAgentsPaymentOutDetails =
+           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+             type: "Ticket_Agent_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(ticketAgentsPaymentOutDetails);
+       }
+     })
+ 
+     // Iterate through agents
+     visitAgents.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Agent_Payment_In_Schema &&
+         agent.Agent_Payment_In_Schema.payment
+       ) {
+         const visitAgentsPaymentInDetails =
+           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Agent_Payment_In_Schema.supplierName,
+             type: "Visit_Agent_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(visitAgentsPaymentInDetails);
+       }
+       if (
+         agent.Agent_Payment_Out_Schema &&
+         agent.Agent_Payment_Out_Schema.payment
+       ) {
+         const visitAgentsPaymentOutDetails =
+           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+             type: "Visit_Agent_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(visitAgentsPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     azadSuppliers.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Supplier_Payment_In_Schema &&
+         agent.Supplier_Payment_In_Schema.payment
+       ) {
+         const azadSuppliersPaymentInDetails =
+           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+             type: "Azad_Supplier_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(azadSuppliersPaymentInDetails);
+       }
+       if (
+         agent.Supplier_Payment_Out_Schema &&
+         agent.Supplier_Payment_Out_Schema.payment
+       ) {
+         const azadSuppliersPaymentOutDetails =
+           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+             type: "Azad_Supplier_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(azadSuppliersPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     ticketSuppliers.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Supplier_Payment_In_Schema &&
+         agent.Supplier_Payment_In_Schema.payment
+       ) {
+         const ticketSuppliersPaymentInDetails =
+           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+             type: "Ticket_Supplier_In",
+ 
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(ticketSuppliersPaymentInDetails);
+       }
+       if (
+         agent.Supplier_Payment_Out_Schema &&
+         agent.Supplier_Payment_Out_Schema.payment
+       ) {
+         const ticketSuppliersPaymentOutDetails =
+           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+             type: "Ticket_Supplier_Out",
+             ...payment.toObject(),
+           }));
+            mergedPayments = mergedPayments.concat(
+           ticketSuppliersPaymentOutDetails
+         );
+       }
+     });
+ 
+     // Iterate through agents
+     visitSuppliers.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Supplier_Payment_In_Schema &&
+         agent.Supplier_Payment_In_Schema.payment
+       ) {
+         const visitSuppliersPaymentInDetails =
+           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+             type: "Visit_Supplier_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(visitSuppliersPaymentInDetails);
+       }
+       if (
+         agent.Supplier_Payment_Out_Schema &&
+         agent.Supplier_Payment_Out_Schema.payment
+       ) {
+         const visitSuppliersPaymentOutDetails =
+           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+             type: "Visit_Supplier_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(visitSuppliersPaymentOutDetails);
+       }
+     });
+     // Iterate through agents
+     azadCandidates.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Candidate_Payment_In_Schema &&
+         agent.Candidate_Payment_In_Schema.payment
+       ) {
+         const azadCandPaymentInDetails =
+           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+             type: "Azad_Candidate_In",
+ 
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(azadCandPaymentInDetails);
+       }
+       if (
+         agent.Candidate_Payment_Out_Schema &&
+         agent.Candidate_Payment_Out_Schema.payment
+       ) {
+         const azadCandPaymentOutDetails =
+           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+             type: "Azad_Candidate_Out",
+ 
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(azadCandPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     ticketCandidates.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Candidate_Payment_In_Schema &&
+         agent.Candidate_Payment_In_Schema.payment
+       ) {
+         const ticketCandPaymentInDetails =
+           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+             type: "Ticket_Candidate_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(ticketCandPaymentInDetails);
+       }
+       if (
+         agent.Candidate_Payment_Out_Schema &&
+         agent.Candidate_Payment_Out_Schema.payment
+       ) {
+         const ticketCandPaymentOutDetails =
+           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+             type: "Ticket_Candidate_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(ticketCandPaymentOutDetails);
+       }
+     });
+ 
+     // Iterate through agents
+     visitCandidates.forEach((agent) => {
+       // Check if payment_In_Schema exists and has the expected structure
+       if (
+         agent.Candidate_Payment_In_Schema &&
+         agent.Candidate_Payment_In_Schema.payment
+       ) {
+         const visitCandPaymentInDetails =
+           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
+             supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+             type: "Visit_Candidate_In",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(visitCandPaymentInDetails);
+       }
+       if (
+         agent.Candidate_Payment_Out_Schema &&
+         agent.Candidate_Payment_Out_Schema.payment
+       ) {
+         const visitCandPaymentOutDetails =
+           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
+             supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+             type: "Visit_Candidate_Out",
+             ...payment.toObject(),
+           }));
+         mergedPayments = mergedPayments.concat(visitCandPaymentOutDetails);
+       }
+     });
+ 
+   const assets=await Assets.find({})
+   const cdwcs=await CDWC.find({})
+   const cdwocs=await CDWOC.find({})
+ 
+ 
+   for (const asset of assets){
+     if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+       const payments=asset.payment_In_Schema.payment
+       for (const payment of payments){
+         if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
+           const newPayment={
+             category:payment.category,
+             payment_Via:payment.payment_Via,
+             payment_Type:payment.payment_Type,
+             slip_No:payment.slip_No,
+             payment_In:payment.payment_In,
+             payment_In_Curr:payment.payment_In_Curr,
+             slip_Pic:payment.slip_Pic,
+             details:payment.details,
+             date:payment.date,
+             curr_Rate:payment.curr_Rate,
+             curr_Amount:payment.curr_Amount,
+             invoice:payment.invoice,
+             name:asset.payment_In_Schema.assetName,
+             type:"Assets_Payment_In",
+           }
+           mergedPayments.push(newPayment);
+ 
+         }
+       }
+     }
+   }
+   for (const cdwc of cdwcs){
+     if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+       const payments=cdwc.payment_In_Schema.payment
+       for (const payment of payments){
+         if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
+          
+           const newPayment={
+             category:payment.category,
+             payment_Via:payment.payment_Via,
+             payment_Type:payment.payment_Type,
+             slip_No:payment.slip_No,
+             payment_In:payment.payment_In,
+             payment_In_Curr:payment.payment_In_Curr,
+             slip_Pic:payment.slip_Pic,
+             details:payment.details,
+             date:payment.date,
+             curr_Rate:payment.curr_Rate,
+             curr_Amount:payment.curr_Amount,
+             invoice:payment.invoice,
+             name:cdwc.payment_In_Schema.supplierName,
+             type:"CDWC_Payment_In",
+             
+           }
+           mergedPayments.push(newPayment);
+         }
+       }
+     }
+   }
+   for (const cdwoc of cdwocs){
+     if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+       const payments=cdwoc.payment_In_Schema.payment
+       for (const payment of payments){
+         if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
+           const newPayment={
+             category:payment.category,
+             payment_Via:payment.payment_Via,
+             payment_Type:payment.payment_Type,
+             slip_No:payment.slip_No,
+             payment_In:payment.payment_In,
+             payment_In_Curr:payment.payment_In_Curr,
+             slip_Pic:payment.slip_Pic,
+             details:payment.details,
+             date:payment.date,
+             curr_Rate:payment.curr_Rate,
+             curr_Amount:payment.curr_Amount,
+             invoice:payment.invoice,
+             name:cdwoc.payment_In_Schema.supplierName,
+             type:"CDWOC_Payment_In",
+            
+ 
+           }
+           mergedPayments.push(newPayment)
+ 
+         }
+       }
+     }
+   }
+   
+   for (const asset of assets){
+     if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
+       const payments=asset.payment_In_Schema.payment
+       for (const payment of payments){
+         if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
+           const newPayment = {
+             category:payment.category,
+             payment_Via:payment.payment_Via,
+             payment_Type:payment.payment_Type,
+             slip_No:payment.slip_No,
+             payment_Out:payment.payment_Out,
+             payment_In_Curr:payment.payment_In_Curr,
+             slip_Pic:payment.slip_Pic,
+             details:payment.details,
+             date:payment.date,
+             curr_Rate:payment.curr_Rate,
+             curr_Amount:payment.curr_Amount,
+             invoice:payment.invoice,
+             name: asset.payment_In_Schema.assetName,
+             type: "Assets_Payment_Out",
+             
+           };
+           mergedPayments.push(newPayment);
+ 
+         }
+       }
+     }
+   }
+   for (const cdwc of cdwcs){
+     if(cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment){
+       const payments=cdwc.payment_In_Schema.payment
+       for (const payment of payments){
+         if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
+           const newPayment = {
+             category:payment.category,
+             payment_Via:payment.payment_Via,
+             payment_Type:payment.payment_Type,
+             slip_No:payment.slip_No,
+             payment_Out:payment.payment_Out,
+             payment_In_Curr:payment.payment_In_Curr,
+             slip_Pic:payment.slip_Pic,
+             details:payment.details,
+             date:payment.date,
+             curr_Rate:payment.curr_Rate,
+             curr_Amount:payment.curr_Amount,
+   
+             invoice:payment.invoice,
+             name: cdwc.payment_In_Schema.supplierName,
+             type: "CDWC_Payment_Out",
+         
+           };
+           mergedPayments.push(newPayment);
+ 
+         }
+       }
+     }
+   }
+   for (const cdwoc of cdwocs){
+     if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
+       const payments=cdwoc.payment_In_Schema.payment
+       for (const payment of payments){
+         if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
+           const newPayment = {
+             category:payment.category,
+             payment_Via:payment.payment_Via,
+             payment_Type:payment.payment_Type,
+             slip_No:payment.slip_No,
+             payment_Out:payment.payment_Out,
+             payment_In_Curr:payment.payment_In_Curr,
+             slip_Pic:payment.slip_Pic,
+             details:payment.details,
+             date:payment.date,
+             curr_Rate:payment.curr_Rate,
+             curr_Amount:payment.curr_Amount,
+             invoice:payment.invoice,
+             name: cdwoc.payment_In_Schema.supplierName,
+             type: "CDWOC_Payment_Out",
+           };
+           mergedPayments.push(newPayment);
+ 
+         }
+       }
+     }
+   }
+   // Initialize total advance payment for payment_Out
+ 
+   const expenses=await Expenses.find({})
+   for (const expense of expenses){
+     if (expense.payment_Type.toLowerCase()==='advance'){
+       const newPayment = {
+         category:expense.expCategory,
+         payment_Via:expense.payment_Via,
+         payment_Type:expense.payment_Type,
+         slip_No:expense.slip_No,
+         payment_Out:expense.payment_Out,
+         payment_In_Curr:expense.payment_Out_Curr,
+         slip_Pic:expense.slip_Pic,
+         details:expense.details,
+         date:expense.date,
+         curr_Rate:expense.curr_Rate,
+         curr_Amount:expense.curr_Amount,
+         invoice:expense.invoice,
+         name: expense.name,
+         type: "Expense_Payment_Out",
+       };
+       mergedPayments.push(newPayment);
+     }
+   }
+ 
+   const employees=await Employees.find({})
+   for(const employee of employees){
+     if(employee.payments){
+       const allMonths=employee.payments
+       for (const month of allMonths){
+         if(month.payment && month.payment.length>0){
+           const payments= month.payment
+           for (const payment of payments){
+             if(payment.payment_Type.toLowerCase() === "advance"){
+               
+               const newPayment = {
+               category:payment.category,
+               payment_Via:payment.payment_Via,
+               payment_Type:payment.payment_Type,
+               slip_No:payment.slip_No,
+               payment_Out:payment.payment_Out,
+               payment_In_Curr:payment.payment_Out_Curr,
+               slip_Pic:payment.slip_Pic,
+               details:payment.details,
+               date:payment.date,
+               curr_Rate:payment.curr_Rate,
+               curr_Amount:payment.curr_Amount,
+               invoice:payment.invoice,
+                 name: employee.employeeName,
+                 type: "Employee_Payment_Out",
+             
+               };
+               mergedPayments.push(newPayment);
+             }
+           }
+         }
+       }
+     }
+   }
+ 
+     
+     res.status(200).json({ data: mergedPayments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -2502,7 +3382,7 @@ const getVisitCandPayments = async (req, res) => {
           }));
         mergedPayments = mergedPayments.concat(paymentOutDetails);
       }
-    });
+    })
 
     // Send the resulting mergedPayments array in the response
     res.status(200).json({ data: mergedPayments });
@@ -2546,6 +3426,8 @@ const getNetVisaReports=async(req,res)=>{
                   cash_Out:person.cash_Out,
                   total_In:person.total_In-person.cash_Out,
                   remaining:person.remaining_Price,
+                  total_Curr_In:person.visa_Price_In_Curr-person.remaining_Curr,
+                  remain_Curr:person.remaining_Curr,
                 };
                 
                 allEntries.push(newEntry);
@@ -2563,7 +3445,9 @@ const getNetVisaReports=async(req,res)=>{
                   cash_In: person.total_In,
                   cash_Out:person.cash_Out,
                   total_In:person.total_In-person.cash_Out,
-                  remaining:person.remaining_Price
+                  remaining:person.remaining_Price,
+                  total_Curr_In:person.visa_Price_Out_Curr-person.remaining_Curr,
+                  remain_Curr:person.remaining_Curr,
                 };
                 
                 allEntries.push(newEntry);
@@ -2585,6 +3469,8 @@ const getNetVisaReports=async(req,res)=>{
                   cash_Out:person.cash_Out,
                   total_In:person.total_In-person.cash_Out,
                   remaining:person.remaining_Price,
+                  total_Curr_In:person.visa_Price_In_Curr-person.remaining_Curr,
+                  remain_Curr:person.remaining_Curr,
                 };
                 // Push the new entry to the allEntries array
                 allEntries.push(newEntry);
@@ -2602,7 +3488,9 @@ const getNetVisaReports=async(req,res)=>{
                   cash_In: person.total_In,
                   cash_Out:person.cash_Out,
                   total_In:person.total_In-person.cash_Out,
-                  remaining:person.remaining_Price
+                  remaining:person.remaining_Price,
+                  total_Curr_In:person.visa_Price_Out_Curr-person.remaining_Curr,
+                  remain_Curr:person.remaining_Curr,
                 };
               
                 allEntries.push(newEntry);
@@ -2623,7 +3511,9 @@ const getNetVisaReports=async(req,res)=>{
                   cash_In: candidate.payment_In_Schema.total_Payment_In,
                   cash_Out:candidate.payment_In_Schema.total_Cash_Out,
                   total_In:candidate.payment_In_Schema.total_Payment_In-candidate.payment_In_Schema.total_Cash_Out,
-                  remaining:candidate.payment_In_Schema.remaining_Balance
+                  remaining:candidate.payment_In_Schema.remaining_Balance,
+                  total_Curr_In:candidate.payment_In_Schema.total_Payment_In_Curr-candidate.payment_In_Schema.remaining_Curr,
+                  remain_Curr:candidate.payment_In_Schema.remaining_Curr,
                 };
                 
                 allEntries.push(newEntry);
@@ -2641,7 +3531,9 @@ const getNetVisaReports=async(req,res)=>{
                   cash_In: candidate.payment_Out_Schema.total_Payment_Out,
                   cash_Out:candidate.payment_Out_Schema.total_Cash_Out,
                   total_In:candidate.payment_Out_Schema.total_Payment_Out-candidate.payment_Out_Schema.total_Cash_Out,
-                  remaining:candidate.payment_Out_Schema.remaining_Balance
+                  remaining:candidate.payment_Out_Schema.remaining_Balance,
+                  total_Curr_In:candidate.payment_Out_Schema.total_Payment_Out_Curr-candidate.payment_Out_Schema.remaining_Curr,
+                  remain_Curr:candidate.payment_Out_Schema.remaining_Curr,
                 };
                 
                 allEntries.push(newEntry);
@@ -2660,6 +3552,468 @@ const getNetVisaReports=async(req,res)=>{
 }
 
 
+// Getting Total Summerize Receivable
+const getTotalReceivable=async(req,res)=>{
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    if (!user.role === "Admin") {
+      res.status(404).json({ message: "you are not Admin" });
+      return;
+    }
+
+  
+    const agents = await Agents.find();
+    const suppliers = await Suppliers.find();
+    const candidates = await Candidates.find();
+    const azadCandidates = await AzadCandidates.find();
+    const visitCandidates = await VisitCandidates.find();
+    const ticketCandidates = await TicketCandidates.find();
+
+    const azadSuppliers = await AzadSuppliers.find();
+    const visitSuppliers = await VisitSuppliers.find();
+    const ticketSuppliers = await TicketSuppliers.find();
+
+    let mergedReceivablePayments = [];
+
+    agents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (agent.payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Agent",
+            total_Price:agent.payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:agent.payment_In_Schema.total_Payment_In- agent.payment_In_Schema.total_Cash_Out,
+            remaining:agent.payment_In_Schema.total_Visa_Price_In_PKR- agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+    suppliers.forEach((supplier) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (supplier.payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: supplier.payment_In_Schema.supplierName,
+            type: "Supplier",
+            total_Price:supplier.payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:supplier.payment_In_Schema.total_Payment_In- supplier.payment_In_Schema.total_Cash_Out,
+            remaining:supplier.payment_In_Schema.total_Visa_Price_In_PKR- supplier.payment_In_Schema.total_Payment_In+supplier.payment_In_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    candidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.payment_In_Schema.supplierName,
+            type: "Candidate",
+            total_Price:candidate.payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+    visitCandidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Candidate_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Candidate_Payment_In_Schema.supplierName,
+            type: "Visit Candidate",
+            total_Price:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Candidate_Payment_In_Schema.total_Payment_In- candidate.Candidate_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR- candidate.Candidate_Payment_In_Schema.total_Payment_In+candidate.Candidate_Payment_In_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    azadCandidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Candidate_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Candidate_Payment_In_Schema.supplierName,
+            type: "Azad Candidate",
+            total_Price:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Candidate_Payment_In_Schema.total_Payment_In- candidate.Candidate_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR- candidate.Candidate_Payment_In_Schema.total_Payment_In+candidate.Candidate_Payment_In_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    ticketCandidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Candidate_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Candidate_Payment_In_Schema.supplierName,
+            type: "Ticket Candidate",
+            total_Price:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Candidate_Payment_In_Schema.total_Payment_In- candidate.Candidate_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR- candidate.Candidate_Payment_In_Schema.total_Payment_In+candidate.Candidate_Payment_In_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+    visitSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Supplier_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Supplier_Payment_In_Schema.supplierName,
+            type: "Visit Supplier",
+            total_Price:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Supplier_Payment_In_Schema.total_Payment_In- candidate.Supplier_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Supplier_Payment_In_Schema.total_Payment_In+candidate.Supplier_Payment_In_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    azadSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Supplier_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Supplier_Payment_In_Schema.supplierName,
+            type: "Azad Supplier",
+            total_Price:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Supplier_Payment_In_Schema.total_Payment_In- candidate.Supplier_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Supplier_Payment_In_Schema.total_Payment_In+candidate.Supplier_Payment_In_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    ticketSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Supplier_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Supplier_Payment_In_Schema.supplierName,
+            type: "Ticket Supplier",
+            total_Price:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Supplier_Payment_In_Schema.total_Payment_In- candidate.Supplier_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Supplier_Payment_In_Schema.total_Payment_In+candidate.Supplier_Payment_In_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+
+    // For Agents
+    visitSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Agent_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Agent_Payment_In_Schema.supplierName,
+            type: "Visit Agent",
+            total_Price:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Agent_Payment_In_Schema.total_Payment_In- candidate.Agent_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Agent_Payment_In_Schema.total_Payment_In+candidate.Agent_Payment_In_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    azadSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Agent_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Agent_Payment_In_Schema.supplierName,
+            type: "Azad Agent",
+            total_Price:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Agent_Payment_In_Schema.total_Payment_In- candidate.Agent_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Agent_Payment_In_Schema.total_Payment_In+candidate.Agent_Payment_In_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    ticketSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Agent_Payment_In_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Agent_Payment_In_Schema.supplierName,
+            type: "Ticket Agent",
+            total_Price:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.Agent_Payment_In_Schema.total_Payment_In- candidate.Agent_Payment_In_Schema.total_Cash_Out,
+            remaining:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Agent_Payment_In_Schema.total_Payment_In+candidate.Agent_Payment_In_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    
+    res.status(200).json({ data: mergedReceivablePayments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+}
+
+
+// Getting Total Summerize Payable
+const getTotalPayable=async(req,res)=>{
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    if (!user.role === "Admin") {
+      res.status(404).json({ message: "you are not Admin" });
+      return;
+    }
+
+  
+    const agents = await Agents.find();
+    const suppliers = await Suppliers.find();
+    const candidates = await Candidates.find();
+    const azadCandidates = await AzadCandidates.find();
+    const visitCandidates = await VisitCandidates.find();
+    const ticketCandidates = await TicketCandidates.find();
+
+    const azadSuppliers = await AzadSuppliers.find();
+    const visitSuppliers = await VisitSuppliers.find();
+    const ticketSuppliers = await TicketSuppliers.find();
+
+    let mergedReceivablePayments = [];
+
+    agents.forEach((agent) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (agent.payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Agent",
+            total_Price:agent.payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:agent.payment_Out_Schema.total_Payment_Out- agent.payment_Out_Schema.total_Cash_Out,
+            remaining:agent.payment_Out_Schema.total_Visa_Price_Out_PKR- agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+    suppliers.forEach((supplier) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (supplier.payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: supplier.payment_Out_Schema.supplierName,
+            type: "Supplier",
+            total_Price:supplier.payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:supplier.payment_Out_Schema.total_Payment_Out- supplier.payment_Out_Schema.total_Cash_Out,
+            remaining:supplier.payment_Out_Schema.total_Visa_Price_Out_PKR- supplier.payment_Out_Schema.total_Payment_Out+supplier.payment_Out_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    candidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.payment_Out_Schema.supplierName,
+            type: "Candidate",
+            total_Price:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+    visitCandidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Candidate_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Candidate_Payment_Out_Schema.supplierName,
+            type: "Visit Candidate",
+            total_Price:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Candidate_Payment_Out_Schema.total_Payment_Out- candidate.Candidate_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.Candidate_Payment_Out_Schema.total_Payment_Out+candidate.Candidate_Payment_Out_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    azadCandidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Candidate_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Candidate_Payment_Out_Schema.supplierName,
+            type: "Azad Candidate",
+            total_Price:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Candidate_Payment_Out_Schema.total_Payment_Out- candidate.Candidate_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.Candidate_Payment_Out_Schema.total_Payment_Out+candidate.Candidate_Payment_Out_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    ticketCandidates.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Candidate_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Candidate_Payment_Out_Schema.supplierName,
+            type: "Ticket Candidate",
+            total_Price:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Candidate_Payment_Out_Schema.total_Payment_Out- candidate.Candidate_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.Candidate_Payment_Out_Schema.total_Payment_Out+candidate.Candidate_Payment_Out_Schema.total_Cash_Out 
+          }
+           
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+    visitSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Supplier_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Supplier_Payment_Out_Schema.supplierName,
+            type: "Visit Supplier",
+            total_Price:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Supplier_Payment_Out_Schema.total_Payment_Out- candidate.Supplier_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Supplier_Payment_Out_Schema.total_Payment_Out+candidate.Supplier_Payment_Out_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    azadSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Supplier_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Supplier_Payment_Out_Schema.supplierName,
+            type: "Azad Supplier",
+            total_Price:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Supplier_Payment_Out_Schema.total_Payment_Out- candidate.Supplier_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Supplier_Payment_Out_Schema.total_Payment_Out+candidate.Supplier_Payment_Out_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    ticketSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Supplier_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Supplier_Payment_Out_Schema.supplierName,
+            type: "Ticket Supplier",
+            total_Price:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Supplier_Payment_Out_Schema.total_Payment_Out- candidate.Supplier_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Supplier_Payment_Out_Schema.total_Payment_Out+candidate.Supplier_Payment_Out_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+
+
+    // For Agents
+    visitSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Agent_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Agent_Payment_Out_Schema.supplierName,
+            type: "Visit Agent",
+            total_Price:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Agent_Payment_Out_Schema.total_Payment_Out- candidate.Agent_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Agent_Payment_Out_Schema.total_Payment_Out+candidate.Agent_Payment_Out_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    azadSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Agent_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Agent_Payment_Out_Schema.supplierName,
+            type: "Azad Agent",
+            total_Price:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Agent_Payment_Out_Schema.total_Payment_Out- candidate.Agent_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Agent_Payment_Out_Schema.total_Payment_Out+candidate.Agent_Payment_Out_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    ticketSuppliers.forEach((candidate) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (candidate.Agent_Payment_Out_Schema) {
+        
+          const newPayment={
+            supplierName: candidate.Agent_Payment_Out_Schema.supplierName,
+            type: "Ticket Agent",
+            total_Price:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.Agent_Payment_Out_Schema.total_Payment_Out- candidate.Agent_Payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Agent_Payment_Out_Schema.total_Payment_Out+candidate.Agent_Payment_Out_Schema.total_Cash_Out 
+          }
+        mergedReceivablePayments.push(newPayment)
+      }
+    })
+
+    
+    res.status(200).json({ data: mergedReceivablePayments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+}
 
 module.exports = {
   getAllPayments,
@@ -2684,5 +4038,7 @@ module.exports = {
   getVisitSuppPayments,
   getVisitAgentPayments,
   getVisitCandPayments,
-  getNetVisaReports
+  getNetVisaReports,
+  getTotalReceivable,
+  getTotalPayable
 };

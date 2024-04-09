@@ -50,6 +50,50 @@ export default function SupplierHook() {
         }
     }
 
+    const getSupplierPaymentsIn = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/auth/suppliers/get/payment_in_details`, {
+                headers: {
 
-    return { getPaymentsIn, getPaymentsOut }
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+            const json = await response.json();
+            if (response.ok) {
+                dispatch(getSup_Payments_In(json.data)); // Dispatch the action with received data
+            }
+            if (!response.ok) {
+                console.log(json.message)
+            }
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const getSupplierPaymentsOut = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/auth/suppliers/get/payment_out_details`, {
+                headers: {
+
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+            const json = await response.json();
+            if (response.ok) {
+                dispatch(getSup_Payments_Out(json.data)); // Dispatch the action with received data
+            }
+            if (!response.ok) {
+                console.log(json.message)
+            }
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+
+    return { getPaymentsIn, getPaymentsOut,getSupplierPaymentsIn,getSupplierPaymentsOut }
 }

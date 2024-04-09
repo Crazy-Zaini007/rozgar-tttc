@@ -177,6 +177,7 @@ const addAzadCandPaymentIn = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                          await existingSupplier.save()
 
                     const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
 
@@ -372,6 +373,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
               
                       })
                       await newNotification.save()
+                    await existingSupplier.save()
+
             }
 
 
@@ -559,6 +562,8 @@ const addAzadCandPaymentInReturn = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                    await existingSupplier.save()
+
 
                     const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
 
@@ -678,6 +683,7 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
         
               })
               await newNotification.save()
+              await existingSupplier.save()
 
             const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
@@ -1620,6 +1626,8 @@ const addAzadCandPaymentOut = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                    await existingSupplier.save()
+
 
                     res.status(200).json({message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record` });
 
@@ -1804,6 +1812,7 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                          await existingSupplier.save()
 
                     const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
 
@@ -1924,6 +1933,8 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
         
               })
               await newNotification.save()
+              await existingSupplier.save()
+
             const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
             res.status(200).json({ message: `Payment Out deleted sucessfully from ${supplierName}` })
 
@@ -2231,6 +2242,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
               
                       })
                       await newNotification.save()
+                    await existingSupplier.save()
+
             }
 
 

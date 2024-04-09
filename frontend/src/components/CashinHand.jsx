@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 export default function CashinHand() {
   const dispatch = useDispatch();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const[total,setTotal]=useState()
 
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
@@ -44,10 +45,34 @@ export default function CashinHand() {
 
 
   const { user } = useAuthContext()
+
+  
+const getBankCash = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
+
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`
+      }
+    })
+
+    const json = await response.json();
+    if (response.ok) {
+     setTotal(json.bank_Cash)
+    }
+  }
+  catch (error) {
+    console.error('Fetch error:', error);
+    setNewMessage(toast.error('Server is not Responding...'));
+    setLoading(false);
+  }
+}
   const fetchData = async () => {
     try {
 
       await getCashInHandData();
+      await getBankCash()
     await getOverAllPayments()
         
       await Promise.all([
@@ -614,12 +639,19 @@ export default function CashinHand() {
                 <div className="account_details py-md-5 py-4 rounded px-0 m-0">
                   <h4 className='text-center'>Account Details</h4>
                 </div>
-                <div className="account-text mt-md-4 mt-3 text-center">
-                  <h6 className='my-2' onClick={() => setCurrent(1)}>{cashInHand.total_Cash?cashInHand.total_Cash:0}</h6>
-                  <h5 className='my-2'>Cash In Hand</h5>
+                <div className="account-text mt-md-4 mt-3">
+                 
+                 <div className="middle text-center">
+                 <h6 className='my-2'>{(cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0)}</h6>
+                  <h5 className='my-2'>Cash</h5>
+                  <h6 className='my-2'>{total ? total :0}</h6>
+                  <h5 className='my-2'>Banks Cash</h5>
+                 <h6 className='my-2' onClick={() => setCurrent(1)}>{cashInHand.total_Cash?cashInHand.total_Cash:0}</h6>
+                  <h5 className='my-2'>Total Cash In Hand</h5>
                   <Link className="cash_in_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
                   <Link className="cash_out_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
-
+                 </div>
+                 
                 </div>
               </div>
             </div>

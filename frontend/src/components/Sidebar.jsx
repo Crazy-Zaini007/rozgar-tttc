@@ -426,6 +426,46 @@ export default function Sidebar() {
           setOption16(false)
 
           break;
+          case '/rozgar/direct/payment_in':
+            setActiveItem(114);
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(false)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+            setOption16(false)
+  
+            break;
+            case '/rozgar/direct/payment_out':
+              setActiveItem(115);
+              setOption1(false)
+              setOption2(false)
+              setOption3(false)
+              setOption4(false)
+              setOption5(false)
+              setOption6(false)
+              setOption7(false)
+              setOption8(false)
+              setOption9(false)
+              setOption10(false)
+              setOption11(false)
+              setOption12(false)
+              setOption13(false)
+              setOption14(false)
+              setOption15(false)
+              setOption16(false)
+    
+              break;
         case '/rozgar/reminders':
           setActiveItem(91);
           setOption1(false)
@@ -2206,6 +2246,66 @@ export default function Sidebar() {
             setOption16(false)
   
             break;
+            case '/rozgar/reports/overall_visa_profit_reports':
+            setActiveItem(111)
+            setOption1(false)
+            setOption2(false)
+            setOption3(false)
+            setOption4(false)
+            setOption5(false)
+            setOption6(false)
+            setOption7(false)
+            setOption8(false)
+            setOption9(false)
+            setOption10(false)
+            setOption11(false)
+            setOption12(true)
+            setOption13(false)
+            setOption14(false)
+            setOption15(false)
+            setOption16(false)
+  
+            break;
+            case '/rozgar/reports/cand_visa_payment_reports':
+              setActiveItem(112)
+              setOption1(false)
+              setOption2(false)
+              setOption3(false)
+              setOption4(false)
+              setOption5(false)
+              setOption6(false)
+              setOption7(false)
+              setOption8(false)
+              setOption9(false)
+              setOption10(false)
+              setOption11(false)
+              setOption12(true)
+              setOption13(false)
+              setOption14(false)
+              setOption15(false)
+              setOption16(false)
+    
+              break;
+              case '/rozgar/reports/overall_system_payment_reports':
+              setActiveItem(113)
+              setOption1(false)
+              setOption2(false)
+              setOption3(false)
+              setOption4(false)
+              setOption5(false)
+              setOption6(false)
+              setOption7(false)
+              setOption8(false)
+              setOption9(false)
+              setOption10(false)
+              setOption11(false)
+              setOption12(true)
+              setOption13(false)
+              setOption14(false)
+              setOption15(false)
+              setOption16(false)
+    
+              break;
 
         case '/rozgar/protector/payment_out':
           setActiveItem(81)
@@ -2439,9 +2539,10 @@ export default function Sidebar() {
             <li className=' my-2' style={activeItem === 1 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(1, `/`)}><i className="fas fa-chart-line me-2"></i>Dashboard</li>
             <li className=' my-2' style={activeItem === 2 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(2, `/rozgar/cash_in_hand`)}><i className="fas fa-hand-holding-usd me-2"></i>Cash in Hand </li>
             <li className=' my-2' style={activeItem === 90 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(90, `/rozgar/bank_cash`)}><i className="fas fa-university me-2"></i>Banks Cash </li>
+            <li className=' my-2' style={activeItem === 114 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(114, `/rozgar/direct/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Direct Payment IN </li>
+            <li className=' my-2' style={activeItem === 115 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(115, `/rozgar/direct/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Direct Payment OUT </li>
           </ul>
           <Divider className='mx-4'></Divider>
-
           <ul className='pt-2 mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption1} style={option1 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
@@ -2738,6 +2839,9 @@ export default function Sidebar() {
                 <li className=' my-2' style={activeItem === 71 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(71, `/rozgar/reports/overall_visa_wise`)}><i className="fa-solid fa-circle-dot mx-2"></i>Overall Visa-Wise</li>
                 <li className=' my-2' style={activeItem === 72 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(72, `/rozgar/reports/overall_payment_visa_wise`)}><i className="fa-solid fa-circle-dot mx-2"></i>Overall Payment <br /> <span className='ms-4'> Visa Wise</span></li>
                 <li className=' my-2' style={activeItem === 106 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(106, `/rozgar/reports/net_visa_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Net Visa Reports</li>
+                <li className=' my-2' style={activeItem === 111 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(111, `/rozgar/reports/overall_visa_profit_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Overall Visa  <br /> <span className='ms-4'> Profit Reports</span></li>
+                <li className=' my-2' style={activeItem === 112 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(112, `/rozgar/reports/cand_visa_payment_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Candidate Visa  <br /> <span className='ms-4'> Payments Reports</span></li>
+                <li className=' my-2' style={activeItem === 113 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(113, `/rozgar/reports/overall_system_payment_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Overall System  <br /> <span className='ms-4'> Payments Reports</span></li>
                 <li className=' my-2' style={activeItem === 77 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(77, `/rozgar/reports/candidates_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Candidate Reports</li>
                 <li className=' my-2' style={activeItem === 78 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(78, `/rozgar/reports/agents_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Agents Reports</li>
                 <li className=' my-2' style={activeItem === 79 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(79, `/rozgar/reports/suppliers_reports`)}><i className="fa-solid fa-circle-dot mx-2"></i>Suppliers Reports</li>

@@ -512,7 +512,7 @@ export default function AgentCandPaymentInDetails() {
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData.payment
-        .filter((paymentItem) => paymentItem.cand_Name !== undefined)
+        .filter((paymentItem) => paymentItem.cand_Name !== undefined && paymentItem.cand_Name !== "")
         .filter((paymentItem) => {
           let isDateInRange = true;
           // Check if the payment item's date is within the selected date range

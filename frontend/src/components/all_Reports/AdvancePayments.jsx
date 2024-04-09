@@ -53,19 +53,6 @@ export default function AdvancePayments() {
   }, []);
 
   
-  const rowsPerPageOptions = [10, 15, 30];
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
@@ -79,9 +66,11 @@ export default function AdvancePayments() {
       const toDate = new Date(dateTo);
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
-    return isDateInRange;
-  })
-
+    // Filter payments where payment_Type is 'advance'
+    const isAdvancePayment = paymentItem.payment_Type.toLowerCase() === 'advance';
+    return isDateInRange && isAdvancePayment;
+  });
+  
   const printExpenseTable = () => {
     // Convert JSX to HTML string
     const printContentString = `
@@ -90,6 +79,8 @@ export default function AdvancePayments() {
         <tr>
         <th>SN</th>
         <th>Date</th>
+        <th>Name</th>
+        <th>Reference Type</th>
         <th>Category</th>
         <th>Payment Via</th>
         <th>Payment Type</th>
@@ -106,6 +97,8 @@ export default function AdvancePayments() {
   <tr key="${entry?._id}">
     <td>${index + 1}</td>
     <td>${String(entry?.date)}</td>
+    <td>${String(entry?.name)}</td>
+    <td>${String(entry?.type)}</td>
     <td>${String(entry?.category)}</td>
     <td>${String(entry?.payment_Via)}</td>
     <td>${String(entry?.payment_Type)}</td>
@@ -120,6 +113,8 @@ export default function AdvancePayments() {
 
       
       <tr>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -185,7 +180,9 @@ export default function AdvancePayments() {
     filteredPayments.forEach((payments, index) => {
         const rowData = {
             SN: index + 1,
-            date: payments.date,
+            Date: payments.date,
+            Name: payments.name,
+            Reference_Type: payments.type,
             Category: payments.category,
             Payment_Via: payments.payment_Via,
             Payment_Type: payments.payment_Type,
@@ -204,7 +201,7 @@ export default function AdvancePayments() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Payable Reports.xlsx');
+    XLSX.writeFile(wb, 'Advance Reports.xlsx');
   };
 
 
@@ -262,6 +259,8 @@ export default function AdvancePayments() {
                         <TableRow>
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
+                          <TableCell className='label border'>Name</TableCell>
+                          <TableCell className='label border'>Reference_Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
                           <TableCell className='label border'>Payment_Via</TableCell>
                           <TableCell className='label border'>Payment_Type</TableCell>
@@ -277,6 +276,8 @@ export default function AdvancePayments() {
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
+                                <TableCell className='border data_td  '>{entry.name}</TableCell>
+                                <TableCell className='border data_td  '>{entry.type}</TableCell>
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
@@ -301,11 +302,7 @@ export default function AdvancePayments() {
                         </TableRow>
                         }
                         <TableRow>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>        
+  <TableCell colSpan={7}></TableCell>        
   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
   <TableCell className='border data_td text-center bg-success text-white'>
     {/* Calculate the total sum of payment_In */}

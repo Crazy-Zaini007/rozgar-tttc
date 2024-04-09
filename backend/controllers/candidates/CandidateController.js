@@ -185,9 +185,9 @@ const addPaymentIn = async (req, res) => {
                   
                           })
                           await newNotification.save()
-                    const updatedSupplier = await Candidate.findById(existingSupplier._id);
+                    await existingSupplier.save()
 
-                    res.status(200).json({ data: updatedSupplier, message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record` });
+                    res.status(200).json({ message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record` });
 
                 } catch (error) {
                     console.error('Error updating values:', error);
@@ -368,6 +368,8 @@ const addMultiplePaymentsIn = async (req, res) => {
               
                       })
                       await newNotification.save()
+                    await existingSupplier.save()
+
             }
             res.status(200).json({
                 message: `Multiple Payments In added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`
@@ -549,10 +551,10 @@ const addPaymentInReturn = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                          await existingSupplier.save()
 
-                    const updatedSupplier = await Candidate.findById(existingSupplier._id);
 
-                    res.status(200).json({ data: updatedSupplier, message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record` });
+                    res.status(200).json({ message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record` });
 
                 } catch (error) {
                     console.error('Error updating values:', error);
@@ -668,6 +670,8 @@ const deleteSinglePaymentIn = async (req, res) => {
       
               })
               await newNotification.save()
+              await existingSupplier.save()
+
             res.status(200).json({ message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}` })
 
 
@@ -785,9 +789,8 @@ const updateSinglePaymentIn = async (req, res) => {
               await newNotification.save()
             await existingSupplier.save();
 
-            const updatedSupplier = await Candidate.findById(existingSupplier._id);
-            console.log(updatedSupplier)
-            res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
+          
+            res.status(200).json({ message: "Payment In details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });
@@ -1655,6 +1658,7 @@ const addPaymentOut = async (req, res) => {
                   
                           })
                           await newNotification.save()
+                        await existingSupplier.save()
 
                     res.status(200).json({  message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record` });
 
@@ -1838,7 +1842,7 @@ const addPaymentOutReturn = async (req, res) => {
                   
                           })
                           await newNotification.save()
-
+                          await existingSupplier.save()
                     res.status(200).json({  message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record` });
                 } catch (error) {
                     console.error('Error updating values:', error);
@@ -1955,6 +1959,7 @@ const deleteSinglePaymentOut = async (req, res) => {
         
               })
               await newNotification.save()
+              await existingSupplier.save()
           
             res.status(200).json({ message: `Payment Out deleted sucessfully from ${supplierName}` })
 
@@ -2262,6 +2267,8 @@ const addMultiplePaymentsOut = async (req, res) => {
               
                       })
                       await newNotification.save()
+                    await existingSupplier.save()
+
             }
 
 

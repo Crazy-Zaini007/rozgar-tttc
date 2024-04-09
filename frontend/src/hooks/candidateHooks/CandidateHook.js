@@ -52,5 +52,50 @@ export default function CandidateHook() {
     }
 
 
-    return { getPaymentsIn, getPaymentsOut }
+    const getCandPaymentsIn = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/auth/candidates/get/payment_in_details`, {
+                headers: {
+
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+            const json = await response.json();
+            if (response.ok) {
+                dispatch(getCandidate_Payments_In(json.data)); // Dispatch the action with received data
+            }
+            if (!response.ok) {
+                console.log(json.message)
+            }
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const getCandPaymentsOut = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/auth/candidates/get/payment_out_details`, {
+                headers: {
+
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+            const json = await response.json();
+            if (response.ok) {
+                dispatch(getCandidate_Payments_Out(json.data)); // Dispatch the action with received data
+            }
+            if (!response.ok) {
+                console.log(json.message)
+            }
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+
+    return { getPaymentsIn, getPaymentsOut,getCandPaymentsIn,getCandPaymentsOut }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import EntryHook from '../../hooks/entryHooks/EntryHook';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
@@ -24,8 +24,7 @@ import ProtectorHook from '../../hooks/settingHooks/ProtectorHook';
 
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+
 const rowsPerPageOptions = [10, 15, 30];
 
 const EntryDetails = () => {
@@ -61,13 +60,13 @@ const EntryDetails = () => {
   const fetchData = async () => {
     try {
       setLoading1(true);
-  
+
       // Fetch getEntries() separately to wait for its completion
       await getEntries();
-      
+
       // Set loading to false right after getEntries() is completed
       setLoading1(false);
-  
+
       // Use Promise.all to execute other promises concurrently
       await Promise.all([
         getAVPPData(),
@@ -93,12 +92,12 @@ const EntryDetails = () => {
       // Handle errors if needed
     }
   };
-  
+
 
   useEffect(() => {
-  
-      fetchData()
-    
+
+    fetchData()
+
   }, []);
 
   const enteries = useSelector((state) => state.enteries.enteries);
@@ -114,8 +113,8 @@ const EntryDetails = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
   const [delLoading, setDelLoading] = useState(false)
+
   const deleteEntry = async (entry) => {
     if (window.confirm('Are you sure you want to delete this record?')){
       setDelLoading(true)
@@ -208,6 +207,7 @@ const EntryDetails = () => {
   const countries = useSelector((state) => state.setting.countries);
   const currencies = useSelector((state) => state.setting.currencies);
 
+  console.log('editedEntry',editedEntry)
 
   const [updateLoading, setUpdateLoading] = useState(false)
   const [, setNewMessage] = useState('')
@@ -222,7 +222,7 @@ const EntryDetails = () => {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ name: editedEntry.name, pp_No: editedEntry.pp_No, trade: editedEntry.trade, company: editedEntry.company, contact: editedEntry.contact, country: editedEntry.country, flight_Date: editedEntry.flight_Date, final_Status: editedEntry.final_Status, remarks: editedEntry.remarks, entry_Mode: editedEntry.entry_Mode,reference_Out:editedEntry.reference_Out, reference_Out_Name: editedEntry.reference_Out_Name, visa_Sales_Rate_PKR: editedEntry.visa_Sales_Rate_PKR, visa_Sale_Rate_Oth_Cur: editedEntry.visa_Sale_Rate_Oth_Cur, cur_Country_One: editedEntry.cur_Country_One,reference_In:editedEntry.reference_In, reference_In_Name: editedEntry.reference_In_Name, visa_Purchase_Rate_PKR: editedEntry.visa_Purchase_Rate_PKR, visa_Purchase_Rate_Oth_Cur: editedEntry.visa_Purchase_Rate_Oth_Cur, cur_Country_Two: editedEntry.cur_Country_Two, picture: editedEntry.picture,  visit_Sales_PKR: editedEntry.visit_Sales_PKR, visit_Sales_Rate_Oth_Curr: editedEntry.visit_Sales_Rate_Oth_Curr,  visit_Purchase_Rate_PKR: editedEntry.visit_Purchase_Rate_PKR, visit_Purchase_Rate_Oth_Cur: editedEntry.visit_Purchase_Rate_Oth_Cur,visit_Reference_In:editedEntry.visit_Reference_In, visit_Reference_In_Name: editedEntry.visit_Reference_In_Name,visit_Reference_Out:editedEntry.visit_Reference_Out, visit_Reference_Out_Name: editedEntry.visit_Reference_Out_Name, visit_Section_Picture: editedEntry.visit_Section_Picture, ticket_Sales_PKR: editedEntry.ticket_Sales_PKR, ticket_Sales_Rate_Oth_Cur: editedEntry.ticket_Sales_Rate_Oth_Cur,  ticket_Purchase_PKR: editedEntry.ticket_Purchase_PKR, ticket_Purchase_Rate_Oth_Cur: editedEntry.ticket_Purchase_Rate_Oth_Cur,ticket_Reference_In:editedEntry.ticket_Reference_In, ticket_Reference_In_Name: editedEntry.ticket_Reference_In_Name,ticket_Reference_Out:editedEntry.ticket_Reference_Out_Name,ticket_Reference_Out_Name:editedEntry.ticket_Reference_Out_Name, ticket_Section_Picture: editedEntry.ticket_Section_Picture, azad_Visa_Sales_PKR: editedEntry.azad_Visa_Sales_PKR, azad_Visa_Sales_Rate_Oth_Cur: editedEntry.azad_Visa_Sales_Rate_Oth_Cur, azad_Visa_Purchase_PKR: editedEntry.azad_Visa_Purchase_PKR, azad_Visa_Purchase_Rate_Oth_Cur: editedEntry.azad_Visa_Purchase_Rate_Oth_Cur,azad_Visa_Reference_In:editedEntry.azad_Visa_Reference_In, azad_Visa_Reference_In_Name: editedEntry.azad_Visa_Reference_In_Name,azad_Visa_Reference_Out:editedEntry.azad_Visa_Reference_Out, azad_Visa_Reference_Out_Name: editedEntry.azad_Visa_Reference_Out_Name, azad_Visa_Section_Picture: editedEntry.azad_Visa_Section_Picture, protector_Price_In: editedEntry.protector_Price_In,protector_Price_In_Oth_Cur:editedEntry.protector_Price_In_Oth_Cur,protector_Reference_In:editedEntry.protector_Reference_In,protector_Reference_In_Name:editedEntry.protector_Reference_In_Name, protector_Price_Out: editedEntry.protector_Price_Out  })
+        body: JSON.stringify({ name: editedEntry.name, pp_No: editedEntry.pp_No, trade: editedEntry.trade, company: editedEntry.company, contact: editedEntry.contact, country: editedEntry.country, flight_Date: editedEntry.flight_Date, final_Status: editedEntry.final_Status, remarks: editedEntry.remarks, entry_Mode: editedEntry.entry_Mode,reference_Out:editedEntry.reference_Out, reference_Out_Name: editedEntry.reference_Out_Name, visa_Sales_Rate_PKR: editedEntry.visa_Sales_Rate_PKR, visa_Sale_Rate_Oth_Cur: editedEntry.visa_Sale_Rate_Oth_Cur, cur_Country_One: editedEntry.cur_Country_One,reference_In:editedEntry.reference_In, reference_In_Name: editedEntry.reference_In_Name, visa_Purchase_Rate_PKR: editedEntry.visa_Purchase_Rate_PKR, visa_Purchase_Rate_Oth_Cur: editedEntry.visa_Purchase_Rate_Oth_Cur, cur_Country_Two: editedEntry.cur_Country_Two, picture: editedEntry.picture,  visit_Sales_PKR: editedEntry.visit_Sales_PKR, visit_Sales_Rate_Oth_Curr: editedEntry.visit_Sales_Rate_Oth_Curr,  visit_Purchase_Rate_PKR: editedEntry.visit_Purchase_Rate_PKR, visit_Purchase_Rate_Oth_Cur: editedEntry.visit_Purchase_Rate_Oth_Cur,visit_Reference_In:editedEntry.visit_Reference_In, visit_Reference_In_Name: editedEntry.visit_Reference_In_Name,visit_Reference_Out:editedEntry.visit_Reference_Out, visit_Reference_Out_Name: editedEntry.visit_Reference_Out_Name, visit_Section_Picture: editedEntry.visit_Section_Picture, ticket_Sales_PKR: editedEntry.ticket_Sales_PKR, ticket_Sales_Rate_Oth_Cur: editedEntry.ticket_Sales_Rate_Oth_Cur,  ticket_Purchase_PKR: editedEntry.ticket_Purchase_PKR, ticket_Purchase_Rate_Oth_Cur: editedEntry.ticket_Purchase_Rate_Oth_Cur,ticket_Reference_In:editedEntry.ticket_Reference_In, ticket_Reference_In_Name: editedEntry.ticket_Reference_In_Name,ticket_Reference_Out:editedEntry.ticket_Reference_Out, ticket_Reference_Out_Name: editedEntry.ticket_Reference_Out_Name, ticket_Section_Picture: editedEntry.ticket_Section_Picture, azad_Visa_Sales_PKR: editedEntry.azad_Visa_Sales_PKR, azad_Visa_Sales_Rate_Oth_Cur: editedEntry.azad_Visa_Sales_Rate_Oth_Cur, azad_Visa_Purchase_PKR: editedEntry.azad_Visa_Purchase_PKR, azad_Visa_Purchase_Rate_Oth_Cur: editedEntry.azad_Visa_Purchase_Rate_Oth_Cur,azad_Visa_Reference_In:editedEntry.azad_Visa_Reference_In, azad_Visa_Reference_In_Name: editedEntry.azad_Visa_Reference_In_Name,azad_Visa_Reference_Out:editedEntry.azad_Visa_Reference_Out, azad_Visa_Reference_Out_Name: editedEntry.azad_Visa_Reference_Out_Name, azad_Visa_Section_Picture: editedEntry.azad_Visa_Section_Picture, protector_Price_In: editedEntry.protector_Price_In,protector_Price_In_Oth_Cur:editedEntry.protector_Price_In_Oth_Cur,protector_Reference_In:editedEntry.protector_Reference_In,protector_Reference_In_Name:editedEntry.protector_Reference_In_Name, protector_Price_Out: editedEntry.protector_Price_Out })
       })
 
       const json = await response.json()
@@ -251,9 +251,10 @@ const EntryDetails = () => {
   const [section3, setSection3] = useState(false)
   const [section4, setSection4] = useState(false)
 
-
-  
   // Filtering the Enteries
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+
   const [date, setDate] = useState('')
   const [trade, setTrade] = useState('')
   const [company, setCompany] = useState('')
@@ -267,7 +268,13 @@ const EntryDetails = () => {
   const [reference_In_Type, setReference_In_Type] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
   const filteredEntries = enteries.filter(entry => {
+    let isDateInRange = true;
+    if (dateFrom && dateTo) {
+      isDateInRange =
+      entry.entry_Date >= dateFrom && entry.entry_Date <= dateTo;
+    }
     return (
+      isDateInRange &&
       entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
       entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
       entry.company.toLowerCase().includes(company.toLowerCase()) &&
@@ -279,6 +286,8 @@ const EntryDetails = () => {
       entry.reference_In_Name.toLowerCase().includes(reference_In.toLowerCase()) &&
       entry.reference_Out.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
       entry.reference_In.toLowerCase().includes(reference_In_Type.toLowerCase())
+
+
     );
   })
 
@@ -365,7 +374,6 @@ const EntryDetails = () => {
   };
 
 
-
   return (
     <>
       <div className='main'>
@@ -380,13 +388,13 @@ const EntryDetails = () => {
                   {enteries.length > 0 &&
                     <>
                       {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
-                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download Excel </button>
+                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download </button>
                     </>
                   }
 
                   <div className="dropdown d-inline m-1">
                     <button className="btn" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                      View More
+                      More
                     </button>
                     <ul className="dropdown-menu shadow border-0" aria-labelledby="dropdownMenuLink">
                       <li className='my-2 py-2' onClick={() => setSection1(!section1)}>{!section1 ? "Show" : "Hide"} Visit Section</li>
@@ -404,13 +412,12 @@ const EntryDetails = () => {
               </div>
             }
 
-
             {/* Filters */}
             {enteries && enteries.length > 0 &&
               <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
-                    <div className="col-auto px-1">
+                  <div className="col-auto px-1">
                       <label htmlFor="">Date:</label>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
@@ -418,6 +425,14 @@ const EntryDetails = () => {
                           <option value={dateValue} key={dateValue}>{dateValue}</option>
                         ))}
                       </select>
+                    </div>
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Date From:</label>
+                     <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
+                    </div>
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Date To:</label>
+                     <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Trade:</label>
@@ -475,20 +490,21 @@ const EntryDetails = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference Out Type:</label>
+                      <select value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
                       <label htmlFor="">Reference Out:</label>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
                           <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference In:</label>
-                      <select value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
-                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
                         ))}
                       </select>
                     </div>
@@ -502,15 +518,12 @@ const EntryDetails = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference Out Type:</label>
-                      <select value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
+                      <label htmlFor="">Reference In:</label>
+                      <select value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        <option value="agent">Agents</option>
-                        <option value="supplier">Suppliers</option>
-                        <option value="candidate">Candidates</option>
-
-
-                        
+                        {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
                       </select>
                     </div>
 
@@ -519,12 +532,13 @@ const EntryDetails = () => {
               </div>
             }
 
+
             {!loading1 &&
               <div className='col-md-12'>
                 <Paper className='py-3 mb-1 px-2 detail_table'>
                   <TableContainer sx={{ maxHeight: 600 }}>
                     <Table stickyHeader>
-                    <TableHead>
+                      <TableHead>
                         <TableRow className='p-0 m-0'>
                           <TableCell align="left" className='personel_label border py-2' colSpan={21}>
                             Personel Details
@@ -656,7 +670,7 @@ const EntryDetails = () => {
                             {editMode && editedRowIndex === index ? (
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
-                              <TableCell className='border data_td p-1 '>
+                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={index+1} readOnly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
@@ -1822,7 +1836,7 @@ const EntryDetails = () => {
             }
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };

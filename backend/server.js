@@ -62,6 +62,9 @@ const Notes =require('./routes/notes/note_Route')
 const Assets =require('./routes/assets/Assets_Route')
 //Backup
 const Backup=require('./routes/backup/backup_Route')
+
+// Direct Payments Routes 
+const DirectPayments=require('./routes/directPayments/directPayments_Route')
 //express app
 const app = express()
 const server = http.createServer(app)
@@ -156,6 +159,9 @@ app.use('/auth/recyclebin',RecycleBin)
 
 // Assets
 app.use('/auth/assets',Assets)
+
+// Direct Payments
+app.use('/auth/direct',DirectPayments)
 //PORT number
 const PORT = process.env.PORT
 

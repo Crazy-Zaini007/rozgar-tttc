@@ -70,6 +70,7 @@ export default function NormalPayments() {
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
+  
   const filteredPayments = payments && payments.filter(paymentItem => {
     let isDateInRange = true;
     // Check if the payment item's date is within the selected date range
@@ -79,8 +80,10 @@ export default function NormalPayments() {
       const toDate = new Date(dateTo);
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
-    return isDateInRange;
-  })
+    // Filter payments where payment_Type is 'advance'
+    const isAdvancePayment = paymentItem.payment_Type.toLowerCase() === 'normal';
+    return isDateInRange && isAdvancePayment;
+  });
 
   const printExpenseTable = () => {
     // Convert JSX to HTML string
