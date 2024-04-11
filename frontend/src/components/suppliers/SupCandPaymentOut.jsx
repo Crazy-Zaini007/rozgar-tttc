@@ -438,9 +438,10 @@ export default function SupCandPaymentOut() {
     }
   };
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
             <div className="col-md-12">

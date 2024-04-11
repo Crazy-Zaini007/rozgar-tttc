@@ -3,6 +3,8 @@ import Paper from '@mui/material/Paper';
 import AzadVisaAgentSinglePayIn from './azadVisaAgents/AzadVisaAgentSinglePayIn';
 import AzadVisaSupSinglePayIn from './azadVisaSuppliers/AzadVisaSupSinglePayIn';
 import AzadVisaCandSinglePayIn from './azadVisaCandidates/AzadVisaCandSinglePayIn';
+import { useSelector } from 'react-redux';
+
 export default function AzadVisaPayIn() {
 
   const [single, setSingle] = useState(0)
@@ -11,10 +13,12 @@ export default function AzadVisaPayIn() {
     setSingle(index)
 
   }
-  
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
+
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
 

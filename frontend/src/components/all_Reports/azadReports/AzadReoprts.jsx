@@ -3,13 +3,16 @@ import AzadSuppReports from './AzadSuppReports'
 import AzadAgentReports from './AzadAgentReports'
 import AzadCandReports from './AzadCandReports'
 import { Paper } from '@mui/material'
+import { useSelector } from 'react-redux';
 
 export default function AzadReoprts() {
 const [option,setOption]=useState(0)
 
+const collapsed = useSelector((state) => state.collapsed.collapsed);
+
   return (
     <div>
-      <div className="main">
+          <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_details">
             <div className="row">
             <div className='col-md-12 '>

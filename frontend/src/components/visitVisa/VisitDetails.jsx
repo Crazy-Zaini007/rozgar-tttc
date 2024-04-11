@@ -2,13 +2,16 @@ import React, {useState } from 'react'
 import { Paper } from '@mui/material'
 import VisitPayInDetails from './VisitPayInDetails'
 import VisitPayOutDetails from './VisitPayOutDetails'
+import { useSelector } from 'react-redux';
+
 export default function VisitDetails() {
  
 const [option,setOption]=useState(0)
 
-  return (
-    <>
-      <div className="main">
+const collapsed = useSelector((state) => state.collapsed.collapsed);
+return (
+  <>
+  <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_details">
           <div className="row">
           

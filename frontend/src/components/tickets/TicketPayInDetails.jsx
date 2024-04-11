@@ -3,6 +3,8 @@ import { Paper } from '@mui/material'
 import TicketAgentPayInDetails from './ticketAgents/details/TicketAgentPayInDetails'
 import TicketSupPayInDetails from './ticketSuppliers/details/TicketSupPayInDetails'
 import TicketCandPayInDetails from './ticketCandidates/details/TicketCandPayInDetails'
+import { useSelector } from 'react-redux';
+
 export default function TicketPayInDetails() {
 
   const [option, setOption] = useState(0)
@@ -15,10 +17,6 @@ export default function TicketPayInDetails() {
           <button className='btn m-1 show_btn btn-sm' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Agents Payment In Details</button>
           <button className='btn m-1 show_btn btn-sm' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Suppliers Payment In Details</button>
           <button className='btn m-1 show_btn btn-sm' style={option === 2 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(2)}>Candidates Payment In Details</button>
-
-
-
-
         </Paper>
       </div>
       {option === 0 &&

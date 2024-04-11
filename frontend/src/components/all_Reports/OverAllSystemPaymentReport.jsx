@@ -3,6 +3,7 @@ import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
 import * as XLSX from 'xlsx';
+import { useSelector } from 'react-redux';
 
 export default function OverAllSystemPaymentReports() {
   const [option, setOption] = useState(0)
@@ -270,10 +271,12 @@ export default function OverAllSystemPaymentReports() {
   }
 
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
     <div>
-      <div className="main">
+         <div className={`${collapsed ?"collapsed":"main"}`}>
+
         <div className="container-fluid payment_details">
             <div className="row">
                 <div className="col-md-12">

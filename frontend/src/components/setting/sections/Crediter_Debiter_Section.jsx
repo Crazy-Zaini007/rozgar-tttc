@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Paper } from '@mui/material'
+import { useSelector } from 'react-redux';
+
 // Entry Setting pages
 import CPP from '../entrySetting/CPP'
 export default function CrediterDebiterSection() {
@@ -15,9 +17,10 @@ export default function CrediterDebiterSection() {
   }, [value])
 
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 entry_setting">
           <div className="row justify-content-start">
             <div className="col-md-12 ">

@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import { Paper } from '@mui/material'
 import SupCandPaymentInReturn from './SupCandPaymentInReturn'
 import SupCandPaymentOutReturn from './SupCandPaymentOutReturn'
+import { useSelector } from 'react-redux';
+
 export default function SupCandPayReturn() {
 
   const [option, setOption] = useState(0)
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_form">
           <div className="row">
 

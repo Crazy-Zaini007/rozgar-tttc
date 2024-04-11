@@ -707,10 +707,12 @@ body {
     XLSX.writeFile(wb, `Today Employees Payment Details.xlsx`);
   }
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_details">
           <div className="row">
             <div className="col-md-12">

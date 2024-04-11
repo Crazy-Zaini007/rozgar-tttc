@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import Paper from '@mui/material/Paper';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import * as XLSX from 'xlsx';
+import { useSelector } from 'react-redux';
 
 export default function AddMulExpenses() {
     const { user } = useAuthContext()
@@ -127,10 +128,11 @@ export default function AddMulExpenses() {
             setLoading(false);
         }
     };
-  return (
-    <>
-
-    <div className="main">
+    
+    const collapsed = useSelector((state) => state.collapsed.collapsed);
+    return (
+      <>
+      <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
             <div className="row">
             <div className="col-md-12">

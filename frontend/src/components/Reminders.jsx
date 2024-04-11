@@ -5,6 +5,8 @@ import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 import { toast } from 'react-toastify';
 import reminderIcon from './reminderGif.gif' 
 import notfound from './notfound.jpg'
+import { useSelector } from 'react-redux';
+
 export default function Reminders() {
   const { user } = useAuthContext();
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -55,8 +57,11 @@ export default function Reminders() {
     }
   }
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
   return (
-    <div className='main'>
+    <div className={`${collapsed ?"collapsed":"main"}`}>
+
       <div className="container-fluid reminders mt-3">
         <div className="row px-3">
             <h4>Reminders</h4>

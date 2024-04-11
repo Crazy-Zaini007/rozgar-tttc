@@ -2,14 +2,17 @@ import React, {useState } from 'react'
 import { Paper } from '@mui/material'
 import AgentCandPaymentInDetails from './candDetails/AgentCandPaymentInDetails'
 import AgentCandPaymentOutDetails from './candDetails/AgentCandPaymentOutDetails'
+import { useSelector } from 'react-redux';
+
 export default function AgentCandDetails() {
  
   const [option,setOption]=useState(0)
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
     <>
-      <div className="main">
+      <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_details">
           <div className="row">
           

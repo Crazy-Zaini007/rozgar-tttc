@@ -222,6 +222,7 @@
   background-color: var(--white);
   overflow-x: scroll;
   top: 0;
+  z-index: 1;
   border-right: 1px solid var(--mediumgrey);
   transition: width 0.3s ease-in-out;
 }
@@ -229,6 +230,7 @@
 .sidenav ul {
   list-style-type: none;
 }
+
 
 .sidenav h4 {
   font-size: 20px;
@@ -283,33 +285,54 @@
   font-weight: 700;
 }
 
-.top_btn {
-  position: relative;
-  z-index: 999;
+#mycheck{
+  -webkit-appearance:none ;
+  visibility: none;
+  display: none;
 }
-.top_btn .toggle_btn {
+.sidenav .my_span{
   position: absolute;
-  left: 16%;
-  z-index: 999;
+  right: 2px;
   top: 10px;
-  border: 0px;
-  color: var(--white);
-  font-size: 10px;
-  border-radius: 20px;
-  box-shadow: 0px 0px 0px 0px solid var(--white);
+  font-size: 16px;
+  border-radius: 3px;
+  color: var(--accent-stonger-blue);
+  padding: 3px 8px;
+  cursor: pointer;
+  background:white;
+  
+}
+#mycheck:checked ~ .sidenav{
+  width: 60px;
+  transition: width 0.3s ease-in-out;
+}
+#mycheck:checked ~ .sidenav h4{
+  display: none;
+  visibility: none;
 }
 
-.collapsed {
-  width: 0px;
-  transition: width 0.3s ease-in-out;
+#mycheck:checked ~ .sidenav li{
+  width: 97%;
+  margin-top: 2px;
+  color: var(--grays-text-disable);
+  font-size: 0px;
+  padding-left: 8%;
+}
+
+#mycheck:checked ~ .sidenav #bars{
+  display: none;
 }
 
 
 .main {
   margin-left: 220px;
   height: 100%;
+  transition: margin 0.3s ease-in-out;
 }
-
+.collapsed{
+  margin-left: 60px;
+  transition: margin 0.3s ease-in-out;
+}
 
 .main .nav {
   background: var(--white);
@@ -394,20 +417,20 @@
   color: var(--darkgrey);
 }
 
-.main h4 {
+ h4 {
   color: var(--accent-lighter-blue);
   font-weight: 600;
   letter-spacing: 1px;
   font-size: 22px;
 }
 
-.main h6 {
+ h6 {
   color: var(--accent-lighter-blue);
   font-weight: 600;
   letter-spacing: 1px;
   font-size: 18px;
 }
-.main .upload_btn {
+.upload_btn {
   border: 1px solid var(--cool-Green);
   box-shadow: 10px 10px 10px 10px solid var(--black);
   color: var(--white);
@@ -416,7 +439,7 @@
   letter-spacing: 1px;
   background-color: var(--cool-Green);
 }
-.main .entry_btn {
+ .entry_btn {
   border: 1px solid var(--accent-lighter-blue);
   box-shadow: 10px 10px 10px 10px solid var(--black);
   color: var(--accent-lighter-blue);
@@ -425,19 +448,19 @@
   font-size: 10px;
 }
 
-.main form {
+ form {
   background-color: rgb(253, 253, 253);
 }
 
-.main .new_entry form label {
+ .new_entry form label {
   font-size: 10px;
   color: var(--black);
   font-weight: 600;
   letter-spacing: 1px;
   margin-bottom: 5px;
 }
-.main .new_entry form input,
-.main .new_entry form select {
+ .new_entry form input,
+ .new_entry form select {
   width: 100%;
   height: 40px;
   border: 1px solid var(--grays-dm-white);
@@ -452,13 +475,13 @@
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
 
-.main .new_entry form input:focus,
-.main .new_entry form select:focus {
+ .new_entry form input:focus,
+ .new_entry form select:focus {
   border: 1px solid var(--accent-lighter-blue) !important;
   outline: none;
 }
 
-.main .new_entry form .submit_btn {
+ .new_entry form .submit_btn {
   box-shadow: 10px 10px 10px 10px solid var(--black);
   background-color: var(--cool-Green);
   color: "var(--black)";
@@ -468,14 +491,14 @@
   font-size: 12px;
   font-weight: 600;
 }
-.main .new_entry form .del_btn {
+ .new_entry form .del_btn {
   background-color: var(--b-Red);
   color: white;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.main .new_entry .dropdown .btn {
+ .new_entry .dropdown .btn {
   box-shadow: 10px 10px 10px 10px solid var(--black);
   background-color: var(--accent-stong-blue);
   color: "var(--black)";
@@ -486,23 +509,23 @@
   font-weight: 600;
 }
 
-.main .new_entry .dropdown li {
+ .new_entry .dropdown li {
   color: var(--black);
   padding-left: 20px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
 }
-.main .new_entry .dropdown li:hover {
+ .new_entry .dropdown li:hover {
   background-color: var(--accent-stong-blue);
   color: var(--white);
 }
 
-.main .new_entry .image {
+ .new_entry .image {
   height: 150px;
   width: 100%;
 }
-.main .new_entry .image img {
+ .new_entry .image img {
   height: 100%;
   width: 100%;
 }
@@ -808,34 +831,34 @@
 
 
 
-.main .payment_form form label {
+ .payment_form form label {
   font-size: 11px;
   color: var(--black);
   font-weight: 600;
   letter-spacing: 1px;
   margin-bottom: 5px;
 }
-.main .payment_form .show_btn {
+ .payment_form .show_btn {
   font-size: 12px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
   font-weight: 600;
   border: 1px solid var(--accent-stonger-blue);
   color: var(--accent-stonger-blue);
 }
-.main .payment_form form .image {
+ .payment_form form .image {
   width: 100%;
   height: 200px;
 }
-.main .payment_form form .image img {
+ .payment_form form .image img {
   height: 100%;
   width: 100%;
 }
 
-.main .payment_form form input[type="checkbox"] {
+ .payment_form form input[type="checkbox"] {
   height: 15px;
 }
-.main .payment_form input,
-.main .payment_form select {
+ .payment_form input,
+ .payment_form select {
   width: 100%;
   height: 40px;
   border: 1px solid var(--grays-dm-white);
@@ -850,7 +873,7 @@
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
 
-.main .payment_form textarea {
+ .payment_form textarea {
   width: 100%;
   border: 1px solid var(--grays-dm-white);
   border-radius: 4px;
@@ -864,14 +887,14 @@
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
 
-.main .payment_form form input:focus,
-.main .payment_form select:focus,
-.main .payment_form textarea:focus {
+ .payment_form form input:focus,
+ .payment_form select:focus,
+ .payment_form textarea:focus {
   border: 1px solid var(--accent-lighter-blue) !important;
   outline: none;
 }
 
-.main .payment_form form .submit_btn {
+ .payment_form form .submit_btn {
   box-shadow: 10px 10px 10px 10px solid var(--black);
   background-color: var(--cool-Green);
   color: "var(--black)";
@@ -913,29 +936,29 @@
   border: 0.5px solid var(--grays-dm-white);
 }
 
-.main .payment_details ::-webkit-scrollbar {
+ .payment_details ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
   border-radius: 100px;
 } 
 
-.main .payment_details .thead {
+ .payment_details .thead {
   background-color: var(--accent-stonger-blue);
 }
-.main .payment_details .label {
+ .payment_details .label {
   color: white;
 }
-.main .payment_details .edit_btn {
+ .payment_details .edit_btn {
   background-color: var(--accent-stonger-blue);
   color: white;
   font-size: 8px;
 }
-.main .payment_details .del_btn {
+ .payment_details .del_btn {
   background-color: var(--b-Red);
   color: white;
   font-size: 8px;
 }
-.main .payment_details .detail_btn {
+ .payment_details .detail_btn {
   font-size: 12px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
   color: white;

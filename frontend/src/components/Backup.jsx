@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
 import BackupHook from '../hooks/backupHooks/BackupHook'
+import { useSelector } from 'react-redux';
 
 export default function Backup() {
   const {getBackup,backup}=BackupHook()
@@ -58,9 +59,10 @@ export default function Backup() {
     }
 }
 
+const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
-    <div className='main'>
+    <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid backup payment_details">
         <div className="row px-2">
         <div className='col-md-12 '>

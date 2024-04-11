@@ -6,6 +6,8 @@ import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
+import { useSelector } from 'react-redux';
+
 export default function Invoice() {
   
 
@@ -191,12 +193,13 @@ export default function Invoice() {
     XLSX.writeFile(wb, 'cashInHand.xlsx');
   };
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
 
 
   return (
     <>
-      <div className="main">
-        <div className="container py-2 cash_in_hand">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
+        <div className="container-fluid py-2 cash_in_hand">
           
 
 

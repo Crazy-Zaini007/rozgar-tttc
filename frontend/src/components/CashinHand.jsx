@@ -628,10 +628,10 @@ const getBankCash = async () => {
   };
 
 
-
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container py-2 cash_in_hand">
           {current === 0 &&
             <div className="row justify-content-center mt-3">

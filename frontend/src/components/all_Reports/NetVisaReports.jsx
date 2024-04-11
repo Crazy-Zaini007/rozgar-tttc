@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
+import { useSelector } from 'react-redux';
 
 const NetVisaReports = () => {
 
@@ -182,10 +183,12 @@ const[payments,setPayments]=useState('')
   };
 
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-      <div className='main'>
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className='container-fluid entry_details'>
           <div className='row'>
             <div className='col-md-12 '>

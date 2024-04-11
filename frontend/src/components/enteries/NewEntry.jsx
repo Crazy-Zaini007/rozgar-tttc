@@ -4,7 +4,7 @@ import SingleEntry from './SingleEntry';
 import * as XLSX from 'xlsx';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { addMulEnteries } from '../../redux/reducers/entrySlice'
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export default function NewEntry() {
@@ -143,9 +143,10 @@ export default function NewEntry() {
 
   }
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
-    <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid new_entry">
         <div className="row">
           <div className="col-md-12 ">

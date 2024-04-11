@@ -14,6 +14,8 @@ import cashInHand from './reducers/cashInHandSlice'
 import protectors from './reducers/protectorSlice'
 import employees from './reducers/employeeSlice'
 import assetsPayments from './reducers/assetsSlice'
+import collapsed from './reducers/collpaseSlice'
+
 
 export const store = configureStore({
   reducer: {
@@ -31,6 +33,7 @@ export const store = configureStore({
     cashInHand:cashInHand,
     protectors:protectors,
     employees:employees,
-    assetsPayments:assetsPayments
+    assetsPayments:assetsPayments,
+    collapsed:collapsed
   }
 })

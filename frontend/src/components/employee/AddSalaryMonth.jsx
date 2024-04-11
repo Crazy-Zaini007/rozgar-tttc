@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
 import EmployeeHook from '../../hooks/employeeHooks/EmployeeHook';
@@ -106,9 +101,10 @@ export default function AddSalaryMonth() {
     }
 
 
+    const collapsed = useSelector((state) => state.collapsed.collapsed);
     return (
-        <>
-            <div className="main">
+      <>
+      <div className={`${collapsed ?"collapsed":"main"}`}>
                 <div className="container-fluid payment_form">
                     <div className="row">
                         <div className="col-md-12">

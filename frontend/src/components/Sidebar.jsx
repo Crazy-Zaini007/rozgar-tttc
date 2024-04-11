@@ -4,8 +4,11 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook'
+import { useSelector,useDispatch } from 'react-redux';
+import { toggleCollapse } from '../redux/reducers/collpaseSlice'
 
 export default function Sidebar() {
+  
   const [activeItem, setActiveItem] = useState(1);
   const [option1, setOption1] = useState(false)
   const [option2, setOption2] = useState(false)
@@ -1771,7 +1774,6 @@ export default function Sidebar() {
             setOption14(false)
             setOption15(false)
             setOption16(true)
-  
             break;
 
         case '/rozgar/reports/invoice':
@@ -2500,10 +2502,11 @@ export default function Sidebar() {
     updateActiveItem()
   }, [location.pathname]);
 
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false); // Added state for sidebar collapse
+  const myDispatch = useDispatch();
 
   const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
+    myDispatch(toggleCollapse())
+
   };
 
   // Logout 
@@ -2523,15 +2526,18 @@ export default function Sidebar() {
     }
 
   }
-
   return (
     <>
       <Paper>
-        <div className="top_btn">
-          {/* <button className='toggle_btn btn' onClick={toggleSidebar}><Avatar  sx={{ width: 28, height: 28 }}>{!isSidebarCollapsed ?<ChevronLeftIcon></ChevronLeftIcon>:<ChevronRightIcon></ChevronRightIcon>}</Avatar></button> */}
-        </div>
-        <div className={`sidenav ${isSidebarCollapsed ? 'collapsed' : ''}`}>
-          <div className="welcome text-center pt-4">
+      <input type="checkbox" id='mycheck'/>
+        <div className='sidenav'>
+        
+  <label htmlFor="mycheck" onClick={()=>toggleSidebar()}>
+    <span className='fas fa-times my_span shadow' id='times'></span>
+    <span className='fas fa-bars my_span shadow' id='bars'></span>
+  </label>
+          <div className="welcome text-center pt-1">
+            
             <h4>Rozgar TTTC Finance</h4>
             {/* <div className='text-center image mx-auto '><img className='mx-auto' src={logo} alt="" /></div> */}
           </div>

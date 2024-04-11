@@ -2,11 +2,15 @@ import React, {useState } from 'react'
 import { Paper } from '@mui/material'
 import VisitPayInReturn from './VisitPayInReturn'
 import VisitPayOutReturn from './VisitPayOutReturn'
+import { useSelector } from 'react-redux';
+
 export default function VisitPayReturn() {
   const [option,setOption]=useState(0)
+  
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_form">
           <div className="row">
              <div className='col-md-12 '>

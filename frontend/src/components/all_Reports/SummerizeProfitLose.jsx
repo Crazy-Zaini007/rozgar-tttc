@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import { toast } from 'react-toastify';
-import {useDispatch } from "react-redux";
+import {useDispatch,useSelector } from "react-redux";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -210,10 +210,12 @@ export default function SummerizeProfitLose() {
   };
 
  
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_details">
           <div className="row">
             <div className="col-md-12">

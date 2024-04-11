@@ -12,7 +12,7 @@ import Countries from '../entrySetting/Countries'
 import Categories from '../entrySetting/Categories'
 import ExpeCategories from '../entrySetting/ExpeCategories'
 import Currencies from '../entrySetting/Currencies'
-
+import { useSelector } from 'react-redux';
 
 export default function OtherSection() {
 
@@ -27,9 +27,10 @@ export default function OtherSection() {
   }, [value])
 
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 entry_setting">
           <div className="row justify-content-start">
             <div className="col-md-12 ">

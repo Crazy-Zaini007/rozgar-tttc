@@ -3,6 +3,8 @@ import { Paper } from '@mui/material'
 // Entry Setting pages
 import TSP from '../entrySetting/TSP'
 import TPP from '../entrySetting/TPP'
+import { useSelector } from 'react-redux';
+
 export default function TicketSection() {
 
   const [value, setValue] = useState(0)
@@ -16,9 +18,10 @@ export default function TicketSection() {
   }, [value])
 
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 entry_setting">
           <div className="row justify-content-start">
             <div className="col-md-12 ">

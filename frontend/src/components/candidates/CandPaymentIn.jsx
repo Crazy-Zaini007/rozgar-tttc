@@ -5,6 +5,8 @@ import Entry1 from './doubleEntry/Entry1'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
+import { useSelector } from 'react-redux';
+
 export default function SupPaymentIn() {
   const { user } = useAuthContext();
   const [single, setSingle] = useState(0)
@@ -135,10 +137,12 @@ export default function SupPaymentIn() {
 
 
 
-  
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
+
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
 

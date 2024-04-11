@@ -19,6 +19,7 @@ import CandidateHook from '../hooks/candidateHooks/CandidateHook'
 import SupplierHook from '../hooks/supplierHooks/SupplierHook'
 import TicketHook from '../hooks/ticketHooks/TicketHook'
 import VisitHook from '../hooks/visitsHooks/VisitHook'
+import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -62,6 +63,9 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
   const { getSupplierPaymentsIn } = SupplierHook();
   const { getTicketAgentPaymentsIn,getTicketSupplierPaymentsIn,getTicketCandPaymentsIn } = TicketHook();
   const { getVisitAgentPaymentsIn,getVisitSupplierPaymentsIn,getVisitCandPaymentsIn } = VisitHook()
+
+  const { getOverAllPayments, overAllPayments } = CashInHandHook()
+
   const [option, setOption] = useState(false);
   // Form input States
   const [ref, setRef] = useState("");
@@ -92,6 +96,7 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
     try {
       // Use Promise.all to execute all promises concurrently
       await Promise.all([
+         getOverAllPayments(),
         getCurrCountryData(),
         getCategoryData(),
         getPaymentViaData(),
@@ -287,6 +292,7 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
         setLoading(false);
       }
       if (response.ok) {
+      getOverAllPayments()
         setNewMessage(toast.success(json.message));
         getPaymentsIn();
         setLoading(false);
@@ -351,9 +357,13 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
     }
   }
 
+const currentDate = new Date().toISOString().split('T')[0];
+
+
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-     <div className='main'>
+    <div className={`${collapsed ?"collapsed":"main"}`}>
 
     <div className='container-fluid payment_form' >
 <div className='row payment_details'>
@@ -367,6 +377,12 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
                 </div>
                 <div className="right">
                   <div className="text-end ">
+                    <span className="btn submit_btn m-1 py-2 px-3 border-0">Today : <i className="fas fa-arrow-down me-1 ms-2"></i>{overAllPayments &&  overAllPayments.length > 0 &&
+                              overAllPayments
+                                .filter(entry => entry.date===currentDate)
+                                .reduce((total, entry) => {
+                                  return total + (entry.payment_In || 0);
+                                }, 0)}</span>
                 <button className="btn submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>

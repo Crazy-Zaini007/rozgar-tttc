@@ -3,6 +3,8 @@ import Paper from '@mui/material/Paper';
 import VisitAgentSinglePayOut from './visitAgents/VisitAgentSinglePayOut';
 import VisitSupSinglePayOut from './visitSuppliers/VisitSupSinlgePayOut';
 import VisitCandSinglePayOut from './visitCandidates/VisitCandSinglePayOut'
+import { useSelector } from 'react-redux';
+
 export default function VisitPayOut() {
 
   const [single, setSingle] = useState(0)
@@ -11,10 +13,10 @@ export default function VisitPayOut() {
     setSingle(index)
 
   }
-  
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
 

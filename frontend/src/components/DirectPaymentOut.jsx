@@ -19,6 +19,7 @@ import CandidateHook from '../hooks/candidateHooks/CandidateHook'
 import SupplierHook from '../hooks/supplierHooks/SupplierHook'
 import TicketHook from '../hooks/ticketHooks/TicketHook'
 import VisitHook from '../hooks/visitsHooks/VisitHook'
+import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -62,6 +63,9 @@ const {getCandPaymentsOut } = CandidateHook();
 const { getSupplierPaymentsOut } = SupplierHook();
 const { getTicketAgentPaymentsOut,getTicketSupplierPaymentsOut,getTicketCandPaymentsOut } = TicketHook();
 const { getVisitAgentPaymentsOut,getVisitSupplierPaymentsOut,getVisitCandPaymentsOut } = VisitHook()
+
+const { getOverAllPayments, overAllPayments } = CashInHandHook()
+
 const [option, setOption] = useState(false);
 // Form input States
 const [ref, setRef] = useState("");
@@ -91,6 +95,7 @@ const fetchData = async () => {
   try {
     // Use Promise.all to execute all promises concurrently
     await Promise.all([
+      getOverAllPayments(),
       getCurrCountryData(),
       getCategoryData(),
       getPaymentViaData(),
@@ -294,6 +299,7 @@ useEffect(() => {
         setLoading(false);
       }
       if (response.ok) {
+      getOverAllPayments()
         setNewMessage(toast.success(json.message));
         getPaymentsOut();
         setLoading(false);
@@ -356,9 +362,13 @@ useEffect(() => {
     }
   }
 
+  const currentDate = new Date().toISOString().split('T')[0];
+
+
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-     <div className='main'>
+    <div className={`${collapsed ?"collapsed":"main"}`}>
 
     <div className='container-fluid payment_form' >
 <div className='row payment_details'>
@@ -370,8 +380,14 @@ useEffect(() => {
                 <div className="left">
                   <h4>Direct Payment OUT</h4>
                 </div>
-                <div className="right">
+                <div className="right ">
                   <div className="text-end ">
+                  <span className="btn submit_btn m-1 py-2 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>{overAllPayments &&  overAllPayments.length > 0 &&
+                              overAllPayments
+                                .filter(entry => entry.date===currentDate)
+                                .reduce((total, entry) => {
+                                  return total + (entry.payment_Out || 0);
+                                }, 0)}</span>
                 <button className="btn submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>

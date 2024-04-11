@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import {useDispatch } from "react-redux";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
-// import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import SyncLoader from 'react-spinners/SyncLoader'
+import { useSelector } from 'react-redux';
 
 export default function ProfitLoseReport() {
   const dispatch = useDispatch();
@@ -205,10 +205,12 @@ export default function ProfitLoseReport() {
   };
 
  
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_details">
           <div className="row">
             <div className="col-md-12">

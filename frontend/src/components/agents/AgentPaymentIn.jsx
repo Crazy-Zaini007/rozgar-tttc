@@ -5,6 +5,7 @@ import Entry1 from './doubleEntry/Entry1'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
+import { useSelector } from 'react-redux';
 
 export default function AgentPaymentIn() {
   const { user } = useAuthContext();
@@ -135,11 +136,12 @@ export default function AgentPaymentIn() {
   }, [triggerEffect, multiplePayment]);
 
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
 
 
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
             <div className="col-md-12">

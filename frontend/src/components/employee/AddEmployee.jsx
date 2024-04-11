@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
-import {  useDispatch } from "react-redux";
+import {  useDispatch,useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 
 export default function AVPP() {
@@ -64,9 +64,10 @@ export default function AVPP() {
     }
   };
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-    <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid py-2 mt-3 entry_setting">
         <div className="row">
         <div className="col-md-12 adding_form">

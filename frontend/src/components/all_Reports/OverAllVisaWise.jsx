@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useRef } from 'react';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as XLSX from 'xlsx';
 import EntryHook from '../../hooks/entryHooks/EntryHook';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
@@ -175,10 +175,12 @@ export default function OverAllVisaWise() {
       alert('Could not open print window. Please check your browser settings.');
     }
   };
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-      <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid entry_details">
             <div className="row">
             <div className='col-md-12 '>

@@ -3,6 +3,7 @@ import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
+import { useSelector } from 'react-redux';
 
 export default function PayableReports() {
   const { user } = useAuthContext();
@@ -380,10 +381,12 @@ const downloadSummerizeExcel = () => {
 }
 
 
+const collapsed = useSelector((state) => state.collapsed.collapsed);
 
-  return (
-    <>
-      <div className="main">
+
+return (
+  <>
+  <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid entry_details">
             <div className="row">
             <div className='col-md-12 '>

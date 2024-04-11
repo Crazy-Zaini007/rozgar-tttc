@@ -22,7 +22,6 @@ export default function AdminDashboard() {
   const { getEntries } = EntryHook()
 
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
-
   const enteries = useSelector((state) => state.enteries.enteries);
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
 
@@ -108,9 +107,11 @@ const currentDate = new Date().toISOString().split('T')[0];
 // Filter payments based on the current date
 const todayPayments =overAllPayments && overAllPayments.filter(payment => payment.date === currentDate);
 
+const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
-    <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
     <div className="container-fluid admin-dashboard mt-3">
      <div className="row px-3 ">
       <h4>Admin Dashboard</h4>

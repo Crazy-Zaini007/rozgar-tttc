@@ -15,6 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import { useSelector } from 'react-redux';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -198,9 +200,10 @@ const addNote=async(e)=>{
     }
   };
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
-    <div className='main'>
+    <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid notes mt-3">
         <div className="row px-3">
         

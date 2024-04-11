@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
-import SyncLoader from 'react-spinners/SyncLoader'
+import { useSelector } from 'react-redux';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import { toast } from 'react-toastify';
 
@@ -104,13 +104,10 @@ export default function User() {
   };
 
 
-
-
-
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-
-    <div className="main">
+    <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_details">
             <div className="row">
             <div className='col-md-12 '>
