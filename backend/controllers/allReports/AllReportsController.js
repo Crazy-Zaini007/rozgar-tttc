@@ -689,6 +689,7 @@ const getTotalPayments = async (req, res) => {
     const expenses = await Expenses.find();
     const cdwcs = await CDWC.find();
     const cdwocs = await CDWOC.find();
+    const assets = await Assets.find();
     // Initialize variables to store total payments
     let totalPaymentIn = 0;
     let totalPaymentOut = 0;
@@ -700,9 +701,16 @@ const getTotalPayments = async (req, res) => {
       items.forEach((item) => {
         // Check if payment_In_Schema exists and has the expected structure
         if (item[schemaType] && item[schemaType].supplierName) {
-          // Add to total payments
-          totalPaymentIn += item[schemaType].total_Payment_In || 0;
-          totalPaymentOut += item[schemaType].total_Cash_Out || 0;
+          for (const payment of item[schemaType].payment) {
+            // Check if payment type is "Advance"
+            if (payment.payment_Type.toLowerCase() === "prfoit") {
+              totalPaymentIn += payment.payment_In || 0;
+            }
+            if (payment.payment_Type.toLowerCase() === "loss") {
+              totalPaymentOut += payment.cash_Out || 0;
+            }
+          }
+          
         }
       });
     }
@@ -711,7 +719,10 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            totalPaymentIn += payment.payment_In;
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              totalPaymentIn += payment.payment_In
+
+            }
           }
         }
       }
@@ -722,7 +733,24 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwoc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            totalPaymentIn += payment.payment_In;
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              totalPaymentIn += payment.payment_In
+
+            }
+          }
+        }
+      }
+    }
+
+    for (const asset of assets) {
+      if (asset.payment_In_Schema && asset.payment_In_Schema.payment) {
+        const payments = asset.payment_In_Schema.payment;
+        if (payments) {
+          for (const payment of payments) {
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              totalPaymentIn += payment.payment_In
+
+            }
           }
         }
       }
@@ -735,9 +763,16 @@ const getTotalPayments = async (req, res) => {
       items.forEach((item) => {
         // Check if payment_In_Schema exists and has the expected structure
         if (item[schemaType] && item[schemaType].supplierName) {
-          // Add to total payments
-          totalPaymentOut += item[schemaType].total_Payment_Out || 0;
-          totalPaymentIn += item[schemaType].total_Cash_Out || 0;
+          for (const payment of item[schemaType].payment) {
+            // Check if payment type is "Advance"
+            if (payment.payment_Type.toLowerCase() === "prfoit") {
+              totalPaymentIn += payment.cash_Out || 0;
+            }
+            if (payment.payment_Type.toLowerCase() === "loss") {
+              totalPaymentOut += payment.payment_Out || 0;
+            }
+          }
+         
         }
       });
     }
@@ -746,8 +781,12 @@ const getTotalPayments = async (req, res) => {
       if (cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment) {
         const payments = cdwc.payment_In_Schema.payment;
         if (payments) {
-          for (const payment of payments) {
-            totalPaymentOut += payment.payment_Out;
+          for (const payment of payments){
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              totalPaymentOut += payment.payment_Out;
+
+            }
+           
           }
         }
       }
@@ -758,7 +797,25 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwoc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            totalPaymentOut += payment.payment_Out;
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              totalPaymentOut += payment.payment_Out;
+
+            }
+            
+          }
+        }
+      }
+    }
+
+    for (const asset of assets) {
+      if (asset.payment_In_Schema && asset.payment_In_Schema.payment) {
+        const payments = asset.payment_In_Schema.payment;
+        if (payments) {
+          for (const payment of payments) {
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              totalPaymentOut += payment.payment_Out
+
+            }
           }
         }
       }
