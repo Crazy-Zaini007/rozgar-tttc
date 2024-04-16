@@ -702,13 +702,9 @@ const getTotalPayments = async (req, res) => {
         // Check if payment_In_Schema exists and has the expected structure
         if (item[schemaType] && item[schemaType].supplierName) {
           for (const payment of item[schemaType].payment) {
-            // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "prfoit") {
               totalPaymentIn += payment.payment_In || 0;
-            }
-            if (payment.payment_Type.toLowerCase() === "loss") {
               totalPaymentOut += payment.cash_Out || 0;
-            }
+            
           }
           
         }
@@ -719,10 +715,8 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            if(payment.payment_Type.toLowerCase()==='profit'){
+            
               totalPaymentIn += payment.payment_In
-
-            }
           }
         }
       }
@@ -733,10 +727,9 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwoc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            if(payment.payment_Type.toLowerCase()==='profit'){
+           
               totalPaymentIn += payment.payment_In
 
-            }
           }
         }
       }
@@ -747,10 +740,8 @@ const getTotalPayments = async (req, res) => {
         const payments = asset.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            if(payment.payment_Type.toLowerCase()==='profit'){
+            
               totalPaymentIn += payment.payment_In
-
-            }
           }
         }
       }
@@ -765,12 +756,9 @@ const getTotalPayments = async (req, res) => {
         if (item[schemaType] && item[schemaType].supplierName) {
           for (const payment of item[schemaType].payment) {
             // Check if payment type is "Advance"
-            if (payment.payment_Type.toLowerCase() === "prfoit") {
-              totalPaymentIn += payment.cash_Out || 0;
-            }
-            if (payment.payment_Type.toLowerCase() === "loss") {
+              totalPaymentIn += payment.cash_Out || 0;  
               totalPaymentOut += payment.payment_Out || 0;
-            }
+          
           }
          
         }
@@ -782,11 +770,10 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments){
-            if(payment.payment_Type.toLowerCase()==='loss'){
+          
               totalPaymentOut += payment.payment_Out;
 
-            }
-           
+            
           }
         }
       }
@@ -797,10 +784,10 @@ const getTotalPayments = async (req, res) => {
         const payments = cdwoc.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            if(payment.payment_Type.toLowerCase()==='loss'){
+           
               totalPaymentOut += payment.payment_Out;
 
-            }
+            
             
           }
         }
@@ -812,10 +799,10 @@ const getTotalPayments = async (req, res) => {
         const payments = asset.payment_In_Schema.payment;
         if (payments) {
           for (const payment of payments) {
-            if(payment.payment_Type.toLowerCase()==='loss'){
+            
               totalPaymentOut += payment.payment_Out
 
-            }
+            
           }
         }
       }
@@ -1222,18 +1209,33 @@ const getAllPaymentsByDate = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const paymentDate = payment.date;
-            if (!paymentsByDate[paymentDate]) {
-              paymentsByDate[paymentDate] = {
-                date: paymentDate,
-                total_payment_in: 0,
-                total_payment_out: 0,
-              };
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_in +=
+                payment.payment_In || 0;
+             
             }
-            paymentsByDate[paymentDate].total_payment_in +=
-              payment.payment_In || 0;
-            paymentsByDate[paymentDate].total_payment_out +=
-              payment.cash_Out || 0;
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_out +=
+                payment.payment_In || 0;
+             
+            }
+           
           }
         }
       }
@@ -1246,18 +1248,31 @@ const getAllPaymentsByDate = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const paymentDate = payment.date;
-            if (!paymentsByDate[paymentDate]) {
-              paymentsByDate[paymentDate] = {
-                date: paymentDate,
-                total_payment_in: 0,
-                total_payment_out: 0,
-              };
+           
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_out +=
+                payment.payment_Out || 0;
             }
-            paymentsByDate[paymentDate].total_payment_out +=
-              payment.payment_Out || 0;
-            paymentsByDate[paymentDate].total_payment_in +=
-              payment.cash_Out || 0;
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_in +=
+                payment.payment_Out || 0;
+             
+            }
           }
         }
       }
