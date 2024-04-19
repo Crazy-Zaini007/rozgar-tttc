@@ -4734,9 +4734,9 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
 
 // Updating The Cand payment
 
-candPayment.new_Remain_PKR+=-updatedPaymentIn
-candPayment.new_Payment+=-updatedPaymentIn
-candPayment.new_Remain_Curr+=-updateCurr_Amount
+candPayment.new_Remain_PKR+=updatedPaymentIn
+candPayment.new_Payment-=updatedPaymentIn
+candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
 
 
@@ -5234,7 +5234,7 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
       new_Curr_Payment
     } = req.body;
     const existingSupplier = await Agents.findOne({
-      "payment_In_Schema.supplierName": supplierName,
+      "payment_Out_Schema.supplierName": supplierName,
     })
 
     if (!existingSupplier) {
@@ -5270,9 +5270,9 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
 
 // Updating The Cand payment
 
-candPayment.new_Remain_PKR+=-updatedPaymentOut
-candPayment.new_Payment+=-updatedPaymentOut
-candPayment.new_Remain_Curr+=-updateCurr_Amount
+candPayment.new_Remain_PKR+=updatedPaymentOut
+candPayment.new_Payment-=updatedPaymentOut
+candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
 
 
@@ -5333,6 +5333,7 @@ candPayment.new_Curr_Payment+=-updateCurr_Amount
 
   }
   catch(error){
+    console.log(error)
     res.status(500).json({message:error.message})
   }
 }

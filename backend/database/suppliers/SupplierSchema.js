@@ -207,15 +207,12 @@ const Payment_InSchema = new mongoose.Schema(
           {
             cand_Name: {
               type: String,
-              required: true,
             },
             pp_No: {
               type: String,
-              required: true,
             },
             entry_Mode: {
               type: String,
-              required: true,
             },
             company: {
               type: String,
@@ -486,15 +483,12 @@ const Payment_OutSchema = new mongoose.Schema(
           {
             cand_Name: {
               type: String,
-              required: true,
             },
             pp_No: {
               type: String,
-              required: true,
             },
             entry_Mode: {
               type: String,
-              required: true,
             },
             company: {
               type: String,
