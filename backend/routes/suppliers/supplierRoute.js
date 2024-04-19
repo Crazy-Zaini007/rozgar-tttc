@@ -19,9 +19,17 @@ const { addPaymentIn,
     updatePaymentOutPerson,
     deleteAgentPaymentOutSchema,
     updateAgentTotalPaymentOut,
-    getAllPaymentsOut,
     changePaymentInStatus,
-    changePaymentOutStatus } = require('../../controllers/suppliers/SupplierController')
+  changePaymentOutStatus,
+    getAllPaymentsOut,
+    addCandVisePaymentIn,
+    deleteCandVisePaymentIn,
+  deleteSingleCandVisePaymentIn,
+  updateSingleCandVisePaymentIn,
+  addCandVisePaymentOut,
+  deleteCandVisePaymentOut,
+  deleteSingleCandVisePaymentOut,
+  updateSingleCandVisePaymentOut } = require('../../controllers/suppliers/SupplierController')
 const router = express.Router()
 
 router.use(userAuth)
@@ -72,4 +80,16 @@ router.patch('/update/all/payment_out', updateAgentTotalPaymentOut)
 
 router.patch('/update/payment_in/status', changePaymentInStatus)
 router.patch('/update/payment_out/status', changePaymentOutStatus)
+
+// Candidate Vise payments in and Out
+router.post('/add/cand_vise/payment_in',addCandVisePaymentIn)
+router.delete('/delete/cand_vise/payment_in',deleteCandVisePaymentIn)
+router.delete('/delete/cand_vise/single/payment_in',deleteSingleCandVisePaymentIn)
+router.patch('/update/cand_vise/single/payment_in',updateSingleCandVisePaymentIn)
+
+
+router.post('/add/cand_vise/payment_out',addCandVisePaymentOut)
+router.delete('/delete/cand_vise/payment_out',deleteCandVisePaymentOut)
+router.delete('/delete/cand_vise/single/payment_out',deleteSingleCandVisePaymentOut)
+router.patch('/update/cand_vise/single/payment_out',updateSingleCandVisePaymentOut)
 module.exports = router

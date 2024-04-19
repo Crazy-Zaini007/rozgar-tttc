@@ -63,11 +63,33 @@ const getAllPayments = async (req, res) => {
         );
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
+
+      if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
+
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const paymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Agent_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
         );
@@ -88,6 +110,18 @@ const getAllPayments = async (req, res) => {
         );
         mergedPayments = mergedPayments.concat(supplierPaymentInDetails);
       }
+
+      
+      if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Supplier_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
@@ -97,6 +131,17 @@ const getAllPayments = async (req, res) => {
           })
         );
         mergedPayments = mergedPayments.concat(supplierPaymentOutDetails);
+      }
+
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Supplier_Cand_Wise_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
       }
     });
 
@@ -706,6 +751,12 @@ const getTotalPayments = async (req, res) => {
               totalPaymentOut += payment.cash_Out || 0;
             
           }
+
+          for (const payment of item[schemaType].candPayments) {
+            totalPaymentIn += payment.payment_In || 0;
+          
+          
+        }
           
         }
       });
@@ -757,6 +808,12 @@ const getTotalPayments = async (req, res) => {
           for (const payment of item[schemaType].payment) {
             // Check if payment type is "Advance"
               totalPaymentIn += payment.cash_Out || 0;  
+              totalPaymentOut += payment.payment_Out || 0;
+          
+          }
+
+          for (const payment of item[schemaType].candPayments) {
+            
               totalPaymentOut += payment.payment_Out || 0;
           
           }
@@ -898,6 +955,17 @@ const getTotalAdvancePayments = async (req, res) => {
             }
           }
         }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            // Check if payment type is "Advance"
+            if (payment.payment_Type.toLowerCase() === "advance") {
+              // Add payment_In to totalAdvancePaymentIn
+              totalAdvancePaymentIn += payment.payment_In || 0;
+            
+            }
+          }
+        }
       }
     }
 
@@ -922,6 +990,20 @@ const getTotalAdvancePayments = async (req, res) => {
             }
           }
         }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            // Check if payment type is "Advance"
+            if (
+              payment.payment_Type.toLowerCase() === "advance" &&
+              payment.date === currentDate
+            ) {
+              // Add payment_In to totalAdvancePaymentIn
+              todayAdvancePaymentIn += payment.payment_In || 0;
+           
+            }
+          }
+        }
       }
     }
 
@@ -938,6 +1020,16 @@ const getTotalAdvancePayments = async (req, res) => {
               // Add payment_In to totalAdvancePaymentIn
               todayCashIn += payment.payment_In || 0;
               todayCashOut += payment.cash_Out || 0;
+            }
+          }
+        }
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            // Check if payment type is "Advance"
+            if (payment.date === currentDate) {
+              // Add payment_In to totalAdvancePaymentIn
+              todayCashIn += payment.payment_In || 0;
+             
             }
           }
         }
@@ -982,6 +1074,17 @@ const getTotalAdvancePayments = async (req, res) => {
               // Add payment_In to totalAdvancePaymentOut
               totalAdvancePaymentOut += payment.payment_Out || 0;
               totalAdvancePaymentIn += payment.cash_Out || 0;
+            }
+          }
+        }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            // Check if payment type is "Advance"
+            if (payment.payment_Type.toLowerCase() === "advance") {
+              // Add payment_In to totalAdvancePaymentOut
+              totalAdvancePaymentOut += payment.payment_Out || 0;
+              
             }
           }
         }
@@ -1036,6 +1139,20 @@ const getTotalAdvancePayments = async (req, res) => {
             }
           }
         }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            // Check if payment type is "Advance"
+            if (
+              payment.payment_Type.toLowerCase() === "advance" &&
+              payment.date === currentDate
+            ) {
+              // Add payment_In to totalAdvancePaymentIn
+              todayAdvancePaymentOut += payment.payment_Out || 0;
+            
+            }
+          }
+        }
       }
     }
 
@@ -1085,21 +1202,21 @@ const getTotalAdvancePayments = async (req, res) => {
             }
           }
         }
-      }
-    }
 
-    for (const employee of employees) {
-      if (employee.payment) {
-        const payments = employee.payment;
-        if (payments) {
-          for (const payment of payments) {
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            // Check if payment type is "Advance"
             if (payment.date === currentDate) {
-              todayCashOut += payment.payment_Out;
+              // Add payment_In to totalAdvancePaymentIn
+              todayCashOut += payment.payment_Out || 0;
+              
             }
           }
         }
       }
     }
+
+   
     for(const employee of employees){
       if(employee.payments){
         const allMonths=employee.payments
@@ -1238,6 +1355,38 @@ const getAllPaymentsByDate = async (req, res) => {
            
           }
         }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_in +=
+                payment.payment_In || 0;
+             
+            }
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_out +=
+                payment.payment_In || 0;
+             
+            }
+           
+          }
+        }
       }
     }
 
@@ -1248,6 +1397,36 @@ const getAllPaymentsByDate = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
+           
+            if(payment.payment_Type.toLowerCase()==='loss'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_out +=
+                payment.payment_Out || 0;
+            }
+            if(payment.payment_Type.toLowerCase()==='profit'){
+              const paymentDate = payment.date;
+              if (!paymentsByDate[paymentDate]) {
+                paymentsByDate[paymentDate] = {
+                  date: paymentDate,
+                  total_payment_in: 0,
+                  total_payment_out: 0,
+                };
+              }
+              paymentsByDate[paymentDate].total_payment_in +=
+                payment.payment_Out || 0;
+             
+            }
+          }
+        }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
            
             if(payment.payment_Type.toLowerCase()==='loss'){
               const paymentDate = payment.date;
@@ -1416,12 +1595,24 @@ const getAllBanksPayments = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const paymentVia = payment.payment_Via;
-            if (paymentVia.toLowerCase() !== "cash" && payment.payment_In>0) {
-              if (!combinedPaymentsIn[paymentVia]) {
-                combinedPaymentsIn[paymentVia] = 0;
+            const payment_Via = payment.payment_Via;
+            if (payment_Via.toLowerCase() !== "cash" && payment.payment_In>0) {
+              if (!combinedPaymentsIn[payment_Via]) {
+                combinedPaymentsIn[payment_Via] = 0;
               }
-              combinedPaymentsIn[paymentVia] += payment.payment_In || 0;
+              combinedPaymentsIn[payment_Via] += payment.payment_In || 0;
+            }
+          }
+        }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            const payment_Via = payment.payment_Via;
+            if (payment_Via.toLowerCase() !== "cash" && payment.payment_In>0) {
+              if (!combinedPaymentsIn[payment_Via]) {
+                combinedPaymentsIn[payment_Via] = 0;
+              }
+              combinedPaymentsIn[payment_Via] += payment.payment_In || 0;
             }
           }
         }
@@ -1435,14 +1626,28 @@ const getAllBanksPayments = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const paymentVia = payment.payment_Via;
-            if (paymentVia.toLowerCase() !== "cash" && payment.payment_Out>0) {
+            const payment_Via = payment.payment_Via;
+            if (payment_Via.toLowerCase() !== "cash" && payment.payment_Out>0) {
               // Ignore cash payments
 
-              if (!combinedPaymentsOut[paymentVia]) {
-                combinedPaymentsOut[paymentVia] = 0;
+              if (!combinedPaymentsOut[payment_Via]) {
+                combinedPaymentsOut[payment_Via] = 0;
               }
-              combinedPaymentsOut[paymentVia] += payment.payment_Out || 0;
+              combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
+            }
+          }
+        }
+
+        if (item[schemaType] && item[schemaType].candPayments) {
+          for (const payment of item[schemaType].candPayments) {
+            const payment_Via = payment.payment_Via;
+            if (payment_Via.toLowerCase() !== "cash" && payment.payment_Out>0) {
+              // Ignore cash payments
+
+              if (!combinedPaymentsOut[payment_Via]) {
+                combinedPaymentsOut[payment_Via] = 0;
+              }
+              combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
             }
           }
         }
@@ -1454,18 +1659,18 @@ const getAllBanksPayments = async (req, res) => {
     for (const cash of cashInHandPayments) {
       if (cash.payment) {
         for (const payment of cash.payment) {
-          const paymentVia = payment.payment_Via;
-          if (paymentVia.toLowerCase() !== "cash") {
-            if (!combinedPaymentsOut[paymentVia]) {
-              combinedPaymentsOut[paymentVia] = 0;
+          const payment_Via = payment.payment_Via;
+          if (payment_Via.toLowerCase() !== "cash") {
+            if (!combinedPaymentsOut[payment_Via]) {
+              combinedPaymentsOut[payment_Via] = 0;
             }
-            combinedPaymentsOut[paymentVia] += payment.payment_Out || 0;
+            combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
           }
-          if (paymentVia.toLowerCase() !== "cash") {
-            if (!combinedPaymentsIn[paymentVia]) {
-              combinedPaymentsIn[paymentVia] = 0;
+          if (payment_Via.toLowerCase() !== "cash") {
+            if (!combinedPaymentsIn[payment_Via]) {
+              combinedPaymentsIn[payment_Via] = 0;
             }
-            combinedPaymentsIn[paymentVia] += payment.payment_In || 0;
+            combinedPaymentsIn[payment_Via] += payment.payment_In || 0;
           }
         }
       }
@@ -1474,34 +1679,42 @@ const getAllBanksPayments = async (req, res) => {
     // Process payments for Expenses schema
     const expensesPayments = await Expenses.find();
     for (const expense of expensesPayments) {
-      const paymentVia = expense.payment_Via;
-      if (paymentVia.toLowerCase() !== "cash") {
+      const payment_Via = expense.payment_Via;
+      if (payment_Via.toLowerCase() !== "cash") {
         // Ignore cash payments
 
-        if (!combinedPaymentsOut[paymentVia]) {
-          combinedPaymentsOut[paymentVia] = 0;
+        if (!combinedPaymentsOut[payment_Via]) {
+          combinedPaymentsOut[payment_Via] = 0;
         }
-        combinedPaymentsOut[paymentVia] += expense.payment_Out || 0;
+        combinedPaymentsOut[payment_Via] += expense.payment_Out || 0;
       }
     }
 
     // Process payments for Expenses schema
+    
     const employeesPayments = await Employees.find();
-    for (const employee of employeesPayments) {
-      if (employee.payment) {
-        for (const payment of employee.payment) {
-          const paymentVia = payment.payment_Via;
-          if (paymentVia.toLowerCase() !== "cash") {
-            // Ignore cash payments
 
-            if (!combinedPaymentsOut[paymentVia]) {
-              combinedPaymentsOut[paymentVia] = 0;
+    for(const employee of employeesPayments){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              if (payment.payment_Via.toLowerCase() !== "cash") {
+                // Ignore cash payments
+    
+                if (!combinedPaymentsOut[payment.payment_Via]) {
+                  combinedPaymentsOut[payment.payment_Via] = 0;
+                }
+                combinedPaymentsOut[payment.payment_Via] += payment.payment_Out || 0;
+              }
             }
-            combinedPaymentsOut[paymentVia] += payment.payment_Out || 0;
           }
         }
       }
     }
+   
     // Combine payments in and out separately for each payment_via and subtract payment_Out from payment_In
     // Combine payments in and out separately for each payment_via
     const combinedArray = [];
@@ -1510,12 +1723,12 @@ const getAllBanksPayments = async (req, res) => {
       ...Object.keys(combinedPaymentsOut),
     ]);
 
-    for (const paymentVia of allPaymentMethods) {
-      const totalPaymentIn = combinedPaymentsIn[paymentVia] || 0;
-      const totalPaymentOut = combinedPaymentsOut[paymentVia] || 0;
+    for (const payment_Via of allPaymentMethods) {
+      const totalPaymentIn = combinedPaymentsIn[payment_Via] || 0;
+      const totalPaymentOut = combinedPaymentsOut[payment_Via] || 0;
       const totalPayment = totalPaymentIn - totalPaymentOut;
       combinedArray.push({
-        payment_Via: paymentVia,
+        payment_Via: payment_Via,
         total_payment: totalPayment,
       });
     }
@@ -1574,18 +1787,41 @@ const getNormalPayments = async (req, res) => {
       if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
         const paymentInDetails = agent.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: agent.payment_In_Schema.supplierName,
+            name: agent.payment_In_Schema.supplierName,
             type: "Agent_Payment_In",
             ...payment.toObject(),
           })
         );
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
+
+      if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentInDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_In_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const paymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
-            supplierName: agent.payment_Out_Schema.supplierName,
+            name: agent.payment_Out_Schema.supplierName,
             type: "Agent_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
+
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
         );
@@ -1599,22 +1835,46 @@ const getNormalPayments = async (req, res) => {
       if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
         const supplierPaymentInDetails = agent.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: agent.payment_In_Schema.supplierName,
+            name: agent.payment_In_Schema.supplierName,
             type: "Supplier_Payment_In",
             ...payment.toObject(),
           })
         );
         mergedPayments = mergedPayments.concat(supplierPaymentInDetails);
       }
+
+      if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentInDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_In_Schema.supplierName,
+            type: "Supplier_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+
+
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
-            supplierName: agent.payment_Out_Schema.supplierName,
+            name: agent.payment_Out_Schema.supplierName,
             type: "Supplier_Payment_Out",
             ...payment.toObject(),
           })
         );
         mergedPayments = mergedPayments.concat(supplierPaymentOutDetails);
+      }
+
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
+            type: "Supplier_Cand_Wise_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
       }
     });
 
@@ -1624,7 +1884,7 @@ const getNormalPayments = async (req, res) => {
       if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
         const candPaymentInDetails = agent.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: agent.payment_In_Schema.supplierName,
+            name: agent.payment_In_Schema.supplierName,
             type: "Candidate_Payment_In",
             ...payment.toObject(),
           })
@@ -1634,7 +1894,7 @@ const getNormalPayments = async (req, res) => {
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const candPaymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
-            supplierName: agent.payment_Out_Schema.supplierName,
+            name: agent.payment_Out_Schema.supplierName,
             type: "Candidate_Payment_Out",
             ...payment.toObject(),
           })
@@ -1652,7 +1912,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const azadAgentsPaymentInDetails =
           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            name: agent.Agent_Payment_In_Schema.supplierName,
             type: "Azad_Agent_In",
             ...payment.toObject(),
           }));
@@ -1664,7 +1924,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const azadAgentsPaymentOutDetails =
           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            name: agent.Agent_Payment_Out_Schema.supplierName,
             type: "Azad_Agent_Out",
             ...payment.toObject(),
           }));
@@ -1681,7 +1941,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const ticketAgentsPaymentInDetails =
           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            name: agent.Agent_Payment_In_Schema.supplierName,
             type: "Ticket_Agent_In",
             ...payment.toObject(),
           }));
@@ -1693,7 +1953,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const ticketAgentsPaymentOutDetails =
           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            name: agent.Agent_Payment_Out_Schema.supplierName,
             type: "Ticket_Agent_Out",
             ...payment.toObject(),
           }));
@@ -1710,7 +1970,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const visitAgentsPaymentInDetails =
           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            name: agent.Agent_Payment_In_Schema.supplierName,
             type: "Visit_Agent_In",
             ...payment.toObject(),
           }));
@@ -1722,7 +1982,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const visitAgentsPaymentOutDetails =
           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            name: agent.Agent_Payment_Out_Schema.supplierName,
             type: "Visit_Agent_Out",
             ...payment.toObject(),
           }));
@@ -1739,7 +1999,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const azadSuppliersPaymentInDetails =
           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            name: agent.Supplier_Payment_In_Schema.supplierName,
             type: "Azad_Supplier_In",
             ...payment.toObject(),
           }));
@@ -1751,7 +2011,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const azadSuppliersPaymentOutDetails =
           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            name: agent.Supplier_Payment_Out_Schema.supplierName,
             type: "Azad_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -1768,7 +2028,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const ticketSuppliersPaymentInDetails =
           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            name: agent.Supplier_Payment_In_Schema.supplierName,
             type: "Ticket_Supplier_In",
 
             ...payment.toObject(),
@@ -1781,7 +2041,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const ticketSuppliersPaymentOutDetails =
           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            name: agent.Supplier_Payment_Out_Schema.supplierName,
             type: "Ticket_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -1800,7 +2060,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const visitSuppliersPaymentInDetails =
           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            name: agent.Supplier_Payment_In_Schema.supplierName,
             type: "Visit_Supplier_In",
             ...payment.toObject(),
           }));
@@ -1812,7 +2072,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const visitSuppliersPaymentOutDetails =
           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            name: agent.Supplier_Payment_Out_Schema.supplierName,
             type: "Visit_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -1828,7 +2088,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const azadCandPaymentInDetails =
           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            name: agent.Candidate_Payment_In_Schema.supplierName,
             type: "Azad_Candidate_In",
 
             ...payment.toObject(),
@@ -1841,7 +2101,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const azadCandPaymentOutDetails =
           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            name: agent.Candidate_Payment_Out_Schema.supplierName,
             type: "Azad_Candidate_Out",
 
             ...payment.toObject(),
@@ -1859,7 +2119,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const ticketCandPaymentInDetails =
           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            name: agent.Candidate_Payment_In_Schema.supplierName,
             type: "Ticket_Candidate_In",
             ...payment.toObject(),
           }));
@@ -1871,7 +2131,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const ticketCandPaymentOutDetails =
           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            name: agent.Candidate_Payment_Out_Schema.supplierName,
             type: "Ticket_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -1888,7 +2148,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const visitCandPaymentInDetails =
           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            name: agent.Candidate_Payment_In_Schema.supplierName,
             type: "Visit_Candidate_In",
             ...payment.toObject(),
           }));
@@ -1900,7 +2160,7 @@ const getNormalPayments = async (req, res) => {
       ) {
         const visitCandPaymentOutDetails =
           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            name: agent.Candidate_Payment_Out_Schema.supplierName,
             type: "Visit_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -2189,23 +2449,44 @@ const getAdvancePayments = async (req, res) => {
        if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
          const paymentInDetails = agent.payment_In_Schema.payment.map(
            (payment) => ({
-             supplierName: agent.payment_In_Schema.supplierName,
+            name: agent.payment_In_Schema.supplierName,
              type: "Agent_Payment_In",
              ...payment.toObject(),
            })
-         );
+         )
          mergedPayments = mergedPayments.concat(paymentInDetails);
        }
+       if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentInDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_In_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        )
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
        if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
          const paymentOutDetails = agent.payment_Out_Schema.payment.map(
            (payment) => ({
-             supplierName: agent.payment_Out_Schema.supplierName,
+            name: agent.payment_Out_Schema.supplierName,
              type: "Agent_Payment_Out",
              ...payment.toObject(),
            })
          );
          mergedPayments = mergedPayments.concat(paymentOutDetails);
        }
+
+       if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
      });
  
      // Iterate through agents
@@ -2214,23 +2495,46 @@ const getAdvancePayments = async (req, res) => {
        if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
          const supplierPaymentInDetails = agent.payment_In_Schema.payment.map(
            (payment) => ({
-             supplierName: agent.payment_In_Schema.supplierName,
+            name: agent.payment_In_Schema.supplierName,
              type: "Supplier_Payment_In",
              ...payment.toObject(),
            })
          );
          mergedPayments = mergedPayments.concat(supplierPaymentInDetails);
        }
+
+       if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentInDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_In_Schema.supplierName,
+            type: "Supplier_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        )
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+
        if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
          const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(
            (payment) => ({
-             supplierName: agent.payment_Out_Schema.supplierName,
+            name: agent.payment_Out_Schema.supplierName,
              type: "Supplier_Payment_Out",
              ...payment.toObject(),
            })
          );
          mergedPayments = mergedPayments.concat(supplierPaymentOutDetails);
        }
+
+       if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
+            type: "Supplier_Cand_Wise_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
      });
  
      // Iterate through agents
@@ -2239,7 +2543,7 @@ const getAdvancePayments = async (req, res) => {
        if (agent.payment_In_Schema && agent.payment_In_Schema.payment) {
          const candPaymentInDetails = agent.payment_In_Schema.payment.map(
            (payment) => ({
-             supplierName: agent.payment_In_Schema.supplierName,
+            name: agent.payment_In_Schema.supplierName,
              type: "Candidate_Payment_In",
              ...payment.toObject(),
            })
@@ -2249,7 +2553,7 @@ const getAdvancePayments = async (req, res) => {
        if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
          const candPaymentOutDetails = agent.payment_Out_Schema.payment.map(
            (payment) => ({
-             supplierName: agent.payment_Out_Schema.supplierName,
+            name: agent.payment_Out_Schema.supplierName,
              type: "Candidate_Payment_Out",
              ...payment.toObject(),
            })
@@ -2267,7 +2571,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const azadAgentsPaymentInDetails =
            agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            name: agent.Agent_Payment_In_Schema.supplierName,
              type: "Azad_Agent_In",
              ...payment.toObject(),
            }));
@@ -2279,7 +2583,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const azadAgentsPaymentOutDetails =
            agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            name: agent.Agent_Payment_Out_Schema.supplierName,
              type: "Azad_Agent_Out",
              ...payment.toObject(),
            }));
@@ -2296,7 +2600,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const ticketAgentsPaymentInDetails =
            agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Agent_Payment_In_Schema.supplierName,
+            name: agent.Agent_Payment_In_Schema.supplierName,
              type: "Ticket_Agent_In",
              ...payment.toObject(),
            }));
@@ -2308,7 +2612,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const ticketAgentsPaymentOutDetails =
            agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            name: agent.Agent_Payment_Out_Schema.supplierName,
              type: "Ticket_Agent_Out",
              ...payment.toObject(),
            }));
@@ -2325,7 +2629,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const visitAgentsPaymentInDetails =
            agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Agent_Payment_In_Schema.supplierName,
+             name: agent.Agent_Payment_In_Schema.supplierName,
              type: "Visit_Agent_In",
              ...payment.toObject(),
            }));
@@ -2337,7 +2641,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const visitAgentsPaymentOutDetails =
            agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+            name: agent.Agent_Payment_Out_Schema.supplierName,
              type: "Visit_Agent_Out",
              ...payment.toObject(),
            }));
@@ -2354,7 +2658,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const azadSuppliersPaymentInDetails =
            agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            name: agent.Supplier_Payment_In_Schema.supplierName,
              type: "Azad_Supplier_In",
              ...payment.toObject(),
            }));
@@ -2366,7 +2670,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const azadSuppliersPaymentOutDetails =
            agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            name: agent.Supplier_Payment_Out_Schema.supplierName,
              type: "Azad_Supplier_Out",
              ...payment.toObject(),
            }));
@@ -2383,7 +2687,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const ticketSuppliersPaymentInDetails =
            agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            name: agent.Supplier_Payment_In_Schema.supplierName,
              type: "Ticket_Supplier_In",
  
              ...payment.toObject(),
@@ -2396,7 +2700,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const ticketSuppliersPaymentOutDetails =
            agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            name: agent.Supplier_Payment_Out_Schema.supplierName,
              type: "Ticket_Supplier_Out",
              ...payment.toObject(),
            }));
@@ -2415,7 +2719,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const visitSuppliersPaymentInDetails =
            agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+            name: agent.Supplier_Payment_In_Schema.supplierName,
              type: "Visit_Supplier_In",
              ...payment.toObject(),
            }));
@@ -2427,7 +2731,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const visitSuppliersPaymentOutDetails =
            agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+            name: agent.Supplier_Payment_Out_Schema.supplierName,
              type: "Visit_Supplier_Out",
              ...payment.toObject(),
            }));
@@ -2443,7 +2747,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const azadCandPaymentInDetails =
            agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            name: agent.Candidate_Payment_In_Schema.supplierName,
              type: "Azad_Candidate_In",
  
              ...payment.toObject(),
@@ -2456,7 +2760,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const azadCandPaymentOutDetails =
            agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            name: agent.Candidate_Payment_Out_Schema.supplierName,
              type: "Azad_Candidate_Out",
  
              ...payment.toObject(),
@@ -2474,7 +2778,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const ticketCandPaymentInDetails =
            agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            name: agent.Candidate_Payment_In_Schema.supplierName,
              type: "Ticket_Candidate_In",
              ...payment.toObject(),
            }));
@@ -2486,7 +2790,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const ticketCandPaymentOutDetails =
            agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+             name: agent.Candidate_Payment_Out_Schema.supplierName,
              type: "Ticket_Candidate_Out",
              ...payment.toObject(),
            }));
@@ -2503,7 +2807,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const visitCandPaymentInDetails =
            agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-             supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+            name: agent.Candidate_Payment_In_Schema.supplierName,
              type: "Visit_Candidate_In",
              ...payment.toObject(),
            }));
@@ -2515,7 +2819,7 @@ const getAdvancePayments = async (req, res) => {
        ) {
          const visitCandPaymentOutDetails =
            agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-             supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+            name: agent.Candidate_Payment_Out_Schema.supplierName,
              type: "Visit_Candidate_Out",
              ...payment.toObject(),
            }));
@@ -2800,11 +3104,33 @@ const getAgentsPayments = async (req, res) => {
         );
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
+
+      if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentInDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const paymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Agent_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Agent_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
         );
@@ -2855,11 +3181,33 @@ const getSuppliersPayments = async (req, res) => {
         );
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
+
+      if (agent.payment_In_Schema && agent.payment_In_Schema.candPayments) {
+        const paymentInDetails = agent.payment_In_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
+            type: "Supp_Cand_Wise_Payment_In",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+
       if (agent.payment_Out_Schema && agent.payment_Out_Schema.payment) {
         const paymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Supp_Payment_Out",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentOutDetails);
+      }
+      if (agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments) {
+        const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
+          (payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
+            type: "Supp_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
         );

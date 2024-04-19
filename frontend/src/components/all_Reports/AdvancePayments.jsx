@@ -71,6 +71,7 @@ export default function AdvancePayments() {
     return isDateInRange && isAdvancePayment;
   });
   
+  console.log(filteredPayments)
   const printExpenseTable = () => {
     // Convert JSX to HTML string
     const printContentString = `

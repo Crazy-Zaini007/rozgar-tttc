@@ -15,8 +15,8 @@ import NewEntry from './components/enteries/NewEntry';
 import Dashboard from './components/Dashboard';
 import CashinHand from './components/CashinHand';
 import BankCash from './components/BankCash.jsx'
-import DirectPaymentIn from './components/DirectPaymentIn.jsx'
-import DirectPaymentOut from './components/DirectPaymentOut.jsx'
+import DirectInOut from './components/DirectIn&Out.jsx'
+
 
 
 
@@ -174,8 +174,8 @@ function App() {
           {/* When user is Logged in */}
           <Route exact path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand>}></Route>
           <Route exact path='/rozgar/bank_cash' element={user && <BankCash></BankCash>}></Route>
-          <Route exact path='/rozgar/direct/payment_in' element={user && <DirectPaymentIn></DirectPaymentIn>}></Route>
-          <Route exact path='/rozgar/direct/payment_out' element={user && <DirectPaymentOut></DirectPaymentOut>}></Route>
+          <Route exact path='/rozgar/direct/payment_in_out' element={user && <DirectInOut></DirectInOut>}></Route>
+         
 
 
 

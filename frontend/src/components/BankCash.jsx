@@ -7,7 +7,7 @@ import PaymentViaHook from '../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../hooks/settingHooks/PaymentTypeHook'
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import * as XLSX from 'xlsx';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -711,32 +711,34 @@ const getBankCash = async () => {
           {current === 1 &&
             <div className="row">
 
+              {(option===0 || option===1) && single===0 &&
               <div className='col-md-12 payment_details'>
-                <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
-                  <div className="left d-flex">
-                    <h4>Banks Cash Details</h4>
-                    {/* <button className='btn m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
-                    <button className='btn m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button> */}
+              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+                <div className="left d-flex">
+                  <h4>Banks Cash Details</h4>
+                  <button className='btn m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
+                  <button className='btn m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
 
-                  </div>
-                  <div className="right">
-                    {option === 0 &&
-                      <>
-                        <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
-                        <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printCashTable}>Print </button>
-                      </>
-                    }
-                      {option === 1 &&
-                      <>
-                        <button className='btn excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
-                        <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
-                      </>
-                    }
-                    <button className='btn detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
+                </div>
+                <div className="right">
+                  {option === 0 &&
+                    <>
+                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
+                      <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printCashTable}>Print </button>
+                    </>
+                  }
+                    {option === 1 &&
+                    <>
+                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
+                      <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
+                    </>
+                  }
+                  <button className='btn detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
 
-                  </div>
-                </Paper>
-              </div>
+                </div>
+              </Paper>
+            </div>
+              }
 
               {option === 0 && single===0 &&
                 <div className="col-md-12 payment_details">
@@ -932,6 +934,163 @@ const getBankCash = async () => {
                   </div>
                 </div>
               }
+  {option === 1 &&
+                <div className="col-md-12 payment_details">
+                  <div className='row'>
+                  <div className="col-md-12 filters">
+                      <Paper className='py-1 mb-2 px-3'>
+                        <div className="row">
+                        <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
+                          
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Supp/Agent/Cand:</label>
+                            <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.supplierName))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Reference Type:</label>
+                            <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.type))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Category:</label>
+                            <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.category))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Payment Via:</label>
+                            <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Payment Type:</label>
+                            <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Type))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </Paper>
+                    </div>
+
+
+                    <div className="col-md-12 detail_table my-2">
+
+                      <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                        <Table stickyHeader>
+                          <TableHead className="thead">
+                            <TableRow>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Date</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Type</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Category</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Slip_No</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_In</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Return</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Details</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Invoice</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Slip_Pic</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {filteredPayment
+                              .map((cash, outerIndex) => (
+                                // Map through the payment array
+                                <React.Fragment key={outerIndex}>
+                                  <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
+                                   
+                                      <>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                       
+                                      </>
+                                  
+                                  </TableRow>
+
+                                </React.Fragment>
+                              ))}
+                              <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+    {/* Calculate the total sum of payment_In */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.payment_In || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-danger text-white'>
+    {/* Calculate the total sum of payment_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.payment_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (entry.cash_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+                            
+                          </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                      
+                    </div>
+                  </div>
+                </div>
+              }
+
+
 
             </div>
           }

@@ -52,6 +52,9 @@ const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupp
 const visitCand_Payments_Out = useSelector((state) => state.visits.visitCand_Payments_Out);
 
 
+const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
+
+
 const { getCurrCountryData } = CurrCountryHook();
 const { getCategoryData } = CategoryHook();
 const { getPaymentViaData } = PaymentViaHook();
@@ -64,7 +67,7 @@ const { getSupplierPaymentsOut } = SupplierHook();
 const { getTicketAgentPaymentsOut,getTicketSupplierPaymentsOut,getTicketCandPaymentsOut } = TicketHook();
 const { getVisitAgentPaymentsOut,getVisitSupplierPaymentsOut,getVisitCandPaymentsOut } = VisitHook()
 
-const { getOverAllPayments, overAllPayments } = CashInHandHook()
+const { getCashInHandData,getOverAllPayments, overAllPayments } = CashInHandHook()
 
 const [option, setOption] = useState(false);
 // Form input States
@@ -95,6 +98,7 @@ const fetchData = async () => {
   try {
     // Use Promise.all to execute all promises concurrently
     await Promise.all([
+      getCashInHandData(),
       getOverAllPayments(),
       getCurrCountryData(),
       getCategoryData(),
@@ -365,13 +369,10 @@ useEffect(() => {
   const currentDate = new Date().toISOString().split('T')[0];
 
 
-  const collapsed = useSelector((state) => state.collapsed.collapsed);
+  
   return (
     <>
-    <div className={`${collapsed ?"collapsed":"main"}`}>
-
-    <div className='container-fluid payment_form' >
-<div className='row payment_details'>
+    
 <Paper className="col-md-12 py-3 mb-1 px-2 detail_table">
         {!option && (
          
@@ -388,6 +389,10 @@ useEffect(() => {
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}</span>
+                                 <span className="btn submit_btn m-1 py-2 px-3 bg-info border-0">
+  Cash In Hand : {cashInHand && cashInHand.total_Cash }
+</span>
+
                 <button className="btn submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
@@ -406,7 +411,7 @@ useEffect(() => {
                     <TableCell className="label border">Slip_No</TableCell>
                     <TableCell className="label border">Payment_Out </TableCell>
                     <TableCell className="label border">Date</TableCell>
-                    {(ref==="Agent Cand-Vise" || ref==="Supplier Cand-Vise") &&  <TableCell className="label border">Candidate</TableCell>}
+                    {(ref==="Agent Cand-Vise" || ref==="Supplier Cand-Vise") && <TableCell className="label border">Candidate</TableCell>}
                     <TableCell className="label border">Details</TableCell>
                     <TableCell className="label border">Curr_Country</TableCell>
                     <TableCell className="label border">Curr_Rate</TableCell>
@@ -743,11 +748,7 @@ useEffect(() => {
             </form>
           
         )}
-      </Paper>
-</div>
-    </div>
-     </div>
-      
+      </Paper>      
     </>
   );
 }

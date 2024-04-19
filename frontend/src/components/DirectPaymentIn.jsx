@@ -20,7 +20,6 @@ import SupplierHook from '../hooks/supplierHooks/SupplierHook'
 import TicketHook from '../hooks/ticketHooks/TicketHook'
 import VisitHook from '../hooks/visitsHooks/VisitHook'
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
-
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function DirectPaymentIn() {
@@ -360,13 +359,9 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
 const currentDate = new Date().toISOString().split('T')[0];
 
 
-  const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-    <div className={`${collapsed ?"collapsed":"main"}`}>
-
-    <div className='container-fluid payment_form' >
-<div className='row payment_details'>
+  
 <Paper className="col-md-12 py-3 mb-1 px-2 detail_table">
         {!option && (
          
@@ -383,7 +378,7 @@ const currentDate = new Date().toISOString().split('T')[0];
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}</span>
-                <button className="btn submit_btn m-1" disabled={loading}>
+                <button className="btn submit_btn m-1 " disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>
@@ -739,9 +734,7 @@ const currentDate = new Date().toISOString().split('T')[0];
           
         )}
       </Paper>
-</div>
-    </div>
-     </div>
+
       
     </>
   );

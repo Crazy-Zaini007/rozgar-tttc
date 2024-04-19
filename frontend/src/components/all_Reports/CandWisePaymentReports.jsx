@@ -9,6 +9,7 @@ export default function CandWisePaymentReports() {
   const [option, setOption] = useState(0)
   const [loading1, setLoading1] = useState(false)
   const { getOverAllPayments, overAllPayments } = CashInHandHook()
+  console.log('overAllPayments',overAllPayments)
    // fteching Data from DB
    const fetchData = async () => {
     try {
@@ -43,16 +44,15 @@ export default function CandWisePaymentReports() {
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Cash In</th>
-        <th>Cash Retrun</th>
         <th>Details</th>
-        <th>Candidate</th>
+        <th>Candidates</th>
         <th>Invoice</th>
         
       </tr>
     </thead>
     <tbody>
       ${overAllPayments && overAllPayments 
-        .filter(entry => entry.type.toLowerCase().includes('in') && entry.cand_Name && entry.cand_Name !=="")
+        .filter(entry => entry.type.toLowerCase().includes('in') &&  entry.payments && entry.payments.length > 0)
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -64,9 +64,9 @@ export default function CandWisePaymentReports() {
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
           <td>${String(entry.payment_In)}</td>
-          <td>${String(entry.cash_Out)}</td>
+       
           <td>${String(entry.details)}</td>
-          <td>${String(entry.cand_Name)}</td>
+          <td>${String(entry.payments.length)}</td>
           <td>${String(entry.invoice)}</td>   
         </tr>
       `).join('')}
@@ -120,7 +120,7 @@ export default function CandWisePaymentReports() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => payment.type.toLowerCase().includes('in') && payment.cand_Name && payment.cand_Name !=="");
+    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => payment.type.toLowerCase().includes('in') && payment.payments && payment.payments.length > 0);
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {
@@ -134,10 +134,8 @@ export default function CandWisePaymentReports() {
         Payment_Type: payments.payment_Type,
         Slip_No: payments.slip_No,
         Cash_In: payments.payment_In,
-        Payment_Out: payments.payment_Out,
-        Cash_Out: payments.cash_Out,
         Details: payments.details,
-        Candidate: payments.cand_Name,
+        Candidates: payments.payments.length,
         Invoice: payments.invoice,
       }
 
@@ -167,16 +165,15 @@ export default function CandWisePaymentReports() {
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Cash Out</th>
-        <th>Cash Retrun</th>
         <th>Details</th>
-        <th>Candidate</th>
+        <th>Candidates</th>
         <th>Invoice</th>
         
       </tr>
     </thead>
     <tbody>
       ${overAllPayments && overAllPayments 
-        .filter(entry => entry.type.toLowerCase().includes('out')&& entry.cand_Name && entry.cand_Name !=="")
+        .filter(entry => entry.type.toLowerCase().includes('out')&&  entry.payments && entry.payments.length > 0)
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -188,9 +185,8 @@ export default function CandWisePaymentReports() {
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
           <td>${String(entry.payment_Out)}</td>
-          <td>${String(entry.cash_Out)}</td>
           <td>${String(entry.details)}</td>
-          <td>${String(entry.cand_Name)}</td>
+          <td>${String(entry.payments.length)}</td>
           <td>${String(entry.invoice)}</td>   
         </tr>
       `).join('')}
@@ -244,7 +240,7 @@ export default function CandWisePaymentReports() {
 
 
   const downloadPaymenOutExcel = () => {
-    const filteredPaymentsOut = overAllPayments && overAllPayments .filter(payment => payment.type.toLowerCase().includes('out')&& payment.cand_Name && payment.cand_Name !=="");
+    const filteredPaymentsOut = overAllPayments && overAllPayments .filter(payment => payment.type.toLowerCase().includes('out')&&  payment.payments && payment.payments.length > 0);
 
     const data = [];
     // Iterate over entries and push all fields
@@ -258,11 +254,9 @@ export default function CandWisePaymentReports() {
         Payment_Via: payments.payment_Via,
         Payment_Type: payments.payment_Type,
         Slip_No: payments.slip_No,
-        Cash_In: payments.payment_In,
-        Payment_Out: payments.payment_Out,
-        Cash_Out: payments.cash_Out,
+        Cash_Out: payments.payment_Out,
         Details: payments.details,
-        Candidate: payments.cand_Name,
+        Candidates: payments.payments.length,
         Invoice: payments.invoice,
       }
 
@@ -336,15 +330,14 @@ export default function CandWisePaymentReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
                               <TableCell className='label border'>Details</TableCell>
-                              <TableCell className='label border'>Candidate</TableCell>
+                              <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => cash.type.toLowerCase().includes('in')&& cash.cand_Name && cash.cand_Name !=="").map((cash, outerIndex) => (
+                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => cash.type.toLowerCase().includes('in')&&  cash.payments && cash.payments.length > 0).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -359,9 +352,8 @@ export default function CandWisePaymentReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.cand_Name}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                   </>
@@ -393,20 +385,12 @@ export default function CandWisePaymentReports() {
                             {/* Calculate the total sum of payment_In */}
                             {overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.cand_Name && entry.cand_Name !=="")
+                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.payments && entry.payments.length > 0)
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
                           </TableCell>
-                          <TableCell className='border data_td text-center bg-warning text-white'>
-                            {/* Calculate the total sum of cash_Out */}
-                            {overAllPayments && overAllPayments.length > 0 &&
-                              overAllPayments
-                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.cand_Name && entry.cand_Name !=="")
-                                .reduce((total, entry) => {
-                                  return total + (entry.cash_Out || 0);
-                                }, 0)}
-                          </TableCell>
+                         
 
 
                             </TableRow>
@@ -434,15 +418,14 @@ export default function CandWisePaymentReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_Out</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
                               <TableCell className='label border'>Details</TableCell>
-                              <TableCell className='label border'>Candidate</TableCell>
+                              <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ? overAllPayments.filter(cash => cash.type.toLowerCase().includes('out')&& cash.cand_Name && cash.cand_Name !=="").map((cash, outerIndex) => (
+                            {overAllPayments && overAllPayments.length > 0 ? overAllPayments.filter(cash => cash.type.toLowerCase().includes('out')&& cash.payments && cash.payments.length > 0).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -457,9 +440,8 @@ export default function CandWisePaymentReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.cand_Name}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                   </>
@@ -492,20 +474,12 @@ export default function CandWisePaymentReports() {
                             
                             { overAllPayments && overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out')&& entry.cand_Name && entry.cand_Name !=="")
+                                .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
                           </TableCell>
-                          <TableCell className='border data_td text-center bg-warning text-white'>
-                            {/* Calculate the total sum of cash_Out */}
-                            { overAllPayments && overAllPayments.length > 0 &&
-                              overAllPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out')&& entry.cand_Name && entry.cand_Name !=="")
-                                .reduce((total, entry) => {
-                                  return total + (entry.cash_Out || 0);
-                                }, 0)}
-                          </TableCell>
+                          
 
                             </TableRow>
                           </TableBody>

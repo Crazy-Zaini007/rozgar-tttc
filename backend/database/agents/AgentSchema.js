@@ -132,7 +132,6 @@ const Payment_InSchema = new mongoose.Schema(
         },
         payment_In_Curr: {
           type: String,
-
         },
         slip_Pic: {
           type: String,
@@ -159,11 +158,120 @@ const Payment_InSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
-        cand_Name: {
+        cand_Name:{
           type: String,
         }
-      },
+      }
     ],
+    candPayments:[
+      {
+        date:{
+          type:String
+        },
+        category: {
+          type: String,
+          required: true,
+        },
+        payment_Via: {
+          type: String,
+          required: true,
+        },
+        payment_Type: {
+          type: String,
+          required: true,
+        },
+        slip_No: {
+          type: String,
+        },
+        payment_In: {
+          type: Number,
+          default: 0,
+        },
+        payment_In_Curr: {
+          type: String,
+        },
+        curr_Amount:{
+          type: Number,
+          default: 0,
+        },
+        slip_Pic: {
+          type: String,
+        },
+        details: {
+          type: String,
+        },
+        date: {
+        type: String,
+        },
+        invoice: {
+          type: Number,
+        },
+        payments:[
+          {
+            cand_Name: {
+              type: String,
+              required: true,
+            },
+            pp_No: {
+              type: String,
+              required: true,
+            },
+            entry_Mode: {
+              type: String,
+              required: true,
+            },
+            company: {
+              type: String,
+            },
+            trade: {
+              type: String,
+            },
+            final_Status: {
+              type: String,
+            },
+            flight_Date: {
+              type: String,
+    
+            },
+            visa_Amount_PKR: {
+              type: Number
+            },
+            past_Paid_PKR: {
+              type: Number
+            },
+            new_Payment:{
+              type: Number
+            },
+            past_Remain_PKR: {
+              type: Number
+            },
+            new_Remain_PKR: {
+              type: Number,
+              default: 0,
+            },
+
+            visa_Curr_Amount: {
+              type: Number,
+            },
+            past_Paid_Curr: {
+              type: Number
+            },
+            new_Curr_Payment:{
+              type: Number
+            },
+
+            past_Remain_Curr: {
+              type: Number
+            },
+            new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+        
+          }
+        ]
+      }       
+    ]
 
   },
   { timestamps: true }
@@ -333,13 +441,121 @@ const Payment_OutSchema = new mongoose.Schema(
         cand_Name: {
           type: String,
         },
-      },
+      }
     ],
+    candPayments:[
+      {
+        date:{
+          type:String
+        },
+        category: {
+          type: String,
+          required: true,
+        },
+        payment_Via: {
+          type: String,
+          required: true,
+        },
+        payment_Type: {
+          type: String,
+          required: true,
+        },
+        slip_No: {
+          type: String,
+        },
+        payment_Out: {
+          type: Number,
+          default: 0,
+        },
+        payment_Out_Curr: {
+          type: String,
+        },
+        curr_Amount:{
+          type: Number,
+          default: 0,
+        },
+        slip_Pic: {
+          type: String,
+        },
+        details: {
+          type: String,
+        },
+        date: {
+        type: String,
+        },
+        invoice: {
+          type: Number,
+        },
+        payments:[
+          {
+            cand_Name: {
+              type: String,
+              required: true,
+            },
+            pp_No: {
+              type: String,
+              required: true,
+            },
+            entry_Mode: {
+              type: String,
+              required: true,
+            },
+            company: {
+              type: String,
+            },
+            trade: {
+              type: String,
+            },
+            final_Status: {
+              type: String,
+            },
+            flight_Date: {
+              type: String,
+    
+            },
+            visa_Amount_PKR: {
+              type: Number
+            },
+            new_Payment:{
+              type: Number
+            },
+            past_Paid_PKR: {
+              type: Number
+            },
+            past_Remain_PKR: {
+              type: Number
+            },
+            new_Remain_PKR: {
+              type: Number,
+              default: 0,
+            },
+
+            visa_Curr_Amount: {
+              type: Number,
+            },
+            new_Curr_Payment:{
+              type: Number
+            },
+            past_Paid_Curr: {
+              type: Number
+            },
+            past_Remain_Curr: {
+              type: Number
+            },
+            new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+        
+          }
+        ]
+      }       
+    ]
   },
   { timestamps: true }
 );
 
-//  Agents Schema
+//  Agent Schema
 
 const AgentSchema = new mongoose.Schema(
   {
@@ -349,5 +565,5 @@ const AgentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Agents = mongoose.model("agents", AgentSchema);
+const Agents = mongoose.model("agent", AgentSchema);
 module.exports = Agents;

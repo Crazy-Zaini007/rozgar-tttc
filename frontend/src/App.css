@@ -311,14 +311,6 @@
   visibility: none;
 }
 
-#mycheck:checked ~ .sidenav li{
-  width: 97%;
-  margin-top: 2px;
-  color: var(--grays-text-disable);
-  font-size: 0px;
-  padding-left: 8%;
-}
-
 #mycheck:checked ~ .sidenav #bars{
   display: none;
 }
