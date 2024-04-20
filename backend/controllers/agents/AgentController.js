@@ -4341,7 +4341,7 @@ const addCandVisePaymentIn=async(req,res)=>{
     
 
       if (existPerson) {
-      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
       past_Paid_PKR=existPerson.total_In,
       pp_No=existPerson.pp_No,
@@ -4366,7 +4366,7 @@ const addCandVisePaymentIn=async(req,res)=>{
       existPerson.remaining_Curr += newCurrAmount ? -newCurrAmount : 0
       new_Payment_In+=newPaymentIn
       new_Curr_Amount+=newCurrAmount
-
+      curr_Rate=newPaymentIn/newCurrAmount
       let myNewPayment={
         _id:new mongoose.Types.ObjectId,
         cand_Name,
@@ -4385,7 +4385,8 @@ const addCandVisePaymentIn=async(req,res)=>{
         new_Curr_Payment,
         past_Paid_Curr,
         past_Remain_Curr,
-        new_Remain_Curr
+        new_Remain_Curr,
+        curr_Rate
       }
       allPayments.push(myNewPayment)
       }
@@ -4559,6 +4560,65 @@ const deleteCandVisePaymentIn=async(req,res)=>{
   }
 }
 
+// Update Cand-Wise Payment In
+const updateCandVisePaymentIn=async(req,res)=>{
+  const {
+    supplierName,
+    paymentId,
+    category,
+    payment_Via,
+    payment_Type,
+    slip_No,
+    details,
+    curr_Country,
+    slip_Pic,
+    date,
+  } = req.body;
+
+  
+  const existingSupplier = await Agents.findOne({
+    "payment_In_Schema.supplierName": supplierName,
+  });
+  if (!existingSupplier) {
+    res.status(404).json({ message: "Agent not found" });
+    return;
+  }
+
+   // Find the payment within the payment array using paymentId
+   const paymentToUpdate = existingSupplier.payment_In_Schema.candPayments.find(
+    (payment) => payment._id.toString() === paymentId
+  );
+  if (!paymentToUpdate) {
+    res.status(404).json({ message: "Payment not found" });
+    return;
+  }
+  let uploadImage;
+
+  if (slip_Pic) {
+    uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+      upload_preset: "rozgar",
+    })
+  }
+
+  paymentToUpdate.category = category;
+  paymentToUpdate.payment_Via = payment_Via;
+  paymentToUpdate.payment_Type = payment_Type;
+  paymentToUpdate.slip_No = slip_No;
+  paymentToUpdate.details = details;
+  if (slip_Pic && uploadImage) {
+    paymentToUpdate.slip_Pic = uploadImage.secure_url;
+  };
+  paymentToUpdate.payment_In_Curr = curr_Country;
+  paymentToUpdate.date = date;
+  // Save the updated supplier
+
+  await existingSupplier.save();
+  res.status(200).json({
+    message: "Payment details updated successfully",
+
+  });
+
+}
 
 // Deleting a Single CandWise Payment IN
 const deleteSingleCandVisePaymentIn=async(req,res)=>{
@@ -4680,6 +4740,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
 
 
 
+
 // Deleting a Single CandWise Payment IN
 const updateSingleCandVisePaymentIn=async(req,res)=>{
   try{
@@ -4738,6 +4799,7 @@ candPayment.new_Remain_PKR+=updatedPaymentIn
 candPayment.new_Payment-=updatedPaymentIn
 candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
+candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
 
 
 // updating Person total_In and remainig pkr and curr as well
@@ -4874,10 +4936,9 @@ const addCandVisePaymentOut=async(req,res)=>{
       const newCurrAmount = parseInt(curr_Amount, 10);
       
       const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-    
-
+  
       if (existPerson) {
-      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
       past_Paid_PKR=existPerson.total_In,
       pp_No=existPerson.pp_No,
@@ -4902,6 +4963,7 @@ const addCandVisePaymentOut=async(req,res)=>{
       existPerson.remaining_Curr += newCurrAmount ? -newCurrAmount : 0
       new_Payment_Out+=newPaymentOut
       new_Curr_Amount+=newCurrAmount
+      curr_Rate=newPaymentOut/newCurrAmount
 
       let myNewPayment={
         _id:new mongoose.Types.ObjectId,
@@ -4921,7 +4983,8 @@ const addCandVisePaymentOut=async(req,res)=>{
         new_Curr_Payment,
         past_Paid_Curr,
         past_Remain_Curr,
-        new_Remain_Curr
+        new_Remain_Curr,
+        curr_Rate
       }
       allPayments.push(myNewPayment)
       }
@@ -5094,6 +5157,67 @@ const deleteCandVisePaymentOut=async(req,res)=>{
     res.status(500).json({message:error.message})
   }
 }
+
+
+// Update Cand-Wise Payment Out
+const updateCandVisePaymentOut=async(req,res)=>{
+  const {
+    supplierName,
+    paymentId,
+    category,
+    payment_Via,
+    payment_Type,
+    slip_No,
+    details,
+    curr_Country,
+    slip_Pic,
+    date,
+  } = req.body;
+
+  
+  const existingSupplier = await Agents.findOne({
+    "payment_Out_Schema.supplierName": supplierName,
+  });
+  if (!existingSupplier) {
+    res.status(404).json({ message: "Agent not found" });
+    return;
+  }
+
+   // Find the payment within the payment array using paymentId
+   const paymentToUpdate = existingSupplier.payment_Out_Schema.candPayments.find(
+    (payment) => payment._id.toString() === paymentId
+  );
+  if (!paymentToUpdate) {
+    res.status(404).json({ message: "Payment not found" });
+    return;
+  }
+  let uploadImage;
+
+  if (slip_Pic) {
+    uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+      upload_preset: "rozgar",
+    })
+  }
+
+  paymentToUpdate.category = category;
+  paymentToUpdate.payment_Via = payment_Via;
+  paymentToUpdate.payment_Type = payment_Type;
+  paymentToUpdate.slip_No = slip_No;
+  paymentToUpdate.details = details;
+  if (slip_Pic && uploadImage) {
+    paymentToUpdate.slip_Pic = uploadImage.secure_url;
+  };
+  paymentToUpdate.payment_Out_Curr = curr_Country;
+  paymentToUpdate.date = date;
+  // Save the updated supplier
+
+  await existingSupplier.save();
+  res.status(200).json({
+    message: "Payment details updated successfully",
+  });
+
+}
+
 
 
 // Deleting a Single CandWise Payment Out
@@ -5274,6 +5398,7 @@ candPayment.new_Remain_PKR+=updatedPaymentOut
 candPayment.new_Payment-=updatedPaymentOut
 candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
+candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
 
 
 // updating Person total_In and remainig pkr and curr as well
@@ -5368,5 +5493,7 @@ module.exports = {
   addCandVisePaymentOut,
   deleteCandVisePaymentOut,
   deleteSingleCandVisePaymentOut,
-  updateSingleCandVisePaymentOut
+  updateSingleCandVisePaymentOut,
+  updateCandVisePaymentIn,
+  updateCandVisePaymentOut
 }

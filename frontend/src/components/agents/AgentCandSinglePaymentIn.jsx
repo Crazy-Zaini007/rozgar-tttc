@@ -63,15 +63,16 @@ export default function AgentCandSinglePaymentIn() {
   const [curr_Country, setCurr_Country] = useState("");
   const [date, setDate] = useState("");
 
+  const[totalPayments,setTotalPayments]=useState(0)
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [supplierNames, setSupplierNames] = useState([]);
 
   const [candData, setCandData] = useState([]);
   // Function to handle the "Add More" button click
   const handleAddMore = () => {
-    setCandData([...candData, { cand_Name: "", payment_In: 0, curr_Amount: 0 }]);
+    setCandData([...candData, { cand_Name: "", payment_In: 0, curr_Amount: 0,curr_Rate:0 }]);
   };
-
+console.log("candData",candData)
   // Function to handle changes in the additional form fields
   const handleCandChange = (index, fieldName, value) => {
     const updatedCandData = [...candData];
@@ -294,7 +295,20 @@ export default function AgentCandSinglePaymentIn() {
       });
     }
   };
-  
+
+
+  const sumPaymentIn = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
+  };
+
+  const disableAddMore = totalPayments <= sumPaymentIn(candData);
+
+  const handleChangePaymentIn = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].payment_In = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_In);
+    setCandData(newCandData);
+  };
+
   return (
     <TableContainer component={Paper}>
       <div className="col-md-12 ">
@@ -427,6 +441,10 @@ export default function AgentCandSinglePaymentIn() {
                     ))}
                   </select>
                 </div>
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total Payments </label>
+                 <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
+                </div>
                 
                 <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                   <label>Details </label>
@@ -461,13 +479,14 @@ export default function AgentCandSinglePaymentIn() {
             </div>
             <div className="right">
            {!option && 
-            <button onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+            <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
             <i className="fas fa-plus"></i> 
           </button>
            }
             </div>
           </div>
         </div>
+        
         {option && (
           <div className="col-md-12 detail_table">
             <TableContainer component={Paper}>
@@ -628,20 +647,32 @@ export default function AgentCandSinglePaymentIn() {
                   required
                   min="1"
                   value={cand.payment_In}
-                  onChange={(e) => handleCandChange(index, "payment_In", e.target.value)}
+                  onChange={(e) => handleChangePaymentIn(index, e.target.value)}
                   placeholder="Payment In"
                 />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-              <label htmlFor="" className="text-sm text-muted mb-1">Currency Amount</label>
+              <label htmlFor="" className="text-sm text-muted mb-1">Currency Rate</label>
 
                 {/* Curr_Amount */}
                 <input
                   type="number"
                   min="0"
                   required
-                  value={cand.curr_Amount}
-                  onChange={(e) => handleCandChange(index, "curr_Amount", e.target.value)}
+                  value={cand.curr_Rate}
+                  onChange={(e) => handleCandChange(index, "curr_Rate", e.target.value)}
+                  placeholder="Currency Rate"
+                />
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+              <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
+
+                {/* Curr_Amount */}
+                <input
+                  type="number"
+                  min="0"
+                  disabled
+                  value={cand.payment_In/cand.curr_Rate}
                   placeholder="Currency Amount"
                 />
               </div>

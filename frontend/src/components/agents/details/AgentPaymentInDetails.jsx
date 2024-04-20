@@ -1319,7 +1319,6 @@ export default function AgentPaymentInDetails() {
                       Actions
                     </TableCell>
                   </TableRow>
-
                 </TableHead>
                 <TableBody>
                   {filteredIndividualPayments.map((filteredData) => (

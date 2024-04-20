@@ -29,7 +29,10 @@ const { addPaymentIn,
   addCandVisePaymentOut,
   deleteCandVisePaymentOut,
   deleteSingleCandVisePaymentOut,
-  updateSingleCandVisePaymentOut } = require('../../controllers/suppliers/SupplierController')
+  updateSingleCandVisePaymentOut,
+  updateCandVisePaymentIn,
+  updateCandVisePaymentOut
+ } = require('../../controllers/suppliers/SupplierController')
 const router = express.Router()
 
 router.use(userAuth)
@@ -92,4 +95,7 @@ router.post('/add/cand_vise/payment_out',addCandVisePaymentOut)
 router.delete('/delete/cand_vise/payment_out',deleteCandVisePaymentOut)
 router.delete('/delete/cand_vise/single/payment_out',deleteSingleCandVisePaymentOut)
 router.patch('/update/cand_vise/single/payment_out',updateSingleCandVisePaymentOut)
+
+router.patch('/update/cand_vise/payment_in',updateCandVisePaymentIn)
+router.patch('/update/cand_vise/payment_out',updateCandVisePaymentOut)
 module.exports = router

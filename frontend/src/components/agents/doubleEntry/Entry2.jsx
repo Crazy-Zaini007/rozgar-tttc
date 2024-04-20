@@ -17,7 +17,6 @@ import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
 
-
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function Entry2() {

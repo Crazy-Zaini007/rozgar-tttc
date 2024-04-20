@@ -333,15 +333,19 @@ const getBankCash = async () => {
 
   const filteredCash = cashInHand.payment
   ? cashInHand.payment.filter((paymentItem) => {
+   
       let isDateInRange = true;
-
       // Check if the payment item's date is within the selected date range
       if (dateFrom && dateTo) {
         isDateInRange =
           paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
       }
-
+      console.log("Payment Via: ", paymentItem.payment_Via.toLowerCase());
+      console.log("Is Cash: ", paymentItem.payment_Via.toLowerCase() === "cash");
+      console.log("Is Date in Range: ", isDateInRange);
+      console.log("Payment Via Search: ", paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()));
       return (
+        paymentItem.payment_Via.trim().toLowerCase()!=="cash" &&
         paymentItem.category.toLowerCase().includes(category1.toLowerCase()) &&
         isDateInRange &&
         paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()) &&

@@ -71,8 +71,8 @@ export default function SupCandPaymentOut() {
   const [candData, setCandData] = useState([]);
   // Function to handle the "Add More" button click
   const handleAddMore = () => {
-    setCandData([...candData, { cand_Name: "", payment_Out: 0, curr_Amount: 0 }]);
-  };
+    setCandData([...candData, { cand_Name: "", payment_Out: 0, curr_Amount: 0,curr_Rate:0 }]);
+  }
 
   // Function to handle changes in the additional form fields
   const handleCandChange = (index, fieldName, value) => {
@@ -424,6 +424,18 @@ export default function SupCandPaymentOut() {
 
 const collapsed = useSelector((state) => state.collapsed.collapsed);
 
+const[totalPayments,setTotalPayments]=useState(0)
+  const sumPaymentIn = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
+  };
+
+  const disableAddMore = totalPayments <= sumPaymentIn(candData);
+
+  const handleChangePaymentIn = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].payment_Out = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_Out);
+    setCandData(newCandData);
+  };
   return (
     <>
       <div className={`${collapsed ?"collapsed":"main"}`}>
@@ -632,7 +644,10 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                            ))}
                          </select>
                        </div>
-                       
+                       <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total Payments </label>
+                 <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
+                </div>
                        <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                          <label>Details </label>
                          <textarea
@@ -666,7 +681,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                    </div>
                    <div className="right">
                   {!option && 
-                   <button onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+                   <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
                    <i className="fas fa-plus"></i> 
                  </button>
                   }
@@ -833,23 +848,35 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                          required
                          min="1"
                          value={cand.payment_Out}
-                         onChange={(e) => handleCandChange(index, "payment_Out", e.target.value)}
+                         onChange={(e) => handleChangePaymentIn(index, e.target.value)}
                          placeholder="Payment Out"
                        />
                      </div>
                      <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                     <label htmlFor="" className="text-sm text-muted mb-1">Currency Amount</label>
-       
-                       {/* Curr_Amount */}
-                       <input
-                         type="number"
-                         min="0"
-                         required
-                         value={cand.curr_Amount}
-                         onChange={(e) => handleCandChange(index, "curr_Amount", e.target.value)}
-                         placeholder="Currency Amount"
-                       />
-                     </div>
+              <label htmlFor="" className="text-sm text-muted mb-1">Currency Rate</label>
+
+                {/* Curr_Amount */}
+                <input
+                  type="number"
+                  min="0"
+                  required
+                  value={cand.curr_Rate}
+                  onChange={(e) => handleCandChange(index, "curr_Rate", e.target.value)}
+                  placeholder="Currency Rate"
+                />
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+              <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
+
+                {/* Curr_Amount */}
+                <input
+                  type="number"
+                  min="0"
+                  disabled
+                  value={cand.payment_Out/cand.curr_Rate}
+                  placeholder="Currency Amount"
+                />
+              </div>
                      {/* Button to remove this additional form */}
                      <div className="col-md-12 text-end">
                      <button onClick={() => handleRemove(index)} className={`btn shadow btn-sm text-white text-bold ms-1 bg-danger`}>

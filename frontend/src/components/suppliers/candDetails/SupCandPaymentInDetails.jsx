@@ -568,105 +568,154 @@ export default function SupCandPaymentInDetails() {
           );
         }),
     }))
-  const printPaymentsTable = () => {
-    // Convert JSX to HTML string
-    const printContentString = `
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>SN</th>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Payment Via</th>
-        <th>Payment Type</th>
-        <th>Slip No</th>
-        <th>Details</th>
-        <th>Payment In</th>
-        <th>Invoice</th>
-        <th>Candidates</th>
-        <th>Payment In Curr</th>
-        <th>CUR Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-      ${filteredIndividualPayments.map((entry, index) =>
-      entry.payment.map((paymentItem, paymentIndex) => `
-          <tr key="${entry?._id}-${paymentIndex}">
-            <td>${index * entry.payment.length + paymentIndex + 1}</td>
-            <td>${String(paymentItem?.date)}</td>
-            <td>${String(paymentItem?.category)}</td>
-            <td>${String(paymentItem?.payment_Via)}</td>
-            <td>${String(paymentItem?.payment_Type)}</td>
-            <td>${String(paymentItem?.slip_No)}</td>
-            <td>${String(paymentItem?.details)}</td>
-            <td>${String(paymentItem?.payment_In)}</td>
-            <td>${String(paymentItem?.invoice)}</td>
-            <td>${String(paymentItem?.payments.length)}</td>
-            <td>${String(paymentItem?.payment_In_Curr)}</td>
-            <td>${String(paymentItem?.curr_Amount)}</td>
+ 
 
+    const printPaymentsTable = () => {
+      // Convert JSX to HTML string
+      const printContentString = `
+      <table class='print-table'>
+        <thead>
+          <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Payment Via</th>
+          <th>Payment Type</th>
+          <th>Slip No</th>
+          <th>Details</th>
+          <th>Payment In</th>
+          <th>Invoice</th>
+          <th>Candidates</th>
+          <th>Total Visa Price In PKR</th>
+          <th>Remaining PKR</th>
+          <th>Payment In Curr</th>
+          <th>CUR Amount</th>
           </tr>
-        `).join('')
-    )}
-    <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Total</td>
-    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
-    </tr>
-
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
+        </thead>
+        <tbody>
+        ${filteredIndividualPayments.map((entry, index) =>
+        entry.payment.map((paymentItem, paymentIndex) => `
+            <tr key="${entry?._id}-${paymentIndex}">
+              <td>${index * entry.payment.length + paymentIndex + 1}</td>
+              <td>${String(paymentItem?.date)}</td>
+              <td>${String(paymentItem?.category)}</td>
+              <td>${String(paymentItem?.payment_Via)}</td>
+              <td>${String(paymentItem?.payment_Type)}</td>
+              <td>${String(paymentItem?.slip_No)}</td>
+              <td>${String(paymentItem?.details)}</td>
+              <td>${String(paymentItem?.payment_In)}</td>
+              <td>${String(paymentItem?.invoice)}</td>
+              <td>${String(paymentItem?.payments.length)}</td>
+              <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
+              <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0))}</td>
+              <td>${String(paymentItem?.payment_In_Curr)}</td>
+              <td>${String(paymentItem?.curr_Amount)}</td>
+  
+            </tr>
+          `).join('')
+      )}
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
+      <td></td>
+      <td></td>
+      <td>
+        ${
+          String(
+            filteredIndividualPayments.reduce(
+              (total, entry) =>
+                total +
+                entry.payment.reduce(
+                  (acc, paymentItem) =>
+                    acc +
+                    paymentItem.payments.reduce(
+                      (subTotal, payment) => subTotal + payment.visa_Amount_PKR,
+                      0
+                    ),
+                  0
+                ),
+              0
+            )
+          )
+        }
+      </td>
+      <td>
+        ${
+          String(
+            filteredIndividualPayments.reduce(
+              (total, entry) =>
+                total +
+                entry.payment.reduce(
+                  (acc, paymentItem) =>
+                    acc +
+                    paymentItem.payments.reduce(
+                      (subTotal, payment) => subTotal + payment.new_Remain_PKR,
+                      0
+                    ),
+                  0
+                ),
+              0
+            )
+          )
+        }
+        </td>
+      <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
+  
+      </tr>
+  
+      </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+      // Create a new window for printing
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        // Write the print content to the new window
+        printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier} Payment In Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+        // Trigger print dialog
+        printWindow.print();
+        // Close the new window after printing
+        printWindow.onafterprint = function () {
+          printWindow.close();
+        };
+      } else {
+        // Handle if the new window cannot be opened
+        alert('Could not open print window. Please check your browser settings.');
       }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedSupplier} Payment In Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
-
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
     }
-  };
-
 
   const [date3, setDate3] = useState('')
   const [name, setName] = useState('')
@@ -996,7 +1045,76 @@ export default function SupCandPaymentInDetails() {
   }
 
 
+// Editing for single Payment In 
+const [editMode3, setEditMode3] = useState(false);
+const [editedEntry3, setEditedEntry3] = useState({});
+const [editedRowIndex3, setEditedRowIndex3] = useState(null);
 
+const handleEditClick3 = (paymentItem, index) => {
+  setEditMode3(!editMode3);
+  setEditedEntry3(paymentItem);
+  setEditedRowIndex3(index); // Set the index of the row being edited
+};
+
+
+const handleInputChange3 = (e, field) => {
+  setEditedEntry3({
+    ...editedEntry3,
+    [field]: e.target.value,
+  });
+
+};
+
+const handleImageChange3 = (e, field) => {
+  if (field === 'slip_Pic') {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditedEntry3({
+          ...editedEntry3,
+          [field]: reader.result, // Use reader.result as the image data URL
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+};
+
+//updating payment in
+const handleUpdatePayment = async () => {
+setLoading3(true)
+let paymentId = editedEntry3._id
+try {
+ const response = await fetch(`${apiUrl}/auth/suppliers/update/cand_vise/payment_in`, {
+   method: 'PATCH',
+   headers: {
+     'Content-Type': 'application/json',
+     "Authorization": `Bearer ${user.token}`,
+   },
+   body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry3.category, payment_Via: editedEntry3.payment_Via, payment_Type: editedEntry3.payment_Type, slip_No: editedEntry3.slip_No, details: editedEntry3.details, payment_In: editedEntry3.payment_In, curr_Country: editedEntry3.payment_In_Curr, curr_Amount: editedEntry3.curr_Amount, slip_Pic: editedEntry3.slip_Pic, date: editedEntry3.date })
+ })
+
+ const json = await response.json()
+
+
+ if (!response.ok) {
+   setNewMessage(toast.error(json.message));
+   setLoading3(false)
+ }
+ if (response.ok) {
+   fetchData();
+   setNewMessage(toast.success(json.message));
+   setLoading3(null)
+   setEditMode3(!editMode3)
+ }
+}
+catch (error) {
+ setNewMessage(toast.error('Server is not responding...'))
+ setLoading3(false)
+}
+}
   
 
   return (
@@ -1355,7 +1473,7 @@ export default function SupCandPaymentInDetails() {
           <div className="col-md-12 detail_table my-2">
             <h6>Payment In Details</h6>
             <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
-              <Table stickyHeader>
+            <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
                     <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
@@ -1367,6 +1485,8 @@ export default function SupCandPaymentInDetails() {
                     <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Candidates</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_PKR</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Total_Remaining_Price_PKR</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
                     {show2 && <>
                       <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
@@ -1383,7 +1503,87 @@ export default function SupCandPaymentInDetails() {
                     <>
                       {filteredData.payment.map((paymentItem, index) => (
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode3 && editedRowIndex3 === index ?(
                             <>
+                            <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry3.date} onChange={(e) => handleInputChange3(e, 'date')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry3.category} onChange={(e) => handleInputChange3(e, 'category')} required>
+                                  <option value="">Choose</option>
+                                  {categories && categories.map((data) => (
+                                    <option key={data._id} value={data.category}>{data.category}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry3.payment_Via} onChange={(e) => handleInputChange3(e, 'payment_Via')} required>
+                                  <option value="">Choose</option>
+                                  {paymentVia && paymentVia.map((data) => (
+                                    <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry3.payment_Type} onChange={(e) => handleInputChange3(e, 'payment_Type')} required>
+                                  <option value="">Choose</option>
+                                  {paymentType && paymentType.map((data) => (
+                                    <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.slip_No} onChange={(e) => handleInputChange3(e, 'slip_No')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.details} onChange={(e) => handleInputChange3(e, 'details')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.payment_In} disabled />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.payments.length} disabled />
+                              </TableCell>
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' readonly disabled/>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' readonly disabled/>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.invoice} readonly disabled/>
+                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry3.payment_In_Curr} onChange={(e) => handleInputChange3(e, 'payment_In_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                               
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry3.curr_Amount} onChange={(e) => handleInputChange3(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
+                              <TableCell className='border data_td p-1 '>
+                                <input type='file' accept='image/*' onChange={(e) => handleImageChange3(e, 'slip_Pic')} />
+                              </TableCell>
+                            <TableCell>
+                            <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode3(!editMode3)} className='btn delete_btn'>Cancel</button>
+                                  <button onClick={() => handleUpdatePayment()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+
+                                </div>
+                            </TableCell>
+</>
+                          ):
+                          <>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
@@ -1392,20 +1592,19 @@ export default function SupCandPaymentInDetails() {
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
-                             
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payments.length}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0)} </TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0)} </TableCell>
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
                               {show2 && <>
                                 <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
-                               
+                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
                               </>}
                               <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
-                            </>
-                          
-                          <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-1 '>
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button onClick={() => handleEditClick3(paymentItem, index)} className='btn save_btn'><i className="fas fa-edit"></i></button>
                                   <button className='btn edit_btn' onClick={()=>handleDetails(paymentItem)}><i className="fas fa-eye"></i></button>
                                   <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fas fa-trash-alt"></i></button>
                                 </div>
@@ -1413,6 +1612,11 @@ export default function SupCandPaymentInDetails() {
                               </>
                           
                           </TableCell>
+                          </>
+                          }
+                           
+                          
+                          
                         </TableRow>
                       ))}
                     </>
@@ -1438,9 +1642,9 @@ export default function SupCandPaymentInDetails() {
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
                     {show2 && <>
-                      
-                    
                     <TableCell className='border data_td text-center bg-primary text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
@@ -1856,6 +2060,7 @@ export default function SupCandPaymentInDetails() {
                     <TableCell className='label border'>Past_Remaining_Curr</TableCell>
                     <TableCell className='label border'>New_Remaining_Curr</TableCell>
                     <TableCell className='label border'>New_Payment_In_Curr</TableCell>
+                    <TableCell className='label border'>Curr_Rate</TableCell>
                     </>
                     }
                  
@@ -1932,6 +2137,9 @@ export default function SupCandPaymentInDetails() {
                                <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.new_Curr_Payment} onChange={(e) => handleInputChange(e, 'new_Curr_Payment')} required/>
                               </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.curr_Rate}  disabled/>
+                              </TableCell>
                               </>
                               }
 
@@ -1960,6 +2168,7 @@ export default function SupCandPaymentInDetails() {
                               <TableCell className='border data_td text-center bg-warning text-white'>{paymentItem?.past_Remain_Curr}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.new_Remain_Curr}</TableCell>
                               <TableCell className='border data_td text-center bg-success text-white'><i className="fa-solid fa-arrow-down me-2 text-bold"></i>{paymentItem?.new_Curr_Payment}</TableCell>
+                              <TableCell className='border data_td text-center bg-success text-white'>{paymentItem?.curr_Rate}</TableCell>
                              </>
                              }
                       
@@ -2069,6 +2278,12 @@ export default function SupCandPaymentInDetails() {
                           return isNaN(newTotal) ? total : total + newTotal;
                         }, 0)}
 
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>  
+                      {details.payments.reduce((total, paymentItem) => {
+                          const newTotal = parseFloat(paymentItem.curr_Rate);
+                          return isNaN(newTotal) ? total : total + newTotal;
+                        }, 0)}
                     </TableCell>
                      </>
                      }
