@@ -426,7 +426,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
 
 const[totalPayments,setTotalPayments]=useState(0)
   const sumPaymentIn = (data) => {
-    return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
+    return data.reduce((acc, curr) => acc + Number(curr.payment_Out), 0);
   };
 
   const disableAddMore = totalPayments <= sumPaymentIn(candData);
