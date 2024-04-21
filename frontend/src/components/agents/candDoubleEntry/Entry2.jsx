@@ -296,8 +296,14 @@ export default function Entry2() {
   
 
   const[totalPayments,setTotalPayments]=useState(0)
+  const[totalCurrency,setTotalCurrency]=useState(0)
+
+
   const sumPaymentIn = (data) => {
     return data.reduce((acc, curr) => acc + Number(curr.payment_Out), 0);
+  };
+  const sumCurrency = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
   };
 
   const disableAddMore = totalPayments <= sumPaymentIn(candData);
@@ -307,6 +313,14 @@ export default function Entry2() {
     newCandData[index].payment_Out = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_Out);
     setCandData(newCandData);
   };
+  const handleChangeCurrency = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
+    setCandData(newCandData);
+  };
+
+
+  
   return (
    <>
     <TableContainer component={Paper} className="mt-1">
@@ -443,6 +457,10 @@ export default function Entry2() {
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Payments </label>
                  <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
+                </div>
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total Currency </label>
+                 <input type="number" min='0' value={totalCurrency} onChange={(e)=>setTotalCurrency(e.target.value)} />
                 </div>
                 <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                   <label>Details </label>
@@ -654,10 +672,10 @@ export default function Entry2() {
                 {/* Curr_Amount */}
                 <input
                   type="number"
-                  min="0"
+                  min="1"
                   required
                   value={cand.curr_Rate}
-                  onChange={(e) => handleCandChange(index, "curr_Rate", e.target.value)}
+                  onChange={(e) => handleChangeCurrency(index, e.target.value)}
                   placeholder="Currency Rate"
                 />
               </div>
@@ -673,6 +691,7 @@ export default function Entry2() {
                   placeholder="Currency Amount"
                 />
               </div>
+             
               {/* Button to remove this additional form */}
               <div className="col-md-12 text-end">
               <button onClick={() => handleRemove(index)} className={`btn shadow btn-sm text-white text-bold ms-1 bg-danger`}>

@@ -295,10 +295,15 @@ export default function Entry1() {
   };
 
 
-const[totalPayments,setTotalPayments]=useState(0)
+  const[totalPayments,setTotalPayments]=useState(0)
+  const[totalCurrency,setTotalCurrency]=useState(0)
+
 
   const sumPaymentIn = (data) => {
     return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
+  };
+  const sumCurrency = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
   };
 
   const disableAddMore = totalPayments <= sumPaymentIn(candData);
@@ -308,7 +313,11 @@ const[totalPayments,setTotalPayments]=useState(0)
     newCandData[index].payment_In = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_In);
     setCandData(newCandData);
   };
-  
+  const handleChangeCurrency = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
+    setCandData(newCandData);
+  };
   return (
    <>
     <TableContainer component={Paper} className="mb-1">
@@ -445,6 +454,10 @@ const[totalPayments,setTotalPayments]=useState(0)
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Payments </label>
                  <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
+                </div>
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total Currency </label>
+                 <input type="number" min='0' value={totalCurrency} onChange={(e)=>setTotalCurrency(e.target.value)} />
                 </div>
                 
                 <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
@@ -657,15 +670,16 @@ const[totalPayments,setTotalPayments]=useState(0)
                 {/* Curr_Amount */}
                 <input
                   type="number"
-                  min="0"
+                  min="1"
                   required
                   value={cand.curr_Rate}
-                  onChange={(e) => handleCandChange(index, "curr_Rate", e.target.value)}
+                  onChange={(e) => handleChangeCurrency(index, e.target.value)}
                   placeholder="Currency Rate"
                 />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
+
                 {/* Curr_Amount */}
                 <input
                   type="number"
