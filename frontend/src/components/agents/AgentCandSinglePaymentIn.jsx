@@ -215,7 +215,7 @@ console.log("candData",candData)
   const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [, setNewMessage] = useState("");
   const handleForm = async (e) => {
     e.preventDefault();
@@ -301,13 +301,16 @@ console.log("candData",candData)
 
   const sumPaymentIn = (data) => {
     return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
-  };
+  }
   const sumCurrency = (data) => {
     return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
   };
 
   const disableAddMore = totalPayments <= sumPaymentIn(candData);
-
+  const disableAddCurr = totalCurrency <= sumCurrency(candData);
+  
+  
+  
   const handleChangePaymentIn = (index, value) => {
     const newCandData = [...candData];
     newCandData[index].payment_In = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_In);
@@ -326,9 +329,9 @@ console.log("candData",candData)
           <>
             <form className="py-3 px-2" onSubmit={handleForm}>
               <div className="text-end ">
-                <button className="btn submit_btn m-1" disabled={loading}>
-                  {loading ? "Adding..." : "Add Payment"}
-                </button>
+                  <button className="btn submit_btn m-1"  disabled={loading || (!disableAddMore || !disableAddCurr)} >
+                    {loading ? "Adding..." : "Add Payment"}
+                  </button>
               </div>
               <div className="row p-0 m-0 my-1">
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -493,7 +496,7 @@ console.log("candData",candData)
             </div>
             <div className="right">
            {!option && 
-            <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+            <button disabled={disableAddMore && disableAddCurr} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
             <i className="fas fa-plus"></i> 
           </button>
            }

@@ -435,6 +435,7 @@ const[totalPayments,setTotalPayments]=useState(0)
   };
 
   const disableAddMore = totalPayments <= sumPaymentIn(candData);
+  const disableAddCurr = totalCurrency <= sumCurrency(candData);
 
   const handleChangePaymentIn = (index, value) => {
     const newCandData = [...candData];
@@ -530,7 +531,7 @@ const[totalPayments,setTotalPayments]=useState(0)
                  <>
                    <form className="py-3 px-2" onSubmit={handleForm}>
                      <div className="text-end ">
-                       <button className="btn submit_btn m-1" disabled={loading}>
+                       <button className="btn submit_btn m-1"  disabled={loading || (!disableAddMore || !disableAddCurr)}>
                          {loading ? "Adding..." : "Add Payment"}
                        </button>
                      </div>
@@ -696,7 +697,7 @@ const[totalPayments,setTotalPayments]=useState(0)
                    </div>
                    <div className="right">
                   {!option && 
-                   <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+                   <button disabled={disableAddMore && disableAddCurr} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
                    <i className="fas fa-plus"></i> 
                  </button>
                   }
