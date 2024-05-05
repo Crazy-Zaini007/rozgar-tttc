@@ -16,7 +16,9 @@ const CDWC = require("../../database/creditsDebitsWC/CDWCSchema");
 const CDWOC = require("../../database/creditsDebitsWOC/CDWOCSchema");
 const Enteries =require('../../database/enteries/EntrySchema')
 const Assets=require('../../database/assets/AssetsSchema')
-
+const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
+const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
+const VisitAgents = require("../../database/visitAgent/VisitAgentSchema");
 // Controller to get all payments with supplierName
 const getAllPayments = async (req, res) => {
   try {
@@ -37,11 +39,11 @@ const getAllPayments = async (req, res) => {
     const agents = await Agents.find();
     const suppliers = await Suppliers.find();
     const candidates = await Candidates.find();
-    const azadAgents = await AzadSuppliers.find();
+    const azadAgents = await AzadAgents.find();
     const azadSuppliers = await AzadSuppliers.find();
-    const ticketAgents = await TicketSuppliers.find();
+    const ticketAgents = await TicketAgents.find();
     const ticketSuppliers = await TicketSuppliers.find();
-    const visitAgents = await VisitSuppliers.find();
+    const visitAgents = await VisitAgents.find();
     const visitSuppliers = await VisitSuppliers.find();
     const azadCandidates = await AzadCandidates.find();
     const ticketCandidates = await TicketCandidates.find();
@@ -174,24 +176,24 @@ const getAllPayments = async (req, res) => {
     azadAgents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Agent_Payment_In_Schema &&
-        agent.Agent_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const azadAgentsPaymentInDetails =
-          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Azad_Agent_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(azadAgentsPaymentInDetails);
       }
       if (
-        agent.Agent_Payment_Out_Schema &&
-        agent.Agent_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const azadAgentsPaymentOutDetails =
-          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Azad_Agent_Out",
             ...payment.toObject(),
           }));
@@ -203,24 +205,24 @@ const getAllPayments = async (req, res) => {
     ticketAgents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Agent_Payment_In_Schema &&
-        agent.Agent_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const ticketAgentsPaymentInDetails =
-          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Ticket_Agent_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(ticketAgentsPaymentInDetails);
       }
       if (
-        agent.Agent_Payment_Out_Schema &&
-        agent.Agent_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const ticketAgentsPaymentOutDetails =
-          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Ticket_Agent_Out",
             ...payment.toObject(),
           }));
@@ -232,24 +234,24 @@ const getAllPayments = async (req, res) => {
     visitAgents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Agent_Payment_In_Schema &&
-        agent.Agent_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const visitAgentsPaymentInDetails =
-          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Visit_Agent_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(visitAgentsPaymentInDetails);
       }
       if (
-        agent.Agent_Payment_Out_Schema &&
-        agent.Agent_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const visitAgentsPaymentOutDetails =
-          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Agent_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Visit_Agent_Out",
             ...payment.toObject(),
           }));
@@ -261,24 +263,24 @@ const getAllPayments = async (req, res) => {
     azadSuppliers.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Supplier_Payment_In_Schema &&
-        agent.Supplier_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const azadSuppliersPaymentInDetails =
-          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Azad_Supplier_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(azadSuppliersPaymentInDetails);
       }
       if (
-        agent.Supplier_Payment_Out_Schema &&
-        agent.Supplier_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const azadSuppliersPaymentOutDetails =
-          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Azad_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -290,12 +292,12 @@ const getAllPayments = async (req, res) => {
     ticketSuppliers.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Supplier_Payment_In_Schema &&
-        agent.Supplier_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const ticketSuppliersPaymentInDetails =
-          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Ticket_Supplier_In",
 
             ...payment.toObject(),
@@ -303,12 +305,12 @@ const getAllPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(ticketSuppliersPaymentInDetails);
       }
       if (
-        agent.Supplier_Payment_Out_Schema &&
-        agent.Supplier_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const ticketSuppliersPaymentOutDetails =
-          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Ticket_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -322,24 +324,24 @@ const getAllPayments = async (req, res) => {
     visitSuppliers.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Supplier_Payment_In_Schema &&
-        agent.Supplier_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const visitSuppliersPaymentInDetails =
-          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Visit_Supplier_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(visitSuppliersPaymentInDetails);
       }
       if (
-        agent.Supplier_Payment_Out_Schema &&
-        agent.Supplier_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const visitSuppliersPaymentOutDetails =
-          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Supplier_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Visit_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -350,12 +352,12 @@ const getAllPayments = async (req, res) => {
     azadCandidates.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Candidate_Payment_In_Schema &&
-        agent.Candidate_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const azadCandPaymentInDetails =
-          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Azad_Candidate_In",
 
             ...payment.toObject(),
@@ -363,12 +365,12 @@ const getAllPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(azadCandPaymentInDetails);
       }
       if (
-        agent.Candidate_Payment_Out_Schema &&
-        agent.Candidate_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const azadCandPaymentOutDetails =
-          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Azad_Candidate_Out",
 
             ...payment.toObject(),
@@ -381,24 +383,24 @@ const getAllPayments = async (req, res) => {
     ticketCandidates.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Candidate_Payment_In_Schema &&
-        agent.Candidate_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const ticketCandPaymentInDetails =
-          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Ticket_Candidate_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(ticketCandPaymentInDetails);
       }
       if (
-        agent.Candidate_Payment_Out_Schema &&
-        agent.Candidate_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const ticketCandPaymentOutDetails =
-          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Ticket_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -410,24 +412,24 @@ const getAllPayments = async (req, res) => {
     visitCandidates.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Candidate_Payment_In_Schema &&
-        agent.Candidate_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const visitCandPaymentInDetails =
-          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_In_Schema.supplierName,
             type: "Visit_Candidate_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(visitCandPaymentInDetails);
       }
       if (
-        agent.Candidate_Payment_Out_Schema &&
-        agent.Candidate_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const visitCandPaymentOutDetails =
-          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: agent.Candidate_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: agent.payment_Out_Schema.supplierName,
             type: "Visit_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -702,31 +704,31 @@ const getTotalPayments = async (req, res) => {
       { model: Agents, schemaType: "payment_In_Schema" },
       { model: Suppliers, schemaType: "payment_In_Schema" },
       { model: Candidates, schemaType: "payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
+      { model: AzadAgents, schemaType: "payment_In_Schema" },
+      { model: TicketAgents, schemaType: "payment_In_Schema" },
+      { model: VisitAgents, schemaType: "payment_In_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_In_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_In_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_In_Schema" },
+      { model: AzadCandidates, schemaType: "payment_In_Schema" },
+      { model: TicketCandidates, schemaType: "payment_In_Schema" },
+      { model: VisitCandidates, schemaType: "payment_In_Schema" },
     ];
 
     const outCollections = [
       { model: Agents, schemaType: "payment_Out_Schema" },
       { model: Suppliers, schemaType: "payment_Out_Schema" },
       { model: Candidates, schemaType: "payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
+      { model: AzadAgents, schemaType: "payment_Out_Schema" },
+      { model: TicketAgents, schemaType: "payment_Out_Schema" },
+      { model: VisitAgents, schemaType: "payment_Out_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_Out_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_Out_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_Out_Schema" },
+      { model: AzadCandidates, schemaType: "payment_Out_Schema" },
+      { model: TicketCandidates, schemaType: "payment_Out_Schema" },
+      { model: VisitCandidates, schemaType: "payment_Out_Schema" },
+      { model: VisitCandidates, schemaType: "payment_Out_Schema" },
       { model: Protector, schemaType: "payment_Out_Schema" },
     ];
 
@@ -922,15 +924,15 @@ const getTotalAdvancePayments = async (req, res) => {
       { model: Agents, schemaType: "payment_In_Schema" },
       { model: Suppliers, schemaType: "payment_In_Schema" },
       { model: Candidates, schemaType: "payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
+      { model: AzadAgents, schemaType: "payment_In_Schema" },
+      { model: TicketAgents, schemaType: "payment_In_Schema" },
+      { model: VisitAgents, schemaType: "payment_In_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_In_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_In_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_In_Schema" },
+      { model: AzadCandidates, schemaType: "payment_In_Schema" },
+      { model: TicketCandidates, schemaType: "payment_In_Schema" },
+      { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
@@ -1041,15 +1043,15 @@ const getTotalAdvancePayments = async (req, res) => {
       { model: Agents, schemaType: "payment_Out_Schema" },
       { model: Suppliers, schemaType: "payment_Out_Schema" },
       { model: Candidates, schemaType: "payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
+      { model: AzadAgents, schemaType: "payment_Out_Schema" },
+      { model: TicketAgents, schemaType: "payment_Out_Schema" },
+      { model: VisitAgents, schemaType: "payment_Out_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_Out_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_Out_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_Out_Schema" },
+      { model: AzadCandidates, schemaType: "payment_Out_Schema" },
+      { model: TicketCandidates, schemaType: "payment_Out_Schema" },
+      { model: VisitCandidates, schemaType: "payment_Out_Schema" },
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
@@ -1279,15 +1281,15 @@ const getAllPaymentsByDate = async (req, res) => {
       { model: Agents, schemaType: "payment_In_Schema" },
       { model: Suppliers, schemaType: "payment_In_Schema" },
       { model: Candidates, schemaType: "payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
+      { model: AzadAgents, schemaType: "payment_In_Schema" },
+      { model: TicketAgents, schemaType: "payment_In_Schema" },
+      { model: VisitAgents, schemaType: "payment_In_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_In_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_In_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_In_Schema" },
+      { model: AzadCandidates, schemaType: "payment_In_Schema" },
+      { model: TicketCandidates, schemaType: "payment_In_Schema" },
+      { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
@@ -1299,15 +1301,15 @@ const getAllPaymentsByDate = async (req, res) => {
       { model: Agents, schemaType: "payment_Out_Schema" },
       { model: Suppliers, schemaType: "payment_Out_Schema" },
       { model: Candidates, schemaType: "payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
+      { model: AzadAgents, schemaType: "payment_Out_Schema" },
+      { model: TicketAgents, schemaType: "payment_Out_Schema" },
+      { model: VisitAgents, schemaType: "payment_Out_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_Out_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_Out_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_Out_Schema" },
+      { model: AzadCandidates, schemaType: "payment_Out_Schema" },
+      { model: TicketCandidates, schemaType: "payment_Out_Schema" },
+      { model: VisitCandidates, schemaType: "payment_Out_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" }, // Including CashInHand schema for payment_Out
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
@@ -1547,15 +1549,15 @@ const getAllBanksPayments = async (req, res) => {
       { model: Agents, schemaType: "payment_In_Schema" },
       { model: Suppliers, schemaType: "payment_In_Schema" },
       { model: Candidates, schemaType: "payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_In_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_In_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_In_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_In_Schema" },
+      { model: AzadAgents, schemaType: "payment_In_Schema" },
+      { model: TicketAgents, schemaType: "payment_In_Schema" },
+      { model: VisitAgents, schemaType: "payment_In_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_In_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_In_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_In_Schema" },
+      { model: AzadCandidates, schemaType: "payment_In_Schema" },
+      { model: TicketCandidates, schemaType: "payment_In_Schema" },
+      { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
       { model: CDWOC, schemaType: "payment_In_Schema" },
@@ -1568,15 +1570,15 @@ const getAllBanksPayments = async (req, res) => {
       { model: Agents, schemaType: "payment_Out_Schema" },
       { model: Suppliers, schemaType: "payment_Out_Schema" },
       { model: Candidates, schemaType: "payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Agent_Payment_Out_Schema" },
-      { model: AzadSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: TicketSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: VisitSuppliers, schemaType: "Supplier_Payment_Out_Schema" },
-      { model: AzadCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: TicketCandidates, schemaType: "Candidate_Payment_Out_Schema" },
-      { model: VisitCandidates, schemaType: "Candidate_Payment_Out_Schema" },
+      { model: AzadAgents, schemaType: "payment_Out_Schema" },
+      { model: TicketAgents, schemaType: "payment_Out_Schema" },
+      { model: VisitAgents, schemaType: "payment_Out_Schema" },
+      { model: AzadSuppliers, schemaType: "payment_Out_Schema" },
+      { model: TicketSuppliers, schemaType: "payment_Out_Schema" },
+      { model: VisitSuppliers, schemaType: "payment_Out_Schema" },
+      { model: AzadCandidates, schemaType: "payment_Out_Schema" },
+      { model: TicketCandidates, schemaType: "payment_Out_Schema" },
+      { model: VisitCandidates, schemaType: "payment_Out_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" }, // Including CashInHand schema for payment_Out
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
@@ -1768,11 +1770,11 @@ const getNormalPayments = async (req, res) => {
     const agents = await Agents.find();
     const suppliers = await Suppliers.find();
     const candidates = await Candidates.find();
-    const azadAgents = await AzadSuppliers.find();
+    const azadAgents = await AzadAgents.find();
     const azadSuppliers = await AzadSuppliers.find();
-    const ticketAgents = await TicketSuppliers.find();
+    const ticketAgents = await TicketAgents.find();
     const ticketSuppliers = await TicketSuppliers.find();
-    const visitAgents = await VisitSuppliers.find();
+    const visitAgents = await VisitAgents.find();
     const visitSuppliers = await VisitSuppliers.find();
     const azadCandidates = await AzadCandidates.find();
     const ticketCandidates = await TicketCandidates.find();
@@ -1907,24 +1909,24 @@ const getNormalPayments = async (req, res) => {
     azadAgents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Agent_Payment_In_Schema &&
-        agent.Agent_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const azadAgentsPaymentInDetails =
-          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Azad_Agent_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(azadAgentsPaymentInDetails);
       }
       if (
-        agent.Agent_Payment_Out_Schema &&
-        agent.Agent_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const azadAgentsPaymentOutDetails =
-          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Azad_Agent_Out",
             ...payment.toObject(),
           }));
@@ -1936,24 +1938,24 @@ const getNormalPayments = async (req, res) => {
     ticketAgents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Agent_Payment_In_Schema &&
-        agent.Agent_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const ticketAgentsPaymentInDetails =
-          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Ticket_Agent_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(ticketAgentsPaymentInDetails);
       }
       if (
-        agent.Agent_Payment_Out_Schema &&
-        agent.Agent_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const ticketAgentsPaymentOutDetails =
-          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Ticket_Agent_Out",
             ...payment.toObject(),
           }));
@@ -1965,24 +1967,24 @@ const getNormalPayments = async (req, res) => {
     visitAgents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Agent_Payment_In_Schema &&
-        agent.Agent_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const visitAgentsPaymentInDetails =
-          agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Visit_Agent_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(visitAgentsPaymentInDetails);
       }
       if (
-        agent.Agent_Payment_Out_Schema &&
-        agent.Agent_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const visitAgentsPaymentOutDetails =
-          agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Visit_Agent_Out",
             ...payment.toObject(),
           }));
@@ -1994,24 +1996,24 @@ const getNormalPayments = async (req, res) => {
     azadSuppliers.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Supplier_Payment_In_Schema &&
-        agent.Supplier_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const azadSuppliersPaymentInDetails =
-          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Azad_Supplier_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(azadSuppliersPaymentInDetails);
       }
       if (
-        agent.Supplier_Payment_Out_Schema &&
-        agent.Supplier_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const azadSuppliersPaymentOutDetails =
-          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Azad_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -2023,12 +2025,12 @@ const getNormalPayments = async (req, res) => {
     ticketSuppliers.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Supplier_Payment_In_Schema &&
-        agent.Supplier_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const ticketSuppliersPaymentInDetails =
-          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Ticket_Supplier_In",
 
             ...payment.toObject(),
@@ -2036,12 +2038,12 @@ const getNormalPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(ticketSuppliersPaymentInDetails);
       }
       if (
-        agent.Supplier_Payment_Out_Schema &&
-        agent.Supplier_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const ticketSuppliersPaymentOutDetails =
-          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Ticket_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -2055,24 +2057,24 @@ const getNormalPayments = async (req, res) => {
     visitSuppliers.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Supplier_Payment_In_Schema &&
-        agent.Supplier_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const visitSuppliersPaymentInDetails =
-          agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Visit_Supplier_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(visitSuppliersPaymentInDetails);
       }
       if (
-        agent.Supplier_Payment_Out_Schema &&
-        agent.Supplier_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const visitSuppliersPaymentOutDetails =
-          agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Visit_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -2083,12 +2085,12 @@ const getNormalPayments = async (req, res) => {
     azadCandidates.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Candidate_Payment_In_Schema &&
-        agent.Candidate_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const azadCandPaymentInDetails =
-          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Azad_Candidate_In",
 
             ...payment.toObject(),
@@ -2096,12 +2098,12 @@ const getNormalPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(azadCandPaymentInDetails);
       }
       if (
-        agent.Candidate_Payment_Out_Schema &&
-        agent.Candidate_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const azadCandPaymentOutDetails =
-          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Azad_Candidate_Out",
 
             ...payment.toObject(),
@@ -2114,24 +2116,24 @@ const getNormalPayments = async (req, res) => {
     ticketCandidates.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Candidate_Payment_In_Schema &&
-        agent.Candidate_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const ticketCandPaymentInDetails =
-          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Ticket_Candidate_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(ticketCandPaymentInDetails);
       }
       if (
-        agent.Candidate_Payment_Out_Schema &&
-        agent.Candidate_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const ticketCandPaymentOutDetails =
-          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Ticket_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -2143,24 +2145,24 @@ const getNormalPayments = async (req, res) => {
     visitCandidates.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        agent.Candidate_Payment_In_Schema &&
-        agent.Candidate_Payment_In_Schema.payment
+        agent.payment_In_Schema &&
+        agent.payment_In_Schema.payment
       ) {
         const visitCandPaymentInDetails =
-          agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_In_Schema.supplierName,
+          agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
             type: "Visit_Candidate_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(visitCandPaymentInDetails);
       }
       if (
-        agent.Candidate_Payment_Out_Schema &&
-        agent.Candidate_Payment_Out_Schema.payment
+        agent.payment_Out_Schema &&
+        agent.payment_Out_Schema.payment
       ) {
         const visitCandPaymentOutDetails =
-          agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_Out_Schema.supplierName,
+          agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
             type: "Visit_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -2430,11 +2432,11 @@ const getAdvancePayments = async (req, res) => {
      const agents = await Agents.find();
      const suppliers = await Suppliers.find();
      const candidates = await Candidates.find();
-     const azadAgents = await AzadSuppliers.find();
+     const azadAgents = await AzadAgents.find();
      const azadSuppliers = await AzadSuppliers.find();
-     const ticketAgents = await TicketSuppliers.find();
+     const ticketAgents = await TicketAgents.find();
      const ticketSuppliers = await TicketSuppliers.find();
-     const visitAgents = await VisitSuppliers.find();
+     const visitAgents = await VisitAgents.find();
      const visitSuppliers = await VisitSuppliers.find();
      const azadCandidates = await AzadCandidates.find();
      const ticketCandidates = await TicketCandidates.find();
@@ -2566,24 +2568,24 @@ const getAdvancePayments = async (req, res) => {
      azadAgents.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Agent_Payment_In_Schema &&
-         agent.Agent_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const azadAgentsPaymentInDetails =
-           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Azad_Agent_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(azadAgentsPaymentInDetails);
        }
        if (
-         agent.Agent_Payment_Out_Schema &&
-         agent.Agent_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const azadAgentsPaymentOutDetails =
-           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Azad_Agent_Out",
              ...payment.toObject(),
            }));
@@ -2595,24 +2597,24 @@ const getAdvancePayments = async (req, res) => {
      ticketAgents.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Agent_Payment_In_Schema &&
-         agent.Agent_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const ticketAgentsPaymentInDetails =
-           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Ticket_Agent_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(ticketAgentsPaymentInDetails);
        }
        if (
-         agent.Agent_Payment_Out_Schema &&
-         agent.Agent_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const ticketAgentsPaymentOutDetails =
-           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Ticket_Agent_Out",
              ...payment.toObject(),
            }));
@@ -2624,24 +2626,24 @@ const getAdvancePayments = async (req, res) => {
      visitAgents.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Agent_Payment_In_Schema &&
-         agent.Agent_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const visitAgentsPaymentInDetails =
-           agent.Agent_Payment_In_Schema.payment.map((payment) => ({
-             name: agent.Agent_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+             name: agent.payment_In_Schema.supplierName,
              type: "Visit_Agent_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(visitAgentsPaymentInDetails);
        }
        if (
-         agent.Agent_Payment_Out_Schema &&
-         agent.Agent_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const visitAgentsPaymentOutDetails =
-           agent.Agent_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Agent_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Visit_Agent_Out",
              ...payment.toObject(),
            }));
@@ -2653,24 +2655,24 @@ const getAdvancePayments = async (req, res) => {
      azadSuppliers.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Supplier_Payment_In_Schema &&
-         agent.Supplier_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const azadSuppliersPaymentInDetails =
-           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Azad_Supplier_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(azadSuppliersPaymentInDetails);
        }
        if (
-         agent.Supplier_Payment_Out_Schema &&
-         agent.Supplier_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const azadSuppliersPaymentOutDetails =
-           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Azad_Supplier_Out",
              ...payment.toObject(),
            }));
@@ -2682,12 +2684,12 @@ const getAdvancePayments = async (req, res) => {
      ticketSuppliers.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Supplier_Payment_In_Schema &&
-         agent.Supplier_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const ticketSuppliersPaymentInDetails =
-           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Ticket_Supplier_In",
  
              ...payment.toObject(),
@@ -2695,12 +2697,12 @@ const getAdvancePayments = async (req, res) => {
          mergedPayments = mergedPayments.concat(ticketSuppliersPaymentInDetails);
        }
        if (
-         agent.Supplier_Payment_Out_Schema &&
-         agent.Supplier_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const ticketSuppliersPaymentOutDetails =
-           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Ticket_Supplier_Out",
              ...payment.toObject(),
            }));
@@ -2714,24 +2716,24 @@ const getAdvancePayments = async (req, res) => {
      visitSuppliers.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Supplier_Payment_In_Schema &&
-         agent.Supplier_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const visitSuppliersPaymentInDetails =
-           agent.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Visit_Supplier_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(visitSuppliersPaymentInDetails);
        }
        if (
-         agent.Supplier_Payment_Out_Schema &&
-         agent.Supplier_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const visitSuppliersPaymentOutDetails =
-           agent.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Supplier_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Visit_Supplier_Out",
              ...payment.toObject(),
            }));
@@ -2742,12 +2744,12 @@ const getAdvancePayments = async (req, res) => {
      azadCandidates.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Candidate_Payment_In_Schema &&
-         agent.Candidate_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const azadCandPaymentInDetails =
-           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Azad_Candidate_In",
  
              ...payment.toObject(),
@@ -2755,12 +2757,12 @@ const getAdvancePayments = async (req, res) => {
          mergedPayments = mergedPayments.concat(azadCandPaymentInDetails);
        }
        if (
-         agent.Candidate_Payment_Out_Schema &&
-         agent.Candidate_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const azadCandPaymentOutDetails =
-           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Azad_Candidate_Out",
  
              ...payment.toObject(),
@@ -2773,24 +2775,24 @@ const getAdvancePayments = async (req, res) => {
      ticketCandidates.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Candidate_Payment_In_Schema &&
-         agent.Candidate_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const ticketCandPaymentInDetails =
-           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Ticket_Candidate_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(ticketCandPaymentInDetails);
        }
        if (
-         agent.Candidate_Payment_Out_Schema &&
-         agent.Candidate_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const ticketCandPaymentOutDetails =
-           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-             name: agent.Candidate_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+             name: agent.payment_Out_Schema.supplierName,
              type: "Ticket_Candidate_Out",
              ...payment.toObject(),
            }));
@@ -2802,24 +2804,24 @@ const getAdvancePayments = async (req, res) => {
      visitCandidates.forEach((agent) => {
        // Check if payment_In_Schema exists and has the expected structure
        if (
-         agent.Candidate_Payment_In_Schema &&
-         agent.Candidate_Payment_In_Schema.payment
+         agent.payment_In_Schema &&
+         agent.payment_In_Schema.payment
        ) {
          const visitCandPaymentInDetails =
-           agent.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_In_Schema.supplierName,
+           agent.payment_In_Schema.payment.map((payment) => ({
+            name: agent.payment_In_Schema.supplierName,
              type: "Visit_Candidate_In",
              ...payment.toObject(),
            }));
          mergedPayments = mergedPayments.concat(visitCandPaymentInDetails);
        }
        if (
-         agent.Candidate_Payment_Out_Schema &&
-         agent.Candidate_Payment_Out_Schema.payment
+         agent.payment_Out_Schema &&
+         agent.payment_Out_Schema.payment
        ) {
          const visitCandPaymentOutDetails =
-           agent.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            name: agent.Candidate_Payment_Out_Schema.supplierName,
+           agent.payment_Out_Schema.payment.map((payment) => ({
+            name: agent.payment_Out_Schema.supplierName,
              type: "Visit_Candidate_Out",
              ...payment.toObject(),
            }));
@@ -3305,24 +3307,24 @@ const getAzadSuppPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Supplier_Payment_In_Schema &&
-        supplier.Supplier_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
         const paymentInDetails =
-          supplier.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: supplier.Supplier_Payment_In_Schema.supplierName,
+          supplier.payment_In_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Supp_Payment_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Supplier_Payment_Out_Schema &&
-        supplier.Supplier_Payment_Out_Schema.payment
+        supplier.payment_Out_Schema &&
+        supplier.payment_Out_Schema.payment
       ) {
         const paymentOutDetails =
-          supplier.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: supplier.Supplier_Payment_Out_Schema.supplierName,
+          supplier.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
             type: "Supp_Payment_Out",
             ...payment.toObject(),
           }));
@@ -3354,7 +3356,7 @@ const getAzadAgentPayments = async (req, res) => {
     }
 
     // Find all agents
-    const suppliers = await AzadSuppliers.find();
+    const suppliers = await AzadAgents.find();
 
     // Initialize an empty array to store merged payments
     let mergedPayments = [];
@@ -3363,12 +3365,12 @@ const getAzadAgentPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Agent_Payment_In_Schema &&
-        supplier.Agent_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
-        const paymentInDetails = supplier.Agent_Payment_In_Schema.payment.map(
+        const paymentInDetails = supplier.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: supplier.Agent_Payment_In_Schema.supplierName,
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Agent_Payment_In",
             ...payment.toObject(),
           })
@@ -3376,12 +3378,12 @@ const getAzadAgentPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Agent_Payment_In_Schema &&
-        supplier.Agent_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
-        const paymentOutDetails = supplier.Agent_Payment_In_Schema.payment.map(
+        const paymentOutDetails = supplier.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: supplier.Agent_Payment_In_Schema.supplierName,
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Agent_Payment_Out",
             ...payment.toObject(),
           })
@@ -3423,24 +3425,24 @@ const getAzadCandPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Candidate_Payment_In_Schema &&
-        supplier.Candidate_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
         const paymentInDetails =
-          supplier.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: supplier.Candidate_Payment_In_Schema.supplierName,
+          supplier.payment_In_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Cand_Payment_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Candidate_Payment_Out_Schema &&
-        supplier.Candidate_Payment_Out_Schema.payment
+        supplier.payment_Out_Schema &&
+        supplier.payment_Out_Schema.payment
       ) {
         const paymentOutDetails =
-          supplier.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: supplier.Candidate_Payment_Out_Schema.supplierName,
+          supplier.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
             type: "Cand_Payment_Out",
             ...payment.toObject(),
           }));
@@ -3483,24 +3485,24 @@ const getTicketSuppPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Supplier_Payment_In_Schema &&
-        supplier.Supplier_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
         const paymentInDetails =
-          supplier.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: supplier.Supplier_Payment_In_Schema.supplierName,
+          supplier.payment_In_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Supp_Payment_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Supplier_Payment_Out_Schema &&
-        supplier.Supplier_Payment_Out_Schema.payment
+        supplier.payment_Out_Schema &&
+        supplier.payment_Out_Schema.payment
       ) {
         const paymentOutDetails =
-          supplier.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: supplier.Supplier_Payment_Out_Schema.supplierName,
+          supplier.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
             type: "Supp_Payment_Out",
             ...payment.toObject(),
           }));
@@ -3532,7 +3534,7 @@ const getTicketAgentPayments = async (req, res) => {
     }
 
     // Find all agents
-    const suppliers = await TicketSuppliers.find();
+    const suppliers = await TicketAgents.find();
 
     // Initialize an empty array to store merged payments
     let mergedPayments = [];
@@ -3541,12 +3543,12 @@ const getTicketAgentPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Agent_Payment_In_Schema &&
-        supplier.Agent_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
-        const paymentInDetails = supplier.Agent_Payment_In_Schema.payment.map(
+        const paymentInDetails = supplier.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: supplier.Agent_Payment_In_Schema.supplierName,
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Agent_Payment_In",
             ...payment.toObject(),
           })
@@ -3554,12 +3556,12 @@ const getTicketAgentPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Agent_Payment_In_Schema &&
-        supplier.Agent_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
-        const paymentOutDetails = supplier.Agent_Payment_In_Schema.payment.map(
+        const paymentOutDetails = supplier.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: supplier.Agent_Payment_In_Schema.supplierName,
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Agent_Payment_Out",
             ...payment.toObject(),
           })
@@ -3601,24 +3603,24 @@ const getTicketCandPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Candidate_Payment_In_Schema &&
-        supplier.Candidate_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
         const paymentInDetails =
-          supplier.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: supplier.Candidate_Payment_In_Schema.supplierName,
+          supplier.payment_In_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Cand_Payment_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Candidate_Payment_Out_Schema &&
-        supplier.Candidate_Payment_Out_Schema.payment
+        supplier.payment_Out_Schema &&
+        supplier.payment_Out_Schema.payment
       ) {
         const paymentOutDetails =
-          supplier.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: supplier.Candidate_Payment_Out_Schema.supplierName,
+          supplier.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
             type: "Cand_Payment_Out",
             ...payment.toObject(),
           }));
@@ -3661,24 +3663,24 @@ const getVisitSuppPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Supplier_Payment_In_Schema &&
-        supplier.Supplier_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
         const paymentInDetails =
-          supplier.Supplier_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: supplier.Supplier_Payment_In_Schema.supplierName,
+          supplier.payment_In_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Supp_Payment_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Supplier_Payment_Out_Schema &&
-        supplier.Supplier_Payment_Out_Schema.payment
+        supplier.payment_Out_Schema &&
+        supplier.payment_Out_Schema.payment
       ) {
         const paymentOutDetails =
-          supplier.Supplier_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: supplier.Supplier_Payment_Out_Schema.supplierName,
+          supplier.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
             type: "Supp_Payment_Out",
             ...payment.toObject(),
           }));
@@ -3710,7 +3712,7 @@ const getVisitAgentPayments = async (req, res) => {
     }
 
     // Find all agents
-    const suppliers = await VisitSuppliers.find();
+    const suppliers = await VisitAgents.find();
 
     // Initialize an empty array to store merged payments
     let mergedPayments = [];
@@ -3719,12 +3721,12 @@ const getVisitAgentPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Agent_Payment_In_Schema &&
-        supplier.Agent_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
-        const paymentInDetails = supplier.Agent_Payment_In_Schema.payment.map(
+        const paymentInDetails = supplier.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: supplier.Agent_Payment_In_Schema.supplierName,
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Agent_Payment_In",
             ...payment.toObject(),
           })
@@ -3732,12 +3734,12 @@ const getVisitAgentPayments = async (req, res) => {
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Agent_Payment_In_Schema &&
-        supplier.Agent_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
-        const paymentOutDetails = supplier.Agent_Payment_In_Schema.payment.map(
+        const paymentOutDetails = supplier.payment_In_Schema.payment.map(
           (payment) => ({
-            supplierName: supplier.Agent_Payment_In_Schema.supplierName,
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Agent_Payment_Out",
             ...payment.toObject(),
           })
@@ -3779,24 +3781,24 @@ const getVisitCandPayments = async (req, res) => {
     suppliers.forEach((supplier) => {
       // Check if payment_In_Schema exists and has the expected structure
       if (
-        supplier.Candidate_Payment_In_Schema &&
-        supplier.Candidate_Payment_In_Schema.payment
+        supplier.payment_In_Schema &&
+        supplier.payment_In_Schema.payment
       ) {
         const paymentInDetails =
-          supplier.Candidate_Payment_In_Schema.payment.map((payment) => ({
-            supplierName: supplier.Candidate_Payment_In_Schema.supplierName,
+          supplier.payment_In_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_In_Schema.supplierName,
             type: "Cand_Payment_In",
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(paymentInDetails);
       }
       if (
-        supplier.Candidate_Payment_Out_Schema &&
-        supplier.Candidate_Payment_Out_Schema.payment
+        supplier.payment_Out_Schema &&
+        supplier.payment_Out_Schema.payment
       ) {
         const paymentOutDetails =
-          supplier.Candidate_Payment_Out_Schema.payment.map((payment) => ({
-            supplierName: supplier.Candidate_Payment_Out_Schema.supplierName,
+          supplier.payment_Out_Schema.payment.map((payment) => ({
+            supplierName: supplier.payment_Out_Schema.supplierName,
             type: "Cand_Payment_Out",
             ...payment.toObject(),
           }));
@@ -4000,6 +4002,9 @@ const getTotalReceivable=async(req,res)=>{
     const visitSuppliers = await VisitSuppliers.find();
     const ticketSuppliers = await TicketSuppliers.find();
 
+    const azadAgents = await AzadAgents.find();
+    const visitAgents = await VisitAgents.find();
+    const ticketAgents = await TicketAgents.find();
     let mergedReceivablePayments = [];
 
     agents.forEach((agent) => {
@@ -4054,14 +4059,14 @@ const getTotalReceivable=async(req,res)=>{
 
     visitCandidates.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Candidate_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Candidate_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Visit Candidate",
-            total_Price:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Candidate_Payment_In_Schema.total_Payment_In- candidate.Candidate_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR- candidate.Candidate_Payment_In_Schema.total_Payment_In+candidate.Candidate_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
            
         mergedReceivablePayments.push(newPayment)
@@ -4070,14 +4075,14 @@ const getTotalReceivable=async(req,res)=>{
 
     azadCandidates.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Candidate_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Candidate_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Azad Candidate",
-            total_Price:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Candidate_Payment_In_Schema.total_Payment_In- candidate.Candidate_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR- candidate.Candidate_Payment_In_Schema.total_Payment_In+candidate.Candidate_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
            
         mergedReceivablePayments.push(newPayment)
@@ -4086,14 +4091,14 @@ const getTotalReceivable=async(req,res)=>{
 
     ticketCandidates.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Candidate_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Candidate_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Ticket Candidate",
-            total_Price:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Candidate_Payment_In_Schema.total_Payment_In- candidate.Candidate_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Candidate_Payment_In_Schema.total_Visa_Price_In_PKR- candidate.Candidate_Payment_In_Schema.total_Payment_In+candidate.Candidate_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
            
         mergedReceivablePayments.push(newPayment)
@@ -4103,14 +4108,14 @@ const getTotalReceivable=async(req,res)=>{
 
     visitSuppliers.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Supplier_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Supplier_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Visit Supplier",
-            total_Price:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Supplier_Payment_In_Schema.total_Payment_In- candidate.Supplier_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Supplier_Payment_In_Schema.total_Payment_In+candidate.Supplier_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4118,14 +4123,14 @@ const getTotalReceivable=async(req,res)=>{
 
     azadSuppliers.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Supplier_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Supplier_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Azad Supplier",
-            total_Price:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Supplier_Payment_In_Schema.total_Payment_In- candidate.Supplier_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Supplier_Payment_In_Schema.total_Payment_In+candidate.Supplier_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4133,14 +4138,14 @@ const getTotalReceivable=async(req,res)=>{
 
     ticketSuppliers.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Supplier_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Supplier_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Ticket Supplier",
-            total_Price:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Supplier_Payment_In_Schema.total_Payment_In- candidate.Supplier_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Supplier_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Supplier_Payment_In_Schema.total_Payment_In+candidate.Supplier_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4149,46 +4154,46 @@ const getTotalReceivable=async(req,res)=>{
 
 
     // For Agents
-    visitSuppliers.forEach((candidate) => {
+    visitAgents.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Agent_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Agent_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Visit Agent",
-            total_Price:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Agent_Payment_In_Schema.total_Payment_In- candidate.Agent_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Agent_Payment_In_Schema.total_Payment_In+candidate.Agent_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
     })
 
-    azadSuppliers.forEach((candidate) => {
+    azadAgents.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Agent_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Agent_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Azad Agent",
-            total_Price:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Agent_Payment_In_Schema.total_Payment_In- candidate.Agent_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Agent_Payment_In_Schema.total_Payment_In+candidate.Agent_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
     })
 
-    ticketSuppliers.forEach((candidate) => {
+    ticketAgents.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Agent_Payment_In_Schema) {
+      if (candidate.payment_In_Schema) {
         
           const newPayment={
-            supplierName: candidate.Agent_Payment_In_Schema.supplierName,
+            supplierName: candidate.payment_In_Schema.supplierName,
             type: "Ticket Agent",
-            total_Price:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR,
-            total_Payment_In:candidate.Agent_Payment_In_Schema.total_Payment_In- candidate.Agent_Payment_In_Schema.total_Cash_Out,
-            remaining:candidate.Agent_Payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.Agent_Payment_In_Schema.total_Payment_In+candidate.Agent_Payment_In_Schema.total_Cash_Out 
+            total_Price:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR,
+            total_Payment_In:candidate.payment_In_Schema.total_Payment_In- candidate.payment_In_Schema.total_Cash_Out,
+            remaining:candidate.payment_In_Schema.total_Azad_Visa_Price_In_PKR- candidate.payment_In_Schema.total_Payment_In+candidate.payment_In_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4232,6 +4237,9 @@ const getTotalPayable=async(req,res)=>{
     const visitSuppliers = await VisitSuppliers.find();
     const ticketSuppliers = await TicketSuppliers.find();
 
+    const azadAgents = await AzadAgents.find();
+    const visitAgents = await VisitAgents.find();
+    const ticketAgents = await TicketAgents.find();
     let mergedReceivablePayments = [];
 
     agents.forEach((agent) => {
@@ -4286,14 +4294,14 @@ const getTotalPayable=async(req,res)=>{
 
     visitCandidates.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Candidate_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Candidate_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Visit Candidate",
-            total_Price:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Candidate_Payment_Out_Schema.total_Payment_Out- candidate.Candidate_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.Candidate_Payment_Out_Schema.total_Payment_Out+candidate.Candidate_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
            
         mergedReceivablePayments.push(newPayment)
@@ -4302,14 +4310,14 @@ const getTotalPayable=async(req,res)=>{
 
     azadCandidates.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Candidate_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Candidate_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Azad Candidate",
-            total_Price:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Candidate_Payment_Out_Schema.total_Payment_Out- candidate.Candidate_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.Candidate_Payment_Out_Schema.total_Payment_Out+candidate.Candidate_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
            
         mergedReceivablePayments.push(newPayment)
@@ -4318,14 +4326,14 @@ const getTotalPayable=async(req,res)=>{
 
     ticketCandidates.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Candidate_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Candidate_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Ticket Candidate",
-            total_Price:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Candidate_Payment_Out_Schema.total_Payment_Out- candidate.Candidate_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Candidate_Payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.Candidate_Payment_Out_Schema.total_Payment_Out+candidate.Candidate_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
            
         mergedReceivablePayments.push(newPayment)
@@ -4335,14 +4343,14 @@ const getTotalPayable=async(req,res)=>{
 
     visitSuppliers.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Supplier_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Supplier_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Visit Supplier",
-            total_Price:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Supplier_Payment_Out_Schema.total_Payment_Out- candidate.Supplier_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Supplier_Payment_Out_Schema.total_Payment_Out+candidate.Supplier_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4350,14 +4358,14 @@ const getTotalPayable=async(req,res)=>{
 
     azadSuppliers.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Supplier_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Supplier_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Azad Supplier",
-            total_Price:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Supplier_Payment_Out_Schema.total_Payment_Out- candidate.Supplier_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Supplier_Payment_Out_Schema.total_Payment_Out+candidate.Supplier_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4365,14 +4373,14 @@ const getTotalPayable=async(req,res)=>{
 
     ticketSuppliers.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Supplier_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Supplier_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Ticket Supplier",
-            total_Price:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Supplier_Payment_Out_Schema.total_Payment_Out- candidate.Supplier_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Supplier_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Supplier_Payment_Out_Schema.total_Payment_Out+candidate.Supplier_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
@@ -4381,46 +4389,46 @@ const getTotalPayable=async(req,res)=>{
 
 
     // For Agents
-    visitSuppliers.forEach((candidate) => {
+    visitAgents.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Agent_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Agent_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Visit Agent",
-            total_Price:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Agent_Payment_Out_Schema.total_Payment_Out- candidate.Agent_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Agent_Payment_Out_Schema.total_Payment_Out+candidate.Agent_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
     })
 
-    azadSuppliers.forEach((candidate) => {
+    azadAgents.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Agent_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Agent_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Azad Agent",
-            total_Price:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Agent_Payment_Out_Schema.total_Payment_Out- candidate.Agent_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Agent_Payment_Out_Schema.total_Payment_Out+candidate.Agent_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }
     })
 
-    ticketSuppliers.forEach((candidate) => {
+    ticketAgents.forEach((candidate) => {
       // Check if payment_In_Schema exists and has the expected structure
-      if (candidate.Agent_Payment_Out_Schema) {
+      if (candidate.payment_Out_Schema) {
         
           const newPayment={
-            supplierName: candidate.Agent_Payment_Out_Schema.supplierName,
+            supplierName: candidate.payment_Out_Schema.supplierName,
             type: "Ticket Agent",
-            total_Price:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
-            total_Payment_In:candidate.Agent_Payment_Out_Schema.total_Payment_Out- candidate.Agent_Payment_Out_Schema.total_Cash_Out,
-            remaining:candidate.Agent_Payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.Agent_Payment_Out_Schema.total_Payment_Out+candidate.Agent_Payment_Out_Schema.total_Cash_Out 
+            total_Price:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR,
+            total_Payment_In:candidate.payment_Out_Schema.total_Payment_Out- candidate.payment_Out_Schema.total_Cash_Out,
+            remaining:candidate.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR- candidate.payment_Out_Schema.total_Payment_Out+candidate.payment_Out_Schema.total_Cash_Out 
           }
         mergedReceivablePayments.push(newPayment)
       }

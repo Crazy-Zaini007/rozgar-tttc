@@ -18,6 +18,10 @@ const CashInHand = require('../../database/cashInHand/CashInHandSchema')
 const Notifications=require('../../database/notifications/NotifyModel.js')
 const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
+const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
+const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
+const VisitAgents = require("../../database/visitAgent/VisitAgentSchema");
+
 const mongoose = require('mongoose')
 const moment = require('moment');
 // Addding a New Payment In
@@ -386,8 +390,6 @@ const addMultiplePaymentsIn = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-
 
 
 // Addding a New Payment In Cash Out
@@ -1047,8 +1049,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
        const ticketSuppliers=await TicketSuppliers.find({})
        for(const ticketSupplier of ticketSuppliers){
         
-        if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= ticketSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1061,8 +1063,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
           }
         }
 
-        if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= ticketSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1074,52 +1076,51 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
 
           }
         }
+    
       
- 
-       
-
-  
-
-        if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
-
-          }
-        }
-       
-        if(ticketSupplier.Agent_Payment_Out_Schema && ticketSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= ticketSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
-
-          }
-        }
  
      
        }
        
+       const ticketAgents=await TicketAgents.find({})
 
+for(const ticketAgent of ticketAgents){
+  if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+    const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await ticketAgent.save()
+
+    }
+  }
+ 
+  if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await ticketAgent.save()
+
+    }
+  }
+}
 
 
 
        const visitSuppliers=await VisitSuppliers.find({})
        for(const visitSupplier of visitSuppliers){
  
-        if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= visitSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1132,8 +1133,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
           }
         }
 
-        if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= visitSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1145,42 +1146,45 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
 
           }
         }
-      
-   
-        if(visitSupplier.Agent_Payment_In_Schema && visitSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= visitSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
-       
-        if(visitSupplier.Agent_Payment_Out_Schema && visitSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= visitSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
        }
 
 
+       const visitAgents=await VisitAgents.find({})
+for (const visitAgent of visitAgents){
+
+  if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+ 
+  if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+}
+
        const azadSuppliers=await AzadSupplier.find({})
        for(const azadSupplier of azadSuppliers){
-        if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= azadSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1194,8 +1198,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
         }
       
  
-        if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= azadSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1209,10 +1213,13 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
   
         }
       
+       }
 
+       const azadAgents=await AzadAgents.find({})
 
-        if(azadSupplier.Agent_Payment_In_Schema && azadSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= azadSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+       for(const azadAgent of azadAgents){
+        if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+          const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(AgentPersonIn){
             AgentPersonIn.company=company
             AgentPersonIn.country=country
@@ -1220,13 +1227,13 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
             AgentPersonIn.final_Status=final_Status
             AgentPersonIn.trade=trade
             AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
+           await azadAgent.save()
 
           }
         }
        
-        if(azadSupplier.Agent_Payment_Out_Schema && azadSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= azadSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+          const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(AgentPersonOut){
             AgentPersonOut.company=company
             AgentPersonOut.country=country
@@ -1234,107 +1241,106 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
             AgentPersonOut.final_Status=final_Status
             AgentPersonOut.trade=trade
             AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
+           await azadAgent.save()
             
           }
         }
-      
        }
      
 const azadCandidateIn=await AzadCandidate.findOne({
-  "Candidate_Payment_In_Schema.supplierName": name,
-  "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_In_Schema.pp_No": pp_No,
+  "payment_In_Schema.supplierName": name,
+  "payment_In_Schema.entry_Mode": entryMode,
+  "payment_In_Schema.pp_No": pp_No,
 })
 if(azadCandidateIn){
-  azadCandidateIn.Candidate_Payment_In_Schema.company=company
-  azadCandidateIn.Candidate_Payment_In_Schema.country=country
-  azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-  azadCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-  azadCandidateIn.Candidate_Payment_In_Schema.trade=trade
-  azadCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateIn.payment_In_Schema.company=company
+  azadCandidateIn.payment_In_Schema.country=country
+  azadCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+  azadCandidateIn.payment_In_Schema.final_Status=final_Status
+  azadCandidateIn.payment_In_Schema.trade=trade
+  azadCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateIn.save()
 
 }
 
 const azadCandidateOut=await AzadCandidate.findOne({
-  "Candidate_Payment_Out_Schema.supplierName": name,
-  "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_Out_Schema.pp_No": pp_No,
+  "payment_Out_Schema.supplierName": name,
+  "payment_Out_Schema.entry_Mode": entryMode,
+  "payment_Out_Schema.pp_No": pp_No,
 })
 if(azadCandidateOut){
-  azadCandidateOut.Candidate_Payment_Out_Schema.company=company
-  azadCandidateOut.Candidate_Payment_Out_Schema.country=country
-  azadCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-  azadCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-  azadCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-  azadCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateOut.payment_Out_Schema.company=company
+  azadCandidateOut.payment_Out_Schema.country=country
+  azadCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+  azadCandidateOut.payment_Out_Schema.final_Status=final_Status
+  azadCandidateOut.payment_Out_Schema.trade=trade
+  azadCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateOut.save()
 
 }
 
 
    const ticketCandidateIn=await TicketCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(ticketCandidateIn){
-    ticketCandidateIn.Candidate_Payment_In_Schema.company=company
-    ticketCandidateIn.Candidate_Payment_In_Schema.country=country
-    ticketCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    ticketCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    ticketCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    ticketCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateIn.payment_In_Schema.company=company
+    ticketCandidateIn.payment_In_Schema.country=country
+    ticketCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    ticketCandidateIn.payment_In_Schema.final_Status=final_Status
+    ticketCandidateIn.payment_In_Schema.trade=trade
+    ticketCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateIn.save()
 
   }
   
   const ticketCandidateOut=await TicketCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(ticketCandidateOut){
-    ticketCandidateOut.Candidate_Payment_Out_Schema.company=company
-    ticketCandidateOut.Candidate_Payment_Out_Schema.country=country
-    ticketCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    ticketCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    ticketCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    ticketCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateOut.payment_Out_Schema.company=company
+    ticketCandidateOut.payment_Out_Schema.country=country
+    ticketCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    ticketCandidateOut.payment_Out_Schema.final_Status=final_Status
+    ticketCandidateOut.payment_Out_Schema.trade=trade
+    ticketCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateOut.save()
 
   }
   
 
    const visitCandidateIn=await VisitCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(visitCandidateIn){
-    visitCandidateIn.Candidate_Payment_In_Schema.company=company
-    visitCandidateIn.Candidate_Payment_In_Schema.country=country
-    visitCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    visitCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    visitCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    visitCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateIn.payment_In_Schema.company=company
+    visitCandidateIn.payment_In_Schema.country=country
+    visitCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    visitCandidateIn.payment_In_Schema.final_Status=final_Status
+    visitCandidateIn.payment_In_Schema.trade=trade
+    visitCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateIn.save()
 
   }
   
   const visitCandidateOut=await VisitCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(visitCandidateOut){
-    visitCandidateOut.Candidate_Payment_Out_Schema.company=company
-    visitCandidateOut.Candidate_Payment_Out_Schema.country=country
-    visitCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    visitCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    visitCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    visitCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateOut.payment_Out_Schema.company=company
+    visitCandidateOut.payment_Out_Schema.country=country
+    visitCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    visitCandidateOut.payment_Out_Schema.final_Status=final_Status
+    visitCandidateOut.payment_Out_Schema.trade=trade
+    visitCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateOut.save()
   }
 
@@ -2432,9 +2438,6 @@ if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons)
      
       }
 
-       
-    
-
 const suppliers=await Suppliers.find({})
 for(const supplier of suppliers){
   if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons) {
@@ -2472,8 +2475,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
        const ticketSuppliers=await TicketSuppliers.find({})
        for(const ticketSupplier of ticketSuppliers){
         
-        if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= ticketSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -2486,8 +2489,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
           }
         }
 
-        if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= ticketSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -2499,43 +2502,42 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
 
           }
         }
-      
- 
-       
-
-  
-
-        if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
-
-          }
-        }
-       
-        if(ticketSupplier.Agent_Payment_Out_Schema && ticketSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= ticketSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
-
-          }
-        }
+     
  
      
        }
        
+       const ticketAgents=await TicketAgents.find({})
+for (const ticketAgent of ticketAgents){
+ 
+  if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+    const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await ticketAgent.save()
+
+    }
+  }
+ 
+  if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await ticketAgent.save()
+
+    }
+  }
+}
 
 
 
@@ -2543,8 +2545,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
        const visitSuppliers=await VisitSuppliers.find({})
        for(const visitSupplier of visitSuppliers){
  
-        if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= visitSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -2557,8 +2559,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
           }
         }
 
-        if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= visitSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -2571,41 +2573,46 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
           }
         }
       
-   
-        if(visitSupplier.Agent_Payment_In_Schema && visitSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= visitSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
-       
-        if(visitSupplier.Agent_Payment_Out_Schema && visitSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= visitSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
+  
        }
 
 
+       const visitAgents=await VisitAgents.find({})
+
+for (const visitAgent of visitAgents){
+  if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+ 
+  if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+}
+
        const azadSuppliers=await AzadSupplier.find({})
        for(const azadSupplier of azadSuppliers){
-        if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= azadSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -2619,8 +2626,8 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
         }
       
  
-        if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= azadSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -2633,133 +2640,136 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
           }
   
         }
-      
-
-
-        if(azadSupplier.Agent_Payment_In_Schema && azadSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= azadSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
-
-          }
-        }
-       
-        if(azadSupplier.Agent_Payment_Out_Schema && azadSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= azadSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
-            
-          }
-        }
+  
       
        }
+
+       const azadAgents=await AzadAgents.find({})
+for (const azadAgent of azadAgents){
+
+  if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+    const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await azadAgent.save()
+
+    }
+  }
+ 
+  if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await azadAgent.save()
+      
+    }
+  }
+}
      
 const azadCandidateIn=await AzadCandidate.findOne({
-  "Candidate_Payment_In_Schema.supplierName": name,
-  "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_In_Schema.pp_No": pp_No,
+  "payment_In_Schema.supplierName": name,
+  "payment_In_Schema.entry_Mode": entryMode,
+  "payment_In_Schema.pp_No": pp_No,
 })
 if(azadCandidateIn){
-  azadCandidateIn.Candidate_Payment_In_Schema.company=company
-  azadCandidateIn.Candidate_Payment_In_Schema.country=country
-  azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-  azadCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-  azadCandidateIn.Candidate_Payment_In_Schema.trade=trade
-  azadCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateIn.payment_In_Schema.company=company
+  azadCandidateIn.payment_In_Schema.country=country
+  azadCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+  azadCandidateIn.payment_In_Schema.final_Status=final_Status
+  azadCandidateIn.payment_In_Schema.trade=trade
+  azadCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateIn.save()
 
 }
 
 const azadCandidateOut=await AzadCandidate.findOne({
-  "Candidate_Payment_Out_Schema.supplierName": name,
-  "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_Out_Schema.pp_No": pp_No,
+  "payment_Out_Schema.supplierName": name,
+  "payment_Out_Schema.entry_Mode": entryMode,
+  "payment_Out_Schema.pp_No": pp_No,
 })
 if(azadCandidateOut){
-  azadCandidateOut.Candidate_Payment_Out_Schema.company=company
-  azadCandidateOut.Candidate_Payment_Out_Schema.country=country
-  azadCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-  azadCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-  azadCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-  azadCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateOut.payment_Out_Schema.company=company
+  azadCandidateOut.payment_Out_Schema.country=country
+  azadCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+  azadCandidateOut.payment_Out_Schema.final_Status=final_Status
+  azadCandidateOut.payment_Out_Schema.trade=trade
+  azadCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateOut.save()
 
 }
 
 
    const ticketCandidateIn=await TicketCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(ticketCandidateIn){
-    ticketCandidateIn.Candidate_Payment_In_Schema.company=company
-    ticketCandidateIn.Candidate_Payment_In_Schema.country=country
-    ticketCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    ticketCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    ticketCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    ticketCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateIn.payment_In_Schema.company=company
+    ticketCandidateIn.payment_In_Schema.country=country
+    ticketCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    ticketCandidateIn.payment_In_Schema.final_Status=final_Status
+    ticketCandidateIn.payment_In_Schema.trade=trade
+    ticketCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateIn.save()
 
   }
   
   const ticketCandidateOut=await TicketCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(ticketCandidateOut){
-    ticketCandidateOut.Candidate_Payment_Out_Schema.company=company
-    ticketCandidateOut.Candidate_Payment_Out_Schema.country=country
-    ticketCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    ticketCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    ticketCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    ticketCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateOut.payment_Out_Schema.company=company
+    ticketCandidateOut.payment_Out_Schema.country=country
+    ticketCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    ticketCandidateOut.payment_Out_Schema.final_Status=final_Status
+    ticketCandidateOut.payment_Out_Schema.trade=trade
+    ticketCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateOut.save()
 
   }
   
 
    const visitCandidateIn=await VisitCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(visitCandidateIn){
-    visitCandidateIn.Candidate_Payment_In_Schema.company=company
-    visitCandidateIn.Candidate_Payment_In_Schema.country=country
-    visitCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    visitCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    visitCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    visitCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateIn.payment_In_Schema.company=company
+    visitCandidateIn.payment_In_Schema.country=country
+    visitCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    visitCandidateIn.payment_In_Schema.final_Status=final_Status
+    visitCandidateIn.payment_In_Schema.trade=trade
+    visitCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateIn.save()
 
   }
   
   const visitCandidateOut=await VisitCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(visitCandidateOut){
-    visitCandidateOut.Candidate_Payment_Out_Schema.company=company
-    visitCandidateOut.Candidate_Payment_Out_Schema.country=country
-    visitCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    visitCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    visitCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    visitCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateOut.payment_Out_Schema.company=company
+    visitCandidateOut.payment_Out_Schema.country=country
+    visitCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    visitCandidateOut.payment_Out_Schema.final_Status=final_Status
+    visitCandidateOut.payment_Out_Schema.trade=trade
+    visitCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateOut.save()
   }
 
@@ -2797,8 +2807,7 @@ if(entry){
 
 
     res.status(200).json({message:`${name} updated successfully!`})
-console.log('updated successfully!')
-   
+  
   
     } catch (error) {
       
@@ -2809,9 +2818,6 @@ console.log('updated successfully!')
 
   }
 };
-
-
-
 
 //deleting the Agent payment_Out_Schema
 const deleteAgentPaymentOutSchema = async (req, res) => {

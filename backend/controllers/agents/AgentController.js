@@ -13,13 +13,18 @@ const Protector = require("../../database/protector/ProtectorSchema");
 const Entries = require("../../database/enteries/EntrySchema");
 const Reminders=require('../../database/reminders/RemindersModel.js')
 const Backup=require('../../database/backup/BackupModel.js')
-const Notifications=require('../../database/notifications/NotifyModel.js')
-const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 const InvoiceNumber = require("../../database/invoiceNumber/InvoiceNumberSchema");
 const CashInHand = require("../../database/cashInHand/CashInHandSchema");
+const Notifications=require('../../database/notifications/NotifyModel.js')
+const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
+
+const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
+const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
+const VisitAgents = require("../../database/visitAgent/VisitAgentSchema");
+
 const mongoose = require("mongoose");
 const moment = require("moment");
-// Addding a New Payment In
+
 const addPaymentIn = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -27,6 +32,11 @@ const addPaymentIn = async (req, res) => {
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    if (user.role !== "Admin") {
+      res.status(404).json({ message: "Only Admin is allowed!" });
       return;
     }
 
@@ -42,8 +52,7 @@ const addPaymentIn = async (req, res) => {
       curr_Country,
       curr_Rate,
       curr_Amount,
-      date,
-      cand_Name,
+      date
     } = req.body;
 
     const newPaymentIn = parseInt(payment_In, 10);
@@ -51,11 +60,11 @@ const addPaymentIn = async (req, res) => {
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-    })
+    });
 
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
       return;
     }
@@ -98,28 +107,19 @@ const addPaymentIn = async (req, res) => {
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
       date,
-      invoice: nextInvoiceNumber,
-      cand_Name,
+      invoice: nextInvoiceNumber
     };
 
     try {
-      if (cand_Name) {
-        // If cand_Name is provided, find the corresponding person in the persons array and update it
-        const existPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-        if (existPerson) {
-          existPerson.remaining_Price += -payment_In,
-          existPerson.total_In += payment_In,
-          existPerson.remaining_Curr += newCurrAmount ? -newCurrAmount : 0
-
-        }
-
         await existingSupplier.updateOne({
           $inc: {
             "payment_In_Schema.total_Payment_In": payment_In,
             "payment_In_Schema.remaining_Balance": -payment_In,
             "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
             "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
+
           },
+
           $push: {
             "payment_In_Schema.payment": payment,
           },
@@ -138,80 +138,7 @@ const addPaymentIn = async (req, res) => {
           $inc: {},
         };
 
-         if (payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = newPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = newPaymentIn;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = newPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = newPaymentIn;
-        }
-
-        await CashInHand.updateOne({}, cashInHandUpdate);
-      const newBackup=new Backup({
-      name: supplierName,
-      category:category,
-      payment_Via:payment_Via,
-      payment_Type:payment_Type,
-      slip_No: slip_No ? slip_No : '',
-      payment_In: newPaymentIn,
-      slip_Pic: uploadImage?.secure_url || '',
-      details:details,
-      payment_In_Curr: curr_Country ? curr_Country : "",
-      curr_Rate: curr_Rate ? curr_Rate : 0,
-      curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date:new Date().toISOString().split("T")[0],
-      invoice: nextInvoiceNumber,
-      cand_Name:cand_Name,
-        })
-        await newBackup.save()
-
-        const newNotification=new Notifications({
-          type:"Agent Payment In",
-          content:`${user.userName} added Payment_In: ${payment_In} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-          date: new Date().toISOString().split("T")[0]
-
-        })
-        await newNotification.save()
-
-        await existingSupplier.save();
-        const updatedSupplier = await Agents.findById(existingSupplier._id);
-        res.status(200).json({
-          message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
-        })
-
-
-      }
-
-      else {
-
-        await existingSupplier.updateOne({
-          $inc: {
-            "payment_In_Schema.total_Payment_In": payment_In,
-            "payment_In_Schema.remaining_Balance": -payment_In,
-            "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
-            "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
-
-          },
-          $push: {
-            "payment_In_Schema.payment": payment,
-          },
-        })
-
-
-
-        const cashInHandDoc = await CashInHand.findOne({})
-
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
-
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-
-        if (payment_Via.toLowerCase() === "cash") {
+        if (payment_Via.toLowerCase() === "cash"|| payment_Via === "cash") {
           cashInHandUpdate.$inc.cash = newPaymentIn;
           cashInHandUpdate.$inc.total_Cash = newPaymentIn;
         }
@@ -235,14 +162,14 @@ const addPaymentIn = async (req, res) => {
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
           date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
+       
             })
             await newBackup.save()
-
-        await existingSupplier.save()
+        await existingSupplier.save();
 
         const newNotification=new Notifications({
           type:"Agent Payment In",
-          content:`${user.userName} added Payment_In: ${payment_In} of Agent: ${supplierName}`,
+          content:`${user.userName} added Payment_In: ${payment_In} of Supplier: ${supplierName}`,
           date: new Date().toISOString().split("T")[0]
 
         })
@@ -251,10 +178,9 @@ const addPaymentIn = async (req, res) => {
         res.status(200).json({
           message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
         })
-      }
+      
 
     } catch (error) {
-      console.error("Error updating values:", error);
       res.status(500).json({
         message: "Error updating values",
         error: error.message,
@@ -283,9 +209,9 @@ const addMultiplePaymentsIn = async (req, res) => {
       return;
     }
 
-    const multiplePayment = req.body;
+    const multiplePaymentIn = req.body;
 
-    if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
+    if (!Array.isArray(multiplePaymentIn) || multiplePaymentIn.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
     }
@@ -295,7 +221,7 @@ const addMultiplePaymentsIn = async (req, res) => {
 
       const updatedPayments = [];
 
-      for (const payment of multiplePayment) {
+      for (const payment of multiplePaymentIn) {
         let {
           supplierName,
           category,
@@ -309,19 +235,18 @@ const addMultiplePaymentsIn = async (req, res) => {
           curr_Rate,
           curr_Amount,
           date,
-          cand_Name,
+
         } = payment;
 
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-       
-        const agents=await Agents.find({})
+        const suppliers=await Agents.find({})
         let existingSupplier
 
-       for (const agent of agents){
-        if(agent.payment_In_Schema){
-          if(agent.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
-            existingSupplier = agent;
+       for (const supplier of suppliers){
+        if(supplier.payment_In_Schema){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = supplier;
             break
           }
         }
@@ -371,23 +296,12 @@ const addMultiplePaymentsIn = async (req, res) => {
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
           date,
           invoice: nextInvoiceNumber,
-          cand_Name,
+        
         };
 
         updatedPayments.push(newPayment);
 
         try {
-          if (cand_Name) {
-            const existPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-            if (existPerson) {
-              existPerson.remaining_Price += -payment_In,
-             existPerson.total_In += payment_In,
-                existPerson.remaining_Curr += newCurrAmount ? newCurrAmount : 0
-
-
-            }
-
-
             // Update total_Visa_Price_In_PKR and other fields using $inc
             await existingSupplier.updateOne({
               $inc: {
@@ -398,7 +312,7 @@ const addMultiplePaymentsIn = async (req, res) => {
               },
               $push: {
                 "payment_In_Schema.payment": newPayment,
-              },
+              }
             })
             const cashInHandDoc = await CashInHand.findOne({});
 
@@ -421,75 +335,7 @@ const addMultiplePaymentsIn = async (req, res) => {
             }
 
             await CashInHand.updateOne({}, cashInHandUpdate);
-          const newBackup=new Backup({
-          name: supplierName,
-          category:category,
-          payment_Via:payment_Via,
-          payment_Type:payment_Type,
-          slip_No: slip_No ? slip_No : '',
-          payment_In: newPaymentIn,
-          slip_Pic: uploadImage?.secure_url || '',
-          details:details,
-          payment_In_Curr: curr_Country ? curr_Country : "",
-          curr_Rate: curr_Rate ? curr_Rate : 0,
-          curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date:new Date().toISOString().split("T")[0],
-          invoice: nextInvoiceNumber,
-          cand_Name:cand_Name,
 
-            })
-            await newBackup.save()
-            const newNotification=new Notifications({
-              type:"Agent Payment In",
-              content:`${user.userName} added Payment_In: ${payment_In} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-              date: new Date().toISOString().split("T")[0]
-    
-            })
-            await newNotification.save()
-            await existingSupplier.save();
-           
-          }
-
-          else {
-
-            // Update total_Visa_Price_In_PKR and other fields using $inc
-            await existingSupplier.updateOne({
-              $inc: {
-                "payment_In_Schema.total_Payment_In": payment_In,
-                "payment_In_Schema.remaining_Balance": -payment_In,
-                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
-                "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
-              },
-              $set: {
-                "payment_In_Schema.open": open,
-                "payment_In_Schema.close": close
-              },
-              $push: {
-                "payment_In_Schema.payment": newPayment,
-              },
-            })
-            const cashInHandDoc = await CashInHand.findOne({});
-
-            if (!cashInHandDoc) {
-              const newCashInHandDoc = new CashInHand();
-              await newCashInHandDoc.save();
-            }
-
-            const cashInHandUpdate = {
-              $inc: {},
-            };
-
-            if (payment_Via.toLowerCase() === "cash" ) {
-              cashInHandUpdate.$inc.cash = newPaymentIn;
-              cashInHandUpdate.$inc.total_Cash = newPaymentIn;
-            }
-            else{
-              cashInHandUpdate.$inc.bank_Cash = newPaymentIn;
-              cashInHandUpdate.$inc.total_Cash = newPaymentIn;
-            }
-
-            await CashInHand.updateOne({}, cashInHandUpdate);
-            
             const newBackup=new Backup({
               name: supplierName,
               category:category,
@@ -506,18 +352,16 @@ const addMultiplePaymentsIn = async (req, res) => {
               invoice: nextInvoiceNumber,
                 })
                 await newBackup.save()
-
                 const newNotification=new Notifications({
                   type:"Agent Payment In",
-                  content:`${user.userName} added Payment_In: ${payment_In} of Agent: ${supplierName}`,
+                  content:`${user.userName} added Payment_In: ${payment_In} of Supplier: ${supplierName}`,
                   date: new Date().toISOString().split("T")[0]
         
                 })
                 await newNotification.save()
-
             await existingSupplier.save();
 
-          }
+          
 
         }
         catch (error) {
@@ -530,7 +374,7 @@ const addMultiplePaymentsIn = async (req, res) => {
       }
 
       res.status(200).json({
-        message: `${multiplePayment.length} Payments In added Successfully`,
+        message: `${multiplePaymentIn.length} Payments In added Successfully`,
       })
 
     } catch (error) {
@@ -606,7 +450,7 @@ const addPaymentInReturn = async (req, res) => {
         });
         if (!existingSupplier) {
           res.status(404).json({
-            message: "Supplier not Found",
+            message: "Agent not Found",
           });
         }
 
@@ -725,7 +569,7 @@ const addPaymentInReturn = async (req, res) => {
                 await newBackup.save()
                 const newNotification=new Notifications({
                   type:"Agent Payment In Return",
-                  content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
+                  content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Supplier: ${supplierName}`,
                   date: new Date().toISOString().split("T")[0]
         
                 })
@@ -751,10 +595,6 @@ const addPaymentInReturn = async (req, res) => {
                 "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? -newCurrAmount : 0,
                 "payment_In_Schema.remaining_Curr": newCurrAmount ? newCurrAmount : 0,
               },
-              $set: {
-                "payment_In_Schema.open": open,
-                "payment_In_Schema.close": close, // Make sure close is defined
-              },
               $push: {
                 "payment_In_Schema.payment": payment,
               },
@@ -779,7 +619,7 @@ const addPaymentInReturn = async (req, res) => {
               cashInHandUpdate.$inc.total_Cash = -newCashOut;
             }
 
-            await CashInHand.updateOne({}, cashInHandUpdate)
+            await CashInHand.updateOne({}, cashInHandUpdate);
             const newBackup=new Backup({
               name: supplierName,
               category:category,
@@ -797,16 +637,18 @@ const addPaymentInReturn = async (req, res) => {
     
                 })
                 await newBackup.save()
+                const newNotification=new Notifications({
+                  type:"Agent Payment In Return",
+                  content:`${user.userName} added Payment_Return: ${cash_Out} of Supplier: ${supplierName}`,
+                  date: new Date().toISOString().split("T")[0]
+        
+                })
+                await newNotification.save()
             await existingSupplier.save();
 
             const updatedSupplier = await Agents.findById(existingSupplier._id);
-            const newNotification=new Notifications({
-              type:"Agent Payment In Return",
-              content:`${user.userName} added Payment_Return: ${cash_Out} of Agent: ${supplierName}`,
-              date: new Date().toISOString().split("T")[0]
-    
-            })
-            await newNotification.save()
+         
+
             res.status(200).json({
               data: updatedSupplier,
               message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
@@ -849,8 +691,7 @@ const deleteSinglePaymentIn = async (req, res) => {
       cash_Out,
       curr_Amount,
       supplierName,
-      payment_Via,
-      cand_Name
+      payment_Via
     } = req.body;
 
     const existingSupplier = await Agents.findOne({
@@ -858,21 +699,13 @@ const deleteSinglePaymentIn = async (req, res) => {
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
     const newPaymentIn = payment_In - cash_Out;
 
     try {
-      if (cand_Name) {
-        // If cand_Name is provided, find the corresponding person in the persons array and update it
-        const existPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-        if (existPerson) {
-          existPerson.remaining_Price += payment_In,
-            existPerson.remaining_Curr += curr_Amount ? curr_Amount : 0
-            existPerson.total_In += -payment_In,
-            existPerson.cash_Out += cash_Out ? -cash_Out : 0
-        }
+      
         // Add this line for logging
         let paymentToDelete=existingSupplier.payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
         const newRecycle=new RecycleBin({
@@ -917,77 +750,7 @@ const deleteSinglePaymentIn = async (req, res) => {
         const cashInHandUpdate = {
           $inc: {},
         };
-
-        if (payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = -newPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = -newPaymentIn;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = -newPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = -newPaymentIn;
-        }
-        await CashInHand.updateOne({}, cashInHandUpdate);
-        await existingSupplier.save()
-        const newNotification=new Notifications({
-          type:"Agent Payment In Deleted",
-          content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-          date: new Date().toISOString().split("T")[0]
-
-        })
-        await newNotification.save()
-
-        const updatedSupplier = await Agents.findById(existingSupplier._id);
-        res.status(200).json({
-          message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}`,
-        });
-
-      }
-
-      else {
-        // Add this line for logging
-        let paymentToDelete=existingSupplier.payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
-        const newRecycle=new RecycleBin({
-          name:supplierName,
-          type:"Agent Payment In",
-          category:paymentToDelete.category,
-          payment_Via:paymentToDelete.payment_Via,
-          payment_Type:paymentToDelete.payment_Type,
-          slip_No:paymentToDelete.slip_No,
-          payment_In:paymentToDelete.payment_In,
-          cash_Out:paymentToDelete.cash_Out,
-          payment_In_Curr:paymentToDelete.payment_In_Curr,
-          slip_Pic:paymentToDelete.slip_Pic,
-          date:paymentToDelete.date,
-          curr_Rate:paymentToDelete.curr_Rate,
-          curr_Amount:paymentToDelete.curr_Amount,
-          invoice:paymentToDelete.invoice
-
-        })
-        await newRecycle.save()
-        await existingSupplier.updateOne({
-          $inc: {
-            "payment_In_Schema.total_Payment_In": -payment_In,
-            "payment_In_Schema.total_Cash_Out": -cash_Out,
-            "payment_In_Schema.remaining_Balance": newPaymentIn,
-            "payment_In_Schema.total_Payment_In_Curr": curr_Amount ? -curr_Amount : 0,
-            "payment_In_Schema.remaining_Curr": curr_Amount ? curr_Amount : 0,
-
-          },
-
-          $pull: {
-            "payment_In_Schema.payment": { _id: paymentId },
-          },
-        });
-        const cashInHandDoc = await CashInHand.findOne({});
-
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
-
-        const cashInHandUpdate = {
-          $inc: {},
-        };
+      
         if (payment_Via.toLowerCase() === "cash" ) {
           cashInHandUpdate.$inc.cash = -newPaymentIn;
           cashInHandUpdate.$inc.total_Cash = -newPaymentIn;
@@ -1001,7 +764,7 @@ const deleteSinglePaymentIn = async (req, res) => {
         await existingSupplier.save()
         const newNotification=new Notifications({
           type:"Agent Payment In Deleted",
-          content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Agent: ${supplierName}`,
+          content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Supplier: ${supplierName}`,
           date: new Date().toISOString().split("T")[0]
 
         })
@@ -1010,7 +773,8 @@ const deleteSinglePaymentIn = async (req, res) => {
         res.status(200).json({
           message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}`,
         });
-      }
+      
+
 
     } catch (error) {
       console.error("Error updating values:", error);
@@ -1051,7 +815,7 @@ const updateSinglePaymentIn = async (req, res) => {
         curr_Amount,
         slip_Pic,
         date,
-        cand_Name,
+        
       } = req.body;
 
       const newPaymentIn = parseInt(payment_In, 10);
@@ -1062,7 +826,7 @@ const updateSinglePaymentIn = async (req, res) => {
         "payment_In_Schema.supplierName": supplierName,
       });
       if (!existingSupplier) {
-        res.status(404).json({ message: "Supplier not found" });
+        res.status(404).json({ message: "Agent not found" });
         return;
       }
 
@@ -1087,82 +851,7 @@ const updateSinglePaymentIn = async (req, res) => {
           upload_preset: "rozgar",
         })
       }
-      if (cand_Name) {
-        // If cand_Name is provided, find the corresponding person in the persons array and update it
-        const existPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-        if (existPerson) {
-          existPerson.remaining_Price += -updatedPaymentIn,
-          existPerson.total_In += -updatedPaymentIn,
-            existPerson.remaining_Curr += updateCurr_Amount ? -updateCurr_Amount : 0
-            existPerson.cash_Out += updatedCashout ? -updatedCashout : 0
-
-        }
-        await existingSupplier.updateOne({
-          $inc: {
-            "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
-            "payment_In_Schema.total_Cash_Out": -updatedCashout,
-            "payment_In_Schema.remaining_Balance": -newBalance,
-            "payment_In_Schema.total_Payment_In_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
-            "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
-          },
-        });
-        const cashInHandDoc = await CashInHand.findOne({});
-  
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
-  
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-  
-        if (payment_Via.toLowerCase() === "cash"  ) {
-          cashInHandUpdate.$inc.cash = newBalance;
-          cashInHandUpdate.$inc.total_Cash = newBalance;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = newBalance;
-          cashInHandUpdate.$inc.total_Cash = newBalance;
-        }
-  
-        await CashInHand.updateOne({}, cashInHandUpdate);
-  
-        // Update the payment details
-        paymentToUpdate.category = category;
-        paymentToUpdate.payment_Via = payment_Via;
-        paymentToUpdate.payment_Type = payment_Type;
-        paymentToUpdate.slip_No = slip_No;
-        paymentToUpdate.details = details;
-        paymentToUpdate.payment_In = newPaymentIn;
-        paymentToUpdate.cash_Out = newCashOut;
-        if (slip_Pic && uploadImage) {
-          paymentToUpdate.slip_Pic = uploadImage.secure_url;
-        };
-        paymentToUpdate.payment_In_Curr = curr_Country;
-        paymentToUpdate.curr_Rate = curr_Rate;
-        paymentToUpdate.curr_Amount = newCurrAmount;
-        paymentToUpdate.date = date;
-        paymentToUpdate.cand_Name = cand_Name;
-  
-        // Save the updated supplier
-  
-        await existingSupplier.save();
-  
-        const updatedSupplier = await Agents.findById(existingSupplier._id);
-        const newNotification=new Notifications({
-          type:"Agent Payment In Updated",
-          content:`${user.userName} updated Payment_In: ${payment_In} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-          date: new Date().toISOString().split("T")[0]
-
-        })
-        await newNotification.save()
-        res.status(200).json({
-          message: "Payment In details updated successfully",
-          data: updatedSupplier,
-        });
-      }
-      else{
+    
         await existingSupplier.updateOne({
           $inc: {
             "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
@@ -1211,8 +900,6 @@ const updateSinglePaymentIn = async (req, res) => {
         paymentToUpdate.curr_Rate = curr_Rate;
         paymentToUpdate.curr_Amount = newCurrAmount;
         paymentToUpdate.date = date;
-        paymentToUpdate.cand_Name = cand_Name;
-  
         // Save the updated supplier
   
         await existingSupplier.save();
@@ -1220,7 +907,7 @@ const updateSinglePaymentIn = async (req, res) => {
         const updatedSupplier = await Agents.findById(existingSupplier._id);
         const newNotification=new Notifications({
           type:"Agent Payment In Updated",
-          content:`${user.userName} updated Payment_In: ${payment_In} of Agent: ${supplierName}`,
+          content:`${user.userName} updated Payment_In: ${payment_In} of Supplier: ${supplierName}`,
           date: new Date().toISOString().split("T")[0]
 
         })
@@ -1229,7 +916,7 @@ const updateSinglePaymentIn = async (req, res) => {
           message: "Payment In details updated successfully",
           data: updatedSupplier,
         });
-      }
+      
       
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -1273,7 +960,7 @@ const updateAgentTotalPaymentIn = async (req, res) => {
         "payment_In_Schema.supplierName": supplierName,
       });
       if (!existingSupplier) {
-        res.status(404).json({ message: "Supplier not found" });
+        res.status(404).json({ message: "Agent not found" });
         return;
       }
 
@@ -1356,7 +1043,7 @@ const deleteAgentPaymentInSchema = async (req, res) => {
     });
 
     if (!existingSupplier) {
-      res.status(404).json({ message: "Supplier not found" });
+      res.status(404).json({ message: "Agent not found" });
       return;
     }
 
@@ -1373,7 +1060,8 @@ const deleteAgentPaymentInSchema = async (req, res) => {
 
 
     cashInHandUpdate.$inc.total_Cash = -existingSupplier.payment_In_Schema.total_Payment_In
-    cashInHandUpdate.$inc.total_Cash =  existingSupplier.payment_In_Schema.total_Cash_Out
+    cashInHandUpdate.$inc.total_Cash = existingSupplier.payment_In_Schema.total_Cash_Out
+
 
     await CashInHand.updateOne({}, cashInHandUpdate);
 
@@ -1424,7 +1112,7 @@ const deletePaymentInPerson = async (req, res) => {
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
 
@@ -1444,15 +1132,14 @@ const deletePaymentInPerson = async (req, res) => {
           "payment_In_Schema.persons": { _id: personId },
         },
       });
-
-      const updatedSupplier = await Agents.findById(existingSupplier._id)
       const newNotification=new Notifications({
         type:"Agent Payment In Person Deleted",
-        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_In_PKR} of Agent: ${supplierName}`,
+        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_In_PKR} of Supplier: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
+      const updatedSupplier = await Agents.findById(existingSupplier._id)
       res.status(200).json({
         message: `Person with ID ${personId} deleted successfully from ${supplierName}`,
       });
@@ -1464,6 +1151,7 @@ const deletePaymentInPerson = async (req, res) => {
     }
   }
 }
+
 
 
 // Updating Payments in Person
@@ -1498,62 +1186,60 @@ const updatePaymentInPerson=async(req,res)=>{
         const personIn = existingSupplier.payment_In_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
           
-          if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
-            const newReminder = new Reminders({
-              type: "Offer Letter",
-              content: `${name}'s Final Status is updated to Offer Letter.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
-    
-            const newReminder = new Reminders({
-              type: "E Number",
-              content: `${name}'s Final Status is updated to E Number.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
-            const newReminder = new Reminders({
-              type: "QVC",
-              content: `${name}'s Final Status is updated to QVC.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
-            const newReminder = new Reminders({
-              type: "Visa Issued",
-              content: `${name}'s Final Status is updated to Visa Issued.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
-            const newReminder = new Reminders({
-              type: "PTN",
-              content: `${name}'s Final Status is updated to PTN.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
-            const newReminder = new Reminders({
-              type: "Ticket",
-              content: `${name}'s Final Status is updated to Ticket.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newReminder=new Reminders({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newReminder.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newReminder=new Reminders({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
 
-       
+          })
+          await newReminder.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newReminder=new Reminders({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newReminder.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newReminder=new Reminders({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newReminder.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newReminder=new Reminders({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newReminder.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newReminder=new Reminders({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newReminder.save()
+        }
+        
           entryMode=personIn.entry_Mode
             personIn.company = company;
             personIn.country = country;
@@ -1570,11 +1256,10 @@ const updatePaymentInPerson=async(req,res)=>{
         }
       }
 
-     
        // Updating in Agents both Schema
-       const agents=await Agents.find({})
+       const suppliers=await Agents.find({})
 
-      for(const agent of agents){
+      for(const agent of suppliers){
 
 if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons)
 {
@@ -1592,11 +1277,9 @@ if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons)
      
       }
 
-       
-    
 
-const suppliers=await Suppliers.find({})
-for(const supplier of suppliers){
+const agents=await Suppliers.find({})
+for(const supplier of agents){
   if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons) {
     const personIn = supplier.payment_In_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString());
     if (personIn) {
@@ -1665,8 +1348,8 @@ if(candidateOut){
        const ticketSuppliers=await TicketSuppliers.find({})
        for(const ticketSupplier of ticketSuppliers){
         
-        if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= ticketSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1679,8 +1362,8 @@ if(candidateOut){
           }
         }
 
-        if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= ticketSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1692,14 +1375,14 @@ if(candidateOut){
 
           }
         }
-      
- 
        
+       }
+       
+       const ticketAgents=await TicketAgents.find({})
 
-  
-
-        if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+       for (const ticketAgent of ticketAgents){
+        if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+          const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(AgentPersonIn){
             AgentPersonIn.company=company
             AgentPersonIn.country=country
@@ -1707,13 +1390,13 @@ if(candidateOut){
             AgentPersonIn.final_Status=final_Status
             AgentPersonIn.trade=trade
             AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
+           await ticketAgent.save()
 
           }
         }
        
-        if(ticketSupplier.Agent_Payment_Out_Schema && ticketSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= ticketSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+          const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(AgentPersonOut){
             AgentPersonOut.company=company
             AgentPersonOut.country=country
@@ -1721,23 +1404,18 @@ if(candidateOut){
             AgentPersonOut.final_Status=final_Status
             AgentPersonOut.trade=trade
             AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
+           await ticketAgent.save()
 
           }
         }
- 
-     
        }
-       
-
-
 
 
        const visitSuppliers=await VisitSuppliers.find({})
        for(const visitSupplier of visitSuppliers){
  
-        if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= visitSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1750,8 +1428,8 @@ if(candidateOut){
           }
         }
 
-        if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= visitSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1764,41 +1442,44 @@ if(candidateOut){
           }
         }
       
-   
-        if(visitSupplier.Agent_Payment_In_Schema && visitSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= visitSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
 
-          }
-        }
-       
-        if(visitSupplier.Agent_Payment_Out_Schema && visitSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= visitSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
        }
 
+       const visitAgents=await VisitAgents.find({})
+for (const visitAgent of visitAgents){
+  if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+ 
+  if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+}
 
        const azadSuppliers=await AzadSupplier.find({})
        for(const azadSupplier of azadSuppliers){
-        if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= azadSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1812,8 +1493,8 @@ if(candidateOut){
         }
       
  
-        if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= azadSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1826,133 +1507,136 @@ if(candidateOut){
           }
   
         }
-      
-
-
-        if(azadSupplier.Agent_Payment_In_Schema && azadSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= azadSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
-
-          }
-        }
        
-        if(azadSupplier.Agent_Payment_Out_Schema && azadSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= azadSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
-            
-          }
-        }
       
        }
+
+
+       const azadAgents=await AzadAgents.find({})
+for (const azadAgent of azadAgents){
+  if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+    const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await azadAgent.save()
+
+    }
+  }
+ 
+  if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await azadAgent.save()
+      
+    }
+  }
+}
      
 const azadCandidateIn=await AzadCandidate.findOne({
-  "Candidate_Payment_In_Schema.supplierName": name,
-  "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_In_Schema.pp_No": pp_No,
+  "payment_In_Schema.supplierName": name,
+  "payment_In_Schema.entry_Mode": entryMode,
+  "payment_In_Schema.pp_No": pp_No,
 })
 if(azadCandidateIn){
-  azadCandidateIn.Candidate_Payment_In_Schema.company=company
-  azadCandidateIn.Candidate_Payment_In_Schema.country=country
-  azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-  azadCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-  azadCandidateIn.Candidate_Payment_In_Schema.trade=trade
-  azadCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateIn.payment_In_Schema.company=company
+  azadCandidateIn.payment_In_Schema.country=country
+  azadCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+  azadCandidateIn.payment_In_Schema.final_Status=final_Status
+  azadCandidateIn.payment_In_Schema.trade=trade
+  azadCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateIn.save()
 
 }
 
 const azadCandidateOut=await AzadCandidate.findOne({
-  "Candidate_Payment_Out_Schema.supplierName": name,
-  "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_Out_Schema.pp_No": pp_No,
+  "payment_Out_Schema.supplierName": name,
+  "payment_Out_Schema.entry_Mode": entryMode,
+  "payment_Out_Schema.pp_No": pp_No,
 })
 if(azadCandidateOut){
-  azadCandidateOut.Candidate_Payment_Out_Schema.company=company
-  azadCandidateOut.Candidate_Payment_Out_Schema.country=country
-  azadCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-  azadCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-  azadCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-  azadCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateOut.payment_Out_Schema.company=company
+  azadCandidateOut.payment_Out_Schema.country=country
+  azadCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+  azadCandidateOut.payment_Out_Schema.final_Status=final_Status
+  azadCandidateOut.payment_Out_Schema.trade=trade
+  azadCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateOut.save()
 
 }
 
 
    const ticketCandidateIn=await TicketCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(ticketCandidateIn){
-    ticketCandidateIn.Candidate_Payment_In_Schema.company=company
-    ticketCandidateIn.Candidate_Payment_In_Schema.country=country
-    ticketCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    ticketCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    ticketCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    ticketCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateIn.payment_In_Schema.company=company
+    ticketCandidateIn.payment_In_Schema.country=country
+    ticketCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    ticketCandidateIn.payment_In_Schema.final_Status=final_Status
+    ticketCandidateIn.payment_In_Schema.trade=trade
+    ticketCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateIn.save()
 
   }
   
   const ticketCandidateOut=await TicketCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(ticketCandidateOut){
-    ticketCandidateOut.Candidate_Payment_Out_Schema.company=company
-    ticketCandidateOut.Candidate_Payment_Out_Schema.country=country
-    ticketCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    ticketCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    ticketCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    ticketCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateOut.payment_Out_Schema.company=company
+    ticketCandidateOut.payment_Out_Schema.country=country
+    ticketCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    ticketCandidateOut.payment_Out_Schema.final_Status=final_Status
+    ticketCandidateOut.payment_Out_Schema.trade=trade
+    ticketCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateOut.save()
 
   }
   
 
    const visitCandidateIn=await VisitCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(visitCandidateIn){
-    visitCandidateIn.Candidate_Payment_In_Schema.company=company
-    visitCandidateIn.Candidate_Payment_In_Schema.country=country
-    visitCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    visitCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    visitCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    visitCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateIn.payment_In_Schema.company=company
+    visitCandidateIn.payment_In_Schema.country=country
+    visitCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    visitCandidateIn.payment_In_Schema.final_Status=final_Status
+    visitCandidateIn.payment_In_Schema.trade=trade
+    visitCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateIn.save()
 
   }
   
   const visitCandidateOut=await VisitCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(visitCandidateOut){
-    visitCandidateOut.Candidate_Payment_Out_Schema.company=company
-    visitCandidateOut.Candidate_Payment_Out_Schema.country=country
-    visitCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    visitCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    visitCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    visitCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateOut.payment_Out_Schema.company=company
+    visitCandidateOut.payment_Out_Schema.country=country
+    visitCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    visitCandidateOut.payment_Out_Schema.final_Status=final_Status
+    visitCandidateOut.payment_Out_Schema.trade=trade
+    visitCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateOut.save()
   }
 
@@ -1987,17 +1671,17 @@ if(entry){
   await entry.save()
 
 }
-
 const newNotification=new Notifications({
   type:"Agent Payment In Person Updated",
-  content:`${user.userName} updated Person :${name} of Agent: ${supplierName}`,
+  content:`${user.userName} updated Person :${name} of Supplier: ${supplierName}`,
   date: new Date().toISOString().split("T")[0]
 
 })
 await newNotification.save()
 
-    res.status(200).json({message:`${name} updated successfully!`})
 
+    res.status(200).json({message:`${name} updated successfully!`})
+console.log('updated successfully!')
    
   
     } catch (error) {
@@ -2011,6 +1695,7 @@ await newNotification.save()
 
 
 }
+
 
 // changing Status 
 const changePaymentInStatus = async (req, res) => {
@@ -2037,11 +1722,12 @@ const changePaymentInStatus = async (req, res) => {
             if(existingSupplier.payment_In_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
               person.status = "Closed"
             }
-          })
+             
+          });
       }
 
       // Toggle the status of the payment in schema
-      existingSupplier.payment_In_Schema.status = newStatus
+      existingSupplier.payment_In_Schema.status = newStatus;
 
       // Save changes to the database
       await existingSupplier.save();
@@ -2051,8 +1737,8 @@ const changePaymentInStatus = async (req, res) => {
       if (existingSupplier.payment_In_Schema.status==="Open") {
           responseMessage = "Agent Status updated to Open Successfully!";
           const newNotification=new Notifications({
-            type:"Khata Open of Agent Payment In",
-            content:`${user.userName} Opened Khata with Agent: ${supplierName}`,
+            type:"Khata Open of Supplier Payment In",
+            content:`${user.userName} Opened Khata with Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -2060,8 +1746,8 @@ const changePaymentInStatus = async (req, res) => {
       } else {
           responseMessage = "Agent Status updated to Closed Successfully!";
           const newNotification=new Notifications({
-            type:"Khata Closed of Agent Payment In",
-            content:`${user.userName} Closed Khata with Agent: ${supplierName}`,
+            type:"Khata Closed of Supplier Payment In",
+            content:`${user.userName} Closed Khata with Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -2074,6 +1760,7 @@ const changePaymentInStatus = async (req, res) => {
       return res.status(500).json({ message: "Internal server error" });
   }
 }
+
 
 
 
@@ -2110,7 +1797,7 @@ const getAllPaymentsIn = async (req, res) => {
             persons: paymentInSchema.persons || [],
             payment: paymentInSchema.payment || [],
             candPayments: paymentInSchema.candPayments || [],
-            status: paymentInSchema.status,
+            status: paymentInSchema.status ,
             createdAt: moment(paymentInSchema.createdAt).format("YYYY-MM-DD"),
             updatedAt: moment(paymentInSchema.updatedAt).format("YYYY-MM-DD"),
           };
@@ -2150,7 +1837,6 @@ const addPaymentOut = async (req, res) => {
           curr_Rate,
           curr_Amount,
           date,
-          cand_Name,
         } = req.body;
         if (!supplierName) {
           return res.status(400).json({ message: "supplier Name is required" });
@@ -2182,7 +1868,7 @@ const addPaymentOut = async (req, res) => {
         });
         if (!existingSupplier) {
           res.status(404).json({
-            message: "Supplier not Found",
+            message: "Agent not Found",
           });
         }
 
@@ -2230,21 +1916,11 @@ const addPaymentOut = async (req, res) => {
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
           date,
           invoice: nextInvoiceNumber,
-          cand_Name,
+      
         };
 
         try {
-          if (cand_Name) {
-            const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-            if (existPerson) {
-              existPerson.remaining_Price += -payment_Out,
-             existPerson.total_In += payment_Out,
-                existPerson.remaining_Curr += newCurrAmount ? newCurrAmount : 0
-
-
-            }
-
-
+  
             // Update total_Visa_Price_In_PKR and other fields using $inc
             await existingSupplier.updateOne({
               $inc: {
@@ -2253,78 +1929,7 @@ const addPaymentOut = async (req, res) => {
                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
-              $push: {
-                "payment_Out_Schema.payment": payment,
-              },
-            })
-            const cashInHandDoc = await CashInHand.findOne({});
-
-            if (!cashInHandDoc) {
-              const newCashInHandDoc = new CashInHand();
-              await newCashInHandDoc.save();
-            }
-
-            const cashInHandUpdate = {
-              $inc: {},
-            };
-
            
-        if (payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = -newPaymentOut;
-          cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
-          cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-        }
-
-            await CashInHand.updateOne({}, cashInHandUpdate);
-            const newBackup=new Backup({
-              name: supplierName,
-              category:category,
-              payment_Via:payment_Via,
-              payment_Type:payment_Type,
-              slip_No: slip_No ? slip_No : '',
-              payment_Out: newPaymentOut,
-              slip_Pic: uploadImage?.secure_url || '',
-              details:details,
-              payment_Out_Curr: curr_Country ? curr_Country : "",
-              curr_Rate: curr_Rate ? curr_Rate : 0,
-              curr_Amount: newCurrAmount ? newCurrAmount : 0,
-              date:new Date().toISOString().split("T")[0],
-              invoice: nextInvoiceNumber,
-              cand_Name:cand_Name,
-                })
-                await newBackup.save()
-            await existingSupplier.save();
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
-
-            const newNotification=new Notifications({
-              type:"Agent Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-              date: new Date().toISOString().split("T")[0]
-    
-            })
-            await newNotification.save()
-            res.status(200).json({
-              data: updatedSupplier,
-              message: `Payment Out: ${payment_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
-            })
-
-
-          }
-
-          else {
-
-            // Update total_Visa_Price_In_PKR and other fields using $inc
-            await existingSupplier.updateOne({
-              $inc: {
-                "payment_Out_Schema.total_Payment_Out": payment_Out,
-                "payment_Out_Schema.remaining_Balance": -payment_Out,
-                "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
-                "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
-              },
-             
               $push: {
                 "payment_Out_Schema.payment": payment,
               },
@@ -2351,6 +1956,8 @@ const addPaymentOut = async (req, res) => {
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
+            await existingSupplier.save();
+            const updatedSupplier = await Agents.findById(existingSupplier._id);
             const newBackup=new Backup({
               name: supplierName,
               category:category,
@@ -2367,25 +1974,18 @@ const addPaymentOut = async (req, res) => {
               invoice: nextInvoiceNumber,
                 })
                 await newBackup.save()
-
-          
-
-            const newNotification=new Notifications({
-              type:"Agent Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} of Agent: ${supplierName}`,
-              date: new Date().toISOString().split("T")[0]
-    
-            })
-            await newNotification.save()
-
-            await existingSupplier.save();
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
-            res.status(200).json({
+                const newNotification=new Notifications({
+                  type:"Agent Payment Out",
+                  content:`${user.userName} added Payment_Out: ${payment_Out} of Supplier: ${supplierName}`,
+                  date: new Date().toISOString().split("T")[0]
+        
+                })
+                await newNotification.save()
+              res.status(200).json({
               data: updatedSupplier,
               message: `Payment Out: ${payment_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
             });
-          }
-
+          
         }
         catch (error) {
           console.error("Error updating values:", error);
@@ -2416,9 +2016,9 @@ const addMultiplePaymentsOut = async (req, res) => {
       return;
     }
 
-    const multiplePayment = req.body;
-
-    if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
+    const multiplePaymentOut = req.body;
+    console.log('multiplePaymentOut',multiplePaymentOut)
+    if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
     }
@@ -2427,7 +2027,7 @@ const addMultiplePaymentsOut = async (req, res) => {
 
       const updatedPayments = [];
 
-      for (const payment of multiplePayment) {
+      for (const payment of multiplePaymentOut) {
         let {
           supplierName,
           category,
@@ -2441,35 +2041,34 @@ const addMultiplePaymentsOut = async (req, res) => {
           curr_Rate,
           curr_Amount,
           date,
-          cand_Name,
         
         } = payment;
 
         if (!supplierName) {
-          res.status(400).json({ message: "Supplier Name is required" });
+          res.status(400).json({ message: `${supplierName}  is required` });
           return;
         }
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-       
-        const agents=await Agents.find({})
+        const suppliers=await Agents.find({})
         let existingSupplier
 
-       for (const agent of agents){
-        if(agent.payment_Out_Schema){
-          if(agent.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
-            existingSupplier = agent;
+       for (const supplier of suppliers){
+        if(supplier.payment_Out_Schema){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+            existingSupplier = supplier;
             break
           }
         }
        }
+        
 
         if (!existingSupplier) {
           res.status(404).json({
             message: `${supplierName} not found`,
           });
-          return;
+          return
         }
 
         let nextInvoiceNumber = 0;
@@ -2505,7 +2104,7 @@ const addMultiplePaymentsOut = async (req, res) => {
           category,
           payment_Via,
           payment_Type,
-          slip_No: slip_No ? slip_No : '',
+          slip_No: slip_No,
           payment_Out: newPaymentOut,
           slip_Pic: uploadImage?.secure_url || '',
           details,
@@ -2514,19 +2113,12 @@ const addMultiplePaymentsOut = async (req, res) => {
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
           date,
           invoice: nextInvoiceNumber,
-          cand_Name,
+
         };
 
         updatedPayments.push(newPayment);
 
         try {
-          if (cand_Name) {
-            const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-            if (existPerson) {
-              existPerson.remaining_Price += -payment_Out,
-              existPerson.total_In += payment_Out,
-              existPerson.remaining_Curr += newCurrAmount ? newCurrAmount : 0
-            }
             // Update total_Visa_Price_In_PKR and other fields using $inc
             await existingSupplier.updateOne({
               $inc: {
@@ -2535,121 +2127,54 @@ const addMultiplePaymentsOut = async (req, res) => {
                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
                 "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
               },
+       
+              $push: {
+                "payment_Out_Schema.payment": newPayment,
+              },
+            })
+            const cashInHandDoc = await CashInHand.findOne({});
+
+            if (!cashInHandDoc) {
+              const newCashInHandDoc = new CashInHand();
+              await newCashInHandDoc.save();
+            }
+
+            const cashInHandUpdate = {
+              $inc: {},
+            };
+
+            if (payment_Via.toLowerCase() === "cash" ) {
+              cashInHandUpdate.$inc.cash = -newPaymentOut;
+              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
+            }
+            else{
+              cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
+              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
+            }
+
+            await CashInHand.updateOne({}, cashInHandUpdate);
+
+            const newBackup=new Backup({
+              name: supplierName,
+              category:category,
+              payment_Via:payment_Via,
+              payment_Type:payment_Type,
+              slip_No: slip_No ? slip_No : '',
+              payment_Out: newPaymentOut,
+              slip_Pic: uploadImage?.secure_url || '',
+              details:details,
+              payment_Out_Curr: curr_Country ? curr_Country : "",
+              curr_Rate: curr_Rate ? curr_Rate : 0,
+              curr_Amount: newCurrAmount ? newCurrAmount : 0,
+              date:new Date().toISOString().split("T")[0],
+              invoice: nextInvoiceNumber,
+                })
+                await newBackup.save()
+            await existingSupplier.save();
             
-              $push: {
-                "payment_Out_Schema.payment": newPayment,
-              },
-            })
-            const cashInHandDoc = await CashInHand.findOne({});
-
-            if (!cashInHandDoc) {
-              const newCashInHandDoc = new CashInHand();
-              await newCashInHandDoc.save();
-            }
-
-            const cashInHandUpdate = {
-              $inc: {},
-            };
-
-            if (payment_Via.toLowerCase() === "cash" ) {
-              cashInHandUpdate.$inc.cash = -newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-            }
-            else{
-              cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-            }
-
-            await CashInHand.updateOne({}, cashInHandUpdate);
-
-            const newBackup=new Backup({
-              name: supplierName,
-              category:category,
-              payment_Via:payment_Via,
-              payment_Type:payment_Type,
-              slip_No: slip_No ? slip_No : '',
-              payment_Out: newPaymentOut,
-              slip_Pic: uploadImage?.secure_url || '',
-              details:details,
-              payment_Out_Curr: curr_Country ? curr_Country : "",
-              curr_Rate: curr_Rate ? curr_Rate : 0,
-              curr_Amount: newCurrAmount ? newCurrAmount : 0,
-              date:new Date().toISOString().split("T")[0],
-              invoice: nextInvoiceNumber,
-              cand_Name:cand_Name,
-                })
-                await newBackup.save()
-            await existingSupplier.save();
             const newNotification=new Notifications({
               type:"Agent Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-              date: new Date().toISOString().split("T")[0]
-    
-            })
-            await newNotification.save()
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
-          }
-
-          else {
-
-            // Update total_Visa_Price_In_PKR and other fields using $inc
-            await existingSupplier.updateOne({
-              $inc: {
-                "payment_Out_Schema.total_Payment_Out": payment_Out,
-                "payment_Out_Schema.remaining_Balance": -payment_Out,
-                "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
-                "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
-              },
-              $set: {
-                "payment_Out_Schema.open": open,
-                "payment_Out_Schema.close": close
-              },
-              $push: {
-                "payment_Out_Schema.payment": newPayment,
-              }
-            })
-            const cashInHandDoc = await CashInHand.findOne({});
-
-            if (!cashInHandDoc) {
-              const newCashInHandDoc = new CashInHand();
-              await newCashInHandDoc.save();
-            }
-
-            const cashInHandUpdate = {
-              $inc: {},
-            };
-
-            if (payment_Via.toLowerCase() === "cash" ) {
-              cashInHandUpdate.$inc.cash = -newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-            }
-            else{
-              cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-            }
-
-            await CashInHand.updateOne({}, cashInHandUpdate);
-
-            const newBackup=new Backup({
-              name: supplierName,
-              category:category,
-              payment_Via:payment_Via,
-              payment_Type:payment_Type,
-              slip_No: slip_No ? slip_No : '',
-              payment_Out: newPaymentOut,
-              slip_Pic: uploadImage?.secure_url || '',
-              details:details,
-              payment_Out_Curr: curr_Country ? curr_Country : "",
-              curr_Rate: curr_Rate ? curr_Rate : 0,
-              curr_Amount: newCurrAmount ? newCurrAmount : 0,
-              date:new Date().toISOString().split("T")[0],
-              invoice: nextInvoiceNumber,
-                })
-                await newBackup.save()
-            await existingSupplier.save();
-            const newNotification=new Notifications({
-              type:"Agent Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} of Agent: ${supplierName}`,
+              content:`${user.userName} added Payment_Out: ${payment_Out} of Supplier: ${supplierName}`,
               date: new Date().toISOString().split("T")[0]
     
             })
@@ -2657,7 +2182,7 @@ const addMultiplePaymentsOut = async (req, res) => {
             const updatedSupplier = await Agents.findById(existingSupplier._id);
 
 
-          }
+          
 
         }
         catch (error) {
@@ -2668,7 +2193,7 @@ const addMultiplePaymentsOut = async (req, res) => {
         }
       }
       res.status(200).json({
-        message: `${multiplePayment.length} Payments Out added Successfully`,
+        message: `${multiplePaymentOut.length} Payments Out added Successfully`,
       });
     } catch (error) {
       console.error("Error updating values:", error);
@@ -2707,7 +2232,6 @@ const addPaymentOutReturn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-        
           date,
           cand_Name,
         } = req.body;
@@ -2741,7 +2265,7 @@ const addPaymentOutReturn = async (req, res) => {
         });
         if (!existingSupplier) {
           res.status(404).json({
-            message: "Supplier not Found",
+            message: "Agent not Found",
           });
         }
 
@@ -2813,7 +2337,7 @@ const addPaymentOutReturn = async (req, res) => {
               "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? -newCurrAmount : 0,
               "payment_Out_Schema.remaining_Curr": newCurrAmount ? newCurrAmount : 0,
             },
-          
+        
             $push: {
               "payment_Out_Schema.payment": payment,
             },
@@ -2839,8 +2363,6 @@ const addPaymentOutReturn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
-          await existingSupplier.save();
-
           const newBackup=new Backup({
             name: supplierName,
             category:category,
@@ -2858,10 +2380,13 @@ const addPaymentOutReturn = async (req, res) => {
             cand_Name:cand_Name,
               })
               await newBackup.save()
+          await existingSupplier.save();
+
           const updatedSupplier = await Agents.findById(existingSupplier._id);
+
           const newNotification=new Notifications({
             type:"Agent Payment Out Return",
-            content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
+            content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -2909,7 +2434,6 @@ const addPaymentOutReturn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
-
           const newBackup=new Backup({
             name: supplierName,
             category:category,
@@ -2926,19 +2450,17 @@ const addPaymentOutReturn = async (req, res) => {
             invoice: nextInvoiceNumber,
               })
               await newBackup.save()
-        
+              
+          await existingSupplier.save();
           const newNotification=new Notifications({
             type:"Agent Payment Out Return",
-            content:`${user.userName} added Payment_Return: ${cash_Out} of Agent: ${supplierName}`,
+            content:`${user.userName} added Payment_Return: ${cash_Out} of Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
           await newNotification.save()
-
-          const updatedSupplier = await Agents.findById(existingSupplier._id);
-          await existingSupplier.save();
           res.status(200).json({
-            data: updatedSupplier,
+           
             message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
           });
           }
@@ -2978,8 +2500,7 @@ const deleteSinglePaymentOut = async (req, res) => {
       curr_Amount,
       supplierName,
       cash_Out,
-      payment_Via,
-      cand_Name
+      payment_Via
     } = req.body;
 
 
@@ -2988,113 +2509,32 @@ const deleteSinglePaymentOut = async (req, res) => {
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
 
     const newPaymentOut = payment_Out - cash_Out;
 
     try {
-      if (cand_Name) {
-        // If cand_Name is provided, find the corresponding person in the persons array and update it
-        const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-        if (existPerson) {
-          existPerson.remaining_Price += payment_Out,
-          existPerson.total_In += -payment_Out,
-          existPerson.remaining_Curr += curr_Amount ? curr_Amount : 0
-          existPerson.cash_Out += cash_Out ? -cash_Out : 0
-
-
-        }
-        let paymentToDelete=existingSupplier.payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
-        const newRecycle=new RecycleBin({
-          name:supplierName,
-          type:"Agent Payment Out",
-          category:paymentToDelete.category,
-          payment_Via:paymentToDelete.payment_Via,
-          payment_Type:paymentToDelete.payment_Type,
-          slip_No:paymentToDelete.slip_No,
-          payment_Out:paymentToDelete.payment_Out,
-          cash_Out:paymentToDelete.cash_Out,
-          payment_Out_Curr:paymentToDelete.payment_Out_Curr,
-          slip_Pic:paymentToDelete.slip_Pic,
-          date:paymentToDelete.date,
-          curr_Rate:paymentToDelete.curr_Rate,
-          curr_Amount:paymentToDelete.curr_Amount,
-          invoice:paymentToDelete.invoice
-
-        })
-        await newRecycle.save()
-        // Update total_Visa_Price_In_PKR and other fields using $inc
-      await existingSupplier.updateOne({
-        $inc: {
-          "payment_Out_Schema.total_Payment_Out": -payment_Out,
-          "payment_Out_Schema.total_Cash_Out": -cash_Out,
-          "payment_Out_Schema.remaining_Balance": newPaymentOut,
-          "payment_Out_Schema.total_Payment_Out_Curr": curr_Amount ? -curr_Amount : 0,
-          "payment_Out_Schema.remaining_Curr": curr_Amount ? curr_Amount : 0,
-        },
-
-        $pull: {
-          "payment_Out_Schema.payment": { _id: paymentId },
-        },
-      });
-      const cashInHandDoc = await CashInHand.findOne({});
-
-      if (!cashInHandDoc) {
-        const newCashInHandDoc = new CashInHand();
-        await newCashInHandDoc.save();
-      }
-
-      const cashInHandUpdate = {
-        $inc: {},
-      };
-
-      if (payment_Via.toLowerCase() === "cash" ) {
-        cashInHandUpdate.$inc.cash = newPaymentOut;
-        cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-      }
-      else{
-        cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
-        cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-      }
-
-      await CashInHand.updateOne({}, cashInHandUpdate);
-      await existingSupplier.save()
-
-      const newNotification=new Notifications({
-        type:"Agent Payment Out Deleted",
-        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0]
+      let paymentToDelete=existingSupplier.payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
+      const newRecycle=new RecycleBin({
+        name:supplierName,
+        type:"Agent Payment Out",
+        category:paymentToDelete.category,
+        payment_Via:paymentToDelete.payment_Via,
+        payment_Type:paymentToDelete.payment_Type,
+        slip_No:paymentToDelete.slip_No,
+        payment_Out:paymentToDelete.payment_Out,
+        cash_Out:paymentToDelete.cash_Out,
+        payment_Out_Curr:paymentToDelete.payment_Out_Curr,
+        slip_Pic:paymentToDelete.slip_Pic,
+        date:paymentToDelete.date,
+        curr_Rate:paymentToDelete.curr_Rate,
+        curr_Amount:paymentToDelete.curr_Amount,
+        invoice:paymentToDelete.invoice
 
       })
-      await newNotification.save()
-
-      const updatedSupplier = await Agents.findById(existingSupplier._id);
-      res.status(200).json({
-        message: `Payment Out deleted sucessfully from ${supplierName}`,
-      });
-    }
-    else{
-      let paymentToDelete=existingSupplier.payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
-        const newRecycle=new RecycleBin({
-          name:supplierName,
-          type:"Agent Payment Out",
-          category:paymentToDelete.category,
-          payment_Via:paymentToDelete.payment_Via,
-          payment_Type:paymentToDelete.payment_Type,
-          slip_No:paymentToDelete.slip_No,
-          payment_Out:paymentToDelete.payment_Out,
-          cash_Out:paymentToDelete.cash_Out,
-          payment_Out_Curr:paymentToDelete.payment_Out_Curr,
-          slip_Pic:paymentToDelete.slip_Pic,
-          date:paymentToDelete.date,
-          curr_Rate:paymentToDelete.curr_Rate,
-          curr_Amount:paymentToDelete.curr_Amount,
-          invoice:paymentToDelete.invoice
-
-        })
-        await newRecycle.save()
+      await newRecycle.save()
       // Update total_Visa_Price_In_PKR and other fields using $inc
       await existingSupplier.updateOne({
         $inc: {
@@ -3120,33 +2560,31 @@ const deleteSinglePaymentOut = async (req, res) => {
         $inc: {},
       };
 
-      if(payment_Via.toLowerCase() === "cash"){
+    
+      if (payment_Via.toLowerCase() === "cash" ) {
         cashInHandUpdate.$inc.cash = newPaymentOut;
         cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-
       }
-    else{
+      else{
         cashInHandUpdate.$inc.bank_Cash = newPaymentOut;
         cashInHandUpdate.$inc.total_Cash = newPaymentOut;
-
-      } 
+      }
 
       await CashInHand.updateOne({}, cashInHandUpdate);
       await existingSupplier.save()
 
       const newNotification=new Notifications({
         type:"Agent Payment Out Deleted",
-        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Agent: ${supplierName}`,
+        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Supplier: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
-
       const updatedSupplier = await Agents.findById(existingSupplier._id);
       res.status(200).json({
         message: `Payment Out deleted sucessfully from ${supplierName}`,
       });
-    }
+    
       
     } catch (error) {
       console.error("Error updating values:", error);
@@ -3186,7 +2624,6 @@ const updateSinglePaymentOut = async (req, res) => {
       slip_Pic,
       date,
       cash_Out,
-      cand_Name,
     } = req.body;
     const newPaymentOut = parseInt(payment_Out, 10);
     const newCashOut = parseInt(cash_Out, 10);
@@ -3198,7 +2635,7 @@ const updateSinglePaymentOut = async (req, res) => {
       });
 
       if (!existingSupplier) {
-        res.status(404).json({ message: "Supplier not found" });
+        res.status(404).json({ message: "Agent not found" });
         return;
       }
 
@@ -3224,88 +2661,6 @@ const updateSinglePaymentOut = async (req, res) => {
           upload_preset: "rozgar",
         })
       }
-      if (cand_Name) {
-        // If cand_Name is provided, find the corresponding person in the persons array and update it
-        const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-        if (existPerson) {
-          existPerson.remaining_Price += -updatedPaymentOut,
-           existPerson.total_In += updatedPaymentOut,
-            existPerson.remaining_Curr += updateCurr_Amount ? -updateCurr_Amount : 0
-            existPerson.cash_Out += updatedCashout ? -updatedCashout : 0
-
-        }
-        
-      await existingSupplier.updateOne({
-        $inc: {
-          "payment_Out_Schema.total_Payment_Out": -updatedPaymentOut,
-          "payment_Out_Schema.total_Cash_Out": -updatedCashout,
-          "payment_Out_Schema.remaining_Balance": -newBalance,
-          "payment_Out_Schema.total_Payment_Out_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
-          "payment_Out_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
-
-        },
-      });
-      const cashInHandDoc = await CashInHand.findOne({});
-
-      if (!cashInHandDoc) {
-        const newCashInHandDoc = new CashInHand();
-        await newCashInHandDoc.save();
-      }
-
-      const cashInHandUpdate = {
-        $inc: {},
-      };
-
-      if (payment_Via.toLowerCase() === "cash" ) {
-        cashInHandUpdate.$inc.cash = -newBalance;
-        cashInHandUpdate.$inc.total_Cash = -newBalance;
-      }
-      else{
-        cashInHandUpdate.$inc.bank_Cash = -newBalance;
-        cashInHandUpdate.$inc.total_Cash = -newBalance;
-      }
-
-      await CashInHand.updateOne({}, cashInHandUpdate);
-
-      // Adding a delay for demonstration purposes
-
-      // Update the payment details
-      paymentToUpdate.category = category;
-      paymentToUpdate.payment_Via = payment_Via;
-      paymentToUpdate.payment_Type = payment_Type;
-      paymentToUpdate.slip_No = slip_No;
-      paymentToUpdate.details = details;
-      paymentToUpdate.payment_Out = newPaymentOut;
-      paymentToUpdate.cash_Out = newCashOut;
-      if (slip_Pic && uploadImage) {
-        paymentToUpdate.slip_Pic = uploadImage.secure_url;
-      };
-      paymentToUpdate.payment_Out_Curr = curr_Country;
-      paymentToUpdate.curr_Rate = curr_Rate;
-      paymentToUpdate.curr_Amount = curr_Amount;
-      paymentToUpdate.date = date;
-      paymentToUpdate.cand_Name = cand_Name;
-      // Save the updated supplier
-      await existingSupplier.save();
-
-      const updatedSupplier = await Agents.findById(existingSupplier._id);
-      await existingSupplier.save();
-
-      const newNotification=new Notifications({
-        type:"Agent Payment Out Updated",
-        content:`${user.userName} updated Payment_Out: ${payment_Out} to Candidate: ${cand_Name} of Agent: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0]
-
-      })
-      await newNotification.save()
-
-      res.status(200).json({
-        message: "Payment Out details updated successfully",
-        data: updatedSupplier,
-      });
-
-      }
-      else{
         
       await existingSupplier.updateOne({
         $inc: {
@@ -3357,25 +2712,24 @@ const updateSinglePaymentOut = async (req, res) => {
       paymentToUpdate.curr_Rate = curr_Rate;
       paymentToUpdate.curr_Amount = curr_Amount;
       paymentToUpdate.date = date;
-      paymentToUpdate.cand_Name = cand_Name;
       // Save the updated supplier
-      await existingSupplier.save();
-
-      const updatedSupplier = await Agents.findById(existingSupplier._id);
       await existingSupplier.save();
 
       const newNotification=new Notifications({
         type:"Agent Payment Out Updated",
-        content:`${user.userName} updated Payment_Out: ${payment_Out} of Agent: ${supplierName}`,
+        content:`${user.userName} updated Payment_Out: ${payment_Out} of Supplier: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
+
+      await existingSupplier.save();
+
       res.status(200).json({
         message: "Payment Out details updated successfully",
-        data: updatedSupplier,
+        
       });
-      }
+      
 
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -3411,7 +2765,7 @@ const deletePaymentOutPerson = async (req, res) => {
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
 
@@ -3433,7 +2787,7 @@ const deletePaymentOutPerson = async (req, res) => {
 
       const newNotification=new Notifications({
         type:"Agent Payment Out Person Deleted",
-        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_Out_PKR} of Agent: ${supplierName}`,
+        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_Out_PKR} of Supplier: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -3485,7 +2839,7 @@ const updateAgentTotalPaymentOut = async (req, res) => {
         "payment_Out_Schema.supplierName": supplierName,
       });
       if (!existingSupplier) {
-        res.status(404).json({ message: "Supplier not found" });
+        res.status(404).json({ message: "Agent not found" });
         return;
       }
 
@@ -3568,7 +2922,7 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
     });
 
     if (!existingSupplier) {
-      res.status(404).json({ message: "Supplier not found" });
+      res.status(404).json({ message: "Agent not found" });
       return;
     }
 
@@ -3586,6 +2940,7 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
 
     cashInHandUpdate.$inc.total_Cash = existingSupplier.payment_Out_Schema.total_Payment_Out
     cashInHandUpdate.$inc.total_Cash = -existingSupplier.payment_Out_Schema.total_Cash_Out
+
 
 
     await CashInHand.updateOne({}, cashInHandUpdate);
@@ -3611,6 +2966,10 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
 };
 
 // Updating PaymentOut Person
+
+
+
+  
 const updatePaymentOutPerson=async(req,res)=>{
  
   const userId = req.user._id;
@@ -3641,62 +3000,60 @@ const updatePaymentOutPerson=async(req,res)=>{
         const personIn = existingSupplier.payment_Out_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
           
-          if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
-            const newReminder = new Reminders({
-              type: "Offer Letter",
-              content: `${name}'s Final Status is updated to Offer Letter.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
-    
-            const newReminder = new Reminders({
-              type: "E Number",
-              content: `${name}'s Final Status is updated to E Number.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
-            const newReminder = new Reminders({
-              type: "QVC",
-              content: `${name}'s Final Status is updated to QVC.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
-            const newReminder = new Reminders({
-              type: "Visa Issued",
-              content: `${name}'s Final Status is updated to Visa Issued.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
-            const newReminder = new Reminders({
-              type: "PTN",
-              content: `${name}'s Final Status is updated to PTN.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
-          
-          if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
-            const newReminder = new Reminders({
-              type: "Ticket",
-              content: `${name}'s Final Status is updated to Ticket.`,
-              date: new Date().toISOString().split("T")[0]
-            });
-            await newReminder.save();
-          }
+        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+          const newReminder=new Reminders({
+            type:"Offer Letter",
+            content:`${name}'s Final Status is updated to Offer Letter.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newReminder.save()
+        }
+        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+          const newReminder=new Reminders({
+            type:"E Number",
+            content:`${name}'s Final Status is updated to E Number.`,
+            date:new Date().toISOString().split("T")[0]
 
-          
+          })
+          await newReminder.save()
+        }
+
+        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+          const newReminder=new Reminders({
+            type:"QVC",
+            content:`${name}'s Final Status is updated to QVC.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newReminder.save()
+        }
+        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+          const newReminder=new Reminders({
+            type:"Visa Issued",
+            content:`${name}'s Final Status is updated to Visa Issued.`,
+            date:new Date().toISOString().split("T")[0]
+
+          })
+          await newReminder.save()
+        }
+        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+          const newReminder=new Reminders({
+            type:"PTN",
+            content:`${name}'s Final Status is updated to PTN.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newReminder.save()
+        }
+
+        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+          const newReminder=new Reminders({
+            type:"Ticket",
+            content:`${name}'s Final Status is updated to Ticket.`,
+            date:new Date().toISOString().split("T")[0]
+          })
+          await newReminder.save()
+        }
+        
           entryMode=personIn.entry_Mode
             personIn.company = company;
             personIn.country = country;
@@ -3808,8 +3165,8 @@ if(candidateOut){
        const ticketSuppliers=await TicketSuppliers.find({})
        for(const ticketSupplier of ticketSuppliers){
         
-        if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= ticketSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -3822,8 +3179,8 @@ if(candidateOut){
           }
         }
 
-        if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= ticketSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -3835,52 +3192,46 @@ if(candidateOut){
 
           }
         }
-      
- 
        
-
-  
-
-        if(ticketSupplier.Agent_Payment_In_Schema && ticketSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= ticketSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
-
-          }
-        }
-       
-        if(ticketSupplier.Agent_Payment_Out_Schema && ticketSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= ticketSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await ticketSupplier.save()
-
-          }
-        }
- 
-     
        }
+
+       const ticketAgents=await TicketAgents.find({})
+
+for (const ticketAgent of ticketAgents){
+  if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+    const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await ticketAgent.save()
+
+    }
+  }
+ 
+  if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await ticketAgent.save()
+
+    }
+  }
+}
        
-
-
-
-
        const visitSuppliers=await VisitSuppliers.find({})
        for(const visitSupplier of visitSuppliers){
  
-        if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= visitSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -3893,8 +3244,8 @@ if(candidateOut){
           }
         }
 
-        if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= visitSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -3907,41 +3258,47 @@ if(candidateOut){
           }
         }
       
-   
-        if(visitSupplier.Agent_Payment_In_Schema && visitSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= visitSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonIn){
-            AgentPersonIn.company=company
-            AgentPersonIn.country=country
-            AgentPersonIn.entry_Mode=entry_Mode
-            AgentPersonIn.final_Status=final_Status
-            AgentPersonIn.trade=trade
-            AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
-       
-        if(visitSupplier.Agent_Payment_Out_Schema && visitSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= visitSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
-          if(AgentPersonOut){
-            AgentPersonOut.company=company
-            AgentPersonOut.country=country
-            AgentPersonOut.entry_Mode=entry_Mode
-            AgentPersonOut.final_Status=final_Status
-            AgentPersonOut.trade=trade
-            AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await visitSupplier.save()
-
-          }
-        }
        }
+
+
+
+       const visitAgents=await VisitAgents.find({})
+
+for (const visitAgent of visitAgents){
+  if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonIn){
+      AgentPersonIn.company=company
+      AgentPersonIn.country=country
+      AgentPersonIn.entry_Mode=entry_Mode
+      AgentPersonIn.final_Status=final_Status
+      AgentPersonIn.trade=trade
+      AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+ 
+  if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    if(AgentPersonOut){
+      AgentPersonOut.company=company
+      AgentPersonOut.country=country
+      AgentPersonOut.entry_Mode=entry_Mode
+      AgentPersonOut.final_Status=final_Status
+      AgentPersonOut.trade=trade
+      AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
+     await visitAgent.save()
+
+    }
+  }
+}
 
 
        const azadSuppliers=await AzadSupplier.find({})
        for(const azadSupplier of azadSuppliers){
-        if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-          const SupPersonIn= azadSupplier.Supplier_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -3955,8 +3312,8 @@ if(candidateOut){
         }
       
  
-        if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-          const SupPersonOut= azadSupplier.Supplier_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -3967,13 +3324,16 @@ if(candidateOut){
            await azadSupplier.save()
 
           }
-  
         }
       
+      
+       }
 
 
-        if(azadSupplier.Agent_Payment_In_Schema && azadSupplier.Agent_Payment_In_Schema.persons){
-          const AgentPersonIn= azadSupplier.Agent_Payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+       const azadAgents=await AzadAgents.find({})
+       for (const azadAgent of azadAgents){
+        if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+          const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(AgentPersonIn){
             AgentPersonIn.company=company
             AgentPersonIn.country=country
@@ -3981,13 +3341,13 @@ if(candidateOut){
             AgentPersonIn.final_Status=final_Status
             AgentPersonIn.trade=trade
             AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
+           await azadAgent.save()
 
           }
         }
        
-        if(azadSupplier.Agent_Payment_Out_Schema && azadSupplier.Agent_Payment_Out_Schema.persons){
-          const AgentPersonOut= azadSupplier.Agent_Payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadAgent.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+          const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
           if(AgentPersonOut){
             AgentPersonOut.company=company
             AgentPersonOut.country=country
@@ -3995,112 +3355,108 @@ if(candidateOut){
             AgentPersonOut.final_Status=final_Status
             AgentPersonOut.trade=trade
             AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
-           await azadSupplier.save()
+           await azadAgent.save()
             
           }
         }
-      
        }
-     
+
 const azadCandidateIn=await AzadCandidate.findOne({
-  "Candidate_Payment_In_Schema.supplierName": name,
-  "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_In_Schema.pp_No": pp_No,
+  "payment_In_Schema.supplierName": name,
+  "payment_In_Schema.entry_Mode": entryMode,
+  "payment_In_Schema.pp_No": pp_No,
 })
 if(azadCandidateIn){
-  azadCandidateIn.Candidate_Payment_In_Schema.company=company
-  azadCandidateIn.Candidate_Payment_In_Schema.country=country
-  azadCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-  azadCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-  azadCandidateIn.Candidate_Payment_In_Schema.trade=trade
-  azadCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateIn.payment_In_Schema.company=company
+  azadCandidateIn.payment_In_Schema.country=country
+  azadCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+  azadCandidateIn.payment_In_Schema.final_Status=final_Status
+  azadCandidateIn.payment_In_Schema.trade=trade
+  azadCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateIn.save()
 
 }
 
 const azadCandidateOut=await AzadCandidate.findOne({
-  "Candidate_Payment_Out_Schema.supplierName": name,
-  "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-  "Candidate_Payment_Out_Schema.pp_No": pp_No,
+  "payment_Out_Schema.supplierName": name,
+  "payment_Out_Schema.entry_Mode": entryMode,
+  "payment_Out_Schema.pp_No": pp_No,
 })
 if(azadCandidateOut){
-  azadCandidateOut.Candidate_Payment_Out_Schema.company=company
-  azadCandidateOut.Candidate_Payment_Out_Schema.country=country
-  azadCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-  azadCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-  azadCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-  azadCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+  azadCandidateOut.payment_Out_Schema.company=company
+  azadCandidateOut.payment_Out_Schema.country=country
+  azadCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+  azadCandidateOut.payment_Out_Schema.final_Status=final_Status
+  azadCandidateOut.payment_Out_Schema.trade=trade
+  azadCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
   await azadCandidateOut.save()
 
 }
 
 
    const ticketCandidateIn=await TicketCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(ticketCandidateIn){
-    ticketCandidateIn.Candidate_Payment_In_Schema.company=company
-    ticketCandidateIn.Candidate_Payment_In_Schema.country=country
-    ticketCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    ticketCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    ticketCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    ticketCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateIn.payment_In_Schema.company=company
+    ticketCandidateIn.payment_In_Schema.country=country
+    ticketCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    ticketCandidateIn.payment_In_Schema.final_Status=final_Status
+    ticketCandidateIn.payment_In_Schema.trade=trade
+    ticketCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateIn.save()
 
   }
   
   const ticketCandidateOut=await TicketCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(ticketCandidateOut){
-    ticketCandidateOut.Candidate_Payment_Out_Schema.company=company
-    ticketCandidateOut.Candidate_Payment_Out_Schema.country=country
-    ticketCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    ticketCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    ticketCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    ticketCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    ticketCandidateOut.payment_Out_Schema.company=company
+    ticketCandidateOut.payment_Out_Schema.country=country
+    ticketCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    ticketCandidateOut.payment_Out_Schema.final_Status=final_Status
+    ticketCandidateOut.payment_Out_Schema.trade=trade
+    ticketCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await ticketCandidateOut.save()
 
   }
   
 
    const visitCandidateIn=await VisitCandidate.findOne({
-    "Candidate_Payment_In_Schema.supplierName": name,
-    "Candidate_Payment_In_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_In_Schema.pp_No": pp_No,
+    "payment_In_Schema.supplierName": name,
+    "payment_In_Schema.entry_Mode": entryMode,
+    "payment_In_Schema.pp_No": pp_No,
   })
   if(visitCandidateIn){
-    visitCandidateIn.Candidate_Payment_In_Schema.company=company
-    visitCandidateIn.Candidate_Payment_In_Schema.country=country
-    visitCandidateIn.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
-    visitCandidateIn.Candidate_Payment_In_Schema.final_Status=final_Status
-    visitCandidateIn.Candidate_Payment_In_Schema.trade=trade
-    visitCandidateIn.Candidate_Payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateIn.payment_In_Schema.company=company
+    visitCandidateIn.payment_In_Schema.country=country
+    visitCandidateIn.payment_In_Schema.entry_Mode=entry_Mode
+    visitCandidateIn.payment_In_Schema.final_Status=final_Status
+    visitCandidateIn.payment_In_Schema.trade=trade
+    visitCandidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateIn.save()
 
   }
   
   const visitCandidateOut=await VisitCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": name,
-    "Candidate_Payment_Out_Schema.entry_Mode": entryMode,
-    "Candidate_Payment_Out_Schema.pp_No": pp_No,
+    "payment_Out_Schema.supplierName": name,
+    "payment_Out_Schema.entry_Mode": entryMode,
+    "payment_Out_Schema.pp_No": pp_No,
   })
   if(visitCandidateOut){
-    visitCandidateOut.Candidate_Payment_Out_Schema.company=company
-    visitCandidateOut.Candidate_Payment_Out_Schema.country=country
-    visitCandidateOut.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
-    visitCandidateOut.Candidate_Payment_Out_Schema.final_Status=final_Status
-    visitCandidateOut.Candidate_Payment_Out_Schema.trade=trade
-    visitCandidateOut.Candidate_Payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
+    visitCandidateOut.payment_Out_Schema.company=company
+    visitCandidateOut.payment_Out_Schema.country=country
+    visitCandidateOut.payment_Out_Schema.entry_Mode=entry_Mode
+    visitCandidateOut.payment_Out_Schema.final_Status=final_Status
+    visitCandidateOut.payment_Out_Schema.trade=trade
+    visitCandidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await visitCandidateOut.save()
   }
-
-
-
    const protectors=await Protector.find({})
    for(const protector of protectors){
     if(protector.payment_Out_Schema && protector.payment_Out_Schema.persons){
@@ -4133,14 +3489,13 @@ if(entry){
 
 const newNotification=new Notifications({
   type:"Agent Payment Out Person Updated",
-  content:`${user.userName} updated Person :${name} of Agent: ${supplierName}`,
+  content:`${user.userName} updated Person :${name} of Supplier: ${supplierName}`,
   date: new Date().toISOString().split("T")[0]
 
 })
 await newNotification.save()
-
     res.status(200).json({message:`${name} updated successfully!`})
-console.log('updated successfully!')
+
    
   
     } catch (error) {
@@ -4149,11 +3504,11 @@ console.log('updated successfully!')
       
     }
     
-
   }
 
 
 }
+
 
 
 // changing Status 
@@ -4162,7 +3517,7 @@ const changePaymentOutStatus = async (req, res) => {
       const userId = req.user._id;
       const user = await User.findById(userId);
       const{supplierName,newStatus}=req.body
-
+    
       if (!user) {
           return res.status(404).json({ message: "User not found" });
       }
@@ -4181,9 +3536,9 @@ const changePaymentOutStatus = async (req, res) => {
             if(existingSupplier.payment_Out_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
               person.status = "Closed"
             }
-          });
+          })
       }
-
+      
       // Toggle the status of the payment in schema
       existingSupplier.payment_Out_Schema.status = newStatus;
 
@@ -4195,8 +3550,8 @@ const changePaymentOutStatus = async (req, res) => {
       if (existingSupplier.payment_Out_Schema.status==="Open") {
           responseMessage = "Agent Status updated to Open Successfully!";
           const newNotification=new Notifications({
-            type:"Khata Open of Agent Payment Out",
-            content:`${user.userName} Opened Khata with Agent: ${supplierName}`,
+            type:"Khata Open of Supplier Payment Out",
+            content:`${user.userName} Opened Khata with Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -4204,8 +3559,8 @@ const changePaymentOutStatus = async (req, res) => {
       } else {
           responseMessage = "Agent Status updated to Closed Successfully!";
           const newNotification=new Notifications({
-            type:"Khata Closed of Agent Payment Out",
-            content:`${user.userName} Closed Khata with Agent: ${supplierName}`,
+            type:"Khata Closed of Supplier Payment Out",
+            content:`${user.userName} Closed Khata with Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -4218,7 +3573,6 @@ const changePaymentOutStatus = async (req, res) => {
       return res.status(500).json({ message: "Internal server error" });
   }
 }
-
 
 // Getting All Supplier Payments Out
 const getAllPaymentsOut = async (req, res) => {
@@ -4265,10 +3619,6 @@ const getAllPaymentsOut = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-
-
 
 // Candidate Wise Payments In
 const addCandVisePaymentIn=async(req,res)=>{
@@ -4367,6 +3717,7 @@ const addCandVisePaymentIn=async(req,res)=>{
       new_Payment_In+=newPaymentIn
       new_Curr_Amount+=newCurrAmount
       curr_Rate=newPaymentIn/newCurrAmount
+
       let myNewPayment={
         _id:new mongoose.Types.ObjectId,
         cand_Name,
@@ -4442,7 +3793,7 @@ const addCandVisePaymentIn=async(req,res)=>{
 
     const newNotification=new Notifications({
       type:"Agent Cand-Wise Payment In",
-      content:`${user.userName} added Candidate Wise Payment_In: ${new_Payment_In} to ${payments.length} Candidates of Agent: ${supplierName}`,
+      content:`${user.userName} added Candidate Wise Payment_In: ${new_Payment_In} to ${payments.length} Candidates of Supplier: ${supplierName}`,
       date: new Date().toISOString().split("T")[0]
 
     })
@@ -4450,7 +3801,7 @@ const addCandVisePaymentIn=async(req,res)=>{
 
     await existingSupplier.save();
     res.status(200).json({
-      message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Agent: ${supplierName}'s Record`,
+      message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Supplier: ${supplierName}'s Record`,
     })
 
   }
@@ -4540,15 +3891,15 @@ const deleteCandVisePaymentIn=async(req,res)=>{
       await CashInHand.updateOne({}, cashInHandUpdate);
       await existingSupplier.save()
       const newNotification=new Notifications({
-        type:"Agent Cand-Wise Payment In Deleted",
-        content:`${user.userName} deleted Cand-Wise Payment_In: ${paymentToDelete.payment_In } of ${paymentToDelete.payments.length} Candidates from  Agent: ${supplierName}'s Record`,
+        type:"Agents Cand-Wise Payment In Deleted",
+        content:`${user.userName} deleted Cand-Wise Payment_In: ${paymentToDelete.payment_In } of ${paymentToDelete.payments.length} Candidates from  Suppliers: ${supplierName}'s Record`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
     
       res.status(200).json({
-        message: `Payment In with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Agent: ${supplierName}'s Record`,
+        message: `Payment In with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Suppliers: ${supplierName}'s Record`,
       });
 
     }
@@ -4559,6 +3910,7 @@ const deleteCandVisePaymentIn=async(req,res)=>{
     res.status(500).json({message:error.message})
   }
 }
+
 
 // Update Cand-Wise Payment In
 const updateCandVisePaymentIn=async(req,res)=>{
@@ -4619,6 +3971,7 @@ const updateCandVisePaymentIn=async(req,res)=>{
   });
 
 }
+
 
 // Deleting a Single CandWise Payment IN
 const deleteSingleCandVisePaymentIn=async(req,res)=>{
@@ -4703,7 +4056,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment In Deleted",
-          content:`${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent: ${supplierName}'s Record`,
+          content:`${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -4726,7 +4079,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
   
       
         res.status(200).json({
-          message: `Successfuly, deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent: ${supplierName}'s Record`,
+          message: `Successfuly, deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
         });
       }
     }
@@ -4737,7 +4090,6 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
     res.status(500).json({message:error.message})
   }
 }
-
 
 
 
@@ -4796,7 +4148,7 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
 // Updating The Cand payment
 
 candPayment.new_Remain_PKR+=updatedPaymentIn
-candPayment.new_Payment-=updatedPaymentIn
+candPayment.new_Payment+=-updatedPaymentIn
 candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
 candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
@@ -4843,7 +4195,7 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment In Updated",
-          content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent: ${supplierName}'s Record`,
+          content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -4936,7 +4288,8 @@ const addCandVisePaymentOut=async(req,res)=>{
       const newCurrAmount = parseInt(curr_Amount, 10);
       
       const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
-  
+    
+
       if (existPerson) {
       let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
@@ -5040,7 +4393,7 @@ const addCandVisePaymentOut=async(req,res)=>{
 
     const newNotification=new Notifications({
       type:"Agent Cand-Wise Payment Out",
-      content:`${user.userName} added Candidate Wise Payment_Ou: ${new_Payment_Out} to ${payments.length} Candidates of Agent: ${supplierName}`,
+      content:`${user.userName} added Candidate Wise Payment_Ou: ${new_Payment_Out} to ${payments.length} Candidates of Supplier: ${supplierName}`,
       date: new Date().toISOString().split("T")[0]
 
     })
@@ -5048,7 +4401,7 @@ const addCandVisePaymentOut=async(req,res)=>{
 
     await existingSupplier.save();
     res.status(200).json({
-      message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Agent: ${supplierName}'s Record`,
+      message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Supplier: ${supplierName}'s Record`,
     })
 
   }
@@ -5139,14 +4492,14 @@ const deleteCandVisePaymentOut=async(req,res)=>{
       await existingSupplier.save()
       const newNotification=new Notifications({
         type:"Agent Cand-Wise Payment Out Deleted",
-        content:`${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out } of ${paymentToDelete.payments.length} Candidates from  Agent: ${supplierName}'s Record`,
+        content:`${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out } of ${paymentToDelete.payments.length} Candidates from  Supplier: ${supplierName}'s Record`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
     
       res.status(200).json({
-        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Agent: ${supplierName}'s Record`,
+        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Supplier: ${supplierName}'s Record`,
       });
 
     }
@@ -5157,6 +4510,8 @@ const deleteCandVisePaymentOut=async(req,res)=>{
     res.status(500).json({message:error.message})
   }
 }
+
+
 
 
 // Update Cand-Wise Payment Out
@@ -5214,6 +4569,7 @@ const updateCandVisePaymentOut=async(req,res)=>{
   await existingSupplier.save();
   res.status(200).json({
     message: "Payment details updated successfully",
+ 
   });
 
 }
@@ -5303,7 +4659,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment Out Deleted",
-          content:`${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent: ${supplierName}'s Record`,
+          content:`${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -5326,7 +4682,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
   
       
         res.status(200).json({
-          message: `Successfuly, deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent: ${supplierName}'s Record`,
+          message: `Successfuly, deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
         });
       }
     }
@@ -5398,7 +4754,6 @@ candPayment.new_Remain_PKR+=updatedPaymentOut
 candPayment.new_Payment-=updatedPaymentOut
 candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
-candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
 
 
 // updating Person total_In and remainig pkr and curr as well
@@ -5442,7 +4797,7 @@ candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment Out Updated",
-          content:`${user.userName} updated Cand-Wise Payment_Out: ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent: ${supplierName}'s Record`,
+          content:`${user.userName} updated Cand-Wise Payment_Out: ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -5450,7 +4805,7 @@ candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
         await existingSupplier.save()
 
         res.status(200).json({
-          message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent: ${supplierName}'s Record`,
+          message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
         });
       }
     }
@@ -5458,7 +4813,6 @@ candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
 
   }
   catch(error){
-    console.log(error)
     res.status(500).json({message:error.message})
   }
 }

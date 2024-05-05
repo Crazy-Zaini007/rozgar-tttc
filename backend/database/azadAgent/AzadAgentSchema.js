@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-//Visit Supplier Payment_In Schema
+//Azad Agent Payment_In Schema
 const Payment_InSchema = new mongoose.Schema(
   {
     supplier_Id: {
@@ -281,7 +281,7 @@ const Payment_InSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-//Visit Supplier Payment_Out Schema
+//Azad Agent Payment_Out Schema
 const Payment_OutSchema = new mongoose.Schema(
   {
     supplier_Id: {
@@ -558,9 +558,9 @@ const Payment_OutSchema = new mongoose.Schema(
   { timestamps: true}
 )
 
-//  Visit Supplier Schema
+//  Azad Agent Schema
 
-const VisitSupplierSchema = new mongoose.Schema(
+const AzadAgentsSchema = new mongoose.Schema(
   {
     payment_In_Schema: Payment_InSchema,
     payment_Out_Schema: Payment_OutSchema
@@ -568,5 +568,5 @@ const VisitSupplierSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const VisitSuppliers = mongoose.model("visitSuppliers", VisitSupplierSchema);
-module.exports = VisitSuppliers;
+const AzadAgents = mongoose.model("azadAgents", AzadAgentsSchema);
+module.exports = AzadAgents;

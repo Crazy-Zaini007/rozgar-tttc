@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 //Payment_In Schema
 const Payment_InSchema = new mongoose.Schema(
   {
@@ -157,9 +156,6 @@ const Payment_InSchema = new mongoose.Schema(
         },
         invoice: {
           type: Number,
-        },
-        cand_Name:{
-          type: String,
         }
       }
     ],
@@ -438,10 +434,7 @@ const Payment_OutSchema = new mongoose.Schema(
         },
         invoice: {
           type: Number,
-        },
-        cand_Name: {
-          type: String,
-        },
+        }
       }
     ],
     candPayments:[

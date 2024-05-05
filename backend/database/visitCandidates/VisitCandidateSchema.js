@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 //Payment_In Schema
-const Candidate_Payment_InSchema = new mongoose.Schema(
+const Payment_InSchema = new mongoose.Schema(
   {
     supplier_Id: {
       type: String,
@@ -127,7 +127,7 @@ const Candidate_Payment_InSchema = new mongoose.Schema(
 );
 
 //Payment_Out Schema
-const Candidate_Payment_OutSchema = new mongoose.Schema(
+const Payment_OutSchema = new mongoose.Schema(
   {
     supplier_Id: {
       type: String,
@@ -257,8 +257,8 @@ const Candidate_Payment_OutSchema = new mongoose.Schema(
 
 const VisitCandidateSchema = new mongoose.Schema(
   {
-    Candidate_Payment_In_Schema: Candidate_Payment_InSchema,
-    Candidate_Payment_Out_Schema: Candidate_Payment_OutSchema,
+    payment_In_Schema: Payment_InSchema,
+    payment_Out_Schema: Payment_OutSchema,
   },
   { timestamps: true }
 );
