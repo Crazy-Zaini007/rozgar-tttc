@@ -1,14 +1,32 @@
 const express = require('express');
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const {  addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut,changeAgentPaymentInStatus,changeAgentPaymentOutStatus } = require('../../controllers/ticketAgents/TicketAgentController')
-const {  addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut,changeSupplierPaymentInStatus,changeSupplierPaymentOutStatus } = require('../../controllers/ticketSupplier/TicketSupplierController')
+const {  addAzadAgentPaymentIn, addAzadAgentMultiplePaymentsIn, addAzadAgentPaymentInReturn, deleteSingleAgentPaymentIn, updateSingleAzadAgentPaymentIn, deleteAzadAgentPaymentInPerson,updateAgentPaymentInPerson,deleteAzadAgentPaymentInSchema, getAllAzadAgentPaymentsIn, addAzadAgentPaymentOut, addAzadAgentMultiplePaymentsOut, addAzadAgentPaymentOutReturn, deleteAzadAgentSinglePaymentOut, updateAzadAgentSinglePaymentOut, deleteAzadAgentPaymentOutPerson,updateAgentPaymentOutPerson,deleteAzadAgentPaymentOutSchema, getAllAzadAgentPaymentsOut,changeAgentPaymentInStatus,changeAgentPaymentOutStatus,addAgentCandVisePaymentIn,
+    deleteAgentCandVisePaymentIn,
+    updateAgentCandVisePaymentIn,
+    deleteSingleAgentCandVisePaymentIn,
+    updateSingleAgentCandVisePaymentIn,
+    addAgentCandVisePaymentOut,
+    deleteAgentCandVisePaymentOut,
+    updateAgentCandVisePaymentOut,
+    deleteSingleAgentCandVisePaymentOut,
+    updateSingleAgentCandVisePaymentOut, } = require('../../controllers/ticketAgents/TicketAgentController')
+const {  addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSupplierPaymentInReturn, deleteSingleAzadSupplierPaymentIn, updateSingleAzadSupplierPaymentIn, deleteAzadSupplierPaymentInPerson,updateSupPaymentInPerson, deleteAzadSupplierPaymentInSchema, getAllAzadSupplierPaymentsIn, addAzadSupplierPaymentOut, addAzadSupplierMultiplePaymentsOut, addAzadSupplierPaymentOutReturn, deleteAzadSupplierSinglePaymentOut, updateAzadSupplierSinglePaymentOut, deleteAzadSupplierPaymentOutPerson,updateSupPaymentOutPerson, deleteAzadSupplierPaymentOutSchema, getAllAzadSupplierPaymentsOut,changeSupplierPaymentInStatus,changeSupplierPaymentOutStatus, addCandVisePaymentIn,
+    deleteCandVisePaymentIn,
+    deleteSingleCandVisePaymentIn,
+    updateSingleCandVisePaymentIn,
+    addCandVisePaymentOut,
+    deleteCandVisePaymentOut,
+    deleteSingleCandVisePaymentOut,
+    updateSingleCandVisePaymentOut,
+    updateCandVisePaymentIn,
+    updateCandVisePaymentOut, } = require('../../controllers/ticketSupplier/TicketSupplierController')
 const {addAzadCandPaymentIn, addAzadCandMultiplePaymentsIn, addAzadCandPaymentInReturn, deleteSingleAzadCandPaymentIn, updateSingleAzadCandPaymentIn,deleteAzadCandPaymentInSchema, getAzadCandAllPaymentsIn, addAzadCandPaymentOut, addAzadCandPaymentOutReturn, deleteAzadCandSinglePaymentOut, updateAzadCandSinglePaymentOut, addAzadCandMultiplePaymentsOut,deleteAzadCandPaymentOutSchema, getAzadCandAllPaymentsOut } = require('../../controllers/ticketCandidate/TicketCandidateController')
 
 const router = express.Router()
 
 router.use(userAuth)
 
-// Azad Suppliers Section
+// Ticket Suppliers Section
 // Adding a new payment in 
 router.post('/suppliers/add/payment_in', addAzadSupplierPaymentIn)
 // Deleting a single payments In
@@ -29,6 +47,7 @@ router.delete('/suppliers/delete/all/payment_in', deleteAzadSupplierPaymentInSch
 router.get('/suppliers/get/payment_in_details', getAllAzadSupplierPaymentsIn)
 
 router.patch('/suppliers/payment_in/status', changeSupplierPaymentInStatus)
+
 
 //
 
@@ -53,7 +72,7 @@ router.get('/suppliers/get/payment_out_details', getAllAzadSupplierPaymentsOut)
 
 router.patch('/suppliers/payment_out/status', changeSupplierPaymentOutStatus)
 
-// Azad Agetns Section
+// Ticket Agetns Section
 // Adding a new payment in 
 router.post('/agents/add/payment_in', addAzadAgentPaymentIn)
 // Deleting a single payments In
@@ -95,7 +114,7 @@ router.get('/agents/get/payment_out_details', getAllAzadAgentPaymentsOut)
 router.delete('/agents/delete/all/payment_out', deleteAzadAgentPaymentOutSchema)
 router.patch('/agents/payment_out/status', changeAgentPaymentOutStatus)
 
-// Azad Candidate Section
+// Ticket Candidate Section
 // Adding a new payment in 
 router.post('/candidates/add/payment_in', addAzadCandPaymentIn)
 // Deleting a single payments In
@@ -121,7 +140,45 @@ router.patch('/candidates/update/single/payment_out', updateAzadCandSinglePaymen
 router.post('/candidates/add/multiple/payment_out', addAzadCandMultiplePaymentsOut)
 router.delete('/candidates/delete/all/payment_out', deleteAzadCandPaymentOutSchema)
 
-// getting all suppliers Payments Out Details
+// getting all candidates Payments Out Details
 router.get('/candidates/get/payment_out_details', getAzadCandAllPaymentsOut)
+
+
+
+
+// Ticket Supplier Candidate Vise payments in and Out
+router.post('/suppliers/add/cand_vise/payment_in',addCandVisePaymentIn)
+router.delete('/suppliers/delete/cand_vise/payment_in',deleteCandVisePaymentIn)
+router.delete('/suppliers/delete/cand_vise/single/payment_in',deleteSingleCandVisePaymentIn)
+router.patch('/suppliers/update/cand_vise/single/payment_in',updateSingleCandVisePaymentIn)
+
+
+router.post('/suppliers/add/cand_vise/payment_out',addCandVisePaymentOut)
+router.delete('/suppliers/delete/cand_vise/payment_out',deleteCandVisePaymentOut)
+router.delete('/suppliers/delete/cand_vise/single/payment_out',deleteSingleCandVisePaymentOut)
+router.patch('/suppliers/update/cand_vise/single/payment_out',updateSingleCandVisePaymentOut)
+
+
+router.patch('/suppliers/update/cand_vise/payment_in',updateCandVisePaymentIn)
+router.patch('/suppliers/update/cand_vise/payment_out',updateCandVisePaymentOut)
+
+
+// Ticket Agents Candidate Vise payments in and Out
+router.post('/agents/add/cand_vise/payment_in',addAgentCandVisePaymentIn)
+router.delete('/agents/delete/cand_vise/payment_in',deleteAgentCandVisePaymentIn)
+router.delete('/agents/delete/cand_vise/single/payment_in',deleteSingleAgentCandVisePaymentIn)
+router.patch('/agents/update/cand_vise/single/payment_in',updateSingleAgentCandVisePaymentIn)
+
+
+router.post('/agents/add/cand_vise/payment_out',addAgentCandVisePaymentOut)
+router.delete('/agents/delete/cand_vise/payment_out',deleteAgentCandVisePaymentOut)
+router.delete('/agents/delete/cand_vise/single/payment_out',deleteSingleAgentCandVisePaymentOut)
+router.patch('/agents/update/cand_vise/single/payment_out',updateSingleAgentCandVisePaymentOut)
+
+
+router.patch('/agents/update/cand_vise/payment_in',updateAgentCandVisePaymentIn)
+router.patch('/agents/update/cand_vise/payment_out',updateAgentCandVisePaymentOut)
+
+
 
 module.exports = router

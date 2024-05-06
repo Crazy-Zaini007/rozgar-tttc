@@ -156,6 +156,10 @@ const Payment_InSchema = new mongoose.Schema(
         },
         invoice: {
           type: Number,
+        },
+        cand_Name:{
+          type: String,
+
         }
       }
     ],
@@ -418,6 +422,7 @@ const Payment_OutSchema = new mongoose.Schema(
           type: String,
         },
         date: {
+          type: String,
           
         },
         curr_Rate: {
@@ -434,6 +439,11 @@ const Payment_OutSchema = new mongoose.Schema(
         },
         invoice: {
           type: Number,
+        }
+        ,
+        cand_Name:{
+          type: String,
+
         }
       }
     ],

@@ -169,7 +169,7 @@ const addPaymentIn = async (req, res) => {
 
         const newNotification=new Notifications({
           type:"Agent Payment In",
-          content:`${user.userName} added Payment_In: ${payment_In} of Supplier: ${supplierName}`,
+          content:`${user.userName} added Payment_In: ${payment_In} of Agent:${supplierName}`,
           date: new Date().toISOString().split("T")[0]
 
         })
@@ -354,7 +354,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                 await newBackup.save()
                 const newNotification=new Notifications({
                   type:"Agent Payment In",
-                  content:`${user.userName} added Payment_In: ${payment_In} of Supplier: ${supplierName}`,
+                  content:`${user.userName} added Payment_In: ${payment_In} of Agent:${supplierName}`,
                   date: new Date().toISOString().split("T")[0]
         
                 })
@@ -569,7 +569,7 @@ const addPaymentInReturn = async (req, res) => {
                 await newBackup.save()
                 const newNotification=new Notifications({
                   type:"Agent Payment In Return",
-                  content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Supplier: ${supplierName}`,
+                  content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Agent:${supplierName}`,
                   date: new Date().toISOString().split("T")[0]
         
                 })
@@ -639,7 +639,7 @@ const addPaymentInReturn = async (req, res) => {
                 await newBackup.save()
                 const newNotification=new Notifications({
                   type:"Agent Payment In Return",
-                  content:`${user.userName} added Payment_Return: ${cash_Out} of Supplier: ${supplierName}`,
+                  content:`${user.userName} added Payment_Return: ${cash_Out} of Agent:${supplierName}`,
                   date: new Date().toISOString().split("T")[0]
         
                 })
@@ -764,7 +764,7 @@ const deleteSinglePaymentIn = async (req, res) => {
         await existingSupplier.save()
         const newNotification=new Notifications({
           type:"Agent Payment In Deleted",
-          content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Supplier: ${supplierName}`,
+          content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Agent:${supplierName}`,
           date: new Date().toISOString().split("T")[0]
 
         })
@@ -907,7 +907,7 @@ const updateSinglePaymentIn = async (req, res) => {
         const updatedSupplier = await Agents.findById(existingSupplier._id);
         const newNotification=new Notifications({
           type:"Agent Payment In Updated",
-          content:`${user.userName} updated Payment_In: ${payment_In} of Supplier: ${supplierName}`,
+          content:`${user.userName} updated Payment_In: ${payment_In} of Agent:${supplierName}`,
           date: new Date().toISOString().split("T")[0]
 
         })
@@ -1134,7 +1134,7 @@ const deletePaymentInPerson = async (req, res) => {
       });
       const newNotification=new Notifications({
         type:"Agent Payment In Person Deleted",
-        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_In_PKR} of Supplier: ${supplierName}`,
+        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_In_PKR} of Agent:${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -1673,7 +1673,7 @@ if(entry){
 }
 const newNotification=new Notifications({
   type:"Agent Payment In Person Updated",
-  content:`${user.userName} updated Person :${name} of Supplier: ${supplierName}`,
+  content:`${user.userName} updated Person :${name} of Agent:${supplierName}`,
   date: new Date().toISOString().split("T")[0]
 
 })
@@ -1738,7 +1738,7 @@ const changePaymentInStatus = async (req, res) => {
           responseMessage = "Agent Status updated to Open Successfully!";
           const newNotification=new Notifications({
             type:"Khata Open of Supplier Payment In",
-            content:`${user.userName} Opened Khata with Supplier: ${supplierName}`,
+            content:`${user.userName} Opened Khata with Agent:${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -1747,7 +1747,7 @@ const changePaymentInStatus = async (req, res) => {
           responseMessage = "Agent Status updated to Closed Successfully!";
           const newNotification=new Notifications({
             type:"Khata Closed of Supplier Payment In",
-            content:`${user.userName} Closed Khata with Supplier: ${supplierName}`,
+            content:`${user.userName} Closed Khata with Agent:${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -1976,7 +1976,7 @@ const addPaymentOut = async (req, res) => {
                 await newBackup.save()
                 const newNotification=new Notifications({
                   type:"Agent Payment Out",
-                  content:`${user.userName} added Payment_Out: ${payment_Out} of Supplier: ${supplierName}`,
+                  content:`${user.userName} added Payment_Out: ${payment_Out} of Agent:${supplierName}`,
                   date: new Date().toISOString().split("T")[0]
         
                 })
@@ -2174,7 +2174,7 @@ const addMultiplePaymentsOut = async (req, res) => {
             
             const newNotification=new Notifications({
               type:"Agent Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} of Supplier: ${supplierName}`,
+              content:`${user.userName} added Payment_Out: ${payment_Out} of Agent:${supplierName}`,
               date: new Date().toISOString().split("T")[0]
     
             })
@@ -2386,7 +2386,7 @@ const addPaymentOutReturn = async (req, res) => {
 
           const newNotification=new Notifications({
             type:"Agent Payment Out Return",
-            content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Supplier: ${supplierName}`,
+            content:`${user.userName} added Payment_Return: ${cash_Out} to Candidate: ${cand_Name} of Agent:${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -2454,7 +2454,7 @@ const addPaymentOutReturn = async (req, res) => {
           await existingSupplier.save();
           const newNotification=new Notifications({
             type:"Agent Payment Out Return",
-            content:`${user.userName} added Payment_Return: ${cash_Out} of Supplier: ${supplierName}`,
+            content:`${user.userName} added Payment_Return: ${cash_Out} of Agent:${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -2575,7 +2575,7 @@ const deleteSinglePaymentOut = async (req, res) => {
 
       const newNotification=new Notifications({
         type:"Agent Payment Out Deleted",
-        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Supplier: ${supplierName}`,
+        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Agent:${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -2717,7 +2717,7 @@ const updateSinglePaymentOut = async (req, res) => {
 
       const newNotification=new Notifications({
         type:"Agent Payment Out Updated",
-        content:`${user.userName} updated Payment_Out: ${payment_Out} of Supplier: ${supplierName}`,
+        content:`${user.userName} updated Payment_Out: ${payment_Out} of Agent:${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -2787,7 +2787,7 @@ const deletePaymentOutPerson = async (req, res) => {
 
       const newNotification=new Notifications({
         type:"Agent Payment Out Person Deleted",
-        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_Out_PKR} of Supplier: ${supplierName}`,
+        content:`${user.userName} deleted Person having Visa Price In PKR: ${visa_Price_Out_PKR} of Agent:${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -3489,7 +3489,7 @@ if(entry){
 
 const newNotification=new Notifications({
   type:"Agent Payment Out Person Updated",
-  content:`${user.userName} updated Person :${name} of Supplier: ${supplierName}`,
+  content:`${user.userName} updated Person :${name} of Agent:${supplierName}`,
   date: new Date().toISOString().split("T")[0]
 
 })
@@ -3551,7 +3551,7 @@ const changePaymentOutStatus = async (req, res) => {
           responseMessage = "Agent Status updated to Open Successfully!";
           const newNotification=new Notifications({
             type:"Khata Open of Supplier Payment Out",
-            content:`${user.userName} Opened Khata with Supplier: ${supplierName}`,
+            content:`${user.userName} Opened Khata with Agent:${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -3560,7 +3560,7 @@ const changePaymentOutStatus = async (req, res) => {
           responseMessage = "Agent Status updated to Closed Successfully!";
           const newNotification=new Notifications({
             type:"Khata Closed of Supplier Payment Out",
-            content:`${user.userName} Closed Khata with Supplier: ${supplierName}`,
+            content:`${user.userName} Closed Khata with Agent:${supplierName}`,
             date: new Date().toISOString().split("T")[0]
   
           })
@@ -3793,7 +3793,7 @@ const addCandVisePaymentIn=async(req,res)=>{
 
     const newNotification=new Notifications({
       type:"Agent Cand-Wise Payment In",
-      content:`${user.userName} added Candidate Wise Payment_In: ${new_Payment_In} to ${payments.length} Candidates of Supplier: ${supplierName}`,
+      content:`${user.userName} added Candidate Wise Payment_In: ${new_Payment_In} to ${payments.length} Candidates of Agent:${supplierName}`,
       date: new Date().toISOString().split("T")[0]
 
     })
@@ -3801,7 +3801,7 @@ const addCandVisePaymentIn=async(req,res)=>{
 
     await existingSupplier.save();
     res.status(200).json({
-      message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Supplier: ${supplierName}'s Record`,
+      message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
     })
 
   }
@@ -4056,7 +4056,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment In Deleted",
-          content:`${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
+          content:`${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -4079,7 +4079,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
   
       
         res.status(200).json({
-          message: `Successfuly, deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
+          message: `Successfuly, deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
         });
       }
     }
@@ -4195,7 +4195,7 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment In Updated",
-          content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
+          content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -4393,7 +4393,7 @@ const addCandVisePaymentOut=async(req,res)=>{
 
     const newNotification=new Notifications({
       type:"Agent Cand-Wise Payment Out",
-      content:`${user.userName} added Candidate Wise Payment_Ou: ${new_Payment_Out} to ${payments.length} Candidates of Supplier: ${supplierName}`,
+      content:`${user.userName} added Candidate Wise Payment_Ou: ${new_Payment_Out} to ${payments.length} Candidates of Agent:${supplierName}`,
       date: new Date().toISOString().split("T")[0]
 
     })
@@ -4401,7 +4401,7 @@ const addCandVisePaymentOut=async(req,res)=>{
 
     await existingSupplier.save();
     res.status(200).json({
-      message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Supplier: ${supplierName}'s Record`,
+      message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
     })
 
   }
@@ -4492,14 +4492,14 @@ const deleteCandVisePaymentOut=async(req,res)=>{
       await existingSupplier.save()
       const newNotification=new Notifications({
         type:"Agent Cand-Wise Payment Out Deleted",
-        content:`${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out } of ${paymentToDelete.payments.length} Candidates from  Supplier: ${supplierName}'s Record`,
+        content:`${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out } of ${paymentToDelete.payments.length} Candidates from  Agent:${supplierName}'s Record`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
     
       res.status(200).json({
-        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Supplier: ${supplierName}'s Record`,
+        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Agent:${supplierName}'s Record`,
       });
 
     }
@@ -4659,7 +4659,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment Out Deleted",
-          content:`${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
+          content:`${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -4682,7 +4682,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
   
       
         res.status(200).json({
-          message: `Successfuly, deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Supplier: ${supplierName}'s Record`,
+          message: `Successfuly, deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
         });
       }
     }
@@ -4797,7 +4797,7 @@ candPayment.new_Curr_Payment+=-updateCurr_Amount
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment Out Updated",
-          content:`${user.userName} updated Cand-Wise Payment_Out: ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
+          content:`${user.userName} updated Cand-Wise Payment_Out: ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0]
   
         })
@@ -4805,7 +4805,7 @@ candPayment.new_Curr_Payment+=-updateCurr_Amount
         await existingSupplier.save()
 
         res.status(200).json({
-          message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
+          message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
         });
       }
     }
