@@ -22,8 +22,6 @@ router.get('/get_vpp', getVPP)
 router.patch('/update_vpp', updateVPP)
 router.delete('/delete_vpp', deleteVPP)
 
-
-
 //3- Ticket Sales Parties Routes
 // a- adding TSP  route
 router.post('/add_tsp', addTSP)
@@ -190,7 +188,6 @@ router.post('/add_cpp', addCPP)
 router.get('/get_cpp', getCPP)
 router.patch('/update_cpp', updateCPP)
 router.delete('/delete_cpp', deleteCPP)
-
 
 //20 - Protector Parties Routes
 // a- adding Protector Parties  route

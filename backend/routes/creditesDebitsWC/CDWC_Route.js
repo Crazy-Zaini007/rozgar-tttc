@@ -10,7 +10,6 @@ router.use(userAuth);
 // Adding a new payment in
 router.post("/add/payment_in", addPaymentIn);
 router.post("/add/multiple/payment_in", addMultiplePaymentIn);
-
 // Deleting a single payments In
 router.delete("/delete/single/payment_in", deleteSinglePaymentIn);
 // Updating a single payment In

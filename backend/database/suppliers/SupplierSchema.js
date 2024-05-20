@@ -556,8 +556,7 @@ const Payment_OutSchema = new mongoose.Schema(
     ]
   },
   { timestamps: true }
-);
-
+)
 //  Supplier Schema
 
 const SupplierSchema = new mongoose.Schema(

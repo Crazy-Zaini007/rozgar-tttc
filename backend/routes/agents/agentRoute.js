@@ -36,7 +36,6 @@ const {addPaymentIn,
 const router = express.Router()
 
 router.use(userAuth)
-
 // Adding a new payment in 
 router.post('/add/payment_in', addPaymentIn)
 // Deleting a single payments In
@@ -57,8 +56,6 @@ router.get('/get/payment_in_details', getAllPaymentsIn)
 router.delete('/delete/all/payment_in', deleteAgentPaymentInSchema)
 // Updating All PaymentIn of a suppliers
 router.patch('/update/all/payment_in', updateAgentTotalPaymentIn)
-
-
 
 // Adding a new Payment Out
 router.post('/add/payment_out', addPaymentOut)
@@ -85,7 +82,6 @@ router.patch('/update/all/payment_out', updateAgentTotalPaymentOut)
 router.patch('/update/payment_in/status', changePaymentInStatus)
 router.patch('/update/payment_out/status', changePaymentOutStatus)
 
-
 // Candidate Vise payments in and Out
 router.post('/add/cand_vise/payment_in',addCandVisePaymentIn)
 router.delete('/delete/cand_vise/payment_in',deleteCandVisePaymentIn)
@@ -98,10 +94,7 @@ router.delete('/delete/cand_vise/payment_out',deleteCandVisePaymentOut)
 router.delete('/delete/cand_vise/single/payment_out',deleteSingleCandVisePaymentOut)
 router.patch('/update/cand_vise/single/payment_out',updateSingleCandVisePaymentOut)
 
-
 router.patch('/update/cand_vise/payment_in',updateCandVisePaymentIn)
 router.patch('/update/cand_vise/payment_out',updateCandVisePaymentOut)
-
-
 
 module.exports = router

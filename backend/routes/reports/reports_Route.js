@@ -31,7 +31,7 @@ const router = express.Router();
 router.use(userAuth);
 
 // Geting AllPayments
-router.get("/get/all/payments", getAllPayments);
+router.get("/get/all/payments", getAllPayments)
 router.get("/get/all/protector/payments", getProtectorPayments);
 router.get("/get/all/employees/payments", getEmployeesPayments);
 

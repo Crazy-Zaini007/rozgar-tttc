@@ -50,6 +50,35 @@ const visitAgent_Payments_In = useSelector((state) => state.visits.visitAgent_Pa
 const visitSupplier_Payments_In = useSelector((state) => state.visits.visitSupplier_Payments_In);
 const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Payments_In);
 
+const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
+
+
+const[banks,setBanks]=useState('')
+const[total,setTotal]=useState()
+console.log(banks)
+const apiUrl = process.env.REACT_APP_API_URL;
+const getBankCash = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
+
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`
+      }
+    })
+
+    const json = await response.json();
+    if (response.ok) {
+     setBanks(json.data)
+     setTotal(json.bank_Cash)
+    }
+  }
+  catch (error) {
+    console.error('Fetch error:', error);
+    setNewMessage(toast.error('Server is not Responding...'));
+    setLoading(false);
+  }
+}
 
   const { getCurrCountryData } = CurrCountryHook();
   const { getCategoryData } = CategoryHook();
@@ -63,7 +92,7 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
   const { getTicketAgentPaymentsIn,getTicketSupplierPaymentsIn,getTicketCandPaymentsIn } = TicketHook();
   const { getVisitAgentPaymentsIn,getVisitSupplierPaymentsIn,getVisitCandPaymentsIn } = VisitHook()
 
-  const { getOverAllPayments, overAllPayments } = CashInHandHook()
+  const { getOverAllPayments, overAllPayments,getCashInHandData } = CashInHandHook()
 
   const [option, setOption] = useState(false);
   // Form input States
@@ -95,7 +124,9 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
     try {
       // Use Promise.all to execute all promises concurrently
       await Promise.all([
-         getOverAllPayments(),
+        getCashInHandData(),
+        getBankCash(),
+        getOverAllPayments(),
         getCurrCountryData(),
         getCategoryData(),
         getPaymentViaData(),
@@ -252,8 +283,6 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
     }
   };
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
@@ -291,7 +320,9 @@ const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Paym
         setLoading(false);
       }
       if (response.ok) {
-      getOverAllPayments()
+        getCashInHandData()
+        getBankCash()
+        getOverAllPayments()
         setNewMessage(toast.success(json.message));
         getPaymentsIn();
         setLoading(false);
@@ -362,7 +393,7 @@ const currentDate = new Date().toISOString().split('T')[0];
   return (
     <>
   
-<Paper className="col-md-12 py-3 mb-1 px-2 detail_table">
+<Paper className="col-md-10 py-3 mb-1 px-2 detail_table">
         {!option && (
          
          <form className="py-3 px-2" onSubmit={handleForm}>
@@ -733,6 +764,42 @@ const currentDate = new Date().toISOString().split('T')[0];
             </form>
           
         )}
+      </Paper>
+      <Paper className="col-md-2 mb-1 px-0 border total_cash">
+        <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
+        <h6 className="bg-success text-white py-2 text-center my-0">{(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
+        <div className="details">
+          <h6 className="text-center my-0 bg-info text-white py-2 my-0 ">Cash Details</h6>
+          <TableContainer className='detail_table' component={Paper} >
+  <Table stickyHeader>
+    <TableHead className="thead">
+      <TableRow>
+        <TableCell className='label border text-center' style={{ width: '50%' }}>Source</TableCell>
+        <TableCell className='label border text-center' style={{ width: '50%' }}>Payment</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+    <TableRow>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>Cash</TableCell>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{(cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0)}</TableCell>
+        </TableRow>
+      {banks && banks.map((data, index) => (
+        <TableRow key={index}>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.payment_Via}</TableCell>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.total_payment}</TableCell>
+        </TableRow>
+      ))}
+      <TableRow>
+        <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Total In Banks</TableCell>
+        <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{total && total}</TableCell>
+      </TableRow>
+
+      
+    </TableBody>
+  </Table>
+</TableContainer>
+
+        </div>
       </Paper>
 
       

@@ -1595,3 +1595,9 @@ color:white;
     width: 60%;
     height: 60%;
     }
+
+
+    /*total_cash  */
+    .total_cash h6{
+      font-size: 14px;
+    } 

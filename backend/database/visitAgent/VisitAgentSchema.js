@@ -165,6 +165,10 @@ const Payment_InSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
+        cand_Name:{
+          type: String,
+
+        }
       },
     ],
     candPayments:[
@@ -444,6 +448,10 @@ const Payment_OutSchema = new mongoose.Schema(
         invoice: {
           type: Number,
         },
+        cand_Name:{
+          type: String,
+
+        }
       },
     ],
     candPayments:[

@@ -55,6 +55,31 @@ const visitCand_Payments_Out = useSelector((state) => state.visits.visitCand_Pay
 const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
 
 
+const[banks,setBanks]=useState('')
+const[total,setTotal]=useState()
+const apiUrl = process.env.REACT_APP_API_URL;
+const getBankCash = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
+
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`
+      }
+    })
+
+    const json = await response.json();
+    if (response.ok) {
+     setBanks(json.data)
+     setTotal(json.bank_Cash)
+    }
+  }
+  catch (error) {
+    setNewMessage(toast.error('Server is not Responding...'));
+    setLoading(false);
+  }
+}
+
 const { getCurrCountryData } = CurrCountryHook();
 const { getCategoryData } = CategoryHook();
 const { getPaymentViaData } = PaymentViaHook();
@@ -99,6 +124,7 @@ const fetchData = async () => {
     // Use Promise.all to execute all promises concurrently
     await Promise.all([
       getCashInHandData(),
+      getBankCash(),
       getOverAllPayments(),
       getCurrCountryData(),
       getCategoryData(),
@@ -264,7 +290,7 @@ useEffect(() => {
     }
   };
 
-  const apiUrl = process.env.REACT_APP_API_URL;
+  
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
@@ -303,7 +329,9 @@ useEffect(() => {
         setLoading(false);
       }
       if (response.ok) {
-      getOverAllPayments()
+        getCashInHandData()
+        getBankCash()
+        getOverAllPayments()
         setNewMessage(toast.success(json.message));
         getPaymentsOut();
         setLoading(false);
@@ -373,7 +401,7 @@ useEffect(() => {
   return (
     <>
     
-<Paper className="col-md-12 py-3 mb-1 px-2 detail_table">
+<Paper className="col-md-10 py-3 mb-1 px-2 detail_table">
         {!option && (
          
          <form className="py-3 px-2" onSubmit={handleForm}>
@@ -389,9 +417,7 @@ useEffect(() => {
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}</span>
-                                 <span className="btn submit_btn m-1 py-2 px-3 bg-info border-0">
-  Cash In Hand : {cashInHand && cashInHand.total_Cash }
-</span>
+                                
 
                 <button className="btn submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
@@ -748,7 +774,44 @@ useEffect(() => {
             </form>
           
         )}
-      </Paper>      
+      </Paper>    
+
+         <Paper className="col-md-2 mb-1 px-0 border total_cash">
+        <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
+        <h6 className="bg-success text-white py-2 text-center my-0">{(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
+        <div className="details">
+          <h6 className="text-center my-0 bg-info text-white py-2 my-0 ">Cash Details</h6>
+          <TableContainer className='detail_table' component={Paper} >
+  <Table stickyHeader>
+    <TableHead className="thead">
+      <TableRow>
+        <TableCell className='label border text-center' style={{ width: '50%' }}>Source</TableCell>
+        <TableCell className='label border text-center' style={{ width: '50%' }}>Payment</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+    <TableRow>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>Cash</TableCell>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{(cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0)}</TableCell>
+        </TableRow>
+      {banks && banks.map((data, index) => (
+        <TableRow key={index}>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.payment_Via}</TableCell>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.total_payment}</TableCell>
+        </TableRow>
+      ))}
+      <TableRow>
+        <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Total In Banks</TableCell>
+        <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{total && total}</TableCell>
+      </TableRow>
+
+      
+    </TableBody>
+  </Table>
+</TableContainer>
+
+        </div>
+      </Paper>
     </>
   );
 }

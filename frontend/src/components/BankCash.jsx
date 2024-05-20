@@ -192,9 +192,6 @@ const getBankCash = async () => {
 
   const [option, setOption] = useState(0)
   const [current, setCurrent] = useState(0)
-
-
-
   // Editing Mode 
   const [editMode, setEditMode] = useState(false);
   const [editedEntry, setEditedEntry] = useState({});
