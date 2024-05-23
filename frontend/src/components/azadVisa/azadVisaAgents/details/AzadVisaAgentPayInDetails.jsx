@@ -232,7 +232,7 @@ export default function AzadVisaAgentPayInDetails() {
 
 
 
-    //Editing for Agent Person 
+    //Editing for Azad Agent Person 
     const [editMode2, setEditMode2] = useState(false);
     const [editedEntry2, setEditedEntry2] = useState({});
     const [editedRowIndex2, setEditedRowIndex2] = useState(null);
@@ -366,88 +366,6 @@ export default function AzadVisaAgentPayInDetails() {
         )
     })
 
-    const printMainTable = () => {
-        // Convert JSX to HTML string
-        const printContentString = `
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Agents</th>
-            <th>TVPI_PKR</th>
-            <th>TPI_PKR</th>
-            <th>Total_Cash_Out</th>
-            <th>RPI_PKR</th>
-            <th>TVPI_Oth_Curr</th>
-            <th>TPI_Curr</th>
-            <th>RPI_Curr</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filteredTotalPaymentIn.map((entry, index) => `
-            <tr key="${entry?._id}">
-              <td>${index + 1}</td>
-              <td>${String(entry.supplierName)}</td>
-              <td>${String(entry.total_Azad_Visa_Price_In_PKR)}</td>
-              <td>${String(entry.total_Payment_In)}</td>
-              <td>${String(entry.total_Cash_Out)}</td>
-              <td>${String(entry.total_Azad_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
-              <td>${String(entry.total_Azad_Visa_Price_In_Curr)}</td>
-              <td>${String(entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.total_Azad_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.status)}</td>
-                       
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-      <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-    `;
-
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-            // Write the print content to the new window
-            printWindow.document.write(`
-        <html>
-          <head>
-            <title>Agents Payment In Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-
-            // Trigger print dialog
-            printWindow.print();
-            // Close the new window after printing
-            printWindow.onafterprint = function () {
-                printWindow.close();
-            };
-        } else {
-            // Handle if the new window cannot be opened
-            alert('Could not open print window. Please check your browser settings.');
-        }
-    };
-
 
     // individual payments filters
     const [dateFrom, setDateFrom] = useState('')
@@ -476,107 +394,7 @@ export default function AzadVisaAgentPayInDetails() {
         );
       }),
   }))
-    const printPaymentsTable = () => {
-        // Convert JSX to HTML string
-        const printContentString = `
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>SN</th>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Payment_Via</th>
-        <th>Payment_Type</th>
-        <th>Slip_No</th>
-        <th>Details</th>
-        <th>Payment_In</th>
-        <th>Cash_Out</th>
-        <th>Invoice</th>
-        <th>Payment_In_Curr</th>
-        <th>CUR_Rate</th>
-        <th>CUR_Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-      ${filteredIndividualPayments.map((entry, index) =>
-            entry.payment.map((paymentItem, paymentIndex) => `
-          <tr key="${entry?._id}-${paymentIndex}">
-            <td>${index * entry.payment.length + paymentIndex + 1}</td>
-            <td>${String(paymentItem?.date)}</td>
-            <td>${String(paymentItem?.category)}</td>
-            <td>${String(paymentItem?.payment_Via)}</td>
-            <td>${String(paymentItem?.payment_Type)}</td>
-            <td>${String(paymentItem?.slip_No)}</td>
-            <td>${String(paymentItem?.details)}</td>
-            <td>${String(paymentItem?.payment_In)}</td>
-            <td>${String(paymentItem?.cash_Out)}</td>
-            <td>${String(paymentItem?.invoice)}</td>
-            <td>${String(paymentItem?.payment_In_Curr)}</td>
-            <td>${String(paymentItem?.curr_Rate)}</td>
-            <td>${String(paymentItem?.curr_Amount)}</td>
-          </tr>
-        `).join('')
-        )}
-        <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    
-        <td></td>
-        <td>Total</td>
-        <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
-        <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
-        </tr>
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
-
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-            // Write the print content to the new window
-            printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedSupplier} Payment In Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
-
-            // Trigger print dialog
-            printWindow.print();
-            // Close the new window after printing
-            printWindow.onafterprint = function () {
-                printWindow.close();
-            };
-        } else {
-            // Handle if the new window cannot be opened
-            alert('Could not open print window. Please check your browser settings.');
-        }
-    };
-
+   
     const [date3, setDate3] = useState('')
     const [name, setName] = useState('')
     const [pp_No, setPP_NO] = useState('')
@@ -609,94 +427,7 @@ export default function AzadVisaAgentPayInDetails() {
                 ),
         }))
 
-    const printPersonsTable = () => {
-        // Convert JSX to HTML string
-        const printContentString = `
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>SN</th>
-        <th>Date</th>
-        <th>Name</th>
-        <th>PP#</th>
-        <th>Entry_Mode</th>
-        <th>Company</th>
-        <th>Trade</th>
-        <th>Country</th>
-        <th>Final_Status</th>
-        <th>Flight_Date</th>
-        <th>VPI_PKR</th>
-        <th>VPI_Oth_Curr</th>
-        <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-      ${filteredPersons.map((entry, index) =>
-            entry.persons.map((person, personIndex) => `
-          <tr key="${person?._id}">
-            <td>${index * entry.persons.length + personIndex + 1}</td>
-            <td>${String(person?.entry_Date)}</td>
-            <td>${String(person?.name)}</td>
-            <td>${String(person?.pp_No)}</td>
-            <td>${String(person?.entry_Mode)}</td>
-            <td>${String(person?.company)}</td>
-            <td>${String(person?.trade)}</td>
-            <td>${String(person?.country)}</td>
-            <td>${String(person?.final_Status)}</td>
-            <td>${String(person?.flight_Date)}</td>
-            <td>${String(person?.azad_Visa_Price_In_PKR)}</td>
-            <td>${String(person?.azad_Visa_Price_In_Curr)}</td>
-            <td>${String(person?.status)}</td>
-          </tr>
-        `).join('')
-        )}
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
-
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-            // Write the print content to the new window
-            printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedSupplier}'s Persons Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
-
-            // Trigger print dialog
-            printWindow.print();
-            // Close the new window after printing
-            printWindow.onafterprint = function () {
-                printWindow.close();
-            };
-        } else {
-            // Handle if the new window cannot be opened
-            alert('Could not open print window. Please check your browser settings.');
-        }
-    };
+   
 
     
   const downloadExcel = () => {
@@ -882,6 +613,734 @@ const changeStatus = async (myStatus) => {
     }
   }
 
+  const printMainTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Agents Payment In Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Agents</th>
+            <th>TVPI PKR</th>
+            <th>TPI PKR</th>
+            <th>Total Cash Out</th>
+            <th>RPI PKR</th>
+            <th>TVPI Oth Curr</th>
+            <th>TPI Curr</th>
+            <th>RPI Curr</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        ${filteredTotalPaymentIn.map((entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${String(entry.supplierName)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_In_PKR)}</td>
+            <td>${String(entry.total_Payment_In)}</td>
+            <td>${String(entry.total_Cash_Out)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_In_Curr)}</td>
+            <td>${String(entry.total_Payment_In_Curr)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
+            <td>${String(entry.status)}</td>           
+          </tr>
+        `).join('')}
+        <tr>
+          <td colspan="1"></td>
+          <td>Total</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Azad_Visa_Price_In_PKR, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Azad_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out), 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Azad_Visa_Price_In_Curr, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In_Curr, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Azad_Visa_Price_In_Curr - entry.total_Payment_In_Curr), 0))}</td>
+          <td></td>
+        </tr>
+      </tbody>
+      
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Agents Payment In Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+  
+  const printPaymentsTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Agent: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Azad Agent Payment Invoices</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Payment Via</th>
+            <th>Payment Type</th>
+            <th>Slip No</th>
+            <th>Details</th>
+            <th>Payment In</th>
+            <th>Cash Out</th>
+            <th>Curr Rate</th>
+            <th>Curr Amount</th>
+            <th>Invoice</th>
+            <th>Payment In Curr</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filteredIndividualPayments.map((entry, index) =>
+            entry.payment.map((paymentItem, paymentIndex) => `
+              <tr key="${entry?._id}-${paymentIndex}">
+                <td>${index * entry.payment.length + paymentIndex + 1}</td>
+                <td>${String(paymentItem?.date)}</td>
+                <td>${String(paymentItem?.category)}</td>
+                <td>${String(paymentItem?.payment_Via)}</td>
+                <td>${String(paymentItem?.payment_Type)}</td>
+                <td>${String(paymentItem?.slip_No)}</td>
+                <td>${String(paymentItem?.details)}</td>
+                <td>${String(paymentItem?.payment_In)}</td>
+                <td>${String(paymentItem?.cash_Out)}</td>
+                <td>${String(paymentItem?.curr_Rate)}</td>
+                <td>${String(paymentItem?.curr_Amount)}</td>
+                <td>${String(paymentItem?.invoice)}</td>
+                <td>${String(paymentItem?.payment_In_Curr)}</td>
+              </tr>
+            `).join('')
+          ).join('')}
+          <tr>
+            <td colspan="6"></td>
+            <td>Total</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Rate, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier} Payment In Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+  const printPersonsTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Agent: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Azad Agent Persons Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>PP#</th>
+            <th>Entry Mode</th>
+            <th>Company</th>
+            <th>Trade</th>
+            <th>Country</th>
+            <th>Final Status</th>
+            <th>Flight Date</th>
+            <th>VPI PKR</th>
+            <th>VPI Oth Curr</th>
+            <th>Paid PKR</th>
+            <th>Remaining PKR</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filteredPersons.map((entry, index) =>
+            entry.persons.map((person, personIndex) => `
+              <tr key="${person?._id}">
+                <td>${index * entry.persons.length + personIndex + 1}</td>
+                <td>${String(person?.entry_Date)}</td>
+                <td>${String(person?.name)}</td>
+                <td>${String(person?.pp_No)}</td>
+                <td>${String(person?.entry_Mode)}</td>
+                <td>${String(person?.company)}</td>
+                <td>${String(person?.trade)}</td>
+                <td>${String(person?.country)}</td>
+                <td>${String(person?.final_Status)}</td>
+                <td>${String(person?.flight_Date)}</td>
+                <td>${String(person?.azad_Visa_Price_In_PKR)}</td>
+                <td>${String(person?.azad_Visa_Price_In_Curr)}</td>
+                <td>${String(person?.total_In)}</td>
+                <td>${String(person?.remaining_Price)}</td>
+                <td>${String(person?.status)}</td>
+              </tr>
+            `).join('')
+          ).join('')}
+          <tr>
+            <td colspan="9"></td>
+            <td>Total</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.azad_Visa_Price_In_PKR, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.azad_Visa_Price_In_Curr, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier}'s Persons Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+
+
+  const printPaymentInvoice = (paymentItem) => {
+      // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Azad Agent Payment Invoice</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Azad Agent Name</th>
+            <th>Category</th>
+            <th>Payment Via</th>
+            <th>Payment Type</th>
+            <th>Slip No</th>
+            <th>Details</th>
+            <th>Payment In</th>
+            <th>Cash Out</th>
+            <th>Curr Rate</th>
+            <th>Curr Amount</th>
+            <th>Payment In Curr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>${String(paymentItem?.date)}</td>
+            <td>${String(selectedSupplier)}</td>
+            <td>${String(paymentItem?.category)}</td>
+            <td>${String(paymentItem?.payment_Via)}</td>
+            <td>${String(paymentItem?.payment_Type)}</td>
+            <td>${String(paymentItem?.slip_No)}</td>
+            <td>${String(paymentItem?.details)}</td>
+            <td>${String(paymentItem?.payment_In)}</td>
+            <td>${String(paymentItem?.cash_Out)}</td>
+            <td>${String(paymentItem?.curr_Rate)}</td>
+            <td>${String(paymentItem?.curr_Amount)}</td>
+            <td>${String(paymentItem?.payment_In_Curr)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .logo {
+          max-width: 100px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .invoice {
+          flex-grow: 0;
+          text-align: left;
+          font-size: 20px;
+        }
+        .date{
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier} Payment In Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
+  
+  const printPerson = (person) => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Agent: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Azad Agent Person Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>PP#</th>
+            <th>Entry Mode</th>
+            <th>Company</th>
+            <th>Trade</th>
+            <th>Country</th>
+            <th>Final Status</th>
+            <th>Flight Date</th>
+            <th>VPI PKR</th>
+            <th>VPI Oth Curr</th>
+            <th>Paid PKR</th>
+            <th>Remaining PKR</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>${String(person?.entry_Date)}</td>
+            <td>${String(person?.name)}</td>
+            <td>${String(person?.pp_No)}</td>
+            <td>${String(person?.entry_Mode)}</td>
+            <td>${String(person?.company)}</td>
+            <td>${String(person?.trade)}</td>
+            <td>${String(person?.country)}</td>
+            <td>${String(person?.final_Status)}</td>
+            <td>${String(person?.flight_Date)}</td>
+            <td>${String(person?.azad_Visa_Price_In_PKR)}</td>
+            <td>${String(person?.azad_Visa_Price_In_Curr)}</td>
+            <td>${String(person?.total_In)}</td>
+            <td>${String(person?.remaining_Price)}</td>
+            <td>${String(person?.status)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .logo {
+          max-width: 100px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .invoice {
+          flex-grow: 0;
+          text-align: left;
+          font-size: 20px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier}'s Persons Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+
+  const downloadPaymentInvoice = (payment) => {
+    const data = [];
+    // Flatten the array of objects to get an array of individual payments
+    // Iterate over individual payments and push all fields
+      const rowData = {
+        Agent:selectedSupplier,
+        Date: payment.date,
+        Category: payment.category,
+        Payment_Via: payment.payment_Via,
+        Payment_Type: payment.payment_Type,
+        Slip_No: payment.slip_No,
+        Details: payment.details,
+        Payment_In: payment.payment_In,
+        Cash_Out: payment.cash_Out,
+        Invoice: payment.invoice,
+        Payment_In_Curr: payment.payment_In_Curr,
+        Curr_Rate: payment.curr_Rate,
+        Curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+  }
+
+  const downloadPersonDetails = (payment) => {
+    const data = [];
+      const rowData = {
+        Agent:selectedSupplier,
+        Entry_Date: payment.entry_Date,
+        Name: payment.name,
+        PP_No: payment.pp_No,
+        Entry_Mode: payment.entry_Mode,
+        Company: payment.company,
+        Trade: payment.trade,
+        Country: payment.country,
+        Final_Status: payment.final_Status,
+        Flight_Date: payment.flight_Date,
+        Visa_Price_In_PKR: payment.azad_Visa_Price_In_PKR,
+        Total_In: payment.total_In,
+        Total_Cash_Out: payment.cash_Out,
+        Remaining_PKR: payment.azad_Visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+        Visa_Price_In_Curr: payment.azad_Visa_Price_In_Curr,
+        Remaining_Curr: payment.remaining_Curr,
+        Status: payment.status
+      };
+
+    data.push(rowData);
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
+  }
 
 
     return (
@@ -1014,7 +1473,7 @@ const changeStatus = async (myStatus) => {
                                                     <TableCell className='border data_td p-1 '>
                                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                                             {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
-                                                            <button className='btn delete_btn' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
+                                                            <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                                         </div>
                                                        
                                                     </TableCell>
@@ -1054,7 +1513,7 @@ const changeStatus = async (myStatus) => {
         const cashOut = parseFloat(paymentItem.total_Cash_Out);
         const paymentOut = parseFloat(paymentItem.total_Payment_In);
         
-        // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
+        // Add the difference between total_Azad_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
         const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
         return total + netCashOut;
     }, 0)}
@@ -1090,7 +1549,7 @@ const changeStatus = async (myStatus) => {
                     <div className="col-md-12 my-2">
                         <div className="d-flex justify-content-between supplier_Name">
                             <div className="left d-flex">
-                                <h4 className='d-inline '>Agent Name: <span>{selectedSupplier}</span></h4>
+                                <h4 className='d-inline '>Azad Agent Name: <span>{selectedSupplier}</span></h4>
 
                             </div>
                             <div className="right">
@@ -1280,29 +1739,31 @@ const changeStatus = async (myStatus) => {
 
                                                             </>
                                                         )}
-                                                        <TableCell className='border data_td p-1 '>
-                                                            {editMode && editedRowIndex === index ? (
-                                                                // Render Save button when in edit mode for the specific row
-                                                                <>
-                                                                    <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                        <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                                                        <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                                         <TableCell className='border data_td p-1 text-center'>
+                            {editMode && editedRowIndex === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
-                                                                    </div>
+                                </div>
 
-                                                                </>
+                              </>
 
-                                                            ) : (
-                                                                // Render Edit button when not in edit mode or for other rows
-                                                                <>
-                                                                    <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                        <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
-                                                                        <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
-                                                                    </div>
-                                                                    
-                                                                </>
-                                                            )}
-                                                        </TableCell>
+                            ) : (
+                              // Render Edit button when not in edit mode or for other rows
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+                               
+                              </>
+                            )}
+                          </TableCell>
                                                     </TableRow>
                                                 ))}
 
@@ -1633,29 +2094,31 @@ const changeStatus = async (myStatus) => {
 
                                                         </>
                                                     )}
-                                                    <TableCell className='border data_td p-1 '>
-                                                        {editMode2 && editedRowIndex2 === index ? (
-                                                            // Render Save button when in edit mode for the specific row
-                                                            <>
-                                                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                    <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn'>Cancel</button>
-                                                                    <button onClick={() => handleUpdatePerson()} className='btn save_btn' disabled={loading5}>{loading5 ? "Saving..." : "Save"}</button>
+                                                      <TableCell className='border data_td p-1 text-center'>
+                            {editMode2 && editedRowIndex2 === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn btn-sm' disabled={loading4}><i className="fa-solid fa-check"></i></button>
 
-                                                                </div>
+                                </div>
 
-                                                            </>
+                              </>
 
-                                                        ) : (
-                                                            // Render Edit button when not in edit mode or for other rows
-                                                            <>
-                                                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                    <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn'>Edit</button>
-                                                                    <button className='btn delete_btn'  onClick={() => deletePerson(person)} disabled={loading2}>{loading2 ? "Deleting..." : "Delete"}</button>
-                                                                </div>
-                                                                
-                                                            </>
-                                                        )}
-                                                    </TableCell>
+                            ) : (
+                              
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPerson(person)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPersonDetails(person)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePerson(person)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+
+                              </>
+                            )}
+                          </TableCell>
 
                                                 </TableRow>
                                             ))}

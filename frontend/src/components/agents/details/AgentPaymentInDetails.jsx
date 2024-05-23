@@ -713,21 +713,34 @@ export default function AgentPaymentInDetails() {
           </tr>
         </thead>
         <tbody>
-          ${filteredTotalPaymentIn.map((entry, index) => `
-            <tr key="${entry?._id}">
-              <td>${index + 1}</td>
-              <td>${String(entry.supplierName)}</td>
-              <td>${String(entry.total_Visa_Price_In_PKR)}</td>
-              <td>${String(entry.total_Payment_In)}</td>
-              <td>${String(entry.total_Cash_Out)}</td>
-              <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
-              <td>${String(entry.total_Visa_Price_In_Curr)}</td>
-              <td>${String(entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.status)}</td>           
-            </tr>
-          `).join('')}
-        </tbody>
+        ${filteredTotalPaymentIn.map((entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${String(entry.supplierName)}</td>
+            <td>${String(entry.total_Visa_Price_In_PKR)}</td>
+            <td>${String(entry.total_Payment_In)}</td>
+            <td>${String(entry.total_Cash_Out)}</td>
+            <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
+            <td>${String(entry.total_Visa_Price_In_Curr)}</td>
+            <td>${String(entry.total_Payment_In_Curr)}</td>
+            <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
+            <td>${String(entry.status)}</td>           
+          </tr>
+        `).join('')}
+        <tr>
+          <td colspan="1"></td>
+          <td>Total</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_In_PKR, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out), 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_In_Curr, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In_Curr, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr), 0))}</td>
+          <td></td>
+        </tr>
+      </tbody>
+      
       </table>
       <style>
         /* Add your custom print styles here */
@@ -829,10 +842,10 @@ export default function AgentPaymentInDetails() {
             <th>Details</th>
             <th>Payment In</th>
             <th>Cash Out</th>
-            <th>Invoice</th>
-            <th>Payment In Curr</th>
             <th>Curr Rate</th>
             <th>Curr Amount</th>
+            <th>Invoice</th>
+            <th>Payment In Curr</th>
           </tr>
         </thead>
         <tbody>
@@ -848,18 +861,22 @@ export default function AgentPaymentInDetails() {
                 <td>${String(paymentItem?.details)}</td>
                 <td>${String(paymentItem?.payment_In)}</td>
                 <td>${String(paymentItem?.cash_Out)}</td>
-                <td>${String(paymentItem?.invoice)}</td>
-                <td>${String(paymentItem?.payment_In_Curr)}</td>
                 <td>${String(paymentItem?.curr_Rate)}</td>
                 <td>${String(paymentItem?.curr_Amount)}</td>
+                <td>${String(paymentItem?.invoice)}</td>
+                <td>${String(paymentItem?.payment_In_Curr)}</td>
               </tr>
             `).join('')
           ).join('')}
           <tr>
-            <td colspan="7">Total</td>
+            <td colspan="6"></td>
+            <td>Total</td>
             <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
             <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
-            <td colspan="4"></td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Rate, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
+            <td></td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -964,6 +981,8 @@ export default function AgentPaymentInDetails() {
             <th>Flight Date</th>
             <th>VPI PKR</th>
             <th>VPI Oth Curr</th>
+            <th>Paid PKR</th>
+            <th>Remaining PKR</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -983,10 +1002,21 @@ export default function AgentPaymentInDetails() {
                 <td>${String(person?.flight_Date)}</td>
                 <td>${String(person?.visa_Price_In_PKR)}</td>
                 <td>${String(person?.visa_Price_In_Curr)}</td>
+                <td>${String(person?.total_In)}</td>
+                <td>${String(person?.remaining_Price)}</td>
                 <td>${String(person?.status)}</td>
               </tr>
             `).join('')
           ).join('')}
+          <tr>
+            <td colspan="9"></td>
+            <td>Total</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_PKR, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_Curr, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
       <style>
@@ -1089,9 +1119,9 @@ export default function AgentPaymentInDetails() {
             <th>Details</th>
             <th>Payment In</th>
             <th>Cash Out</th>
-            <th>Payment In Curr</th>
             <th>Curr Rate</th>
             <th>Curr Amount</th>
+            <th>Payment In Curr</th>
           </tr>
         </thead>
         <tbody>
@@ -1106,9 +1136,9 @@ export default function AgentPaymentInDetails() {
             <td>${String(paymentItem?.details)}</td>
             <td>${String(paymentItem?.payment_In)}</td>
             <td>${String(paymentItem?.cash_Out)}</td>
-            <td>${String(paymentItem?.payment_In_Curr)}</td>
             <td>${String(paymentItem?.curr_Rate)}</td>
             <td>${String(paymentItem?.curr_Amount)}</td>
+            <td>${String(paymentItem?.payment_In_Curr)}</td>
           </tr>
         </tbody>
       </table>
@@ -1220,6 +1250,8 @@ export default function AgentPaymentInDetails() {
             <th>Flight Date</th>
             <th>VPI PKR</th>
             <th>VPI Oth Curr</th>
+            <th>Paid PKR</th>
+            <th>Remaining PKR</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -1237,6 +1269,8 @@ export default function AgentPaymentInDetails() {
             <td>${String(person?.flight_Date)}</td>
             <td>${String(person?.visa_Price_In_PKR)}</td>
             <td>${String(person?.visa_Price_In_Curr)}</td>
+            <td>${String(person?.total_In)}</td>
+            <td>${String(person?.remaining_Price)}</td>
             <td>${String(person?.status)}</td>
           </tr>
         </tbody>
@@ -1369,6 +1403,7 @@ export default function AgentPaymentInDetails() {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
+  
   return (
     <>
       {!option &&
@@ -1593,7 +1628,6 @@ export default function AgentPaymentInDetails() {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             const paymentOut = parseFloat(paymentItem.total_Payment_In);
-
                             // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
                             const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
                             return total + netCashOut;
