@@ -262,8 +262,7 @@ export default function ExpenseDetails() {
         Payment_Type:payments.payment_Type,
         Slip_No:payments.slip_No,
         Details:payments.details,
-        Invoice:payments.invoice,
-        Total:filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)
+        Invoice:payments.invoice
       }
 
       data.push(rowData);
@@ -271,7 +270,7 @@ export default function ExpenseDetails() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'expenses.xlsx');
+    XLSX.writeFile(wb, 'expense.xlsx');
   }
   const printExpenseTable = () => {
      // Function to format the date as dd-MM-yyyy
@@ -399,7 +398,7 @@ export default function ExpenseDetails() {
   };
 
 
-  const printExpense = () => {
+  const printExpense = (entry) => {
     // Function to format the date as dd-MM-yyyy
     const formatDate = (date) => {
      const d = new Date(date);
@@ -424,7 +423,6 @@ export default function ExpenseDetails() {
    <table class='print-table'>
      <thead>
        <tr>
-       <th>SN</th>
        <th>Date</th>
        <th>Person</th>
        <th>E_Category</th>
@@ -437,9 +435,8 @@ export default function ExpenseDetails() {
        </tr>
      </thead>
      <tbody>
-     ${filteredExpenses.map((entry, index) => `
-         <tr key="${entry?._id}">
-           <td>${index + 1}</td>
+    
+         <tr>
            <td>${String(entry?.date)}</td>
            <td>${String(entry?.name)}</td>
            <td>${String(entry?.expCategory)}</td>
@@ -450,8 +447,6 @@ export default function ExpenseDetails() {
            <td>${String(entry?.details)}</td>
            <td>${String(entry?.invoice)}</td>
          </tr>
-       `).join('')
-     }
    </tbody>
    </table>
    <style>

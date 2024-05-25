@@ -231,81 +231,6 @@ export default function AssetsPaymentsDetails() {
     )
   })
 
-  const printMainTable = () => {
-    // Convert JSX to HTML string
-    const printContentString = `
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Date</th>
-            <th>Assets</th>
-            <th>TPI_PKR</th>
-            <th>TPO_PKR</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filteredTotalPaymentIn.map((entry, index) => `
-            <tr key="${entry?._id}">
-              <td>${index + 1}</td>
-              <td>${String(entry.createdAt)}</td>
-              <td>${String(entry.assetName)}</td>
-              <td>${String(entry.total_Payment_In)}</td>
-              <td>${String(entry.total_Payment_Out)}</td>
-              <td>${String(entry.balance)}</td>
-            
-             
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-      <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-    `;
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Payment Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  };
-
   // individual payments filters
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
@@ -332,26 +257,267 @@ export default function AssetsPaymentsDetails() {
         );
       }),
   }))
+  const printMainTable = () => {
+    // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
 
-  const printPaymentsTable = () => {
     // Convert JSX to HTML string
     const printContentString = `
+      <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Assets Details (WCIH)</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Assets</th>
+            <th>Total Payment In PKR</th>
+            <th>Total Payment Out PKR</th>
+            <th>Total Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filteredTotalPaymentIn.map((entry, index) => `
+            <tr key="${entry?._id}">
+              <td>${index + 1}</td>
+              <td>${String(entry.createdAt)}</td>
+              <td>${String(entry.assetName)}</td>
+              <td>${String(entry.total_Payment_In)}</td>
+              <td>${String(entry.total_Payment_Out)}</td>
+              <td>${String(entry.balance)}</td>
+              
+            </tr>
+          `).join('')}
+          <tr>
+          <td></td>
+          <td></td>
+          <td>Total</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.balance, 0))}</td>
+        </tr>
+        </tbody>
+      </table>
+      <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+    `;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Assets Payment Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+
+
+  const printDetails = (entry) => {
+    // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Asset Details (WCIH)</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Assets</th>
+            <th>Total Payment In PKR</th>
+            <th>Total Payment Out PKR</th>
+            <th>Total Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr">
+             
+              <td>${String(entry.createdAt)}</td>
+              <td>${String(entry.assetName)}</td>
+              <td>${String(entry.total_Payment_In)}</td>
+              <td>${String(entry.total_Payment_Out)}</td>
+              <td>${String(entry.balance)}</td>
+              
+            </tr>
+        </tbody>
+      </table>
+      <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+    `;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Assets Payment Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
+  const printPaymentsTable = () => {
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Supplier: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Assets Payments Details</h1>
+      </div>
+      <hr/>
     <table class='print-table'>
       <thead>
         <tr>
         <th>SN</th>
         <th>Date</th>
         <th>Category</th>
-        <th>Payment_Via</th>
-        <th>Payment_Type</th>
-        <th>Slip_No</th>
+        <th>Payment Via</th>
+        <th>Payment Type</th>
+        <th>Slip No</th>
         <th>Details</th>
-        <th>Payment_In</th>
-        <th>Payment_Out</th>
+        <th>Payment In</th>
+        <th>Payment Out</th>
         <th>Invoice</th>
-        <th>Payment_In_Curr</th>
-        <th>CUR_Rate</th>
-        <th>CUR_Amount</th>
+        <th>Payment In Curr</th>
+        <th>Curr Rate</th>
+        <th>Curr Amount</th>
         </tr>
       </thead>
       <tbody>
@@ -393,6 +559,22 @@ export default function AssetsPaymentsDetails() {
     body {
       background-color: #fff;
     }
+    .print-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+      font-size: 24px;
+    }
+    .date {
+      flex-grow: 0;
+      text-align: right;
+      font-size: 20px;
+    }
     .print-table {
       width: 100%;
       border-collapse: collapse;
@@ -416,7 +598,7 @@ export default function AssetsPaymentsDetails() {
       printWindow.document.write(`
       <html>
         <head>
-          <title>${selectedSupplier} Payment In Details</title>
+          <title>${selectedSupplier} Payment Details</title>
         </head>
         <body class='bg-dark'>${printContentString}</body>
       </html>
@@ -434,6 +616,129 @@ export default function AssetsPaymentsDetails() {
     }
   };
 
+  const printPaymentInvoice = (paymentItem) => {   
+ // Function to format the date as dd-MM-yyyy
+const formatDate = (date) => {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+const formattedDate = formatDate(new Date());
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+    <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Asset Payment Invoice</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+        <th>Date</th>
+        <th>Asset</th>
+        <th>Category</th>
+        <th>Payment Via</th>
+        <th>Payment Type</th>
+        <th>Slip No</th>
+        <th>Details</th>
+        <th>Payment In</th>
+        <th>Payment Out</th>
+        <th>Payment In Curr</th>
+        <th>Curr Rate</th>
+        <th>Curr Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+     
+          <tr>
+         
+            <td>${String(paymentItem?.date)}</td>
+            <td>${String(selectedSupplier)}</td>
+            <td>${String(paymentItem?.category)}</td>
+            <td>${String(paymentItem?.payment_Via)}</td>
+            <td>${String(paymentItem?.payment_Type)}</td>
+            <td>${String(paymentItem?.slip_No)}</td>
+            <td>${String(paymentItem?.details)}</td>
+            <td>${String(paymentItem?.payment_In)}</td>
+            <td>${String(paymentItem?.payment_Out)}</td>
+            <td>${String(paymentItem?.payment_In_Curr)}</td>
+            <td>${String(paymentItem?.curr_Rate)}</td>
+            <td>${String(paymentItem?.curr_Amount)}</td>
+          </tr>
+       
+    
+    </tbody>
+    </table>
+    <style>
+    /* Add your custom print styles here */
+    body {
+      background-color: #fff;
+    }
+    .print-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+      font-size: 24px;
+    }
+    .date {
+      flex-grow: 0;
+      text-align: right;
+      font-size: 20px;
+    }
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .print-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+  `;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier} Payment Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+
+
   const downloadExcel = () => {
     const data = [];
     // Iterate over entries and push all fields
@@ -441,9 +746,10 @@ export default function AssetsPaymentsDetails() {
       const rowData = {
         SN: index + 1,
         Date:payments.createdAt,
-        assetName:payments.assetName,
+        Asset:payments.assetName,
         total_Payment_In:payments.total_Payment_In,
         total_Payment_Out:payments.total_Payment_Out,
+        Balance:payments.balance,
 
       };
       data.push(rowData);
@@ -452,8 +758,31 @@ export default function AssetsPaymentsDetails() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'assetsPayments.xlsx');
+    XLSX.writeFile(wb, 'CDWC_Payments_In.xlsx');
   };
+
+
+  const downloadDetails = (payments) => {
+    const data = [];
+    // Iterate over entries and push all fields
+  
+      const rowData = {
+        Date:payments.createdAt,
+        Asset:payments.assetName,
+        Total_Payment_In:payments.total_Payment_In,
+        Total_Payment_Out:payments.total_Payment_Out,
+        Balance:payments.balance,
+    
+
+      };
+      data.push(rowData);
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'CDWC_Payments_In.xlsx');
+  };
+
 
 
   const downloadIndividualPayments = () => {
@@ -464,16 +793,16 @@ export default function AssetsPaymentsDetails() {
         SN: index + 1,
         Date:payments.date,
         Category:payments.category,
-        payment_Via:payments.payment_Via,
-        payment_Type:payments.payment_Type,
-        slip_No: payments.slip_No,
-        details:payments.details,
-        payment_In:payments.payment_In,
-        payment_Out:payments.payment_Out,
-        invoice:payments.invoice,
-        payment_In_Curr:payments.payment_In_Curr,
-        curr_Rate:payments.curr_Rate,
-        curr_Amount:payments.curr_Amount
+        Payment_Via:payments.payment_Via,
+        Payment_Type:payments.payment_Type,
+        Slip_No: payments.slip_No,
+        Details:payments.details,
+        Payment_In:payments.payment_In,
+        Payment_Out:payments.payment_Out,
+        Invoice:payments.invoice,
+        Payment_In_Curr:payments.payment_In_Curr,
+        Curr_Rate:payments.curr_Rate,
+        Curr_Amount:payments.curr_Amount
       }
 
       data.push(rowData);
@@ -485,7 +814,31 @@ export default function AssetsPaymentsDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
   }
 
+  const downloadPaymentInvoice = (payments) => {
+    const data = [];
+   
+      const rowData = {
+        Asset: selectedSupplier,
+        Date:payments.date,
+        Category:payments.category,
+        Payment_Via:payments.payment_Via,
+        Payment_Type:payments.payment_Type,
+        Slip_No: payments.slip_No,
+        Details:payments.details,
+        Payment_In:payments.payment_In,
+        Payment_Out:payments.payment_Out,
+        Invoice:payments.invoice,
+        Payment_In_Curr:payments.payment_In_Curr,
+        Curr_Rate:payments.curr_Rate,
+        Curr_Amount:payments.curr_Amount
+      }
 
+      data.push(rowData);
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+  }
 
 
   return (
@@ -578,7 +931,12 @@ export default function AssetsPaymentsDetails() {
                       </TableCell>
                       
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                      <button className='btn delete_btn' onClick={() => deleteTotalPayment(entry)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
+                      <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                      <button onClick={() => printDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                      <button onClick={() => downloadDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                      <button className='btn delete_btn btn-sm' onClick={() => deleteTotalPayment(entry)} disabled={isLoading}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+                     
                      
                       </TableCell>
                     </TableRow>
@@ -816,13 +1174,13 @@ export default function AssetsPaymentsDetails() {
                               <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                             </>
                           )}
-                          <TableCell className='border data_td p-1 '>
+                         <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                  <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading1}>{loading1 ? "Saving..." : "Save"}</button>
+                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading1}><i className="fa-solid fa-check"></i></button>
 
                                 </div>
 
@@ -832,8 +1190,10 @@ export default function AssetsPaymentsDetails() {
                               // Render Edit button when not in edit mode or for other rows
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
-                                  <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
+                                <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
                                 </div>
                                
                               </>

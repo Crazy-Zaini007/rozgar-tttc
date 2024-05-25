@@ -1077,7 +1077,7 @@ export default function AgentPaymentInDetails() {
       // Handle if the new window cannot be opened
       alert('Could not open print window. Please check your browser settings.');
     }
-  };
+  }
   
 
 

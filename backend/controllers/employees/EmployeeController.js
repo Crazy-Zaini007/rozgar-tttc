@@ -449,8 +449,9 @@ const delSalary = async (req, res) => {
           let allPayments=month.payment
          let paymentFind=allPayments.find(p=>p._id.toString()===paymentId.toString())
          if(paymentFind){
-          
-         let paymentToDelete=allPayments.filter(p=>p._id.toString() !==paymentId.toString())
+          console.log('paymentFind 1',paymentFind)
+          month.payment =allPayments.filter(p=>p._id.toString() !==paymentId.toString())
+          console.log('paymentFind 2',paymentFind)
          const cashInHandDoc = await CashInHand.findOne({});
          if (!cashInHandDoc) {
            const newCashInHandDoc = new CashInHand();
@@ -482,7 +483,7 @@ const delSalary = async (req, res) => {
            payment_Type:paymentFind.payment_Type,
            slip_No:paymentFind.slip_No,
            payment_Out:paymentFind.payment_Out,
-           payment_In_Curr:paymentToDelete.payment_In_Curr,
+           payment_In_Curr:paymentFind.payment_In_Curr,
            slip_Pic:paymentFind.slip_Pic,
            date:paymentFind.date,
            curr_Rate:paymentFind.curr_Rate,

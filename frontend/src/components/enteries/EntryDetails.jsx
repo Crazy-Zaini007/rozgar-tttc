@@ -1766,13 +1766,13 @@ const EntryDetails = () => {
                                 {/* Repeat similar blocks for other non-editable fields */}
                               </>
                             )}
-                            <TableCell className='border data_td p-1 '>
+                            <TableCell className='border data_td p-1 text-center'>
                               {editMode && editedRowIndex === index ? (
                                 // Render Save button when in edit mode for the specific row
                                 <>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                    <button onClick={() => handleUpdate()} className='btn save_btn' disabled={updateLoading}>{updateLoading ? "Saving..." : "Save"}</button>
+                                    <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                    <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={updateLoading}><i className="fa-solid fa-check"></i></button>
 
                                   </div>
 
@@ -1782,28 +1782,10 @@ const EntryDetails = () => {
                                 // Render Edit button when not in edit mode or for other rows
                                 <>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button onClick={() => handleEditClick(entry, index)} className='btn edit_btn'>Edit</button>
-                                    <button className='btn delete_btn' onClick={() => deleteEntry(entry)} disabled={delLoading}>{delLoading ? "Deleting..." : "Delete"}</button>
+                                    <button onClick={() => handleEditClick(entry, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                    <button className='btn delete_btn btn-sm' onClick={() => deleteEntry(entry)} disabled={delLoading}><i className="fa-solid fa-trash-can"></i></button>
                                   </div>
-                                  {/* Deleting Modal  */}
-                                  <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div className="modal-dialog p-0">
-                                      <div className="modal-content p-0">
-                                        <div className="modal-header border-0">
-                                          <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                          {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                        </div>
-                                        <div className="modal-body text-center p-0">
-
-                                          <p>Do you want to Delete the Record?</p>
-                                        </div>
-                                        <div className="text-end m-2">
-                                          <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                          <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                  
                                 </>
                               )}
                             </TableCell>

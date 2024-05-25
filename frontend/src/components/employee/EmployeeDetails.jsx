@@ -114,12 +114,12 @@ export default function EmployeeDetails() {
     const [editMode, setEditMode] = useState(false);
     const [editedEntry, setEditedEntry] = useState({});
     const [editedRowIndex, setEditedRowIndex] = useState(null);
-
+let sr_No=0;
     const handleEditClick = (paymentItem, index) => {
         setEditMode(!editMode);
         setEditedEntry(paymentItem);
-        setEditedRowIndex(index); // Set the index of the row being edited
-    };
+        setEditedRowIndex(index);
+    }
 
 
     const handleInputChange = (e, field) => {
@@ -501,7 +501,25 @@ export default function EmployeeDetails() {
 
     const printMainTable = () => {
         // Convert JSX to HTML string
+        const formatDate = (date) => {
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+          };
+        
+          const formattedDate = formatDate(new Date());
+        
         const printContentString = `
+        <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Employees Details</h1>
+      </div>
+      <hr/>
       <table class='print-table'>
         <thead>
           <tr>
@@ -517,8 +535,6 @@ export default function EmployeeDetails() {
             <th>Salary Type</th>
             <th>Remaining</th>
             <th>Address</th>
-            <th>Open</th>
-            <th>Close</th>
           </tr>
         </thead>
         <tbody>
@@ -535,17 +551,38 @@ export default function EmployeeDetails() {
               <td>${String(entry.cnic)}</td>
               <td>${String(entry.salaryType)}</td>
               <td>${String(entry.remaining)}</td>
-              <td>${String(entry.address)}</td>
-              <td>${String(entry.open)}</td>
-              <td>${String(entry.close)}</td>       
+              <td>${String(entry.address)}</td>      
             </tr>
           `).join('')}
+          <tr>
+          <td colspan="9"></td>
+          <td>Total</td>
+          <td>${String(filteredTotalEmployee.reduce((total, entry) => total + entry.remaining, 0))}</td>          
+          <td></td>
+        </tr>
         </tbody>
       </table>
       <style>
       /* Add your custom print styles here */
       body {
         background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
       }
       .print-table {
         width: 100%;
@@ -572,7 +609,7 @@ export default function EmployeeDetails() {
           <head>
             <title>Employees Payment Details</title>
           </head>
-          <body class='bg-dark'>${printContentString}</body>
+          <body>${printContentString}</body>
         </html>
       `);
 
@@ -587,6 +624,126 @@ export default function EmployeeDetails() {
             alert('Could not open print window. Please check your browser settings.');
         }
     }
+
+
+    const printEmployeeDetails = (entry) => {
+        // Convert JSX to HTML string
+        const formatDate = (date) => {
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+          };
+        
+          const formattedDate = formatDate(new Date());
+        
+        const printContentString = `
+        <div class="print-header">
+      <p class="invoice">Employee: ${entry.employeeName}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Employee Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>Entry Date</th>
+            <th>Employee</th>
+            <th>Fahter Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Emergency Phone</th>
+            <th>DOB</th>
+            <th>CNIC</th>
+            <th>Salary Type</th>
+            <th>Remaining</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr key="${entry?._id}">
+              <td>${String(entry.entry_Date)}</td>       
+              <td>${String(entry.employeeName)}</td>
+              <td>${String(entry.fatherName)}</td>
+              <td>${String(entry.email)}</td>
+              <td>${String(entry.phone)}</td>
+              <td>${String(entry.emergencyPhone)}</td>
+              <td>${String(entry.dob)}</td>
+              <td>${String(entry.cnic)}</td>
+              <td>${String(entry.salaryType)}</td>
+              <td>${String(entry.remaining)}</td>
+              <td>${String(entry.address)}</td>      
+            </tr>
+        </tbody>
+      </table>
+      <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+    `;
+
+        // Create a new window for printing
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            // Write the print content to the new window
+            printWindow.document.write(`
+        <html>
+          <head>
+            <title>Employees Payment Details</title>
+          </head>
+          <body>${printContentString}</body>
+        </html>
+      `);
+
+            // Trigger print dialog
+            printWindow.print();
+            // Close the new window after printing
+            printWindow.onafterprint = function () {
+                printWindow.close();
+            };
+        } else {
+            // Handle if the new window cannot be opened
+            alert('Could not open print window. Please check your browser settings.');
+        }
+    }
+
 
     // individual payments filters
     const [newDateFrom, setNewDateFrom] = useState('')
@@ -624,8 +781,26 @@ export default function EmployeeDetails() {
 
 
         const printPaymentsTable = () => {
+            const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+              };
+            
+              const formattedDate = formatDate(new Date());
             // Convert JSX to HTML string
             const printContentString = `
+            <div class="print-header">
+            <p class="invoice">Employee: ${selectedEmployee}</p>
+              <h1 class="title">ROZGAR TTTC</h1>
+            <p class="date">Date: ${formattedDate}</p>
+            </div>
+            <div class="print-header">
+              <h1 class="title">Emloyee Payment Invoices</h1>
+            </div>
+            <hr/>
                 <table class='print-table'>
                   <thead>
                     <tr>
@@ -636,7 +811,7 @@ export default function EmployeeDetails() {
                         <th>Payment_Type</th>
                         <th>Slip_No</th>
                         <th>Details</th>
-                        <th>Salary</th>
+                        <th>Paid Payment</th>
                         <th>Invoice</th>
                     </tr>
                   </thead>
@@ -651,7 +826,7 @@ export default function EmployeeDetails() {
                                     <td>${String(paymentItem?.payment_Via)}</td>
                                     <td>${String(paymentItem?.payment_Type)}</td>
                                     <td>${String(paymentItem?.slip_No)}</td>
-                                    <td>${String(paymentItem?.details)}</td>
+                                    <td>${String(paymentItem?.details,"")}</td>
                                     <td>${String(paymentItem?.payment_Out)}</td>
                                     <td>${String(paymentItem?.invoice)}</td>
                                 </tr>
@@ -667,6 +842,7 @@ export default function EmployeeDetails() {
                         <td></td>
                         <td>Total</td>
                         <td>${filteredIndividualPayments.reduce((total, entry) => total + entry.payments.reduce((acc, paymentData) => acc + paymentData.payment.reduce((innerAcc, paymentItem) => innerAcc + parseFloat(paymentItem.payment_Out), 0), 0), 0)}</td>
+                        <td></td>
                     </tr>
                   </tbody>
                 </table>
@@ -674,6 +850,28 @@ export default function EmployeeDetails() {
                   /* Add your custom print styles here */
                   body {
                     background-color: #fff;
+                  }
+                  .print-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  }
+                 
+                  .title {
+                    flex-grow: 1;
+                    text-align: center;
+                    margin: 0;
+                    font-size: 24px;
+                  }
+                  .invoice {
+                    flex-grow: 0;
+                    text-align: left;
+                    font-size: 20px;
+                  }
+                  .date{
+                    flex-grow: 0;
+                    text-align: right;
+                    font-size: 20px;
                   }
                   .print-table {
                     width: 100%;
@@ -714,8 +912,125 @@ export default function EmployeeDetails() {
                 // Handle if the new window cannot be opened
                 alert('Could not open print window. Please check your browser settings.');
             }
-        };
+        }
         
+        const printPaymentInvoice = (paymentItem) => {
+            const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+              };
+            
+              const formattedDate = formatDate(new Date());
+            // Convert JSX to HTML string
+            const printContentString = `
+            <div class="print-header">
+            <p class="invoice">Invoice: ${paymentItem.invoice}</p>
+              <h1 class="title">ROZGAR TTTC</h1>
+            <p class="date">Date: ${formattedDate}</p>
+            </div>
+            <div class="print-header">
+              <h1 class="title">Emloyee Payment Invoice</h1>
+            </div>
+            <hr/>
+                <table class='print-table'>
+                  <thead>
+                    <tr>
+                    <th>Date</th>
+                        <th>Employee</th>
+                        <th>Category</th>
+                        <th>Payment_Via</th>
+                        <th>Payment_Type</th>
+                        <th>Slip_No</th>
+                        <th>Details</th>
+                        <th>Paid Payment</th>
+                        <th>Invoice</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                                <tr>
+                                    <td>${String(paymentItem?.date)}</td>
+                                    <td>${String(selectedEmployee)}</td>
+                                    <td>${String(paymentItem?.category)}</td>
+                                    <td>${String(paymentItem?.payment_Via)}</td>
+                                    <td>${String(paymentItem?.payment_Type)}</td>
+                                    <td>${String(paymentItem?.slip_No)}</td>
+                                    <td>${String(paymentItem?.details,"")}</td>
+                                    <td>${String(paymentItem?.payment_Out)}</td>
+                                    <td>${String(paymentItem?.invoice)}</td>
+                                </tr>
+                  </tbody>
+                </table>
+                <style>
+                  /* Add your custom print styles here */
+                  body {
+                    background-color: #fff;
+                  }
+                  .print-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  }
+                 
+                  .title {
+                    flex-grow: 1;
+                    text-align: center;
+                    margin: 0;
+                    font-size: 24px;
+                  }
+                  .invoice {
+                    flex-grow: 0;
+                    text-align: left;
+                    font-size: 20px;
+                  }
+                  .date{
+                    flex-grow: 0;
+                    text-align: right;
+                    font-size: 20px;
+                  }
+                  .print-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                  }
+                  .print-table th, .print-table td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                  }
+                  .print-table th {
+                    background-color: #f2f2f2;
+                  }
+                </style>
+            `;
+        
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+                // Write the print content to the new window
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${selectedEmployee} Payment Details</title>
+                        </head>
+                        <body class='bg-dark'>${printContentString}</body>
+                    </html>
+                `);
+        
+                // Trigger print dialog
+                printWindow.print();
+                // Close the new window after printing
+                printWindow.onafterprint = function () {
+                    printWindow.close();
+                };
+            } else {
+                // Handle if the new window cannot be opened
+                alert('Could not open print window. Please check your browser settings.');
+            }
+        }
 
     const [date3, setDate3] = useState('')
     const [dateFrom, setDateFrom] = useState('')
@@ -738,8 +1053,26 @@ export default function EmployeeDetails() {
             // Calculate total days
             const totalDays = filteredVacations.reduce((total, entry) => total + entry.vacation.reduce((acc, vacation) => acc + parseFloat(vacation.days), 0), 0);
         
+            const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+              };
+            
+              const formattedDate = formatDate(new Date());
             // Convert JSX to HTML string
             const printContentString = `
+            <div class="print-header">
+            <p class="invoice">Employee: ${selectedEmployee}</p>
+              <h1 class="title">ROZGAR TTTC</h1>
+            <p class="date">Date: ${formattedDate}</p>
+            </div>
+            <div class="print-header">
+              <h1 class="title">Emloyee Vacations Details</h1>
+            </div>
+            <hr/>
                 <table class='print-table'>
                     <thead>
                         <tr>
@@ -778,6 +1111,28 @@ export default function EmployeeDetails() {
                     body {
                         background-color: #fff;
                     }
+                    .print-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+                     
+                      .title {
+                        flex-grow: 1;
+                        text-align: center;
+                        margin: 0;
+                        font-size: 24px;
+                      }
+                      .invoice {
+                        flex-grow: 0;
+                        text-align: left;
+                        font-size: 20px;
+                      }
+                      .date{
+                        flex-grow: 0;
+                        text-align: right;
+                        font-size: 20px;
+                      }
                     .print-table {
                         width: 100%;
                         border-collapse: collapse;
@@ -819,6 +1174,122 @@ export default function EmployeeDetails() {
             }
         };
         
+        const printVacation = (vacation) => {
+            // Calculate total days
+            const totalDays = filteredVacations.reduce((total, entry) => total + entry.vacation.reduce((acc, vacation) => acc + parseFloat(vacation.days), 0), 0);
+        
+            const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+              };
+            
+              const formattedDate = formatDate(new Date());
+            // Convert JSX to HTML string
+            const printContentString = `
+            <div class="print-header">
+            <p class="invoice">Employee: ${selectedEmployee}</p>
+              <h1 class="title">ROZGAR TTTC</h1>
+            <p class="date">Date: ${formattedDate}</p>
+            </div>
+            <div class="print-header">
+              <h1 class="title">Emloyee Vacation Details</h1>
+            </div>
+            <hr/>
+                <table class='print-table'>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Date From</th>
+                            <th>Date To</th>
+                            <th>Days</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                                <tr >
+                                    <td>${String(vacation?.date)}</td>
+                                    <td>${String(vacation?.dateFrom)}</td>
+                                    <td>${String(vacation?.dateTo)}</td>
+                                    <td>${String(vacation?.days)}</td>
+                                    <td>${String(vacation?.timeIn)}</td>
+                                    <td>${String(vacation?.timeOut)}</td>
+                                </tr>
+                           
+                    </tbody>
+                </table>
+                <style>
+                    /* Add your custom print styles here */
+                    body {
+                        background-color: #fff;
+                    }
+                    .print-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+                     
+                      .title {
+                        flex-grow: 1;
+                        text-align: center;
+                        margin: 0;
+                        font-size: 24px;
+                      }
+                      .invoice {
+                        flex-grow: 0;
+                        text-align: left;
+                        font-size: 20px;
+                      }
+                      .date{
+                        flex-grow: 0;
+                        text-align: right;
+                        font-size: 20px;
+                      }
+                    .print-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 20px 0;
+                    }
+                    .print-table th, .print-table td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    .print-table th {
+                        background-color: #f2f2f2;
+                    }
+                </style>
+            `;
+        
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+                // Write the print content to the new window
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${selectedEmployee}'s Vacations Details</title>
+                        </head>
+                        <body class='bg-dark'>${printContentString}</body>
+                    </html>
+                `);
+        
+                // Trigger print dialog
+                printWindow.print();
+                // Close the new window after printing
+                printWindow.onafterprint = function () {
+                    printWindow.close();
+                };
+            } else {
+                // Handle if the new window cannot be opened
+                alert('Could not open print window. Please check your browser settings.');
+            }
+        };
+
 
         const [month, setMonth] = useState('');
 // Filter and map over the employees array
@@ -834,16 +1305,32 @@ const filteredSalaryMonths = employees
             payments: filteredPayments,
         };
     });
-console.log('filteredSalaryMonths',filteredSalaryMonths)
 
         const printSalaryMonthsTable = () => {
             // Calculate total days
              const totalPaid = filteredSalaryMonths.reduce((total, entry) => total + entry.payments.reduce((acc, payment) => acc + parseFloat(payment.salary - payment.remain), 0), 0);
              const totalRemain = filteredSalaryMonths.reduce((total, entry) => total + entry.payments.reduce((acc, payment) => acc + parseFloat(payment.remain), 0), 0);
 
-        
+             const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+              };
+            
+              const formattedDate = formatDate(new Date());
             // Convert JSX to HTML string
             const printContentString = `
+            <div class="print-header">
+            <p class="invoice">Employee: ${selectedEmployee}</p>
+              <h1 class="title">ROZGAR TTTC</h1>
+            <p class="date">Date: ${formattedDate}</p>
+            </div>
+            <div class="print-header">
+              <h1 class="title">Employee Salary Months Record</h1>
+            </div>
+            <hr/>
                 <table class='print-table'>
                     <thead>
                         <tr>
@@ -880,6 +1367,141 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                     body {
                         background-color: #fff;
                     }
+                    .print-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+                     
+                      .title {
+                        flex-grow: 1;
+                        text-align: center;
+                        margin: 0;
+                        font-size: 24px;
+                      }
+                      .invoice {
+                        flex-grow: 0;
+                        text-align: left;
+                        font-size: 20px;
+                      }
+                      .date{
+                        flex-grow: 0;
+                        text-align: right;
+                        font-size: 20px;
+                      }
+                    .print-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 20px 0;
+                    }
+                    .print-table th, .print-table td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    .print-table th {
+                        background-color: #f2f2f2;
+                    }
+                </style>
+            `;
+        
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+                // Write the print content to the new window
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>${selectedEmployee}'s Vacations Details</title>
+                        </head>
+                        <body class='bg-dark'>${printContentString}</body>
+                    </html>
+                `);
+        
+                // Trigger print dialog
+                printWindow.print();
+                // Close the new window after printing
+                printWindow.onafterprint = function () {
+                    printWindow.close();
+                };
+            } else {
+                // Handle if the new window cannot be opened
+                alert('Could not open print window. Please check your browser settings.');
+            }
+        };
+
+        const printSalaryMonth = (payment) => {
+           
+
+             const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+              };
+            
+              const formattedDate = formatDate(new Date());
+            // Convert JSX to HTML string
+            const printContentString = `
+            <div class="print-header">
+            <p class="invoice">Employee: ${selectedEmployee}</p>
+              <h1 class="title">ROZGAR TTTC</h1>
+            <p class="date">Date: ${formattedDate}</p>
+            </div>
+            <div class="print-header">
+              <h1 class="title">Employee Salary Month Details</h1>
+            </div>
+            <hr/>
+                <table class='print-table'>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Salary</th>
+                            <th>Paid</th>
+                            <th>Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                                <tr>
+                                    <td>${String(payment?.month)}</td>
+                                    <td>${String(payment?.salary)}</td>
+                                    <td>${payment?.salary-payment?.remain}</td>
+                                    <td>${String(payment?.remain)}</td>
+                                   
+                                </tr>
+                           
+                       
+                    </tbody>
+                </table>
+                <style>
+                    /* Add your custom print styles here */
+                    body {
+                        background-color: #fff;
+                    }
+                    .print-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+                     
+                      .title {
+                        flex-grow: 1;
+                        text-align: center;
+                        margin: 0;
+                        font-size: 24px;
+                      }
+                      .invoice {
+                        flex-grow: 0;
+                        text-align: left;
+                        font-size: 20px;
+                      }
+                      .date{
+                        flex-grow: 0;
+                        text-align: right;
+                        font-size: 20px;
+                      }
                     .print-table {
                         width: 100%;
                         border-collapse: collapse;
@@ -938,9 +1560,6 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                 SalaryType: payments.salaryType,
                 Remaining: payments.remaining,
                 Address: payments.address,
-                Close: payments.close,
-                Open: payments.open
-
             }
 
             data.push(rowData);
@@ -951,6 +1570,32 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         XLSX.writeFile(wb, 'Employees Details.xlsx');
     }
+
+
+    const downloadEmployeeDetails = (payments) => {
+        const data = [];
+        // Iterate over entries and push all fields
+       
+            const rowData = {
+                Employee: payments.employeeName,
+                FatherName: payments.fatherName,
+                Email: payments.email,
+                Phone: payments.phone,
+                EmergencyPhone: payments.emergencyPhone,
+                Dob: payments.dob,
+                Cnic: payments.cnic,
+                SalaryType: payments.salaryType,
+                Remaining: payments.remaining,
+                Address: payments.address,
+            }
+
+            data.push(rowData);
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'Employee Details.xlsx');
+    }
+
 
     const downloadIndividualPayments = () => {
         const data = [];
@@ -972,7 +1617,7 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                 Payment_Type: paymentItem.payment_Type,
                                 Slip_No: paymentItem.slip_No,
                                 Details: paymentItem.details,
-                                Payment_In: paymentItem.payment_Out,
+                                Payment_Out: paymentItem.payment_Out,
                                 Invoice: paymentItem.invoice,
                             };
                             data.push(rowData);
@@ -993,6 +1638,34 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
             console.log("No payment data found.");
         }
     };
+
+    const downloadPaymentInvoice = (paymentItem) => {
+        const data = [];
+                            const rowData = {
+                                Employee:selectedEmployee,
+                                Date: paymentItem.date,
+                                Category: paymentItem.category,
+                                Payment_Via: paymentItem.payment_Via,
+                                Payment_Type: paymentItem.payment_Type,
+                                Slip_No: paymentItem.slip_No,
+                                Details: paymentItem.details,
+                                Payment_Out: paymentItem.payment_Out,
+                                Invoice: paymentItem.invoice,
+                            };
+                            data.push(rowData);
+    
+        if (data.length > 0) {
+            // Create worksheet and workbook using XLSX utils
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+            // Download the workbook as an Excel file
+            XLSX.writeFile(wb, `${selectedEmployee} Payment Invoice.xlsx`);
+        } else {
+            console.log("No payment data found.");
+        }
+    };
+
     const downloadVacations = () => {
         const data = [];
        
@@ -1127,8 +1800,6 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                             <TableCell className='label border' style={{ width: '18.28%' }}>Salary_Type</TableCell>
                                                             <TableCell className='label border' style={{ width: '18.28%' }}>Remaining</TableCell>
                                                             <TableCell className='label border' style={{ width: '18.28%' }}>Address</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell>
                                                             {route !== "/rozgar/reports/payroll_reports" &&
                                                                 <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}> Actions</TableCell>
                                                             }
@@ -1182,17 +1853,12 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                                                 <input type='text' value={editedEntry3.address} onChange={(e) => handleEmployeeInputChange(e, 'address')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                                                                <input type='checkbox' value={editedEntry3.open} disabled />
-                                                                            </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                                                                <input type='checkbox' value={editedEntry3.close} disabled />
-                                                                            </TableCell>
+                                                                           
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                <TableCell className='border data_td p-1 '>
+                                                                                <TableCell className='border data_td p-1 text-center'>
                                                                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                        <button onClick={() => setEditMode3(!editMode3)} className='btn delete_btn'>Cancel</button>
-                                                                                        <button onClick={() => handleEmployeeUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                                                                        <button onClick={() => setEditMode3(!editMode3)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                                                                        <button onClick={() => handleEmployeeUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
                                                                                     </div>
 
@@ -1236,36 +1902,16 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                                                                 {entry.address}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                                                                <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
-                                                                            </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
-                                                                                {entry.close === false ? "Not Closed" : "Closed"}
-                                                                            </TableCell>
+                                                                          
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                <TableCell className='border data_td p-1 '>
+                                                                                <TableCell className='border data_td p-1 text-center'>
                                                                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                        <button onClick={() => handleEmployeeEditClick(entry, index)} className='btn edit_btn'>Edit</button>
-                                                                                        <button className='btn delete_btn' onClick={() => deleteEmployee(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
+                                                                                        <button onClick={() => handleEmployeeEditClick(entry, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                                                                        <button onClick={() => printEmployeeDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                                                                        <button onClick={() => downloadEmployeeDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                                                                        <button className='btn delete_btn btn-sm' onClick={() => deleteEmployee(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                                                                     </div>
-                                                                                    <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div className="modal-dialog p-0">
-                                                                                            <div className="modal-content p-0">
-                                                                                                <div className="modal-header border-0">
-                                                                                                    <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                                                                                    {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                                                                                </div>
-                                                                                                <div className="modal-body text-center p-0">
-
-                                                                                                    <p>Do you want to Delete the Employee Record?</p>
-                                                                                                </div>
-                                                                                                <div className="text-end m-2">
-                                                                                                    <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                                                                                    <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                   
                                                                                 </TableCell>
                                                                             }
                                                                         </>
@@ -1380,7 +2026,6 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
                                                                 <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
                                                                 <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
                                                                 <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
@@ -1402,18 +2047,14 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                         <TableBody>
                                                             {filteredIndividualPayments.map((filteredData) => (
                                                                 <React.Fragment key={filteredData._id}>
-                                                                    {/* Render payment items */}
                                                                     {filteredData.payments && filteredData.payments.map((paymentData, paymentIndex) => (
                                                                         <React.Fragment key={paymentIndex}>
                                                                             {paymentData.payment && paymentData.payment.map((paymentItem, index) => (
                                                                                 <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                                                                                    {/* Render table cells for each payment item */}
-                                                                                    {/* Edit mode */}
-                                                                                    {editMode && editedRowIndex === index ? (
+                                                                                 
+                                                                                    {editMode && editedRowIndex === paymentItem._id ? (
                                                                                         <>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='text' value={index + 1} readonly />
-                                                                                            </TableCell>
+                                                                                          
                                                                                             <TableCell className='border data_td p-1 '>
                                                                                                 <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                                                                                             </TableCell>
@@ -1475,8 +2116,7 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                                         </>
                                                                                     ) : (
                                                                                         <>
-                                                                                            {/* Render static data */}
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
+
                                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
                                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
                                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
@@ -1493,24 +2133,26 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                                     )}
                                                                                     {/* Actions */}
                                                                                     {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                        <TableCell className='border data_td p-1 '>
-                                                                                            {editMode && editedRowIndex === index ? (
+                                                                                        <TableCell className='border data_td p-1 text-center'>
+                                                                                            {editMode && editedRowIndex === paymentItem._id ? (
                                                                                                 // Render Save button when in edit mode for the specific row
                                                                                                 <>
                                                                                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                        <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                                                                                        <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                                                                                        <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                                                                                        <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
                                                                                                     </div>
 
                                                                                                 </>
 
                                                                                             ) : (
-                                                                                                // Render Edit button when not in edit mode or for other rows
+                                                                                                
                                                                                                 <>
                                                                                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                        <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
-                                                                                                        <button className='btn delete_btn' onClick={() => deletePaymentOut(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
+                                                                                                        <button onClick={() => handleEditClick(paymentItem, paymentItem._id)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                                                                                        <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                                                                                        <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                                                                                        <button className='btn delete_btn btn-sm' onClick={() => deletePaymentOut(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
                                                                                                     </div>
                                                                                                    
                                                                                                 </>
@@ -1681,13 +2323,13 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                                 </>
                                                                             )}
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                <TableCell className='border data_td p-1 text-center' style={{ width: '18.28%' }}>
                                                                                     {editMode2 && editedRowIndex2 === index ? (
                                                                                         // Render Save button when in edit mode for the specific row
                                                                                         <>
                                                                                             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn'>Cancel</button>
-                                                                                                <button onClick={() => handleUpdateVacation()} className='btn save_btn' disabled={loading5}>{loading5 ? "Saving..." : "Save"}</button>
+                                                                                                <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                                                                                <button onClick={() => handleUpdateVacation()} className='btn save_btn btn-sm' disabled={loading5}><i className="fa-solid fa-check"></i></button>
 
                                                                                             </div>
 
@@ -1697,28 +2339,11 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                                         // Render Edit button when not in edit mode or for other rows
                                                                                         <>
                                                                                             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                <button onClick={() => handlePersonEditClick(vacation, index)} className='btn edit_btn'>Edit</button>
-                                                                                                <button className='btn delete_btn' onClick={() => deleteVacation(vacation)} disabled={loading2}>{loading2 ? "Deleting..." : "Delete"}</button>
+                                                                                                <button onClick={() => handlePersonEditClick(vacation, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                                                                        <button onClick={() => printVacation(vacation)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                                                                                <button className='btn delete_btn btn-sm' onClick={() => deleteVacation(vacation)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
                                                                                             </div>
-                                                                                            {/* Deleting Modal  */}
-                                                                                            <div className="modal fade delete_Modal p-0" data-bs-backdrop="static" id="deleteVacationModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div className="modal-dialog p-0">
-                                                                                                    <div className="modal-content p-0">
-                                                                                                        <div className="modal-header border-0">
-                                                                                                            <h5 className="modal-title" id="exampleModalLabel">Attention!</h5>
-                                                                                                            {/* <button type="button" className="btn-close shadow rounded" data-bs-dismiss="modal" aria-label="Close" /> */}
-                                                                                                        </div>
-                                                                                                        <div className="modal-body text-center p-0">
-
-                                                                                                            <p>Do you want to Delete the Vacation?</p>
-                                                                                                        </div>
-                                                                                                        <div className="text-end m-2">
-                                                                                                            <button type="button " className="btn rounded m-1 cancel_btn" data-bs-dismiss="modal" >Cancel</button>
-                                                                                                            <button type="button" className="btn m-1 confirm_btn rounded" data-bs-dismiss="modal" >Confirm</button>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
+                                                                                           
                                                                                         </>
                                                                                     )}
                                                                                 </TableCell>
@@ -1841,13 +2466,13 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                                 </>
                                                                             )}
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                <TableCell className='border data_td p-1 text-center' style={{ width: '18.28%' }}>
                                                                                     {editMode4 && editedRowIndex4 === index ? (
                                                                                         // Render Save button when in edit mode for the specific row
                                                                                         <>
                                                                                             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                <button onClick={() => setEditMode4(!editMode4)} className='btn delete_btn'>Cancel</button>
-                                                                                                <button onClick={() => handleSalaryMonthUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                                                                                <button onClick={() => setEditMode4(!editMode4)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                                                                                <button onClick={() => handleSalaryMonthUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
                                                                                             </div>
 
@@ -1857,8 +2482,9 @@ console.log('filteredSalaryMonths',filteredSalaryMonths)
                                                                                         // Render Edit button when not in edit mode or for other rows
                                                                                         <>
                                                                                             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                <button onClick={() => handleSalaryMonthEditClick(payment, index)} className='btn edit_btn'>Edit</button>
-                                                                                                <button className='btn delete_btn' onClick={() => deleteSalaryMonth(payment)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
+                                                                                                <button onClick={() => handleSalaryMonthEditClick(payment, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                                                                        <button onClick={() => printSalaryMonth(payment)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                                                                                <button className='btn delete_btn btn-sm' onClick={() => deleteSalaryMonth(payment)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                                                                             </div>
                                                                                            
                                                                                         </>
