@@ -229,15 +229,15 @@ export default function ExpenseDetails() {
     filteredExpenses.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        date:payments.date,
-        person_Name:payments.name,
-        expCategory:payments.expCategory,
+        Date:payments.date,
+        Expense_Person:payments.name,
+        ExpCategory:payments.expCategory,
         ExpAmount:payments.payment_Out,
-        payment_Via:payments.payment_Via,
-        payment_Type:payments.payment_Type,
-        slip_No:payments.slip_No,
-        details:payments.details,
-        invoice:payments.invoice,
+        Payment_Via:payments.payment_Via,
+        Payment_Type:payments.payment_Type,
+        Slip_No:payments.slip_No,
+        Details:payments.details,
+        Invoice:payments.invoice,
         Total:filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)
       }
 
@@ -250,12 +250,51 @@ export default function ExpenseDetails() {
     XLSX.writeFile(wb, 'expenses.xlsx');
   }
 
-{/* <td>${String(entry?.curr_Country)}</td>
-            <td>${String(entry?.curr_Rate)}</td>
-            <td>${String(entry?.curr_Amount)}</td> */}
+  
+  const downloadExpense = (payments) => {
+    const data = [];
+      const rowData = {
+        Date:payments.date,
+        Expense_Person:payments.name,
+        ExpCategory:payments.expCategory,
+        ExpAmount:payments.payment_Out,
+        Payment_Via:payments.payment_Via,
+        Payment_Type:payments.payment_Type,
+        Slip_No:payments.slip_No,
+        Details:payments.details,
+        Invoice:payments.invoice,
+        Total:filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)
+      }
+
+      data.push(rowData);
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'expenses.xlsx');
+  }
   const printExpenseTable = () => {
+     // Function to format the date as dd-MM-yyyy
+     const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     // Convert JSX to HTML string
     const printContentString = `
+    <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Expenses Details</h1>
+      </div>
+      <hr/>
     <table class='print-table'>
       <thead>
         <tr>
@@ -301,6 +340,23 @@ export default function ExpenseDetails() {
       body {
         background-color: #fff;
       }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
       .print-table {
         width: 100%;
         border-collapse: collapse;
@@ -341,6 +397,125 @@ export default function ExpenseDetails() {
       alert('Could not open print window. Please check your browser settings.');
     }
   };
+
+
+  const printExpense = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+     const d = new Date(date);
+     const day = String(d.getDate()).padStart(2, '0');
+     const month = String(d.getMonth() + 1).padStart(2, '0');
+     const year = d.getFullYear();
+     return `${day}-${month}-${year}`;
+   };
+ 
+   const formattedDate = formatDate(new Date());
+ 
+   // Convert JSX to HTML string
+   const printContentString = `
+   <div class="print-header">
+       <h1 class="title">ROZGAR TTTC</h1>
+       <p class="date">Date: ${formattedDate}</p>
+     </div>
+     <div class="print-header">
+       <h1 class="title">Expense Details</h1>
+     </div>
+     <hr/>
+   <table class='print-table'>
+     <thead>
+       <tr>
+       <th>SN</th>
+       <th>Date</th>
+       <th>Person</th>
+       <th>E_Category</th>
+       <th>E_Amount</th>
+       <th>Payment_Via</th>
+       <th>Payment_Type</th>
+       <th>Slip_No</th>
+       <th>Details</th>
+       <th>Invoice</th>
+       </tr>
+     </thead>
+     <tbody>
+     ${filteredExpenses.map((entry, index) => `
+         <tr key="${entry?._id}">
+           <td>${index + 1}</td>
+           <td>${String(entry?.date)}</td>
+           <td>${String(entry?.name)}</td>
+           <td>${String(entry?.expCategory)}</td>
+           <td>${String(entry?.payment_Out)}</td>
+           <td>${String(entry?.payment_Via)}</td>
+           <td>${String(entry?.payment_Type)}</td>
+           <td>${String(entry?.slip_No)}</td>
+           <td>${String(entry?.details)}</td>
+           <td>${String(entry?.invoice)}</td>
+         </tr>
+       `).join('')
+     }
+   </tbody>
+   </table>
+   <style>
+     /* Add your custom print styles here */
+     body {
+       background-color: #fff;
+     }
+     .print-header {
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       margin-bottom: 20px;
+     }
+     .title {
+       flex-grow: 1;
+       text-align: center;
+       margin: 0;
+       font-size: 24px;
+     }
+     .date {
+       flex-grow: 0;
+       text-align: right;
+       font-size: 20px;
+     }
+     .print-table {
+       width: 100%;
+       border-collapse: collapse;
+       margin: 20px 0;
+     }
+     .print-table th, .print-table td {
+       border: 1px solid #ddd;
+       padding: 8px;
+       text-align: left;
+     }
+     .print-table th {
+       background-color: #f2f2f2;
+     }
+   </style>
+ `;
+
+   // Create a new window for printing
+   const printWindow = window.open('', '_blank');
+   if (printWindow) {
+     // Write the print content to the new window
+     printWindow.document.write(`
+     <html>
+       <head>
+         <title>Expense Details</title>
+       </head>
+       <body class='bg-dark'>${printContentString}</body>
+     </html>
+   `);
+
+     // Trigger print dialog
+     printWindow.print();
+     // Close the new window after printing
+     printWindow.onafterprint = function () {
+       printWindow.close();
+     };
+   } else {
+     // Handle if the new window cannot be opened
+     alert('Could not open print window. Please check your browser settings.');
+   }
+ };
 
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
@@ -536,8 +711,8 @@ export default function ExpenseDetails() {
 
 
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                    <button onClick={() => handleUpdateFrom()} className='btn save_btn' disabled={isLoading}>{isLoading ? "Saving..." : "Save"}</button>
+                                    <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                    <button onClick={() => handleUpdateFrom()} className='btn save_btn btn-sm' disabled={isLoading}><i className="fa-solid fa-check"></i></button>
 
                                   </div>
 
@@ -566,8 +741,10 @@ export default function ExpenseDetails() {
                                 <TableCell className='border data_td text-center'>{expense.slip_Pic ? <img src={expense.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                 <TableCell className='border data_td text-center'>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button onClick={() => handleEditClick(expense, outerIndex)} className='btn edit_btn'>Edit</button>
-                                    <button className='btn delete_btn' onClick={() => deleteExpense(expense)} disabled={isLoading}>{isLoading ? "Deleting..." : "Delete"}</button>
+                                    <button onClick={() => handleEditClick(expense, outerIndex)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                    <button onClick={() => printExpense(expense)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadExpense(expense)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                    <button className='btn delete_btn btn-sm' onClick={() => deleteExpense(expense)} disabled={isLoading}><i className="fa-solid fa-trash-can"></i></button>
                                   </div>
                                   
                                 </TableCell>

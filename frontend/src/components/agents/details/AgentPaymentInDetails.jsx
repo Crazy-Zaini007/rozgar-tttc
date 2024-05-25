@@ -579,8 +579,6 @@ export default function AgentPaymentInDetails() {
     const anotherData = []
 
     const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
-
-    // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
       const rowData = {
         SN: index + 1,
@@ -815,8 +813,7 @@ export default function AgentPaymentInDetails() {
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
-    };
-  
+    }
     const formattedDate = formatDate(new Date());
   
     // Convert JSX to HTML string
@@ -941,7 +938,7 @@ export default function AgentPaymentInDetails() {
       // Handle if the new window cannot be opened
       alert('Could not open print window. Please check your browser settings.');
     }
-  };
+  }
   
   const printPersonsTable = () => {
     // Function to format the date as dd-MM-yyyy
@@ -954,7 +951,7 @@ export default function AgentPaymentInDetails() {
     };
   
     const formattedDate = formatDate(new Date());
-  
+
     // Convert JSX to HTML string
     const printContentString = `
       <div class="print-header">

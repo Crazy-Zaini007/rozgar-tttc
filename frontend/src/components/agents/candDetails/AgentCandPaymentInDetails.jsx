@@ -459,87 +459,7 @@ export default function AgentCandPaymentInDetails() {
   })
 
 
-  const printMainTable = () => {
-    // Convert JSX to HTML string
-    const printContentString = `
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Agents</th>
-            <th>TVPI PKR</th>
-            <th>TPI PKR</th>
-            <th>Total Cash Out</th>
-            <th>RPI PKR</th>
-            <th>TVPI Oth Curr</th>
-            <th>TPI Curr</th>
-            <th>RPI Curr</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filteredTotalPaymentIn.map((entry, index) => `
-            <tr key="${entry?._id}">
-              <td>${index + 1}</td>
-              <td>${String(entry.supplierName)}</td>
-              <td>${String(entry.total_Visa_Price_In_PKR)}</td>
-              <td>${String(entry.total_Payment_In)}</td>
-              <td>${String(entry.total_Cash_Out)}</td>
-              <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
-              <td>${String(entry.total_Visa_Price_In_Curr)}</td>
-              <td>${String(entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
-              <td>${String(entry.status)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-      <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-    `;
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Agents Payment In Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  };
-
+  
 
   // individual payments filters
 
@@ -568,153 +488,7 @@ export default function AgentCandPaymentInDetails() {
           );
         }),
     }))
-  const printPaymentsTable = () => {
-    // Convert JSX to HTML string
-    const printContentString = `
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>SN</th>
-        <th>Date</th>
-        <th>Category</th>
-        <th>Payment Via</th>
-        <th>Payment Type</th>
-        <th>Slip No</th>
-        <th>Details</th>
-        <th>Payment In</th>
-        <th>Invoice</th>
-        <th>Candidates</th>
-        <th>Total Visa Price In PKR</th>
-        <th>Remaining PKR</th>
-        <th>Payment In Curr</th>
-        <th>CUR Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-      ${filteredIndividualPayments.map((entry, index) =>
-      entry.payment.map((paymentItem, paymentIndex) => `
-          <tr key="${entry?._id}-${paymentIndex}">
-            <td>${index * entry.payment.length + paymentIndex + 1}</td>
-            <td>${String(paymentItem?.date)}</td>
-            <td>${String(paymentItem?.category)}</td>
-            <td>${String(paymentItem?.payment_Via)}</td>
-            <td>${String(paymentItem?.payment_Type)}</td>
-            <td>${String(paymentItem?.slip_No)}</td>
-            <td>${String(paymentItem?.details)}</td>
-            <td>${String(paymentItem?.payment_In)}</td>
-            <td>${String(paymentItem?.invoice)}</td>
-            <td>${String(paymentItem?.payments.length)}</td>
-            <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
-            <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0))}</td>
-            <td>${String(paymentItem?.payment_In_Curr)}</td>
-            <td>${String(paymentItem?.curr_Amount)}</td>
-
-          </tr>
-        `).join('')
-    )}
-    <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Total</td>
-    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
-    <td></td>
-    <td></td>
-    <td>
-      ${
-        String(
-          filteredIndividualPayments.reduce(
-            (total, entry) =>
-              total +
-              entry.payment.reduce(
-                (acc, paymentItem) =>
-                  acc +
-                  paymentItem.payments.reduce(
-                    (subTotal, payment) => subTotal + payment.visa_Amount_PKR,
-                    0
-                  ),
-                0
-              ),
-            0
-          )
-        )
-      }
-    </td>
-    <td>
-      ${
-        String(
-          filteredIndividualPayments.reduce(
-            (total, entry) =>
-              total +
-              entry.payment.reduce(
-                (acc, paymentItem) =>
-                  acc +
-                  paymentItem.payments.reduce(
-                    (subTotal, payment) => subTotal + payment.new_Remain_PKR,
-                    0
-                  ),
-                0
-              ),
-            0
-          )
-        )
-      }
-      </td>
-    <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
-
-    </tr>
-
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedSupplier} Payment In Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
-
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  }
-
+ 
 
   const [date3, setDate3] = useState('')
   const [name, setName] = useState('')
@@ -726,7 +500,6 @@ export default function AgentCandPaymentInDetails() {
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
   const [status1, setStatus1] = useState("")
-
 
 
   const filteredPersons = agent_Payments_In
@@ -749,262 +522,8 @@ export default function AgentCandPaymentInDetails() {
         ),
     }))
 
-  const printPersonsTable = () => {
-    // Convert JSX to HTML string
-    const printContentString = `
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>SN</th>
-        <th>Date</th>
-        <th>Name</th>
-        <th>PP#</th>
-        <th>Entry_Mode</th>
-        <th>Company</th>
-        <th>Trade</th>
-        <th>Country</th>
-        <th>Final tatus</th>
-        <th>Flight Date</th>
-        <th>VPI PKR</th>
-        <th>Toatl In PKR</th>
-        <th>Toatl Cash Out</th>
-        <th>Remaining PKR</th>
-        <th>VPI Oth Curr</th>
-        <th>Remaining Curr</th>
-        <th>Status</th>
-        
-        </tr>
-      </thead>
-      <tbody>
-      ${filteredPersons.map((entry, index) =>
-      entry.persons.map((person, personIndex) => `
-          <tr key="${person?._id}">
-            <td>${index * entry.persons.length + personIndex + 1}</td>
-            <td>${String(person?.entry_Date)}</td>
-            <td>${String(person?.name)}</td>
-            <td>${String(person?.pp_No)}</td>
-            <td>${String(person?.entry_Mode)}</td>
-            <td>${String(person?.company)}</td>
-            <td>${String(person?.trade)}</td>
-            <td>${String(person?.country)}</td>
-            <td>${String(person?.final_Status)}</td>
-            <td>${String(person?.flight_Date)}</td>
-            <td>${String(person?.visa_Price_In_PKR)}</td>
-            <td>${String(person?.total_In)}</td>
-            <td>${String(person?.cash_Out)}</td>
-            <td>${String(person?.visa_Price_In_PKR) - String(person?.total_In) + String(person?.cash_Out)}</td>
-            <td>${String(person?.visa_Price_In_Curr)}</td>
-            <td>${String(person?.remaining_Curr)}</td>
-            <td>${String(person?.status)}</td>
+ 
 
-          </tr>
-        `).join('')
-    )}
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedSupplier}'s Persons Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
-
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  }
-
-
-
-  const downloadExcel = () => {
-    const data = [];
-    // Iterate over entries and push all fields
-    filteredTotalPaymentIn.forEach((payments, index) => {
-      const rowData = {
-        SN: index + 1,
-        Agents: payments.supplierName,
-        Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
-        Total_Payment_In: payments.total_Payment_In,
-        Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.total_Visa_Price_In_PKR - payments.total_Payment_In + payments.total_Cash_Out,
-        Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
-        Total_Payment_In_Curr: payments.total_Payment_In_Curr,
-        Remaining_Curr: payments.total_Visa_Price_In_Curr - payments.total_Payment_In_Curr,
-        Status: payments.status
-      }
-
-      data.push(rowData);
-    });
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Agents Payments Details.xlsx');
-  }
-
-  const downloadIndividualPayments = () => {
-    const data = [];
-    // Flatten the array of objects to get an array of individual payments
-    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payments);
-
-    // Iterate over individual payments and push all fields
-    individualPayments.forEach((payment, index) => {
-      const rowData = {
-        SN: index + 1,
-        Date: payment.date,
-        Category: payment.category,
-        payment_Via: payment.payment_Via,
-        payment_Type: payment.payment_Type,
-        slip_No: payment.slip_No,
-        details: payment.details,
-        payment_In: payment.payment_In,
-        invoice: payment.invoice,
-        candidates: payment.payments.length,
-        payment_In_Curr: payment.payment_In_Curr,
-        curr_Amount: payment.curr_Amount
-      };
-
-      data.push(rowData);
-    });
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-  }
-
-  const downloadPersons = () => {
-    const data = [];
-    // Flatten the array of objects to get an array of individual payments
-    const individualPayments = filteredPersons.flatMap(payment => payment.persons);
-
-    // Iterate over individual payments and push all fields
-    individualPayments.forEach((payment, index) => {
-      const rowData = {
-        SN: index + 1,
-        entry_Date: payment.entry_Date,
-        name: payment.name,
-        pp_No: payment.pp_No,
-        entry_Mode: payment.entry_Mode,
-        company: payment.company,
-        trade: payment.trade,
-        country: payment.country,
-        final_Status: payment.final_Status,
-        flight_Date: payment.flight_Date,
-        visa_Price_In_PKR: payment.visa_Price_In_PKR,
-        total_In: payment.total_In,
-        total_Cash_Out: payment.cash_Out,
-        Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
-        visa_Price_In_Curr: payment.visa_Price_In_Curr,
-        remaining_Curr: payment.remaining_Curr,
-        Status: payment.status
-      };
-
-      data.push(rowData);
-    });
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-  }
-
-  const downloadCombinedPayments = () => {
-    const combinedData = [];
-    const anotherData = []
-
-    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
-
-    // Iterate over individual payments and push all fields
-    individualPayments.forEach((payment, index) => {
-      const rowData = {
-        SN: index + 1,
-        Date: payment.date,
-        Category: payment.category,
-        Payment_Via: payment.payment_Via,
-        Payment_Type: payment.payment_Type,
-        Slip_No: payment.slip_No,
-        Details: payment.details,
-        Payment_In: payment.payment_In,
-        Cash_Out: payment.cash_Out,
-        Invoice: payment.invoice,
-        Candidate_Name: payment.cand_Name,
-        Payment_In_Curr: payment.payment_In_Curr,
-        Curr_Rate: payment.curr_Rate,
-        Curr_Amount: payment.curr_Amount
-      };
-
-      combinedData.push(rowData);
-    });
-
-    const individualPerons = filteredPersons.flatMap(payment => payment.persons);
-
-
-    // Iterate over individual payments and push all fields
-    individualPerons.forEach((payment, index) => {
-      const rowData = {
-        SN: index + 1,
-        Entry_Date: payment.entry_Date,
-        Name: payment.name,
-        PP_No: payment.pp_No,
-        Entry_Mode: payment.entry_Mode,
-        Company: payment.company,
-        Trade: payment.trade,
-        Country: payment.country,
-        Final_Status: payment.final_Status,
-        Flight_Date: payment.flight_Date,
-        Visa_Price_In_PKR: payment.visa_Price_In_PKR,
-        Total_In: payment.total_In,
-        Total_Cash_Out: payment.cash_Out,
-        Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
-        Visa_Price_In_Curr: payment.visa_Price_In_Curr,
-        Remaining_Curr: payment.remaining_Curr,
-        Status: payment.status
-      };
-
-      anotherData.push(rowData);
-    });
-    const ws1 = XLSX.utils.json_to_sheet(combinedData);
-    const ws2 = XLSX.utils.json_to_sheet(anotherData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
-    XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
-    XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
-  }
 
   // Changing Status
 
@@ -1113,6 +632,980 @@ export default function AgentCandPaymentInDetails() {
     setNewMessage(toast.error('Server is not responding...'))
     setLoading3(false)
   }
+}
+
+const printMainTable = () => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Agents Payment In Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Agents</th>
+          <th>TVPI PKR</th>
+          <th>TPI PKR</th>
+          <th>Total Cash Out</th>
+          <th>RPI PKR</th>
+          <th>TVPI Oth Curr</th>
+          <th>TPI Curr</th>
+          <th>RPI Curr</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+      ${filteredTotalPaymentIn.map((entry, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${String(entry.supplierName)}</td>
+          <td>${String(entry.total_Visa_Price_In_PKR)}</td>
+          <td>${String(entry.total_Payment_In)}</td>
+          <td>${String(entry.total_Cash_Out)}</td>
+          <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
+          <td>${String(entry.total_Visa_Price_In_Curr)}</td>
+          <td>${String(entry.total_Payment_In_Curr)}</td>
+          <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
+          <td>${String(entry.status)}</td>           
+        </tr>
+      `).join('')}
+      <tr>
+        <td colspan="1"></td>
+        <td>Total</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_In_PKR, 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In, 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out), 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_In_Curr, 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In_Curr, 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr), 0))}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Agents Payment In Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
+
+
+
+const printPaymentsTable = () => {
+  // Convert JSX to HTML string
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+  const formattedDate = formatDate(new Date());
+
+  const printContentString = `
+  <div class="print-header">
+      <p class="invoice">Agent: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Agent Payment Invoices</h1>
+      </div>
+      <hr/>
+  <table class='print-table'>
+    <thead>
+      <tr>
+      <th>SN</th>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Payment Via</th>
+      <th>Payment Type</th>
+      <th>Slip No</th>
+      <th>Details</th>
+      <th>Payment In</th>
+      <th>Invoice</th>
+      <th>Candidates</th>
+      <th>Total Visa Price In PKR</th>
+      <th>Remaining PKR</th>
+      <th>CUR Amount</th>
+      <th>Payment In Curr</th>
+      </tr>
+    </thead>
+    <tbody>
+    ${filteredIndividualPayments.map((entry, index) =>
+    entry.payment.map((paymentItem, paymentIndex) => `
+        <tr key="${entry?._id}-${paymentIndex}">
+          <td>${index * entry.payment.length + paymentIndex + 1}</td>
+          <td>${String(paymentItem?.date)}</td>
+          <td>${String(paymentItem?.category)}</td>
+          <td>${String(paymentItem?.payment_Via)}</td>
+          <td>${String(paymentItem?.payment_Type)}</td>
+          <td>${String(paymentItem?.slip_No)}</td>
+          <td>${String(paymentItem?.details)}</td>
+          <td>${String(paymentItem?.payment_In)}</td>
+          <td>${String(paymentItem?.invoice)}</td>
+          <td>${String(paymentItem?.payments.length)}</td>
+          <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
+          <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0))}</td>
+          <td>${String(paymentItem?.curr_Amount)}</td>
+          <td>${String(paymentItem?.payment_In_Curr)}</td>
+
+        </tr>
+      `).join('')
+  )}
+  <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Total</td>
+  <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
+  <td></td>
+  <td></td>
+  <td>
+    ${
+      String(
+        filteredIndividualPayments.reduce(
+          (total, entry) =>
+            total +
+            entry.payment.reduce(
+              (acc, paymentItem) =>
+                acc +
+                paymentItem.payments.reduce(
+                  (subTotal, payment) => subTotal + payment.visa_Amount_PKR,
+                  0
+                ),
+              0
+            ),
+          0
+        )
+      )
+    }
+  </td>
+  <td>
+    ${
+      String(
+        filteredIndividualPayments.reduce(
+          (total, entry) =>
+            total +
+            entry.payment.reduce(
+              (acc, paymentItem) =>
+                acc +
+                paymentItem.payments.reduce(
+                  (subTotal, payment) => subTotal + payment.new_Remain_PKR,
+                  0
+                ),
+              0
+            ),
+          0
+        )
+      )
+    }
+    </td>
+  <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
+
+  </tr>
+
+  </tbody>
+  </table>
+  <style>
+    /* Add your custom print styles here */
+    body {
+      background-color: #fff;
+    }
+    .print-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+      font-size: 24px;
+    }
+    .date {
+      flex-grow: 0;
+      text-align: right;
+      font-size: 20px;
+    }
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .print-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+`;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+    <html>
+      <head>
+        <title>${selectedSupplier} Payment In Details</title>
+      </head>
+      <body class='bg-dark'>${printContentString}</body>
+    </html>
+  `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+}
+
+const printPersonsTable = () => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Agent: ${selectedSupplier}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Agent Persons Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>VPI PKR</th>
+          <th>VPI Oth Curr</th>
+          <th>Paid PKR</th>
+          <th>Remaining PKR</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filteredPersons.map((entry, index) =>
+          entry.persons.map((person, personIndex) => `
+            <tr key="${person?._id}">
+              <td>${index * entry.persons.length + personIndex + 1}</td>
+              <td>${String(person?.entry_Date)}</td>
+              <td>${String(person?.name)}</td>
+              <td>${String(person?.pp_No)}</td>
+              <td>${String(person?.entry_Mode)}</td>
+              <td>${String(person?.company)}</td>
+              <td>${String(person?.trade)}</td>
+              <td>${String(person?.country)}</td>
+              <td>${String(person?.final_Status)}</td>
+              <td>${String(person?.flight_Date)}</td>
+              <td>${String(person?.visa_Price_In_PKR)}</td>
+              <td>${String(person?.visa_Price_In_Curr)}</td>
+              <td>${String(person?.total_In)}</td>
+              <td>${String(person?.remaining_Price)}</td>
+              <td>${String(person?.status)}</td>
+            </tr>
+          `).join('')
+        ).join('')}
+        <tr>
+          <td colspan="9"></td>
+          <td>Total</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_PKR, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_Curr, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier}'s Persons Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
+
+
+const printPaymentInvoice = (paymentItem) => {
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+  const paymentDetailsString = paymentItem.payments.map(payment => `
+    <tr>
+      <td>${String(payment.cand_Name)}</td>
+      <td>${String(payment?.pp_No,'')}</td>
+      <td>${String(payment?.entry_Mode,'')}</td>
+      <td>${String(payment?.company,'')}</td>
+      <td>${String(payment?.trade,'')}</td>
+      <td>${String(payment?.country,'')}</td>
+      <td>${String(payment?.final_Status,'')}</td>
+      <td>${String(payment?.flight_Date,'')}</td>
+      <td>${String(payment?.visa_Amount_PKR)}</td>
+      <td>${String(payment?.past_Paid_PKR)}</td>
+      <td>${String(payment?.past_Remain_PKR)}</td>
+      <td>${String(payment?.new_Payment)}</td>
+      <td>${String(payment?.new_Remain_PKR)}</td>
+      <td>${String(payment?.curr_Amount,0)}</td>
+      <td>${String(payment?.curr_Rate,0)}</td>
+    </tr>
+  `).join('');
+
+  const printContentString = `
+    <div class="print-header">
+      <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Agent Payment Invoice</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Agent Name</th>
+          <th>Category</th>
+          <th>Payment Via</th>
+          <th>Payment Type</th>
+          <th>Slip No</th>
+          <th>Details</th>
+          <th>Payment In</th>
+          <th>Invoice</th>
+          <th>Candidates</th>
+          <th>Total Visa Price In PKR</th>
+          <th>Remaining PKR</th>
+          <th>CUR Amount</th>
+          <th>Payment In Curr</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>${String(paymentItem?.date)}</td>
+          <td>${String(selectedSupplier)}</td>
+          <td>${String(paymentItem?.category)}</td>
+          <td>${String(paymentItem?.payment_Via)}</td>
+          <td>${String(paymentItem?.payment_Type)}</td>
+          <td>${String(paymentItem?.slip_No)}</td>
+          <td>${String(paymentItem?.details)}</td>
+          <td>${String(paymentItem?.payment_In)}</td>
+          <td>${String(paymentItem?.invoice)}</td>
+          <td>${String(paymentItem?.payments.length)}</td>
+          <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
+          <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0))}</td>
+          <td>${String(paymentItem?.curr_Amount)}</td>
+          <td>${String(paymentItem?.payment_In_Curr)}</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr/>
+    <h2 class="subtitle">Candidate Vise Details</h2>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>Visa Amount (PKR)</th>
+          <th>Past Paid (PKR)</th>
+          <th>Past Remaining (PKR)</th>
+          <th>New Payment In (PKR)</th>
+          <th>New Remaining (PKR)</th>
+          <th>Currency Amount</th>
+          <th>Currency Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${paymentDetailsString}
+      </tbody>
+    </table>
+    <style>
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .invoice {
+        flex-grow: 0;
+        text-align: left;
+        font-size: 20px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .subtitle {
+        margin: 20px 0;
+        text-align: center;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier} Payment In Details</title>
+        </head>
+        <body>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+}
+
+
+const downloadExcel = () => {
+  const data = [];
+  // Iterate over entries and push all fields
+  filteredTotalPaymentIn.forEach((payments, index) => {
+    const rowData = {
+      SN: index + 1,
+      Agents: payments.supplierName,
+      Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
+      Total_Payment_In: payments.total_Payment_In,
+      Total_Cash_Out: payments.total_Cash_Out,
+      Remaining_PKR: payments.total_Visa_Price_In_PKR - payments.total_Payment_In + payments.total_Cash_Out,
+      Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
+      Total_Payment_In_Curr: payments.total_Payment_In_Curr,
+      Remaining_Curr: payments.total_Visa_Price_In_Curr - payments.total_Payment_In_Curr,
+      Status: payments.status
+    }
+
+    data.push(rowData);
+  });
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, 'Agents Payments Details.xlsx');
+}
+
+const downloadIndividualPayments = () => {
+  const data = [];
+  // Flatten the array of objects to get an array of individual payments
+  const individualPayments = filteredIndividualPayments.flatMap(payment => payment.candPayments);
+
+  // Iterate over individual payments and push all fields
+  individualPayments.forEach((payment, index) => {
+    const rowData = {
+      SN: index + 1,
+      Date: payment.date,
+      Category: payment.category,
+      payment_Via: payment.payment_Via,
+      payment_Type: payment.payment_Type,
+      slip_No: payment.slip_No,
+      details: payment.details,
+      payment_In: payment.payment_In,
+      Invoice: payment.invoice,
+      Candidates: payment.payments.length,
+      Payment_In_Curr: payment.payment_In_Curr,
+      Curr_Amount: payment.curr_Amount
+    };
+
+    data.push(rowData);
+  })
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+}
+
+
+const downloadPaymentInvoice = (payment) => {
+  const data = [];
+    const rowData = {
+      Date: payment.date,
+      Category: payment.category,
+      payment_Via: payment.payment_Via,
+      payment_Type: payment.payment_Type,
+      slip_No: payment.slip_No,
+      details: payment.details,
+      payment_In: payment.payment_In,
+      Invoice: payment.invoice,
+      Candidates: payment.payments.length,
+      Payment_In_Curr: payment.payment_In_Curr,
+      Curr_Amount: payment.curr_Amount,
+    }
+
+    data.push(rowData);
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+}
+
+
+const downloadPersons = () => {
+  const data = [];
+  // Flatten the array of objects to get an array of individual payments
+  const individualPayments = filteredPersons.flatMap(payment => payment.persons);
+
+  // Iterate over individual payments and push all fields
+  individualPayments.forEach((payment, index) => {
+    const rowData = {
+      SN: index + 1,
+      Entry_Date: payment.entry_Date,
+      Name: payment.name,
+      PP_No: payment.pp_No,
+      Entry_Mode: payment.entry_Mode,
+      Company: payment.company,
+      Trade: payment.trade,
+      Country: payment.country,
+      Final_Status: payment.final_Status,
+      Flight_Date: payment.flight_Date,
+      Visa_Price_In_PKR: payment.visa_Price_In_PKR,
+      Total_In: payment.total_In,
+      Total_Cash_Out: payment.cash_Out,
+      Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+      Visa_Price_In_Curr: payment.visa_Price_In_Curr,
+      Remaining_Curr: payment.remaining_Curr,
+      Status: payment.status
+    };
+
+    data.push(rowData);
+  });
+
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
+}
+
+const downloadCombinedPayments = () => {
+  const combinedData = [];
+  const anotherData = []
+
+  const individualPayments = filteredIndividualPayments.flatMap(payment => payment.candPayments);
+
+  // Iterate over individual payments and push all fields
+  individualPayments.forEach((payment, index) => {
+    const rowData = {
+      SN: index + 1,
+      Date: payment.date,
+      Category: payment.category,
+      payment_Via: payment.payment_Via,
+      payment_Type: payment.payment_Type,
+      slip_No: payment.slip_No,
+      details: payment.details,
+      payment_In: payment.payment_In,
+      Invoice: payment.invoice,
+      Candidates: payment.payments.length,
+      Payment_In_Curr: payment.payment_In_Curr,
+      Curr_Amount: payment.curr_Amount,
+      Curr_Rate: payment.curr_Rate
+    };
+    combinedData.push(rowData);
+  })
+  const individualPerons = filteredPersons.flatMap(payment => payment.persons);
+
+  // Iterate over individual payments and push all fields
+  individualPerons.forEach((payment, index) => {
+    const rowData = {
+      SN: index + 1,
+      Entry_Date: payment.entry_Date,
+      Name: payment.name,
+      PP_No: payment.pp_No,
+      Entry_Mode: payment.entry_Mode,
+      Company: payment.company,
+      Trade: payment.trade,
+      Country: payment.country,
+      Final_Status: payment.final_Status,
+      Flight_Date: payment.flight_Date,
+      Visa_Price_In_PKR: payment.visa_Price_In_PKR,
+      Total_In: payment.total_In,
+      Total_Cash_Out: payment.cash_Out,
+      Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+      Visa_Price_In_Curr: payment.visa_Price_In_Curr,
+      Remaining_Curr: payment.remaining_Curr,
+      Status: payment.status
+    };
+
+    anotherData.push(rowData);
+  });
+  const ws1 = XLSX.utils.json_to_sheet(combinedData);
+  const ws2 = XLSX.utils.json_to_sheet(anotherData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
+  XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
+  XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
+}
+
+
+const printPerson = (person) => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Agent: ${selectedSupplier}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Agent Person Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>VPI PKR</th>
+          <th>VPI Oth Curr</th>
+          <th>Paid PKR</th>
+          <th>Remaining PKR</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>${String(person?.entry_Date)}</td>
+          <td>${String(person?.name)}</td>
+          <td>${String(person?.pp_No)}</td>
+          <td>${String(person?.entry_Mode)}</td>
+          <td>${String(person?.company)}</td>
+          <td>${String(person?.trade)}</td>
+          <td>${String(person?.country)}</td>
+          <td>${String(person?.final_Status)}</td>
+          <td>${String(person?.flight_Date)}</td>
+          <td>${String(person?.visa_Price_In_PKR)}</td>
+          <td>${String(person?.visa_Price_In_Curr)}</td>
+          <td>${String(person?.total_In)}</td>
+          <td>${String(person?.remaining_Price)}</td>
+          <td>${String(person?.status)}</td>
+        </tr>
+      </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        max-width: 100px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .invoice {
+        flex-grow: 0;
+        text-align: left;
+        font-size: 20px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier}'s Persons Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
+
+const downloadPersonDetails = (payment) => {
+  const data = []
+    const rowData = {
+      Agent:selectedSupplier,
+      Entry_Date: payment.entry_Date,
+      Name: payment.name,
+      PP_No: payment.pp_No,
+      Entry_Mode: payment.entry_Mode,
+      Company: payment.company,
+      Trade: payment.trade,
+      Country: payment.country,
+      Final_Status: payment.final_Status,
+      Flight_Date: payment.flight_Date,
+      Visa_Price_In_PKR: payment.visa_Price_In_PKR,
+      Total_In: payment.total_In,
+      Total_Cash_Out: payment.cash_Out,
+      Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
+      Visa_Price_In_Curr: payment.visa_Price_In_Curr,
+      Remaining_Curr: payment.remaining_Curr,
+      Status: payment.status
+    };
+
+  data.push(rowData);
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
 }
 
   return (
@@ -1289,10 +1782,10 @@ export default function AgentCandPaymentInDetails() {
                                     <span>{entry.status}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-1 text-center'>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                       {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
-                                      <button className='btn delete_btn' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
+                                      <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                     </div>
                                    
                                   </TableCell>
@@ -1557,8 +2050,8 @@ export default function AgentCandPaymentInDetails() {
                               </TableCell>
                             <TableCell>
                             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => setEditMode3(!editMode3)} className='btn delete_btn'>Cancel</button>
-                                  <button onClick={() => handleUpdatePayment()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                  <button onClick={() => setEditMode3(!editMode3)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePayment()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
                                 </div>
                             </TableCell>
@@ -1585,9 +2078,11 @@ export default function AgentCandPaymentInDetails() {
                               <TableCell className='border data_td p-1 '>
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                <button onClick={() => handleEditClick3(paymentItem, index)} className='btn save_btn'><i className="fas fa-edit"></i></button>
-                                  <button className='btn edit_btn' onClick={()=>handleDetails(paymentItem)}><i className="fas fa-eye"></i></button>
-                                  <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fas fa-trash-alt"></i></button>
+                                  <button className='btn btn-info btn-sm' onClick={()=>handleDetails(paymentItem)}><i className="fas fa-eye"></i></button>
+                                <button onClick={() => handleEditClick3(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fas fa-edit"></i></button>
+                                <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn delete_btn btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fas fa-trash-alt"></i></button>
                                 </div>
                                
                               </>
@@ -1932,24 +2427,26 @@ export default function AgentCandPaymentInDetails() {
 
                             </>
                           )}
-                          <TableCell className='border data_td p-1 '>
+                          <TableCell className='border data_td p-1 text-center'>
                             {editMode2 && editedRowIndex2 === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn'>Cancel</button>
-                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn' disabled={loading4}>{loading4 ? "Saving..." : "Save"}</button>
+                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn btn-sm' disabled={loading4}><i className="fa-solid fa-check"></i></button>
 
                                 </div>
 
                               </>
 
                             ) : (
-                              // Render Edit button when not in edit mode or for other rows
+                              
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn'>Edit</button>
-                                  <button className='btn delete_btn' onClick={() => deletePerson(person)} disabled={loading2}>{loading2 ? "Deleting..." : "Delete"}</button>
+                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPerson(person)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPersonDetails(person)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePerson(person)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
                                 </div>
 
                               </>
@@ -2161,8 +2658,8 @@ export default function AgentCandPaymentInDetails() {
                               // Render Save button when in edit mode for the specific row
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                  <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm '><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
                                 </div>
 
@@ -2172,8 +2669,8 @@ export default function AgentCandPaymentInDetails() {
                               // Render Edit button when not in edit mode or for other rows
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
-                                  <button className='btn delete_btn' onClick={() => deleteSinglePaymentIn(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
+                                  <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fas fa-edit"></i></button>
+                                  <button className='btn delete_btn btn-sm' onClick={() => deleteSinglePaymentIn(paymentItem)} disabled={loading1}><i className="fas fa-trash-alt"></i></button>
                                 </div>
                                
                               </>

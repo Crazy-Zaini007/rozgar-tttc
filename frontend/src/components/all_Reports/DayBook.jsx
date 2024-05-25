@@ -104,8 +104,25 @@ export default function DayBook() {
   const todayPayments = overAllPayments && overAllPayments.filter(payment => payment.date === currentDate )
 
   const printPaymenInMainTable = () => {
-    // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+    <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Today Payments In Details</h1>
+      </div>
+      <hr/>
   <table class='print-table'>
     <thead>
       <tr>
@@ -150,6 +167,23 @@ export default function DayBook() {
   body {
     background-color: #fff;
   }
+  .print-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .title {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 24px;
+  }
+  .date {
+    flex-grow: 0;
+    text-align: right;
+    font-size: 20px;
+  }
   .print-table {
     width: 100%;
     border-collapse: collapse;
@@ -173,7 +207,7 @@ export default function DayBook() {
       printWindow.document.write(`
     <html>
       <head>
-        <title>Today's Payment_Out Details</title>
+        <title>Today's Payment In Details</title>
       </head>
       <body class='bg-dark'>${printContentString}</body>
     </html>
@@ -226,7 +260,25 @@ export default function DayBook() {
   
   const printPaymenOutMainTable = () => {
     // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+    <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Today Payments Out Details</h1>
+      </div>
+      <hr/>
   <table class='print-table'>
     <thead>
       <tr>
@@ -270,6 +322,23 @@ export default function DayBook() {
   /* Add your custom print styles here */
   body {
     background-color: #fff;
+  }
+  .print-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .title {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 24px;
+  }
+  .date {
+    flex-grow: 0;
+    text-align: right;
+    font-size: 20px;
   }
   .print-table {
     width: 100%;
@@ -349,13 +418,46 @@ export default function DayBook() {
   const expenses = useSelector((state) => state.expenses.expenses);
 
   const todayExpenses = expenses && expenses.filter(payment => payment.date === currentDate);
+  const [cash_Type,setCash_Type]=useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
 
+  const [name, setName] = useState('')
+  const [expe_Category, setExpe_Category] = useState('')
+  const [payment_Via, setPayment_Via] = useState('')
+  const [payment_Type, setPayment_Type] = useState('')
 
+  const filteredExpenses =todayExpenses && todayExpenses.filter(expense => {
+    let isDateInRange = true;
+  
+    // Check if the expense date is within the selected date range
+    if (dateFrom && dateTo) {
+      isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
+    }
+  
+    // Filter payment_Via based on the selected cash_Type
+    let filteredPaymentVia = true;
+    if (cash_Type === 'cash') {
+      filteredPaymentVia = expense.payment_Via.toLowerCase().includes('cash');
+    } else if (cash_Type === 'banks') {
+      filteredPaymentVia = !expense.payment_Via.toLowerCase().includes('cash');
+    }
+  
+    return (
+      isDateInRange &&
+      expense.name.toLowerCase().includes(name.toLowerCase()) &&
+      expense.expCategory.toLowerCase().includes(expe_Category.toLowerCase()) &&
+      expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      filteredPaymentVia
+    )
+  })
+  
 
   const downloadExpenesExcel = () => {
     const data = [];
     // Iterate over entries and push all fields
-    todayExpenses.forEach((payments, index) => {
+    filteredExpenses.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
         date: payments.date,
@@ -384,7 +486,25 @@ export default function DayBook() {
 
   const printExpenseTable = () => {
     // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+    <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Expenses Details</h1>
+      </div>
+      <hr/>
   <table class='print-table'>
     <thead>
       <tr>
@@ -404,7 +524,7 @@ export default function DayBook() {
       </tr>
     </thead>
     <tbody>
-    ${todayExpenses.map((entry, index) => `
+    ${filteredExpenses.map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
           <td>${String(entry?.date)}</td>
@@ -416,18 +536,42 @@ export default function DayBook() {
           <td>${String(entry?.slip_No)}</td>
           <td>${String(entry?.details)}</td>
           <td>${String(entry?.invoice)}</td>
-          <td>${String(entry?.curr_Country)}</td>
-          <td>${String(entry?.curr_Rate)}</td>
-          <td>${String(entry?.curr_Amount)}</td>
+          <td>${String(entry?.curr_Country,'')}</td>
+          <td>${String(entry?.curr_Rate,0)}</td>
+          <td>${String(entry?.curr_Amount,'0')}</td>
         </tr>
       `).join('')
       }
+      <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>${String(filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0))}</td>
+      </tr>
   </tbody>
   </table>
   <style>
     /* Add your custom print styles here */
     body {
       background-color: #fff;
+    }
+    .print-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+      font-size: 24px;
+    }
+    .date {
+      flex-grow: 0;
+      text-align: right;
+      font-size: 20px;
     }
     .print-table {
       width: 100%;
@@ -477,7 +621,25 @@ export default function DayBook() {
 
   const printProtectorTable = () => {
     // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+    <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Today Protector Payments Details</h1>
+      </div>
+      <hr/>
 <table class='print-table'>
   <thead>
     <tr>
@@ -491,7 +653,6 @@ export default function DayBook() {
       <th>Cash Out</th>
       <th>Details</th>
       <th>Invoice</th>
-      
     </tr>
   </thead>
   <tbody>
@@ -515,6 +676,23 @@ export default function DayBook() {
 /* Add your custom print styles here */
 body {
   background-color: #fff;
+}
+.print-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.title {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 24px;
+}
+.date {
+  flex-grow: 0;
+  text-align: right;
+  font-size: 20px;
 }
 .print-table {
   width: 100%;
@@ -590,8 +768,25 @@ body {
 
 
   const printEmployeeTable = () => {
-    // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+    <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Employees Today Payments Details</h1>
+      </div>
+      <hr/>
 <table class='print-table'>
 <thead>
   <tr>
@@ -635,6 +830,23 @@ ${todayEmployees.map((entry, index) =>
 /* Add your custom print styles here */
 body {
   background-color: #fff;
+}
+.print-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.title {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 24px;
+}
+.date {
+  flex-grow: 0;
+  text-align: right;
+  font-size: 20px;
 }
 .print-table {
   width: 100%;
@@ -969,7 +1181,61 @@ body {
                 <SyncLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
-
+ <div className="col-md-12 filters">
+              <Paper className='py-1 mb-2 px-3'>
+                <div className="row">
+                
+                <div className="col-auto px-1">
+                    <label htmlFor="">Name:</label>
+                    <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      {[...new Set(todayExpenses && todayExpenses.map(data => data.name))].map(name => (
+                          <option key={name} value={name}>{name}</option>
+                        ))}
+                      
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Expense Category:</label>
+                    <select value={expe_Category} onChange={(e) => setExpe_Category(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      {[...new Set(todayExpenses && todayExpenses.map(data => data.expCategory))].map(expCategory => (
+                          <option key={expCategory} value={expCategory}>{expCategory}</option>
+                        ))}
+                    
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Payment Via:</label>
+                    <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      {[...new Set(todayExpenses && todayExpenses.map(data => data.payment_Via))].map(payment_Via => (
+                          <option key={payment_Via} value={payment_Via}>{payment_Via}</option>
+                        ))}
+                     
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Payment Type:</label>
+                    <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      {[...new Set(todayExpenses && todayExpenses.map(data => data.payment_Type))].map(payment_Type => (
+                          <option key={payment_Type} value={payment_Type}>{payment_Type}</option>
+                        ))}
+                      
+                    </select>
+                  </div>
+                  <div className="col-auto px-1">
+                    <label htmlFor="">Cash Type:</label>
+                    <select value={cash_Type} onChange={(e) => setCash_Type(e.target.value)} className='m-0 p-1'>
+                      <option value="">All</option>
+                      <option value="cash">Cash</option>
+                      <option value="banks">Banks</option>
+                    </select>
+                  </div>
+                </div>
+              </Paper>
+            </div>
             {!loading2 &&
               <div className='col-md-12'>
                 <Paper className='py-3 mb-1 px-2 detail_table'>
@@ -995,7 +1261,7 @@ body {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {todayExpenses && todayExpenses.length > 0 ? todayExpenses.map((expense, outerIndex) => (
+                        {filteredExpenses && filteredExpenses.length > 0 ? filteredExpenses.map((expense, outerIndex) => (
                           // Map through the payment array
 
                           <>
@@ -1044,7 +1310,7 @@ body {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                          <TableCell className='border data_td text-center bg-danger text-white text-bold'>{todayExpenses.reduce((total, payment) => total + payment.payment_Out, 0)}</TableCell>
+                          <TableCell className='border data_td text-center bg-danger text-white text-bold'>{filteredExpenses.reduce((total, payment) => total + payment.payment_Out, 0)}</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
