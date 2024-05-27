@@ -458,13 +458,13 @@ const[totalPayments,setTotalPayments]=useState(0)
             <div className="col-md-12">
               <Paper className='py-3 mb-1 px-2'>
                 <h4>Cand-Vise Agent Payment Out</h4>
-                <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
-                <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
-                {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
+                <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
+                <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
+                {single === 1 && <label className="btn m-1 btn-sm upload_btn">
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
-                <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
+                <button className='btn m-1 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
               </Paper>
             </div>
             {single === 1 &&
@@ -474,7 +474,7 @@ const[totalPayments,setTotalPayments]=useState(0)
                   <Paper>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
-                        <button className='btn submit_btn m-1' >Add Payment</button>
+                        <button className='btn btn-sm  submit_btn m-1' >Add Payment</button>
                       </div>
                       <div className="table-responsive">
                         <table className='table table-borderless table-striped'>
@@ -1020,7 +1020,7 @@ const[totalPayments,setTotalPayments]=useState(0)
              </form>
              <div className="row p-0 m-0 mt-2 justify-content-center">
                        <div className="col-md-2 col-sm-12">
-                       <button className='btn shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
+                       <button className='btn  btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
                        </div>
                      </div>
             </>

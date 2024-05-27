@@ -213,7 +213,7 @@ const addNote=async(e)=>{
             <h4>Daily Notes</h4>
                 </div>
                 <div className="right d-flex">
-                  <button className='btn m-1 add_btn' onClick={()=>setOption(1)} disabled={loading1}>Add New</button>
+                  <button className='btn btn-sm m-1 add_btn' onClick={()=>setOption(1)} disabled={loading1}>Add New</button>
                 </div>
                 
               </Paper>
@@ -258,7 +258,7 @@ const addNote=async(e)=>{
                     <small>{data.date}</small>
                   </div>
                   <div className="right">
-                    <button className='btn btn-sm mt-2' onClick={()=>handleView(data)}>View</button>
+                    <button className='btn btn-sm btn-sm mt-2' onClick={()=>handleView(data)}>View</button>
                   </div>
                 </div>
               </Paper>
@@ -281,7 +281,7 @@ const addNote=async(e)=>{
           </div>
           <form className='px-2' onSubmit={addNote}>
             <div className='text-end pb-0'>
-              <button className='btn btn-sm shadow' disabled={loading1}>{loading1 ? "Adding..." :"Add Note"}</button>
+              <button className='btn btn-sm btn-sm shadow' disabled={loading1}>{loading1 ? "Adding..." :"Add Note"}</button>
             </div>
             <div className='my-3'>
               <label className='my-1'>Notes Title:</label>

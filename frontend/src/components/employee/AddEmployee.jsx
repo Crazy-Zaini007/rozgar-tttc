@@ -117,7 +117,7 @@ export default function AVPP() {
               <textarea type="text" value={address} onChange={(e) => setAddress(e.target.value)}  />
             </div> 
           </div>
-          <button className='btn submit_btn' disabled={isLoading}>{isLoading ? 'Adding' : 'Add New'}</button>
+          <button className='btn btn-sm  submit_btn' disabled={isLoading}>{isLoading ? 'Adding' : 'Add New'}</button>
         </form>
       </div>
         </div>

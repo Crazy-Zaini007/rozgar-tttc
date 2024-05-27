@@ -105,7 +105,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                       <TableCell className='border text-center'>{index + 1}</TableCell>
                       <TableCell className='border text-center'>{backupEntry.date}</TableCell>
                       <TableCell className='border text-center'>{backupEntry.date} Backup</TableCell>
-                      <TableCell className='border text-center'><button className='btn btn-success shadow text-white btn-sm' onClick={()=>downloadExcel(backupEntry)}>Donwload</button></TableCell>
+                      <TableCell className='border text-center'><button className='btn btn-warning shadow text-white btn-sm' onClick={()=>downloadExcel(backupEntry)}>Download <i class="fa fa-download" aria-hidden="true"></i></button></TableCell>
                     </TableRow>
                   )):<>
                   <TableRow>

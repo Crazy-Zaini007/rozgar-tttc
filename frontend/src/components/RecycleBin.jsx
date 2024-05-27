@@ -253,9 +253,9 @@ export default function AgnetsReports() {
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
                     <>
-                      <button className='btn btn-sm shadow btn-info text-white m-1 btn-sm' onClick={()=>setShow(!show)}>{show ? "Hide":"Show"} </button>
+                      <button className='btn btn-sm shadow btn-info text-white m-1' onClick={()=>setShow(!show)}>{show ? "Hide":"Show"} </button>
                      
-                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download </button>
+                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
 
                     </>
@@ -342,7 +342,7 @@ export default function AgnetsReports() {
                                 <TableCell className='border data_td bg-warning text-white'>{entry?.cash_Out || 0}</TableCell>
                               {show &&   <TableCell className='border data_td'>{(entry?.payment_In_Curr && entry?.payment_In_Curr>0)? entry?.payment_In_Curr:entry?.payment_Out_Curr}</TableCell>}
                                 <TableCell className='border data_td '>{entry.invoice}</TableCell>
-                                <TableCell className='border data_td'><button className='btn btn-danger text-white btn-sm' onClick={()=>deleteRecord(entry)}>Delete</button></TableCell>
+                                <TableCell className='border data_td'><button className='btn btn-danger text-white btn-sm' onClick={()=>deleteRecord(entry)}><i className="fa fa-trash" aria-hidden="true"></i></button></TableCell>
                           
                           </TableRow>
                         )):

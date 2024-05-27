@@ -152,10 +152,10 @@ export default function NewEntry() {
           <div className="col-md-12 ">
             <Paper className='py-3 mb-1 px-2' >
               <h4>Add New Entry</h4>
-              <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Entry</button>
-              <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Entries</button>
+              <button className='btn m-1  btn-sm entry_btn text-sm' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Entry</button>
+              <button className='btn m-1  btn-sm entry_btn text-sm' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Entries</button>
 
-              {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
+              {single === 1 && <label className="btn m-1  btn-sm upload_btn">
                 Upload New List
                 <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
               </label>}
@@ -174,7 +174,7 @@ export default function NewEntry() {
                 <Paper>
                   <form className='py-0 px-2' onSubmit={addMultipleentries} >
                     <div className="text-end">
-                      {entries && <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Uploading..." : "Add Entries"}{uploadProgress>0 && uploadProgress}</button>}
+                      {entries && <button className='btn submit_btn m-1 btn-sm' disabled={loading}>{loading ? "Uploading..." : "Add Entries"}{uploadProgress>0 && uploadProgress}</button>}
                     </div>
                     <div className="table-responsive">
                       <table className='table table-borderless table-striped'>

@@ -410,16 +410,16 @@ export default function SingleEntry() {
         <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={handleSubmit}>
             <div className="text-end ">
-              <button className='btn submit_btn m-1' type='submit' disabled={loading}>{loading === true ? "Submitting" : "Add New Entry"}</button>
+              <button className='btn submit_btn m-1 btn-sm' type='submit' disabled={loading}>{loading === true ? "Submitting" : "Add New Entry"}</button>
               <div className="dropdown d-inline m-1">
-                <button className="btn" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className="btn btn-sm" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                   More Sections<AddRoundedIcon fontSize='small'></AddRoundedIcon>
                 </button>
                 <ul className="dropdown-menu shadow border-0" aria-labelledby="dropdownMenuLink">
-                  {section1 === 0 && <li className='my-2 py-2' onClick={() => setSection1(1)}><TourIcon fontSize='small' className='me-1' /><span>Add Visit</span></li>}
-                  {section2 === 0 && <li className='my-2 py-2' onClick={() => setSection2(1)}><LocalActivityIcon fontSize='small' className='me-1' /><span>Add Ticket</span></li>}
-                  {section3 === 0 && <li className='my-2 py-2' onClick={() => setSection3(1)}><FlagCircleIcon fontSize='small' className='me-1' /><span>Add Azad</span></li>}
-                  {section4 === 0 && <li className='my-2 py-2' onClick={() => setSection4(1)}><ShieldIcon fontSize='small' className='me-1' /><span>Add Protector </span></li>}
+                  {section1 === 0 && <li className='my-1 py-1' onClick={() => setSection1(1)}><TourIcon fontSize='small' className='me-1' /><span>Add Visit</span></li>}
+                  {section2 === 0 && <li className='my-1 py-1' onClick={() => setSection2(1)}><LocalActivityIcon fontSize='small' className='me-1' /><span>Add Ticket</span></li>}
+                  {section3 === 0 && <li className='my-1 py-1' onClick={() => setSection3(1)}><FlagCircleIcon fontSize='small' className='me-1' /><span>Add Azad</span></li>}
+                  {section4 === 0 && <li className='my-1 py-1' onClick={() => setSection4(1)}><ShieldIcon fontSize='small' className='me-1' /><span>Add Protector </span></li>}
                 </ul>
               </div>
 

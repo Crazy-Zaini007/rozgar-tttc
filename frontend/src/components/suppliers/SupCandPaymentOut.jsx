@@ -90,98 +90,131 @@ export default function SupCandPaymentOut() {
 
   const printPersonsTable = (selectedPersonDetails) => {
     // Convert JSX to HTML string
-    const printContentString = `
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>Date</th>
-        <th>Name</th>
-        <th>PP#</th>
-        <th>Entry_Mode</th>
-        <th>Company</th>
-        <th>Trade</th>
-        <th>Country</th>
-        <th>Final tatus</th>
-        <th>Flight Date</th>
-        <th>VPI PKR</th>
-        <th>Total In PKR</th>
-        <th>Remaining PKR</th>
-        <th>VPI Oth Curr</th>
-        <th>Remaining Curr</th>
-        
-        </tr>
-      </thead>
-      <tbody>
-     
-          <tr>
-            <td>${String(selectedPersonDetails?.entry_Date)}</td>
-            <td>${String(selectedPersonDetails?.name)}</td>
-            <td>${String(selectedPersonDetails?.pp_No)}</td>
-            <td>${String(selectedPersonDetails?.entry_Mode)}</td>
-            <td>${String(selectedPersonDetails?.company)}</td>
-            <td>${String(selectedPersonDetails?.trade)}</td>
-            <td>${String(selectedPersonDetails?.country)}</td>
-            <td>${String(selectedPersonDetails?.final_Status)}</td>
-            <td>${String(selectedPersonDetails?.flight_Date)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)}</td>
-            <td>${String(selectedPersonDetails?.total_In)}</td>
-            <td>${String(
-      (selectedPersonDetails?.visa_Price_Out_PKR - selectedPersonDetails?.total_In) +
-      selectedPersonDetails?.cash_Out
-    )}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_Out_Curr)}</td>
-            <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
-
-          </tr>
-      
+    const formatDate = (date) => {
+     const d = new Date(date);
+     const day = String(d.getDate()).padStart(2, '0');
+     const month = String(d.getMonth() + 1).padStart(2, '0');
+     const year = d.getFullYear();
+     return `${day}-${month}-${year}`;
+   }
+   const formattedDate = formatDate(new Date());
+     const printContentString = `
+   <div class="print-header">
+     <p class="invoice">Supplier: ${selectedSupplier}</p>
+       <h1 class="title">ROZGAR TTTC</h1>
+       <p class="date">Date: ${formattedDate}</p>
+     </div>
+     <div class="print-header">
+       <h1 class="title"> Candidate Payments Details</h1>
+     </div>
+     <hr/>
+   <table class='print-table'>
+     <thead>
+       <tr>
+       <th>Date</th>
+       <th>Name</th>
+       <th>PP#</th>
+       <th>Entry Mode</th>
+       <th>Company</th>
+       <th>Trade</th>
+       <th>Country</th>
+       <th>Final Status</th>
+       <th>Flight Date</th>
+       <th>VPI PKR</th>
+       <th>Total In PKR</th>
+       <th>Remaining PKR</th>
+       <th>VPI Oth Curr</th>
+       <th>Remaining Curr</th>
+       
+       </tr>
+     </thead>
+     <tbody>
     
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
+         <tr>
+           <td>${String(selectedPersonDetails?.entry_Date)}</td>
+           <td>${String(selectedPersonDetails?.name)}</td>
+           <td>${String(selectedPersonDetails?.pp_No)}</td>
+           <td>${String(selectedPersonDetails?.entry_Mode)}</td>
+           <td>${String(selectedPersonDetails?.company)}</td>
+           <td>${String(selectedPersonDetails?.trade)}</td>
+           <td>${String(selectedPersonDetails?.country)}</td>
+           <td>${String(selectedPersonDetails?.final_Status)}</td>
+           <td>${String(selectedPersonDetails?.flight_Date)}</td>
+           <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)}</td>
+           <td>${String(selectedPersonDetails?.total_In)}</td>
+           <td>${String(
+     (selectedPersonDetails?.visa_Price_Out_PKR - selectedPersonDetails?.total_In) +
+     selectedPersonDetails?.cash_Out
+   )}</td>
+           <td>${String(selectedPersonDetails?.visa_Price_Out_Curr)}</td>
+           <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedPersonDetails.name} Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
+         </tr>
+     
+   
+   </tbody>
+   </table>
+   <style>
+     /* Add your custom print styles here */
+     body {
+       background-color: #fff;
+     }
+     .print-header {
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+     }
+     .title {
+       flex-grow: 1;
+       text-align: center;
+       margin: 0;
+       font-size: 24px;
+     }
+     .date {
+       flex-grow: 0;
+       text-align: right;
+       font-size: 20px;
+     }
+     .print-table {
+       width: 100%;
+       border-collapse: collapse;
+       margin: 20px 0;
+     }
+     .print-table th, .print-table td {
+       border: 1px solid #ddd;
+       padding: 8px;
+       text-align: left;
+     }
+     .print-table th {
+       background-color: #f2f2f2;
+     }
+   </style>
+ `;
 
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  }
+   // Create a new window for printing
+   const printWindow = window.open('', '_blank');
+   if (printWindow) {
+     // Write the print content to the new window
+     printWindow.document.write(`
+     <html>
+       <head>
+         <title>${selectedPersonDetails.name} Details</title>
+       </head>
+       <body class='bg-dark'>${printContentString}</body>
+     </html>
+   `);
+
+     // Trigger print dialog
+     printWindow.print();
+     // Close the new window after printing
+     printWindow.onafterprint = function () {
+       printWindow.close();
+     };
+   } else {
+     // Handle if the new window cannot be opened
+     alert('Could not open print window. Please check your browser settings.');
+   }
+ }
   const handleOpen = () => {
     setOption(!option);
   };
@@ -456,13 +489,13 @@ const[totalPayments,setTotalPayments]=useState(0)
             <div className="col-md-12">
               <Paper className='py-3 mb-1 px-2'>
                 <h4>Cand-Vise Supplier Payment Out</h4>
-                <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
-                <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
-                {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
+                <button className='btn btn-sm  m-1  entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
+                <button className='btn btn-sm  m-1  entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
+                {single === 1 && <label className="btn m-1 btn-sm upload_btn">
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
-                <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
+                <button className='btn btn-sm  m-1 entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
               </Paper>
             </div>
             {single === 1 &&
@@ -472,7 +505,7 @@ const[totalPayments,setTotalPayments]=useState(0)
                   <Paper>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
-                        <button className='btn submit_btn m-1'>Add Payment</button>
+                        <button className='btn btn-sm  submit_btn m-1'>Add Payment</button>
                       </div>
                       <div className="table-responsive">
                         <table className='table table-borderless table-striped'>
@@ -933,6 +966,38 @@ const[totalPayments,setTotalPayments]=useState(0)
                            />
                          </div>
                          <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Country</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].country}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Final Status</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].final_Status}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Flight Date</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].flight_Date}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Company</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].company}
+                      readOnly
+                    />
+                  </div>
+                         <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                            <label>Visa Price In PKR</label>
                            <input disabled
                              type="text"
@@ -1015,7 +1080,7 @@ const[totalPayments,setTotalPayments]=useState(0)
              </form>
              <div className="row p-0 m-0 mt-2 justify-content-center">
                        <div className="col-md-2 col-sm-12">
-                       <button className='btn shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
+                       <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
                        </div>
                      </div>
             </>

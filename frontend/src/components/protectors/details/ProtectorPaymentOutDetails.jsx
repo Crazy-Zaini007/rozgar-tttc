@@ -964,8 +964,8 @@ export default function ProtectorPaymentOutDetails() {
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                      <button onClick={() => setEditMode1(false)} className='btn delete_btn'>Cancel</button>
-                                      <button onClick={() => handleTotalPaymentUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                      <button onClick={() => setEditMode1(false)} className='btn delete_btn  btn-sm '>Cancel</button>
+                                      <button onClick={() => handleTotalPaymentUpdate()} className='btn save_btn  btn-sm ' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
                                     </div>
                                   </TableCell>
                                 </>
@@ -1005,7 +1005,7 @@ export default function ProtectorPaymentOutDetails() {
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                       {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
-                                      <button className='btn delete_btn' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
+                                      <button className='btn delete_btn  btn-sm ' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
                                     </div>
                                    
                                   </TableCell>
@@ -1084,7 +1084,7 @@ export default function ProtectorPaymentOutDetails() {
               <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
               <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
-                {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
+                {selectedSupplier && <button className='btn detail_btn  btn-sm ' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
               </div>
             </div>
@@ -1253,8 +1253,8 @@ export default function ProtectorPaymentOutDetails() {
                               // Render Save button when in edit mode for the specific row
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                  <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
+                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm '>Cancel</button>
+                                  <button onClick={() => handleUpdate()} className='btn save_btn  btn-sm ' disabled={loading3}>{loading3 ? "Saving..." : "Save"}</button>
 
                                 </div>
 
@@ -1264,8 +1264,8 @@ export default function ProtectorPaymentOutDetails() {
                               // Render Edit button when not in edit mode or for other rows
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn'>Edit</button>
-                                  <button className='btn delete_btn' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
+                                  <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn  btn-sm '>Edit</button>
+                                  <button className='btn delete_btn  btn-sm ' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}>{loading1 ? "Deleting..." : "Delete"}</button>
                                 </div>
                                 
                               </>
@@ -1606,8 +1606,8 @@ export default function ProtectorPaymentOutDetails() {
                               // Render Save button when in edit mode for the specific row
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn'>Cancel</button>
-                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn' disabled={loading4}>{loading4 ? "Saving..." : "Save"}</button>
+                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn  btn-sm '>Cancel</button>
+                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn  btn-sm ' disabled={loading4}>{loading4 ? "Saving..." : "Save"}</button>
 
                                 </div>
 
@@ -1617,8 +1617,8 @@ export default function ProtectorPaymentOutDetails() {
                               // Render Edit button when not in edit mode or for other rows
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn'>Edit</button>
-                                  <button className='btn delete_btn' onClick={() => deletePerson(person)} disabled={loading2}>{loading2 ? "Deleting..." : "Delete"}</button>
+                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn  btn-sm '>Edit</button>
+                                  <button className='btn delete_btn  btn-sm ' onClick={() => deletePerson(person)} disabled={loading2}>{loading2 ? "Deleting..." : "Delete"}</button>
                                 </div>
                                
                               </>

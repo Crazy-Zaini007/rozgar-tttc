@@ -149,7 +149,7 @@ export default function AddMulExpenses() {
 <Paper>
   <form className='py-0 px-2' onSubmit={handleUploadList} >
     <div className="text-end">
-      <button className='btn submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Expenses"}</button>
+      <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Expenses"}</button>
     </div>
     <div className="table-responsive">
       <table className='table table-borderless table-striped'>

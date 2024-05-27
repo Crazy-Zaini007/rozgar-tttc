@@ -648,8 +648,8 @@ const getBankCash = async () => {
                   <h5 className='my-2'>Banks Cash</h5>
                  <h6 className='my-2' onClick={() => setCurrent(1)}>{cashInHand.total_Cash?cashInHand.total_Cash:0}</h6>
                   <h5 className='my-2'>Total Cash In Hand</h5>
-                  <Link className="cash_in_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
-                  <Link className="cash_out_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
+                  <Link className="cash_in_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
+                  <Link className="cash_out_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
                  </div>
                  
                 </div>
@@ -666,24 +666,24 @@ const getBankCash = async () => {
               <div className='col-md-12 payment_details'>
                 <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                   <div className="left d-flex">
-                    <button className='btn m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
-                    <button className='btn m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
+                    <button className= 'btn btn-sm  m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
+                    <button className= 'btn btn-sm  m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
 
                   </div>
                   <div className="right">
                     {option === 0 &&
                       <>
-                        <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
-                        <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printCashTable}>Print </button>
+                        <button className= 'btn btn-sm  excel_btn m-1 btn btn-sm -sm' onClick={downloadExcel}>Download </button>
+                        <button className= 'btn btn-sm  excel_btn m-1 btn btn-sm -sm bg-success border-0' onClick={printCashTable}>Print </button>
                       </>
                     }
                       {option === 1 &&
                       <>
-                        <button className='btn excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
-                        <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
+                        <button className= 'btn btn-sm  excel_btn m-1 btn btn-sm -sm' onClick={downloadOverAllExcel}>Download </button>
+                        <button className= 'btn btn-sm  excel_btn m-1 btn btn-sm -sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
                       </>
                     }
-                    <button className='btn detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
+                    <button className= 'btn btn-sm  detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
 
                   </div>
                 </Paper>
@@ -824,8 +824,8 @@ const getBankCash = async () => {
                                         </TableCell>
                                         <TableCell className='border data_td p-1 '>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                            <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading1}>{loading1 ? "Saving..." : "Save"}</button>
+                                            <button onClick={() => setEditMode(!editMode)} className= 'btn btn-sm  delete_btn'>Cancel</button>
+                                            <button onClick={() => handleUpdate()} className= 'btn btn-sm  save_btn' disabled={loading1}>{loading1 ? "Saving..." : "Save"}</button>
 
                                           </div>
                                         </TableCell>
@@ -846,8 +846,8 @@ const getBankCash = async () => {
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => handleEditClick(cash, outerIndex)} className='btn edit_btn'>Edit</button>
-                                            <button className='btn delete_btn' onClick={() => deleteCash(cash)} disabled={loading}>{loading ? "Deleting..." : "Delete"}</button>
+                                            <button onClick={() => handleEditClick(cash, outerIndex)} className= 'btn btn-sm  edit_btn'>Edit</button>
+                                            <button className= 'btn btn-sm  delete_btn' onClick={() => deleteCash(cash)} disabled={loading}>{loading ? "Deleting..." : "Delete"}</button>
                                           </div>
                                          
                                         </TableCell>
@@ -1048,7 +1048,7 @@ const getBankCash = async () => {
               <div className="modal-content border-0">
                 <div className="modal-header bg-success border-0">
                   <h5 className="modal-title text-white " id="exampleModalLabel"><strong>CASH IN</strong></h5>
-                  <button type="button" className="btn-close shadow btn-sm text-white" data-bs-dismiss="modal" aria-label="Close" onClick={() => (
+                  <button type="button" className="btn-close shadow btn btn-sm -sm text-white" data-bs-dismiss="modal" aria-label="Close" onClick={() => (
                     setCategory(''),
                     setPayment_Via(''),
                     setPayment_Type(''),
@@ -1121,7 +1121,7 @@ const getBankCash = async () => {
                     </div>
                     <div className="text-center">
 
-                      <button className="btn btn-success shadow" disabled={loading}><strong>{loading ? "Adding" : "Cash In"}</strong></button>
+                      <button className="btn btn btn-sm -success shadow" disabled={loading}><strong>{loading ? "Adding" : "Cash In"}</strong></button>
                     </div>
                   </form>
                 </div>
@@ -1137,7 +1137,7 @@ const getBankCash = async () => {
               <div className="modal-content border-0">
                 <div className="modal-header bg-danger border-0">
                   <h5 className="modal-title text-white " id="exampleModalLabel"><strong>CASH OUT</strong></h5>
-                  <button type="button" className="btn-close shadow btn-sm text-white" data-bs-dismiss="modal" aria-label="Close" onClick={() => (
+                  <button type="button" className="btn-close shadow btn btn-sm -sm text-white" data-bs-dismiss="modal" aria-label="Close" onClick={() => (
                     setCategory(''),
                     setPayment_Via(''),
                     setPayment_Type(''),
@@ -1211,7 +1211,7 @@ const getBankCash = async () => {
                     </div>
                     <div className="text-center">
 
-                      <button className="btn btn-danger shadow" disabled={loading}><strong>{loading ? "Adding" : "Cash Out"}</strong></button>
+                      <button className="btn btn btn-sm -danger shadow" disabled={loading}><strong>{loading ? "Adding" : "Cash Out"}</strong></button>
 
                     </div>
                   </form>

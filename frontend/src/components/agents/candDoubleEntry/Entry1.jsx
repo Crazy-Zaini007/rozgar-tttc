@@ -89,18 +89,36 @@ export default function Entry1() {
 
   const printPersonsTable = (selectedPersonDetails) => {
     // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+    <div class="print-header">
+      <p class="invoice">Agent: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title"> Candidate Payments Details</h1>
+      </div>
+      <hr/>
     <table class='print-table'>
       <thead>
         <tr>
         <th>Date</th>
         <th>Name</th>
         <th>PP#</th>
-        <th>Entry_Mode</th>
+        <th>Entry Mode</th>
         <th>Company</th>
         <th>Trade</th>
         <th>Country</th>
-        <th>Final tatus</th>
+        <th>Final Status</th>
         <th>Flight Date</th>
         <th>VPI PKR</th>
         <th>Total In PKR</th>
@@ -140,6 +158,22 @@ export default function Entry1() {
       /* Add your custom print styles here */
       body {
         background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
       }
       .print-table {
         width: 100%;
@@ -321,7 +355,6 @@ export default function Entry1() {
     setCandData(newCandData);
   };
 
-  
   return (
    <>
     <TableContainer component={Paper} className="mb-1">
@@ -330,7 +363,7 @@ export default function Entry1() {
           <>
             <form className="py-3 px-2" onSubmit={handleForm}>
               <div className="text-end ">
-                <button className="btn submit_btn m-1" disabled={loading || (!disableAddMore || !disableAddCurr)}>
+                <button className="btn submit_btn btn-sm m-1" disabled={loading || (!disableAddMore || !disableAddCurr)}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>
@@ -732,6 +765,38 @@ export default function Entry1() {
                     />
                   </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Country</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].country}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Final Status</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].final_Status}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Flight Date</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].flight_Date}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Company</label>
+                    <input disabled
+                      type="text"
+                      value={selectedPersonDetails[index].company}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Visa Price In PKR</label>
                     <input disabled
                       type="text"
@@ -814,7 +879,7 @@ export default function Entry1() {
       </form>
       <div className="row p-0 m-0 mt-2 justify-content-center">
                 <div className="col-md-2 col-sm-12">
-                <button className='btn shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
+                <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
                 </div>
               </div>
      </>

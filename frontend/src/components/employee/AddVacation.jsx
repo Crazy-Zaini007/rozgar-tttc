@@ -143,8 +143,8 @@ export default function AddVacation() {
             <div className="text-end ">
              
 
-              <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Vacation"}</button>
-              {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
+              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Vacation"}</button>
+              {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
 
@@ -205,7 +205,7 @@ export default function AddVacation() {
       {/* Details */}
       <div className="row payment_details mt-0">
         <div className="col-md-12 my-2">
-          {selectedEmployee && <button className='btn detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
+          {selectedEmployee && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
           <div className="col-md-12 detail_table">

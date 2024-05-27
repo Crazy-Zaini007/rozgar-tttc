@@ -1021,7 +1021,7 @@ const formattedDate = formatDate(new Date());
               <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
-                {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
+                {selectedSupplier && <button className='btn detail_btn  btn-sm ' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
               </div>
             </div>

@@ -647,8 +647,8 @@ const getBankCash = async () => {
               <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <button className='btn m-1 show_btn' style={single===0 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(0)}>Bank Cash</button>
-                  <button className='btn m-1 show_btn' style={single===1 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(1)}>All Banks</button>
+                  <button className= 'btn btn-sm  m-1 show_btn' style={single===0 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(0)}>Bank Cash</button>
+                  <button className= 'btn btn-sm  m-1 show_btn' style={single===1 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(1)}>All Banks</button>
 
                 </div>
                 
@@ -666,8 +666,8 @@ const getBankCash = async () => {
                 <div className="account-text mt-md-4 mt-3 text-center">
                   <h6 className='my-2' onClick={() => setCurrent(1)}>{loading2 ? <CircularProgress></CircularProgress>: total && total}</h6>
                   <h5 className='my-2'>Bank Cash </h5>
-                  <Link className="cash_in_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
-                  <Link className="cash_out_btn m-1 btn shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
+                  <Link className="cash_in_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
+                  <Link className="cash_out_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
                 </div>
               </div>
             </div>
@@ -715,26 +715,26 @@ const getBankCash = async () => {
               {(option===0 || option===1) && single===0 &&
               <div className='col-md-12 payment_details'>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
-                <div className="left d-flex">
-                  <h4>Banks Cash Details</h4>
-                  <button className='btn m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
-                  <button className='btn m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
+                <div className="left ">
+                  <h4>Banks Cash Details</h4> <br />
+                  <button className= 'btn btn-sm  m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
+                  <button className= 'btn btn-sm  m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
 
                 </div>
                 <div className="right">
                   {option === 0 &&
                     <>
-                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
-                      <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printCashTable}>Print </button>
+                      <button className= 'btn btn-sm  excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
+                      <button className= 'btn btn-sm  excel_btn m-1 btn-sm bg-success border-0' onClick={printCashTable}>Print </button>
                     </>
                   }
                     {option === 1 &&
                     <>
-                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
-                      <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
+                      <button className= 'btn btn-sm  excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
+                      <button className= 'btn btn-sm  excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
                     </>
                   }
-                  <button className='btn detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
+                  <button className= 'btn btn-sm  detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
 
                 </div>
               </Paper>
@@ -876,8 +876,8 @@ const getBankCash = async () => {
                                         </TableCell>
                                         <TableCell className='border data_td p-1 '>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                                            <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading1}>{loading1 ? "Saving..." : "Save"}</button>
+                                            <button onClick={() => setEditMode(!editMode)} className= 'btn btn-sm  delete_btn'>Cancel</button>
+                                            <button onClick={() => handleUpdate()} className= 'btn btn-sm  save_btn' disabled={loading1}>{loading1 ? "Saving..." : "Save"}</button>
 
                                           </div>
                                         </TableCell>
@@ -898,8 +898,8 @@ const getBankCash = async () => {
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => handleEditClick(cash, outerIndex)} className='btn edit_btn'>Edit</button>
-                                            <button className='btn delete_btn' onClick={() => deleteCash(cash)} disabled={loading}>{loading ? "Deleting..." : "Delete"}</button>
+                                            <button onClick={() => handleEditClick(cash, outerIndex)} className= 'btn btn-sm  edit_btn'>Edit</button>
+                                            <button className= 'btn btn-sm  delete_btn' onClick={() => deleteCash(cash)} disabled={loading}>{loading ? "Deleting..." : "Delete"}</button>
                                           </div>
                                          
                                         </TableCell>

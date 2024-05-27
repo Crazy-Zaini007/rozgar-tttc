@@ -179,14 +179,14 @@ const[show,setShow]=useState(false)
                   }
 
                   <div className="dropdown d-inline m-1">
-                    <button className="btn" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button className="btn btn-sm" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       View More
                     </button>
                     <ul className="dropdown-menu shadow border-0" aria-labelledby="dropdownMenuLink">
-                      <li className='my-2 py-2' onClick={() => setSection1(!section1)}>{!section1 ? "Show" : "Hide"} Visit Section</li>
-                      <li className='my-2 py-2' onClick={() => setSection2(!section2)}>{!section2 ? "Show" : "Hide"} Ticket Section</li>
-                      <li className='my-2 py-2' onClick={() => setSection3(!section3)}>{!section3 ? "Show" : "Hide"} Azad Section</li>
-                      <li className='my-2 py-2' onClick={() => setSection4(!section4)}>{!section4 ? "Show" : "Hide"} Protectors</li>
+                      <li className='my-1 py-1' onClick={() => setSection1(!section1)}>{!section1 ? "Show" : "Hide"} Visit Section</li>
+                      <li className='my-1 py-1' onClick={() => setSection2(!section2)}>{!section2 ? "Show" : "Hide"} Ticket Section</li>
+                      <li className='my-1 py-1' onClick={() => setSection3(!section3)}>{!section3 ? "Show" : "Hide"} Azad Section</li>
+                      <li className='my-1 py-1' onClick={() => setSection4(!section4)}>{!section4 ? "Show" : "Hide"} Protectors</li>
                     </ul>
                   </div>
                 </div>

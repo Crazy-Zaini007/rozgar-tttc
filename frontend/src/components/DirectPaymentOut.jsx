@@ -411,7 +411,7 @@ useEffect(() => {
                 </div>
                 <div className="right ">
                   <div className="text-end ">
-                  <span className="btn submit_btn m-1 py-2 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>{overAllPayments &&  overAllPayments.length > 0 &&
+                  <span className="btn btn-sm submit_btn m-1 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>{overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
                                 .filter(entry => entry.date===currentDate)
                                 .reduce((total, entry) => {
@@ -419,7 +419,7 @@ useEffect(() => {
                                 }, 0)}</span>
                                 
 
-                <button className="btn submit_btn m-1" disabled={loading}>
+                <button className="btn btn-sm submit_btn m-1" disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>

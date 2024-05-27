@@ -318,13 +318,13 @@ export default function VisitCandSinglePayOut() {
       <div className="col-md-12">
         <Paper className='py-3 mb-1 px-2'>
           <h4>Candidate Payment Out</h4>
-          <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setSingle(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
-          <button className='btn m-1 py-2 btn-sm entry_btn' onClick={() => setSingle(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
-          {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
+          <button className='btn btn-sm  m-1 entry_btn' onClick={() => setSingle(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
+          <button className='btn btn-sm  m-1  entry_btn' onClick={() => setSingle(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
+          {single === 1 && <label className="btn m-1 btn-sm upload_btn">
             Upload New List
             <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
           </label>}
-          <button className='btn m-1 py-2 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setSingle(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
+          <button className='btn btn-sm  m-1 entry_btn bg-danger border-0 text-white' onClick={() => setSingle(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
 
         </Paper>
       </div>
@@ -339,8 +339,8 @@ export default function VisitCandSinglePayOut() {
                   <input type="checkbox" value={close} onClick={() => setClose(!close)} />
                 </label>
 
-                  <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
-                  {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
+                  <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
+                  {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
                 </div>
                 <div className="row p-0 m-0 my-1">
 
@@ -417,7 +417,7 @@ export default function VisitCandSinglePayOut() {
                     </div>
                   </div>}
                 </div>
-                <span className='btn add_section_btn' style={!section ? { backgroundColor: 'var(--accent-lighter-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={handleSection}>{!section ? <AddIcon fontSize='small'></AddIcon> : <RemoveIcon fontSize='small'></RemoveIcon>}{!section ? "Add Currency" : "Remove"}</span>
+                <span className='btn btn-sm  add_section_btn' style={!section ? { backgroundColor: 'var(--accent-lighter-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={handleSection}>{!section ? <AddIcon fontSize='small'></AddIcon> : <RemoveIcon fontSize='small'></RemoveIcon>}{!section ? "Add Currency" : "Remove"}</span>
                 {/* Add Crrency section */}
                 {section &&
                   <div className="row p-0 m-0 mt-5">
@@ -451,7 +451,7 @@ export default function VisitCandSinglePayOut() {
       {single === 0 &&
         <div className="row payment_details mt-0">
           <div className="col-md-12 my-2">
-            {selectedSupplier && <button className='btn detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
+            {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
           </div>
           {option && (
             <div className="col-md-12 detail_table">
@@ -557,7 +557,7 @@ export default function VisitCandSinglePayOut() {
             <Paper>
               <form className='py-0 px-2' onSubmit={handleUploadList} >
                 <div className="text-end">
-                <button className='btn submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
+                <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
                 </div>
                 <div className="table-responsive">
                   <table className='table table-borderless table-striped'>

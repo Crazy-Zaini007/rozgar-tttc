@@ -182,8 +182,8 @@ export default function AddExpense() {
                             <TableContainer component={Paper}>
                                 <form className='py-3 px-2' onSubmit={handleForm}>
                                     <div className="text-end ">
-                                        <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Expense"}</button>
-                                        {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
+                                        <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Expense"}</button>
+                                        {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
                                     </div>
                                     <div className="row p-0 m-0 my-1">
                                         <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -247,7 +247,7 @@ export default function AddExpense() {
                                             </div>
                                         </div>}
                                     </div>
-                                    <span className='btn add_section_btn' style={!section ? { backgroundColor: 'var(--accent-lighter-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={handleSection}>{!section ? <AddIcon fontSize='small'></AddIcon> : <RemoveIcon fontSize='small'></RemoveIcon>}{!section ? "Add Currency" : "Remove"}</span>
+                                    <span className='btn btn-sm  add_section_btn' style={!section ? { backgroundColor: 'var(--accent-lighter-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={handleSection}>{!section ? <AddIcon fontSize='small'></AddIcon> : <RemoveIcon fontSize='small'></RemoveIcon>}{!section ? "Add Currency" : "Remove"}</span>
                                     {/* Add Crrency section */}
                                     {section &&
                                         <div className="row p-0 m-0 mt-5">

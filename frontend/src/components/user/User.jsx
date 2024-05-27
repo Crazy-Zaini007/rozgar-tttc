@@ -158,8 +158,8 @@ export default function User() {
 
 
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                      <button onClick={() => setEditMode(!editMode)} className='btn delete_btn'>Cancel</button>
-                      <button onClick={() => handleUpdate()} className='btn save_btn' disabled={loading2}>{loading2 ? "Saving..." : "Save"}</button>
+                      <button onClick={() => setEditMode(!editMode)} className='btn btn-sm  delete_btn'>Cancel</button>
+                      <button onClick={() => handleUpdate()} className='btn btn-sm  save_btn' disabled={loading2}>{loading2 ? "Saving..." : "Save"}</button>
 
                     </div>
 
@@ -175,7 +175,7 @@ export default function User() {
                  
                   <TableCell className='border data_td text-center'>
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                      <button onClick={() => handleEditClick(users)} className='btn edit_btn'>Edit</button>
+                      <button onClick={() => handleEditClick(users)} className='btn btn-sm  edit_btn'>Edit</button>
                      
                     </div>
                     

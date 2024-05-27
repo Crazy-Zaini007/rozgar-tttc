@@ -206,7 +206,7 @@ const deleteSupplier = async (data) => {
             </div>
 
           </div>
-          <button className='btn submit_btn' disabled={isLoading}>{isLoading ? 'Adding' : 'Add New'}</button>
+          <button className='btn btn-sm  submit_btn' disabled={isLoading}>{isLoading ? 'Adding' : 'Add New'}</button>
 
         </form>
       </div>
@@ -240,8 +240,8 @@ const deleteSupplier = async (data) => {
                                 
                                 <TableCell className='border data_td p-1 '>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                  <button className='btn edit_btn p-1  shadow' onClick={() => setEditMode(!editMode)}><CloseIcon fontSize='small'></CloseIcon></button>
-                                  <button className='btn delete_btn p-1  shadow' onClick={() => handleUpdate()} disabled={loading}><CheckIcon fontSize='small'></CheckIcon></button>
+                                  <button className='btn btn-sm  edit_btn p-1  shadow' onClick={() => setEditMode(!editMode)}><CloseIcon fontSize='small'></CloseIcon></button>
+                                  <button className='btn btn-sm  delete_btn p-1  shadow' onClick={() => handleUpdate()} disabled={loading}><CheckIcon fontSize='small'></CheckIcon></button>
                                   </div>
                                 
                                 </TableCell>
@@ -253,8 +253,8 @@ const deleteSupplier = async (data) => {
                  
                   <TableCell className='data_td text-center'>
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                    <button className='btn edit_btn p-1  shadow' onClick={() => handleEditClick(data,index)} ><EditIcon fontSize='small'></EditIcon></button>
-                    <button className='btn delete_btn p-1  shadow' onClick={() => deleteSupplier(data)}><DeleteIcon fontSize='small'  disabled={loading}></DeleteIcon></button>
+                    <button className='btn btn-sm  edit_btn p-1  shadow' onClick={() => handleEditClick(data,index)} ><EditIcon fontSize='small'></EditIcon></button>
+                    <button className='btn btn-sm  delete_btn p-1  shadow' onClick={() => deleteSupplier(data)}><DeleteIcon fontSize='small'  disabled={loading}></DeleteIcon></button>
                     </div>
                     
 
