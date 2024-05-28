@@ -160,6 +160,7 @@
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 5px;
+
 }
 
 .register_form input,
@@ -222,8 +223,14 @@
   background-color: var(--white);
   overflow-x: scroll;
   top: 0;
-  z-index: 1;
+  z-index: 999;
   border-right: 1px solid var(--mediumgrey);
+  transition: width 0.3s ease-in-out;
+}
+.mycollapsed {
+  width: 0;
+  visibility: hidden;
+  display: none;
   transition: width 0.3s ease-in-out;
 }
 
@@ -285,16 +292,25 @@
   font-weight: 700;
 }
 
+
+.my_Navbar{
+  position: relative;
+}
+.my_Navbar .right i{
+  font-size: 20px;
+  color: var(--accent-stonger-blue);
+
+}
 #mycheck{
   -webkit-appearance:none ;
   visibility: none;
   display: none;
 }
-.sidenav .my_span{
+.my_Navbar .my_span{
   position: absolute;
-  right: 2px;
-  top: 10px;
-  font-size: 16px;
+  top: 16px;
+  left: 15px;
+  font-size: 20px;
   border-radius: 3px;
   color: var(--accent-stonger-blue);
   padding: 3px 8px;
@@ -302,16 +318,13 @@
   background:white;
   
 }
-#mycheck:checked ~ .sidenav{
-  width: 25px;
-  transition: width 0.3s ease-in-out;
-}
+
 #mycheck:checked ~ .sidenav h4{
   display: none;
   visibility: none;
 }
 
-#mycheck:checked ~ .sidenav #bars{
+#mycheck:checked ~ .my_Navbar #bars{
   display: none;
 }
 .main {
@@ -320,7 +333,7 @@
   transition: margin 0.3s ease-in-out;
 }
 .collapsed{
-  margin-left: 25px;
+  margin-left: 0px;
   transition: margin 0.3s ease-in-out;
 }
 
@@ -693,6 +706,7 @@
   color: white;
   font-size: 11px;
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 .entry_details .detail_table .action {
@@ -726,6 +740,8 @@
   letter-spacing: 1px;
   width: auto;
   letter-spacing: normal;
+  text-transform: capitalize;
+
 }
 .entry_details .detail_table p {
   font-size: 12px;
@@ -937,6 +953,8 @@
 }
  .payment_details .label {
   color: white;
+  text-transform: capitalize;
+
 }
  .payment_details .edit_btn {
   background-color: var(--accent-stonger-blue);
@@ -1061,6 +1079,8 @@
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: auto;
+  text-transform: capitalize;
+
 }
 .entry_setting .details_table .data_td input,
 .entry_setting .details_table .data_td select {
@@ -1313,8 +1333,7 @@
   font-weight: 600;
   letter-spacing: 1px;
   width: 18.28%;
-  text-transform: normal;
-
+  text-transform: capitalize;
 }
 .payment_details .detail_table .profit {
   background-color: var(--cool-Green);

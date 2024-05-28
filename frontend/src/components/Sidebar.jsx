@@ -2507,18 +2507,14 @@ export default function Sidebar() {
     }
 
   }
+const collapsed = useSelector((state) => state.collapsed.collapsed);
+
   return (
     <>
       <Paper>
-      <input type="checkbox" id='mycheck'/>
-        <div className='sidenav'>
-        
-  <label htmlFor="mycheck" onClick={()=>toggleSidebar()}>
-    <span className='fas fa-times my_span shadow' id='times'></span>
-    <span className='fas fa-bars my_span shadow' id='bars'></span>
-  </label>
-          <div className="welcome text-center pt-1">
-            
+      
+        <div className={`${collapsed ?"mycollapsed":"sidenav"}`}>         
+          <div className="welcome text-center pt-4">
             <h4>Rozgar TTTC Finance</h4>
             {/* <div className='text-center image mx-auto '><img className='mx-auto' src={logo} alt="" /></div> */}
           </div>

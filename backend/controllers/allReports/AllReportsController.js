@@ -1594,7 +1594,7 @@ const getAllBanksPayments = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const payment_Via=payment.payment_Via
+            const payment_Via=payment.payment_Via.toLowerCase();
           
             if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_In>0) {
               if (!combinedPaymentsIn[payment_Via]) {
@@ -1607,7 +1607,7 @@ const getAllBanksPayments = async (req, res) => {
 
         if (item[schemaType] && item[schemaType].candPayments) {
           for (const payment of item[schemaType].candPayments) {
-            const payment_Via = payment.payment_Via;
+            const payment_Via = payment.payment_Via.toLowerCase();
           
 
             if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_In>0) {
@@ -1629,7 +1629,7 @@ const getAllBanksPayments = async (req, res) => {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
           
-            const payment_Via=payment.payment_Via
+            const payment_Via=payment.payment_Via.toLowerCase();
           
 
             if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_Out>0) {
@@ -1645,7 +1645,7 @@ const getAllBanksPayments = async (req, res) => {
 
         if (item[schemaType] && item[schemaType].candPayments) {
           for (const payment of item[schemaType].candPayments) {
-            const payment_Via = payment.payment_Via;
+            const payment_Via = payment.payment_Via.toLowerCase();
           
 
             if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_Out>0) {
@@ -1666,7 +1666,7 @@ const getAllBanksPayments = async (req, res) => {
     for (const cash of cashInHandPayments) {
       if (cash.payment) {
         for (const payment of cash.payment) {
-          const payment_Via = payment.payment_Via;
+          const payment_Via = payment.payment_Via.toLowerCase();
         
 
           if (payment?.payment_Via?.toLowerCase() !== "cash") {
@@ -1688,7 +1688,7 @@ const getAllBanksPayments = async (req, res) => {
     // Process payments for Expenses schema
     const expensesPayments = await Expenses.find();
     for (const expense of expensesPayments) {
-      const payment_Via = expense.payment_Via;
+      const payment_Via = expense.payment_Via.toLowerCase();
     
       if (payment?.payment_Via?.toLowerCase() !== "cash") {
         // Ignore cash payments
@@ -1711,13 +1711,14 @@ const getAllBanksPayments = async (req, res) => {
           if(month.payment && month.payment.length>0){
             const payments= month.payment
             for (const payment of payments){
+              const payment_Via=payment.payment_Via.toLowerCase();
               if (payment?.payment_Via?.toLowerCase() !== "cash") {
                 // Ignore cash payments
     
-                if (!combinedPaymentsOut[payment.payment_Via]) {
-                  combinedPaymentsOut[payment.payment_Via] = 0;
+                if (!combinedPaymentsOut[payment_Via]) {
+                  combinedPaymentsOut[payment_Via] = 0;
                 }
-                combinedPaymentsOut[payment.payment_Via] += payment.payment_Out || 0;
+                combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
               }
             }
           }
@@ -1734,8 +1735,8 @@ const getAllBanksPayments = async (req, res) => {
     ]);
 
     for (const payment_Via of allPaymentMethods) {
-      const totalPaymentIn = combinedPaymentsIn[payment_Via] || 0;
-      const totalPaymentOut = combinedPaymentsOut[payment_Via] || 0;
+      const totalPaymentIn = combinedPaymentsIn[payment_Via.toLowerCase()] || 0;
+      const totalPaymentOut = combinedPaymentsOut[payment_Via.toLowerCase()] || 0;
       const totalPayment = totalPaymentIn - totalPaymentOut;
       combinedArray.push({
         payment_Via: payment_Via,
@@ -1747,7 +1748,7 @@ const getAllBanksPayments = async (req, res) => {
       0
     );
 
-    // Send the resulting combined payments in the response
+    
     res
       .status(200)
       .json({ data: combinedArray, bank_Cash: totalPaymentAcrossBanks });

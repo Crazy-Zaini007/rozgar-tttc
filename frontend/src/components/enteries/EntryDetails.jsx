@@ -25,7 +25,7 @@ import ProtectorHook from '../../hooks/settingHooks/ProtectorHook';
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-const rowsPerPageOptions = [10, 15, 30];
+const rowsPerPageOptions = [50, 75, 100,200];
 
 const EntryDetails = () => {
   const { getEntries } = EntryHook();
@@ -55,6 +55,8 @@ const EntryDetails = () => {
   const { getVPPData } = VPPHook()
   const { getVSPData } = VSPHook()
   const { getProtector } = ProtectorHook()
+
+
 
   // fteching Data from DB
   const fetchData = async () => {
@@ -100,19 +102,9 @@ const EntryDetails = () => {
 
   }, []);
 
+  
   const enteries = useSelector((state) => state.enteries.enteries);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
   const [delLoading, setDelLoading] = useState(false)
 
   const deleteEntry = async (entry) => {
@@ -207,8 +199,6 @@ const EntryDetails = () => {
   const countries = useSelector((state) => state.setting.countries);
   const currencies = useSelector((state) => state.setting.currencies);
 
-  console.log('editedEntry',editedEntry)
-
   const [updateLoading, setUpdateLoading] = useState(false)
   const [, setNewMessage] = useState('')
 
@@ -267,7 +257,7 @@ const EntryDetails = () => {
   const [reference_Out_Type, setReference_Out_Type] = useState('')
   const [reference_In_Type, setReference_In_Type] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  console.log('enteries',enteries)
+
   const filteredEntries = enteries.filter(entry => {
     let isDateInRange = true;
     if (dateFrom && dateTo) {
@@ -291,6 +281,9 @@ const EntryDetails = () => {
 
     );
   })
+
+  const[rowsValue,setRowsValue]=useState("")
+
 
   const downloadExcel = () => {
     const data = [];
@@ -538,7 +531,21 @@ const EntryDetails = () => {
             {!loading1 &&
               <div className='col-md-12'>
                 <Paper className='py-3 mb-1 px-2 detail_table'>
-                  <TableContainer sx={{ maxHeight: 600 }}>
+                  <label htmlFor="" className='my-2 mx-1'>Select Range: </label>
+                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+
+                  </select>
+                  <TableContainer>
                     <Table stickyHeader>
                       <TableHead>
                         <TableRow className='p-0 m-0'>
@@ -666,7 +673,7 @@ const EntryDetails = () => {
 
 
                       <TableBody>
-                        {filteredEntries && filteredEntries.length > 0 ? filteredEntries.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
+                        {filteredEntries && filteredEntries.length > 0 ? filteredEntries.slice(0,rowsValue ? rowsValue : undefined).map((entry, index) => (
                           <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                             {/* ... (previous cells) */}
                             {editMode && editedRowIndex === index ? (
@@ -1800,21 +1807,7 @@ const EntryDetails = () => {
 
                     </Table>
                   </TableContainer>
-                  <TablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    component='div'
-                    count={filteredEntries.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    style={{
-                      color: 'blue',
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      textTransform: 'capitalize',
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
+                 
                 </Paper>
               </div>
             }

@@ -872,9 +872,9 @@ const getBankCash = async () => {
                                           <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                                         </TableCell>
                                         <TableCell className='border data_td p-1 '>
-                                          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => setEditMode(!editMode)} className= 'btn btn-sm  delete_btn'>Cancel</button>
-                                            <button onClick={() => handleUpdate()} className= 'btn btn-sm  save_btn' disabled={loading1}>{loading1 ? "Saving..." : "Save"}</button>
+                                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                            <button onClick={() => setEditMode(!editMode)} className= 'btn btn-sm  delete_btn'><i className="fa-solid fa-xmark"></i></button>
+                                            <button onClick={() => handleUpdate()} className= 'btn btn-sm  save_btn' disabled={loading1}><i className="fa-solid fa-check"></i></button>
 
                                           </div>
                                         </TableCell>
@@ -894,9 +894,9 @@ const getBankCash = async () => {
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
-                                          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => handleEditClick(cash, outerIndex)} className= 'btn btn-sm  edit_btn'>Edit</button>
-                                            <button className= 'btn btn-sm  delete_btn' onClick={() => deleteCash(cash)} disabled={loading}>{loading ? "Deleting..." : "Delete"}</button>
+                                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                            <button onClick={() => handleEditClick(cash, outerIndex)} className= 'btn btn-sm edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
+                                            <button className= 'btn btn-sm  delete_btn' onClick={() => deleteCash(cash)} disabled={loading}><i className="fa-solid fa-trash-can"></i></button>
                                           </div>
                                          
                                         </TableCell>

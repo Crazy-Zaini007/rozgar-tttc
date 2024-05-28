@@ -8,6 +8,8 @@ import { useAuthContext } from './hooks/userHooks/UserAuthHook'
 // User Login/Signup Section
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Navbar from './components/Navbar.jsx';
+
 
 // Enteries Section
 
@@ -153,7 +155,7 @@ import Notes from './components/Notes.jsx'
 
 // Backup
 import Backup from './components/Backup.jsx'
-import CandWisePaymentReports from './components/all_Reports/CandWisePaymentReports.jsx';
+
 
 function App() {
   // user Info
@@ -163,6 +165,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      {user && <Navbar />}
 
         {user && <Sidebar />}
         {/* <Navbar/> */}
@@ -175,10 +178,7 @@ function App() {
           <Route exact path='/rozgar/cash_in_hand' element={user && <CashinHand></CashinHand>}></Route>
           <Route exact path='/rozgar/bank_cash' element={user && <BankCash></BankCash>}></Route>
           <Route exact path='/rozgar/direct/payment_in_out' element={user && <DirectInOut></DirectInOut>}></Route>
-         
-
-
-
+        
 
           {/* Enteries Routes */}
           <Route exact path='/rozgar/enteries/add_new_entry' element={user && <NewEntry></NewEntry>}></Route>
