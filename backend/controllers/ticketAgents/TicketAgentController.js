@@ -227,7 +227,10 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
           curr_Amount,
           date,
         } = payment;
-
+        if(!payment_Via){
+          res.status(400).json({message:"Payment Via is required"})
+          break;
+        }
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 
@@ -1874,7 +1877,10 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
           curr_Amount,
           date,
         } = payment;
-
+        if(!payment_Via){
+          res.status(400).json({message:"Payment Via is required"})
+          break;
+        }
         if (!supplierName) {
           res.status(400).json({ message: "Name is required" });
           return;

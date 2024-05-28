@@ -74,16 +74,16 @@ const[payments,setPayments]=useState('')
   const filteredEntries =payments && payments.filter(entry => {
     return (
       entry.entry_Date?.toLowerCase().includes(date.toLowerCase()) &&
-      entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
-      entry.company.toLowerCase().includes(company.toLowerCase()) &&
-      entry.country.toLowerCase().includes(country.toLowerCase()) &&
-      entry.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
-      entry.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-      entry.reference_Out_Name.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      entry.reference_In_Name.toLowerCase().includes(reference_In.toLowerCase()) &&
-      entry.reference_Out.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
-      entry.reference_In.toLowerCase().includes(reference_In_Type.toLowerCase())
+      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      entry.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+      entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase()) &&
+      entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase()) &&
+      entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
+      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase())
     );
   })
 

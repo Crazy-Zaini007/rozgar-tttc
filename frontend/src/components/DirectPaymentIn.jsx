@@ -55,7 +55,29 @@ const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
 
 const[banks,setBanks]=useState('')
 const[total,setTotal]=useState()
-console.log(banks)
+const[payments,setPayments]=useState('')
+
+
+const getData = async () => {
+    
+  try {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/persons`, {
+      headers: {
+        'Authorization': `Bearer ${user.token}`,
+      },
+    });
+
+    const json = await response.json()
+    if (response.ok) {
+      setPayments(json.data)
+    // Dispatch the action with received data
+    }
+  } catch (error) {
+   
+
+  }
+}
+
 const apiUrl = process.env.REACT_APP_API_URL;
 const getBankCash = async () => {
   try {
@@ -74,7 +96,6 @@ const getBankCash = async () => {
     }
   }
   catch (error) {
-    console.error('Fetch error:', error);
     setNewMessage(toast.error('Server is not Responding...'));
     setLoading(false);
   }
@@ -124,6 +145,7 @@ const getBankCash = async () => {
     try {
       // Use Promise.all to execute all promises concurrently
       await Promise.all([
+        getData(),
         getCashInHandData(),
         getBankCash(),
         getOverAllPayments(),
@@ -320,6 +342,7 @@ const getBankCash = async () => {
         setLoading(false);
       }
       if (response.ok) {
+        getData()
         getCashInHandData()
         getBankCash()
         getOverAllPayments()
@@ -389,12 +412,30 @@ const getBankCash = async () => {
 
 const currentDate = new Date().toISOString().split('T')[0];
 
+// Filtering the Enteries
+const [mySearch, setMySearch] = useState('')
+const [reference_Out, setReference_Out] = useState('')
+
+const filteredEntries =payments && payments.filter(entry => {
+  return (
+   ( entry?.name?.toLowerCase().includes(mySearch.toLowerCase()) ||
+    entry?.pp_No?.toLowerCase().includes(mySearch.toLowerCase()) ||
+    entry?.trade?.toLowerCase().includes(mySearch.toLowerCase()) ||
+    entry?.company?.toLowerCase().includes(mySearch.toLowerCase()) ||
+    entry?.country?.toLowerCase().includes(mySearch.toLowerCase()) ||
+    entry?.final_Status?.toLowerCase().includes(mySearch.toLowerCase()) ||
+    entry?.flight_Date?.toLowerCase().includes(mySearch.toLowerCase())) &&
+    entry?.type?.toLowerCase().includes(reference_Out.toLowerCase()) 
+  )
+})
 
   return (
     <>
   
 <Paper className="col-md-10 py-3 mb-1 px-2 detail_table">
-        {!option && (
+  <div className="row">
+  <div className="col-md-12">
+  {!option && (
          
          <form className="py-3 px-2" onSubmit={handleForm}>
               <div className="d-flex justify-content-between">
@@ -764,8 +805,102 @@ const currentDate = new Date().toISOString().split('T')[0];
             </form>
           
         )}
+    </div>
+    <div className="col-md-12 filters">
+                <Paper className='py-1 mb-2 px-3'>
+                  <div className="row">
+                  <div className="col-auto px-1">
+                      <label htmlFor="">Search:</label>
+                      <input type="search"  value={mySearch} onChange={(e)=>setMySearch(e.target.value)}/>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Reference:</label>
+                      <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        <option value="Candidate">Direct/Candidate</option>
+                        <option value="Agent">Agents</option>
+                        <option value="Supplier">Suppliers</option>
+                      </select>
+                    </div>
+
+                  </div>
+                </Paper>
+              </div>
+    <div className="col-md-12">
+      <TableContainer>
+        <Table>
+        <TableHead>
+          <TableRow>
+          <TableCell className="label border">SN</TableCell>
+            <TableCell className="label border">Date</TableCell>
+            <TableCell className="label border">Candidate/PP NO</TableCell>
+            <TableCell className="label border">Trade</TableCell>
+            <TableCell className="label border">Company</TableCell>
+            <TableCell className="label border">Country</TableCell>
+            <TableCell className="label border">FS</TableCell>
+            <TableCell className="label border">Fly</TableCell>
+            <TableCell className="label border">Reference</TableCell>
+            <TableCell className="label border">Visa_Price</TableCell>
+            <TableCell className="label border">Total_Paid</TableCell>
+            <TableCell className="label border">Remaining</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {filteredEntries && filteredEntries.length > 0 && filteredEntries.map((entry, index) => (
+    <TableRow key={index}>
+      <TableCell className='border data_td'>{index + 1}</TableCell>
+      <TableCell className='border data_td'>{entry.entry_Date}</TableCell>
+      <TableCell className='border data_td'>{entry.name}/{entry.pp_No}</TableCell>
+      <TableCell className='border data_td'>{entry.trade}</TableCell>
+      <TableCell className='border data_td'>{entry.company}</TableCell>
+      <TableCell className='border data_td'>{entry.country}</TableCell>
+      <TableCell className='border data_td'>{entry.final_Status}</TableCell>
+      <TableCell className='border data_td'>{entry.flight_Date}</TableCell>
+      <TableCell className='border data_td'>{entry.supplierName === entry.name ? "/" : entry.supplierName} / {entry.type}</TableCell>
+      <TableCell className='border data_td'>{entry.visa_Price_In_PKR}</TableCell>
+      <TableCell className='border data_td bg-success text-white'>{entry.total_In-entry.cash_Out}</TableCell>
+      <TableCell className='border data_td bg-warning text-white'>{entry.visa_Price_In_PKR - entry.total_In + entry.cash_Out}</TableCell>
+    </TableRow>
+  ))}
+  <TableRow>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell></TableCell>
+    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_PKR);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.total_In);
+      }, 0)}
+    </TableCell>
+   
+    <TableCell className='border data_td text-center bg-warning text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_PKR) - parseFloat(entry.total_In) +parseFloat(entry.cash_Out)
+      }, 0)}
+    </TableCell>
+  </TableRow>
+        </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  </div>
+ 
+        
       </Paper>
-      <Paper className="col-md-2 mb-1 px-0 border total_cash">
+      <div className="col-md-2 mb-1 px-0  total_cash">
         <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
         <h6 className="bg-success text-white py-2 text-center my-0">{(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
         <div className="details">
@@ -800,7 +935,7 @@ const currentDate = new Date().toISOString().split('T')[0];
 </TableContainer>
 
         </div>
-      </Paper>
+      </div>
 
       
     </>

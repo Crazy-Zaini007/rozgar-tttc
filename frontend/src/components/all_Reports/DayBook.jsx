@@ -227,7 +227,7 @@ export default function DayBook() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = todayPayments.filter(payment => payment.type.toLowerCase().includes('in'));
+    const filteredPaymentsIn = todayPayments.filter(payment => payment.type?.toLowerCase().includes('in'));
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {
@@ -299,7 +299,7 @@ export default function DayBook() {
     </thead>
     <tbody>
       ${todayPayments
-        .filter(entry => entry.type.toLowerCase().includes('out'))
+        .filter(entry => entry.type?.toLowerCase().includes('out'))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -383,7 +383,7 @@ export default function DayBook() {
 
 
   const downloadPaymenOutExcel = () => {
-    const filteredPaymentsOut = todayPayments.filter(payment => payment.type.toLowerCase().includes('out'));
+    const filteredPaymentsOut = todayPayments.filter(payment => payment.type?.toLowerCase().includes('out'));
 
     const data = [];
     // Iterate over entries and push all fields
@@ -438,17 +438,17 @@ export default function DayBook() {
     // Filter payment_Via based on the selected cash_Type
     let filteredPaymentVia = true;
     if (cash_Type === 'cash') {
-      filteredPaymentVia = expense.payment_Via.toLowerCase().includes('cash');
+      filteredPaymentVia = expense.payment_Via?.toLowerCase().includes('cash');
     } else if (cash_Type === 'banks') {
-      filteredPaymentVia = !expense.payment_Via.toLowerCase().includes('cash');
+      filteredPaymentVia = !expense.payment_Via?.toLowerCase().includes('cash');
     }
   
     return (
       isDateInRange &&
-      expense.name.toLowerCase().includes(name.toLowerCase()) &&
-      expense.expCategory.toLowerCase().includes(expe_Category.toLowerCase()) &&
-      expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      expense.name?.toLowerCase().includes(name.toLowerCase()) &&
+      expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
+      expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
       filteredPaymentVia
     )
   })

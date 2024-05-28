@@ -303,7 +303,7 @@
   
 }
 #mycheck:checked ~ .sidenav{
-  width: 60px;
+  width: 25px;
   transition: width 0.3s ease-in-out;
 }
 #mycheck:checked ~ .sidenav h4{
@@ -314,15 +314,13 @@
 #mycheck:checked ~ .sidenav #bars{
   display: none;
 }
-
-
 .main {
   margin-left: 220px;
   height: 100%;
   transition: margin 0.3s ease-in-out;
 }
 .collapsed{
-  margin-left: 60px;
+  margin-left: 25px;
   transition: margin 0.3s ease-in-out;
 }
 

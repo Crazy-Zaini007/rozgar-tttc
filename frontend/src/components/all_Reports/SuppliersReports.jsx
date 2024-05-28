@@ -81,8 +81,8 @@ export default function SuppliersReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
-    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase())
+    paymentItem.type?.toLowerCase().includes(type.toLowerCase())&&
+    paymentItem.supplierName?.toLowerCase().includes(supplier.toLowerCase())
 
   })
 

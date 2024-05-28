@@ -258,7 +258,10 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
           date,
           close,
         } = payment;
-
+        if(!payment_Via){
+          res.status(400).json({message:"Payment Via is required"})
+          break;
+        }
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
         const suppliers = await AzadCandidate.find({});
@@ -2219,7 +2222,10 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
           date,
           close,
         } = payment;
-
+        if(!payment_Via){
+          res.status(400).json({message:"Payment Via is required"})
+          break;
+        }
         if (!supplierName) {
           res.status(400).json({ message: "Supplier Name is required" });
           return;

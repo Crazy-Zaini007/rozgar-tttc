@@ -452,9 +452,9 @@ export default function AgentCandPaymentInDetails() {
 
   const filteredTotalPaymentIn = agent_Payments_In.filter(payment => {
     return (
-      payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-      payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
-      payment.status.toLowerCase().includes(status.toLowerCase())
+      payment.createdAt?.toLowerCase().includes(date1.toLowerCase()) &&
+      payment.supplierName?.toLowerCase().includes(supplier1.toLowerCase()) &&
+      payment.status?.toLowerCase().includes(status.toLowerCase())
     )
   })
 
@@ -483,8 +483,8 @@ export default function AgentCandPaymentInDetails() {
 
           return (
             isDateInRange &&
-            paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-            paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+            paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
           );
         }),
     }))

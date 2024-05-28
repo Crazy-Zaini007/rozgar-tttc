@@ -769,8 +769,8 @@ let sr_No=0;
                     if (payment && payment.payment_Via && payment.payment_Type) {
                         return (
                             isDateInRange &&
-                            payment.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-                            payment.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+                            payment.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+                            payment.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
                         );
                     } else {
                         return false;
@@ -1042,9 +1042,9 @@ let sr_No=0;
             ...filteredData,
             vacation: filteredData.vacation
                 .filter((vacation) =>
-                    vacation.date.toLowerCase().includes(date3.toLowerCase()) &&
-                    vacation.dateFrom.toLowerCase().includes(dateFrom.toLowerCase()) &&
-                    vacation.dateTo.toLowerCase().includes(dateTo.toLowerCase())
+                    vacation.date?.toLowerCase().includes(date3.toLowerCase()) &&
+                    vacation.dateFrom?.toLowerCase().includes(dateFrom.toLowerCase()) &&
+                    vacation.dateTo?.toLowerCase().includes(dateTo.toLowerCase())
 
                 ),
         }))

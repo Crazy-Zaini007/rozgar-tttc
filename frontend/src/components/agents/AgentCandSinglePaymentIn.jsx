@@ -67,11 +67,25 @@ export default function AgentCandSinglePaymentIn() {
   const [supplierNames, setSupplierNames] = useState([]);
 
   const [candData, setCandData] = useState([]);
+
+  const [selectedPersonDetails, setSelectedPersonDetails] = useState([]);
+  let totalVisaPriceInPKR = selectedPersonDetails.reduce((total, person) => {
+    return total + person?.visa_Price_In_PKR;
+}, 0);
+
+let totalPastPaidPKR = selectedPersonDetails.reduce((total, person) => {
+  return total + person?.total_In;
+}, 0);
+let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
+  return total + person?.remaining_Price;
+}, 0);
+
   // Function to handle the "Add More" button click
   const handleAddMore = () => {
     setCandData([...candData, { cand_Name: "", payment_In: 0, curr_Amount: 0,curr_Rate:0 }]);
+    setSelectedPersonDetails([...selectedPersonDetails, {}]);
   };
-console.log("candData",candData)
+
   // Function to handle changes in the additional form fields
   const handleCandChange = (index, fieldName, value) => {
     const updatedCandData = [...candData];
@@ -84,7 +98,12 @@ console.log("candData",candData)
     const updatedCandData = [...candData];
     updatedCandData.splice(index, 1);
     setCandData(updatedCandData);
-  };
+    setSelectedPersonDetails((prevDetails) => {
+      const newDetails = [...prevDetails];
+      newDetails.splice(index, 1);
+      return newDetails;
+    });
+  }
 
   const printPersonsTable = (selectedPersonDetails) => {
     // Convert JSX to HTML string
@@ -302,7 +321,7 @@ console.log("candData",candData)
   };
 
 
-  const [selectedPersonDetails, setSelectedPersonDetails] = useState([]);
+ 
 
   const handlePersonChange = (selectedPersonName, index) => {
     const selectedSupplierData = agent_Payments_In.find(
@@ -812,7 +831,10 @@ console.log("candData",candData)
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >New Total In PKR</label>
-                  <input type="text" disabled  value={parseFloat(selectedPersonDetails[index].total_In) + parseFloat(candData[candData.length - 1].payment_In)}  readOnly />
+                  <input type="text" disabled   value={
+                parseFloat(selectedPersonDetails[index]?.total_In || 0) +
+                parseFloat(cand.payment_In || 0)
+              } readOnly />
                 </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Remaining PKR</label>
@@ -892,6 +914,38 @@ console.log("candData",candData)
         </>
       ))}
 
+<hr/>
+<div className="col-md-12">
+<h4 className="text-center">Payment Summary</h4>
+<form className="py-3 px-2" >
+  <div className="row  p-0 m-0 my-1">
+  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total Candidates </label>
+                  <input type="text" value={candData.length} disabled/>
+                </div>
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total Visa Amount PKR </label>
+                  <input type="text" value={totalVisaPriceInPKR} disabled/>
+                </div>
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total Past Paid PKR </label>
+                  <input type="text" value={totalPastPaidPKR} disabled/>
+                </div>
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total Past Remaining PKR </label>
+                  <input type="text" value={totalPastRemainingPKR} disabled/>
+                </div>
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total New Payment PKR </label>
+                  <input type="text" value={totalPayments} disabled/>
+                </div>
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total New Remaining PKR </label>
+                  <input type="text" value={totalPastRemainingPKR-totalPayments} disabled/>
+                </div>
+  </div>
+</form>
+</div>
 
     </TableContainer>
   );

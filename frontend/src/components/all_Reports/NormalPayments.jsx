@@ -81,7 +81,7 @@ export default function NormalPayments() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     // Filter payments where payment_Type is 'advance'
-    const isAdvancePayment = paymentItem.payment_Type.toLowerCase() === 'normal';
+    const isAdvancePayment = paymentItem.payment_Type?.toLowerCase() === 'normal';
     return isDateInRange && isAdvancePayment;
   });
 

@@ -67,11 +67,11 @@ export default function Invoice() {
 
   const filteredPayment = overAllPayments
   ? overAllPayments.filter((paymentItem) =>
-      paymentItem.category.toLowerCase().includes(category2.toLowerCase()) &&
-      paymentItem.date.toLowerCase().includes(date2.toLowerCase()) &&
-      paymentItem.supplierName.toLowerCase().includes(supplierName.toLowerCase()) &&
-      paymentItem.payment_Via.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-      paymentItem.payment_Type.toLowerCase().includes(payment_Type2.toLowerCase())
+      paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
+      paymentItem.date?.toLowerCase().includes(date2.toLowerCase()) &&
+      paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
+      paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+      paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase())
     )
   : [];
 

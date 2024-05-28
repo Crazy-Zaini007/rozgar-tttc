@@ -323,7 +323,7 @@ const getBankCash = async () => {
   const [category1, setCategory1] = useState('')
   const [payment_Via1, setPayment_Via1] = useState('')
   const [payment_Type1, setPayment_Type1] = useState('')
-
+  
   const filteredCash = cashInHand.payment
   ? cashInHand.payment.filter((paymentItem) => {
       let isDateInRange = true;
@@ -335,10 +335,10 @@ const getBankCash = async () => {
       }
 
       return (
-        paymentItem.category.toLowerCase().includes(category1.toLowerCase()) &&
+        paymentItem.category?.toLowerCase().includes(category1.toLowerCase()) &&
         isDateInRange &&
-        paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()) &&
-        paymentItem.payment_Type.toLowerCase().includes(payment_Type1.toLowerCase())
+        paymentItem.payment_Via?.toLowerCase().includes(payment_Via1.toLowerCase()) &&
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase())
       );
     })
   : []
@@ -487,12 +487,12 @@ const getBankCash = async () => {
       }
 
       return (
-        paymentItem.category.toLowerCase().includes(category2.toLowerCase()) &&
+        paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
         isDateInRange &&
-        paymentItem.supplierName.toLowerCase().includes(supplierName.toLowerCase()) &&
-        paymentItem.type.toLowerCase().includes(type.toLowerCase()) &&
-        paymentItem.payment_Via.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-        paymentItem.payment_Type.toLowerCase().includes(payment_Type2.toLowerCase())
+        paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
+        paymentItem.type?.toLowerCase().includes(type.toLowerCase()) &&
+        paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase())
       );
     })
   : [];
@@ -627,12 +627,13 @@ const getBankCash = async () => {
     XLSX.writeFile(wb, 'cashInHand.xlsx');
   };
 
+  console.log('overAllPayments',overAllPayments)
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container py-2 cash_in_hand">
+        <div className="container-fluid py-2 cash_in_hand">
           {current === 0 &&
             <div className="row justify-content-center mt-3">
               <div className="col-lg-6 col-12  mt-md-4 mt-3  shadow px-0 pb-md-4 pb-3 rounded">

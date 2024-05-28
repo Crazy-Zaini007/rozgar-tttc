@@ -252,7 +252,10 @@ const addMultiplePaymentsIn = async (req, res) => {
                     date,
                     close
                 } = payment;
-
+                if(!payment_Via){
+                  res.status(400).json({message:"Payment Via is required"})
+                  break;
+                }
                 const newPaymentIn = parseInt(payment_In, 10);
                 const newCurrAmount = parseInt(curr_Amount, 10);
                 const existingSupplier = await Candidate.findOne({ 'payment_In_Schema.supplierName': supplierName });
@@ -2141,6 +2144,10 @@ const addMultiplePaymentsOut = async (req, res) => {
                     close
                 } = payment;
 
+                if(!payment_Via){
+                  res.status(400).json({message:"Payment Via is required"})
+                  break;
+                }
                 if (!supplierName) {
                     res.status(400).json({ message: "Supplier Name is required" });
                     return;

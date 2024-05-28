@@ -337,16 +337,13 @@ const getBankCash = async () => {
         isDateInRange =
           paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
       }
-      console.log("Payment Via: ", paymentItem.payment_Via.toLowerCase());
-      console.log("Is Cash: ", paymentItem.payment_Via.toLowerCase() === "cash");
-      console.log("Is Date in Range: ", isDateInRange);
-      console.log("Payment Via Search: ", paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()));
+    
       return (
-        paymentItem.payment_Via.trim().toLowerCase()!=="cash" &&
-        paymentItem.category.toLowerCase().includes(category1.toLowerCase()) &&
+        paymentItem.payment_Via?.trim().toLowerCase()!=="cash" &&
+        paymentItem.category?.toLowerCase().includes(category1.toLowerCase()) &&
         isDateInRange &&
-        paymentItem.payment_Via.toLowerCase().includes(payment_Via1.toLowerCase()) &&
-        paymentItem.payment_Type.toLowerCase().includes(payment_Type1.toLowerCase())
+        paymentItem.payment_Via?.toLowerCase().includes(payment_Via1.toLowerCase()) &&
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase())
       );
     })
   : [];
@@ -495,12 +492,12 @@ const getBankCash = async () => {
       }
 
       return (
-        paymentItem.category.toLowerCase().includes(category2.toLowerCase()) &&
+        paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
         isDateInRange &&
-        paymentItem.supplierName.toLowerCase().includes(supplierName.toLowerCase()) &&
-        paymentItem.type.toLowerCase().includes(type.toLowerCase()) &&
-        paymentItem.payment_Via.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-        paymentItem.payment_Type.toLowerCase().includes(payment_Type2.toLowerCase())
+        paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
+        paymentItem.type?.toLowerCase().includes(type.toLowerCase()) &&
+        paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase())
       );
     })
   : [];
@@ -642,7 +639,7 @@ const getBankCash = async () => {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container py-2 cash_in_hand">
+        <div className="container-fluid py-2 cash_in_hand">
           <div className="row payment_details">
               <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>

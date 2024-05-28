@@ -88,12 +88,12 @@ export default function PayableReports() {
   const[flight_Date,setFlight_Date]=useState('')
   const filteredEntries =payments && payments.filter(entry => {
     return (
-      entry.trade.toLowerCase().includes(trade.toLowerCase()) &&
-      entry.company.toLowerCase().includes(company.toLowerCase()) &&
-      entry.country.toLowerCase().includes(country.toLowerCase()) &&
-      entry.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry.type.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      entry.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) 
+      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.type?.toLowerCase().includes(reference_Out.toLowerCase()) &&
+      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) 
     );
   });
 

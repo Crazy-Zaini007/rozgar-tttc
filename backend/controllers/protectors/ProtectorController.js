@@ -240,7 +240,10 @@ const addMultiplePaymentsOut = async (req, res) => {
           date,
           
         } = payment;
-
+        if(!payment_Via){
+          res.status(400).json({message:"Payment Via is required"})
+          break;
+        }
         if (!supplierName) {
           res.status(400).json({ message: "Name is required" });
           return;

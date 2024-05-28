@@ -482,8 +482,8 @@ export default function SupCandPaymentInDetails() {
 
           return (
             isDateInRange &&
-            paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-            paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+             paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+             paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
           );
         }),
     }))

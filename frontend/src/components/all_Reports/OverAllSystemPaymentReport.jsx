@@ -52,7 +52,7 @@ export default function OverAllSystemPaymentReports() {
     </thead>
     <tbody>
       ${overAllPayments && overAllPayments 
-        .filter(entry => entry.type.toLowerCase().includes('in') && (!entry.cand_Name || entry.cand_Name ===""))
+        .filter(entry => entry.type?.toLowerCase().includes('in') && (!entry.cand_Name || entry.cand_Name ===""))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -119,7 +119,7 @@ export default function OverAllSystemPaymentReports() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => payment.type.toLowerCase().includes('in') && (!payment.cand_Name || payment.cand_Name ===""));
+    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => payment.type?.toLowerCase().includes('in') && (!payment.cand_Name || payment.cand_Name ===""));
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {

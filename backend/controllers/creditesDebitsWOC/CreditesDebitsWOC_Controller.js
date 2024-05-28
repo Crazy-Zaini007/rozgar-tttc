@@ -202,6 +202,10 @@ for(const payment of multiplePayment){
       
     } = payment
 
+    if(!payment_Via){
+        res.status(400).json({message:"Payment Via is required"})
+        break;
+      }
     const newPaymentIn=Number(payment_In)
 const newPaymentOut=Number(payment_Out)
  

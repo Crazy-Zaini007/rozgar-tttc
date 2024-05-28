@@ -564,9 +564,7 @@ const getPersons = async (req, res) => {
 
     // Initialize an empty array to store persons data
     let personsData = [];
-    let personsOutData = [];
-
-
+    let personsOutData = []
     // Iterate through agents
     agents.forEach((agent) => {
       // Check if payment_In_Schema exists and has the expected structure
@@ -621,7 +619,6 @@ const getPersons = async (req, res) => {
       }
     })
 
-
     // Persons Out
     // Iterate through agents
     agents.forEach((agent) => {
@@ -661,7 +658,7 @@ const getPersons = async (req, res) => {
       if (payment_Out_Schema) {
         const modifiedPaymentOutSchema = {
           ...payment_Out_Schema.toObject(),
-          total_In: payment_Out_Schema.total_Payment_In,
+          total_In: payment_Out_Schema.total_Payment_Out,
           cash_Out: payment_Out_Schema.total_Cash_Out,
           visa_Price_Out_PKR: payment_Out_Schema.total_Visa_Price_Out_PKR,
           visa_Price_Out_Curr: payment_Out_Schema.total_Visa_Price_Out_Curr,
@@ -1597,8 +1594,9 @@ const getAllBanksPayments = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const payment_Via = payment.payment_Via;
-            if (payment_Via.toLowerCase() !== "cash" && payment.payment_In>0) {
+            const payment_Via=payment.payment_Via
+          
+            if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_In>0) {
               if (!combinedPaymentsIn[payment_Via]) {
                 combinedPaymentsIn[payment_Via] = 0;
               }
@@ -1610,7 +1608,9 @@ const getAllBanksPayments = async (req, res) => {
         if (item[schemaType] && item[schemaType].candPayments) {
           for (const payment of item[schemaType].candPayments) {
             const payment_Via = payment.payment_Via;
-            if (payment_Via.toLowerCase() !== "cash" && payment.payment_In>0) {
+          
+
+            if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_In>0) {
               if (!combinedPaymentsIn[payment_Via]) {
                 combinedPaymentsIn[payment_Via] = 0;
               }
@@ -1628,8 +1628,11 @@ const getAllBanksPayments = async (req, res) => {
       for (const item of items) {
         if (item[schemaType] && item[schemaType].payment) {
           for (const payment of item[schemaType].payment) {
-            const payment_Via = payment.payment_Via;
-            if (payment_Via.toLowerCase() !== "cash" && payment.payment_Out>0) {
+          
+            const payment_Via=payment.payment_Via
+          
+
+            if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_Out>0) {
               // Ignore cash payments
 
               if (!combinedPaymentsOut[payment_Via]) {
@@ -1643,7 +1646,9 @@ const getAllBanksPayments = async (req, res) => {
         if (item[schemaType] && item[schemaType].candPayments) {
           for (const payment of item[schemaType].candPayments) {
             const payment_Via = payment.payment_Via;
-            if (payment_Via.toLowerCase() !== "cash" && payment.payment_Out>0) {
+          
+
+            if (payment?.payment_Via?.toLowerCase() !== "cash" && payment.payment_Out>0) {
               // Ignore cash payments
 
               if (!combinedPaymentsOut[payment_Via]) {
@@ -1662,13 +1667,15 @@ const getAllBanksPayments = async (req, res) => {
       if (cash.payment) {
         for (const payment of cash.payment) {
           const payment_Via = payment.payment_Via;
-          if (payment_Via.toLowerCase() !== "cash") {
+        
+
+          if (payment?.payment_Via?.toLowerCase() !== "cash") {
             if (!combinedPaymentsOut[payment_Via]) {
               combinedPaymentsOut[payment_Via] = 0;
             }
             combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
           }
-          if (payment_Via.toLowerCase() !== "cash") {
+          if (payment?.payment_Via?.toLowerCase() !== "cash") {
             if (!combinedPaymentsIn[payment_Via]) {
               combinedPaymentsIn[payment_Via] = 0;
             }
@@ -1682,7 +1689,8 @@ const getAllBanksPayments = async (req, res) => {
     const expensesPayments = await Expenses.find();
     for (const expense of expensesPayments) {
       const payment_Via = expense.payment_Via;
-      if (payment_Via.toLowerCase() !== "cash") {
+    
+      if (payment?.payment_Via?.toLowerCase() !== "cash") {
         // Ignore cash payments
 
         if (!combinedPaymentsOut[payment_Via]) {
@@ -1703,7 +1711,7 @@ const getAllBanksPayments = async (req, res) => {
           if(month.payment && month.payment.length>0){
             const payments= month.payment
             for (const payment of payments){
-              if (payment.payment_Via.toLowerCase() !== "cash") {
+              if (payment?.payment_Via?.toLowerCase() !== "cash") {
                 // Ignore cash payments
     
                 if (!combinedPaymentsOut[payment.payment_Via]) {

@@ -67,11 +67,11 @@ export default function AdvancePayments() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     // Filter payments where payment_Type is 'advance'
-    const isAdvancePayment = paymentItem.payment_Type.toLowerCase() === 'advance';
+    const isAdvancePayment = paymentItem.payment_Type?.toLowerCase() === 'advance';
     return isDateInRange && isAdvancePayment;
   });
   
-  console.log(filteredPayments)
+
   const printExpenseTable = () => {
     // Convert JSX to HTML string
     const printContentString = `

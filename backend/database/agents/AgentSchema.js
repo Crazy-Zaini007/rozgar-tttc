@@ -194,6 +194,10 @@ const Payment_InSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        curr_Rate:{
+          type: Number,
+          default: 0,
+        },
         slip_Pic: {
           type: String,
         },
@@ -475,6 +479,10 @@ const Payment_OutSchema = new mongoose.Schema(
           type: String,
         },
         curr_Amount:{
+          type: Number,
+          default: 0,
+        },
+        curr_Rate:{
           type: Number,
           default: 0,
         },
