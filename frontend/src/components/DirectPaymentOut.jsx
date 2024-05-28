@@ -58,28 +58,6 @@ const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
 const[banks,setBanks]=useState('')
 const[total,setTotal]=useState()
 
-const[payments,setPayments]=useState('')
-
-
-const getData = async () => {
-    
-  try {
-    const response = await fetch(`${apiUrl}/auth/reports/get/all/persons`, {
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-      },
-    });
-
-    const json = await response.json()
-    if (response.ok) {
-      setPayments(json.personsOutData)
-    // Dispatch the action with received data
-    }
-  } catch (error) {
-   
-
-  }
-}
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const getBankCash = async () => {
@@ -147,10 +125,9 @@ const fetchData = async () => {
   try {
     // Use Promise.all to execute all promises concurrently
     await Promise.all([
-      getData(),
       getCashInHandData(),
-      getBankCash(),
       getOverAllPayments(),
+      getBankCash(),
       getCurrCountryData(),
       getCategoryData(),
       getPaymentViaData(),
@@ -354,10 +331,9 @@ useEffect(() => {
         setLoading(false);
       }
       if (response.ok) {
-        getData()
         getCashInHandData()
-        getBankCash()
         getOverAllPayments()
+        getBankCash()
         setNewMessage(toast.success(json.message));
         getPaymentsOut();
         setLoading(false);
@@ -375,7 +351,7 @@ useEffect(() => {
         setCand_Name("");
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+   
       setNewMessage(toast.error("Server is not Responding..."));
       setLoading(false);
     }
@@ -421,24 +397,20 @@ useEffect(() => {
   }
 
   const currentDate = new Date().toISOString().split('T')[0];
-
-// Filtering the Enteries
-const [mySearch, setMySearch] = useState('')
-const [reference_Out, setReference_Out] = useState('')
-
-const filteredEntries =payments && payments.filter(entry => {
-  return (
-   ( entry?.name?.toLowerCase().includes(mySearch.toLowerCase()) ||
-    entry?.pp_No?.toLowerCase().includes(mySearch.toLowerCase()) ||
-    entry?.trade?.toLowerCase().includes(mySearch.toLowerCase()) ||
-    entry?.company?.toLowerCase().includes(mySearch.toLowerCase()) ||
-    entry?.country?.toLowerCase().includes(mySearch.toLowerCase()) ||
-    entry?.final_Status?.toLowerCase().includes(mySearch.toLowerCase()) ||
-    entry?.flight_Date?.toLowerCase().includes(mySearch.toLowerCase())) &&
-    entry?.type?.toLowerCase().includes(reference_Out.toLowerCase()) 
-
-  );
-})
+  const [mySearch, setMySearch] = useState('')
+  const [reference_Out, setReference_Out] = useState('')
+  
+  const todayPayments = overAllPayments && overAllPayments.filter(payment => payment.date === currentDate )
+  
+  const filteredPayments =todayPayments && todayPayments.filter(entry => {
+    return (
+     (entry?.supplierName?.toLowerCase().includes(mySearch.toLowerCase()) ||
+      entry?.category?.toLowerCase().includes(mySearch.toLowerCase()) ||
+      entry?.payment_Via?.toLowerCase().includes(mySearch.toLowerCase()) ||
+      entry?.payment_Type?.toLowerCase().includes(mySearch.toLowerCase())) &&
+      entry?.supplierName?.toLowerCase().includes(reference_Out.toLowerCase()) 
+    )
+  })
   
   return (
     <>
@@ -821,91 +793,112 @@ const filteredEntries =payments && payments.filter(entry => {
     </div>
     <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
-                  <div className="row">
+                <div className="row">
                   <div className="col-auto px-1">
                       <label htmlFor="">Search:</label>
                       <input type="search"  value={mySearch} onChange={(e)=>setMySearch(e.target.value)}/>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference:</label>
+                      <label htmlFor="">Agent/Supp/Cand:</label>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        <option value="Candidate">Direct/Candidate</option>
-                        <option value="Agent">Agents</option>
-                        <option value="Supplier">Suppliers</option>
-                      </select>
+                      <option value="">All</option>
+                      {[...new Set(todayPayments.filter(entry => entry.type.toLowerCase().includes('in')))].map(name => (
+      <option key={name.supplierName} value={name.supplierName}>{name.supplierName}</option>
+    ))}
+                      
+                    </select>
                     </div>
 
                   </div>
                 </Paper>
               </div>
     <div className="col-md-12">
-      <TableContainer>
+    <TableContainer>
         <Table>
         <TableHead>
           <TableRow>
-          <TableCell className="label border">SN</TableCell>
-            <TableCell className="label border">Date</TableCell>
-            <TableCell className="label border">Candidate/PP NO</TableCell>
-            <TableCell className="label border">Trade</TableCell>
-            <TableCell className="label border">Company</TableCell>
-            <TableCell className="label border">Country</TableCell>
-            <TableCell className="label border">FS</TableCell>
-            <TableCell className="label border">Fly</TableCell>
-            <TableCell className="label border">Reference</TableCell>
-            <TableCell className="label border">Visa_Price</TableCell>
-            <TableCell className="label border">Total_Paid</TableCell>
-            <TableCell className="label border">Remaining</TableCell>
-          </TableRow>
+                              <TableCell className='label border'>SN</TableCell>
+                              <TableCell className='label border'>Date</TableCell>
+                              <TableCell className='label border'>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'>Reference_Type</TableCell>
+                              <TableCell className='label border'>Category</TableCell>
+                              <TableCell className='label border'>Payment_Via</TableCell>
+                              <TableCell className='label border'>Payment_Type</TableCell>
+                              <TableCell className='label border'>Slip_No</TableCell>
+                              <TableCell className='label border'>Cash_Out</TableCell>
+                              <TableCell className='label border'>Cash_Return</TableCell>
+                              <TableCell className='label border'>Details</TableCell>
+                              <TableCell className='label border'>Invoice</TableCell>
+                              <TableCell className='label border'>Slip_Pic</TableCell>
+                            </TableRow>
         </TableHead>
         <TableBody>
-        {filteredEntries && filteredEntries.length > 0 && filteredEntries.map((entry, index) => (
-    <TableRow key={index}>
-      <TableCell className='border data_td'>{index + 1}</TableCell>
-      <TableCell className='border data_td'>{entry.entry_Date}</TableCell>
-      <TableCell className='border data_td'>{entry.name}/{entry.pp_No}</TableCell>
-      <TableCell className='border data_td'>{entry.trade}</TableCell>
-      <TableCell className='border data_td'>{entry.company}</TableCell>
-      <TableCell className='border data_td'>{entry.country}</TableCell>
-      <TableCell className='border data_td'>{entry.final_Status}</TableCell>
-      <TableCell className='border data_td'>{entry.flight_Date}</TableCell>
-      <TableCell className='border data_td'>{entry.supplierName === entry.name ? "/" : entry.supplierName} / {entry.type}</TableCell>
-      <TableCell className='border data_td'>{entry.visa_Price_Out_PKR}</TableCell>
-      <TableCell className='border data_td bg-danger text-white'>{entry.total_In-entry.cash_Out}</TableCell>
-      <TableCell className='border data_td bg-warning text-white'>{entry.visa_Price_Out_PKR - entry.total_In + entry.cash_Out}</TableCell>
-    </TableRow>
-  ))}
-  <TableRow>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell></TableCell>
-    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-    <TableCell className='border data_td text-center bg-info text-white'>
-      {/* Calculate the total sum of visa_Price_In_PKR */}
-      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-        return total + parseFloat(entry.visa_Price_Out_PKR);
-      }, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-danger text-white'>
-      {/* Calculate the total sum of visa_Price_In_PKR */}
-      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-        return total + parseFloat(entry.total_In-entry.cash_Out);
-      }, 0)}
-    </TableCell>
-   
-    <TableCell className='border data_td text-center bg-warning text-white'>
-      {/* Calculate the total sum of visa_Price_In_PKR */}
-      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-        return total + parseFloat(entry.visa_Price_Out_PKR) - parseFloat(entry.total_In) +parseFloat(entry.cash_Out)
-      }, 0)}
-    </TableCell>
-  </TableRow>
-        </TableBody>
+                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => cash.type.toLowerCase().includes('out')).map((cash, outerIndex) => (
+                              // Map through the payment array
+
+                              <>
+                                <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
+                                  <>
+                                    <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.date}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.type}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.category}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
+                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                  </>
+
+                                </TableRow>
+
+
+                              </>
+
+                            )) : <TableRow>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell className='data_td text-center'>Not_found</TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                            </TableRow>}
+
+                            <TableRow>
+                              <TableCell colSpan={7}></TableCell>
+                              <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                              <TableCell className='border data_td text-center bg-danger text-white'>
+                            {/* Calculate the total sum of payment_In */}
+                            {filteredPayments && filteredPayments.length > 0 &&
+                              filteredPayments
+                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .reduce((total, entry) => {
+                                  return total + (entry.payment_Out || 0);
+                                }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white'>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 &&
+                              filteredPayments
+                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .reduce((total, entry) => {
+                                  return total + (entry.cash_Out || 0);
+                                }, 0)}
+                          </TableCell>
+
+
+                            </TableRow>
+                          </TableBody>
         </Table>
       </TableContainer>
     </div>

@@ -3644,6 +3644,7 @@ const addCandVisePaymentIn=async(req,res)=>{
       slip_Pic,
       details,
       date,
+      totalCurrRate,
       payments
     } = req.body;
 
@@ -3720,7 +3721,7 @@ const addCandVisePaymentIn=async(req,res)=>{
       existPerson.remaining_Curr += newCurrAmount ? -newCurrAmount : 0
       new_Payment_In+=newPaymentIn
       new_Curr_Amount+=newCurrAmount
-      curr_Rate=newPaymentIn/newCurrAmount
+      curr_Rate=totalCurrRate
 
       let myNewPayment={
         _id:new mongoose.Types.ObjectId,
@@ -4244,6 +4245,7 @@ const addCandVisePaymentOut=async(req,res)=>{
       slip_Pic,
       details,
       date,
+      totalCurrRate,
       payments
     } = req.body;
 
@@ -4320,7 +4322,7 @@ const addCandVisePaymentOut=async(req,res)=>{
       existPerson.remaining_Curr += newCurrAmount ? -newCurrAmount : 0
       new_Payment_Out+=newPaymentOut
       new_Curr_Amount+=newCurrAmount
-      curr_Rate=newPaymentOut/newCurrAmount
+      curr_Rate=totalCurrRate
 
       let myNewPayment={
         _id:new mongoose.Types.ObjectId,

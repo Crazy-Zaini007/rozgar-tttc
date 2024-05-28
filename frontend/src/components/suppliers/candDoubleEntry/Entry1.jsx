@@ -264,7 +264,9 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  const[totalPayments,setTotalPayments]=useState(0)
+  const[totalCurrency,setTotalCurrency]=useState(0)
+  const[totalCurrRate,setTotalCurrRate]=useState(0)
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
@@ -288,6 +290,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
           details,
           curr_Country,
           date,
+          totalCurrRate,
           payments:candData
         }),
       });
@@ -310,9 +313,10 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
         setDetails("");
         setCurr_Country("");
         setDate("");
+        setTotalCurrRate('')
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+   
       setNewMessage(toast.error("Server is not Responding..."));
       setLoading(false);
     }
@@ -344,11 +348,6 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
       });
     }
   };
-
-
-  const[totalPayments,setTotalPayments]=useState(0)
-  const[totalCurrency,setTotalCurrency]=useState(0)
-
 
   const sumPaymentIn = (data) => {
     return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
@@ -511,7 +510,10 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
                   <label >Total Currency </label>
                  <input type="number" min='0' value={totalCurrency} onChange={(e)=>setTotalCurrency(e.target.value)} />
                 </div>
-                
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Curr Rate </label>
+                 <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(e.target.value)} />
+                </div>
                 <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                   <label>Details </label>
                   <textarea
@@ -704,9 +706,9 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
           ))}
         </select>
       </div>
-              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+      <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor="" className="text-sm text-muted  mb-1">Payment In</label>
-                {/* Payment_In */}
+             
                 <input
                   type="number"
                   required
@@ -716,28 +718,14 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
                   placeholder="Payment In"
                 />
               </div>
-              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-              <label htmlFor="" className="text-sm text-muted mb-1">Currency Rate</label>
-
-                {/* Curr_Amount */}
-                <input
-                  type="number"
-                  min="1"
-                  required
-                  value={cand.curr_Rate}
-                  onChange={(e) => handleChangeCurrency(index, e.target.value)}
-                  placeholder="Currency Rate"
-                />
-              </div>
+           
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
-
-                {/* Curr_Amount */}
                 <input
                   type="number"
                   min="0"
                   disabled
-                  value={cand.payment_In/cand.curr_Rate}
+                  value={cand.payment_In/totalCurrRate}
                   placeholder="Currency Amount"
                 />
               </div>
@@ -933,6 +921,10 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
                 <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total New Payment PKR </label>
                   <input type="text" value={totalPayments} disabled/>
+                </div>
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <label>New Payment In Curr </label>
+                  <input type="text" value={totalCurrency} disabled/>
                 </div>
                 <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total New Remaining PKR </label>

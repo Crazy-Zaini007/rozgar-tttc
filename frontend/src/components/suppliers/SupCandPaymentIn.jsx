@@ -148,7 +148,7 @@ export default function SupCandPaymentIn() {
                 <h4>Cand-Vise Supplier Payment IN</h4>
                 <button className='btn btn-sm  m-1 entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn btn-sm  m-1   entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
-                {single === 1 && <label className="btn m-1 py-2 btn-sm upload_btn">
+                {single === 1 && <label className="btn m-1  btn-sm upload_btn">
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
