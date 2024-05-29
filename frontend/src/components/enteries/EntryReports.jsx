@@ -25,7 +25,7 @@ import ProtectorHook from '../../hooks/settingHooks/ProtectorHook';
 import * as XLSX from 'xlsx';
 import SyncLoader from 'react-spinners/SyncLoader'
 
-const rowsPerPageOptions = [10, 15, 30];
+const rowsPerPageOptions = [50, 75, 100,200];
 
 const EntryReports = () => {
   const { getEntries } = EntryHook();
@@ -100,8 +100,8 @@ const EntryReports = () => {
 
   }, []);
 
+  
   const enteries = useSelector((state) => state.enteries.enteries);
-
 
   const [delLoading, setDelLoading] = useState(false)
 
@@ -138,7 +138,55 @@ const EntryReports = () => {
       }
     }
    
+  }
+
+  
+  // Deleting Multiple Enteries
+  const [multipleIds, setMultipleIds] = useState([]);
+
+  const handleEntryId = (id, isChecked) => {
+    if (isChecked) {
+      // Add the ID if the checkbox is checked
+      setMultipleIds((prevIds) => [...prevIds, id]);
+    } else {
+      // Remove the ID if the checkbox is unchecked
+      setMultipleIds((prevIds) => prevIds.filter((entryId) => entryId !== id));
+    }
+   
   };
+
+  const deleteMultipleEntries = async (entry) => {
+    if (window.confirm(`Are you sure you want to delete ${multipleIds.length} Entries Record?`)){
+      setDelLoading(true)
+      try {
+        const response = await fetch(`${apiUrl}/auth/entries/delete/multiple/entries`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ entries:multipleIds })
+        });
+  
+        const json = await response.json();
+        if (response.ok) {
+          fetchData()
+          setDelLoading(false)
+          setNewMessage(toast.success(json.message))
+        
+        }
+        if (!response.ok) {
+          
+          setDelLoading(false)
+          setNewMessage(toast.error(json.message))
+        }
+      }
+      catch (err) {
+        setDelLoading(false)
+      }
+    }
+   
+  }
 
   const handleEditClick = (entry, index) => {
     setEditMode(!editMode);
@@ -197,8 +245,6 @@ const EntryReports = () => {
   const countries = useSelector((state) => state.setting.countries);
   const currencies = useSelector((state) => state.setting.currencies);
 
-  console.log('editedEntry',editedEntry)
-
   const [updateLoading, setUpdateLoading] = useState(false)
   const [, setNewMessage] = useState('')
 
@@ -246,6 +292,7 @@ const EntryReports = () => {
   const [dateTo, setDateTo] = useState('')
   const [name, setName] = useState('')
 
+
   const [date, setDate] = useState('')
   const [trade, setTrade] = useState('')
   const [company, setCompany] = useState('')
@@ -258,12 +305,12 @@ const EntryReports = () => {
   const [reference_Out_Type, setReference_Out_Type] = useState('')
   const [reference_In_Type, setReference_In_Type] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
+
   const filteredEntries = enteries.filter(entry => {
     let isDateInRange = true;
     if (dateFrom && dateTo) {
       isDateInRange =
       entry.entry_Date && entry.entry_Date >= dateFrom && entry.entry_Date&& entry.entry_Date <= dateTo;
-
     }
     return (
       isDateInRange &&
@@ -283,7 +330,9 @@ const EntryReports = () => {
 
     );
   })
+
   const[rowsValue,setRowsValue]=useState("")
+
 
   const downloadExcel = () => {
     const data = [];
@@ -377,7 +426,7 @@ const EntryReports = () => {
             <div className='col-md-12 '>
               <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Enteries Details Reports</h4>
+                  <h4>Enteries Details Report</h4>
                 </div>
                 <div className="right d-flex">
                   {enteries.length > 0 &&
@@ -535,7 +584,9 @@ const EntryReports = () => {
             {!loading1 &&
               <div className='col-md-12'>
                 <Paper className='py-3 mb-1 px-2 detail_table'>
-                <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
+                  <div className="d-flex justify-content-between">
+                    <div className="d-flex left">
+                    <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
                   <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
                     <option value="">All</option>
                     <option value="30">30</option>
@@ -547,16 +598,21 @@ const EntryReports = () => {
                     <option value="200">200</option>
                     <option value="250">250</option>
                     <option value="300">300</option>
-
                   </select>
-                  <TableContainer >
+                    </div>
+                    <div className="d-flex right">
+                     {multipleIds.length>0 &&  <button className='btn btn-danger btn-sm rounded text-white shadow' onClick={()=>deleteMultipleEntries()} style={{height:'30px',fontWeight:'600'}} disabled={delLoading}>Delete</button>}
+                    </div>
+
+                  </div>
+                  
+                  <TableContainer>
                     <Table stickyHeader>
                       <TableHead>
                         <TableRow className='p-0 m-0'>
-                          <TableCell align="left" className='personel_label border  py-2' colSpan={21}>
+                          <TableCell align="left" className='personel_label border py-2' colSpan={22}>
                             Personel Details
                           </TableCell>
-
                           {section1 &&
                             <TableCell align="left" className='visit_label border  py-2' colSpan={9}>
                               Visit Sales Purchase Details
@@ -564,7 +620,7 @@ const EntryReports = () => {
                           }
                           {section2 &&
 
-                            <TableCell align="left" className='ticket_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='ticket_label border  py-2' colSpan={9}>
                               Ticket Sales Purchase Details
                             </TableCell>
                           }
@@ -585,6 +641,7 @@ const EntryReports = () => {
                           </TableCell>
                         </TableRow>
                         <TableRow>
+                          <TableCell className='label border text-center px-1'>Select</TableCell>
                           <TableCell className='label border text-center px-1'>SN</TableCell>
                           <TableCell className='label border text-center px-1'>Date</TableCell>
                           <TableCell className='label border text-center px-1'>Name</TableCell>
@@ -679,10 +736,12 @@ const EntryReports = () => {
                       <TableBody>
                         {filteredEntries && filteredEntries.length > 0 ? filteredEntries.slice(0,rowsValue ? rowsValue : undefined).map((entry, index) => (
                           <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            {/* ... (previous cells) */}
                             {editMode && editedRowIndex === index ? (
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
+                               <TableCell className='border data_td p-1 text-center'>
+                                <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
+                              </TableCell>
                                <TableCell className='border data_td p-1 '>
                                 <input type='text' value={index+1} readOnly />
                               </TableCell>
@@ -1690,6 +1749,9 @@ const EntryReports = () => {
                             ) : (
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
+                              <TableCell className='border data_td  text-center'>
+                                <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
+                              </TableCell>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
@@ -1791,7 +1853,7 @@ const EntryReports = () => {
                                 </>
 
                               ) : (
-                               
+                                // Render Edit button when not in edit mode or for other rows
                                 <>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                     <button onClick={() => handleEditClick(entry, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
@@ -1811,7 +1873,7 @@ const EntryReports = () => {
 
                     </Table>
                   </TableContainer>
-                  
+                 
                 </Paper>
               </div>
             }

@@ -1,5 +1,5 @@
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addEntry, getEntry, delEntry, updateEntry, addMultipleEnteries } = require('../../controllers/enteries/EntryController')
+const { addEntry, getEntry, delEntry,delMultipleEntries, updateEntry, addMultipleEnteries } = require('../../controllers/enteries/EntryController')
 const express = require('express');
 const router = express.Router()
 
@@ -18,8 +18,8 @@ router.get('/get/enteries', getEntry)
 
 // deleting a single Entry
 router.delete('/delete/entry', delEntry)
-
-
+// deleting a Multiple Entry
+router.delete('/delete/multiple/entries', delMultipleEntries)
 // updating a single entry
 router.patch('/update/single_entry/:entryId', updateEntry)
 

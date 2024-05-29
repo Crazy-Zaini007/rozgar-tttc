@@ -138,7 +138,55 @@ const EntryDetails = () => {
       }
     }
    
+  }
+
+  
+  // Deleting Multiple Enteries
+  const [multipleIds, setMultipleIds] = useState([]);
+
+  const handleEntryId = (id, isChecked) => {
+    if (isChecked) {
+      // Add the ID if the checkbox is checked
+      setMultipleIds((prevIds) => [...prevIds, id]);
+    } else {
+      // Remove the ID if the checkbox is unchecked
+      setMultipleIds((prevIds) => prevIds.filter((entryId) => entryId !== id));
+    }
+   
   };
+
+  const deleteMultipleEntries = async (entry) => {
+    if (window.confirm(`Are you sure you want to delete ${multipleIds.length} Entries Record?`)){
+      setDelLoading(true)
+      try {
+        const response = await fetch(`${apiUrl}/auth/entries/delete/multiple/entries`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ entries:multipleIds })
+        });
+  
+        const json = await response.json();
+        if (response.ok) {
+          fetchData()
+          setDelLoading(false)
+          setNewMessage(toast.success(json.message))
+        
+        }
+        if (!response.ok) {
+          
+          setDelLoading(false)
+          setNewMessage(toast.error(json.message))
+        }
+      }
+      catch (err) {
+        setDelLoading(false)
+      }
+    }
+   
+  }
 
   const handleEditClick = (entry, index) => {
     setEditMode(!editMode);
@@ -536,7 +584,9 @@ const EntryDetails = () => {
             {!loading1 &&
               <div className='col-md-12'>
                 <Paper className='py-3 mb-1 px-2 detail_table'>
-                  <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
+                  <div className="d-flex justify-content-between">
+                    <div className="d-flex left">
+                    <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
                   <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
                     <option value="">All</option>
                     <option value="30">30</option>
@@ -549,14 +599,20 @@ const EntryDetails = () => {
                     <option value="250">250</option>
                     <option value="300">300</option>
                   </select>
+                    </div>
+                    <div className="d-flex right">
+                     {multipleIds.length>0 &&  <button className='btn btn-danger btn-sm rounded text-white shadow' onClick={()=>deleteMultipleEntries()} style={{height:'30px',fontWeight:'600'}} disabled={delLoading}>Delete</button>}
+                    </div>
+
+                  </div>
+                  
                   <TableContainer>
                     <Table stickyHeader>
                       <TableHead>
                         <TableRow className='p-0 m-0'>
-                          <TableCell align="left" className='personel_label border py-2' colSpan={21}>
+                          <TableCell align="left" className='personel_label border py-2' colSpan={22}>
                             Personel Details
                           </TableCell>
-
                           {section1 &&
                             <TableCell align="left" className='visit_label border  py-2' colSpan={9}>
                               Visit Sales Purchase Details
@@ -585,6 +641,7 @@ const EntryDetails = () => {
                           </TableCell>
                         </TableRow>
                         <TableRow>
+                          <TableCell className='label border text-center px-1'>Select</TableCell>
                           <TableCell className='label border text-center px-1'>SN</TableCell>
                           <TableCell className='label border text-center px-1'>Date</TableCell>
                           <TableCell className='label border text-center px-1'>Name</TableCell>
@@ -679,10 +736,12 @@ const EntryDetails = () => {
                       <TableBody>
                         {filteredEntries && filteredEntries.length > 0 ? filteredEntries.slice(0,rowsValue ? rowsValue : undefined).map((entry, index) => (
                           <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            {/* ... (previous cells) */}
                             {editMode && editedRowIndex === index ? (
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
+                               <TableCell className='border data_td p-1 text-center'>
+                                <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
+                              </TableCell>
                                <TableCell className='border data_td p-1 '>
                                 <input type='text' value={index+1} readOnly />
                               </TableCell>
@@ -1690,6 +1749,9 @@ const EntryDetails = () => {
                             ) : (
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
+                              <TableCell className='border data_td  text-center'>
+                                <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
+                              </TableCell>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
