@@ -1772,7 +1772,7 @@ const EntryDetails = () => {
                                 <TableCell className='border data_td '>{entry.reference_Out_Name}</TableCell>
                                 <TableCell className='border data_td  '>{entry.reference_In}</TableCell>
                                 <TableCell className='border data_td  '>{entry.reference_In_Name}</TableCell>
-                                <TableCell className='border data_td text-center'>{entry.picture ? <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /> : "No Picture"}</TableCell>
+                                <TableCell className='border data_td text-center'>{entry.picture ? <a href={entry.picture} target="_blank" rel="noopener noreferrer"> <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                 {section1 &&
                                   <>
@@ -1787,7 +1787,7 @@ const EntryDetails = () => {
                                     <TableCell className='border data_td'>{entry.visit_Reference_Out_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Section_Picture ? <img src={entry.visit_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td'>{entry.visit_Section_Picture ? <a href={entry.visit_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.visit_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                   </>
                                 }
@@ -1804,7 +1804,7 @@ const EntryDetails = () => {
                                     <TableCell className='border data_td'>{entry.ticket_Reference_Out_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Section_Picture ? <img src={entry.ticket_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td'>{entry.ticket_Section_Picture ? <a href={entry.ticket_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.ticket_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                   </>
                                 }
@@ -1821,7 +1821,7 @@ const EntryDetails = () => {
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_Out_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Section_Picture ? <img src={entry.azad_Visa_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td'>{entry.azad_Visa_Section_Picture ? <a href={entry.azad_Visa_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.azad_Visa_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                   </>
                                 }

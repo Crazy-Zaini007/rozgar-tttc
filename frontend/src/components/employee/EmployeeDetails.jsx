@@ -2128,7 +2128,7 @@ const filteredSalaryMonths = employees
                                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Out_Curr}</TableCell>
                                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
                                                                                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
                                                                                         </>
                                                                                     )}
                                                                                     {/* Actions */}

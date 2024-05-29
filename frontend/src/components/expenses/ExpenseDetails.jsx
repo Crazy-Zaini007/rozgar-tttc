@@ -733,7 +733,7 @@ export default function ExpenseDetails() {
                                 <TableCell className='border data_td text-center'>{expense?.curr_Amount}</TableCell>
                                 </>
                                 }
-                                <TableCell className='border data_td text-center'>{expense.slip_Pic ? <img src={expense.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                <TableCell className='border data_td text-center'>{expense.slip_Pic ? <a href={expense.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={expense.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
                                 <TableCell className='border data_td text-center'>
                                   <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                     <button onClick={() => handleEditClick(expense, outerIndex)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>

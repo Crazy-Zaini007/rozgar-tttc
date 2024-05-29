@@ -1180,7 +1180,7 @@ const formattedDate = formatDate(new Date());
                               <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
                               </>}
-                              <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
                             </>
                           )}
                           <TableCell className='border data_td p-1 text-center'>
