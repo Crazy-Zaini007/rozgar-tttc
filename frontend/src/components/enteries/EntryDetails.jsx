@@ -56,8 +56,6 @@ const EntryDetails = () => {
   const { getVSPData } = VSPHook()
   const { getProtector } = ProtectorHook()
 
-
-
   // fteching Data from DB
   const fetchData = async () => {
     try {
@@ -244,6 +242,8 @@ const EntryDetails = () => {
   // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
+  const [name, setName] = useState('')
+
 
   const [date, setDate] = useState('')
   const [trade, setTrade] = useState('')
@@ -266,6 +266,7 @@ const EntryDetails = () => {
     }
     return (
       isDateInRange &&
+      entry.name && entry.name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
       entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
       entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
       entry.company?.toLowerCase().includes(company.toLowerCase()) &&
@@ -413,6 +414,10 @@ const EntryDetails = () => {
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
                   <div className="col-auto px-1">
+                      <label htmlFor="">Search by Name:</label>
+                     <input type="search"value={name} onChange={(e)=>setName(e.target.value)} />
+                    </div>
+                  <div className="col-auto px-1">
                       <label htmlFor="">Date:</label>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
@@ -531,7 +536,7 @@ const EntryDetails = () => {
             {!loading1 &&
               <div className='col-md-12'>
                 <Paper className='py-3 mb-1 px-2 detail_table'>
-                  <label htmlFor="" className='my-2 mx-1'>Select Range: </label>
+                  <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
                   <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
                     <option value="">All</option>
                     <option value="30">30</option>
@@ -553,23 +558,23 @@ const EntryDetails = () => {
                           </TableCell>
 
                           {section1 &&
-                            <TableCell align="left" className='visit_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='visit_label border  py-2' colSpan={9}>
                               Visit Sales Purchase Details
                             </TableCell>
                           }
                           {section2 &&
 
-                            <TableCell align="left" className='ticket_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='ticket_label border  py-2' colSpan={9}>
                               Ticket Sales Purchase Details
                             </TableCell>
                           }
                           {section3 &&
-                            <TableCell align="left" className='azad_label border py-2' colSpan={9}>
+                            <TableCell align="left" className='azad_label border  py-2' colSpan={9}>
                               Azad Visa Sales Purchase Details
                             </TableCell>
                           }
                           {section4 &&
-                            <TableCell align="left" className='protector_label border py-2' colSpan={5}>
+                            <TableCell align="left" className='protector_label border  py-2' colSpan={5}>
                               Protector Details
                             </TableCell>
                           }
@@ -580,39 +585,39 @@ const EntryDetails = () => {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell className='label border'>SN</TableCell>
-                          <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Name</TableCell>
-                          <TableCell className='label border'>PP#</TableCell>
-                          <TableCell className='label border'>Trade</TableCell>
-                          <TableCell className='label border'>Company</TableCell>
-                          <TableCell className='label border'>Remarks</TableCell>
-                          <TableCell className='label border'>Contact</TableCell>
-                          <TableCell className='label border'>FS</TableCell>
-                          <TableCell className='label border'>FD</TableCell>
-                          <TableCell className='label border'>Country</TableCell>
-                          <TableCell className='label border'>EM</TableCell>
-                          <TableCell className='label border'>VSR_PKR</TableCell>
-                          <TableCell className='label border'>VSR_Oth_Curr</TableCell>
-                          <TableCell className='label border'>VPR_PKR</TableCell>
-                          <TableCell className='label border'>VPR_Oth_Curr</TableCell>
-                          <TableCell className='label border'>RO</TableCell>
-                          <TableCell className='label border'>RO_Name</TableCell>
-                          <TableCell className='label border'>RI</TableCell>
-                          <TableCell className='label border'>RI_Name</TableCell>
-                          <TableCell className='label border'>Picture</TableCell>
+                          <TableCell className='label border text-center px-1'>SN</TableCell>
+                          <TableCell className='label border text-center px-1'>Date</TableCell>
+                          <TableCell className='label border text-center px-1'>Name</TableCell>
+                          <TableCell className='label border text-center px-1'>PP#</TableCell>
+                          <TableCell className='label border text-center px-1'>Trade</TableCell>
+                          <TableCell className='label border text-center px-1'>Company</TableCell>
+                          <TableCell className='label border text-center px-1'>Remarks</TableCell>
+                          <TableCell className='label border text-center px-1'>Contact</TableCell>
+                          <TableCell className='label border text-center px-1'>FS</TableCell>
+                          <TableCell className='label border text-center px-1'>FD</TableCell>
+                          <TableCell className='label border text-center px-1'>Country</TableCell>
+                          <TableCell className='label border text-center px-1'>EM</TableCell>
+                          <TableCell className='label border text-center px-1'>VSR_PKR</TableCell>
+                          <TableCell className='label border text-center px-1'>VSR_Oth_Curr</TableCell>
+                          <TableCell className='label border text-center px-1'>VPR_PKR</TableCell>
+                          <TableCell className='label border text-center px-1'>VPR_Oth_Curr</TableCell>
+                          <TableCell className='label border text-center px-1'>RO</TableCell>
+                          <TableCell className='label border text-center px-1'>RO_Name</TableCell>
+                          <TableCell className='label border text-center px-1'>RI</TableCell>
+                          <TableCell className='label border text-center px-1'>RI_Name</TableCell>
+                          <TableCell className='label border text-center px-1'>Picture</TableCell>
                           {section1 &&
                             <>
                               {/* Visit Sales Purchase Parties Section*/}
-                              <TableCell className='label border'>VSR_PKR</TableCell>
-                              <TableCell className='label border'>VSR_Cur</TableCell>
-                              <TableCell className='label border'>VPR_PKR</TableCell>
-                              <TableCell className='label border'>VPR_Curr</TableCell>
-                              <TableCell className='label border'>RO</TableCell>
-                              <TableCell className='label border'>RO_Name</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
-                              <TableCell className='label border'>Picture</TableCell>
+                              <TableCell className='label border text-center px-1'>VSR_PKR</TableCell>
+                              <TableCell className='label border text-center px-1'>VSR_Cur</TableCell>
+                              <TableCell className='label border text-center px-1'>VPR_PKR</TableCell>
+                              <TableCell className='label border text-center px-1'>VPR_Curr</TableCell>
+                              <TableCell className='label border text-center px-1'>RO</TableCell>
+                              <TableCell className='label border text-center px-1'>RO_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>RI</TableCell>
+                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>Picture</TableCell>
                             </>
                           }
 
@@ -620,15 +625,15 @@ const EntryDetails = () => {
                             <>
                               {/* Ticket Sales Purchase Parties Section*/}
 
-                              <TableCell className='label border'>TSR_PKR</TableCell>
-                              <TableCell className='label border'>TSR_Curr</TableCell>
-                              <TableCell className='label border'>TPR_PKR</TableCell>
-                              <TableCell className='label border'>TPR_Curr</TableCell>
-                              <TableCell className='label border'>RO</TableCell>
-                              <TableCell className='label border'>RO_Name</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
-                              <TableCell className='label border'>Picture</TableCell>
+                              <TableCell className='label border text-center px-1'>TSR_PKR</TableCell>
+                              <TableCell className='label border text-center px-1'>TSR_Curr</TableCell>
+                              <TableCell className='label border text-center px-1'>TPR_PKR</TableCell>
+                              <TableCell className='label border text-center px-1'>TPR_Curr</TableCell>
+                              <TableCell className='label border text-center px-1'>RO</TableCell>
+                              <TableCell className='label border text-center px-1'>RO_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>RI</TableCell>
+                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>Picture</TableCell>
 
                             </>
                           }
@@ -636,15 +641,15 @@ const EntryDetails = () => {
                           {section3 &&
                             <>
                               {/* Azad Visa Sales Purchase Parties Section*/}
-                              <TableCell className='label border'>AVSR_PKR</TableCell>
-                              <TableCell className='label border'>AVSR_Curr</TableCell>
-                              <TableCell className='label border'>AVPR_PKR</TableCell>
-                              <TableCell className='label border'>AVPR_Curr</TableCell>
-                              <TableCell className='label border'>RO</TableCell>
-                              <TableCell className='label border'>RO_Name</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
-                              <TableCell className='label border'>Picture</TableCell>
+                              <TableCell className='label border text-center px-1'>AVSR_PKR</TableCell>
+                              <TableCell className='label border text-center px-1'>AVSR_Curr</TableCell>
+                              <TableCell className='label border text-center px-1'>AVPR_PKR</TableCell>
+                              <TableCell className='label border text-center px-1'>AVPR_Curr</TableCell>
+                              <TableCell className='label border text-center px-1'>RO</TableCell>
+                              <TableCell className='label border text-center px-1'>RO_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>RI</TableCell>
+                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>Picture</TableCell>
 
                             </>
                           }
@@ -653,18 +658,18 @@ const EntryDetails = () => {
                           {section4 &&
                             <>
                               {/* Protector Section*/}
-                              <TableCell className='label border'>PP_In</TableCell>
-                              <TableCell className='label border'>PP_In_Curr</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
-                              <TableCell className='label border'>PP_Out</TableCell>
+                              <TableCell className='label border text-center px-1'>PP_In</TableCell>
+                              <TableCell className='label border text-center px-1'>PP_In_Curr</TableCell>
+                              <TableCell className='label border text-center px-1'>RI</TableCell>
+                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
+                              <TableCell className='label border text-center px-1'>PP_Out</TableCell>
 
                             </>
                           }
 
 
                           {/* Add more table header cells for other fields */}
-                          <TableCell align='left' className='edw_label border' colSpan={1}>
+                          <TableCell align='left' className='edw_label border text-center px-1' colSpan={1}>
                             Actions
                           </TableCell>
                         </TableRow>

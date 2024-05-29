@@ -325,7 +325,7 @@ export default function CandPaymentInDetails() {
 
   const filteredTotalPaymentIn = candidate_Payments_In.filter(payment => {
     // Check if supplierName exists and matches the provided name
-    if (payment?.supplierName && payment.supplierName.toLowerCase().includes(name.toLowerCase())) {
+    if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
         payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
         payment.pp_No.toLowerCase().includes(pp_No.toLowerCase()) &&
@@ -1206,6 +1206,8 @@ export default function CandPaymentInDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
   }
 
+  const[rowsValue,setRowsValue]=useState("")
+  const[rowsValue1,setRowsValue1]=useState("")
 
 
   return (
@@ -1219,6 +1221,19 @@ export default function CandPaymentInDetails() {
                 <h4>PaymentIn Details</h4>
               </div>
               <div className="right d-flex">
+              <label htmlFor="" className='mx-1 mt-2'>Show Entries: </label>
+                  <select name="" className='mt-1 mx-1' value={rowsValue1} onChange={(e)=>setRowsValue1(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
                 {candidate_Payments_In.length > 0 &&
                   <>
                     <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
@@ -1238,6 +1253,10 @@ export default function CandPaymentInDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+              <div className="col-auto px-1">
+                      <label htmlFor="">Search by Name:</label>
+                     <input type="search"value={name} onChange={(e)=>setName(e.target.value)} />
+                    </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label>
                   <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
@@ -1247,15 +1266,7 @@ export default function CandPaymentInDetails() {
                     ))}
                   </select>
                 </div>
-                <div className="col-auto px-1">
-                  <label htmlFor="">Candidate:</label>
-                  <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {candidate_Payments_In && candidate_Payments_In.map((data) => (
-                      <option value={data.supplierName} key={data._id}>{data.supplierName} </option>
-                    ))}
-                  </select>
-                </div>
+                
 
                 <div className="col-auto px-1">
                   <label htmlFor="">PP#:</label>
@@ -1336,7 +1347,7 @@ export default function CandPaymentInDetails() {
           {!isLoading &&
             <div className='col-md-12'>
               <Paper className='py-3 mb-1 px-2 detail_table'>
-                <TableContainer sx={{ maxHeight: 600 }}>
+                <TableContainer>
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow>
@@ -1369,7 +1380,7 @@ export default function CandPaymentInDetails() {
 
                     <TableBody>
                       {filteredTotalPaymentIn
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, outerIndex) => (
+                        .slice(0,rowsValue1 ? rowsValue1 : undefined).map((entry, outerIndex) => (
                           // Map through the payment array
                           <React.Fragment key={outerIndex}>
 
@@ -1563,28 +1574,28 @@ export default function CandPaymentInDetails() {
                         <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                         <TableCell className='border data_td text-center bg-info text-white'>
                           {/* Calculate the total sum of payment_In */}
-                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                          {filteredTotalPaymentIn.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
                             return isNaN(paymentIn) ? total : total + paymentIn;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-success text-white'>
                           {/* Calculate the total sum of cash_Out */}
-                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                          {filteredTotalPaymentIn.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Payment_In);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-danger text-white'>
                           {/* Calculate the total sum of cash_Out */}
-                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                          {filteredTotalPaymentIn.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-warning text-white'>
                           {/* Calculate the total sum of cash_Out */}
-                          {filteredTotalPaymentIn.reduce((total, paymentItem) => {
+                          {filteredTotalPaymentIn.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             const paymentOut = parseFloat(paymentItem.total_Payment_In);
@@ -1599,21 +1610,7 @@ export default function CandPaymentInDetails() {
 
                   </Table>
                 </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={rowsPerPageOptions}
-                  component='div'
-                  count={filteredTotalPaymentIn.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  style={{
-                    color: 'blue',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    textTransform: 'capitalize',
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+               
               </Paper>
             </div>
           }
@@ -1713,7 +1710,26 @@ export default function CandPaymentInDetails() {
             </Paper>
           </div>
           <div className="col-md-12 detail_table my-2">
-            <h6>Payment In Details</h6>
+          <div className="d-flex justify-content-between">
+              <div className="left d-flex">
+              <h6>Payment In Details</h6>
+              </div>
+              <div className="right d-flex">
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label>
+                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
+              </div>
+            </div>
             <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
@@ -1743,7 +1759,7 @@ export default function CandPaymentInDetails() {
                 <TableBody>
                   {filteredIndividualPayments.map((filteredData) => (
                     <>
-                      {filteredData.payment.map((paymentItem, index) => (
+                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
@@ -1872,7 +1888,7 @@ export default function CandPaymentInDetails() {
                     <TableCell className='border data_td text-center bg-warning text-white'>
                       {/* Calculate the total sum of payment_In */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const paymentIn = parseFloat(paymentItem.payment_In);
                           return isNaN(paymentIn) ? sum : sum + paymentIn;
                         }, 0);
@@ -1881,7 +1897,7 @@ export default function CandPaymentInDetails() {
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.cash_Out);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
@@ -1893,7 +1909,7 @@ export default function CandPaymentInDetails() {
                       <TableCell className='border data_td text-center bg-warning text-white'>
                       
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const paymentIn = parseFloat(paymentItem.payment_In_Curr);
                           return isNaN(paymentIn) ? sum : sum + paymentIn;
                         }, 0);
@@ -1902,7 +1918,7 @@ export default function CandPaymentInDetails() {
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Rate);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
@@ -1911,7 +1927,7 @@ export default function CandPaymentInDetails() {
                     <TableCell className='border data_td text-center bg-primary text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Amount);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);

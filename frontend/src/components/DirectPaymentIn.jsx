@@ -340,7 +340,7 @@ const getBankCash = async () => {
       
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+    
       setNewMessage(toast.error("Server is not Responding..."));
       setLoading(false);
     }
@@ -418,6 +418,25 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                 </div>
                 <div className="right">
                   <div className="text-end ">
+                  <span className="btn btn-sm submit_btn bg-info m-1 px-2 border-0">
+  Yesterday Closing Balance : {(
+    (cashInHand.total_Cash || 0) -
+    (overAllPayments && overAllPayments.length > 0
+      ? overAllPayments
+          .filter(entry => entry.date === currentDate)
+          .reduce((total, entry) => {
+            return total + (entry.payment_In || 0);
+          }, 0)
+      : 0)+ (overAllPayments && overAllPayments.length > 0
+        ? overAllPayments
+            .filter(entry => entry.date === currentDate)
+            .reduce((total, entry) => {
+              return total + (entry.payment_Out || 0);
+            }, 0)
+        : 0)
+      
+  ).toFixed(2)}
+</span>
                     <span className="btn btn-sm submit_btn m-1  px-3 border-0">Today : <i className="fas fa-arrow-down me-1 ms-2"></i>{overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
                                 .filter(entry => entry.date===currentDate)
@@ -862,7 +881,6 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                               <TableCell></TableCell>
                               <TableCell></TableCell>
                             </TableRow>}
-
                             <TableRow>
                               <TableCell colSpan={7}></TableCell>
                               <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>

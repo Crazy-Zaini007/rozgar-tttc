@@ -470,7 +470,7 @@ export default function AgentPaymentOutDetails() {
       persons: filteredData.persons
         .filter((persons) =>
           persons.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-          persons.name?.toLowerCase().includes(name.toLowerCase()) &&
+          persons.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
           persons.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
           persons.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
           persons.company?.toLowerCase().includes(company.toLowerCase()) &&
@@ -1414,6 +1414,9 @@ export default function AgentPaymentOutDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
 
+  const[rowsValue,setRowsValue]=useState("")
+  const[rowsValue1,setRowsValue1]=useState("")
+
   return (
     <>
       {!option &&
@@ -1744,7 +1747,26 @@ export default function AgentPaymentOutDetails() {
             </Paper>
           </div>
           <div className="col-md-12 detail_table my-2">
-            <h6>Payment Out Details</h6>
+          <div className="d-flex justify-content-between">
+              <div className="left d-flex">
+              <h6>Payment Out Details</h6>
+              </div>
+              <div className="right d-flex">
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label>
+                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
+              </div>
+            </div>
             <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
@@ -1774,7 +1796,7 @@ export default function AgentPaymentOutDetails() {
                 <TableBody>
                   {filteredIndividualPayments.map((filteredData) => (
                     <>
-                      {filteredData.payment.map((paymentItem, index) => (
+                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
@@ -1905,7 +1927,7 @@ export default function AgentPaymentOutDetails() {
                     <TableCell className='border data_td text-center bg-warning text-white'>
                       {/* Calculate the total sum of payment_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const paymentOut = parseFloat(paymentItem.payment_Out);
                           return isNaN(paymentOut) ? sum : sum + paymentOut;
                         }, 0);
@@ -1914,7 +1936,7 @@ export default function AgentPaymentOutDetails() {
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.cash_Out);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
@@ -1926,7 +1948,7 @@ export default function AgentPaymentOutDetails() {
                       <TableCell className='border data_td text-center bg-warning text-white'>
                       
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
                           return isNaN(paymentIn) ? sum : sum + paymentIn;
                         }, 0);
@@ -1935,7 +1957,7 @@ export default function AgentPaymentOutDetails() {
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Rate);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
@@ -1944,7 +1966,7 @@ export default function AgentPaymentOutDetails() {
                     <TableCell className='border data_td text-center bg-primary text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Amount);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
@@ -1962,6 +1984,10 @@ export default function AgentPaymentOutDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+              <div className="col-auto px-1">
+                  <label htmlFor="">Search by Name:</label>
+                  <input type="search" value={name} onChange={(e)=>setName(e.target.value)} />
+                </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
                   <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
@@ -1983,19 +2009,7 @@ export default function AgentPaymentOutDetails() {
                     ))}
                   </select>
                 </div>
-                <div className="col-auto px-1">
-                  <label htmlFor="">Name:</label>
-                  <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {[...new Set(agent_Payments_Out
-                      .filter(data => data.supplierName === selectedSupplier)
-                      .flatMap(data => data.persons)
-                      .map(data => data.name)
-                    )].map(dateValue => (
-                      <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
-                </div>
+                
                 <div className="col-auto px-1">
                   <label htmlFor="">PP#:</label>
                   <select value={pp_No} onChange={(e) => setPP_NO(e.target.value)} className='m-0 p-1'>
@@ -2097,6 +2111,19 @@ export default function AgentPaymentOutDetails() {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label>
+                  <select name="" className='my-2 mx-1' value={rowsValue1} onChange={(e)=>setRowsValue1(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
@@ -2126,7 +2153,7 @@ export default function AgentPaymentOutDetails() {
                 <TableBody>
                   {filteredPersons.map((filteredData) => (
                     <>
-                      {filteredData.persons.map((person, index) => (
+                      {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
 
                         <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode2 && editedRowIndex2 === index ? (
@@ -2260,7 +2287,7 @@ export default function AgentPaymentOutDetails() {
                         <TableCell className='border data_td text-center bg-warning text-white'>
                           {/* Calculate the total sum of payment_Out */}
                           {filteredPersons.reduce((total, filteredData) => {
-                            return total + filteredData.persons.reduce((sum, paymentItem) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.visa_Price_Out_PKR);
                               return isNaN(paymentIn) ? sum : sum + paymentIn;
                             }, 0);
