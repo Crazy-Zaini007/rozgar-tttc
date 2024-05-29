@@ -173,6 +173,7 @@ const EntryReports = () => {
           fetchData()
           setDelLoading(false)
           setNewMessage(toast.success(json.message))
+          setMultipleIds([])
         
         }
         if (!response.ok) {
