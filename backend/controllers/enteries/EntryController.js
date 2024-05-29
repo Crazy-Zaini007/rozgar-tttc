@@ -3958,7 +3958,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_Out === "candidates" ||
             entryData.reference_Out === "candidate" ||
             entryData.reference_Out === "Candidates" ||
-            entryData.reference_Out === "Candidate"
+            entryData.reference_Out === "Candidate" ||
+            entryData.reference_Out === "DIRECTS" ||
+            entryData.reference_Out === "DIRECT" ||
+            entryData.reference_Out === "directs" ||
+            entryData.reference_Out === "direct" ||
+            entryData.reference_Out === "Directs" ||
+            entryData.reference_Out === "Direct"
           ) {
             try {
               // Check if the supplier with the given name and entry mode exists
@@ -4015,7 +4021,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_In === "candidates" ||
             entryData.reference_In === "candidate" ||
             entryData.reference_In === "Candidates" ||
-            entryData.reference_In === "Candidate"
+            entryData.reference_In === "Candidate" ||
+            entryData.reference_In === "DIRECTS" ||
+            entryData.reference_In === "DIRECT" ||
+            entryData.reference_In === "directs" ||
+            entryData.reference_In === "direct" ||
+            entryData.reference_In === "Directs" ||
+            entryData.reference_In === "Direct"
           ) {
             try {
               // Check if the supplier with the given name exists
@@ -4591,7 +4603,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.azad_Visa_Reference_Out === "candidates" ||
             entryData.azad_Visa_Reference_Out === "candidate" ||
             entryData.azad_Visa_Reference_Out === "Candidates" ||
-            entryData.azad_Visa_Reference_Out === "Candidate"
+            entryData.azad_Visa_Reference_Out === "Candidate" ||
+            entryData.azad_Visa_Reference_Out === "DIRECTS" ||
+            entryData.azad_Visa_Reference_Out === "DIRECT" ||
+            entryData.azad_Visa_Reference_Out === "directs" ||
+            entryData.azad_Visa_Reference_Out === "direct" ||
+            entryData.azad_Visa_Reference_Out === "Directs" ||
+            entryData.azad_Visa_Reference_Out === "Direct"
           ) {
             try {
               // Check if the supplier with the given name and entry mode exists
@@ -4652,7 +4670,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.azad_Visa_Reference_In === "candidates" ||
             entryData.azad_Visa_Reference_In === "candidate" ||
             entryData.azad_Visa_Reference_In === "Candidates" ||
-            entryData.azad_Visa_Reference_In === "Candidate"
+            entryData.azad_Visa_Reference_In === "Candidate"||
+            entryData.azad_Visa_Reference_In === "DIRECTS" ||
+            entryData.azad_Visa_Reference_In === "DIRECT" ||
+            entryData.azad_Visa_Reference_In === "directs" ||
+            entryData.azad_Visa_Reference_In === "direct" ||
+            entryData.azad_Visa_Reference_In === "Directs" ||
+            entryData.azad_Visa_Reference_In === "Direct"
           ) {
             try {
               // Check if the supplier with the given name exists
@@ -5230,7 +5254,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.ticket_Reference_Out === "candidates" ||
             entryData.ticket_Reference_Out === "candidate" ||
             entryData.ticket_Reference_Out === "Candidates" ||
-            entryData.ticket_Reference_Out === "Candidate"
+            entryData.ticket_Reference_Out === "Candidate"||
+            entryData.ticket_Reference_Out === "DIRECTS" ||
+            entryData.ticket_Reference_Out === "DIRECT" ||
+            entryData.ticket_Reference_Out === "directs" ||
+            entryData.ticket_Reference_Out === "direct" ||
+            entryData.ticket_Reference_Out === "Directs" ||
+            entryData.ticket_Reference_Out === "Direct"
           ) {
             try {
               // Check if the supplier with the given name and entry mode exists
@@ -5289,7 +5319,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.ticket_Reference_In === "candidates" ||
             entryData.ticket_Reference_In === "candidate" ||
             entryData.ticket_Reference_In === "Candidates" ||
-            entryData.ticket_Reference_In === "Candidate"
+            entryData.ticket_Reference_In === "Candidate"||
+            entryData.ticket_Reference_In === "DIRECTS" ||
+            entryData.ticket_Reference_In === "DIRECT" ||
+            entryData.ticket_Reference_In === "directs" ||
+            entryData.ticket_Reference_In === "direct" ||
+            entryData.ticket_Reference_In === "Directs" ||
+            entryData.ticket_Reference_In === "Direct"
           ) {
             try {
               // Check if the supplier with the given name exists
@@ -5858,7 +5894,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.visit_Reference_Out === "candidates" ||
             entryData.visit_Reference_Out === "candidate" ||
             entryData.visit_Reference_Out === "Candidates" ||
-            entryData.visit_Reference_Out === "Candidate"
+            entryData.visit_Reference_Out === "Candidate"||
+            entryData.visit_Reference_Out === "DIRECTS" ||
+            entryData.visit_Reference_Out === "DIRECT" ||
+            entryData.visit_Reference_Out === "directs" ||
+            entryData.visit_Reference_Out === "direct" ||
+            entryData.visit_Reference_Out === "Directs" ||
+            entryData.visit_Reference_Out === "Direct"
           ) {
             try {
               // Check if the supplier with the given name and entry mode exists
@@ -5917,7 +5959,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.visit_Reference_In === "candidate" ||
             entryData.visit_Reference_In === "candidates" ||
             entryData.visit_Reference_In === "Candidate" ||
-            entryData.visit_Reference_In === "Candidates"
+            entryData.visit_Reference_In === "Candidates"||
+            entryData.visit_Reference_Out === "DIRECTS" ||
+            entryData.visit_Reference_In === "DIRECT" ||
+            entryData.visit_Reference_In === "directs" ||
+            entryData.visit_Reference_In === "direct" ||
+            entryData.visit_Reference_In === "Directs" ||
+            entryData.visit_Reference_In === "Direct"
           ) {
             try {
               // Check if the supplier with the given name exists
@@ -7758,7 +7806,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "supplier" && reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "supplier" && (reference_In.toLowerCase() === "candidate"||reference_In.toLowerCase() === "direct" )) {
 
         const existingSupplierPaymentIn = await Suppliers.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.reference_In_Name,
@@ -8231,7 +8279,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "agent" && reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "agent" && (reference_In.toLowerCase() === "candidate"||reference_In.toLowerCase() === "direct" )) {
 
         const existingSupplierPaymentIn = await Agents.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.reference_In_Name,
@@ -8316,7 +8364,7 @@ const updateEntry = async (req, res) => {
 
 
       // For Candidates Reference_In
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "candidate" && reference_In.toLowerCase() === "candidate" && entryToUpdate.reference_In_Name === reference_In_Name) {
+      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase() === "candidate"||entryToUpdate.reference_In.toLowerCase() === "direct" ) && (reference_In.toLowerCase() === "candidate"||reference_In.toLowerCase() === "direct" ) && entryToUpdate.reference_In_Name === reference_In_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await Candidate.findOne({
@@ -8365,7 +8413,7 @@ const updateEntry = async (req, res) => {
 
       }
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "candidate" && reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase() === "candidate" ||entryToUpdate.reference_In.toLowerCase() === "direct") && reference_In.toLowerCase() === "supplier") {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -8508,7 +8556,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "candidate" && reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase() === "candidate" ||entryToUpdate.reference_In.toLowerCase() === "direct")  && reference_In.toLowerCase() === "agent") {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -9033,7 +9081,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "supplier" && reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "supplier" && (reference_Out.toLowerCase() === "candidate" ||reference_Out.toLowerCase() === "direct") ) {
         // Update the Agent With PaymentIn by removing the person from the persons array
         const existingSupplierPaymentIn = await Suppliers.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.reference_Out_Name,
@@ -9503,7 +9551,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "agent" && reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "agent" &&(reference_Out.toLowerCase() === "candidate" ||reference_Out.toLowerCase() === "direct")) {
         // Update the Agent With PaymentIn by removing the person from the persons array
         const existingSupplierPaymentIn = await Agents.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.reference_Out_Name,
@@ -9590,7 +9638,7 @@ const updateEntry = async (req, res) => {
 
 
       // For Candidate Reference_Out
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "candidate" && reference_Out.toLowerCase() === "candidate" && entryToUpdate.reference_Out_Name === reference_Out_Name) {
+      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase() === "candidate" ||entryToUpdate.reference_Out.toLowerCase() === "direct") && (reference_Out.toLowerCase() === "candidate" ||reference_Out.toLowerCase() === "direct") && entryToUpdate.reference_Out_Name === reference_Out_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await Candidate.findOne({
@@ -9635,7 +9683,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "candidate" && reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase() === "candidate" ||entryToUpdate.reference_Out.toLowerCase() === "direct") && reference_Out.toLowerCase() === "supplier") {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -9775,7 +9823,7 @@ const updateEntry = async (req, res) => {
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "candidate" && reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase() === "candidate" ||entryToUpdate.reference_Out.toLowerCase() === "direct") && reference_Out.toLowerCase() === "agent") {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
