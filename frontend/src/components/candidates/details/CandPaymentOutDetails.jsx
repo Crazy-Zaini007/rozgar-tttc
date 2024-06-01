@@ -1552,7 +1552,7 @@ export default function CandPaymentOutDetails() {
                                     <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
                                   <button onClick={() => printCandidateDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
                                   <button onClick={() => downloadCandidateDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
-                                    <button className='btn delete_btn btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
+                                    {/* <button className='btn delete_btn btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button> */}
                                     </div>
                                     </div>
                                    

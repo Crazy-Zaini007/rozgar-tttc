@@ -1693,9 +1693,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                           <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
                         </>}
                         <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
-                        <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
+                        {/* <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                           Actions
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     </TableHead>
 
@@ -1786,13 +1786,13 @@ const[rowsValue1,setRowsValue1]=useState("")
                                     <span>{entry.status}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
-                                  <TableCell className='border data_td p-1 text-center'>
+                                  {/* <TableCell className='border data_td p-1 text-center'>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                      {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
+                                      <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
                                       <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                     </div>
                                    
-                                  </TableCell>
+                                  </TableCell> */}
                                 </>
                               )}
                             </TableRow>

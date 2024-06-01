@@ -1437,7 +1437,7 @@ export default function TicketSupPayInDetails() {
                                                 </>}
                                                 <TableCell className='label border'>Status</TableCell>
 
-                                                <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell>
+                                                {/* <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell> */}
                                             </TableRow>
                                         </TableHead>
 
@@ -1479,13 +1479,13 @@ export default function TicketSupPayInDetails() {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.status}
                                                     </TableCell>
-                                                    <TableCell className='border data_td p-1 '>
+                                                    {/* <TableCell className='border data_td p-1 '>
                                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                            {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
+                                                            <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
                                                             <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                                         </div>
 
-                                                    </TableCell>
+                                                    </TableCell> */}
 
 
                                                 </TableRow>

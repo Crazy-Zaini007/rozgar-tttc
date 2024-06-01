@@ -909,9 +909,9 @@ export default function ProtectorPaymentOutDetails() {
                        </>
                        }
                       
-                        <TableCell align='left' className='edw_label border' colSpan={1}>
+                        {/* <TableCell align='left' className='edw_label border' colSpan={1}>
                           Actions
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     </TableHead>
 
@@ -1002,13 +1002,13 @@ export default function ProtectorPaymentOutDetails() {
                                  </>}
                                   
                                   {/* ... Other cells in non-edit mode */}
-                                  <TableCell className='border data_td p-1 '>
+                                  {/* <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                      {/* <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button> */}
+                                      <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
                                       <button className='btn delete_btn  btn-sm ' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button>
                                     </div>
                                    
-                                  </TableCell>
+                                  </TableCell> */}
                                 </>
                               )}
                             </TableRow>
