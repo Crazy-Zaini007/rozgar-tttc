@@ -39,6 +39,11 @@ const CashInHand=require('../../database/cashInHand/CashInHandSchema')
 const Assets =require('../../database/assets/AssetsSchema')
 const MyAssets =require('../../database/setting/MyAssetsModel')
 
+
+const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
+const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
+const VisitAgents = require("../../database/visitAgent/VisitAgentSchema");
+
 const cloudinary = require('../cloudinary')
 
 // 1- Visa Sales Parties Controllers
@@ -186,151 +191,151 @@ const updateVSP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -574,7 +579,7 @@ const deleteVSP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -589,16 +594,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -612,16 +617,16 @@ const deleteVSP = async (req, res) => {
               $inc: {}
             };
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -636,16 +641,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -660,17 +665,17 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -685,16 +690,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -709,16 +714,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -733,16 +738,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -757,17 +762,17 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -782,16 +787,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -806,16 +811,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -830,16 +835,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -854,17 +859,17 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -879,16 +884,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -903,17 +908,17 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -928,16 +933,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -952,17 +957,17 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -977,16 +982,16 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1001,11 +1006,11 @@ const deleteVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -1220,151 +1225,151 @@ const updateVPP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -1608,7 +1613,7 @@ const deleteVPP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1623,16 +1628,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1647,16 +1652,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1671,16 +1676,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1695,17 +1700,17 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1720,16 +1725,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1744,16 +1749,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1768,16 +1773,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1792,17 +1797,17 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1817,16 +1822,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1841,16 +1846,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1865,16 +1870,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1889,17 +1894,17 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1914,16 +1919,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1938,17 +1943,17 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1963,16 +1968,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -1987,17 +1992,17 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2012,16 +2017,16 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2036,11 +2041,11 @@ const deleteVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -2254,151 +2259,151 @@ const updateTSP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -2641,7 +2646,7 @@ const deleteTSP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2656,16 +2661,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2680,16 +2685,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2704,16 +2709,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2728,17 +2733,17 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2753,16 +2758,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2777,16 +2782,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2801,16 +2806,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2825,17 +2830,17 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2850,16 +2855,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2874,16 +2879,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2898,16 +2903,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2922,17 +2927,17 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2947,16 +2952,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2971,17 +2976,17 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -2996,16 +3001,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3020,17 +3025,17 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3045,16 +3050,16 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3069,11 +3074,11 @@ const deleteTSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -3291,151 +3296,151 @@ const updateTPP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
         
@@ -3676,7 +3681,7 @@ const deleteTPP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3691,16 +3696,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3715,16 +3720,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3739,16 +3744,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3763,17 +3768,17 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3788,16 +3793,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3812,16 +3817,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3836,16 +3841,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3860,17 +3865,17 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3885,16 +3890,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3909,16 +3914,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3933,16 +3938,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3957,17 +3962,17 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -3982,16 +3987,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4006,17 +4011,17 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4031,16 +4036,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4055,17 +4060,17 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4080,16 +4085,16 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4104,11 +4109,11 @@ const deleteTPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -4324,151 +4329,151 @@ const updateAVSP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -4710,7 +4715,7 @@ const deleteAVSP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4725,16 +4730,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4749,16 +4754,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4773,16 +4778,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4797,17 +4802,17 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4822,16 +4827,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4846,16 +4851,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4870,16 +4875,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4894,17 +4899,17 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4919,16 +4924,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4943,16 +4948,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4967,16 +4972,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -4991,17 +4996,17 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5016,16 +5021,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5040,17 +5045,17 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5065,16 +5070,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5089,17 +5094,17 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5114,16 +5119,16 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5138,11 +5143,11 @@ const deleteAVSP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -5359,151 +5364,151 @@ const updateAVPP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -5746,7 +5751,7 @@ const deleteAVPP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5761,16 +5766,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5785,16 +5790,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5809,16 +5814,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5833,17 +5838,17 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5858,16 +5863,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5882,16 +5887,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5906,16 +5911,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5930,17 +5935,17 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5955,16 +5960,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -5979,16 +5984,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6003,16 +6008,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6027,17 +6032,17 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6052,16 +6057,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6076,17 +6081,17 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6101,16 +6106,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6125,17 +6130,17 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6150,16 +6155,16 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6174,11 +6179,11 @@ const deleteAVPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -6394,151 +6399,151 @@ const updateVISP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -6781,7 +6786,7 @@ const deleteVISP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6796,16 +6801,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6820,16 +6825,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6844,16 +6849,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6868,17 +6873,17 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6893,16 +6898,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6917,16 +6922,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6941,16 +6946,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6965,17 +6970,17 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -6990,16 +6995,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7014,16 +7019,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7038,16 +7043,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7062,17 +7067,17 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7087,16 +7092,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7111,17 +7116,17 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7136,16 +7141,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7160,17 +7165,17 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7185,16 +7190,16 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7209,11 +7214,11 @@ const deleteVISP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -7426,151 +7431,151 @@ const updateVIPP = async (req, res) => {
 
                            //   Updating Azad Suppliers and Agents
                         const existingAzadSupIn = await AzadSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadSupIn){
-                            existingAzadSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingAzadSupIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadSupIn.save()
                           }
     
                           const existingAzadSupOut = await AzadSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadSupOut){
-                            existingAzadSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadSupOut.save()
                           }
 
-                          const existingAzadAgentIn = await AzadSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentIn = await AzadAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadAgentIn){
-                            existingAzadAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingAzadAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadAgentIn.save()
                           }
     
-                          const existingAzadAgentOut = await AzadSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingAzadAgentOut = await AzadAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadAgentOut){
-                            existingAzadAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadAgentOut.save()
                           }
 
                             //   Updating Ticket Suppliers and Agents
                         const existingTicketSupIn = await TicketSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketSupIn){
-                            existingTicketSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingTicketSupIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketSupIn.save()
                           }
     
                           const existingTicketSupOut = await TicketSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketSupOut){
-                            existingTicketSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketSupOut.save()
                           }
 
-                          const existingTicketAgentIn = await TicketSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentIn = await TicketAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketAgentIn){
-                            existingTicketAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingTicketAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketAgentIn.save()
                           }
     
-                          const existingTicketAgentOut = await TicketSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingTicketAgentOut = await TicketAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketAgentOut){
-                            existingTicketAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketAgentOut.save()
                           }
     
                            //   Updating Visit Suppliers and Agents
                         const existingVisitSupIn = await VisitSuppliers.findOne({
-                            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitSupIn){
-                            existingVisitSupIn.Supplier_Payment_In_Schema.supplierName=supplierName
+                            existingVisitSupIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitSupIn.save()
                           }
     
                           const existingVisitSupOut = await VisitSuppliers.findOne({
-                            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitSupOut){
-                            existingVisitSupOut.Supplier_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitSupOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitSupOut.save()
                           }
 
-                          const existingVisitAgentIn = await VisitSuppliers.findOne({
-                            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentIn = await VisitAgents.findOne({
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitAgentIn){
-                            existingVisitAgentIn.Agent_Payment_In_Schema.supplierName=supplierName
+                            existingVisitAgentIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitAgentIn.save()
                           }
     
-                          const existingVisitAgentOut = await VisitSuppliers.findOne({
-                            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                          const existingVisitAgentOut = await VisitAgents.findOne({
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitAgentOut){
-                            existingVisitAgentOut.Agent_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitAgentOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitAgentOut.save()
                           }
 
                         //   Updating Azad Candidate
                         const existingAzadCandIn = await AzadCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingAzadCandIn){
-                            existingAzadCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingAzadCandIn.payment_In_Schema.supplierName=supplierName
                             await existingAzadCandIn.save()
                           }
     
                           const existingAzadCandOut = await AzadCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingAzadCandOut){
-                            existingAzadCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingAzadCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingAzadCandOut.save()
                           }
 
                           //   Updating Ticket Candidate
                         const existingTicketCandIn = await TicketCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingTicketCandIn){
-                            existingTicketCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingTicketCandIn.payment_In_Schema.supplierName=supplierName
                             await existingTicketCandIn.save()
                           }
     
                           const existingTicketCandOut = await TicketCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingTicketCandOut){
-                            existingTicketCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingTicketCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingTicketCandOut.save()
                           }
 
                            //   Updating Visit Candidate
                         const existingVisitCandIn = await VisitCandidates.findOne({
-                            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_In_Schema.supplierName": existingSupplier.supplierName,
                           });
                           if(existingVisitCandIn){
-                            existingVisitCandIn.Candidate_Payment_In_Schema.supplierName=supplierName
+                            existingVisitCandIn.payment_In_Schema.supplierName=supplierName
                             await existingVisitCandIn.save()
                           }
     
                           const existingVisitCandOut = await VisitCandidates.findOne({
-                            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+                            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
                           })
                           if(existingVisitCandOut){
-                            existingVisitCandOut.Candidate_Payment_Out_Schema.supplierName=supplierName
+                            existingVisitCandOut.payment_Out_Schema.supplierName=supplierName
                             await existingVisitCandOut.save()
                           }
 
@@ -7813,7 +7818,7 @@ const deleteVIPP = async (req, res) => {
 
           //   Updating Azad Suppliers and Agents
           const existingAzadSupIn = await AzadSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7828,16 +7833,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupIn.Supplier_Payment_In_Schema = null
+            existingAzadSupIn.payment_In_Schema = null
             await existingAzadSupIn.save()
           }
 
           const existingAzadSupOut = await AzadSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7852,16 +7857,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadSupOut.Supplier_Payment_Out_Schema = null
+            existingAzadSupOut.payment_Out_Schema = null
             await existingAzadSupOut.save()
           }
 
           const existingAzadAgentIn = await AzadSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7876,16 +7881,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentIn.Agent_Payment_In_Schema = null
+            existingAzadAgentIn.payment_In_Schema = null
             await existingAzadAgentIn.save()
           }
 
           const existingAzadAgentOut = await AzadSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7900,17 +7905,17 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadAgentOut.Agent_Payment_Out_Schema = null
+            existingAzadAgentOut.payment_Out_Schema = null
             await existingAzadAgentOut.save()
           }
 
           //   Updating Ticket Suppliers and Agents
           const existingTicketSupIn = await TicketSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7925,16 +7930,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupIn.Supplier_Payment_In_Schema = null
+            existingTicketSupIn.payment_In_Schema = null
             await existingTicketSupIn.save()
           }
 
           const existingTicketSupOut = await TicketSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7949,16 +7954,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketSupOut.Supplier_Payment_Out_Schema = null
+            existingTicketSupOut.payment_Out_Schema = null
             await existingTicketSupOut.save()
           }
 
           const existingTicketAgentIn = await TicketSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7973,16 +7978,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentIn.Agent_Payment_In_Schema = null
+            existingTicketAgentIn.payment_In_Schema = null
             await existingTicketAgentIn.save()
           }
 
           const existingTicketAgentOut = await TicketSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -7997,17 +8002,17 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketAgentOut.Agent_Payment_Out_Schema = null
+            existingTicketAgentOut.payment_Out_Schema = null
             await existingTicketAgentOut.save()
           }
 
           //   Updating Visit Suppliers and Agents
           const existingVisitSupIn = await VisitSuppliers.findOne({
-            "Supplier_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitSupIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8022,16 +8027,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.Supplier_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupIn.Supplier_Payment_In_Schema = null
+            existingVisitSupIn.payment_In_Schema = null
             await existingVisitSupIn.save()
           }
 
           const existingVisitSupOut = await VisitSuppliers.findOne({
-            "Supplier_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitSupOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8046,16 +8051,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.Supplier_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitSupOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitSupOut.Supplier_Payment_Out_Schema = null
+            existingVisitSupOut.payment_Out_Schema = null
             await existingVisitSupOut.save()
           }
 
           const existingVisitAgentIn = await VisitSuppliers.findOne({
-            "Agent_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8070,16 +8075,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.Agent_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentIn.Agent_Payment_In_Schema = null
+            existingVisitAgentIn.payment_In_Schema = null
             await existingVisitAgentIn.save()
           }
 
           const existingVisitAgentOut = await VisitSuppliers.findOne({
-            "Agent_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8094,17 +8099,17 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.Agent_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitAgentOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitAgentOut.Agent_Payment_Out_Schema = null
+            existingVisitAgentOut.payment_Out_Schema = null
             await existingVisitAgentOut.save()
           }
 
           //   Updating Azad Candidate
           const existingAzadCandIn = await AzadCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8119,16 +8124,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandIn.Candidate_Payment_In_Schema = null
+            existingAzadCandIn.payment_In_Schema = null
             await existingAzadCandIn.save()
           }
 
           const existingAzadCandOut = await AzadCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8143,17 +8148,17 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingAzadCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingAzadCandOut.Candidate_Payment_Out_Schema = null
+            existingAzadCandOut.payment_Out_Schema = null
             await existingAzadCandOut.save()
           }
 
           //   Updating Ticket Candidate
           const existingTicketCandIn = await TicketCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8168,16 +8173,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandIn.Candidate_Payment_In_Schema = null
+            existingTicketCandIn.payment_In_Schema = null
             await existingTicketCandIn.save()
           }
 
           const existingTicketCandOut = await TicketCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8192,17 +8197,17 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingTicketCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingTicketCandOut.Candidate_Payment_Out_Schema = null
+            existingTicketCandOut.payment_Out_Schema = null
             await existingTicketCandOut.save()
           }
 
           //   Updating Visit Candidate
           const existingVisitCandIn = await VisitCandidates.findOne({
-            "Candidate_Payment_In_Schema.supplierName": existingSupplier.supplierName,
+            "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitCandIn) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8217,16 +8222,16 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.Candidate_Payment_In_Schema.total_Payment_In
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandIn.payment_In_Schema.total_Payment_In
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandIn.Candidate_Payment_In_Schema = null
+            existingVisitCandIn.payment_In_Schema = null
             await existingVisitCandIn.save()
           }
 
           const existingVisitCandOut = await VisitCandidates.findOne({
-            "Candidate_Payment_Out_Schema.supplierName": existingSupplier.supplierName,
+            "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitCandOut) {
             const cashInHandDoc = await CashInHand.findOne({});
@@ -8241,11 +8246,11 @@ const deleteVIPP = async (req, res) => {
             };
 
 
-            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.Candidate_Payment_Out_Schema.total_Payment_Out
+            cashInHandUpdate.$inc.total_Cash = -existingVisitCandOut.payment_Out_Schema.total_Payment_Out
 
             await CashInHand.updateOne({}, cashInHandUpdate);
 
-            existingVisitCandOut.Candidate_Payment_Out_Schema = null
+            existingVisitCandOut.payment_Out_Schema = null
             await existingVisitCandOut.save()
           }
 
@@ -8396,11 +8401,11 @@ const updateCompany = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+        const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -8484,8 +8489,8 @@ const updateCompany = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8496,8 +8501,8 @@ const updateCompany = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8513,8 +8518,8 @@ const updateCompany = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8525,8 +8530,8 @@ const updateCompany = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8542,8 +8547,8 @@ const updateCompany = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8554,8 +8559,8 @@ const updateCompany = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8571,8 +8576,8 @@ const updateCompany = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8583,8 +8588,8 @@ const updateCompany = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8599,8 +8604,8 @@ const updateCompany = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8611,8 +8616,8 @@ const updateCompany = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8628,8 +8633,8 @@ const updateCompany = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8640,8 +8645,8 @@ const updateCompany = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8680,22 +8685,22 @@ const updateCompany = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.company===existingSupplier.company){
-                azadCandidate.Candidate_Payment_In_Schema.company=company
+              if(azadCandidate.payment_In_Schema.company===existingSupplier.company){
+                azadCandidate.payment_In_Schema.company=company
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.company===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.company=company
+            if(azadCandidate.payment_Out_Schema.company===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.company=company
            
             }
         
@@ -8705,22 +8710,22 @@ const updateCompany = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.company===existingSupplier.company){
-                ticketCandidate.Candidate_Payment_In_Schema.company=company
+              if(ticketCandidate.payment_In_Schema.company===existingSupplier.company){
+                ticketCandidate.payment_In_Schema.company=company
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.company===existingSupplier.company){
-              ticketCandidate.Candidate_Payment_Out_Schema.company=company
+            if(ticketCandidate.payment_Out_Schema.company===existingSupplier.company){
+              ticketCandidate.payment_Out_Schema.company=company
            
             }
         
@@ -8730,22 +8735,22 @@ const updateCompany = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.company===existingSupplier.company){
-                visitCandidate.Candidate_Payment_In_Schema.company=company
+              if(visitCandidate.payment_In_Schema.company===existingSupplier.company){
+                visitCandidate.payment_In_Schema.company=company
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.company===existingSupplier.company){
-              visitCandidate.Candidate_Payment_Out_Schema.company=company
+            if(visitCandidate.payment_Out_Schema.company===existingSupplier.company){
+              visitCandidate.payment_Out_Schema.company=company
            
             }
         
@@ -8807,11 +8812,11 @@ const deleteCompany = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -8895,8 +8900,8 @@ const deleteCompany = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8907,8 +8912,8 @@ const deleteCompany = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8924,8 +8929,8 @@ const deleteCompany = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8936,8 +8941,8 @@ const deleteCompany = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8953,8 +8958,8 @@ const deleteCompany = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8965,8 +8970,8 @@ const deleteCompany = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8982,8 +8987,8 @@ const deleteCompany = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -8994,8 +8999,8 @@ const deleteCompany = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -9010,8 +9015,8 @@ const deleteCompany = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -9022,8 +9027,8 @@ const deleteCompany = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -9039,8 +9044,8 @@ const deleteCompany = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -9051,8 +9056,8 @@ const deleteCompany = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.company===existingSupplier.company){
@@ -9091,22 +9096,22 @@ const deleteCompany = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.company===existingSupplier.company){
-                azadCandidate.Candidate_Payment_In_Schema.company=""
+              if(azadCandidate.payment_In_Schema.company===existingSupplier.company){
+                azadCandidate.payment_In_Schema.company=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.company===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.company=""
+            if(azadCandidate.payment_Out_Schema.company===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.company=""
            
             }
         
@@ -9116,22 +9121,22 @@ const deleteCompany = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.company===existingSupplier.company){
-                ticketCandidate.Candidate_Payment_In_Schema.company=""
+              if(ticketCandidate.payment_In_Schema.company===existingSupplier.company){
+                ticketCandidate.payment_In_Schema.company=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.company===existingSupplier.company){
-              ticketCandidate.Candidate_Payment_Out_Schema.company=""
+            if(ticketCandidate.payment_Out_Schema.company===existingSupplier.company){
+              ticketCandidate.payment_Out_Schema.company=""
            
             }
         
@@ -9141,22 +9146,22 @@ const deleteCompany = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.company===existingSupplier.company){
-                visitCandidate.Candidate_Payment_In_Schema.company=""
+              if(visitCandidate.payment_In_Schema.company===existingSupplier.company){
+                visitCandidate.payment_In_Schema.company=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.company===existingSupplier.company){
-              visitCandidate.Candidate_Payment_Out_Schema.company=""
+            if(visitCandidate.payment_Out_Schema.company===existingSupplier.company){
+              visitCandidate.payment_Out_Schema.company=""
            
             }
         
@@ -9292,11 +9297,11 @@ const updateTrade = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -9380,8 +9385,8 @@ const updateTrade = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9392,8 +9397,8 @@ const updateTrade = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9409,8 +9414,8 @@ const updateTrade = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9421,8 +9426,8 @@ const updateTrade = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9438,8 +9443,8 @@ const updateTrade = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9450,8 +9455,8 @@ const updateTrade = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9467,8 +9472,8 @@ const updateTrade = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9479,8 +9484,8 @@ const updateTrade = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9495,8 +9500,8 @@ const updateTrade = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9507,8 +9512,8 @@ const updateTrade = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9524,8 +9529,8 @@ const updateTrade = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9536,8 +9541,8 @@ const updateTrade = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9576,22 +9581,22 @@ const updateTrade = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.trade===existingSupplier.trade){
-                azadCandidate.Candidate_Payment_In_Schema.trade=trade
+              if(azadCandidate.payment_In_Schema.trade===existingSupplier.trade){
+                azadCandidate.payment_In_Schema.trade=trade
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.trade===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.trade=trade
+            if(azadCandidate.payment_Out_Schema.trade===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.trade=trade
            
             }
         
@@ -9601,22 +9606,22 @@ const updateTrade = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.trade===existingSupplier.trade){
-                ticketCandidate.Candidate_Payment_In_Schema.trade=trade
+              if(ticketCandidate.payment_In_Schema.trade===existingSupplier.trade){
+                ticketCandidate.payment_In_Schema.trade=trade
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.trade===existingSupplier.trade){
-              ticketCandidate.Candidate_Payment_Out_Schema.trade=trade
+            if(ticketCandidate.payment_Out_Schema.trade===existingSupplier.trade){
+              ticketCandidate.payment_Out_Schema.trade=trade
            
             }
         
@@ -9626,22 +9631,22 @@ const updateTrade = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.trade===existingSupplier.trade){
-                visitCandidate.Candidate_Payment_In_Schema.trade=trade
+              if(visitCandidate.payment_In_Schema.trade===existingSupplier.trade){
+                visitCandidate.payment_In_Schema.trade=trade
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.trade===existingSupplier.trade){
-              visitCandidate.Candidate_Payment_Out_Schema.trade=trade
+            if(visitCandidate.payment_Out_Schema.trade===existingSupplier.trade){
+              visitCandidate.payment_Out_Schema.trade=trade
            
             }
         
@@ -9705,11 +9710,11 @@ const deleteTrade = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -9793,8 +9798,8 @@ const deleteTrade = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9805,8 +9810,8 @@ const deleteTrade = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9822,8 +9827,8 @@ const deleteTrade = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9834,8 +9839,8 @@ const deleteTrade = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9851,8 +9856,8 @@ const deleteTrade = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9863,8 +9868,8 @@ const deleteTrade = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9880,8 +9885,8 @@ const deleteTrade = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9892,8 +9897,8 @@ const deleteTrade = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9908,8 +9913,8 @@ const deleteTrade = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9920,8 +9925,8 @@ const deleteTrade = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9937,8 +9942,8 @@ const deleteTrade = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9949,8 +9954,8 @@ const deleteTrade = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.trade===existingSupplier.trade){
@@ -9989,22 +9994,22 @@ const deleteTrade = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.trade===existingSupplier.trade){
-                azadCandidate.Candidate_Payment_In_Schema.trade=""
+              if(azadCandidate.payment_In_Schema.trade===existingSupplier.trade){
+                azadCandidate.payment_In_Schema.trade=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.trade===existingSupplier.trade){
-              azadCandidate.Candidate_Payment_Out_Schema.trade=""
+            if(azadCandidate.payment_Out_Schema.trade===existingSupplier.trade){
+              azadCandidate.payment_Out_Schema.trade=""
            
             }
         
@@ -10014,22 +10019,22 @@ const deleteTrade = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.trade===existingSupplier.trade){
-                ticketCandidate.Candidate_Payment_In_Schema.trade=""
+              if(ticketCandidate.payment_In_Schema.trade===existingSupplier.trade){
+                ticketCandidate.payment_In_Schema.trade=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.trade===existingSupplier.trade){
-              ticketCandidate.Candidate_Payment_Out_Schema.trade=""
+            if(ticketCandidate.payment_Out_Schema.trade===existingSupplier.trade){
+              ticketCandidate.payment_Out_Schema.trade=""
            
             }
         
@@ -10039,22 +10044,22 @@ const deleteTrade = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.trade===existingSupplier.trade){
-                visitCandidate.Candidate_Payment_In_Schema.trade=""
+              if(visitCandidate.payment_In_Schema.trade===existingSupplier.trade){
+                visitCandidate.payment_In_Schema.trade=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.trade===existingSupplier.trade){
-              visitCandidate.Candidate_Payment_Out_Schema.trade=""
+            if(visitCandidate.payment_Out_Schema.trade===existingSupplier.trade){
+              visitCandidate.payment_Out_Schema.trade=""
            
             }
         
@@ -10191,11 +10196,11 @@ const updateCurrCountry = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -10298,17 +10303,17 @@ const updateCurrCountry = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema ){
-              if(azadAgent.Agent_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  azadAgent.Agent_Payment_In_Schema.curr_Country=currCountry
+          if(azadAgent.payment_In_Schema ){
+              if(azadAgent.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  azadAgent.payment_In_Schema.curr_Country=currCountry
               }
           
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema ){
+          if(azadAgent.payment_Out_Schema ){
             
-              if(azadAgent.Agent_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  azadAgent.Agent_Payment_Out_Schema.curr_Country=currCountry
+              if(azadAgent.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  azadAgent.payment_Out_Schema.curr_Country=currCountry
               }
           }
           await azadAgent.save()
@@ -10317,16 +10322,16 @@ const updateCurrCountry = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema){
+          if(azadSupplier.payment_In_Schema){
            
-           if(azadSupplier.Supplier_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-              azadSupplier.Supplier_Payment_In_Schema.curr_Country=currCountry
+           if(azadSupplier.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+              azadSupplier.payment_In_Schema.curr_Country=currCountry
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema ){
-              if(azadSupplier.Supplier_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  azadSupplier.Supplier_Payment_Out_Schema.curr_Country=currCountry
+          if(azadSupplier.payment_Out_Schema ){
+              if(azadSupplier.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  azadSupplier.payment_Out_Schema.curr_Country=currCountry
               }
           }
           await azadSupplier.save()
@@ -10335,15 +10340,15 @@ const updateCurrCountry = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema ){
-              if(ticketAgent.Agent_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketAgent.Agent_Payment_In_Schema.curr_Country=currCountry
+          if(ticketAgent.payment_In_Schema ){
+              if(ticketAgent.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketAgent.payment_In_Schema.curr_Country=currCountry
               }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema ){
-              if(ticketAgent.Agent_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketAgent.Agent_Payment_Out_Schema.curr_Country=currCountry
+          if(ticketAgent.payment_Out_Schema ){
+              if(ticketAgent.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketAgent.payment_Out_Schema.curr_Country=currCountry
               }
           }
           await ticketAgent.save()
@@ -10352,15 +10357,15 @@ const updateCurrCountry = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema ){
-              if(ticketSupplier.Supplier_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketSupplier.Supplier_Payment_In_Schema.curr_Country=currCountry
+          if(ticketSupplier.payment_In_Schema ){
+              if(ticketSupplier.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketSupplier.payment_In_Schema.curr_Country=currCountry
               }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema){
-              if(ticketSupplier.Supplier_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketSupplier.Supplier_Payment_Out_Schema.curr_Country=currCountry
+          if(ticketSupplier.payment_Out_Schema){
+              if(ticketSupplier.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketSupplier.payment_Out_Schema.curr_Country=currCountry
               }
           }
           await ticketSupplier.save()
@@ -10368,15 +10373,15 @@ const updateCurrCountry = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema ){
-              if(visitAgent.Agent_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  visitAgent.Agent_Payment_In_Schema.curr_Country=currCountry
+          if(visitAgent.payment_In_Schema ){
+              if(visitAgent.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  visitAgent.payment_In_Schema.curr_Country=currCountry
               }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema ){
-              if(visitAgent.Agent_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  visitAgent.Agent_Payment_Out_Schema.curr_Country=existingSupplier.currCountry
+          if(visitAgent.payment_Out_Schema ){
+              if(visitAgent.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  visitAgent.payment_Out_Schema.curr_Country=existingSupplier.currCountry
               }
           }
           await visitAgent.save()
@@ -10385,16 +10390,16 @@ const updateCurrCountry = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema){
+          if(visitSupplier.payment_In_Schema){
              
-              if(visitSupplier.Supplier_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  visitSupplier.Supplier_Payment_In_Schema.curr_Country=currCountry
+              if(visitSupplier.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  visitSupplier.payment_In_Schema.curr_Country=currCountry
               }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema){
-              if(visitSupplier.Supplier_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  visitSupplier.Supplier_Payment_Out_Schema.curr_Country=currCountry
+          if(visitSupplier.payment_Out_Schema){
+              if(visitSupplier.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  visitSupplier.payment_Out_Schema.curr_Country=currCountry
               }
           }
           await visitSupplier.save()
@@ -10426,22 +10431,22 @@ const updateCurrCountry = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                azadCandidate.Candidate_Payment_In_Schema.curr_Country=currCountry
+              if(azadCandidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                azadCandidate.payment_In_Schema.curr_Country=currCountry
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.curr_Country===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.curr_Country=currCountry
+            if(azadCandidate.payment_Out_Schema.curr_Country===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.curr_Country=currCountry
            
             }
         
@@ -10451,22 +10456,22 @@ const updateCurrCountry = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                ticketCandidate.Candidate_Payment_In_Schema.curr_Country=currCountry
+              if(ticketCandidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                ticketCandidate.payment_In_Schema.curr_Country=currCountry
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-              ticketCandidate.Candidate_Payment_Out_Schema.curr_Country=currCountry
+            if(ticketCandidate.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+              ticketCandidate.payment_Out_Schema.curr_Country=currCountry
            
             }
         
@@ -10476,22 +10481,22 @@ const updateCurrCountry = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                visitCandidate.Candidate_Payment_In_Schema.curr_Country=currCountry
+              if(visitCandidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                visitCandidate.payment_In_Schema.curr_Country=currCountry
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-              visitCandidate.Candidate_Payment_Out_Schema.curr_Country=currCountry
+            if(visitCandidate.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+              visitCandidate.payment_Out_Schema.curr_Country=currCountry
            
             }
         
@@ -10557,11 +10562,11 @@ const deleteCurrCountry = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -10664,17 +10669,17 @@ const deleteCurrCountry = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema ){
-              if(azadAgent.Agent_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  azadAgent.Agent_Payment_In_Schema.curr_Country=""
+          if(azadAgent.payment_In_Schema ){
+              if(azadAgent.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  azadAgent.payment_In_Schema.curr_Country=""
               }
           
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema ){
+          if(azadAgent.payment_Out_Schema ){
             
-              if(azadAgent.Agent_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  azadAgent.Agent_Payment_Out_Schema.curr_Country=""
+              if(azadAgent.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  azadAgent.payment_Out_Schema.curr_Country=""
               }
           }
           await azadAgent.save()
@@ -10683,16 +10688,16 @@ const deleteCurrCountry = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema){
+          if(azadSupplier.payment_In_Schema){
            
-           if(azadSupplier.Supplier_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-              azadSupplier.Supplier_Payment_In_Schema.curr_Country=""
+           if(azadSupplier.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+              azadSupplier.payment_In_Schema.curr_Country=""
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema ){
-              if(azadSupplier.Supplier_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  azadSupplier.Supplier_Payment_Out_Schema.curr_Country=""
+          if(azadSupplier.payment_Out_Schema ){
+              if(azadSupplier.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  azadSupplier.payment_Out_Schema.curr_Country=""
               }
           }
           await azadSupplier.save()
@@ -10701,15 +10706,15 @@ const deleteCurrCountry = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema ){
-              if(ticketAgent.Agent_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketAgent.Agent_Payment_In_Schema.curr_Country=""
+          if(ticketAgent.payment_In_Schema ){
+              if(ticketAgent.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketAgent.payment_In_Schema.curr_Country=""
               }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema ){
-              if(ticketAgent.Agent_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketAgent.Agent_Payment_Out_Schema.curr_Country=""
+          if(ticketAgent.payment_Out_Schema ){
+              if(ticketAgent.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketAgent.payment_Out_Schema.curr_Country=""
               }
           }
           await ticketAgent.save()
@@ -10718,15 +10723,15 @@ const deleteCurrCountry = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema ){
-              if(ticketSupplier.Supplier_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketSupplier.Supplier_Payment_In_Schema.curr_Country=""
+          if(ticketSupplier.payment_In_Schema ){
+              if(ticketSupplier.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketSupplier.payment_In_Schema.curr_Country=""
               }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema){
-              if(ticketSupplier.Supplier_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  ticketSupplier.Supplier_Payment_Out_Schema.curr_Country=""
+          if(ticketSupplier.payment_Out_Schema){
+              if(ticketSupplier.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  ticketSupplier.payment_Out_Schema.curr_Country=""
               }
           }
           await ticketSupplier.save()
@@ -10734,15 +10739,15 @@ const deleteCurrCountry = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema ){
-              if(visitAgent.Agent_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  visitAgent.Agent_Payment_In_Schema.curr_Country=""
+          if(visitAgent.payment_In_Schema ){
+              if(visitAgent.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  visitAgent.payment_In_Schema.curr_Country=""
               }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema ){
-              if(visitAgent.Agent_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  visitAgent.Agent_Payment_Out_Schema.curr_Country=existingSupplier.currCountry
+          if(visitAgent.payment_Out_Schema ){
+              if(visitAgent.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  visitAgent.payment_Out_Schema.curr_Country=existingSupplier.currCountry
               }
           }
           await visitAgent.save()
@@ -10751,16 +10756,16 @@ const deleteCurrCountry = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema){
+          if(visitSupplier.payment_In_Schema){
              
-              if(visitSupplier.Supplier_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                  visitSupplier.Supplier_Payment_In_Schema.curr_Country=""
+              if(visitSupplier.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                  visitSupplier.payment_In_Schema.curr_Country=""
               }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema){
-              if(visitSupplier.Supplier_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-                  visitSupplier.Supplier_Payment_Out_Schema.curr_Country=""
+          if(visitSupplier.payment_Out_Schema){
+              if(visitSupplier.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+                  visitSupplier.payment_Out_Schema.curr_Country=""
               }
           }
           await visitSupplier.save()
@@ -10792,22 +10797,22 @@ const deleteCurrCountry = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                azadCandidate.Candidate_Payment_In_Schema.curr_Country=""
+              if(azadCandidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                azadCandidate.payment_In_Schema.curr_Country=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.curr_Country===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.curr_Country=""
+            if(azadCandidate.payment_Out_Schema.curr_Country===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.curr_Country=""
            
             }
         
@@ -10817,22 +10822,22 @@ const deleteCurrCountry = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                ticketCandidate.Candidate_Payment_In_Schema.curr_Country=""
+              if(ticketCandidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                ticketCandidate.payment_In_Schema.curr_Country=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-              ticketCandidate.Candidate_Payment_Out_Schema.curr_Country=""
+            if(ticketCandidate.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+              ticketCandidate.payment_Out_Schema.curr_Country=""
            
             }
         
@@ -10842,22 +10847,22 @@ const deleteCurrCountry = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.curr_Country===existingSupplier.currCountry){
-                visitCandidate.Candidate_Payment_In_Schema.curr_Country=""
+              if(visitCandidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
+                visitCandidate.payment_In_Schema.curr_Country=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.curr_Country===existingSupplier.currCountry){
-              visitCandidate.Candidate_Payment_Out_Schema.curr_Country=""
+            if(visitCandidate.payment_Out_Schema.curr_Country===existingSupplier.currCountry){
+              visitCandidate.payment_Out_Schema.curr_Country=""
            
             }
         
@@ -10997,11 +11002,11 @@ const updatePaymentVia = async (req, res) => {
           const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -11146,8 +11151,8 @@ const updatePaymentVia = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.payment){
-            const payments=azadAgent.Agent_Payment_In_Schema.payment
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11158,8 +11163,8 @@ const updatePaymentVia = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.payment){
-            const payments=azadAgent.Agent_Payment_Out_Schema.payment
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11175,8 +11180,8 @@ const updatePaymentVia = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_In_Schema.payment
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11187,8 +11192,8 @@ const updatePaymentVia = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_Out_Schema.payment
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11204,8 +11209,8 @@ const updatePaymentVia = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_In_Schema.payment
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11216,8 +11221,8 @@ const updatePaymentVia = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_Out_Schema.payment
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11233,8 +11238,8 @@ const updatePaymentVia = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_In_Schema.payment
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11245,8 +11250,8 @@ const updatePaymentVia = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_Out_Schema.payment
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11261,8 +11266,8 @@ const updatePaymentVia = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.payment){
-            const payments=visitAgent.Agent_Payment_In_Schema.payment
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11273,8 +11278,8 @@ const updatePaymentVia = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.payment){
-            const payments=visitAgent.Agent_Payment_Out_Schema.payment
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11290,8 +11295,8 @@ const updatePaymentVia = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_In_Schema.payment
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11302,8 +11307,8 @@ const updatePaymentVia = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_Out_Schema.payment
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11348,10 +11353,10 @@ const updatePaymentVia = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema && azadCandidate.Candidate_Payment_In_Schema.payment){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment){
            
          
-            const payments=azadCandidate.Candidate_Payment_In_Schema.payment
+            const payments=azadCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11364,8 +11369,8 @@ const updatePaymentVia = async (req, res) => {
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema && azadCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=azadCandidate.Candidate_Payment_Out_Schema.payment
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11381,8 +11386,8 @@ const updatePaymentVia = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema && ticketCandidate.Candidate_Payment_In_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_In_Schema.payment
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment){
+            const payments=ticketCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11395,8 +11400,8 @@ const updatePaymentVia = async (req, res) => {
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema && ticketCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_Out_Schema.payment
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11412,8 +11417,8 @@ const updatePaymentVia = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_In_Schema.payment
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11426,8 +11431,8 @@ const updatePaymentVia = async (req, res) => {
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_Out_Schema.payment
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11486,11 +11491,11 @@ const deletePaymentVia = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -11635,8 +11640,8 @@ const deletePaymentVia = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.payment){
-            const payments=azadAgent.Agent_Payment_In_Schema.payment
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11647,8 +11652,8 @@ const deletePaymentVia = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.payment){
-            const payments=azadAgent.Agent_Payment_Out_Schema.payment
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11664,8 +11669,8 @@ const deletePaymentVia = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_In_Schema.payment
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11676,8 +11681,8 @@ const deletePaymentVia = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_Out_Schema.payment
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11693,8 +11698,8 @@ const deletePaymentVia = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_In_Schema.payment
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11705,8 +11710,8 @@ const deletePaymentVia = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_Out_Schema.payment
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11722,8 +11727,8 @@ const deletePaymentVia = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_In_Schema.payment
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11734,8 +11739,8 @@ const deletePaymentVia = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_Out_Schema.payment
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11750,8 +11755,8 @@ const deletePaymentVia = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.payment){
-            const payments=visitAgent.Agent_Payment_In_Schema.payment
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11762,8 +11767,8 @@ const deletePaymentVia = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.payment){
-            const payments=visitAgent.Agent_Payment_Out_Schema.payment
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11779,8 +11784,8 @@ const deletePaymentVia = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_In_Schema.payment
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11791,8 +11796,8 @@ const deletePaymentVia = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_Out_Schema.payment
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11837,10 +11842,10 @@ const deletePaymentVia = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema && azadCandidate.Candidate_Payment_In_Schema.payment){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment){
            
          
-            const payments=azadCandidate.Candidate_Payment_In_Schema.payment
+            const payments=azadCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11853,8 +11858,8 @@ const deletePaymentVia = async (req, res) => {
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema && azadCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=azadCandidate.Candidate_Payment_Out_Schema.payment
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11870,8 +11875,8 @@ const deletePaymentVia = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema && ticketCandidate.Candidate_Payment_In_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_In_Schema.payment
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment){
+            const payments=ticketCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11884,8 +11889,8 @@ const deletePaymentVia = async (req, res) => {
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema && ticketCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_Out_Schema.payment
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11901,8 +11906,8 @@ const deletePaymentVia = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_In_Schema.payment
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11915,8 +11920,8 @@ const deletePaymentVia = async (req, res) => {
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_Out_Schema.payment
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Via===existingSupplier.payment_Via){
@@ -12047,11 +12052,11 @@ const updatePaymentType= async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -12199,8 +12204,8 @@ const updatePaymentType= async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.payment){
-            const payments=azadAgent.Agent_Payment_In_Schema.payment
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12211,8 +12216,8 @@ const updatePaymentType= async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.payment){
-            const payments=azadAgent.Agent_Payment_Out_Schema.payment
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12228,8 +12233,8 @@ const updatePaymentType= async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_In_Schema.payment
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12240,8 +12245,8 @@ const updatePaymentType= async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_Out_Schema.payment
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12257,8 +12262,8 @@ const updatePaymentType= async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_In_Schema.payment
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12269,8 +12274,8 @@ const updatePaymentType= async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_Out_Schema.payment
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12286,8 +12291,8 @@ const updatePaymentType= async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_In_Schema.payment
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12298,8 +12303,8 @@ const updatePaymentType= async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_Out_Schema.payment
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12314,8 +12319,8 @@ const updatePaymentType= async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.payment){
-            const payments=visitAgent.Agent_Payment_In_Schema.payment
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12326,8 +12331,8 @@ const updatePaymentType= async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.payment){
-            const payments=visitAgent.Agent_Payment_Out_Schema.payment
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12343,8 +12348,8 @@ const updatePaymentType= async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_In_Schema.payment
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12355,8 +12360,8 @@ const updatePaymentType= async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_Out_Schema.payment
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12401,10 +12406,10 @@ const updatePaymentType= async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema && azadCandidate.Candidate_Payment_In_Schema.payment){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment){
            
          
-            const payments=azadCandidate.Candidate_Payment_In_Schema.payment
+            const payments=azadCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12417,8 +12422,8 @@ const updatePaymentType= async (req, res) => {
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema && azadCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=azadCandidate.Candidate_Payment_Out_Schema.payment
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12434,8 +12439,8 @@ const updatePaymentType= async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema && ticketCandidate.Candidate_Payment_In_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_In_Schema.payment
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment){
+            const payments=ticketCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12448,8 +12453,8 @@ const updatePaymentType= async (req, res) => {
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema && ticketCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_Out_Schema.payment
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12465,8 +12470,8 @@ const updatePaymentType= async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_In_Schema.payment
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12479,8 +12484,8 @@ const updatePaymentType= async (req, res) => {
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_Out_Schema.payment
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12543,11 +12548,11 @@ const deletePaymentType = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -12692,8 +12697,8 @@ const deletePaymentType = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.payment){
-            const payments=azadAgent.Agent_Payment_In_Schema.payment
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12704,8 +12709,8 @@ const deletePaymentType = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.payment){
-            const payments=azadAgent.Agent_Payment_Out_Schema.payment
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12721,8 +12726,8 @@ const deletePaymentType = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_In_Schema.payment
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12733,8 +12738,8 @@ const deletePaymentType = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_Out_Schema.payment
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12750,8 +12755,8 @@ const deletePaymentType = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_In_Schema.payment
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12762,8 +12767,8 @@ const deletePaymentType = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_Out_Schema.payment
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12779,8 +12784,8 @@ const deletePaymentType = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_In_Schema.payment
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12791,8 +12796,8 @@ const deletePaymentType = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_Out_Schema.payment
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12807,8 +12812,8 @@ const deletePaymentType = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.payment){
-            const payments=visitAgent.Agent_Payment_In_Schema.payment
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12819,8 +12824,8 @@ const deletePaymentType = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.payment){
-            const payments=visitAgent.Agent_Payment_Out_Schema.payment
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12836,8 +12841,8 @@ const deletePaymentType = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_In_Schema.payment
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12848,8 +12853,8 @@ const deletePaymentType = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_Out_Schema.payment
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12894,10 +12899,10 @@ const deletePaymentType = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema && azadCandidate.Candidate_Payment_In_Schema.payment){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment){
            
          
-            const payments=azadCandidate.Candidate_Payment_In_Schema.payment
+            const payments=azadCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12910,8 +12915,8 @@ const deletePaymentType = async (req, res) => {
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema && azadCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=azadCandidate.Candidate_Payment_Out_Schema.payment
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12927,8 +12932,8 @@ const deletePaymentType = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema && ticketCandidate.Candidate_Payment_In_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_In_Schema.payment
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment){
+            const payments=ticketCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12941,8 +12946,8 @@ const deletePaymentType = async (req, res) => {
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema && ticketCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_Out_Schema.payment
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12958,8 +12963,8 @@ const deletePaymentType = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_In_Schema.payment
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12972,8 +12977,8 @@ const deletePaymentType = async (req, res) => {
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_Out_Schema.payment
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Type===existingSupplier.payment_Type){
@@ -13104,11 +13109,11 @@ const updateEntryMode = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -13192,8 +13197,8 @@ const updateEntryMode = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13204,8 +13209,8 @@ const updateEntryMode = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13221,8 +13226,8 @@ const updateEntryMode = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13233,8 +13238,8 @@ const updateEntryMode = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13250,8 +13255,8 @@ const updateEntryMode = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13262,8 +13267,8 @@ const updateEntryMode = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13279,8 +13284,8 @@ const updateEntryMode = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13291,8 +13296,8 @@ const updateEntryMode = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13307,8 +13312,8 @@ const updateEntryMode = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13319,8 +13324,8 @@ const updateEntryMode = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13336,8 +13341,8 @@ const updateEntryMode = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13348,8 +13353,8 @@ const updateEntryMode = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13388,22 +13393,22 @@ const updateEntryMode = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
-                azadCandidate.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
+              if(azadCandidate.payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
+                azadCandidate.payment_In_Schema.entry_Mode=entry_Mode
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.entry_Mode===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
+            if(azadCandidate.payment_Out_Schema.entry_Mode===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.entry_Mode=entry_Mode
            
             }
         
@@ -13413,22 +13418,22 @@ const updateEntryMode = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
-                ticketCandidate.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
+              if(ticketCandidate.payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
+                ticketCandidate.payment_In_Schema.entry_Mode=entry_Mode
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
-              ticketCandidate.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
+            if(ticketCandidate.payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
+              ticketCandidate.payment_Out_Schema.entry_Mode=entry_Mode
            
             }
         
@@ -13438,22 +13443,22 @@ const updateEntryMode = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
-                visitCandidate.Candidate_Payment_In_Schema.entry_Mode=entry_Mode
+              if(visitCandidate.payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
+                visitCandidate.payment_In_Schema.entry_Mode=entry_Mode
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
-              visitCandidate.Candidate_Payment_Out_Schema.entry_Mode=entry_Mode
+            if(visitCandidate.payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
+              visitCandidate.payment_Out_Schema.entry_Mode=entry_Mode
            
             }
         
@@ -13518,11 +13523,11 @@ const deleteEntryMode = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -13606,8 +13611,8 @@ const deleteEntryMode = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13618,8 +13623,8 @@ const deleteEntryMode = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13635,8 +13640,8 @@ const deleteEntryMode = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13647,8 +13652,8 @@ const deleteEntryMode = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13664,8 +13669,8 @@ const deleteEntryMode = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13676,8 +13681,8 @@ const deleteEntryMode = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13693,8 +13698,8 @@ const deleteEntryMode = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13705,8 +13710,8 @@ const deleteEntryMode = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13721,8 +13726,8 @@ const deleteEntryMode = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13733,8 +13738,8 @@ const deleteEntryMode = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13750,8 +13755,8 @@ const deleteEntryMode = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13762,8 +13767,8 @@ const deleteEntryMode = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.entry_Mode===existingSupplier.entry_Mode){
@@ -13802,22 +13807,22 @@ const deleteEntryMode = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
-                azadCandidate.Candidate_Payment_In_Schema.entry_Mode=""
+              if(azadCandidate.payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
+                azadCandidate.payment_In_Schema.entry_Mode=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.entry_Mode===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.entry_Mode=""
+            if(azadCandidate.payment_Out_Schema.entry_Mode===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.entry_Mode=""
            
             }
         
@@ -13827,22 +13832,22 @@ const deleteEntryMode = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
-                ticketCandidate.Candidate_Payment_In_Schema.entry_Mode=""
+              if(ticketCandidate.payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
+                ticketCandidate.payment_In_Schema.entry_Mode=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
-              ticketCandidate.Candidate_Payment_Out_Schema.entry_Mode=""
+            if(ticketCandidate.payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
+              ticketCandidate.payment_Out_Schema.entry_Mode=""
            
             }
         
@@ -13852,22 +13857,22 @@ const deleteEntryMode = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
-                visitCandidate.Candidate_Payment_In_Schema.entry_Mode=""
+              if(visitCandidate.payment_In_Schema.entry_Mode===existingSupplier.entry_Mode){
+                visitCandidate.payment_In_Schema.entry_Mode=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
-              visitCandidate.Candidate_Payment_Out_Schema.entry_Mode=""
+            if(visitCandidate.payment_Out_Schema.entry_Mode===existingSupplier.entry_Mode){
+              visitCandidate.payment_Out_Schema.entry_Mode=""
            
             }
         
@@ -14005,11 +14010,11 @@ const updateFinalStatus = async (req, res) => {
         const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -14093,8 +14098,8 @@ const updateFinalStatus = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14105,8 +14110,8 @@ const updateFinalStatus = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14122,8 +14127,8 @@ const updateFinalStatus = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14134,8 +14139,8 @@ const updateFinalStatus = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14151,8 +14156,8 @@ const updateFinalStatus = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14163,8 +14168,8 @@ const updateFinalStatus = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14180,8 +14185,8 @@ const updateFinalStatus = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14192,8 +14197,8 @@ const updateFinalStatus = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14208,8 +14213,8 @@ const updateFinalStatus = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14220,8 +14225,8 @@ const updateFinalStatus = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14237,8 +14242,8 @@ const updateFinalStatus = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14249,8 +14254,8 @@ const updateFinalStatus = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14289,22 +14294,22 @@ const updateFinalStatus = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.final_Status===existingSupplier.final_Status){
-                azadCandidate.Candidate_Payment_In_Schema.final_Status=final_Status
+              if(azadCandidate.payment_In_Schema.final_Status===existingSupplier.final_Status){
+                azadCandidate.payment_In_Schema.final_Status=final_Status
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.final_Status===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.final_Status=final_Status
+            if(azadCandidate.payment_Out_Schema.final_Status===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.final_Status=final_Status
            
             }
         
@@ -14314,22 +14319,22 @@ const updateFinalStatus = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.final_Status===existingSupplier.final_Status){
-                ticketCandidate.Candidate_Payment_In_Schema.final_Status=final_Status
+              if(ticketCandidate.payment_In_Schema.final_Status===existingSupplier.final_Status){
+                ticketCandidate.payment_In_Schema.final_Status=final_Status
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.final_Status===existingSupplier.final_Status){
-              ticketCandidate.Candidate_Payment_Out_Schema.final_Status=final_Status
+            if(ticketCandidate.payment_Out_Schema.final_Status===existingSupplier.final_Status){
+              ticketCandidate.payment_Out_Schema.final_Status=final_Status
            
             }
         
@@ -14339,22 +14344,22 @@ const updateFinalStatus = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.final_Status===existingSupplier.final_Status){
-                visitCandidate.Candidate_Payment_In_Schema.final_Status=final_Status
+              if(visitCandidate.payment_In_Schema.final_Status===existingSupplier.final_Status){
+                visitCandidate.payment_In_Schema.final_Status=final_Status
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.final_Status===existingSupplier.final_Status){
-              visitCandidate.Candidate_Payment_Out_Schema.final_Status=final_Status
+            if(visitCandidate.payment_Out_Schema.final_Status===existingSupplier.final_Status){
+              visitCandidate.payment_Out_Schema.final_Status=final_Status
            
             }
         
@@ -14419,11 +14424,11 @@ const deleteFinalStatus = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -14507,8 +14512,8 @@ const deleteFinalStatus = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14519,8 +14524,8 @@ const deleteFinalStatus = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14536,8 +14541,8 @@ const deleteFinalStatus = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14548,8 +14553,8 @@ const deleteFinalStatus = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14565,8 +14570,8 @@ const deleteFinalStatus = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14577,8 +14582,8 @@ const deleteFinalStatus = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14594,8 +14599,8 @@ const deleteFinalStatus = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14606,8 +14611,8 @@ const deleteFinalStatus = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14622,8 +14627,8 @@ const deleteFinalStatus = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14634,8 +14639,8 @@ const deleteFinalStatus = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14651,8 +14656,8 @@ const deleteFinalStatus = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14663,8 +14668,8 @@ const deleteFinalStatus = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.final_Status===existingSupplier.final_Status){
@@ -14703,22 +14708,22 @@ const deleteFinalStatus = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.final_Status===existingSupplier.final_Status){
-                azadCandidate.Candidate_Payment_In_Schema.final_Status=""
+              if(azadCandidate.payment_In_Schema.final_Status===existingSupplier.final_Status){
+                azadCandidate.payment_In_Schema.final_Status=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.final_Status===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.final_Status=""
+            if(azadCandidate.payment_Out_Schema.final_Status===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.final_Status=""
            
             }
         
@@ -14728,22 +14733,22 @@ const deleteFinalStatus = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.final_Status===existingSupplier.final_Status){
-                ticketCandidate.Candidate_Payment_In_Schema.final_Status=""
+              if(ticketCandidate.payment_In_Schema.final_Status===existingSupplier.final_Status){
+                ticketCandidate.payment_In_Schema.final_Status=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.final_Status===existingSupplier.final_Status){
-              ticketCandidate.Candidate_Payment_Out_Schema.final_Status=""
+            if(ticketCandidate.payment_Out_Schema.final_Status===existingSupplier.final_Status){
+              ticketCandidate.payment_Out_Schema.final_Status=""
            
             }
         
@@ -14753,22 +14758,22 @@ const deleteFinalStatus = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.final_Status===existingSupplier.final_Status){
-                visitCandidate.Candidate_Payment_In_Schema.final_Status=""
+              if(visitCandidate.payment_In_Schema.final_Status===existingSupplier.final_Status){
+                visitCandidate.payment_In_Schema.final_Status=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.final_Status===existingSupplier.final_Status){
-              visitCandidate.Candidate_Payment_Out_Schema.final_Status=""
+            if(visitCandidate.payment_Out_Schema.final_Status===existingSupplier.final_Status){
+              visitCandidate.payment_Out_Schema.final_Status=""
            
             }
         
@@ -14904,11 +14909,11 @@ const updateCountry = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -14992,8 +14997,8 @@ const updateCountry = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15004,8 +15009,8 @@ const updateCountry = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15021,8 +15026,8 @@ const updateCountry = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15033,8 +15038,8 @@ const updateCountry = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15050,8 +15055,8 @@ const updateCountry = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15062,8 +15067,8 @@ const updateCountry = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15079,8 +15084,8 @@ const updateCountry = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15091,8 +15096,8 @@ const updateCountry = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15107,8 +15112,8 @@ const updateCountry = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15119,8 +15124,8 @@ const updateCountry = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15136,8 +15141,8 @@ const updateCountry = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15148,8 +15153,8 @@ const updateCountry = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15188,22 +15193,22 @@ const updateCountry = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.country===existingSupplier.country){
-                azadCandidate.Candidate_Payment_In_Schema.country=country
+              if(azadCandidate.payment_In_Schema.country===existingSupplier.country){
+                azadCandidate.payment_In_Schema.country=country
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.country===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.country=country
+            if(azadCandidate.payment_Out_Schema.country===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.country=country
            
             }
         
@@ -15213,22 +15218,22 @@ const updateCountry = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.country===existingSupplier.country){
-                ticketCandidate.Candidate_Payment_In_Schema.country=country
+              if(ticketCandidate.payment_In_Schema.country===existingSupplier.country){
+                ticketCandidate.payment_In_Schema.country=country
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.country===existingSupplier.country){
-              ticketCandidate.Candidate_Payment_Out_Schema.country=country
+            if(ticketCandidate.payment_Out_Schema.country===existingSupplier.country){
+              ticketCandidate.payment_Out_Schema.country=country
            
             }
         
@@ -15238,22 +15243,22 @@ const updateCountry = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.country===existingSupplier.country){
-                visitCandidate.Candidate_Payment_In_Schema.country=country
+              if(visitCandidate.payment_In_Schema.country===existingSupplier.country){
+                visitCandidate.payment_In_Schema.country=country
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.country===existingSupplier.country){
-              visitCandidate.Candidate_Payment_Out_Schema.country=country
+            if(visitCandidate.payment_Out_Schema.country===existingSupplier.country){
+              visitCandidate.payment_Out_Schema.country=country
            
             }
         
@@ -15317,11 +15322,11 @@ const deleteCountry = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -15405,8 +15410,8 @@ const deleteCountry = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15417,8 +15422,8 @@ const deleteCountry = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15434,8 +15439,8 @@ const deleteCountry = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15446,8 +15451,8 @@ const deleteCountry = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15463,8 +15468,8 @@ const deleteCountry = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15475,8 +15480,8 @@ const deleteCountry = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15492,8 +15497,8 @@ const deleteCountry = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15504,8 +15509,8 @@ const deleteCountry = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15520,8 +15525,8 @@ const deleteCountry = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15532,8 +15537,8 @@ const deleteCountry = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15549,8 +15554,8 @@ const deleteCountry = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15561,8 +15566,8 @@ const deleteCountry = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.country===existingSupplier.country){
@@ -15601,22 +15606,22 @@ const deleteCountry = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.country===existingSupplier.country){
-                azadCandidate.Candidate_Payment_In_Schema.country=""
+              if(azadCandidate.payment_In_Schema.country===existingSupplier.country){
+                azadCandidate.payment_In_Schema.country=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.country===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.country=""
+            if(azadCandidate.payment_Out_Schema.country===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.country=""
            
             }
         
@@ -15626,22 +15631,22 @@ const deleteCountry = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.country===existingSupplier.country){
-                ticketCandidate.Candidate_Payment_In_Schema.country=""
+              if(ticketCandidate.payment_In_Schema.country===existingSupplier.country){
+                ticketCandidate.payment_In_Schema.country=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.country===existingSupplier.country){
-              ticketCandidate.Candidate_Payment_Out_Schema.country=""
+            if(ticketCandidate.payment_Out_Schema.country===existingSupplier.country){
+              ticketCandidate.payment_Out_Schema.country=""
            
             }
         
@@ -15651,22 +15656,22 @@ const deleteCountry = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.country===existingSupplier.country){
-                visitCandidate.Candidate_Payment_In_Schema.country=""
+              if(visitCandidate.payment_In_Schema.country===existingSupplier.country){
+                visitCandidate.payment_In_Schema.country=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.country===existingSupplier.country){
-              visitCandidate.Candidate_Payment_Out_Schema.country=""
+            if(visitCandidate.payment_Out_Schema.country===existingSupplier.country){
+              visitCandidate.payment_Out_Schema.country=""
            
             }
         
@@ -15804,11 +15809,11 @@ const updateCategory = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -15945,8 +15950,8 @@ const updateCategory = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -15957,8 +15962,8 @@ const updateCategory = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -15974,8 +15979,8 @@ const updateCategory = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -15986,8 +15991,8 @@ const updateCategory = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16003,8 +16008,8 @@ const updateCategory = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16015,8 +16020,8 @@ const updateCategory = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16032,8 +16037,8 @@ const updateCategory = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16044,8 +16049,8 @@ const updateCategory = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16060,8 +16065,8 @@ const updateCategory = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16072,8 +16077,8 @@ const updateCategory = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16089,8 +16094,8 @@ const updateCategory = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16101,8 +16106,8 @@ const updateCategory = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16141,22 +16146,22 @@ const updateCategory = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.category===existingSupplier.category){
-                azadCandidate.Candidate_Payment_In_Schema.category=category
+              if(azadCandidate.payment_In_Schema.category===existingSupplier.category){
+                azadCandidate.payment_In_Schema.category=category
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.category===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.category=category
+            if(azadCandidate.payment_Out_Schema.category===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.category=category
            
             }
         
@@ -16166,22 +16171,22 @@ const updateCategory = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.category===existingSupplier.category){
-                ticketCandidate.Candidate_Payment_In_Schema.category=category
+              if(ticketCandidate.payment_In_Schema.category===existingSupplier.category){
+                ticketCandidate.payment_In_Schema.category=category
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.category===existingSupplier.category){
-              ticketCandidate.Candidate_Payment_Out_Schema.category=category
+            if(ticketCandidate.payment_Out_Schema.category===existingSupplier.category){
+              ticketCandidate.payment_Out_Schema.category=category
            
             }
         
@@ -16191,22 +16196,22 @@ const updateCategory = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.category===existingSupplier.category){
-                visitCandidate.Candidate_Payment_In_Schema.category=category
+              if(visitCandidate.payment_In_Schema.category===existingSupplier.category){
+                visitCandidate.payment_In_Schema.category=category
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.category===existingSupplier.category){
-              visitCandidate.Candidate_Payment_Out_Schema.category=category
+            if(visitCandidate.payment_Out_Schema.category===existingSupplier.category){
+              visitCandidate.payment_Out_Schema.category=category
            
             }
         
@@ -16263,11 +16268,11 @@ const deleteCategory = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -16404,8 +16409,8 @@ const deleteCategory = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.persons){
-            const persons=azadAgent.Agent_Payment_In_Schema.persons
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
+            const persons=azadAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16416,8 +16421,8 @@ const deleteCategory = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.persons){
-            const persons=azadAgent.Agent_Payment_Out_Schema.persons
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+            const persons=azadAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16433,8 +16438,8 @@ const deleteCategory = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_In_Schema.persons
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
+            const persons=azadSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16445,8 +16450,8 @@ const deleteCategory = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=azadSupplier.Supplier_Payment_Out_Schema.persons
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
+            const persons=azadSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16462,8 +16467,8 @@ const deleteCategory = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_In_Schema.persons
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
+            const persons=ticketAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16474,8 +16479,8 @@ const deleteCategory = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.persons){
-            const persons=ticketAgent.Agent_Payment_Out_Schema.persons
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
+            const persons=ticketAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16491,8 +16496,8 @@ const deleteCategory = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_In_Schema.persons
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
+            const persons=ticketSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16503,8 +16508,8 @@ const deleteCategory = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=ticketSupplier.Supplier_Payment_Out_Schema.persons
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
+            const persons=ticketSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16519,8 +16524,8 @@ const deleteCategory = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.persons){
-            const persons=visitAgent.Agent_Payment_In_Schema.persons
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
+            const persons=visitAgent.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16531,8 +16536,8 @@ const deleteCategory = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.persons){
-            const persons=visitAgent.Agent_Payment_Out_Schema.persons
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
+            const persons=visitAgent.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16548,8 +16553,8 @@ const deleteCategory = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_In_Schema.persons
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
+            const persons=visitSupplier.payment_In_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16560,8 +16565,8 @@ const deleteCategory = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.persons){
-            const persons=visitSupplier.Supplier_Payment_Out_Schema.persons
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
+            const persons=visitSupplier.payment_Out_Schema.persons
            if(persons){
             for(const person of persons){
               if(person.category===existingSupplier.category){
@@ -16600,22 +16605,22 @@ const deleteCategory = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema ){
+          if(azadCandidate.payment_In_Schema ){
            
          
-              if(azadCandidate.Candidate_Payment_In_Schema.category===existingSupplier.category){
-                azadCandidate.Candidate_Payment_In_Schema.category=""
+              if(azadCandidate.payment_In_Schema.category===existingSupplier.category){
+                azadCandidate.payment_In_Schema.category=""
              
               }
           
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema ){
+          if(azadCandidate.payment_Out_Schema ){
            
          
-            if(azadCandidate.Candidate_Payment_Out_Schema.category===existingSupplier.company){
-              azadCandidate.Candidate_Payment_Out_Schema.category=""
+            if(azadCandidate.payment_Out_Schema.category===existingSupplier.company){
+              azadCandidate.payment_Out_Schema.category=""
            
             }
         
@@ -16625,22 +16630,22 @@ const deleteCategory = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema ){
+          if(ticketCandidate.payment_In_Schema ){
            
          
-              if(ticketCandidate.Candidate_Payment_In_Schema.category===existingSupplier.category){
-                ticketCandidate.Candidate_Payment_In_Schema.category=""
+              if(ticketCandidate.payment_In_Schema.category===existingSupplier.category){
+                ticketCandidate.payment_In_Schema.category=""
              
               }
           
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema ){
+          if(ticketCandidate.payment_Out_Schema ){
            
          
-            if(ticketCandidate.Candidate_Payment_Out_Schema.category===existingSupplier.category){
-              ticketCandidate.Candidate_Payment_Out_Schema.category=""
+            if(ticketCandidate.payment_Out_Schema.category===existingSupplier.category){
+              ticketCandidate.payment_Out_Schema.category=""
            
             }
         
@@ -16650,22 +16655,22 @@ const deleteCategory = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema ){
+          if(visitCandidate.payment_In_Schema ){
            
          
-              if(visitCandidate.Candidate_Payment_In_Schema.category===existingSupplier.category){
-                visitCandidate.Candidate_Payment_In_Schema.category=""
+              if(visitCandidate.payment_In_Schema.category===existingSupplier.category){
+                visitCandidate.payment_In_Schema.category=""
              
               }
           
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema ){
+          if(visitCandidate.payment_Out_Schema ){
            
          
-            if(visitCandidate.Candidate_Payment_Out_Schema.category===existingSupplier.category){
-              visitCandidate.Candidate_Payment_Out_Schema.category=""
+            if(visitCandidate.payment_Out_Schema.category===existingSupplier.category){
+              visitCandidate.payment_Out_Schema.category=""
            
             }
         
@@ -16981,11 +16986,11 @@ const updateCurrency = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -17069,8 +17074,8 @@ const updateCurrency = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.payment){
-            const payments=azadAgent.Agent_Payment_In_Schema.payment
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17081,8 +17086,8 @@ const updateCurrency = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.payment){
-            const payments=azadAgent.Agent_Payment_Out_Schema.payment
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17098,8 +17103,8 @@ const updateCurrency = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_In_Schema.payment
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17110,8 +17115,8 @@ const updateCurrency = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_Out_Schema.payment
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17127,8 +17132,8 @@ const updateCurrency = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_In_Schema.payment
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17139,8 +17144,8 @@ const updateCurrency = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_Out_Schema.payment
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17156,8 +17161,8 @@ const updateCurrency = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_In_Schema.payment
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17168,8 +17173,8 @@ const updateCurrency = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_Out_Schema.payment
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17184,8 +17189,8 @@ const updateCurrency = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.payment){
-            const payments=visitAgent.Agent_Payment_In_Schema.payment
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17196,8 +17201,8 @@ const updateCurrency = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.payment){
-            const payments=visitAgent.Agent_Payment_Out_Schema.payment
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17213,8 +17218,8 @@ const updateCurrency = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_In_Schema.payment
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17225,8 +17230,8 @@ const updateCurrency = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_Out_Schema.payment
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17271,10 +17276,10 @@ const updateCurrency = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema && azadCandidate.Candidate_Payment_In_Schema.payment){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment){
            
          
-            const payments=azadCandidate.Candidate_Payment_In_Schema.payment
+            const payments=azadCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17287,8 +17292,8 @@ const updateCurrency = async (req, res) => {
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema && azadCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=azadCandidate.Candidate_Payment_Out_Schema.payment
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17304,8 +17309,8 @@ const updateCurrency = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema && ticketCandidate.Candidate_Payment_In_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_In_Schema.payment
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment){
+            const payments=ticketCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17318,8 +17323,8 @@ const updateCurrency = async (req, res) => {
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema && ticketCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_Out_Schema.payment
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17335,8 +17340,8 @@ const updateCurrency = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_In_Schema.payment
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17349,8 +17354,8 @@ const updateCurrency = async (req, res) => {
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_Out_Schema.payment
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17413,11 +17418,11 @@ const deleteCurrency = async (req, res) => {
                   const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
-        const azadAgents = await AzadSuppliers.find()
+         const azadAgents = await AzadAgents.find()
         const azadSuppliers = await AzadSuppliers.find()
-        const ticketAgents = await TicketSuppliers.find()
+        const ticketAgents = await TicketAgents.find()
         const ticketSuppliers = await TicketSuppliers.find()
-        const visitAgents = await VisitSuppliers.find()
+        const visitAgents = await VisitAgents.find()
         const visitSuppliers = await VisitSuppliers.find()
         const azadCandidates = await AzadCandidates.find()
         const ticketCandidates = await TicketCandidates.find()
@@ -17501,8 +17506,8 @@ const deleteCurrency = async (req, res) => {
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.Agent_Payment_In_Schema && azadAgent.Agent_Payment_In_Schema.payment){
-            const payments=azadAgent.Agent_Payment_In_Schema.payment
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17513,8 +17518,8 @@ const deleteCurrency = async (req, res) => {
           }
           }
 
-          if(azadAgent.Agent_Payment_Out_Schema && azadAgent.Agent_Payment_Out_Schema.payment){
-            const payments=azadAgent.Agent_Payment_Out_Schema.payment
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17530,8 +17535,8 @@ const deleteCurrency = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.Supplier_Payment_In_Schema && azadSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_In_Schema.payment
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17542,8 +17547,8 @@ const deleteCurrency = async (req, res) => {
           }
           }
 
-          if(azadSupplier.Supplier_Payment_Out_Schema && azadSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=azadSupplier.Supplier_Payment_Out_Schema.payment
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17559,8 +17564,8 @@ const deleteCurrency = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.Agent_Payment_In_Schema && ticketAgent.Agent_Payment_In_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_In_Schema.payment
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17571,8 +17576,8 @@ const deleteCurrency = async (req, res) => {
           }
           }
 
-          if(ticketAgent.Agent_Payment_Out_Schema && ticketAgent.Agent_Payment_Out_Schema.payment){
-            const payments=ticketAgent.Agent_Payment_Out_Schema.payment
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17588,8 +17593,8 @@ const deleteCurrency = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.Supplier_Payment_In_Schema && ticketSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_In_Schema.payment
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17600,8 +17605,8 @@ const deleteCurrency = async (req, res) => {
           }
           }
 
-          if(ticketSupplier.Supplier_Payment_Out_Schema && ticketSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=ticketSupplier.Supplier_Payment_Out_Schema.payment
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17616,8 +17621,8 @@ const deleteCurrency = async (req, res) => {
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.Agent_Payment_In_Schema && visitAgent.Agent_Payment_In_Schema.payment){
-            const payments=visitAgent.Agent_Payment_In_Schema.payment
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17628,8 +17633,8 @@ const deleteCurrency = async (req, res) => {
           }
           }
 
-          if(visitAgent.Agent_Payment_Out_Schema && visitAgent.Agent_Payment_Out_Schema.payment){
-            const payments=visitAgent.Agent_Payment_Out_Schema.payment
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17645,8 +17650,8 @@ const deleteCurrency = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.Supplier_Payment_In_Schema && visitSupplier.Supplier_Payment_In_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_In_Schema.payment
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17657,8 +17662,8 @@ const deleteCurrency = async (req, res) => {
           }
           }
 
-          if(visitSupplier.Supplier_Payment_Out_Schema && visitSupplier.Supplier_Payment_Out_Schema.payment){
-            const payments=visitSupplier.Supplier_Payment_Out_Schema.payment
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17703,10 +17708,10 @@ const deleteCurrency = async (req, res) => {
         }
 
         for(const azadCandidate of azadCandidates){
-          if(azadCandidate.Candidate_Payment_In_Schema && azadCandidate.Candidate_Payment_In_Schema.payment){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment){
            
          
-            const payments=azadCandidate.Candidate_Payment_In_Schema.payment
+            const payments=azadCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17719,8 +17724,8 @@ const deleteCurrency = async (req, res) => {
           }
           
 
-          if(azadCandidate.Candidate_Payment_Out_Schema && azadCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=azadCandidate.Candidate_Payment_Out_Schema.payment
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17736,8 +17741,8 @@ const deleteCurrency = async (req, res) => {
         }
 
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.Candidate_Payment_In_Schema && ticketCandidate.Candidate_Payment_In_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_In_Schema.payment
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment){
+            const payments=ticketCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17750,8 +17755,8 @@ const deleteCurrency = async (req, res) => {
           }
           
 
-          if(ticketCandidate.Candidate_Payment_Out_Schema && ticketCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=ticketCandidate.Candidate_Payment_Out_Schema.payment
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17767,8 +17772,8 @@ const deleteCurrency = async (req, res) => {
         }
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.Candidate_Payment_In_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_In_Schema.payment
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_In_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_In_Curr===existingSupplier.currency){
@@ -17781,8 +17786,8 @@ const deleteCurrency = async (req, res) => {
           }
           
 
-          if(visitCandidate.Candidate_Payment_Out_Schema && visitCandidate.Candidate_Payment_Out_Schema.payment){
-            const payments=visitCandidate.Candidate_Payment_Out_Schema.payment
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
             if(payments){
              for(const payment of payments){
                if(payment.payment_Out_Curr===existingSupplier.currency){

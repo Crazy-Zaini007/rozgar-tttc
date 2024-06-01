@@ -68,8 +68,8 @@ const getBankCash = async () => {
     try {
 
       await getCashInHandData();
+      await getOverAllPayments()
       await getBankCash()
-    await getOverAllPayments()
         
       await Promise.all([
         getCategoryData(),
