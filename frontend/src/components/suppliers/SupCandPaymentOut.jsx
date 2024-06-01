@@ -267,9 +267,10 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  
   const[totalPayments,setTotalPayments]=useState(0)
-  const[totalCurrency,setTotalCurrency]=useState(0)
   const[totalCurrRate,setTotalCurrRate]=useState(0)
+let totalCurrency=Math.round(totalPayments/totalCurrRate)
   
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
@@ -487,7 +488,7 @@ const sumPaymentIn = (data) => {
   };
 
   const disableAddMore = totalPayments <= sumPaymentIn(candData);
-  const disableAddCurr = totalCurrency <= sumCurrency(candData);
+ 
 
   const handleChangePaymentIn = (index, value) => {
     const newCandData = [...candData];
@@ -583,7 +584,7 @@ const sumPaymentIn = (data) => {
                  <>
                    <form className="py-3 px-2" onSubmit={handleForm}>
                      <div className="text-end ">
-                       <button className="btn submit_btn m-1"  disabled={loading || (!disableAddMore || !disableAddCurr)}>
+                       <button className="btn submit_btn m-1"  disabled={loading || !disableAddMore}>
                          {loading ? "Adding..." : "Add Payment"}
                        </button>
                      </div>
@@ -713,12 +714,12 @@ const sumPaymentIn = (data) => {
                  <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Total Currency </label>
-                 <input type="number" min='0' value={totalCurrency} onChange={(e)=>setTotalCurrency(e.target.value)} />
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Curr Rate </label>
                  <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(e.target.value)} />
+                </div>
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total Currency </label>
+                 <input type="number" min='0' value={totalCurrency} disabled />
                 </div>
                        <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
                          <label>Details </label>
@@ -753,7 +754,7 @@ const sumPaymentIn = (data) => {
                    </div>
                    <div className="right">
                   {!option && 
-                   <button disabled={disableAddMore && disableAddCurr} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+                   <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
                    <i className="fas fa-plus"></i> 
                  </button>
                   }
@@ -930,7 +931,7 @@ const sumPaymentIn = (data) => {
                   type="number"
                   min="0"
                   disabled
-                  value={cand.payment_Out/totalCurrRate}
+                  value={Math.round(cand.payment_Out/totalCurrRate)}
                   placeholder="Currency Amount"
                 />
               </div>

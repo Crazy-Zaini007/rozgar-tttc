@@ -62,7 +62,7 @@ export default function AddExpense() {
     const [details, setDetails] = useState('')
     const [curr_Country, setCurr_Country] = useState('')
     const [curr_Rate, setCurr_Rate] = useState()
-    let curr_Amount = payment_Out / curr_Rate
+    let curr_Amount = Math.round(payment_Out / curr_Rate);
 
 
     const [section, setSection] = useState(false)

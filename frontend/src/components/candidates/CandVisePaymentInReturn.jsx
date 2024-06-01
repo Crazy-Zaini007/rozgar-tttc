@@ -78,7 +78,7 @@ export default function CandVisePaymentInReturn() {
   const [date, setDate] = useState('')
   const [cand_Name, setCand_Name] = useState('')
   
-  let curr_Amount = cash_Out / curr_Rate
+  let curr_Amount = Math.round(cash_Out / curr_Rate);
   const handleOpen = () => {
     setOption(!option)
   }

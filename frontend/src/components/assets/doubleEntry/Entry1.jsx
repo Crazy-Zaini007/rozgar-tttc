@@ -80,7 +80,7 @@ export default function Entry1() {
   const [curr_Rate, setCurr_Rate] = useState()
 
   const [date, setDate] = useState('')
-  let curr_Amount = payment_In / curr_Rate
+  let curr_Amount = Math.round(payment_In / curr_Rate);
   const handleOpen = () => {
     setOption(!option)
   }

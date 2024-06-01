@@ -81,7 +81,7 @@ export default function AssetsPaymentOut() {
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
   const [date, setDate] = useState('');
-  let curr_Amount = payment_Out / curr_Rate
+  let curr_Amount = Math.round(payment_Out / curr_Rate);
 
   const [selectedSupplier, setSelectedSupplier] = useState('');
 

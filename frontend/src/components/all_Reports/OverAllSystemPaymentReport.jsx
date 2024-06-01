@@ -285,10 +285,11 @@ export default function OverAllSystemPaymentReports() {
                   <h4>Overall System Payments</h4>
                 </div>
                 <div className="right d-flex">
+                <button className='btn m-1 btn-sm shadow border' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Payment In</button>
+                <button className='btn m-1 btn-sm shadow border' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Payment Out</button>
                   {overAllPayments && overAllPayments.length > 0 &&
                     <>
-                      <button className='btn m-1 btn-sm shadow border' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Payment In</button>
-                      <button className='btn m-1 btn-sm shadow border' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Payment Out</button>
+                     
                      {option===0 &&
                      <>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenInExcel}>Download </button>

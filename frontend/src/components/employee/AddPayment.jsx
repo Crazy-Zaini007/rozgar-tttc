@@ -76,7 +76,7 @@ export default function AddPayment() {
   const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
 
-  let curr_Amount = payment_Out / curr_Rate
+  let curr_Amount = Math.round(payment_Out / curr_Rate);
   const handleOpen = () => {
     setOption(!option)
   }

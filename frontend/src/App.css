@@ -424,7 +424,7 @@
   color: var(--accent-lighter-blue);
   font-weight: 600;
   letter-spacing: 1px;
-  font-size: 22px;
+  font-size: 18px;
 }
 
  h6 {
@@ -1620,3 +1620,78 @@ color:white;
     .total_cash h6{
       font-size: 14px;
     } 
+
+
+    /* Direct Payment In/Out*/
+    .direct_payment .label {
+      background-color: var(--grays-dm-input-bg);
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      display: inline-flexbox;
+      width: 18.28%;
+    }
+.direct_payment .detail_table input,
+.direct_payment .detail_table select,
+.direct_payment .detail_table textarea {
+  min-width: 2px;
+  height: 40px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 9px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+}
+
+.direct_payment .detail_table input:focus,
+.direct_payment .detail_table select:focus,
+.direct_payment .detail_table textarea:focus{
+  outline: none;
+  border: 2px solid var(--accent-lighter-blue) !important;
+}
+.direct_payment .detail_table .label {
+  background-color: var(--grays-dm-input-bg);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  display: inline-flexbox;
+  width: 18.28%;
+}
+.direct_payment .detail_table .data_td {
+  font-size: 9px;
+  font-weight: 600;
+  width: auto;
+  text-transform: capitalize;
+}
+.direct_payment .filters {
+  overflow: scroll;
+}
+.direct_payment .filters label{
+  font-size: 12px;
+  font-weight: 500;
+
+}
+.direct_payment .filters select,.direct_payment .filters input {
+  width: 100%;
+  height: 30px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 2px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  text-transform: capitalize;
+
+}
+.direct_payment .filters select:focus,.direct_payment .filters input:focus {
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue) !important;
+}

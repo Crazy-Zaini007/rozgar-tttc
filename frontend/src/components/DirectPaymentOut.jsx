@@ -114,7 +114,7 @@ const [curr_Rate, setCurr_Rate] = useState();
 // const [close, setClose] = useState(false);
 const [cand_Name, setCand_Name] = useState("");
 const [date, setDate] = useState("");
-let curr_Amount = payment_Out / curr_Rate;
+let curr_Amount = Math.round(payment_Out / curr_Rate)
 
 const [selectedSupplier, setSelectedSupplier] = useState("");
 const [supplierNames, setSupplierNames] = useState([]);
@@ -415,20 +415,20 @@ useEffect(() => {
   return (
     <>
     
-<Paper className="col-md-10 py-3 mb-1 px-2 detail_table">
-  <div className="row">
+<Paper className="col-md-12 py-3 mb-1 detail_table p-0 m-0">
+  <div className="row p-0 m-0">
     <div className="col-md-12">
     {!option && (
          
          <form className="py-3 px-2" onSubmit={handleForm}>
+                  <h4 className='text-sm d-inline'>Payment Out</h4>
               <div className="d-flex justify-content-between">
                 <div className="left">
-                  <h4>Direct Payment Out</h4>
                 </div>
                 <div className="right ">
                   <div className="text-end ">
                        <span className="btn btn-sm submit_btn bg-info m-1 px-2 border-0">
-  Yesterday Closing Balance : {(
+  Closing Balance : {(
     (cashInHand.total_Cash || 0) -
     (overAllPayments && overAllPayments.length > 0
       ? overAllPayments
@@ -832,8 +832,8 @@ useEffect(() => {
                 </Paper>
               </div>
     <div className="col-md-12">
-    <TableContainer>
-        <Table>
+    <TableContainer sx={{ maxHeight: 200}}>
+        <Table stickyHeader>
         <TableHead>
           <TableRow>
                               <TableCell className='label border'>SN</TableCell>
@@ -925,7 +925,7 @@ useEffect(() => {
         
       </Paper>    
 
-         <div className="col-md-2 mb-1 px-0  total_cash">
+         {/* <div className="col-md-12 mb-1 px-0  total_cash">
         <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
         <h6 className="bg-success text-white py-2 text-center my-0">{(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
         <div className="details">
@@ -960,7 +960,7 @@ useEffect(() => {
 </TableContainer>
 
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
