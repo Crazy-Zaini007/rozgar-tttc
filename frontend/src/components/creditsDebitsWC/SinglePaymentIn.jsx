@@ -133,6 +133,17 @@ export default function SinglePaymentIn() {
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_in`, {
         method: 'POST',
@@ -279,7 +290,7 @@ export default function SinglePaymentIn() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">

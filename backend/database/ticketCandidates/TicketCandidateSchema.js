@@ -9,7 +9,9 @@ const Payment_InSchema = new mongoose.Schema(
     supplierName: {
       type: String,
     },
-
+    picture:{
+      type: String,
+    },
     pp_No: {
       type: String,
     },
@@ -134,6 +136,9 @@ const Payment_OutSchema = new mongoose.Schema(
       type: String,
     },
     supplierName: {
+      type: String,
+    },
+    picture:{
       type: String,
     },
     pp_No: {

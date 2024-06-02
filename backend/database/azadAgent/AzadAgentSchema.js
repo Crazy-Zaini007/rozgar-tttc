@@ -106,6 +106,9 @@ const Payment_InSchema = new mongoose.Schema(
         entry_Date: {
           type: String,
         },
+        picture:{
+          type: String,
+        },
         status:{
           type:String,
           default:"Open"
@@ -391,6 +394,9 @@ const Payment_OutSchema = new mongoose.Schema(
         entry_Date: {
           type: String,
 
+        },
+        picture:{
+          type: String,
         },
         status:{
           type:String,

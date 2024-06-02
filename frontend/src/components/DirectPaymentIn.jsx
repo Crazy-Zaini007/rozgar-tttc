@@ -288,6 +288,18 @@ const getBankCash = async () => {
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName("");
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setPayment_In("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setCurr_Rate("");
+        setDate("");
+        setCand_Name("");
     try {
       const response = await fetch(`${apiUrl}/auth/direct/payment_in`, {
         method: "POST",
@@ -820,24 +832,28 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                   </div>
                 </Paper>
               </div>
-    <div className="col-md-12">
-      <TableContainer sx={{ maxHeight: 200 }}>
+    <div className="col-md-12 today_Payments_Table">
+      <TableContainer sx={{ maxHeight: 150 }}>
         <Table stickyHeader>
         <TableHead>
           <TableRow>
-                              <TableCell className='label border'>SN</TableCell>
-                              <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Supp/Agent/Cand</TableCell>
-                              <TableCell className='label border'>Reference_Type</TableCell>
-                              <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
-                              <TableCell className='label border'>Details</TableCell>
-                              <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border p-0 text-center'>SN</TableCell>
+                              <TableCell className='label border p-0 text-center'>Date</TableCell>
+                              <TableCell className='label border p-0 text-center'>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border p-0 text-center'>Reference_Type</TableCell>
+                              <TableCell className='label border p-0 text-center'>Category</TableCell>
+                              <TableCell className='label border p-0 text-center'>Payment_Via</TableCell>
+                              <TableCell className='label border p-0 text-center'>Payment_Type</TableCell>
+                              <TableCell className='label border p-0 text-center'>Slip_No</TableCell>
+                              <TableCell className='label border p-0 text-center'>Cash_In</TableCell>
+                              <TableCell className='label border p-0 text-center'>Cash_Return</TableCell>
+                             
+                            <TableCell className='label border p-0 text-center'>Curr_Rate</TableCell>
+                            <TableCell className='label border p-0 text-center'>Curr_Amount</TableCell>
+                            <TableCell className='label border p-0 text-center'>Payment_In_Curr</TableCell>
+                              <TableCell className='label border p-0 text-center'>Details</TableCell>
+                              <TableCell className='label border p-0 text-center'>Invoice</TableCell>
+                              <TableCell className='label border p-0 text-center'>Slip_Pic</TableCell>
                             </TableRow>
         </TableHead>
         <TableBody>
@@ -847,19 +863,22 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                               <>
                                 <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
                                   <>
-                                    <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.type}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.category}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ? <a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded ' /></a>  : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{outerIndex + 1}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.date}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.supplierName}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.type}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.category}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.payment_Via}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.payment_Type}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash?.slip_No}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{Math.round(cash?.curr_Rate||0)}</TableCell>
+                                      <TableCell className='border data_td text-center p-0'>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                      <TableCell className='border data_td text-center p-0'>{cash?.payment_In_curr}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash?.details}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash?.invoice}</TableCell>
+                                    <TableCell className='border data_td text-center p-0'>{cash.slip_Pic ? <a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded ' /></a>  : "No Picture"}</TableCell>
                                   </>
 
                                 </TableRow>
@@ -883,8 +902,8 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                             </TableRow>}
                             <TableRow>
                               <TableCell colSpan={7}></TableCell>
-                              <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                              <TableCell className='border data_td text-center bg-success text-white'>
+                              <TableCell className='border data_td text-center bg-secondary text-white p-0'>Total</TableCell>
+                              <TableCell className='border data_td text-center bg-success text-white p-0'>
                             {/* Calculate the total sum of payment_In */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
@@ -893,7 +912,7 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
                           </TableCell>
-                          <TableCell className='border data_td text-center bg-warning text-white'>
+                          <TableCell className='border data_td text-center bg-warning text-white p-0'>
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
@@ -902,7 +921,18 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}
                           </TableCell>
-
+                          <TableCell className='border data_td text-center bg-info text-white p-0'>
+                            {/* Calculate the total sum of payment_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.curr_Rate || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white p-0'>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && todayPayments.reduce((total, entry) => {
+                              return total + (entry.curr_Amount || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
 
                             </TableRow>
                           </TableBody>

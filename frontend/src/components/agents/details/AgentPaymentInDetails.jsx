@@ -940,146 +940,7 @@ export default function AgentPaymentInDetails() {
     }
   }
   
-  const printPersonsTable = () => {
-    // Function to format the date as dd-MM-yyyy
-    const formatDate = (date) => {
-      const d = new Date(date);
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear();
-      return `${day}-${month}-${year}`;
-    };
-  
-    const formattedDate = formatDate(new Date());
-
-    // Convert JSX to HTML string
-    const printContentString = `
-      <div class="print-header">
-      <p class="invoice">Agent: ${selectedSupplier}</p>
-        <h1 class="title">ROZGAR TTTC</h1>
-        <p class="date">Date: ${formattedDate}</p>
-      </div>
-      <div class="print-header">
-        <h1 class="title">Agent Persons Details</h1>
-      </div>
-      <hr/>
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>PP#</th>
-            <th>Entry Mode</th>
-            <th>Company</th>
-            <th>Trade</th>
-            <th>Country</th>
-            <th>Final Status</th>
-            <th>Flight Date</th>
-            <th>VPI PKR</th>
-            <th>VPI Oth Curr</th>
-            <th>Paid PKR</th>
-            <th>Remaining PKR</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filteredPersons.map((entry, index) =>
-            entry.persons.map((person, personIndex) => `
-              <tr key="${person?._id}">
-                <td>${index * entry.persons.length + personIndex + 1}</td>
-                <td>${String(person?.entry_Date)}</td>
-                <td>${String(person?.name)}</td>
-                <td>${String(person?.pp_No)}</td>
-                <td>${String(person?.entry_Mode)}</td>
-                <td>${String(person?.company)}</td>
-                <td>${String(person?.trade)}</td>
-                <td>${String(person?.country)}</td>
-                <td>${String(person?.final_Status)}</td>
-                <td>${String(person?.flight_Date)}</td>
-                <td>${String(person?.visa_Price_In_PKR)}</td>
-                <td>${String(person?.visa_Price_In_Curr)}</td>
-                <td>${String(person?.total_In)}</td>
-                <td>${String(person?.remaining_Price)}</td>
-                <td>${String(person?.status)}</td>
-              </tr>
-            `).join('')
-          ).join('')}
-          <tr>
-            <td colspan="9"></td>
-            <td>Total</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_PKR, 0), 0))}</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_Curr, 0), 0))}</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-      <style>
-        /* Add your custom print styles here */
-        body {
-          background-color: #fff;
-        }
-        .print-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .title {
-          flex-grow: 1;
-          text-align: center;
-          margin: 0;
-          font-size: 24px;
-        }
-        .date {
-          flex-grow: 0;
-          text-align: right;
-          font-size: 20px;
-        }
-        .print-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 20px 0;
-        }
-        .print-table th, .print-table td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: left;
-          text-transform: capitalize;
-        }
-        .print-table th {
-          background-color: #f2f2f2;
-        }
-      </style>
-    `;
-  
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>${selectedSupplier}'s Persons Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-  
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  }
-  
-
+ 
 
   const printPaymentInvoice = (paymentItem) => {
       // Function to format the date as dd-MM-yyyy
@@ -1209,139 +1070,297 @@ export default function AgentPaymentInDetails() {
     }
   }
   
-  const printPerson = (person) => {
-    // Function to format the date as dd-MM-yyyy
-    const formatDate = (date) => {
-      const d = new Date(date);
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear();
-      return `${day}-${month}-${year}`;
-    };
   
-    const formattedDate = formatDate(new Date());
-  
-    // Convert JSX to HTML string
-    const printContentString = `
-      <div class="print-header">
-      <p class="invoice">Agent: ${selectedSupplier}</p>
-        <h1 class="title">ROZGAR TTTC</h1>
-        <p class="date">Date: ${formattedDate}</p>
-      </div>
-      <div class="print-header">
-        <h1 class="title">Agent Person Details</h1>
-      </div>
-      <hr/>
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>PP#</th>
-            <th>Entry Mode</th>
-            <th>Company</th>
-            <th>Trade</th>
-            <th>Country</th>
-            <th>Final Status</th>
-            <th>Flight Date</th>
-            <th>VPI PKR</th>
-            <th>VPI Oth Curr</th>
-            <th>Paid PKR</th>
-            <th>Remaining PKR</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>${String(person?.entry_Date)}</td>
-            <td>${String(person?.name)}</td>
-            <td>${String(person?.pp_No)}</td>
-            <td>${String(person?.entry_Mode)}</td>
-            <td>${String(person?.company)}</td>
-            <td>${String(person?.trade)}</td>
-            <td>${String(person?.country)}</td>
-            <td>${String(person?.final_Status)}</td>
-            <td>${String(person?.flight_Date)}</td>
-            <td>${String(person?.visa_Price_In_PKR)}</td>
-            <td>${String(person?.visa_Price_In_Curr)}</td>
-            <td>${String(person?.total_In)}</td>
-            <td>${String(person?.remaining_Price)}</td>
-            <td>${String(person?.status)}</td>
-          </tr>
-        </tbody>
-      </table>
-      <style>
-        /* Add your custom print styles here */
-        body {
-          background-color: #fff;
-        }
-        .print-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .logo {
-          max-width: 100px;
-        }
-        .title {
-          flex-grow: 1;
-          text-align: center;
-          margin: 0;
-          font-size: 24px;
-        }
-        .invoice {
-          flex-grow: 0;
-          text-align: left;
-          font-size: 20px;
-        }
-        .date {
-          flex-grow: 0;
-          text-align: right;
-          font-size: 20px;
-        }
-        .print-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 20px 0;
-        }
-        .print-table th, .print-table td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: left;
-          text-transform: capitalize;
-        }
-        .print-table th {
-          background-color: #f2f2f2;
-        }
-      </style>
-    `;
-  
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>${selectedSupplier}'s Persons Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-  
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
+const printPersonsTable = () => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
   };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Agent: ${selectedSupplier}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Agent Persons Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>VPI PKR</th>
+          <th>VPI Oth Curr</th>
+          <th>Paid PKR</th>
+          <th>Remaining PKR</th>
+          <th>Status</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filteredPersons.map((entry, index) =>
+          entry.persons.map((person, personIndex) => `
+            <tr key="${person?._id}">
+              <td>${index * entry.persons.length + personIndex + 1}</td>
+              <td>${String(person?.entry_Date)}</td>
+              <td>${String(person?.name)}</td>
+              <td>${String(person?.pp_No)}</td>
+              <td>${String(person?.entry_Mode)}</td>
+              <td>${String(person?.company)}</td>
+              <td>${String(person?.trade)}</td>
+              <td>${String(person?.country)}</td>
+              <td>${String(person?.final_Status)}</td>
+              <td>${String(person?.flight_Date)}</td>
+              <td>${String(person?.visa_Price_In_PKR)}</td>
+              <td>${String(person?.visa_Price_In_Curr)}</td>
+              <td>${String(person?.total_In)}</td>
+              <td>${String(person?.remaining_Price)}</td>
+              <td>${String(person?.status)}</td>
+              <td>
+              ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+            </td>
+            </tr>
+          `).join('')
+        ).join('')}
+        <tr>
+          <td colspan="9"></td>
+          <td>Total</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_PKR, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_Curr, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table td img{
+        height:40px;
+        width:40px;
+       }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier}'s Persons Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
+
+
+const printPerson = (person) => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Agent: ${selectedSupplier}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Agent Person Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>VPI PKR</th>
+          <th>VPI Oth Curr</th>
+          <th>Paid PKR</th>
+          <th>Remaining PKR</th>
+          <th>Status</th>
+          <th>Image</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>${String(person?.entry_Date)}</td>
+          <td>${String(person?.name)}</td>
+          <td>${String(person?.pp_No)}</td>
+          <td>${String(person?.entry_Mode)}</td>
+          <td>${String(person?.company)}</td>
+          <td>${String(person?.trade)}</td>
+          <td>${String(person?.country)}</td>
+          <td>${String(person?.final_Status)}</td>
+          <td>${String(person?.flight_Date)}</td>
+          <td>${String(person?.visa_Price_In_PKR)}</td>
+          <td>${String(person?.visa_Price_In_Curr)}</td>
+          <td>${String(person?.total_In)}</td>
+          <td>${String(person?.remaining_Price)}</td>
+          <td>${String(person?.status)}</td>
+          <td>
+          ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+        </td>
+        </tr>
+      </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        max-width: 100px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .invoice {
+        flex-grow: 0;
+        text-align: left;
+        font-size: 20px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table td img{
+        height:40px;
+        width:40px;
+       }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier}'s Persons Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
   
 
   const downloadPaymentInvoice = (payment) => {

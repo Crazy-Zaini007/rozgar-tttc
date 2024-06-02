@@ -49,6 +49,9 @@ const Payment_OutSchema = new mongoose.Schema({
             name: {
                 type: String
             },
+            picture:{
+                type: String
+            },
             pp_No: {
                 type: String
 

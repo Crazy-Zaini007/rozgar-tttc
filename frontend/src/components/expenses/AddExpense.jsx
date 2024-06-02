@@ -111,6 +111,16 @@ export default function AddExpense() {
     const handleForm = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setName('')
+        setExpCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
         try {
             const response = await fetch(`${apiUrl}/auth/expenses/add/expense`, {
                 method: 'POST',
@@ -188,7 +198,7 @@ export default function AddExpense() {
                                     <div className="row p-0 m-0 my-1">
                                         <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                                             <label >Date </label>
-                                            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                                            <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
                                         </div>
 
                                         <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">

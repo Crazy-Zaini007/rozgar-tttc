@@ -266,7 +266,7 @@ export default function TicketCandPayOutReturn() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">

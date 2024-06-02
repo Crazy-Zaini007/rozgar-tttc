@@ -10234,17 +10234,23 @@ const updateCurrCountry = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
+       
+    for(const employee of employees){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
             for (const payment of payments){
-              if(payment.payment_Out_Curr===existingSupplier.currCountry){
-                payment.payment_Out_Curr=currCountry
+              if(payment.payment_In_Curr===existingSupplier.currCountry){
+                payment.payment_In_Curr=currCountry
               }
             }
-            await employee.save()
           }
         }
+        await employee.save()
+      }
+    }
 
         for(const expense of expenses){
           if (expense.curr_Country===existingSupplier.currCountry){
@@ -10410,7 +10416,7 @@ const updateCurrCountry = async (req, res) => {
           if(candidate.payment_In_Schema ){
            
          
-              if(candidate.payment_In_Schema.curr_Country===existingSupplier.existingSupplier.currCountry){
+              if(candidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
                 candidate.payment_In_Schema.curr_Country=currCountry
              
               }
@@ -10525,6 +10531,7 @@ const updateCurrCountry = async (req, res) => {
           }
       }
   } catch (error) {
+    console.log('error',error)
       res.status(500).json({ message: error.message })
   }
 }
@@ -10600,17 +10607,24 @@ const deleteCurrCountry = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.payment_Out_Curr===existingSupplier.currCountry){
-                payment.payment_Out_Curr=""
+
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.payment_Out_Curr===existingSupplier.currCountry){
+                    payment.payment_Out_Curr=""
+                  }
+                }
               }
             }
             await employee.save()
           }
         }
+       
 
         for(const expense of expenses){
           if (expense.curr_Country===existingSupplier.currCountry){
@@ -10776,7 +10790,7 @@ const deleteCurrCountry = async (req, res) => {
           if(candidate.payment_In_Schema ){
            
          
-              if(candidate.payment_In_Schema.curr_Country===existingSupplier.existingSupplier.currCountry){
+              if(candidate.payment_In_Schema.curr_Country===existingSupplier.currCountry){
                 candidate.payment_In_Schema.curr_Country=""
              
               }
@@ -11026,7 +11040,7 @@ const updatePaymentVia = async (req, res) => {
                 payment.payment_Via=payment_Via
               }
             }
-            await cdwc.save()
+            await cashInHand.save()
           }
         }
         
@@ -11053,12 +11067,18 @@ const updatePaymentVia = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.payment_Via===existingSupplier.payment_Via){
-                payment.payment_Via=payment_Via
+       
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.payment_Via===existingSupplier.payment_Via){
+                    payment.payment_Via=payment_Via
+                  }
+                }
               }
             }
             await employee.save()
@@ -11080,7 +11100,7 @@ const updatePaymentVia = async (req, res) => {
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
-                payment.company=company
+                payment.payment_Via=payment_Via
              
               }
             }
@@ -11092,7 +11112,7 @@ const updatePaymentVia = async (req, res) => {
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
-                payment.company=company
+                payment.payment_Via=payment_Via
                
               }
             }
@@ -11115,9 +11135,32 @@ const updatePaymentVia = async (req, res) => {
           }
 
           }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Via===existingSupplier.payment_Via){
+                payment.payment_Via=payment_Via
+             
+              }
+            }
+          }
+
+          }
 
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
             const payments=supplier.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Via===existingSupplier.payment_Via){
+                payment.payment_Via=payment_Via
+               
+              }
+            }
+          }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -11515,7 +11558,7 @@ const deletePaymentVia = async (req, res) => {
                 payment.payment_Via=""
               }
             }
-            await cdwc.save()
+            await cashInHand.save()
           }
         }
         
@@ -11542,12 +11585,19 @@ const deletePaymentVia = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.payment_Via===existingSupplier.payment_Via){
-                payment.payment_Via=""
+      
+
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.payment_Via===existingSupplier.payment_Via){
+                    payment.payment_Via=""
+                  }
+                }
               }
             }
             await employee.save()
@@ -11569,7 +11619,18 @@ const deletePaymentVia = async (req, res) => {
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
-                payment.company=company
+                payment.payment_Via=''
+             
+              }
+            }
+          }
+          }
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Via===existingSupplier.payment_Via){
+                payment.payment_Via=''
              
               }
             }
@@ -11581,7 +11642,18 @@ const deletePaymentVia = async (req, res) => {
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
-                payment.company=company
+                payment.payment_Via=''
+               
+              }
+            }
+          }
+          }
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Via===existingSupplier.payment_Via){
+                payment.payment_Via=''
                
               }
             }
@@ -11604,9 +11676,32 @@ const deletePaymentVia = async (req, res) => {
           }
 
           }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Via===existingSupplier.payment_Via){
+                payment.payment_Via=""
+             
+              }
+            }
+          }
+
+          }
 
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
             const payments=supplier.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Via===existingSupplier.payment_Via){
+                payment.payment_Via=""
+               
+              }
+            }
+          }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Via===existingSupplier.payment_Via){
@@ -12076,7 +12171,7 @@ const updatePaymentType= async (req, res) => {
                 payment.payment_Type=payment_Type
               }
             }
-            await cdwc.save()
+            await cashInHand.save()
           }
         }
         
@@ -12103,17 +12198,24 @@ const updatePaymentType= async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.payment_Type===existingSupplier.payment_Type){
-                payment.payment_Type=payment_Type
+
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.payment_Type===existingSupplier.payment_Type){
+                    payment.payment_Type=payment_Type
+                  }
+                }
               }
             }
             await employee.save()
           }
         }
+       
 
         for(const expense of expenses){
           if (expense.payment_Type===existingSupplier.payment_Type){
@@ -12139,9 +12241,31 @@ const updatePaymentType= async (req, res) => {
             }
           }
           }
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=payment_Type
+             
+              }
+            }
+          }
+          }
 
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.payment){
             const payments=agent.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=payment_Type
+               
+              }
+            }
+          }
+          }
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12168,9 +12292,32 @@ const updatePaymentType= async (req, res) => {
           }
 
           }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=payment_Type
+             
+              }
+            }
+          }
+
+          }
 
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
             const payments=supplier.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=payment_Type
+               
+              }
+            }
+          }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12572,7 +12719,7 @@ const deletePaymentType = async (req, res) => {
                 payment.payment_Type=""
               }
             }
-            await cdwc.save()
+            await cashInHand.save()
           }
         }
         
@@ -12599,17 +12746,24 @@ const deletePaymentType = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.payment_Type===existingSupplier.payment_Type){
-                payment.payment_Type=""
+
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.payment_Type===existingSupplier.payment_Type){
+                    payment.payment_Type=""
+                  }
+                }
               }
             }
             await employee.save()
           }
         }
+       
 
         for(const expense of expenses){
           if (expense.payment_Type===existingSupplier.payment_Type){
@@ -12632,9 +12786,32 @@ const deletePaymentType = async (req, res) => {
             }
           }
           }
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=""
+             
+              }
+            }
+          }
+          }
 
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.payment){
             const payments=agent.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=""
+               
+              }
+            }
+          }
+          }
+
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12661,9 +12838,33 @@ const deletePaymentType = async (req, res) => {
           }
 
           }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=""
+             
+              }
+            }
+          }
+
+          }
 
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
             const payments=supplier.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Type===existingSupplier.payment_Type){
+                payment.payment_Type=""
+               
+              }
+            }
+          }
+          }
+
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Type===existingSupplier.payment_Type){
@@ -12992,7 +13193,6 @@ const deletePaymentType = async (req, res) => {
           await visitCandidate.save()
 
         }
-                  
                       
               const deletePaymentType = await PaymentType.findByIdAndDelete(myId);
 
@@ -15832,7 +16032,7 @@ const updateCategory = async (req, res) => {
                 payment.category=category
               }
             }
-            await cdwc.save()
+            await cashInHand.save()
           }
         }
         
@@ -15859,72 +16059,114 @@ const updateCategory = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.category===existingSupplier.category){
+
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.category===existingSupplier.category){
                 payment.category=category
+              }
+                }
               }
             }
             await employee.save()
           }
         }
-
+      
 
 
         for(const agent of agents){
-          if(agent.payment_In_Schema && agent.payment_In_Schema.persons){
-            const persons=agent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(agent.payment_In_Schema && agent.payment_In_Schema.payment){
+            const payments=agent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
-            const persons=agent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
+             
               }
             }
           }
+          }
+
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await agent.save()
 
         }
 
         for(const supplier of suppliers){
-          if(supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
-            const persons=supplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-             
-              }
-            }
-          }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.payment){
+            const payments=supplier.payment_In_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
 
           }
 
-          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
-            const persons=supplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
+
           }
+
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
+            const payments=supplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await supplier.save()
 
@@ -15935,43 +16177,43 @@ const updateCategory = async (req, res) => {
        
 
           if(protector.payment_Out_Schema && protector.payment_Out_Schema.persons){
-            const persons=protector.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+            const payments=protector.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await protector.save()
 
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
-            const persons=azadAgent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
-            const persons=azadAgent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await azadAgent.save()
 
@@ -15979,28 +16221,28 @@ const updateCategory = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
-            const persons=azadSupplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
-            const persons=azadSupplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await azadSupplier.save()
 
@@ -16008,28 +16250,28 @@ const updateCategory = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
-            const persons=ticketAgent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
-            const persons=ticketAgent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await ticketAgent.save()
 
@@ -16037,56 +16279,56 @@ const updateCategory = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
-            const persons=ticketSupplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
-            const persons=ticketSupplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await ticketSupplier.save()
 
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
-            const persons=visitAgent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
-            const persons=visitAgent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await visitAgent.save()
 
@@ -16094,128 +16336,156 @@ const updateCategory = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
-            const persons=visitSupplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=category
              
               }
             }
           }
           }
 
-          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
-            const persons=visitSupplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=category
-               
-              }
-            }
-          }
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
           }
           await visitSupplier.save()
 
         }
 
         for(const candidate of candidates){
-          if(candidate.payment_In_Schema ){
-           
-         
-              if(candidate.payment_In_Schema.category===existingSupplier.category){
-                candidate.payment_In_Schema.category=category
-             
+          if(candidate.payment_In_Schema && candidate.payment_In_Schema.payment ){
+              const payments=candidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=category
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(candidate.payment_Out_Schema ){
-           
-         
-            if(candidate.payment_Out_Schema.category===existingSupplier.category){
-              candidate.payment_Out_Schema.category=category
-           
-            }
-        }
+          if(candidate.payment_Out_Schema && candidate.payment_Out_Schema.payment){
+            const payments=candidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
+          }
           await candidate.save()
 
         }
 
-        for(const azadCandidate of azadCandidates){
-          if(azadCandidate.payment_In_Schema ){
-           
-         
-              if(azadCandidate.payment_In_Schema.category===existingSupplier.category){
-                azadCandidate.payment_In_Schema.category=category
-             
+
+        
+        for(const azadCandidate of azadCandidats){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment ){
+              const payments=azadCandidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=category
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(azadCandidate.payment_Out_Schema ){
-           
-         
-            if(azadCandidate.payment_Out_Schema.category===existingSupplier.company){
-              azadCandidate.payment_Out_Schema.category=category
-           
-            }
-        
-        }
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
+          }
           await azadCandidate.save()
 
         }
-
+     
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.payment_In_Schema ){
-           
-         
-              if(ticketCandidate.payment_In_Schema.category===existingSupplier.category){
-                ticketCandidate.payment_In_Schema.category=category
-             
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment ){
+              const payments=ticketCandidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=category
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(ticketCandidate.payment_Out_Schema ){
-           
-         
-            if(ticketCandidate.payment_Out_Schema.category===existingSupplier.category){
-              ticketCandidate.payment_Out_Schema.category=category
-           
-            }
-        
-        }
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
+          }
           await ticketCandidate.save()
 
         }
+       
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.payment_In_Schema ){
-           
-         
-              if(visitCandidate.payment_In_Schema.category===existingSupplier.category){
-                visitCandidate.payment_In_Schema.category=category
-             
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_In_Schema.payment ){
+              const payments=visitCandidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=category
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(visitCandidate.payment_Out_Schema ){
-           
-         
-            if(visitCandidate.payment_Out_Schema.category===existingSupplier.category){
-              visitCandidate.payment_Out_Schema.category=category
-           
-            }
-        
-        }
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=category
+              
+               }
+             }
+           }
+          }
           await visitCandidate.save()
 
         }
@@ -16291,7 +16561,7 @@ const deleteCategory = async (req, res) => {
                 payment.category=""
               }
             }
-            await cdwc.save()
+            await cashInHand.save()
           }
         }
         
@@ -16318,12 +16588,18 @@ const deleteCategory = async (req, res) => {
             await cdwoc.save()
           }
         }
-        for (const employee of employees){
-          if(employee.payment){
-            const payments=employee.payment
-            for (const payment of payments){
-              if(payment.category===existingSupplier.category){
-                payment.category=""
+     
+        for(const employee of employees){
+          if(employee.payments){
+            const allMonths=employee.payments
+            for (const month of allMonths){
+              if(month.payment && month.payment.length>0){
+                const payments= month.payment
+                for (const payment of payments){
+                  if(payment.category===existingSupplier.category){
+                    payment.category=""
+                  }
+                }
               }
             }
             await employee.save()
@@ -16331,59 +16607,105 @@ const deleteCategory = async (req, res) => {
         }
 
 
-
         for(const agent of agents){
-          if(agent.payment_In_Schema && agent.payment_In_Schema.persons){
-            const persons=agent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(agent.payment_In_Schema && agent.payment_In_Schema.payment){
+            const payments=agent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
+             
+              }
+            }
+          }
+          }
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
-            const persons=agent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.payment){
+            const payments=agent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
+          
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await agent.save()
 
         }
 
         for(const supplier of suppliers){
-          if(supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
-            const persons=supplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-             
-              }
-            }
-          }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.payment){
+            const payments=supplier.payment_In_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
 
           }
 
-          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
-            const persons=supplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
+
           }
+
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
+            const payments=supplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await supplier.save()
 
@@ -16394,43 +16716,43 @@ const deleteCategory = async (req, res) => {
        
 
           if(protector.payment_Out_Schema && protector.payment_Out_Schema.persons){
-            const persons=protector.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+            const payments=protector.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await protector.save()
 
         }
 
         for(const azadAgent of azadAgents){
-          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
-            const persons=azadAgent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.payment){
+            const payments=azadAgent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
-            const persons=azadAgent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+          if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.payment){
+            const payments=azadAgent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await azadAgent.save()
 
@@ -16438,28 +16760,28 @@ const deleteCategory = async (req, res) => {
 
         
         for(const azadSupplier of azadSuppliers){
-          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
-            const persons=azadSupplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.payment){
+            const payments=azadSupplier.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
-            const persons=azadSupplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+          if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.payment){
+            const payments=azadSupplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await azadSupplier.save()
 
@@ -16467,28 +16789,28 @@ const deleteCategory = async (req, res) => {
 
         
         for(const ticketAgent of ticketAgents){
-          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
-            const persons=ticketAgent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.payment){
+            const payments=ticketAgent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
-            const persons=ticketAgent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+          if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.payment){
+            const payments=ticketAgent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await ticketAgent.save()
 
@@ -16496,56 +16818,56 @@ const deleteCategory = async (req, res) => {
 
         
         for(const ticketSupplier of ticketSuppliers){
-          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
-            const persons=ticketSupplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.payment){
+            const payments=ticketSupplier.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
-            const persons=ticketSupplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+          if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.payment){
+            const payments=ticketSupplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await ticketSupplier.save()
 
         }
           
         for(const visitAgent of visitAgents){
-          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
-            const persons=visitAgent.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.payment){
+            const payments=visitAgent.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
-            const persons=visitAgent.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+          if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.payment){
+            const payments=visitAgent.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await visitAgent.save()
 
@@ -16553,133 +16875,161 @@ const deleteCategory = async (req, res) => {
 
         
         for(const visitSupplier of visitSuppliers){
-          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
-            const persons=visitSupplier.payment_In_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
+          if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.payment){
+            const payments=visitSupplier.payment_In_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.category===existingSupplier.category){
+                payment.category=""
              
               }
             }
           }
           }
 
-          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
-            const persons=visitSupplier.payment_Out_Schema.persons
-           if(persons){
-            for(const person of persons){
-              if(person.category===existingSupplier.category){
-                person.category=""
-               
-              }
-            }
-          }
+          if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.payment){
+            const payments=visitSupplier.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
           }
           await visitSupplier.save()
 
         }
 
         for(const candidate of candidates){
-          if(candidate.payment_In_Schema ){
-           
-         
-              if(candidate.payment_In_Schema.category===existingSupplier.category){
-                candidate.payment_In_Schema.category=""
-             
+          if(candidate.payment_In_Schema && candidate.payment_In_Schema.payment ){
+              const payments=candidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=""
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(candidate.payment_Out_Schema ){
-           
-         
-            if(candidate.payment_Out_Schema.category===existingSupplier.category){
-              candidate.payment_Out_Schema.category=""
-           
-            }
-        }
+          if(candidate.payment_Out_Schema && candidate.payment_Out_Schema.payment){
+            const payments=candidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
+          }
           await candidate.save()
 
         }
 
-        for(const azadCandidate of azadCandidates){
-          if(azadCandidate.payment_In_Schema ){
-           
-         
-              if(azadCandidate.payment_In_Schema.category===existingSupplier.category){
-                azadCandidate.payment_In_Schema.category=""
-             
+
+        
+        for(const azadCandidate of azadCandidats){
+          if(azadCandidate.payment_In_Schema && azadCandidate.payment_In_Schema.payment ){
+              const payments=azadCandidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=""
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(azadCandidate.payment_Out_Schema ){
-           
-         
-            if(azadCandidate.payment_Out_Schema.category===existingSupplier.company){
-              azadCandidate.payment_Out_Schema.category=""
-           
-            }
-        
-        }
+          if(azadCandidate.payment_Out_Schema && azadCandidate.payment_Out_Schema.payment){
+            const payments=azadCandidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
+          }
           await azadCandidate.save()
 
         }
-
+     
         for(const ticketCandidate of ticketCandidates){
-          if(ticketCandidate.payment_In_Schema ){
-           
-         
-              if(ticketCandidate.payment_In_Schema.category===existingSupplier.category){
-                ticketCandidate.payment_In_Schema.category=""
-             
+          if(ticketCandidate.payment_In_Schema && ticketCandidate.payment_In_Schema.payment ){
+              const payments=ticketCandidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=""
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(ticketCandidate.payment_Out_Schema ){
-           
-         
-            if(ticketCandidate.payment_Out_Schema.category===existingSupplier.category){
-              ticketCandidate.payment_Out_Schema.category=""
-           
-            }
-        
-        }
+          if(ticketCandidate.payment_Out_Schema && ticketCandidate.payment_Out_Schema.payment){
+            const payments=ticketCandidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
+          }
           await ticketCandidate.save()
 
         }
+       
 
         for(const visitCandidate of visitCandidates){
-          if(visitCandidate.payment_In_Schema ){
-           
-         
-              if(visitCandidate.payment_In_Schema.category===existingSupplier.category){
-                visitCandidate.payment_In_Schema.category=""
-             
+          if(visitCandidate.payment_In_Schema && visitCandidate.payment_In_Schema.payment ){
+              const payments=visitCandidate.payment_In_Schema.payment
+             if(payments){
+              for(const payment of payments){
+                if(payment.category===existingSupplier.category){
+                  payment.category=""
+               
+                }
               }
+            }
+            
           
           }
           
 
-          if(visitCandidate.payment_Out_Schema ){
-           
-         
-            if(visitCandidate.payment_Out_Schema.category===existingSupplier.category){
-              visitCandidate.payment_Out_Schema.category=""
-           
-            }
-        
-        }
+          if(visitCandidate.payment_Out_Schema && visitCandidate.payment_Out_Schema.payment){
+            const payments=visitCandidate.payment_Out_Schema.payment
+            if(payments){
+             for(const payment of payments){
+               if(payment.category===existingSupplier.category){
+                 payment.category=""
+              
+               }
+             }
+           }
+          }
           await visitCandidate.save()
 
         }
-                       
-                      
+     
+                             
                 const deleteCategory = await Categories.findByIdAndDelete(myId);
                   
                   res.status(200).json({  message: `Category deleted successfully` })
@@ -16803,7 +17153,7 @@ const updateExpenseCategory = async (req, res) => {
                   const expenses = await Expenses.find();
      
         for(const expense of expenses){
-          if(expense.expCategory ===category){
+          if(expense.expCategory ===existingSupplier.category){
               expense.expCategory =category
           }
           await expense.save()
@@ -16858,7 +17208,7 @@ const deleteExpenseCategory = async (req, res) => {
                   const expenses = await Expenses.find();
      
         for(const expense of expenses){
-          if(expense.expCategory ===category){
+          if(expense.expCategory ===existingSupplier.category){
               expense.expCategory =""
           }
           await expense.save()
@@ -16983,7 +17333,7 @@ const updateCurrency = async (req, res) => {
                 
 
                 
-                  const agents = await Agents.find();
+          const agents = await Agents.find();
         const suppliers = await Suppliers.find()
         const candidates = await Candidates.find()
          const azadAgents = await AzadAgents.find()
@@ -17009,6 +17359,18 @@ const updateCurrency = async (req, res) => {
             }
           }
           }
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_In_Curr===existingSupplier.currency){
+                payment.payment_In_Curr=currency
+             
+              }
+            }
+          }
+
+          }
 
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.payment){
             const payments=agent.payment_Out_Schema.payment
@@ -17021,6 +17383,20 @@ const updateCurrency = async (req, res) => {
             }
           }
           }
+
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Out_Curr===existingSupplier.currency){
+                payment.payment_Out_Curr=currency
+               
+              }
+            }
+          }
+          }
+
+
           await agent.save()
 
         }
@@ -17039,8 +17415,32 @@ const updateCurrency = async (req, res) => {
 
           }
 
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_In_Curr===existingSupplier.currency){
+                payment.payment_In_Curr=currency
+             
+              }
+            }
+          }
+
+          }
+
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
             const payments=supplier.payment_Out_Schema.payment
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_Out_Curr===existingSupplier.currency){
+                payment.payment_Out_Curr=currency
+               
+              }
+            }
+          }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
            if(payments){
             for(const payment of payments){
               if(payment.payment_Out_Curr===existingSupplier.currency){
@@ -17441,6 +17841,17 @@ const deleteCurrency = async (req, res) => {
             }
           }
           }
+          if(agent.payment_In_Schema && agent.payment_In_Schema.candPayments){
+            const payments=agent.payment_In_Schema.candPayments
+           if(payments){
+            for(const payment of payments){
+              if(payment.payment_In_Curr===existingSupplier.currency){
+                payment.payment_In_Curr=""
+             
+              }
+            }
+          }
+          }
 
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.payment){
             const payments=agent.payment_Out_Schema.payment
@@ -17453,6 +17864,18 @@ const deleteCurrency = async (req, res) => {
             }
           }
           }
+          if(agent.payment_Out_Schema && agent.payment_Out_Schema.candPayments){
+            const payments=agent.payment_Out_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+              if(payment.payment_Out_Curr===existingSupplier.currency){
+                payment.payment_Out_Curr=""
+               
+              }
+             }
+           }
+          }
+
           await agent.save()
 
         }
@@ -17470,6 +17893,18 @@ const deleteCurrency = async (req, res) => {
           }
 
           }
+          if(supplier.payment_In_Schema && supplier.payment_In_Schema.candPayments){
+            const payments=supplier.payment_In_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+              if(payment.payment_In_Curr===existingSupplier.currency){
+                payment.payment_In_Curr=""
+             
+              }
+             }
+           }
+
+          }
 
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.payment){
             const payments=supplier.payment_Out_Schema.payment
@@ -17481,6 +17916,17 @@ const deleteCurrency = async (req, res) => {
               }
             }
           }
+          }
+          if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.candPayments){
+            const payments=supplier.payment_Out_Schema.candPayments
+            if(payments){
+             for(const payment of payments){
+              if(payment.payment_Out_Curr===existingSupplier.currency){
+                payment.payment_Out_Curr=""
+               
+              }
+             }
+           }
           }
           await supplier.save()
 

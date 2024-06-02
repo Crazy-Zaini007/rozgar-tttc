@@ -78,6 +78,14 @@ export default function AddVacation() {
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setEmployeeId('')
+        setEmployeeName('')
+        setDateFrom('');
+        setDateTo('');
+        setDays('');
+        setTimeIn('');
+        setTimeOut('');
+        setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/employees/add/employee/vacation`, {
         method: 'POST',
@@ -189,7 +197,7 @@ export default function AddVacation() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
               </div>
 
             

@@ -458,6 +458,7 @@ export default function CandPaymentOutDetails() {
                     <th>Total_Cash_Out</th>
                     <th>RPI_PKR</th>
                     <th>Status</th>
+                    <th>Image</th>
                 </tr>
             </thead>
             <tbody>
@@ -478,6 +479,9 @@ export default function CandPaymentOutDetails() {
                         <td>${String(entry.total_Cash_Out)}</td>
                         <td>${String(entry.remaining_Balance)}</td>
                         <td>${String(entry.status)}</td>
+                        <td>
+                        ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
+                      </td>
                     </tr>
                 `).join('')}
                 <tr>
@@ -531,6 +535,10 @@ export default function CandPaymentOutDetails() {
                 padding: 8px;
                 text-align: left;
             }
+            .print-table td img{
+              height:40px;
+              width:40px;
+             }
             .print-table th {
                 background-color: #f2f2f2;
             }
@@ -602,6 +610,7 @@ export default function CandPaymentOutDetails() {
                     <th>Total Cash Out</th>
                     <th>Remaining PKR</th>
                     <th>Status</th>
+                    <th>Image</th>
                 </tr>
             </thead>
             <tbody>
@@ -620,6 +629,9 @@ export default function CandPaymentOutDetails() {
                         <td>${String(entry.total_Cash_Out)}</td>
                         <td>${String(entry.remaining_Balance)}</td>
                         <td>${String(entry.status)}</td>
+                        <td>
+                        ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
+                      </td>
                     </tr>
                
             </tbody>
@@ -656,6 +668,10 @@ export default function CandPaymentOutDetails() {
                 padding: 8px;
                 text-align: left;
             }
+            .print-table td img{
+              height:40px;
+              width:40px;
+             }
             .print-table th {
                 background-color: #f2f2f2;
             }

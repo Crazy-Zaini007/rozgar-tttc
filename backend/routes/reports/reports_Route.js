@@ -8,6 +8,7 @@ const {
   getEmployeesPayments,
   getProtectorPayments,
   getAllBanksPayments,
+  getTodayAllPayments,
   getNormalPayments,
   getAdvancePayments,
   getAgentsPayments,
@@ -51,6 +52,8 @@ router.get("/get/all/advance_payments", getTotalAdvancePayments);
 
 router.get("/get/all/payments/date", getAllPaymentsByDate);
 router.get("/get/all/banks/payments", getAllBanksPayments);
+router.get("/get/all/today/payments", getTodayAllPayments);
+
 
 //Agents/Suppliers and Candidates Payments reports
 router.get("/get/agents/reports", getAgentsPayments);

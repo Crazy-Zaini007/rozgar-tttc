@@ -63,6 +63,10 @@ export default function AddSalaryMonth() {
     const handleForm = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setEmployeeId('')
+        setEmployeeName('')
+        setSalary('');
+        setMonth('');
         try {
             const response = await fetch(`${apiUrl}/auth/employees/add/salary_month`, {
                 method: 'POST',

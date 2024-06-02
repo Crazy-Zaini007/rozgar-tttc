@@ -278,6 +278,16 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName("");
+    setCategory("");
+    setPayment_Via("");
+    setPayment_Type("");
+    setSlip_No("");
+    setSlip_Pic("");
+    setDetails("");
+    setCurr_Country("");
+    setDate("");
+    setTotalCurrRate('')
     try {
       const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_out`, {
         method: "POST",
@@ -697,7 +707,7 @@ const sumPaymentIn = (data) => {
                            type="date"
                            value={date}
                            onChange={(e) => setDate(e.target.value)}
-                           required
+                           
                          />
                        </div>
                        <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">

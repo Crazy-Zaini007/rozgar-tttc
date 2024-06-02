@@ -1695,3 +1695,21 @@ color:white;
   outline: none;
   border: 1px solid var(--accent-lighter-blue) !important;
 }
+
+/* today_Payments_Table */
+.detail_table .today_Payments_Table .label {
+  background-color: var(--grays-dm-input-bg);
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  display: inline-flexbox;
+  width: 18.28%;
+}
+.detail_table .today_Payments_Table .data_td {
+  background-color: none;
+  color: black;
+  font-size: 8px;
+  font-weight: 500;
+  display: inline-flexbox;
+  width: 18.28%;
+}

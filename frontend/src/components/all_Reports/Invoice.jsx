@@ -58,20 +58,32 @@ export default function Invoice() {
 
 
 
+  const[rowsValue,setRowsValue]=useState("")
 
   const [date2, setDate2] = useState('')
+  const [mySeacrh, setMySeacrh] = useState('')
+
   const [supplierName, setSupplierName] = useState('')
   const [category2, setCategory2] = useState('')
   const [payment_Via2, setPayment_Via2] = useState('')
   const [payment_Type2, setPayment_Type2] = useState('')
 
-  const filteredPayment = overAllPayments
-  ? overAllPayments.filter((paymentItem) =>
+  const sortedPayments = overAllPayments && overAllPayments.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
+
+  const filteredPayment = sortedPayments
+  ? sortedPayments.filter((paymentItem) =>
       paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
       paymentItem.date?.toLowerCase().includes(date2.toLowerCase()) &&
       paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
       paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-      paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase())
+      paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) && 
+      (paymentItem.category?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase()) ||
+      paymentItem.supplierName?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase())||
+      paymentItem.payment_Via?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase()) ||
+      paymentItem.payment_Type?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase())) 
+
     )
   : [];
 
@@ -237,6 +249,10 @@ export default function Invoice() {
                   <div className="col-md-12 filters">
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
+                        <div className="col-auto px-1">
+                            <label htmlFor="">Seacrh Here:</label>
+                           <input type="search"  value={mySeacrh} onChange={(e)=>setMySeacrh(e.target.value)}/>
+                          </div>
                           <div className="col-auto px-1">
                             <label htmlFor="">Date:</label>
                             <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
@@ -284,6 +300,21 @@ export default function Invoice() {
                               ))}
                             </select>
                           </div>
+                          <div className="col-auto px-1">
+                          <label htmlFor="" >Show Entries: </label>
+                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="">
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
+                          </div>
                         </div>
                       </Paper>
                     </div>
@@ -291,7 +322,7 @@ export default function Invoice() {
 
                     <div className="col-md-12 detail_table my-2">
 
-                      <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                      <TableContainer component={Paper}>
                         <Table stickyHeader>
                           <TableHead className="thead">
                             <TableRow>
@@ -313,7 +344,7 @@ export default function Invoice() {
                           </TableHead>
                           <TableBody>
                             {filteredPayment
-                              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((cash, outerIndex) => (
+                              .slice(0,rowsValue ? rowsValue : undefined).map((cash, outerIndex) => (
                                 // Map through the payment array
                                 <React.Fragment key={outerIndex}>
                                   <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
@@ -352,19 +383,19 @@ export default function Invoice() {
                            
     <TableCell className='border data_td text-center bg-success text-white'>
     {/* Calculate the total sum of payment_In */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.slice(0,rowsValue ? rowsValue : undefined).reduce((total, entry) => {
       return total + (entry.payment_In || 0); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-danger text-white'>
     {/* Calculate the total sum of payment_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.slice(0,rowsValue ? rowsValue : undefined).reduce((total, entry) => {
       return total + (entry.payment_Out || 0); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.slice(0,rowsValue ? rowsValue : undefined).reduce((total, entry) => {
       return total + (entry.cash_Out || 0); // Use proper conditional check
     }, 0)}
   </TableCell>
@@ -374,21 +405,7 @@ export default function Invoice() {
                           </TableBody>
                         </Table>
                       </TableContainer>
-                      <TablePagination
-                        rowsPerPageOptions={rowsPerPageOptions}
-                        component='div'
-                        count={filteredPayment.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        style={{
-                          color: 'blue',
-                          fontSize: '14px',
-                          fontWeight: '700',
-                          textTransform: 'capitalize',
-                        }}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
+                      
                     </div>
                   </div>
                 </div>

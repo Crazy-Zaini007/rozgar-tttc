@@ -421,6 +421,7 @@ const addEntry = async (req, res) => {
                     {
                       name,
                       pp_No,
+                      picture:picture,
                       entry_Mode,
                       contact,
                       country,
@@ -474,6 +475,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInSupplier.payment_In_Schema.persons.push({
                   name,
                   pp_No,
+                  picture:picture,
                   entry_Mode,
                   contact,
                   country,
@@ -567,6 +569,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:picture,
                       pp_No,
                       entry_Mode,
                       contact,
@@ -621,6 +624,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutSupplier.payment_Out_Schema.persons.push({
                   name,
                   pp_No,
+                  picture:picture,
                   entry_Mode,
                   trade,
                   contact,
@@ -722,6 +726,7 @@ const addEntry = async (req, res) => {
                     {
                       name,
                       pp_No,
+                      picture:picture,
                       entry_Mode,
                       contact,
                       country,
@@ -776,6 +781,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInAgent.payment_In_Schema.persons.push({
                   name,
                   pp_No,
+                  picture:picture,
                   entry_Mode,
                   contact,
                   country,
@@ -871,6 +877,7 @@ const addEntry = async (req, res) => {
                     {
                       name,
                       pp_No,
+                      picture:picture,
                       entry_Mode,
                       contact,
                       trade,
@@ -924,6 +931,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutAgent.payment_Out_Schema.persons.push({
                   name,
                   pp_No,
+                  picture:picture,
                   entry_Mode,
                   trade,
                   contact,
@@ -1002,6 +1010,7 @@ const addEntry = async (req, res) => {
                 payment_In_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:picture,
                   total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
                     ? visa_Sales_Rate_PKR
                     : 0,
@@ -1063,6 +1072,7 @@ const addEntry = async (req, res) => {
                 payment_Out_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:picture,
                   total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
                     ? visa_Purchase_Rate_PKR
                     : 0,
@@ -1148,6 +1158,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:azad_Visa_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -1200,6 +1211,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInAzadSupplier.payment_In_Schema.persons.push(
                   {
                     name,
+                    picture:azad_Visa_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -1296,6 +1308,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:azad_Visa_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -1348,6 +1361,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
                   {
                     name,
+                    picture:azad_Visa_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -1443,6 +1457,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:azad_Visa_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -1495,6 +1510,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInAzadAgent.payment_In_Schema.persons.push(
                   {
                     name,
+                    picture:azad_Visa_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -1590,6 +1606,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:azad_Visa_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -1642,6 +1659,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutAzadAgent.payment_Out_Schema.persons.push(
                   {
                     name,
+                    picture:azad_Visa_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -1715,6 +1733,7 @@ const addEntry = async (req, res) => {
                 payment_In_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:azad_Visa_Section_Picture,
                   total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                     ? azad_Visa_Sales_PKR
                     : 0,
@@ -1780,6 +1799,7 @@ const addEntry = async (req, res) => {
                 payment_Out_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:azad_Visa_Section_Picture,
                   total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                     ? azad_Visa_Purchase_PKR
                     : 0,
@@ -1864,6 +1884,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:ticket_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -1913,6 +1934,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInTicketSupplier.payment_In_Schema.persons.push(
                   {
                     name,
+                    picture:ticket_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2003,6 +2025,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:ticket_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -2056,6 +2079,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutTicketSupplier.payment_Out_Schema.persons.push(
                   {
                     name,
+                    picture:ticket_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2148,6 +2172,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:ticket_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -2196,6 +2221,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInTicketAgent.payment_In_Schema.persons.push(
                   {
                     name,
+                    picture:ticket_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2287,6 +2313,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:ticket_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -2339,6 +2366,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutTicketAgent.payment_Out_Schema.persons.push(
                   {
                     name,
+                    picture:ticket_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2412,6 +2440,7 @@ const addEntry = async (req, res) => {
                 payment_In_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:ticket_Section_Picture,
                   total_Visa_Price_In_PKR: ticket_Sales_PKR
                     ? ticket_Sales_PKR
                     : 0,
@@ -2561,6 +2590,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:visit_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -2609,6 +2639,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInVisitSupplier.payment_In_Schema.persons.push(
                   {
                     name,
+                    picture:visit_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2699,6 +2730,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:visit_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -2748,6 +2780,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutVisitSupplier.payment_Out_Schema.persons.push(
                   {
                     name,
+                    picture:visit_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2840,6 +2873,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:visit_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -2888,6 +2922,7 @@ const addEntry = async (req, res) => {
                 existingPaymentInVisitAgent.payment_In_Schema.persons.push(
                   {
                     name,
+                    picture:visit_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -2980,6 +3015,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                      picture:visit_Section_Picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -3028,6 +3064,7 @@ const addEntry = async (req, res) => {
                 existingPaymentOutVisitAgent.payment_Out_Schema.persons.push(
                   {
                     name,
+                    picture:visit_Section_Picture,
                     pp_No,
                     entry_Mode,
                     trade,
@@ -3101,6 +3138,7 @@ const addEntry = async (req, res) => {
                 payment_In_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:visit_Section_Picture,
                   total_Visa_Price_In_PKR: visit_Sales_PKR
                     ? visit_Sales_PKR
                     : 0,
@@ -3164,6 +3202,7 @@ const addEntry = async (req, res) => {
                 payment_Out_Schema: {
                   supplier_Id: newEntry._id,
                   supplierName: name,
+                  picture:visit_Section_Picture,
                   total_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
                     ? visit_Purchase_Rate_PKR
                     : 0,
@@ -3246,6 +3285,7 @@ const addEntry = async (req, res) => {
                   persons: [
                     {
                       name,
+                     picture: picture,
                       pp_No,
                       entry_Mode,
                       trade,
@@ -3293,6 +3333,7 @@ const addEntry = async (req, res) => {
                 // If the person does not exist, add them to the persons array
                 existingPaymentOutProtector.payment_Out_Schema.persons.push({
                   name,
+                  picture: picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -6199,7 +6240,7 @@ const delMultipleEntries = async (req, res) => {
     }
 
     const entries = req.body.entries;
-    console.log('entries',entries)
+
     let addedEntries = [];
 
     for (const entryId of entries){
@@ -6375,6 +6416,7 @@ const delMultipleEntries = async (req, res) => {
             let supplierOutPersonIndex;
   
             if (existingSupplierPaymentOut) {
+
               // Find the index of the person in the persons array
               supplierOutPersonIndex =
                 existingSupplierPaymentOut.payment_Out_Schema.persons.findIndex(
@@ -8333,7 +8375,7 @@ const updateEntry = async (req, res) => {
       }
       
       if (final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
-        console.log('Yes Ticket',final_Status)
+        
         const newReminder = new Reminders({
           type: "Ticket",
           content: `${name}'s Final Status is updated to Ticket.`,
@@ -8341,18 +8383,24 @@ const updateEntry = async (req, res) => {
         });
         await newReminder.save();
       }
+let mainPicture
+let visitPicture
+let ticketPicture
+let azadPicture
+
+
 
       if (picture) {
         try {
-          const uploadPicture = await cloudinary.uploader.upload(picture, {
+          mainPicture = await cloudinary.uploader.upload(picture, {
             upload_preset: "rozgar",
           });
-          if (!uploadPicture) {
+          if (!mainPicture) {
             return res
               .status(500)
               .json({ message: "Error uploading the main picture" });
           }
-          entryToUpdate.picture = uploadPicture.secure_url;
+          entryToUpdate.picture = mainPicture.secure_url;
         } catch (uploadError) {
           console.error(uploadError);
           return res
@@ -8362,18 +8410,18 @@ const updateEntry = async (req, res) => {
       }
       if (visit_Section_Picture) {
         try {
-          const uploadPicture = await cloudinary.uploader.upload(
+          visitPicture = await cloudinary.uploader.upload(
             visit_Section_Picture,
             {
               upload_preset: "rozgar",
             }
           );
-          if (!uploadPicture) {
+          if (!visitPicture) {
             return res
               .status(500)
               .json({ message: "Error uploading Visit Section Picture" });
           }
-          entryToUpdate.visit_Section_Picture = uploadPicture.secure_url;
+          entryToUpdate.visit_Section_Picture = visitPicture.secure_url;
         } catch (uploadError) {
           console.error(uploadError);
           return res
@@ -8383,18 +8431,18 @@ const updateEntry = async (req, res) => {
       }
       if (ticket_Section_Picture) {
         try {
-          const uploadPicture = await cloudinary.uploader.upload(
+          ticketPicture = await cloudinary.uploader.upload(
             ticket_Section_Picture,
             {
               upload_preset: "rozgar",
             }
           );
-          if (!uploadPicture) {
+          if (!ticketPicture) {
             return res
               .status(500)
               .json({ message: "Error uploading Visit Section Picture" });
           }
-          entryToUpdate.ticket_Section_Picture = uploadPicture.secure_url;
+          entryToUpdate.ticket_Section_Picture = ticketPicture.secure_url;
         } catch (uploadError) {
           console.error(uploadError);
           return res
@@ -8404,18 +8452,18 @@ const updateEntry = async (req, res) => {
       }
       if (azad_Visa_Section_Picture) {
         try {
-          const uploadPicture = await cloudinary.uploader.upload(
+          azadPicture = await cloudinary.uploader.upload(
             azad_Visa_Section_Picture,
             {
               upload_preset: "rozgar",
             }
           );
-          if (!uploadPicture) {
+          if (!azadPicture) {
             return res
               .status(500)
               .json({ message: "Error uploading Visit Section Picture" });
           }
-          entryToUpdate.azad_Visa_Section_Picture = uploadPicture.secure_url;
+          entryToUpdate.azad_Visa_Section_Picture = azadPicture.secure_url;
         } catch (uploadError) {
           console.error(uploadError);
           return res
@@ -8451,6 +8499,8 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
+
 
             // Calculate the differences
             const visa_Purchase_Rate_PKR_Diff = entryToUpdate.visa_Purchase_Rate_PKR - visa_Purchase_Rate_PKR
@@ -8544,6 +8594,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -8597,6 +8648,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -8714,6 +8766,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -8767,6 +8820,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -8869,6 +8923,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : mainPicture?mainPicture:picture,
               total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
                 ? visa_Purchase_Rate_PKR
                 : 0,
@@ -8924,6 +8979,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const visa_Purchase_Rate_PKR_Diff = entryToUpdate.visa_Purchase_Rate_PKR - visa_Purchase_Rate_PKR
@@ -9017,6 +9073,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -9070,6 +9127,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -9187,6 +9245,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -9240,6 +9299,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -9341,6 +9401,7 @@ const updateEntry = async (req, res) => {
           const newPaymentOutCandidate = new Candidate({
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
+              picture : mainPicture?mainPicture:picture,
               supplierName: name,
               total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
                 ? visa_Purchase_Rate_PKR
@@ -9388,6 +9449,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_Out_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                mainPicture?mainPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -9465,6 +9528,7 @@ const updateEntry = async (req, res) => {
                 {
                   name,
                   pp_No,
+                  picture: mainPicture?mainPicture:picture,
                   entry_Mode,
                   contact,
                   trade,
@@ -9517,6 +9581,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture: mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -9606,6 +9671,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture: mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -9659,6 +9725,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture: mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -9732,6 +9799,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const visa_Sale_Rate_PKR_Diff = entryToUpdate.visa_Sales_Rate_PKR - visa_Sales_Rate_PKR
@@ -9821,6 +9889,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -9874,6 +9943,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -9991,6 +10061,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10044,6 +10115,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -10143,6 +10215,7 @@ const updateEntry = async (req, res) => {
           const newPaymentInCandidate = new Candidate({
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
+              picture : mainPicture?mainPicture:picture,
               supplierName: name,
               total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
                 ? visa_Sales_Rate_PKR
@@ -10202,6 +10275,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const visa_Sale_Rate_PKR_Diff = entryToUpdate.visa_Sales_Rate_PKR - visa_Sales_Rate_PKR
@@ -10291,6 +10365,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10344,6 +10419,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -10461,6 +10537,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10514,6 +10591,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -10614,6 +10692,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : mainPicture?mainPicture:picture,
               total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
                 ? visa_Sales_Rate_PKR
                 : 0,
@@ -10659,6 +10738,7 @@ const updateEntry = async (req, res) => {
 
         if (existingPaymentInCandidate) {
           existingPaymentInCandidate.payment_In_Schema.supplierName = name,
+          existingPaymentInCandidate.payment_In_Schema.picture = mainPicture?mainPicture:existingPaymentInCandidate.payment_In_Schema.picture,
             existingPaymentInCandidate.payment_In_Schema.pp_No = pp_No,
             existingPaymentInCandidate.payment_In_Schema.entry_Mode =
             entry_Mode,
@@ -10733,6 +10813,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10786,6 +10867,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -10873,6 +10955,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10926,6 +11009,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
+              picture : mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -10998,6 +11082,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -11122,6 +11207,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -11175,6 +11261,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -11296,6 +11383,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -11349,6 +11437,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -11451,6 +11540,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -11509,6 +11599,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -11633,6 +11724,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -11686,6 +11778,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : mainPicture?mainPicture:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -11807,6 +11900,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -11860,6 +11954,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : mainPicture?mainPicture:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -11962,6 +12057,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : mainPicture?mainPicture:picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -12007,6 +12103,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_Out_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                azadPicture?azadPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -12088,6 +12186,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12141,6 +12240,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -12231,6 +12331,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12284,6 +12385,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -12353,6 +12455,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -12435,9 +12538,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -12477,6 +12580,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12530,6 +12634,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -12608,9 +12713,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -12651,6 +12756,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12704,6 +12810,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -12783,9 +12890,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -12806,6 +12913,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -12864,6 +12972,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -12946,9 +13055,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -12988,6 +13097,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13041,6 +13151,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : mainPicture?mainPicture:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13119,9 +13230,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -13162,6 +13273,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13215,6 +13327,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : mainPicture?mainPicture:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13294,9 +13407,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -13317,6 +13430,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : mainPicture?mainPicture:picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -13362,6 +13476,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_In_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                azadPicture?azadPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_In_Schema.trade = trade),
             (existingPaymentInCandidate.payment_In_Schema.country = country),
             (existingPaymentInCandidate.payment_In_Schema.contact = contact),
@@ -13443,6 +13559,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13496,6 +13613,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13586,6 +13704,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13639,6 +13758,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13709,6 +13829,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -13833,6 +13954,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13886,6 +14008,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14007,6 +14130,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14060,6 +14184,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14162,6 +14287,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -14220,6 +14346,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -14344,6 +14471,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14397,6 +14525,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14518,6 +14647,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14571,6 +14701,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14673,6 +14804,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -14718,6 +14850,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_Out_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                ticketPicture?ticketPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -14799,6 +14933,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14852,6 +14987,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14942,6 +15078,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14995,6 +15132,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15064,6 +15202,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -15146,9 +15285,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -15188,6 +15327,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15241,6 +15381,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15319,9 +15460,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -15362,6 +15503,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15415,6 +15557,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15494,9 +15637,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -15517,6 +15660,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -15575,6 +15719,8 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
+
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -15657,9 +15803,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -15699,6 +15845,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15752,6 +15899,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15830,9 +15978,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -15873,6 +16021,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15926,6 +16075,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16005,9 +16155,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -16028,6 +16178,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -16073,6 +16224,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_In_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                ticketPicture?ticketPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_In_Schema.trade = trade),
             (existingPaymentInCandidate.payment_In_Schema.country = country),
             (existingPaymentInCandidate.payment_In_Schema.contact = contact),
@@ -16154,6 +16307,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16207,6 +16361,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16297,6 +16452,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16350,6 +16506,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16419,6 +16576,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -16543,6 +16701,8 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
+
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16596,6 +16756,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16717,6 +16878,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16770,6 +16932,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16872,6 +17035,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : visitPicture?visitPicture:visit_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -16930,6 +17094,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = visitPicture?visitPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -17054,6 +17219,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17107,6 +17273,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17228,6 +17395,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17281,6 +17449,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17383,6 +17552,7 @@ const updateEntry = async (req, res) => {
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : visitPicture?visitPicture:visit_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -17428,6 +17598,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_Out_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                visitPicture?visitPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -17509,6 +17681,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17562,6 +17735,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17652,6 +17826,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17705,6 +17880,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17774,6 +17950,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = visitPicture?visitPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -17856,9 +18033,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -17898,6 +18075,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17951,6 +18129,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18029,9 +18208,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -18072,6 +18251,8 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
+
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18125,6 +18306,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18204,9 +18386,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -18227,6 +18409,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : visitPicture?visitPicture:visit_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -18285,6 +18468,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = visitPicture?visitPicture:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -18367,9 +18551,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -18409,6 +18593,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18462,6 +18647,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18540,9 +18726,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -18583,6 +18769,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18636,6 +18823,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18715,9 +18903,9 @@ const updateEntry = async (req, res) => {
             existingSupplierPaymentIn.payment_In_Schema.remaining_Balance -=
               personToUpdate.azad_Visa_Price_In_PKR || 0;
             existingSupplierPaymentIn.payment_In_Schema.total_Azad_Visa_Price_In_PKR -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
             existingSupplierPaymentIn.payment_In_Schema.remaining_Curr -=
-              personToUpdate.azad_Visa_Price_Out_Curr || 0;
+              personToUpdate.azad_Visa_Price_In_Curr || 0;
 
             // Save the changes
             await existingSupplierPaymentIn.save();
@@ -18738,6 +18926,7 @@ const updateEntry = async (req, res) => {
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
+              picture : visitPicture?visitPicture:visit_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -18783,6 +18972,8 @@ const updateEntry = async (req, res) => {
             (existingPaymentInCandidate.payment_In_Schema.pp_No = pp_No),
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
+              (existingPaymentInCandidate.payment_Out_Schema.picture =
+                visitPicture?visitPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_In_Schema.trade = trade),
             (existingPaymentInCandidate.payment_In_Schema.country = country),
             (existingPaymentInCandidate.payment_In_Schema.contact = contact),
@@ -18864,6 +19055,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18917,6 +19109,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19007,6 +19200,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture : visitPicture?visitPicture:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -19060,6 +19254,7 @@ const updateEntry = async (req, res) => {
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
+                picture : visitPicture?visitPicture:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19127,7 +19322,7 @@ const updateEntry = async (req, res) => {
             supplierInPersonIndex.entry_Mode = entry_Mode;
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
-            supplierInPersonIndex.contact = contact;
+            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const protector_Price_In_Diff = entryToUpdate.protector_Price_In - protector_Price_In
@@ -19218,6 +19413,7 @@ const updateEntry = async (req, res) => {
               persons: [
                 {
                   name,
+                  picture: mainPicture?mainPicture:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -19266,6 +19462,7 @@ const updateEntry = async (req, res) => {
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
+              picture: mainPicture?mainPicture:picture,
               pp_No,
               entry_Mode,
               trade,

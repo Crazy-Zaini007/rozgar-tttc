@@ -993,6 +993,8 @@ export default function SupPaymentInDetails() {
             <th>Paid PKR</th>
             <th>Remaining PKR</th>
             <th>Status</th>
+          <th>Image</th>
+
           </tr>
         </thead>
         <tbody>
@@ -1014,6 +1016,9 @@ export default function SupPaymentInDetails() {
                 <td>${String(person?.total_In)}</td>
                 <td>${String(person?.remaining_Price)}</td>
                 <td>${String(person?.status)}</td>
+                <td>
+                ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+              </td>
               </tr>
             `).join('')
           ).join('')}
@@ -1060,6 +1065,10 @@ export default function SupPaymentInDetails() {
           text-align: left;
           text-transform: capitalize;
         }
+        .print-table td img{
+          height:40px;
+          width:40px;
+         }
         .print-table th {
           background-color: #f2f2f2;
         }
@@ -1262,6 +1271,7 @@ export default function SupPaymentInDetails() {
             <th>Paid PKR</th>
             <th>Remaining PKR</th>
             <th>Status</th>
+          <th>Image</th>
           </tr>
         </thead>
         <tbody>
@@ -1281,6 +1291,9 @@ export default function SupPaymentInDetails() {
             <td>${String(person?.total_In)}</td>
             <td>${String(person?.remaining_Price)}</td>
             <td>${String(person?.status)}</td>
+            <td>
+            ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+          </td>
           </tr>
         </tbody>
       </table>
@@ -1324,6 +1337,10 @@ export default function SupPaymentInDetails() {
           text-align: left;
           text-transform: capitalize;
         }
+        .print-table td img{
+          height:40px;
+          width:40px;
+         }
         .print-table th {
           background-color: #f2f2f2;
         }

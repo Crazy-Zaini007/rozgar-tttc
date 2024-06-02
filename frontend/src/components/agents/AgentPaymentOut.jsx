@@ -134,6 +134,17 @@ export default function SupPaymentOut() {
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/agents/add/payment_out`, {
         method: 'POST',
@@ -477,7 +488,7 @@ export default function SupPaymentOut() {
                         </div>
                         <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                           <label >Date </label>
-                          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                          <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
                         </div>
 
                         <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">

@@ -411,6 +411,136 @@ const addSalary = async (req, res) => {
 
 }
 
+//adding salary to an employee
+const addMultipleSalaries = async (req, res) => {
+
+  try {
+    const userId = req.user._id
+    const user = await User.findById(userId)
+    if (!user) {
+      res.status(404).json({ message: "User not found" })
+
+    }
+
+    if (user) {
+    const multiplePayments = req.body;
+
+    if (!Array.isArray(multiplePayments) || multiplePayments.length === 0) {
+      res.status(400).json({ message: "Invalid request payload" });
+      return;
+    }
+    try {
+      for (const payment of multiplePayments){
+        const {
+          employeeName,
+          month,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          payment_Out_Curr,
+          slip_Pic,
+          date,
+          curr_Rate,
+          curr_Amount,
+         
+        } = payment
+        const employee = await Employees.findOne({employeeName:employeeName.toLowerCase()})
+
+      if (!employee) {
+        res.status(404).json({ message: "Employee not found" })
+      }
+      if (employee) {
+        const parsedPaymentOut = Number(payment_Out);
+        
+
+
+    // Find the payment object corresponding to the provided month
+    const paymentObject = employee.payments.find(payment => payment.month.toLowerCase() === month.toLowerCase());
+
+    if (!paymentObject) {
+      return res.status(404).json({ message: "Salary Month for the provided month not found" });
+    }
+        let nextInvoiceNumber = 0;
+            // Check if InvoiceNumber document exists
+            const currentInvoiceNumber = await InvoiceNumber.findOne({});
+
+            if (!currentInvoiceNumber) {
+                // If not, create a new one
+                const newInvoiceNumberDoc = new InvoiceNumber();
+                await newInvoiceNumberDoc.save();
+            }
+
+            // Get the updated invoice number
+            const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+                {},
+                { $inc: { invoice_Number: 1 } },
+                { new: true, upsert: true } // Use upsert: true to create a new document if it doesn't exist
+            )
+            if (updatedInvoiceNumber) {
+                nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+            }
+
+        const payment = {
+          _id: new mongoose.Types.ObjectId(),
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out:parsedPaymentOut,
+          payment_Out_Curr,
+          slip_Pic,
+          date:date?date:new Date().toISOString().split("T")[0],
+          curr_Rate,
+          curr_Amount,
+          invoice:nextInvoiceNumber
+        }
+
+        const cashInHandDoc = await CashInHand.findOne({});
+
+        if (!cashInHandDoc) {
+          const newCashInHandDoc = new CashInHand();
+          await newCashInHandDoc.save();
+        }
+
+        const cashInHandUpdate = {
+          $inc: {}
+        };
+        if (payment_Via.toLowerCase() === "cash") {
+          cashInHandUpdate.$inc.cash = -payment_Out;
+          cashInHandUpdate.$inc.total_Cash = -payment_Out;
+
+        } else {
+          cashInHandUpdate.$inc.bank_Cash = -payment_Out;
+          cashInHandUpdate.$inc.total_Cash = -payment_Out;
+
+        }
+        await CashInHand.updateOne({}, cashInHandUpdate);
+
+        paymentObject.payment.push(payment)
+        paymentObject.remain-=payment_Out
+        employee.open=open,
+        employee.close=close
+        employee.remaining-=payment_Out
+        await employee.save()
+      }
+      res.status(200).json({ message: `Salaries done for ${multiplePayments.length} Employees!` })
+
+      }
+    } catch (error) {
+      
+    }
+      
+      
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+
+  }
+
+}
+
 
 
 
@@ -784,4 +914,4 @@ const updateVacation = async (req, res) => {
 }
 
 
-module.exports = {addEmployee,delEmployee,updateEmployee,getEmployees,addNewSalaryMonth,deleteSalaryMonth,updateSalaryMonth,addSalary,delSalary,updateSalary,addVacation,delVacation,updateVacation };
+module.exports = {addEmployee,delEmployee,updateEmployee,getEmployees,addNewSalaryMonth,deleteSalaryMonth,updateSalaryMonth,addSalary,addMultipleSalaries,delSalary,updateSalary,addVacation,delVacation,updateVacation };

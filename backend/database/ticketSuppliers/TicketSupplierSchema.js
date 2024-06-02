@@ -54,6 +54,9 @@ const Payment_InSchema = new mongoose.Schema(
         name: {
           type: String,
         },
+        picture:{
+          type: String,
+        },
         pp_No: {
           type: String,
         },
@@ -296,6 +299,9 @@ const Payment_OutSchema = new mongoose.Schema(
       type: String,
     },
     supplierName: {
+      type: String,
+    },
+    picture:{
       type: String,
     },
     total_Azad_Visa_Price_Out_PKR: {

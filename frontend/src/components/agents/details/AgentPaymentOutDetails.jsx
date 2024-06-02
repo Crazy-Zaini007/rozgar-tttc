@@ -994,6 +994,7 @@ export default function AgentPaymentOutDetails() {
             <th>Paid PKR</th>
             <th>Remaining PKR</th>
             <th>Status</th>
+          <th>Image</th>
           </tr>
         </thead>
         <tbody>
@@ -1015,6 +1016,9 @@ export default function AgentPaymentOutDetails() {
                 <td>${String(person?.total_In)}</td>
                 <td>${String(person?.remaining_Price)}</td>
                 <td>${String(person?.status)}</td>
+                <td>
+          ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+        </td>
               </tr>
             `).join('')
           ).join('')}
@@ -1263,6 +1267,7 @@ export default function AgentPaymentOutDetails() {
             <th>Paid PKR</th>
             <th>Remaining PKR</th>
             <th>Status</th>
+          <th>Image</th>
           </tr>
         </thead>
         <tbody>
@@ -1282,6 +1287,9 @@ export default function AgentPaymentOutDetails() {
             <td>${String(person?.total_In)}</td>
             <td>${String(person?.remaining_Price)}</td>
             <td>${String(person?.status)}</td>
+            <td>
+          ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+        </td>
           </tr>
         </tbody>
       </table>

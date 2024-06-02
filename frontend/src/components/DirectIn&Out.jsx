@@ -18,7 +18,6 @@ export default function DirectInOut() {
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
   const currentDate = new Date().toISOString().split('T')[0];
 
-
   const[banks,setBanks]=useState('')
   const[total,setTotal]=useState()
 
@@ -26,7 +25,7 @@ export default function DirectInOut() {
 const apiUrl = process.env.REACT_APP_API_URL;
 const getBankCash = async () => {
   try {
-    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
+    const response = await fetch(`${apiUrl}/auth/reports/get/all/today/payments`, {
 
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +75,7 @@ const { getCashInHandData } = CashInHandHook()
             <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
         <h6 className="bg-success text-white py-2 text-center my-0">{Math.round((cashInHand.total_Cash?cashInHand.total_Cash:0))}</h6>
         <div className="details">
-          <h6 className="text-center my-0 bg-info text-white py-2 my-0 ">Cash Details</h6>
+          <h6 className="text-center my-0 bg-info text-white py-2 my-0 ">Today Cash Details</h6>
           <TableContainer className='detail_table' component={Paper} >
   <Table stickyHeader>
     <TableHead className="thead">
@@ -86,10 +85,10 @@ const { getCashInHandData } = CashInHandHook()
       </TableRow>
     </TableHead>
     <TableBody>
-    <TableRow>
+    {/* <TableRow>
           <TableCell className='border data_td text-center' style={{ width: '50%' }}>Cash</TableCell>
           <TableCell className='border data_td text-center' style={{ width: '50%' }}>{Math.round((cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0))}</TableCell>
-        </TableRow>
+        </TableRow> */}
       {banks && banks.map((data, index) => (
         <TableRow key={index}>
           <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.payment_Via}</TableCell>
@@ -97,7 +96,7 @@ const { getCashInHandData } = CashInHandHook()
         </TableRow>
       ))}
       <TableRow>
-        <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Total In Banks</TableCell>
+        <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Today Total</TableCell>
         <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{Math.round(total && total)}</TableCell>
       </TableRow>
 
