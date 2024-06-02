@@ -69,8 +69,8 @@ const addCash = async (req, res) => {
       payment_Out: payment_Out ? payment_Out : 0,
       slip_Pic: uploadImage?.secure_url || '',
       details,
-      date: date,
-      invoice: nextInvoiceNumber, // Convert date to a valid Date object
+      date:date?date:new Date().toISOString().split("T")[0],
+      invoice: nextInvoiceNumber
     };
 
 

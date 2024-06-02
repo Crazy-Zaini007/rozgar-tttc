@@ -311,7 +311,7 @@ const getBankCash = async () => {
         }
       }
       catch (error) {
-        console.error('Fetch error:', error);
+        
         setNewMessage(toast.error('Server is not Responding...'));
         setLoading(false);
       }
@@ -661,7 +661,7 @@ const getBankCash = async () => {
                   <h4 className='text-center'>Bank Account Details</h4>
                 </div>
                 <div className="account-text mt-md-4 mt-3 text-center">
-                  <h6 className='my-2' onClick={() => setCurrent(1)}>{loading2 ? <CircularProgress></CircularProgress>: total && total}</h6>
+                  <h6 className='my-2' onClick={() => setCurrent(1)}>{loading2 ? <CircularProgress></CircularProgress>: Math.round(total && total)}</h6>
                   <h5 className='my-2'>Bank Cash </h5>
                   <Link className="cash_in_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
                   <Link className="cash_out_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
@@ -692,10 +692,10 @@ const getBankCash = async () => {
              <TableBody>
              {banks && banks.map((data)=>(
                    <>
-                   <TableCell className='border data_td text-center ' style={{ width: '18.28%' }}>{data.total_payment}</TableCell>
+                   <TableCell className='border data_td text-center ' style={{ width: '18.28%' }}>{Math.round(data.total_payment)}</TableCell>
                    </>
                  ))}
-                   <TableCell className='border data_td text-center text-white bg-success' style={{ width: '18.28%' }}>{total && total}</TableCell>
+                   <TableCell className='border data_td text-center text-white bg-success' style={{ width: '18.28%' }}>{Math.round(total && total)}</TableCell>
              </TableBody>
            </Table>
           </TableContainer>

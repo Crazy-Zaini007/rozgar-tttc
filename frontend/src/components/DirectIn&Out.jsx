@@ -74,7 +74,7 @@ const { getCashInHandData } = CashInHandHook()
             </div>
             <div className="col-md-2 col-sm-12 p-0 m-0 total_cash">
             <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
-        <h6 className="bg-success text-white py-2 text-center my-0">{(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
+        <h6 className="bg-success text-white py-2 text-center my-0">{Math.round((cashInHand.total_Cash?cashInHand.total_Cash:0))}</h6>
         <div className="details">
           <h6 className="text-center my-0 bg-info text-white py-2 my-0 ">Cash Details</h6>
           <TableContainer className='detail_table' component={Paper} >
@@ -88,17 +88,17 @@ const { getCashInHandData } = CashInHandHook()
     <TableBody>
     <TableRow>
           <TableCell className='border data_td text-center' style={{ width: '50%' }}>Cash</TableCell>
-          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{(cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0)}</TableCell>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{Math.round((cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0))}</TableCell>
         </TableRow>
       {banks && banks.map((data, index) => (
         <TableRow key={index}>
           <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.payment_Via}</TableCell>
-          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.total_payment}</TableCell>
+          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{Math.round(data.total_payment)}</TableCell>
         </TableRow>
       ))}
       <TableRow>
         <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Total In Banks</TableCell>
-        <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{total && total}</TableCell>
+        <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{Math.round(total && total)}</TableCell>
       </TableRow>
 
       

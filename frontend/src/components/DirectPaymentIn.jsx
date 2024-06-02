@@ -419,7 +419,7 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
                 <div className="right">
                   <div className="text-end ">
                   <span className="btn btn-sm submit_btn bg-info m-1 px-2 border-0">
-  Closing Balance : {(
+  Closing Balance : {Math.round((
     (cashInHand.total_Cash || 0) -
     (overAllPayments && overAllPayments.length > 0
       ? overAllPayments
@@ -435,14 +435,14 @@ const filteredPayments =todayPayments && todayPayments.filter(entry => {
             }, 0)
         : 0)
       
-  ).toFixed(2)}
+  ).toFixed(2))}
 </span>
-                    <span className="btn btn-sm submit_btn m-1  px-3 border-0">Today : <i className="fas fa-arrow-down me-1 ms-2"></i>{overAllPayments &&  overAllPayments.length > 0 &&
+                    <span className="btn btn-sm submit_btn m-1  px-3 border-0">Today : <i className="fas fa-arrow-down me-1 ms-2"></i>{Math.round(overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
                                 .filter(entry => entry.date===currentDate)
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
-                                }, 0)}</span>
+                                }, 0))}</span>
                 <button className="btn btn-sm submit_btn m-1 " disabled={loading}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>

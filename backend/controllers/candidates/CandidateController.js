@@ -122,7 +122,7 @@ const addPaymentIn = async (req, res) => {
                     payment_In_Curr: curr_Country ? curr_Country : "",
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                 };
 
@@ -307,7 +307,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                     payment_In_Curr: curr_Country ? curr_Country : "",
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                 };
 
@@ -484,7 +484,7 @@ const addPaymentInReturn = async (req, res) => {
                     payment_Out_Curr: curr_Country ? curr_Country : 0,
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                 };
 
@@ -1601,7 +1601,7 @@ const addPaymentOut = async (req, res) => {
                     payment_Out_Curr: curr_Country ? curr_Country : '',
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                   
                 }
@@ -1778,7 +1778,7 @@ const addPaymentOutReturn = async (req, res) => {
                     payment_Out_Curr: curr_Country ? curr_Country : 0,
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                    
                 };
@@ -2214,7 +2214,7 @@ const addMultiplePaymentsOut = async (req, res) => {
                     payment_Out_Curr: curr_Country ? curr_Country : '',
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                 }
                 updatedPayments.push(newPayment);

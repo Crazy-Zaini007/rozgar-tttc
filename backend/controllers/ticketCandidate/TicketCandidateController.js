@@ -128,7 +128,7 @@ const addAzadCandPaymentIn = async (req, res) => {
           payment_In_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -324,7 +324,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
           payment_In_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -514,7 +514,7 @@ const addAzadCandPaymentInReturn = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : 0,
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -1620,7 +1620,7 @@ const addAzadCandPaymentOut = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -1819,7 +1819,7 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : 0,
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -2295,7 +2295,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
         updatedPayments.push(newPayment);

@@ -171,7 +171,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading2 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0}</h5> }
+            {loading2 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{Math.round( cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0)}</h5> }
             <h6 className='ml-2'>Cash In Hand</h6>
             </div>
           </div> 
@@ -190,7 +190,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0}</h5> }
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ Math.round(todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0)}</h5> }
 
 <h6 className='ml-2'>Today Cash In</h6>
             </div>
@@ -208,7 +208,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0}</h5> }
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ Math.round(todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0)}</h5> }
 
                 <h6 className='ml-2'>Today Cash Out</h6>
             </div>
@@ -229,7 +229,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0}</h5> }
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ Math.round(todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0)}</h5> }
                 
                 <h6 className='ml-2'>Today Advance In</h6>
             </div>
@@ -252,7 +252,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0}</h5> }
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ Math.round(todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0)}</h5> }
 
 <h6 className='ml-2'>Today Advance Out</h6>
             
@@ -272,7 +272,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0}</h5> }
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ Math.round(totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0)}</h5> }
                 <h6 className='ml-2'>Total Advance In</h6>
             
             </div>
@@ -292,7 +292,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0}</h5> }
+            {loading4 ? <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />:<h5>{ Math.round(totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0)}</h5> }
                 
                 <h6 className='ml-2'>Total Advance Out</h6>
             

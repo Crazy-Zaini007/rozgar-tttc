@@ -69,13 +69,13 @@ const getBankCash = async () => {
 
       await getCashInHandData();
       await getOverAllPayments()
-      await getBankCash()
         
       await Promise.all([
         getCategoryData(),
         getPaymentViaData(),
         getPaymentTypeData()
       ]);
+      await getBankCash()
 
 
     } catch (error) {
@@ -639,11 +639,11 @@ const getBankCash = async () => {
                 <div className="account-text mt-md-4 mt-3">
                  
                  <div className="middle text-center">
-                 <h6 className='my-2'>{(cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0)}</h6>
+                 <h6 className='my-2'>{Math.round((cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0))}</h6>
                   <h5 className='my-2'>Cash</h5>
-                  <h6 className='my-2'>{total ? total :0}</h6>
+                  <h6 className='my-2'>{Math.round(total ? total :0)}</h6>
                   <h5 className='my-2'>Banks Cash</h5>
-                 <h6 className='my-2' onClick={() => setCurrent(1)}>{cashInHand.total_Cash?cashInHand.total_Cash:0}</h6>
+                 <h6 className='my-2' onClick={() => setCurrent(1)}>{Math.round(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
                   <h5 className='my-2'>Total Cash In Hand</h5>
                   <Link className="cash_in_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
                   <Link className="cash_out_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
@@ -1064,7 +1064,7 @@ const getBankCash = async () => {
                     <div className="row p-0 m-0 my-1">
                       <div className="col-xl-6  col-12 p-1 my-1">
                         <label >Date </label>
-                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
                         <label >Category </label>
@@ -1118,7 +1118,7 @@ const getBankCash = async () => {
                     </div>
                     <div className="text-center">
 
-                      <button className="btn btn btn-sm -success shadow" disabled={loading}><strong>{loading ? "Adding" : "Cash In"}</strong></button>
+                      <button className="btn btn-sm bg-success shadow text-white" disabled={loading}><strong>{loading ? "Adding" : "Cash In"}</strong></button>
                     </div>
                   </form>
                 </div>
@@ -1154,7 +1154,7 @@ const getBankCash = async () => {
                     <div className="row p-0 m-0 my-1">
                       <div className="col-xl-6  col-12 p-1 my-1">
                         <label >Date </label>
-                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
                         <label >Category </label>
@@ -1208,7 +1208,7 @@ const getBankCash = async () => {
                     </div>
                     <div className="text-center">
 
-                      <button className="btn btn btn-sm -danger shadow" disabled={loading}><strong>{loading ? "Adding" : "Cash Out"}</strong></button>
+                      <button className="btn btn-sm bg-danger shadow text-white" disabled={loading}><strong>{loading ? "Adding" : "Cash Out"}</strong></button>
 
                     </div>
                   </form>

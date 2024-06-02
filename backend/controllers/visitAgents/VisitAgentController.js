@@ -106,7 +106,7 @@ const addAzadAgentPaymentIn = async (req, res) => {
       payment_In_Curr: curr_Country ? curr_Country : "",
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
     };
 
@@ -293,7 +293,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
           payment_In_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -478,7 +478,7 @@ const addAzadAgentPaymentInReturn = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : 0,
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -1754,7 +1754,7 @@ const addAzadAgentPaymentOut = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -1948,7 +1948,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -2136,7 +2136,7 @@ const addAzadAgentPaymentOutReturn = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : 0,
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -3602,7 +3602,7 @@ const addAgentCandVisePaymentIn = async (req, res) => {
       payment_In_Curr: curr_Country,
       slip_Pic: uploadImage?.secure_url || "",
       details,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
       payments: allPayments,
     };
@@ -4208,7 +4208,7 @@ const addAgentCandVisePaymentOut = async (req, res) => {
       payment_Out_Curr: curr_Country,
       slip_Pic: uploadImage?.secure_url || "",
       details,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
       payments: allPayments,
     };

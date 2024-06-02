@@ -368,7 +368,7 @@ const addSalary = async (req, res) => {
           payment_Out:parsedPaymentOut,
           payment_Out_Curr,
           slip_Pic,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           curr_Rate,
           curr_Amount,
           invoice:nextInvoiceNumber
@@ -668,7 +668,7 @@ const addVacation = async (req, res) => {
         days,
         timeIn,
         timeOut,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
 
         }

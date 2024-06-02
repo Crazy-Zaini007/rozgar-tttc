@@ -72,7 +72,7 @@ const addExpense = async (req, res) => {
                 curr_Country,
                 curr_Rate,
                 curr_Amount,
-                date,
+                date:date?date:new Date().toISOString().split("T")[0],
                 invoice: nextInvoiceNumber
             })
 

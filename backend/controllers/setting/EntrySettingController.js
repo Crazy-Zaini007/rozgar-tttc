@@ -625,7 +625,7 @@ const deleteVSP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -649,7 +649,7 @@ const deleteVSP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -722,7 +722,7 @@ const deleteVSP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -746,7 +746,7 @@ const deleteVSP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -819,7 +819,7 @@ const deleteVSP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -843,7 +843,7 @@ const deleteVSP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -1660,7 +1660,7 @@ const deleteVPP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -1684,7 +1684,7 @@ const deleteVPP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -1757,7 +1757,7 @@ const deleteVPP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -1781,7 +1781,7 @@ const deleteVPP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -1854,7 +1854,7 @@ const deleteVPP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -1878,7 +1878,7 @@ const deleteVPP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -2693,7 +2693,7 @@ const deleteTSP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -2717,7 +2717,7 @@ const deleteTSP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -2790,7 +2790,7 @@ const deleteTSP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -2814,7 +2814,7 @@ const deleteTSP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -2887,7 +2887,7 @@ const deleteTSP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -2911,7 +2911,7 @@ const deleteTSP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -3728,7 +3728,7 @@ const deleteTPP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -3752,7 +3752,7 @@ const deleteTPP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -3825,7 +3825,7 @@ const deleteTPP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -3849,7 +3849,7 @@ const deleteTPP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -3922,7 +3922,7 @@ const deleteTPP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -3946,7 +3946,7 @@ const deleteTPP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -4762,7 +4762,7 @@ const deleteAVSP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -4786,7 +4786,7 @@ const deleteAVSP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -4859,7 +4859,7 @@ const deleteAVSP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -4883,7 +4883,7 @@ const deleteAVSP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -4956,7 +4956,7 @@ const deleteAVSP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -4980,7 +4980,7 @@ const deleteAVSP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -5798,7 +5798,7 @@ const deleteAVPP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -5822,7 +5822,7 @@ const deleteAVPP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -5895,7 +5895,7 @@ const deleteAVPP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -5919,7 +5919,7 @@ const deleteAVPP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -5992,7 +5992,7 @@ const deleteAVPP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -6016,7 +6016,7 @@ const deleteAVPP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -6833,7 +6833,7 @@ const deleteVISP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -6857,7 +6857,7 @@ const deleteVISP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -6930,7 +6930,7 @@ const deleteVISP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -6954,7 +6954,7 @@ const deleteVISP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -7027,7 +7027,7 @@ const deleteVISP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -7051,7 +7051,7 @@ const deleteVISP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {
@@ -7865,7 +7865,7 @@ const deleteVIPP = async (req, res) => {
             await existingAzadSupOut.save()
           }
 
-          const existingAzadAgentIn = await AzadSuppliers.findOne({
+          const existingAzadAgentIn = await AzadAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingAzadAgentIn) {
@@ -7889,7 +7889,7 @@ const deleteVIPP = async (req, res) => {
             await existingAzadAgentIn.save()
           }
 
-          const existingAzadAgentOut = await AzadSuppliers.findOne({
+          const existingAzadAgentOut = await AzadAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingAzadAgentOut) {
@@ -7962,7 +7962,7 @@ const deleteVIPP = async (req, res) => {
             await existingTicketSupOut.save()
           }
 
-          const existingTicketAgentIn = await TicketSuppliers.findOne({
+          const existingTicketAgentIn = await TicketAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingTicketAgentIn) {
@@ -7986,7 +7986,7 @@ const deleteVIPP = async (req, res) => {
             await existingTicketAgentIn.save()
           }
 
-          const existingTicketAgentOut = await TicketSuppliers.findOne({
+          const existingTicketAgentOut = await TicketAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingTicketAgentOut) {
@@ -8059,7 +8059,7 @@ const deleteVIPP = async (req, res) => {
             await existingVisitSupOut.save()
           }
 
-          const existingVisitAgentIn = await VisitSuppliers.findOne({
+          const existingVisitAgentIn = await VisitAgents.findOne({
             "payment_In_Schema.supplierName": existingSupplier.supplierName,
           });
           if (existingVisitAgentIn) {
@@ -8083,7 +8083,7 @@ const deleteVIPP = async (req, res) => {
             await existingVisitAgentIn.save()
           }
 
-          const existingVisitAgentOut = await VisitSuppliers.findOne({
+          const existingVisitAgentOut = await VisitAgents.findOne({
             "payment_Out_Schema.supplierName": existingSupplier.supplierName,
           })
           if (existingVisitAgentOut) {

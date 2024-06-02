@@ -48,6 +48,8 @@ const getAllPayments = async (req, res) => {
     const azadCandidates = await AzadCandidates.find();
     const ticketCandidates = await TicketCandidates.find();
     const visitCandidates = await VisitCandidates.find();
+    const cashInHand = await CashInHand.find({});
+
 
     // Initialize an empty array to store merged payments
     let mergedPayments = [];
@@ -432,13 +434,24 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Visit_Candidate_Out",
             ...payment.toObject(),
-          }));
+          }))
         mergedPayments = mergedPayments.concat(visitCandPaymentOutDetails);
       }
     });
 
+    // CashIn Hand Today Payments
+ for (const myCashInHand of cashInHand){
+  let allPayments=myCashInHand.payment && myCashInHand.payment.map((myPayment)=>({
+    supplierName:'Direct Cash',
+    type:"Cash In Hand",
+    ...myPayment.toObject()
+  }))
+  mergedPayments = mergedPayments.concat(allPayments);
+ }
+ let sortedPayments=mergedPayments.sort((a, b) => new Date(a.date) - new Date(b.date));
+
     // Send the resulting mergedPayments array in the response
-    res.status(200).json({ data: mergedPayments });
+    res.status(200).json({ data: sortedPayments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -1690,7 +1703,7 @@ const getAllBanksPayments = async (req, res) => {
     for (const expense of expensesPayments) {
       const payment_Via = expense.payment_Via.toLowerCase();
     
-      if (payment?.payment_Via?.toLowerCase() !== "cash") {
+      if (expense?.payment_Via?.toLowerCase() !== "cash") {
         // Ignore cash payments
 
         if (!combinedPaymentsOut[payment_Via]) {

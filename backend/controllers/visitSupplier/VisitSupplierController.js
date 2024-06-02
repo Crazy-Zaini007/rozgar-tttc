@@ -107,7 +107,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
       payment_In_Curr: curr_Country ? curr_Country : "",
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
     };
 
@@ -291,7 +291,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
           payment_In_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -476,7 +476,7 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : 0,
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -1758,7 +1758,7 @@ const addAzadSupplierPaymentOut = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -1950,7 +1950,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : "",
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -2132,7 +2132,7 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
           payment_Out_Curr: curr_Country ? curr_Country : 0,
           curr_Rate: curr_Rate ? curr_Rate : 0,
           curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date,
+          date:date?date:new Date().toISOString().split("T")[0],
           invoice: nextInvoiceNumber,
         };
 
@@ -3598,7 +3598,7 @@ const addCandVisePaymentIn = async (req, res) => {
       payment_In_Curr: curr_Country,
       slip_Pic: uploadImage?.secure_url || "",
       details,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
       payments: allPayments,
     };
@@ -4204,7 +4204,7 @@ const addCandVisePaymentOut = async (req, res) => {
       payment_Out_Curr: curr_Country,
       slip_Pic: uploadImage?.secure_url || "",
       details,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
       payments: allPayments,
     };

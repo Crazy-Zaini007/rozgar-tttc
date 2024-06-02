@@ -10,13 +10,15 @@ const TicketCandidate = require("../../database/ticketCandidates/TicketCandidate
 const VisitSuppliers = require("../../database/visitSuppliers/VisitSupplierSchema");
 const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSchema");
 const Protector = require("../../database/protector/ProtectorSchema");
-const Entries = require("../../database/enteries/EntrySchema");
 const Backup=require('../../database/backup/BackupModel.js')
 const Notifications=require('../../database/notifications/NotifyModel.js')
 const InvoiceNumber = require("../../database/invoiceNumber/InvoiceNumberSchema");
 const CashInHand = require("../../database/cashInHand/CashInHandSchema");
-const mongoose = require("mongoose");
-const moment = require("moment");
+
+const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
+const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
+const VisitAgents = require("../../database/visitAgent/VisitAgentSchema");
+
 
 // Payment In
 const directPaymentIn=async(req,res)=>{
@@ -96,7 +98,7 @@ const directPaymentIn=async(req,res)=>{
       payment_In_Curr: curr_Country ? curr_Country : "",
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
       cand_Name,
     }
@@ -112,7 +114,7 @@ const directPaymentIn=async(req,res)=>{
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
         
       }
@@ -327,7 +329,7 @@ const directPaymentIn=async(req,res)=>{
             payment_In_Curr: curr_Country ? curr_Country : "",
             curr_Rate: curr_Rate ? curr_Rate : 0,
             curr_Amount: newCurrAmount ? newCurrAmount : 0,
-            date,
+            date:date?date:new Date().toISOString().split("T")[0],
             invoice: nextInvoiceNumber,
             cand_Name,
           };
@@ -343,7 +345,7 @@ const directPaymentIn=async(req,res)=>{
             payment_In_Curr: curr_Country ? curr_Country : "",
             curr_Rate: curr_Rate ? curr_Rate : 0,
             curr_Amount: newCurrAmount ? newCurrAmount : 0,
-            date,
+            date:date?date:new Date().toISOString().split("T")[0],
             invoice: nextInvoiceNumber,
             
           }
@@ -571,7 +573,7 @@ const directPaymentIn=async(req,res)=>{
                 payment_In_Curr: curr_Country ? curr_Country : "",
                 curr_Rate: curr_Rate ? curr_Rate : 0,
                 curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                date,
+                date:date?date:new Date().toISOString().split("T")[0],
                 invoice: nextInvoiceNumber,
             };
             try {
@@ -651,7 +653,7 @@ const directPaymentIn=async(req,res)=>{
     // For Ticket Supplier
     if(ref.toLowerCase()==='ticket supplier'){
         const existingSupplier = await TicketSuppliers.findOne({
-            'Supplier_Payment_In_Schema.supplierName': supplierName
+            'payment_In_Schema.supplierName': supplierName
         });
 
         if (!existingSupplier) {
@@ -698,21 +700,21 @@ const directPaymentIn=async(req,res)=>{
             payment_In_Curr: curr_Country ? curr_Country : "",
             curr_Rate: curr_Rate ? curr_Rate : 0,
             curr_Amount: newCurrAmount ? newCurrAmount : 0,
-            date,
+            date:date?date:new Date().toISOString().split("T")[0],
             invoice: nextInvoiceNumber
         };
         try {
            
             await existingSupplier.updateOne({
                 $inc: {
-                    'Supplier_Payment_In_Schema.total_Payment_In': payment_In,
-                    'Supplier_Payment_In_Schema.remaining_Balance': -payment_In,
-                    "Supplier_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                    'payment_In_Schema.total_Payment_In': payment_In,
+                    'payment_In_Schema.remaining_Balance': -payment_In,
+                    "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
                 },
            
                 $push: {
-                    'Supplier_Payment_In_Schema.payment': payment
+                    'payment_In_Schema.payment': payment
                 }
             });
 
@@ -778,8 +780,8 @@ const directPaymentIn=async(req,res)=>{
 
     // Ticket Agent
     if(ref.toLowerCase()==='ticket agent'){
-        const existingSupplier = await TicketSuppliers.findOne({
-            'Agent_Payment_In_Schema.supplierName': supplierName
+        const existingSupplier = await TicketAgents.findOne({
+            'payment_In_Schema.supplierName': supplierName
         });
 
         if (!existingSupplier) {
@@ -826,7 +828,7 @@ const directPaymentIn=async(req,res)=>{
             payment_In_Curr: curr_Country ? curr_Country : "",
             curr_Rate: curr_Rate ? curr_Rate : 0,
             curr_Amount: newCurrAmount ? newCurrAmount : 0,
-            date,
+            date:date?date:new Date().toISOString().split("T")[0],
             invoice: nextInvoiceNumber
         };
 
@@ -834,14 +836,14 @@ const directPaymentIn=async(req,res)=>{
            
             await existingSupplier.updateOne({
                 $inc: {
-                    'Agent_Payment_In_Schema.total_Payment_In': payment_In,
-                    'Agent_Payment_In_Schema.remaining_Balance': -payment_In,
-                    "Agent_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                    'payment_In_Schema.total_Payment_In': payment_In,
+                    'payment_In_Schema.remaining_Balance': -payment_In,
+                    "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
                 },
               
                 $push: {
-                    'Agent_Payment_In_Schema.payment': payment
+                    'payment_In_Schema.payment': payment
                 }
             });
 
@@ -911,7 +913,7 @@ const directPaymentIn=async(req,res)=>{
 
     // Ticket Candidate
 if(ref.toLowerCase()==='ticket candidate'){
-    const existingSupplier = await TicketCandidate.findOne({ 'Candidate_Payment_In_Schema.supplierName': supplierName });
+    const existingSupplier = await TicketCandidate.findOne({ 'payment_In_Schema.supplierName': supplierName });
     if (!existingSupplier) {
         res.status(404).json({
             message: "Candidate not Found"
@@ -959,7 +961,7 @@ if(ref.toLowerCase()==='ticket candidate'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
   
     };
@@ -968,17 +970,17 @@ if(ref.toLowerCase()==='ticket candidate'){
         // Update total_Visa_Price_In_PKR and other fields using $inc
         await existingSupplier.updateOne({
             $inc: {
-                'Candidate_Payment_In_Schema.total_Payment_In': payment_In,
-                'Candidate_Payment_In_Schema.remaining_Balance': -payment_In,
-                "Candidate_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
-                "Candidate_Payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
+                'payment_In_Schema.total_Payment_In': payment_In,
+                'payment_In_Schema.remaining_Balance': -payment_In,
+                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
             },
             $set: {
                
-                "Candidate_Payment_In_Schema.status": close ? "Closed" : "Open"
+                "payment_In_Schema.status": close ? "Closed" : "Open"
             },
             $push: {
-                'Candidate_Payment_In_Schema.payment': payment
+                'payment_In_Schema.payment': payment
             }
         });
         const cashInHandDoc = await CashInHand.findOne({});
@@ -1040,7 +1042,7 @@ if(ref.toLowerCase()==='ticket candidate'){
 // Visit Supplier
 if(ref.toLowerCase()==='visit supplier'){
     const existingSupplier = await VisitSuppliers.findOne({
-        'Supplier_Payment_In_Schema.supplierName': supplierName
+        'payment_In_Schema.supplierName': supplierName
     });
 
     if (!existingSupplier) {
@@ -1087,7 +1089,7 @@ if(ref.toLowerCase()==='visit supplier'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber
     };
 
@@ -1095,14 +1097,14 @@ if(ref.toLowerCase()==='visit supplier'){
        
         await existingSupplier.updateOne({
             $inc: {
-                'Supplier_Payment_In_Schema.total_Payment_In': payment_In,
-                'Supplier_Payment_In_Schema.remaining_Balance': -payment_In,
-                "Supplier_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                'payment_In_Schema.total_Payment_In': payment_In,
+                'payment_In_Schema.remaining_Balance': -payment_In,
+                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
             },
        
             $push: {
-                'Supplier_Payment_In_Schema.payment': payment
+                'payment_In_Schema.payment': payment
             }
         });
 
@@ -1170,8 +1172,8 @@ const cashInHandDoc = await CashInHand.findOne({});
 
 // Visit Agent
 if(ref.toLowerCase()==='visit agent'){
-    const existingSupplier = await VisitSuppliers.findOne({
-        'Agent_Payment_In_Schema.supplierName': supplierName
+    const existingSupplier = await VisitAgents.findOne({
+        'payment_In_Schema.supplierName': supplierName
     });
 
     if (!existingSupplier) {
@@ -1218,7 +1220,7 @@ if(ref.toLowerCase()==='visit agent'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber
     };
 
@@ -1226,14 +1228,14 @@ if(ref.toLowerCase()==='visit agent'){
        
         await existingSupplier.updateOne({
             $inc: {
-                'Agent_Payment_In_Schema.total_Payment_In': payment_In,
-                'Agent_Payment_In_Schema.remaining_Balance': -payment_In,
-                "Agent_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                'payment_In_Schema.total_Payment_In': payment_In,
+                'payment_In_Schema.remaining_Balance': -payment_In,
+                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
             },
           
             $push: {
-                'Agent_Payment_In_Schema.payment': payment
+                'payment_In_Schema.payment': payment
             }
         });
 
@@ -1302,7 +1304,7 @@ if(ref.toLowerCase()==='visit agent'){
 
 // Visit Candidate
 if(ref.toLowerCase()==='visit candidate'){
-    const existingSupplier = await VisitCandidate.findOne({ 'Candidate_Payment_In_Schema.supplierName': supplierName });
+    const existingSupplier = await VisitCandidate.findOne({ 'payment_In_Schema.supplierName': supplierName });
     if (!existingSupplier) {
         res.status(404).json({
             message: "Candidate not Found"
@@ -1350,7 +1352,7 @@ if(ref.toLowerCase()==='visit candidate'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
        
     };
@@ -1360,17 +1362,17 @@ if(ref.toLowerCase()==='visit candidate'){
         // Update total_Visa_Price_In_PKR and other fields using $inc
         await existingSupplier.updateOne({
             $inc: {
-                'Candidate_Payment_In_Schema.total_Payment_In': payment_In,
-                'Candidate_Payment_In_Schema.remaining_Balance': -payment_In,
-                "Candidate_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
-                "Candidate_Payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
+                'payment_In_Schema.total_Payment_In': payment_In,
+                'payment_In_Schema.remaining_Balance': -payment_In,
+                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                "payment_In_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
             },
             $set: {
                 
-                "Candidate_Payment_In_Schema.status": close ? "Closed" : "Open",
+                "payment_In_Schema.status": close ? "Closed" : "Open",
             },
             $push: {
-                'Candidate_Payment_In_Schema.payment': payment
+                'payment_In_Schema.payment': payment
             }
         });
         const cashInHandDoc = await CashInHand.findOne({});
@@ -1432,7 +1434,7 @@ if(ref.toLowerCase()==='visit candidate'){
 // Azad Section
 if(ref.toLowerCase()==='azad supplier'){
     const existingSupplier = await AzadSuppliers.findOne({
-        'Supplier_Payment_In_Schema.supplierName': supplierName
+        'payment_In_Schema.supplierName': supplierName
     });
 
     if (!existingSupplier) {
@@ -1479,7 +1481,7 @@ if(ref.toLowerCase()==='azad supplier'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber
     };
 
@@ -1487,14 +1489,14 @@ if(ref.toLowerCase()==='azad supplier'){
        
         await existingSupplier.updateOne({
             $inc: {
-                'Supplier_Payment_In_Schema.total_Payment_In': payment_In,
-                'Supplier_Payment_In_Schema.remaining_Balance': -payment_In,
-                "Supplier_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                'payment_In_Schema.total_Payment_In': payment_In,
+                'payment_In_Schema.remaining_Balance': -payment_In,
+                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
             },
        
             $push: {
-                'Supplier_Payment_In_Schema.payment': payment
+                'payment_In_Schema.payment': payment
             }
         });
 
@@ -1563,8 +1565,8 @@ const cashInHandDoc = await CashInHand.findOne({});
 
 // Azad Agent
 if(ref.toLowerCase()==='azad agent'){
-    const existingSupplier = await AzadSuppliers.findOne({
-        'Agent_Payment_In_Schema.supplierName': supplierName
+    const existingSupplier = await AzadAgents.findOne({
+        'payment_In_Schema.supplierName': supplierName
     });
 
     if (!existingSupplier) {
@@ -1611,7 +1613,7 @@ if(ref.toLowerCase()==='azad agent'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber
     };
 
@@ -1619,14 +1621,14 @@ if(ref.toLowerCase()==='azad agent'){
        
         await existingSupplier.updateOne({
             $inc: {
-                'Agent_Payment_In_Schema.total_Payment_In': payment_In,
-                'Agent_Payment_In_Schema.remaining_Balance': -payment_In,
-                "Agent_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
+                'payment_In_Schema.total_Payment_In': payment_In,
+                'payment_In_Schema.remaining_Balance': -payment_In,
+                "payment_In_Schema.total_Payment_In_Curr": newCurrAmount ? newCurrAmount : 0,
 
             },
           
             $push: {
-                'Agent_Payment_In_Schema.payment': payment
+                'payment_In_Schema.payment': payment
             }
         });
 
@@ -1696,7 +1698,7 @@ if(ref.toLowerCase()==='azad agent'){
 // Azad Candidate
 if(ref.toLowerCase()==='azad candidate'){
     const existingSupplier = await AzadCandidate.findOne({
-        "Candidate_Payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.supplierName": supplierName,
       });
       if (!existingSupplier) {
         res.status(404).json({
@@ -1744,7 +1746,7 @@ if(ref.toLowerCase()==='azad candidate'){
         payment_In_Curr: curr_Country ? curr_Country : "",
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
       };
 
@@ -1752,20 +1754,20 @@ if(ref.toLowerCase()==='azad candidate'){
         // Update total_Visa_Price_In_PKR and other fields using $inc
         await existingSupplier.updateOne({
           $inc: {
-            "Candidate_Payment_In_Schema.total_Payment_In": payment_In,
-            "Candidate_Payment_In_Schema.remaining_Balance": -payment_In,
-            "Candidate_Payment_In_Schema.total_Payment_In_Curr": newCurrAmount
+            "payment_In_Schema.total_Payment_In": payment_In,
+            "payment_In_Schema.remaining_Balance": -payment_In,
+            "payment_In_Schema.total_Payment_In_Curr": newCurrAmount
               ? newCurrAmount
               : 0,
-            "Candidate_Payment_In_Schema.remaining_Curr": newCurrAmount
+            "payment_In_Schema.remaining_Curr": newCurrAmount
               ? -newCurrAmount
               : 0,
           },
           $set: {
-            "Candidate_Payment_In_Schema.status": close ? "Closed" : "Open",
+            "payment_In_Schema.status": close ? "Closed" : "Open",
           },
           $push: {
-            "Candidate_Payment_In_Schema.payment": payment,
+            "payment_In_Schema.payment": payment,
           },
         });
         const cashInHandDoc = await CashInHand.findOne({});
@@ -1914,7 +1916,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
         cand_Name,
       };
@@ -1930,7 +1932,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
       
       };
@@ -2152,7 +2154,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
         cand_Name,
       };
@@ -2168,7 +2170,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
       
       };
@@ -2387,7 +2389,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber,
       
     }
@@ -2465,7 +2467,7 @@ const directPaymentOut=async(req,res)=>{
 
   // For Ticket Supplier
   if(ref.toLowerCase()==='ticket supplier'){
-    const existingSupplier = await TicketSuppliers.findOne({ 'Supplier_Payment_Out_Schema.supplierName': supplierName });
+    const existingSupplier = await TicketSuppliers.findOne({ 'payment_Out_Schema.supplierName': supplierName });
     if (!existingSupplier) {
         res.status(404).json({
             message: "Supplier not Found"
@@ -2516,7 +2518,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber
     };
 
@@ -2525,15 +2527,15 @@ const directPaymentOut=async(req,res)=>{
         // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
         await existingSupplier.updateOne({
             $inc: {
-                'Supplier_Payment_Out_Schema.total_Payment_Out': payment_Out,
-                'Supplier_Payment_Out_Schema.remaining_Balance': -payment_Out,
-                 "Supplier_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+                'payment_Out_Schema.total_Payment_Out': payment_Out,
+                'payment_Out_Schema.remaining_Balance': -payment_Out,
+                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
 
                 
             },
 
             $push: {
-                'Supplier_Payment_Out_Schema.payment': payment
+                'payment_Out_Schema.payment': payment
             }
         });
 
@@ -2594,7 +2596,7 @@ const directPaymentOut=async(req,res)=>{
 
   // Ticket Agent
   if(ref.toLowerCase()==='ticket agent'){
-    const existingSupplier = await TicketSuppliers.findOne({ 'Agent_Payment_Out_Schema.supplierName': supplierName });
+    const existingSupplier = await TicketAgents.findOne({ 'payment_Out_Schema.supplierName': supplierName });
     if (!existingSupplier) {
         res.status(404).json({
             message: "Supplier not Found"
@@ -2645,7 +2647,7 @@ const directPaymentOut=async(req,res)=>{
         payment_Out_Curr: curr_Country ? curr_Country : '',
         curr_Rate: curr_Rate ? curr_Rate : 0,
         curr_Amount: newCurrAmount ? newCurrAmount : 0,
-        date,
+        date:date?date:new Date().toISOString().split("T")[0],
         invoice: nextInvoiceNumber
     };
 
@@ -2654,15 +2656,15 @@ const directPaymentOut=async(req,res)=>{
         // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
         await existingSupplier.updateOne({
             $inc: {
-                'Agent_Payment_Out_Schema.total_Payment_Out': payment_Out,
-                'Agent_Payment_Out_Schema.remaining_Balance': -payment_Out,
-                 "Agent_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+                'payment_Out_Schema.total_Payment_Out': payment_Out,
+                'payment_Out_Schema.remaining_Balance': -payment_Out,
+                 "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
 
                 
             },
           
             $push: {
-                'Agent_Payment_Out_Schema.payment': payment
+                'payment_Out_Schema.payment': payment
             }
         });
 
@@ -2726,7 +2728,7 @@ const directPaymentOut=async(req,res)=>{
 
   // Ticket Candidate
 if(ref.toLowerCase()==='ticket candidate'){
-  const existingSupplier = await TicketCandidate.findOne({ 'Candidate_Payment_Out_Schema.supplierName': supplierName });
+  const existingSupplier = await TicketCandidate.findOne({ 'payment_Out_Schema.supplierName': supplierName });
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: "Supplier not Found"
@@ -2777,7 +2779,7 @@ if(ref.toLowerCase()==='ticket candidate'){
                     payment_Out_Curr: curr_Country ? curr_Country : '',
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber,
                  
                 }
@@ -2787,17 +2789,17 @@ if(ref.toLowerCase()==='ticket candidate'){
                     // Update total_Visa_Price_In_PKR and other fields using $inc
                     await existingSupplier.updateOne({
                         $inc: {
-                            'Candidate_Payment_Out_Schema.total_Payment_Out': payment_Out,
-                            'Candidate_Payment_Out_Schema.remaining_Balance': -payment_Out,
-                            "Candidate_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
-                            "Candidate_Payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
+                            'payment_Out_Schema.total_Payment_Out': payment_Out,
+                            'payment_Out_Schema.remaining_Balance': -payment_Out,
+                            "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+                            "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
                         },
                         $set: {
                             
-                            "Candidate_Payment_Out_Schema.status": close ? "Closed" : "Open",
+                            "payment_Out_Schema.status": close ? "Closed" : "Open",
                         },
                         $push: {
-                            'Candidate_Payment_Out_Schema.payment': payment
+                            'payment_Out_Schema.payment': payment
                         }
                     });
 
@@ -2860,7 +2862,7 @@ if(ref.toLowerCase()==='ticket candidate'){
 
 // Visit Supplier
 if(ref.toLowerCase()==='visit supplier'){
-  const existingSupplier = await VisitSuppliers.findOne({ 'Supplier_Payment_Out_Schema.supplierName': supplierName });
+  const existingSupplier = await VisitSuppliers.findOne({ 'payment_Out_Schema.supplierName': supplierName });
                 if (!existingSupplier) {
                     res.status(404).json({
                         message: "Supplier not Found"
@@ -2911,7 +2913,7 @@ if(ref.toLowerCase()==='visit supplier'){
                     payment_Out_Curr: curr_Country ? curr_Country : '',
                     curr_Rate: curr_Rate ? curr_Rate : 0,
                     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-                    date,
+                    date:date?date:new Date().toISOString().split("T")[0],
                     invoice: nextInvoiceNumber
                 };
 
@@ -2920,15 +2922,15 @@ if(ref.toLowerCase()==='visit supplier'){
                     // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
                     await existingSupplier.updateOne({
                         $inc: {
-                            'Supplier_Payment_Out_Schema.total_Payment_Out': payment_Out,
-                            'Supplier_Payment_Out_Schema.remaining_Balance': -payment_Out,
-                             "Supplier_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+                            'payment_Out_Schema.total_Payment_Out': payment_Out,
+                            'payment_Out_Schema.remaining_Balance': -payment_Out,
+                             "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
 
                             
                         },
 
                         $push: {
-                            'Supplier_Payment_Out_Schema.payment': payment
+                            'payment_Out_Schema.payment': payment
                         }
                     });
 
@@ -2989,7 +2991,7 @@ if(ref.toLowerCase()==='visit supplier'){
 // Visit Agent
 if(ref.toLowerCase()==='visit agent'){
   
-  const existingSupplier = await VisitSuppliers.findOne({ 'Agent_Payment_Out_Schema.supplierName': supplierName });
+  const existingSupplier = await VisitAgents.findOne({ 'payment_Out_Schema.supplierName': supplierName });
   if (!existingSupplier) {
       res.status(404).json({
           message: "Supplier not Found"
@@ -3040,7 +3042,7 @@ if(ref.toLowerCase()==='visit agent'){
       payment_Out_Curr: curr_Country ? curr_Country : '',
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber
   };
 
@@ -3049,15 +3051,15 @@ if(ref.toLowerCase()==='visit agent'){
       // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
       await existingSupplier.updateOne({
           $inc: {
-              'Agent_Payment_Out_Schema.total_Payment_Out': payment_Out,
-              'Agent_Payment_Out_Schema.remaining_Balance': -payment_Out,
-               "Agent_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+              'payment_Out_Schema.total_Payment_Out': payment_Out,
+              'payment_Out_Schema.remaining_Balance': -payment_Out,
+               "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
 
               
           },
         
           $push: {
-              'Agent_Payment_Out_Schema.payment': payment
+              'payment_Out_Schema.payment': payment
           }
       });
 
@@ -3120,7 +3122,7 @@ if(ref.toLowerCase()==='visit agent'){
 
 // Visit Candidate
 if(ref.toLowerCase()==='visit candidate'){
-  const existingSupplier = await VisitCandidate.findOne({ 'Candidate_Payment_Out_Schema.supplierName': supplierName });
+  const existingSupplier = await VisitCandidate.findOne({ 'payment_Out_Schema.supplierName': supplierName });
   if (!existingSupplier) {
       res.status(404).json({
           message: "Supplier not Found"
@@ -3171,7 +3173,7 @@ if(ref.toLowerCase()==='visit candidate'){
       payment_Out_Curr: curr_Country ? curr_Country : '',
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber,
      
   }
@@ -3181,17 +3183,17 @@ if(ref.toLowerCase()==='visit candidate'){
       // Update total_Visa_Price_In_PKR and other fields using $inc
       await existingSupplier.updateOne({
           $inc: {
-              'Candidate_Payment_Out_Schema.total_Payment_Out': payment_Out,
-              'Candidate_Payment_Out_Schema.remaining_Balance': -payment_Out,
-              "Candidate_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
-              "Candidate_Payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
+              'payment_Out_Schema.total_Payment_Out': payment_Out,
+              'payment_Out_Schema.remaining_Balance': -payment_Out,
+              "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+              "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
           },
           $set: {
              
-              "Candidate_Payment_Out_Schema.status": close ? "Closed" : "Open",
+              "payment_Out_Schema.status": close ? "Closed" : "Open",
           },
           $push: {
-              'Candidate_Payment_Out_Schema.payment': payment
+              'payment_Out_Schema.payment': payment
           }
       });
 
@@ -3253,7 +3255,7 @@ if(ref.toLowerCase()==='visit candidate'){
 
 // Azad Section
 if(ref.toLowerCase()==='azad supplier'){
-  const existingSupplier = await AzadSuppliers.findOne({ 'Supplier_Payment_Out_Schema.supplierName': supplierName });
+  const existingSupplier = await AzadSuppliers.findOne({ 'payment_Out_Schema.supplierName': supplierName });
   if (!existingSupplier) {
       res.status(404).json({
           message: "Supplier not Found"
@@ -3304,7 +3306,7 @@ if(ref.toLowerCase()==='azad supplier'){
       payment_Out_Curr: curr_Country ? curr_Country : '',
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber
   };
 
@@ -3313,15 +3315,15 @@ if(ref.toLowerCase()==='azad supplier'){
       // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
       await existingSupplier.updateOne({
           $inc: {
-              'Supplier_Payment_Out_Schema.total_Payment_Out': payment_Out,
-              'Supplier_Payment_Out_Schema.remaining_Balance': -payment_Out,
-               "Supplier_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+              'payment_Out_Schema.total_Payment_Out': payment_Out,
+              'payment_Out_Schema.remaining_Balance': -payment_Out,
+               "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
 
               
           },
 
           $push: {
-              'Supplier_Payment_Out_Schema.payment': payment
+              'payment_Out_Schema.payment': payment
           }
       });
 
@@ -3383,7 +3385,7 @@ if(ref.toLowerCase()==='azad supplier'){
 
 // Azad Agent
 if(ref.toLowerCase()==='azad agent'){
-  const existingSupplier = await AzadSuppliers.findOne({ 'Agent_Payment_Out_Schema.supplierName': supplierName });
+  const existingSupplier = await AzadAgents.findOne({ 'payment_Out_Schema.supplierName': supplierName });
   if (!existingSupplier) {
       res.status(404).json({
           message: "Supplier not Found"
@@ -3434,7 +3436,7 @@ if(ref.toLowerCase()==='azad agent'){
       payment_Out_Curr: curr_Country ? curr_Country : '',
       curr_Rate: curr_Rate ? curr_Rate : 0,
       curr_Amount: newCurrAmount ? newCurrAmount : 0,
-      date,
+      date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber
   };
 
@@ -3443,15 +3445,15 @@ if(ref.toLowerCase()==='azad agent'){
       // Update total_Azad_Visa_Price_In_PKR and other fields using $inc
       await existingSupplier.updateOne({
           $inc: {
-              'Agent_Payment_Out_Schema.total_Payment_Out': payment_Out,
-              'Agent_Payment_Out_Schema.remaining_Balance': -payment_Out,
-               "Agent_Payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+              'payment_Out_Schema.total_Payment_Out': payment_Out,
+              'payment_Out_Schema.remaining_Balance': -payment_Out,
+               "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
 
               
           },
         
           $push: {
-              'Agent_Payment_Out_Schema.payment': payment
+              'payment_Out_Schema.payment': payment
           }
       });
 
@@ -3515,7 +3517,7 @@ if(ref.toLowerCase()==='azad agent'){
 // Azad Candidate
 if(ref.toLowerCase()==='azad candidate'){
   const existingSupplier = await AzadCandidate.findOne({
-    "Candidate_Payment_Out_Schema.supplierName": supplierName,
+    "payment_Out_Schema.supplierName": supplierName,
   });
   if (!existingSupplier) {
     res.status(404).json({
@@ -3566,7 +3568,7 @@ if(ref.toLowerCase()==='azad candidate'){
     payment_Out_Curr: curr_Country ? curr_Country : "",
     curr_Rate: curr_Rate ? curr_Rate : 0,
     curr_Amount: newCurrAmount ? newCurrAmount : 0,
-    date,
+    date:date?date:new Date().toISOString().split("T")[0],
     invoice: nextInvoiceNumber,
   };
 
@@ -3574,19 +3576,19 @@ if(ref.toLowerCase()==='azad candidate'){
     // Update total_Visa_Price_In_PKR and other fields using $inc
     await existingSupplier.updateOne({
       $inc: {
-        "Candidate_Payment_Out_Schema.total_Payment_Out": payment_Out,
-        "Candidate_Payment_Out_Schema.remaining_Balance": -payment_Out,
-        "Candidate_Payment_Out_Schema.total_Payment_Out_Curr":
+        "payment_Out_Schema.total_Payment_Out": payment_Out,
+        "payment_Out_Schema.remaining_Balance": -payment_Out,
+        "payment_Out_Schema.total_Payment_Out_Curr":
           newCurrAmount ? newCurrAmount : 0,
-        "Candidate_Payment_Out_Schema.remaining_Curr": newCurrAmount
+        "payment_Out_Schema.remaining_Curr": newCurrAmount
           ? -newCurrAmount
           : 0,
       },
       $set: {
-        "Candidate_Payment_Out_Schema.status": close ? "Closed" : "Open",
+        "payment_Out_Schema.status": close ? "Closed" : "Open",
       },
       $push: {
-        "Candidate_Payment_Out_Schema.payment": payment,
+        "payment_Out_Schema.payment": payment,
       },
     });
 
