@@ -1686,6 +1686,10 @@ color:white;
   width: auto;
   text-transform: capitalize;
 }
+.direct_payment .detail_table .data_td img{
+  height: 50px;
+  width:60px;
+}
 .direct_payment .filters {
   overflow: scroll;
 }
