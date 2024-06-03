@@ -189,8 +189,8 @@ export default function ExpenseOverAllReport() {
 
   const filteredExpenses = expenses.filter(expense => {
     return (
-      expense.date.toLowerCase().includes(date.toLowerCase()) &&
-      expense.name.toLowerCase().includes(name.toLowerCase()) &&
+      expense.date?.toLowerCase().includes(date.toLowerCase()) &&
+      expense.name?.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
       expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())

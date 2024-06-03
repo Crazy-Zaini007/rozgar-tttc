@@ -19,6 +19,7 @@ const[total,setTotal]=useState()
 const[loading2,setLoading2]=useState(false)
 const dispatch = useDispatch();
 const apiUrl = process.env.REACT_APP_API_URL;
+const [show, setShow] = useState(false)
 
 
 const getBankCash = async () => {
@@ -727,6 +728,7 @@ const getBankCash = async () => {
                   }
                     {option === 1 &&
                     <>
+                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className= 'btn btn-sm  excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
                       <button className= 'btn btn-sm  excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
                     </>
@@ -1016,6 +1018,13 @@ const getBankCash = async () => {
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_In</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Out</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Return</TableCell>
+                              {show && 
+                              <>
+                              <TableCell className='label border' style={{ width: '18.28%' }}>Curr_Rate</TableCell>
+                            <TableCell className='label border' style={{ width: '18.28%' }}>Curr_Amount</TableCell>
+                            <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                              </>
+                              }
                               <TableCell className='label border'style={{ width: '18.28%' }}>Details</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Invoice</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Slip_Pic</TableCell>
@@ -1040,6 +1049,13 @@ const getBankCash = async () => {
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                        {show &&
+                                       <>
+                                        <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
+                                       </>
+                                       }
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
@@ -1062,21 +1078,37 @@ const getBankCash = async () => {
                             <TableCell className='border data_td text-center bg-success text-white'>
     {/* Calculate the total sum of payment_In */}
     {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (entry.payment_In || 0); // Use proper conditional check
+      return total + (Math.round(entry.payment_In || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-danger text-white'>
     {/* Calculate the total sum of payment_Out */}
     {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (entry.payment_Out || 0); // Use proper conditional check
+      return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
     {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
+      return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
+  {show && 
+  <>
+  <TableCell className='border data_td text-center bg-info text-white'>
+    {/* Calculate the total sum of payment_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (Math.round(entry.curr_Rate || 0)); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  </>
+  }
                             
                           </TableRow>
                           </TableBody>

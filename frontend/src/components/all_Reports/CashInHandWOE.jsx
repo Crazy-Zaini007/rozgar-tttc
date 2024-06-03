@@ -240,10 +240,10 @@ export default function CashInHandWOE() {
   
     return (
       isDateInRange &&
-      expense.name.toLowerCase().includes(name.toLowerCase()) &&
-      expense.expCategory.toLowerCase().includes(expe_Category.toLowerCase()) &&
-      expense.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      expense.name?.toLowerCase().includes(name.toLowerCase()) &&
+      expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
+      expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
       filteredPaymentVia
     );
   });

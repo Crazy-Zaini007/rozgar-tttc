@@ -395,31 +395,31 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                                   <TableCell className='border data_td text-center bg-success text-white'>
     {/* Calculate the total sum of payment_In */}
     {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
-      return total + (entry.payment_In || 0); // Use proper conditional check
+      return total + (Math.round(entry.payment_In || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-danger text-white'>
     {/* Calculate the total sum of payment_Out */}
     {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
-      return total + (entry.payment_Out || 0); // Use proper conditional check
+      return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
     {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
+      return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-info text-white'>
     {/* Calculate the total sum of payment_Out */}
     {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
-      return total + (entry.curr_Rate || 0); // Use proper conditional check
+      return total + (Math.round(entry.curr_Rate || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
     {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
-      return total + (entry.curr_Amount || 0); // Use proper conditional check
+      return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
                                   

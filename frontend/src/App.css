@@ -46,7 +46,7 @@
 /* Track */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 0px;
+  height: 4px;
   border-radius: 100px;
 }
 
@@ -1623,6 +1623,25 @@ color:white;
 
 
     /* Direct Payment In/Out*/
+    .direct_payment{
+      display: flex;
+      flex-wrap: wrap; /* Ensure that the elements wrap if they don't fit in one row */
+    }
+    .direct_payment .payment_form {
+      display: flex;
+      overflow-x: auto; 
+  }
+  .flex-grow-1 {
+    flex-grow: 1;
+    padding: 0;
+    margin: 0;
+    min-width: 200px; /* Ensures the elements have a minimum width */
+}
+  
+.total_cash {
+  flex: 0 0 auto; /* Prevents the flex item from shrinking or growing */
+  min-width: 200px; /* Adjust as needed for the specific width */
+}
     .direct_payment .label {
       background-color: var(--grays-dm-input-bg);
       color: white;
@@ -1700,7 +1719,7 @@ color:white;
 .detail_table .today_Payments_Table .label {
   background-color: var(--grays-dm-input-bg);
   color: white;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 600;
   display: inline-flexbox;
   width: 18.28%;
@@ -1708,7 +1727,7 @@ color:white;
 .detail_table .today_Payments_Table .data_td {
   background-color: none;
   color: black;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 500;
   display: inline-flexbox;
   width: 18.28%;

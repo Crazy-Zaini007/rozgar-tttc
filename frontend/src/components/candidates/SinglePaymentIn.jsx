@@ -199,7 +199,133 @@ export default function SinglePaymentIn() {
   };
 
 
+  const printPersonsTable = (selectedPersonDetails) => {
+    // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    const formattedDate = formatDate(new Date());
+  
+    const printContentString = `
+    <div class="print-header">
+      <p class="invoice">Candidate: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title"> Candidate Details</h1>
+      </div>
+      <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>PP#</th>
+        <th>Entry Mode</th>
+        <th>Company</th>
+        <th>Trade</th>
+        <th>Country</th>
+        <th>Final Status</th>
+        <th>Flight Date</th>
+        <th>VPI PKR</th>
+        <th>Total In PKR</th>
+        <th>Remaining PKR</th>
+        <th>VPI Oth Curr</th>
+        <th>Remaining Curr</th>
+        </tr>
+      </thead>
+      <tbody>
+     
+          <tr>
+            <td>${String(selectedPersonDetails?.createdAt)}</td>
+            <td>${String(selectedPersonDetails?.supplierName)}</td>
+            <td>${String(selectedPersonDetails?.pp_No)}</td>
+            <td>${String(selectedPersonDetails?.entry_Mode)}</td>
+            <td>${String(selectedPersonDetails?.company)}</td>
+            <td>${String(selectedPersonDetails?.trade)}</td>
+            <td>${String(selectedPersonDetails?.country)}</td>
+            <td>${String(selectedPersonDetails?.final_Status)}</td>
+            <td>${String(selectedPersonDetails?.flight_Date)}</td>
+            <td>${String(selectedPersonDetails?.total_Visa_Price_In_PKR)}</td>
+            <td>${String(selectedPersonDetails?.total_Payment_In)}</td>
+            <td>${String(
+      (selectedPersonDetails?.total_Visa_Price_In_PKR - selectedPersonDetails?.total_Payment_In) +
+      selectedPersonDetails?.total_Cash_Out
+    )}</td>
+            <td>${String(selectedPersonDetails?.total_Visa_Price_In_Curr)}</td>
+            <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
+          </tr>
+      
+    
+    </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedPersonDetails.supplierName} Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
 
   return (
     <>
@@ -439,7 +565,6 @@ export default function SinglePaymentIn() {
                     <TableCell className='label border'>VPI_PKR</TableCell>
                     <TableCell className='label border'>VPI_Oth_Curr</TableCell>
                     
-
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -463,10 +588,166 @@ export default function SinglePaymentIn() {
 
               </Table>
             </TableContainer>
+          <hr className='my-2 '/>
+
           </div>
+         
          </>
         )}
+ {candidate_Payments_In 
+          .filter(data => data.supplierName === selectedSupplier)
+          .map((person,index)=>(
+<>
+      <form>
+       <div className="row p-0 m-0 mt-2">
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Candidate Name</label>
+                    <input disabled
+                      type="text"
+                      value={person.supplierName}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>PP#</label>
+                    <input disabled
+                      type="text"
+                      value={person.pp_No}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Entry Mode</label>
+                    <input disabled
+                      type="text"
+                      value={person.entry_Mode}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Country</label>
+                    <input disabled
+                      type="text"
+                      value={person.country}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Final Status</label>
+                    <input disabled
+                      type="text"
+                      value={person.final_Status}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Flight Date</label>
+                    <input disabled
+                      type="text"
+                      value={person.flight_Date}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Company</label>
+                    <input disabled
+                      type="text"
+                      value={person.company}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Visa Price In PKR</label>
+                    <input disabled
+                      type="text"
+                      value={Math.round(person.total_Visa_Price_In_PKR)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >Total In PKR</label>
+                  <input type="text" disabled value={Math.round(person.total_Payment_In)} readOnly />
+                </div>
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label >New Total In PKR</label>
+                  <input type="text" disabled   value={
+                    Math.round(person.total_Payment_In+payment_In)
+              } readOnly />
+                </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Remaining PKR</label>
+                    <input 
+                    disabled
+                      type="text"
+                      value={Math.round(person.remaining_Balance)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Remaining PKR</label>
+                    <input
+                    disabled
+                      type="text"
+                      value={Math.round(person.remaining_Balance-payment_In)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Visa Price In Curr</label>
+                    <input
+                    disabled
+                      type="text"
+                      value={Math.round(person.total_Visa_Price_In_Curr)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Total Paid Curr</label>
+                    <input
+                    disabled
+                      type="text"
+                      value={Math.round(person.total_Payment_In_Curr)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Total Paid Curr</label>
+                    <input
+                    disabled
+                      type="text"
+                      value={Math.round(person.total_Payment_In_Curr +curr_Amount)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Remaining Curr</label>
+                    <input
+                    disabled
+                      type="text"
+                      value={person.remaining_Curr}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Remaining Curr</label>
+                    <input
+                    disabled
+                      type="text"
+                      value={Math.round(person.remaining_Curr-curr_Amount)}
+                      readOnly
+                    />
+                  </div>
+                </div>
+      </form>
+      <div className="row p-0 m-0 mt-2 justify-content-center">
+                <div className="col-md-2 col-sm-12">
+                <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(person)}>Print</button>
+                </div>
+              </div>
 
+
+     </>
+          ))}
       </div>
     </>
   )
