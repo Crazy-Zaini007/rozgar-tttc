@@ -316,7 +316,7 @@ const getBankCash = async () => {
 
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
-
+  const [slip, setSlip] = useState('')
   const [category1, setCategory1] = useState('')
   const [payment_Via1, setPayment_Via1] = useState('')
   const [payment_Type1, setPayment_Type1] = useState('')
@@ -335,7 +335,8 @@ const getBankCash = async () => {
         paymentItem.category?.toLowerCase().includes(category1.toLowerCase()) &&
         isDateInRange &&
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via1.toLowerCase()) &&
-        paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase())
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase())&&
+        paymentItem.slip_No?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())
       );
     })
   : []
@@ -732,6 +733,10 @@ const getBankCash = async () => {
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Slip No:</label>
+                           <input type="search" value={slip} onChange={(e)=>setSlip(e.target.value)} />
                           </div>
                         </div>
                       </Paper>

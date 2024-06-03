@@ -1650,10 +1650,10 @@ color:white;
       display: inline-flexbox;
       width: 18.28%;
     }
-.direct_payment .detail_table input,
-.direct_payment .detail_table select,
-.direct_payment .detail_table textarea {
-  min-width: 2px;
+.direct_payment .detail_table .data_td input,
+.direct_payment .detail_table .data_td select,
+.direct_payment .detail_table .data_td textarea {
+  min-width: 100px;
   height: 40px;
   border: 1px solid var(--grays-dm-white);
   border-radius: 4px;
@@ -1722,7 +1722,7 @@ color:white;
   font-size: 9px;
   font-weight: 600;
   display: inline-flexbox;
-  width: 18.28%;
+  width: auto;
 }
 .detail_table .today_Payments_Table .data_td {
   background-color: none;
@@ -1730,5 +1730,5 @@ color:white;
   font-size: 10px;
   font-weight: 500;
   display: inline-flexbox;
-  width: 18.28%;
+  width: auto;
 }
