@@ -20,6 +20,7 @@ export default function AdminDashboard() {
 
   const { user } = useAuthContext()
   const { getEntries } = EntryHook()
+  const [show, setShow] = useState(false)
 
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
   const enteries = useSelector((state) => state.enteries.enteries);
@@ -306,6 +307,9 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
 
         <div className="col-md-12 payment_details p-0 my-3">
           <h3 className="text-center my-2"><strong>Day Book</strong> </h3>
+          <div className="text-end">
+    <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+    </div>
          {loading3 && 
           <div className="image text-center">
 <CircularProgress  sx={{ width: 25, height: 25  }}  disableShrink />
@@ -327,9 +331,13 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                             <TableCell className='label border'>Cash_In</TableCell>
                             <TableCell className='label border'>Cash_Out</TableCell>
                             <TableCell className='label border'>Cash_Return</TableCell>
+                           {show && 
+                           <>
                             <TableCell className='label border'>Curr_Rate</TableCell>
                             <TableCell className='label border'>Curr_Amount</TableCell>
                             <TableCell className='label border'>Payment_In_Curr</TableCell>
+                           </>
+                           }
                             <TableCell className='label border'>Details</TableCell>
                             <TableCell className='label border'>Invoice</TableCell>
                             <TableCell className='label border'>Slip_Pic</TableCell>
@@ -354,9 +362,13 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                     {show &&
+                                     <>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
+                                     </>
+                                     }
                                       <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.slip_Pic ? <a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
@@ -410,6 +422,8 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
       return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
+ {show &&
+ <>
   <TableCell className='border data_td text-center bg-info text-white'>
     {/* Calculate the total sum of payment_Out */}
     {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
@@ -422,6 +436,8 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
       return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
+ </>
+ }
                                   
                                   
                                 </TableRow>

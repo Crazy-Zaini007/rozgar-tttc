@@ -87,7 +87,7 @@ const { getCashInHandData } = CashInHandHook()
                                 ))}
                                 <TableRow>
                                     <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Today Total</TableCell>
-                                    <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{Math.round(total && total)}</TableCell>
+                                    <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{Math.round(total && total||0)}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>

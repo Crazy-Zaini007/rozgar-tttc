@@ -43,7 +43,8 @@ const[show,setShow]=useState(false)
   const [trade, setTrade] = useState('')
   const [company, setCompany] = useState('')
   const [country, setCountry] = useState('')
-  // const [flight_Date,, setFlight_Date] = useState('')
+  const [search1, setSearch1] = useState('')
+
   const [final_Status, setFinal_Status] = useState('')
   const [entry_Mode, setEntry_Mode] = useState('')
   const [reference_Out, setReference_Out] = useState('')
@@ -64,8 +65,19 @@ const[show,setShow]=useState(false)
       entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase()) &&
       entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase()) &&
       entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
-      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase())
-    );
+      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase()) &&
+      ( entry.trade?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.company?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.pp_No?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.name?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.country?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.final_Status?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.flight_Date?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.reference_Out_Name?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.reference_In_Name?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.reference_In?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.reference_Out?.toLowerCase().startsWith(search1.trim().toLowerCase()))
+    )
   })
 
   useEffect(() => {
@@ -204,6 +216,10 @@ const[show,setShow]=useState(false)
               <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
+                  <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Date:</label>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>

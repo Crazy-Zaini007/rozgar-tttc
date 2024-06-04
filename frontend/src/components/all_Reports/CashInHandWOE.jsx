@@ -181,7 +181,7 @@ export default function CashInHandWOE() {
 
   const deleteExpense = async (expense) => {
     setIsLoading(true)
-    debugger
+    
     let expenseId = expense._id
     try {
       const response = await fetch(`${apiUrl}/auth/expenses/delete/expense`, {
@@ -217,6 +217,7 @@ export default function CashInHandWOE() {
   const [cash_Type,setCash_Type]=useState('')
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
+  const [search1, setSearch1] = useState('')
 
   const [name, setName] = useState('')
   const [expe_Category, setExpe_Category] = useState('')
@@ -243,7 +244,13 @@ export default function CashInHandWOE() {
       expense.name?.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+  )&&
       filteredPaymentVia
     );
   });
@@ -376,6 +383,10 @@ const total = totalCashInHand + totalExpenses;
             <div className="col-md-12 filters">
               <Paper className='py-1 mb-2 px-3'>
                 <div className="row">
+                <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
@@ -547,7 +558,7 @@ const total = totalCashInHand + totalExpenses;
                                 <TableCell className='border data_td text-center'>{expense?.curr_Country}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Rate}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Amount}</TableCell>
-                                <TableCell className='border data_td text-center'>{expense.slip_Pic ? <img src={expense.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                <TableCell className='border data_td text-center'>{expense.slip_Pic ?<a href={expense.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={expense.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
                                 
                               </>
                             )}
@@ -560,9 +571,9 @@ const total = totalCashInHand + totalExpenses;
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-danger text-white'> {filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)}</TableCell>
+                            <TableCell className='border data_td text-center bg-danger text-white'> {Math.round(filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0))}</TableCell>
                             <TableCell className='border data_td text-center'></TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white '>CashInHand= {total}</TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white '>CashInHand= {Math.round(total)}</TableCell>
 
                             
                           </TableRow>

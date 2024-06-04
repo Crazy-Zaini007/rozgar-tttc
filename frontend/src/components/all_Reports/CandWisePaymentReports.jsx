@@ -9,7 +9,7 @@ export default function CandWisePaymentReports() {
   const [option, setOption] = useState(0)
   const [loading1, setLoading1] = useState(false)
   const { getOverAllPayments, overAllPayments } = CashInHandHook()
-  console.log('overAllPayments',overAllPayments)
+ 
    // fteching Data from DB
    const fetchData = async () => {
     try {
@@ -443,7 +443,7 @@ export default function CandWisePaymentReports() {
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ?<a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
                                   </>
 
                                 </TableRow>

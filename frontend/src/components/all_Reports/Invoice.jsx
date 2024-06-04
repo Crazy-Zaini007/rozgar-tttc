@@ -363,7 +363,7 @@ export default function Invoice() {
                                         <TableCell className='border data_td text-center bg-warning  text-white'><i className="fa-solid fa-arrow-up me-2 text-white text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-white text-bold"></i>{cash.cash_Out}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.slip_Pic ?<a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
                                        
                                       </>
                                   

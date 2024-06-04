@@ -495,6 +495,7 @@ export default function ProtectorPaymentOutDetails() {
   // individual payments filters
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
+  const [search1, setSearch1] = useState('')
 
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -515,7 +516,12 @@ export default function ProtectorPaymentOutDetails() {
         return (
           isDateInRange &&
           paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-          paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
+          paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+          (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+           paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+           paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+           paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+      )
         );
       }),
   }))
@@ -632,6 +638,7 @@ export default function ProtectorPaymentOutDetails() {
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
   const [status1, setStatus1] = useState("")
+  const [search2, setSearch2] = useState('')
 
 
   const filteredPersons = protector_Payments_Out
@@ -641,16 +648,25 @@ export default function ProtectorPaymentOutDetails() {
       persons: filteredData.persons
         .filter((persons) =>
           persons.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-          persons.name?.toLowerCase().includes(name.toLowerCase()) &&
+          persons.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
           persons.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
           persons.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
           persons.company?.toLowerCase().includes(company.toLowerCase()) &&
           persons.country?.toLowerCase().includes(country.toLowerCase()) &&
           persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
           persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
-          persons.status?.toLowerCase().includes(status1.toLowerCase())
-        ),
+          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+          persons.status?.toLowerCase().includes(status1.toLowerCase()) &&
+          (persons.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()))
+        )
     }))
 
   const printPersonsTable = () => {
@@ -1094,6 +1110,10 @@ export default function ProtectorPaymentOutDetails() {
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
               <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
+              <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
@@ -1342,6 +1362,10 @@ export default function ProtectorPaymentOutDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+              <div className="col-auto px-1">
+                  <label htmlFor="">Search Here:</label>
+                  <input type="search" value={search2} onChange={(e)=>setSearch2(e.target.value)} />
+                </div>
               <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>
                   <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>

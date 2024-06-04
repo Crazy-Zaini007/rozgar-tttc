@@ -463,7 +463,7 @@ useEffect(() => {
 </span>
                   <span className="btn btn-sm submit_btn m-1 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>{Math.round(overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => entry.date===currentDate)
+                                .filter(entry => entry.date===currentDate && entry.type.toLowerCase().includes('out'))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0))}</span>

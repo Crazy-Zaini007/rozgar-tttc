@@ -196,6 +196,8 @@ export default function ExpenseDetails() {
   const [expe_Category, setExpe_Category] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
+  const [search1, setSearch1] = useState('')
+
   const filteredExpenses = expenses.filter(expense => {
     let isDateInRange = true;
   
@@ -217,7 +219,13 @@ export default function ExpenseDetails() {
       expense.name?.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+  )&&
       filteredPaymentVia
     )
   })
@@ -539,6 +547,10 @@ export default function ExpenseDetails() {
             <div className="col-md-12 filters">
               <Paper className='py-1 mb-2 px-3'>
                 <div className="row">
+                <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>

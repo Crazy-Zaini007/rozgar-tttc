@@ -182,18 +182,33 @@ export default function ExpenseOverAllReport() {
 
   // individual payments filters
   const [date, setDate] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
   const [name, setName] = useState('')
   const [expe_Category, setExpe_Category] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
+  const [search1, setSearch1] = useState('')
 
   const filteredExpenses = expenses.filter(expense => {
+    let isDateInRange = true;
+  
+    // Check if the expense date is within the selected date range
+    if (dateFrom && dateTo) {
+      isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
+    }
     return (
-      expense.date?.toLowerCase().includes(date.toLowerCase()) &&
+      isDateInRange &&
       expense.name?.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+      expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+  )
     )
   })
 
@@ -344,15 +359,19 @@ export default function ExpenseOverAllReport() {
             <div className="col-md-12 filters">
               <Paper className='py-1 mb-2 px-3'>
                 <div className="row">
-                  <div className="col-auto px-1">
-                    <label htmlFor="">Date:</label>
-                    <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
-                      <option value="">All</option>
-                      {[...new Set(expenses.map(data => data.date))].map(dateValue => (
-                        <option value={dateValue} key={dateValue}>{dateValue}</option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                   <div className="col-auto px-1">
                     <label htmlFor="">Name:</label>
                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
@@ -503,7 +522,7 @@ export default function ExpenseOverAllReport() {
                                 <TableCell className='border data_td text-center'>{expense?.curr_Country}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Rate}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Amount}</TableCell>
-                                <TableCell className='border data_td text-center'>{expense.slip_Pic ? <img src={expense.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                <TableCell className='border data_td text-center'>{expense.slip_Pic ?<a href={expense.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={expense.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
                                 
                               </>
                             )}

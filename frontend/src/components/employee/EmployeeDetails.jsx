@@ -748,6 +748,7 @@ let sr_No=0;
     // individual payments filters
     const [newDateFrom, setNewDateFrom] = useState('')
     const [newDateTo, setNewDateTo] = useState('')
+    const [search1, setSearch1] = useState('')
 
     const [payment_Via, setPayment_Via] = useState('')
     const [payment_Type, setPayment_Type] = useState('')
@@ -770,7 +771,12 @@ let sr_No=0;
                         return (
                             isDateInRange &&
                             payment.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-                            payment.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
+                            payment.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+                            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+                             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+                             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+                             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+                        )
                         );
                     } else {
                         return false;
@@ -1973,6 +1979,10 @@ const filteredSalaryMonths = employees
                                             <div className="col-md-12 filters">
                                                 <Paper className='py-1 mb-2 px-3'>
                                                     <div className="row">
+                                                    <div className="col-auto px-1">
+                                                    <label htmlFor="">Serach Here:</label>
+                                                    <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                                                    </div>
                                                         <div className="col-auto px-1">
                                                             <label htmlFor="">Date From:</label>
                                                             <input type="date" value={newDateFrom} onChange={(e) => setNewDateFrom(e.target.value)} className='m-0 p-1' />

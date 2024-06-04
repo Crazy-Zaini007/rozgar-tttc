@@ -465,6 +465,7 @@ export default function AgentCandPaymentInDetails() {
 
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
+  const [search1, setSearch1] = useState('')
 
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -484,7 +485,12 @@ export default function AgentCandPaymentInDetails() {
           return (
             isDateInRange &&
             paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
+            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+        )
           );
         }),
     }))
@@ -500,6 +506,7 @@ export default function AgentCandPaymentInDetails() {
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
   const [status1, setStatus1] = useState("")
+  const [search2, setSearch2] = useState('')
 
 
   const filteredPersons = agent_Payments_In
@@ -517,9 +524,17 @@ export default function AgentCandPaymentInDetails() {
           persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
           persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
           persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-          persons.status?.toLowerCase().includes(status1.toLowerCase())
-
-        ),
+          persons.status?.toLowerCase().includes(status1.toLowerCase()) &&
+          (persons.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+          persons.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()))
+        )
     }))
 
  
@@ -1928,6 +1943,10 @@ const[rowsValue1,setRowsValue1]=useState("")
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
+              <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
@@ -2187,8 +2206,8 @@ const[rowsValue1,setRowsValue1]=useState("")
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
               <div className="col-auto px-1">
-                  <label htmlFor="">Search by Name:</label>
-                  <input type="search" value={name} onChange={(e)=>setName(e.target.value)} />
+                  <label htmlFor="">Search Here:</label>
+                  <input type="search" value={search2} onChange={(e)=>setSearch2(e.target.value)} />
                 </div>
                 <div className="col-auto px-1">
                   <label htmlFor="">Khata:</label>

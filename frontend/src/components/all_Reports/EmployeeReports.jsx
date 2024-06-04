@@ -69,8 +69,8 @@ export default function EmployeeReports() {
   // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
-  const [type, setType] = useState('')
   const [supplier, setSupplier] = useState('')
+  const [search1, setSearch1] = useState('')
 
   const filteredPayments = payments && payments.filter(paymentItem => {
     let isDateInRange = true;
@@ -81,7 +81,13 @@ export default function EmployeeReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.employeeName.toLowerCase().includes(supplier.toLowerCase())
+    paymentItem.employeeName.toLowerCase().includes(supplier.toLowerCase()) &&
+    (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.employeeName?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+        )
 
   })
 
@@ -248,6 +254,10 @@ export default function EmployeeReports() {
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
                   <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
+                  <div className="col-auto px-1">
                       <label htmlFor="">Date From:</label>
                       <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
@@ -256,7 +266,7 @@ export default function EmployeeReports() {
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">EmployeeName Name:</label>
+                      <label htmlFor="">EmployeeName:</label>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.employeeName))].map(supplier => (
@@ -264,15 +274,7 @@ export default function EmployeeReports() {
                         ))}
                       </select>
                     </div>
-                    <div className="col-auto px-1 ">
-                      <label htmlFor="">Type:</label>
-                      <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(payments.map(data => data.type))].map(typeValue => (
-                          <option key={typeValue} value={typeValue}>{typeValue}</option>
-                        ))}
-                      </select>
-                    </div>
+                    
                   </div>
                 </Paper>
               </div>

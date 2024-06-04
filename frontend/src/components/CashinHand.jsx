@@ -70,12 +70,10 @@ const getBankCash = async () => {
 
       await getCashInHandData();
       await getOverAllPayments()
-        
-      await Promise.all([
-        getCategoryData(),
-        getPaymentViaData(),
-        getPaymentTypeData()
-      ]);
+      await getCategoryData()
+      await getPaymentViaData()
+      await getPaymentTypeData()
+     
       await getBankCash()
 
 
@@ -336,7 +334,10 @@ const getBankCash = async () => {
         isDateInRange &&
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via1.toLowerCase()) &&
         paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase())&&
-        paymentItem.slip_No?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())
+       (paymentItem.slip_No?.trim().toLowerCase().startsWith(slip.trim().toLowerCase()) ||
+       paymentItem.payment_Via?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())||
+       paymentItem.payment_Type?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())
+      )
       );
     })
   : []
@@ -473,6 +474,7 @@ const getBankCash = async () => {
   const [category2, setCategory2] = useState('')
   const [payment_Via2, setPayment_Via2] = useState('')
   const [payment_Type2, setPayment_Type2] = useState('')
+  const [search, setSearch] = useState('')
 
   const filteredPayment = overAllPayments
   ? overAllPayments.filter((paymentItem) => {
@@ -490,7 +492,12 @@ const getBankCash = async () => {
         paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
         paymentItem.type?.toLowerCase().includes(type.toLowerCase()) &&
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-        paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase())
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
+        (paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+       paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
+       paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
+       paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
+      )
       );
     })
   : [];
@@ -625,7 +632,6 @@ const getBankCash = async () => {
     XLSX.writeFile(wb, 'cashInHand.xlsx');
   };
 
-  console.log('overAllPayments',overAllPayments)
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
@@ -696,6 +702,10 @@ const getBankCash = async () => {
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
                         <div className="col-auto px-1">
+                            <label htmlFor="">Search Here:</label>
+                           <input type="search" value={slip} onChange={(e)=>setSlip(e.target.value)} />
+                          </div>
+                        <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
@@ -734,10 +744,7 @@ const getBankCash = async () => {
                               ))}
                             </select>
                           </div>
-                          <div className="col-auto px-1">
-                            <label htmlFor="">Slip No:</label>
-                           <input type="search" value={slip} onChange={(e)=>setSlip(e.target.value)} />
-                          </div>
+                         
                         </div>
                       </Paper>
                     </div>
@@ -893,6 +900,10 @@ const getBankCash = async () => {
                   <div className="col-md-12 filters">
                       <Paper className='py-1 mb-2 px-3'>
                         <div className="row">
+                        <div className="col-auto px-1">
+                            <label htmlFor="">Search Here:</label>
+                           <input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
+                          </div>
                         <div className="col-auto px-1">
                   <label htmlFor="">Date From:</label>
                   <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>

@@ -74,21 +74,29 @@ export default function Invoice() {
   const [trade, setTrade] = useState('')
   const [company, setCompany] = useState('')
   const [country, setCountry] = useState('')
+  const [search1, setSearch1] = useState('')
+
   // const [flight_Date,, setFlight_Date] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [reference_Out, setReference_Out] = useState('')
   const[flight_Date,setFlight_Date]=useState('')
   const filteredEntries =payments && payments.filter(entry => {
     return (
-      entry?.name?.toLowerCase().includes(name.toLowerCase()) &&
-      entry?.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
-      entry?.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-      entry?.company?.toLowerCase().includes(company.toLowerCase()) &&
-      entry?.country?.toLowerCase().includes(country.toLowerCase()) &&
-      entry?.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry?.type?.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      entry?.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) 
-    );
+      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      entry.reference_Out?.toLowerCase().includes(reference_Out.toLowerCase()) &&
+      ( entry.trade?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.company?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.pp_No?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.name?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.country?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.final_Status?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.flight_Date?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+      entry.reference_Out?.toLowerCase().startsWith(search1.trim().toLowerCase()))
+    )
   })
 
   
@@ -234,6 +242,10 @@ export default function Invoice() {
               <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
+                  <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
                   <div className="col-auto px-1">
                       <label htmlFor="">Name:</label>
                       <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>

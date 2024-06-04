@@ -48,11 +48,44 @@ const getAllPayments = async (req, res) => {
     const azadCandidates = await AzadCandidates.find();
     const ticketCandidates = await TicketCandidates.find();
     const visitCandidates = await VisitCandidates.find();
-    const cashInHand = await CashInHand.find({});
+    const cashInHand = await CashInHand.find();
+    const cdwocs = await CDWOC.find();
+    const cdwcs = await CDWC.find();
 
 
     // Initialize an empty array to store merged payments
     let mergedPayments = [];
+
+    // Iterate through CDWOC 
+    cdwocs.forEach((cdwoc) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment) {
+        const paymentInDetails = cdwoc.payment_In_Schema.payment.map(
+          (payment) => ({
+            supplierName: cdwoc.payment_In_Schema.supplierName,
+            type: "CDWOC_Payment",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+     
+    })
+ // Iterate through CDWC 
+ cdwcs.forEach((cdwc) => {
+  // Check if payment_In_Schema exists and has the expected structure
+  if (cdwc.payment_In_Schema && cdwc.payment_In_Schema.payment) {
+    const paymentInDetails = cdwc.payment_In_Schema.payment.map(
+      (payment) => ({
+        supplierName: cdwc.payment_In_Schema.supplierName,
+        type: "CDWC_Payment",
+        ...payment.toObject(),
+      })
+    );
+    mergedPayments = mergedPayments.concat(paymentInDetails);
+  }
+ 
+})
 
     // Iterate through agents
     agents.forEach((agent) => {
@@ -99,7 +132,7 @@ const getAllPayments = async (req, res) => {
         );
         mergedPayments = mergedPayments.concat(paymentOutDetails);
       }
-    });
+    })
 
     // Iterate through agents
     suppliers.forEach((agent) => {
@@ -443,7 +476,7 @@ const getAllPayments = async (req, res) => {
  for (const myCashInHand of cashInHand){
   let allPayments=myCashInHand.payment && myCashInHand.payment.map((myPayment)=>({
     supplierName:'Direct Cash',
-    type:"Cash In Hand",
+    type:"Direct Cash",
     ...myPayment.toObject()
   }))
   mergedPayments = mergedPayments.concat(allPayments);

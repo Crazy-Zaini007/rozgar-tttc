@@ -82,7 +82,8 @@ export default function PayableReports() {
   const [trade, setTrade] = useState('')
   const [company, setCompany] = useState('')
   const [country, setCountry] = useState('')
-  // const [flight_Date,, setFlight_Date] = useState('')
+  const [search1, setSearch1] = useState('')
+
   const [final_Status, setFinal_Status] = useState('')
   const [reference_Out, setReference_Out] = useState('')
   const[flight_Date,setFlight_Date]=useState('')
@@ -93,8 +94,15 @@ export default function PayableReports() {
       entry.country?.toLowerCase().includes(country.toLowerCase()) &&
       entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
       entry.type?.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) 
-    );
+      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      ( entry.trade?.trim().toLowerCase().startsWith(search1.toLowerCase()) ||
+      entry.name?.trim().toLowerCase().startsWith(search1.toLowerCase()) ||
+      entry.company?.trim().toLowerCase().startsWith(search1.toLowerCase()) ||
+      entry.country?.trim().toLowerCase().startsWith(search1.toLowerCase()) ||
+      entry.final_Status?.trim().toLowerCase().startsWith(search1.toLowerCase()) ||
+      entry.type?.trim().toLowerCase().startsWith(search1.toLowerCase()) ||
+      entry.flight_Date?.trim().toLowerCase().startsWith(search1.toLowerCase()) )
+    )
   });
 
   
@@ -264,7 +272,7 @@ const[ref,setRef]=useState('')
 
 const filteredSummerizePayments =payable && payable.filter(entry => {
   return (
-    entry.supplierName.toLowerCase().includes(supplierName.toLowerCase()) &&
+    entry.supplierName.trim().toLowerCase().startsWith(supplierName.trim().toLowerCase()) &&
     entry.type.toLowerCase().includes(ref.toLowerCase())
   );
 });
@@ -436,6 +444,10 @@ return (
               <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
+                  <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Trade:</label>
                       <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
@@ -621,14 +633,10 @@ return (
               <div className="col-md-12 filters">
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
-                    <div className="col-auto px-1">
-                      <label htmlFor="">Name:</label>
-                      <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(payable && payable.map(data => data.supplierName))].map(supplierName => (
-                          <option key={supplierName} value={supplierName}>{supplierName}</option>
-                        ))}
-                      </select>
+                  <div className="col-auto px-1">
+                      <label htmlFor="">Search By Name:</label>
+                      <input type="search" value={supplierName} onChange={(e) => setSupplierName(e.target.value)}/>
+                      
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference:</label>
