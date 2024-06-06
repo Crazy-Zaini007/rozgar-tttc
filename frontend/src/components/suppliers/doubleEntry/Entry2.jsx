@@ -15,7 +15,9 @@ import CategoryHook from '../../../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
+import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
+import CandidateHook from '../../../hooks/candidateHooks/CandidateHook';
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -27,13 +29,19 @@ export default function Entry2() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
+  const agent_Payments_Out = useSelector((state) => state.agents.agent_Payments_Out)
+  const candidate_Payments_Out = useSelector((state) => state.candidates.candidate_Payments_Out)
   const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
+
+  const [selectedSupplier, setSelectedSupplier] = useState('');
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
-  const { getPaymentsOut } = SupplierHook()
+  const { getPaymentsOut } = AgentHook()
+  const { getSupplierPaymentsOut } = SupplierHook()
+  const { getCandPaymentsOut } = CandidateHook()
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -46,7 +54,9 @@ export default function Entry2() {
         getCategoryData(),
         getPaymentViaData(),
         getPaymentTypeData(),
-        getPaymentsOut()
+        getPaymentsOut(),
+        getSupplierPaymentsOut(),
+        getCandPaymentsOut()
 
       ]);
 
@@ -61,7 +71,9 @@ export default function Entry2() {
 
 
   const [option, setOption] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
+  const [type, setType] = useState(false)
 
   // Form input States
 
@@ -78,9 +90,12 @@ export default function Entry2() {
   // const [open, setOpen] = useState(true)
   // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
+
+  useEffect(() => {
+  }, [type,supplierName,selectedSupplier])
+
   let curr_Amount = Math.round(payment_Out / curr_Rate);
 
-  const [selectedSupplier, setSelectedSupplier] = useState('');
 
   const handleOpen = () => {
     setOption(!option)
@@ -123,13 +138,82 @@ export default function Entry2() {
       setSlip_Pic('');
     }
   };
-  const apiUrl = process.env.REACT_APP_API_URL;
 
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
-  const handleForm = async (e) => {
+  const handleAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/agents/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+  const handleSupplierForm = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -194,37 +278,122 @@ export default function Entry2() {
   }
 
 
+  const handleCandidateForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
 
   return (
     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={handleForm}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"&&handleCandidateForm)}>
             <div className="text-end ">
-              {/* {close === false &&
-                <label htmlFor="">
-                  Open
-                  <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
-                </label>
-              }
-              {open === true &&
-                <label htmlFor="">
-                  Close
-                  <input type="checkbox" value={close} onClick={() => setClose(!close)} />
-                </label>
-              } */}
-              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
+             
+              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment Out"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
-
+            <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >Choose Type </label>
+                <select value={type} onChange={(e) => setType(e.target.value)} required>
+                  <option value="">Choose</option>
+                 <option value="Agent">Agent</option>
+                 <option value="Supplier">Supplier</option>
+                 <option value="Candidate">Candidate</option>
+                </select>
+              </div>
+              
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Name</label>
                 <select required value={supplierName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
-                  <option value="">Choose Supplier</option>
+                  
+                 {type==="Agent" &&
+                 <>
+                 <option value="">Choose Agent</option>
+                  {agent_Payments_Out &&
+                    agent_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Supplier" &&
+                 <>
+                 <option value="">Choose Supplier</option>
                   {supp_Payments_Out &&
                     supp_Payments_Out.map((data) => (
                       <option key={data._id} value={data.supplierName}>
@@ -232,9 +401,24 @@ export default function Entry2() {
                       </option>
                     ))
                   }
+                 </>
+                 }
+                  {type==="Candidate" &&
+                 <>
+                 <option value="">Choose Candidate</option>
+                  {candidate_Payments_Out &&
+                    candidate_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
                 </select>
 
               </div>
+
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Category </label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)} required>
@@ -278,7 +462,7 @@ export default function Entry2() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
@@ -330,42 +514,42 @@ export default function Entry2() {
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
-                    <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_Out</TableCell>
-                    <TableCell className='label border'>Cash_Out</TableCell>
-                    <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_Out_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
 
 
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {supp_Payments_Out
+                  {(type === "Agent" ? agent_Payments_Out : type === "Supplier" ? supp_Payments_Out : type === "Candidate" ? candidate_Payments_Out : [])
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>
                         {filteredData.payment.map((paymentItem, index) => (
                           <TableRow key={paymentItem._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            <TableCell className='border data_td text-center'>{paymentItem.date}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.category}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.payment_Via}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.payment_Type}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.slip_No}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.details}</TableCell>
-                            <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                            <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.payment_Out_Curr}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.curr_Rate}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem.curr_Amount}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.date}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.category}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.payment_Via}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.payment_Type}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_No}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.details}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.payment_Out_Curr}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.curr_Rate}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.curr_Amount}</TableCell>
 
                           </TableRow>
                         ))}
@@ -378,11 +562,11 @@ export default function Entry2() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border'>Total_Payment_Out</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_Out</TableCell>
                           <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_Out}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Payment_Out_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_Out_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_Out_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
@@ -392,11 +576,11 @@ export default function Entry2() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_PKR</TableCell>
                           <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_Out_PKR}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
@@ -405,11 +589,11 @@ export default function Entry2() {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining PKR</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Remaining PKR</TableCell>
                           <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_Out_PKR-filteredData.total_Payment_Out+filteredData.total_Cash_Out}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining Total_Payment_Out_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Remaining Total_Payment_Out_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr-filteredData.total_Payment_Out_Curr}</TableCell>
                         </TableRow>
                       </>

@@ -16,6 +16,9 @@ import PaymentViaHook from '../../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
+import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
+import CandidateHook from '../../../hooks/candidateHooks/CandidateHook';
+
 import Entry2 from './Entry2'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -28,6 +31,8 @@ export default function Entry1() {
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In)
+  const candidate_Payments_In = useSelector((state) => state.candidates.candidate_Payments_In)
+  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In)
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -36,6 +41,8 @@ export default function Entry1() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const { getPaymentsIn } = AgentHook()
+  const { getSupplierPaymentsIn } = SupplierHook()
+  const { getCandPaymentsIn } = CandidateHook()
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -48,7 +55,9 @@ export default function Entry1() {
         getCategoryData(),
         getPaymentViaData(),
         getPaymentTypeData(),
-        getPaymentsIn()
+        getPaymentsIn(),
+        getSupplierPaymentsIn(),
+        getCandPaymentsIn()
 
       ]);
 
@@ -63,6 +72,7 @@ export default function Entry1() {
 
 
   const [option, setOption] = useState(false)
+  const [type, setType] = useState(false)
 
   // Form input States
   const [supplierName, setSupplierName] = useState('')
@@ -78,6 +88,10 @@ export default function Entry1() {
   // const [open, setOpen] = useState(true)
   // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
+  
+  useEffect(() => {
+  }, [type,supplierName,selectedSupplier])
+
   
   let curr_Amount = Math.round(payment_In / curr_Rate);
   const handleOpen = () => {
@@ -127,7 +141,8 @@ export default function Entry1() {
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
-  const handleForm = async (e) => {
+  
+  const handleAgentForm = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -149,8 +164,6 @@ export default function Entry1() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          // open,
-          // close,
           date
         }),
       });
@@ -187,40 +200,165 @@ export default function Entry1() {
     }
   };
 
+  const handleCandidateForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
 
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+  const handleSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+        // setOpen(true)
+        // setClose(false);
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
 
 
   return (
     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={handleForm}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"&&handleCandidateForm)}>
             <div className="text-end ">
-              {/* {close === false &&
-                <label htmlFor="">
-                  Open
-                  <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
-                </label>
-              }
-              {open === true &&
-                <label htmlFor="">
-                  Close
-                  <input type="checkbox" value={close} onClick={() => setClose(!close)} />
-                </label>
-              } */}
-
-              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
+             
+              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment In"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
-
+            <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >Choose Type </label>
+                <select value={type} onChange={(e) => setType(e.target.value)} required>
+                  <option value="">Choose</option>
+                 <option value="Agent">Agent</option>
+                 <option value="Supplier">Supplier</option>
+                 <option value="Candidate">Candidate</option>
+                </select>
+              </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Name</label>
                 <select required value={supplierName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
-                  <option value="">Choose Agent</option>
+                  
+                 {type==="Agent" &&
+                 <>
+                 <option value="">Choose Agent</option>
                   {agent_Payments_In &&
                     agent_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
@@ -228,6 +366,32 @@ export default function Entry1() {
                       </option>
                     ))
                   }
+                 </>
+                 }
+                  {type==="Supplier" &&
+                 <>
+                 <option value="">Choose Supplier</option>
+                  {supp_Payments_In &&
+                    supp_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Candidate" &&
+                 <>
+                 <option value="">Choose Candidate</option>
+                  {candidate_Payments_In &&
+                    candidate_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
                 </select>
 
               </div>
@@ -338,12 +502,10 @@ export default function Entry1() {
                     <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
-
-
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {agent_Payments_In
+                  {(type === "Agent" ? agent_Payments_In : type === "Supplier" ? supp_Payments_In : type === "Candidate" ? candidate_Payments_In : [])
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array

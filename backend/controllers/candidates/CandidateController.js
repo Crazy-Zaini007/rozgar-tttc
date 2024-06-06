@@ -189,12 +189,12 @@ const addPaymentIn = async (req, res) => {
                   
                           })
                           await newNotification.save()
-                    await existingSupplier.save()
+                          await existingSupplier.save()
 
-                    res.status(200).json({ message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record` });
+                    res.status(200).json({ message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record` });
 
                 } catch (error) {
-                    console.error('Error updating values:', error);
+                    
                     res.status(500).json({ message: 'Error updating values', error: error.message });
                 }
 
@@ -379,7 +379,7 @@ const addMultiplePaymentsIn = async (req, res) => {
 
             }
             res.status(200).json({
-                message: `Multiple Payments In added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`
+                message: `Multiple Payments In added Successfully to ${supplierName}'s Record`
             });
         } catch (error) {
             console.error('Error updating values:', error);
@@ -559,7 +559,7 @@ const addPaymentInReturn = async (req, res) => {
                           await existingSupplier.save()
 
 
-                    res.status(200).json({ message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record` });
+                    res.status(200).json({ message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record` });
 
                 } catch (error) {
                     console.error('Error updating values:', error);

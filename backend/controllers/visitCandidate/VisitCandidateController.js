@@ -202,7 +202,7 @@ const addAzadCandPaymentIn = async (req, res) => {
             .status(200)
             .json({
               
-              message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
+              message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
           console.error("Error updating values:", error);
@@ -398,7 +398,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
       }
 
       res.status(200).json({
-        message: `${updatedPayments.length} Payments In added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
+        message: `${updatedPayments.length} Payments In added Successfully to ${supplierName}'s Record`,
       });
     } catch (error) {
       console.error("Error updating values:", error);
@@ -595,7 +595,7 @@ const addAzadCandPaymentInReturn = async (req, res) => {
             .status(200)
             .json({
               data: updatedSupplier,
-              message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
+              message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
           console.error("Error updating values:", error);
