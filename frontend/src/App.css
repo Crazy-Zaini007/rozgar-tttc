@@ -1241,6 +1241,12 @@
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
 
+.payment_details .detail_table input[type='checkbox']{
+height: 17px;
+min-width: 17px;
+max-width: 17px;
+
+}
 .payment_details .detail_table input:focus,
 .payment_details .detail_table select:focus,
 .payment_details .detail_table textarea:focus{

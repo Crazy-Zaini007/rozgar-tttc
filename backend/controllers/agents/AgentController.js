@@ -1705,7 +1705,8 @@ const changePaymentInStatus = async (req, res) => {
   try {
       const userId = req.user._id;
       const user = await User.findById(userId);
-      const{supplierName,newStatus}=req.body
+      const{supplierName,newStatus,multipleIds}=req.body
+      
 
       if (!user) {
           return res.status(404).json({ message: "User not found" });
@@ -1720,13 +1721,19 @@ const changePaymentInStatus = async (req, res) => {
       }
 
       // Update status of all persons to false
-      if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
-          existingSupplier.payment_In_Schema.persons.forEach(person => {
-            if(existingSupplier.payment_In_Schema.status.toLowerCase()==="open" && newStatus.toLowerCase()==="closed"){
+      if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons && newStatus.toLowerCase()==="closed") {
+        if(multipleIds.length>0){
+          for(const myId of multipleIds){
+            const allPersons=existingSupplier.payment_In_Schema.persons
+            for (const person of allPersons){
+              if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
+         
               person.status = "Closed"
+              }
             }
-             
-          });
+          }
+        }
+        
       }
 
       // Toggle the status of the payment in schema

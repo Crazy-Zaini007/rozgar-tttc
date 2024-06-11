@@ -153,7 +153,7 @@ const EntryDetails = () => {
       setMultipleIds((prevIds) => prevIds.filter((entryId) => entryId !== id));
     }
    
-  };
+  }
 
   const deleteMultipleEntries = async (entry) => {
     if (window.confirm(`Are you sure you want to delete ${multipleIds.length} Entries Record?`)){
