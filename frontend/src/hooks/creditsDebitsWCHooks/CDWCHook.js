@@ -51,5 +51,50 @@ export default function CDWCHook() {
     }
 
 
-    return { getPaymentsIn, getPaymentsOut }
+
+    const getCDWCPaymentsIn = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/get/payment_in_details`, {
+                headers: {
+
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+            const json = await response.json();
+            if (response.ok) {
+                dispatch(getCDWC_Payments_In(json.data)); // Dispatch the action with received data
+            }
+            if (!response.ok) {
+                console.log(json.message)
+            }
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const getCDWCPaymentsOut = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/get/payment_in_details`, {
+                headers: {
+
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+            const json = await response.json();
+            if (response.ok) {
+                dispatch(getCDWC_Payments_Out(json.data)); // Dispatch the action with received data
+            }
+            if (!response.ok) {
+                console.log(json.message)
+            }
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    return { getPaymentsIn, getPaymentsOut,getCDWCPaymentsIn,getCDWCPaymentsOut }
 }

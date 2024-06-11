@@ -110,6 +110,164 @@ const todayPayments =overAllPayments && overAllPayments.filter(payment => paymen
 
 const collapsed = useSelector((state) => state.collapsed.collapsed);
 
+const [supplierName, setSupplierName] = useState('')
+const [type, setType] = useState('')
+const [category2, setCategory2] = useState('')
+const [payment_Via2, setPayment_Via2] = useState('')
+const [payment_Type2, setPayment_Type2] = useState('')
+const [search, setSearch] = useState('')
+
+const filteredPayment = todayPayments
+? todayPayments.filter((paymentItem) => {
+    return (
+      paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
+      paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
+      paymentItem.type?.toLowerCase().includes(type.toLowerCase()) &&
+      paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+      paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
+    (paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+     paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
+     paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
+     paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
+     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
+    )
+    );
+  })
+: [];
+
+
+
+const printPaymentInvoice = (paymentItem) => {
+  // Function to format the date as dd-MM-yyyy
+const formatDate = (date) => {
+const d = new Date(date);
+const day = String(d.getDate()).padStart(2, '0');
+const month = String(d.getMonth() + 1).padStart(2, '0');
+const year = d.getFullYear();
+return `${day}-${month}-${year}`;
+};
+
+const formattedDate = formatDate(new Date());
+// Convert JSX to HTML string
+const printContentString = `
+  <div class="print-header">
+  <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
+    <h1 class="title">ROZGAR TTTC</h1>
+  <p class="date">Date: ${formattedDate}</p>
+  </div>
+  <div class="print-header">
+    <h1 class="title">Today Payment Invoice</h1>
+  </div>
+  <hr/>
+  <table class='print-table'>
+    <thead>
+      <tr>
+        <th>SN</th>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Reference</th>
+        <th>Category</th>
+        <th>Payment Via</th>
+        <th>Payment Type</th>
+        <th>Slip No</th>
+        <th>Details</th>
+        <th>Cash In</th>
+        <th>Cash Out</th>
+        <th>Cash Return</th>
+        <th>Curr Rate</th>
+        <th>Curr Amount</th>
+        <th>Payment In Curr</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>${String(paymentItem?.date)}</td>
+        <td>${String(paymentItem.supplierName)}</td>
+        <td>${String(paymentItem.type)}</td>
+        <td>${String(paymentItem?.category)}</td>
+        <td>${String(paymentItem?.payment_Via)}</td>
+        <td>${String(paymentItem?.payment_Type)}</td>
+        <td>${String(paymentItem?.slip_No)}</td>
+        <td>${String(paymentItem?.details)}</td>
+        <td>${String(paymentItem?.payment_In||0)}</td>
+        <td>${String(paymentItem?.payment_Out||0)}</td>
+        <td>${String(paymentItem?.cash_Out||0)}</td>
+        <td>${String(paymentItem?.curr_Rate||0)}</td>
+        <td>${String(paymentItem?.curr_Amount||0)}</td>
+        <td>${String(paymentItem?.payment_In_curr?paymentItem?.payment_In_curr:paymentItem?.payment_Out_curr||'NIL')}</td>
+      </tr>
+    </tbody>
+  </table>
+  <style>
+    body {
+      background-color: #fff;
+    }
+    .print-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      max-width: 100px;
+    }
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0;
+      font-size: 24px;
+    }
+    .invoice {
+      flex-grow: 0;
+      text-align: left;
+      font-size: 20px;
+    }
+    .date{
+      flex-grow: 0;
+      text-align: right;
+      font-size: 20px;
+    }
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      text-transform: capitalize;
+    }
+    .print-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+`;
+
+// Create a new window for printing
+const printWindow = window.open('', '_blank');
+if (printWindow) {
+  // Write the print content to the new window
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Print Invoice</title>
+      </head>
+      <body class='bg-dark'>${printContentString}</body>
+    </html>
+  `);
+
+  // Trigger print dialog
+  printWindow.print();
+  // Close the new window after printing
+  printWindow.onafterprint = function () {
+    printWindow.close();
+  };
+} else {
+  // Handle if the new window cannot be opened
+  alert('Could not open print window. Please check your browser settings.');
+}
+}
 
   return (
     <div className={`${collapsed ?"collapsed":"main"}`}>
@@ -304,9 +462,69 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
             </div>
           </div>
         </div>
-
+        
         <div className="col-md-12 payment_details p-0 my-3">
+          <div className="row">
           <h3 className="text-center my-2"><strong>Day Book</strong> </h3>
+          <div className="col-md-12 filters">
+                      <Paper className='py-1 mb-2 px-3'>
+                        <div className="row">
+                        <div className="col-auto px-1">
+                            <label htmlFor="">Search Here:</label>
+                           <input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
+                          </div>
+                        
+                          
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Supp/Agent/Cand:</label>
+                            <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(todayPayments && todayPayments.map(data => data.supplierName))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Reference Type:</label>
+                            <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(todayPayments && todayPayments.map(data => data.type))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Category:</label>
+                            <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(todayPayments && todayPayments.map(data => data.category))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Payment Via:</label>
+                            <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(todayPayments && todayPayments.map(data => data.payment_Via))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Payment Type:</label>
+                            <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
+                              <option value="">All</option>
+                              {[...new Set(todayPayments && todayPayments.map(data => data.payment_Type))].map(dateValue => (
+                                <option value={dateValue} key={dateValue}>{dateValue}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </Paper>
+                    </div>
+          </div>
           <div className="text-end">
     <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
     </div>
@@ -341,11 +559,13 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                             <TableCell className='label border'>Details</TableCell>
                             <TableCell className='label border'>Invoice</TableCell>
                             <TableCell className='label border'>Slip_Pic</TableCell>
+                            <TableCell className='label border'>Actions</TableCell>
+
                         
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {todayPayments && todayPayments.length>0 ? todayPayments.map((cash, outerIndex) => (
+                          {filteredPayment && filteredPayment.length>0 ? filteredPayment.map((cash, outerIndex) => (
                               // Map through the payment array
                              
                                <>
@@ -372,6 +592,13 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                                       <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.slip_Pic ? <a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                                      <TableCell className='border data_td text-center'> <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                              
+                                  <button  className='btn bg-success text-white btn-sm' onClick={()=>printPaymentInvoice(cash)}><i className="fa-solid fa-print"></i></button>
+                                  <button  className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                
+                                </div></TableCell>
+
                                       
                                     </>
                                   
@@ -406,19 +633,19 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                                   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                                   <TableCell className='border data_td text-center bg-success text-white'>
     {/* Calculate the total sum of payment_In */}
-    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
       return total + (Math.round(entry.payment_In || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-danger text-white'>
     {/* Calculate the total sum of payment_Out */}
-    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
       return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
-    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
       return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
@@ -426,13 +653,13 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
  <>
   <TableCell className='border data_td text-center bg-info text-white'>
     {/* Calculate the total sum of payment_Out */}
-    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
       return total + (Math.round(entry.curr_Rate || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
-    {todayPayments && todayPayments.length > 0 && todayPayments.reduce((total, entry) => {
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
       return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>

@@ -17,7 +17,7 @@ export default function BankCash() {
 const[banks,setBanks]=useState('')
 const[total,setTotal]=useState()
 const[loading2,setLoading2]=useState(false)
-const dispatch = useDispatch();
+
 const apiUrl = process.env.REACT_APP_API_URL;
 const [show, setShow] = useState(false)
 
@@ -93,20 +93,6 @@ const getBankCash = async () => {
   useEffect(() => {
     fetchData()
   }, [])
-
-
-  const rowsPerPageOptions = [10, 15, 30];
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
 
 
@@ -472,10 +458,7 @@ const getBankCash = async () => {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'cashInHand.xlsx');
   };
-
-
-
-
+  
   const [date2, setDate2] = useState('')
   const [date3, setDate3] = useState('')
   const [supplierName, setSupplierName] = useState('')
@@ -611,7 +594,7 @@ const getBankCash = async () => {
         printWindow.close();
       };
     } else {
-      // Handle if the new window cannot be opened
+      
       alert('Could not open print window. Please check your browser settings.');
     }
   };
@@ -644,6 +627,16 @@ const getBankCash = async () => {
   };
 
 
+  const [bankName, setBankName] = useState('')
+
+  const filteredBanksPayments = overAllPayments
+  ? overAllPayments.filter((paymentItem) => {
+      return (
+        paymentItem.payment_Via?.toLowerCase().includes(bankName.toLowerCase()) 
+      );
+    })
+  : [];
+
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
@@ -655,15 +648,13 @@ const getBankCash = async () => {
                 <div className="left d-flex">
                   <button className= 'btn btn-sm  m-1 show_btn' style={single===0 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(0)}>Bank Cash</button>
                   <button className= 'btn btn-sm  m-1 show_btn' style={single===1 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(1)}>All Banks</button>
-
                 </div>
-                
               </Paper>
             </div>
           </div>
          {single===0 &&
          <>
-          {current === 0 &&
+          {current === 0 &&single===0  &&
             <div className="row justify-content-center mt-3">
               <div className="col-lg-6 col-12  mt-md-4 mt-3  shadow px-0 pb-md-4 pb-3 rounded">
                 <div className="account_details py-md-5 py-4 rounded px-0 m-0">
@@ -676,13 +667,7 @@ const getBankCash = async () => {
                   <Link className="cash_out_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
                 </div>
               </div>
-            </div>
-          }
-         </>
-         }
-
-         {single===1 &&
-        <div className="col-md-12 payment_details my-2 text-center">
+              <div className="col-md-12 payment_details my-2 text-center ">
            {loading2 && <CircularProgress></CircularProgress>}
            {!loading2 &&
            <TableContainer className='detail_table' component={Paper}  sx={{ maxHeight: 600 }}>
@@ -709,6 +694,122 @@ const getBankCash = async () => {
            </Table>
           </TableContainer>
            }
+        </div>
+            </div>
+          }
+         </>
+         }
+
+         {single===1 &&
+        <div className="col-md-12 payment_details my-2">
+           <div className="row justify-content-start">
+<div className="col-md-12 tex-start mb-3">
+  <button className='btn btn-sm me-1 shadow'style={!bankName?{background:'var(--accent-stonger-blue)',color:'white',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName('')}>All</button>
+{[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
+                                <button className='btn btn-sm me-1 shadow' style={bankName===dateValue?{background:'var(--accent-stonger-blue)',color:'white',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName(dateValue)} value={dateValue} key={dateValue}>{dateValue}</button>
+                              ))}
+</div>
+<TableContainer className='detail_table' component={Paper}  sx={{ maxHeight: 600 }}>
+           <Table stickyHeader>
+           <TableHead className="thead">
+                            <TableRow>
+                              <TableCell className='label border text-center' style={{ width: '18.28%' }}>SN</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Date</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Type</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Category</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Slip_No</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Cash_In</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Cash_Return</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Details</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Invoice</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Slip_Pic</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {filteredBanksPayments && filteredBanksPayments
+                              .map((cash, outerIndex) => (
+                                // Map through the payment array
+                                <React.Fragment key={outerIndex}>
+                                  <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
+                                   
+                                      <>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Type}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                        {show &&
+                                       <>
+                                        <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
+                                       </>
+                                       }
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.details}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.invoice}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                       
+                                      </>
+                                  
+                                  </TableRow>
+
+                                </React.Fragment>
+                              ))}
+                              <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='border data_td text-center bg-secondary text-white'>Total={
+  filteredBanksPayments&&
+  (
+    filteredBanksPayments.filter(data => data.payment_Via === bankName)
+      .reduce((total, entry) => total + (Math.round(entry.payment_In || 0)), 0)
+    -
+    filteredBanksPayments.reduce((total, entry) => total + (Math.round(entry.payment_Out || 0)), 0)
+  )
+}
+
+    </TableCell>
+        <TableCell className='border data_td text-center bg-success text-white'>
+    
+    {filteredBanksPayments  && filteredBanksPayments.filter(data=>data.payment_Via===bankName).reduce((total, entry) => {
+      return total + (Math.round(entry.payment_In || 0)); 
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-danger text-white'>
+    
+    {filteredBanksPayments && filteredBanksPayments.length > 0 && filteredBanksPayments.reduce((total, entry) => {
+      return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-warning text-white'>
+    {/* Calculate the total sum of cash_Out */}
+    {filteredBanksPayments && filteredBanksPayments.length > 0 && filteredBanksPayments.reduce((total, entry) => {
+      return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+                            
+                          </TableRow>
+                          </TableBody>
+           </Table>
+          </TableContainer>
+           </div>
+          
+           
         </div>
          }
 

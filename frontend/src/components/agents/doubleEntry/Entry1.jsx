@@ -18,6 +18,12 @@ import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
 import CandidateHook from '../../../hooks/candidateHooks/CandidateHook';
+import AzadVisaHook from '../../../hooks/azadVisaHooks/AzadVisaHooks';
+import TicketHook from '../../../hooks/ticketHooks/TicketHook';
+import VisitHook from '../../../hooks/visitsHooks/VisitHook';
+import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
+import CPPHook from '../../../hooks/settingHooks/CPPHook';
+import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
 
 import Entry2 from './Entry2'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -25,7 +31,6 @@ import Entry2 from './Entry2'
 export default function Entry1() {
   const dispatch = useDispatch();
   // getting data from redux store 
-
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
@@ -33,6 +38,21 @@ export default function Entry1() {
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In)
   const candidate_Payments_In = useSelector((state) => state.candidates.candidate_Payments_In)
   const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In)
+  const azadAgent_Payments_In = useSelector((state) => state.azadVisa.azadAgent_Payments_In)
+  const azadCand_Payments_In = useSelector((state) => state.azadVisa.azadCand_Payments_In)
+  const azadSupplier_Payments_In = useSelector((state) => state.azadVisa.azadSupplier_Payments_In)
+  const ticketAgent_Payments_In = useSelector((state) => state.tickets.ticketAgent_Payments_In)
+  const ticketCand_Payments_In = useSelector((state) => state.tickets.ticketCand_Payments_In)
+  const ticketSupplier_Payments_In = useSelector((state) => state.tickets.ticketSupplier_Payments_In)
+  const visitAgent_Payments_In = useSelector((state) => state.visits.visitAgent_Payments_In)
+  const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Payments_In)
+  const visitSupplier_Payments_In = useSelector((state) => state.visits.visitSupplier_Payments_In)
+
+
+  const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
+  const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
+
+  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -43,24 +63,35 @@ export default function Entry1() {
   const { getPaymentsIn } = AgentHook()
   const { getSupplierPaymentsIn } = SupplierHook()
   const { getCandPaymentsIn } = CandidateHook()
-
+  const { getAzadAgentPaymentsIn,getAzadCandPaymentsIn,getAzadSupplierPaymentsIn } = AzadVisaHook()
+  const { getTicketAgentPaymentsIn,getTicketCandPaymentsIn,getTicketSupplierPaymentsIn } = TicketHook()
+  const { getVisitAgentPaymentsIn,getVisitCandPaymentsIn,getVisitSupplierPaymentsIn } = VisitHook()
+  const { getCDWCPaymentsIn } = CDWCHook()
+  const { getCDWOCPaymentsIn } = CDWOCHook()
+  const { getCPPData } = CPPHook()
   // getting Data from DB
   const { user } = useAuthContext()
   const fetchData = async () => {
     try {
-      // Use Promise.all to execute all promises concurrently
-      await Promise.all([
-
-        getCurrCountryData(),
-        getCategoryData(),
-        getPaymentViaData(),
-        getPaymentTypeData(),
-        getPaymentsIn(),
-        getSupplierPaymentsIn(),
+        getCurrCountryData()
+        getCategoryData()
+        getPaymentViaData()
+        getPaymentTypeData()
+        getPaymentsIn()
+        getSupplierPaymentsIn()
         getCandPaymentsIn()
-
-      ]);
-
+        getAzadAgentPaymentsIn()
+        getAzadCandPaymentsIn()
+        getAzadSupplierPaymentsIn()
+        getTicketAgentPaymentsIn()
+        getTicketCandPaymentsIn()
+        getTicketSupplierPaymentsIn()
+        getVisitAgentPaymentsIn()
+        getVisitCandPaymentsIn()
+        getVisitSupplierPaymentsIn()
+        getCPPData()
+        getCDWCPaymentsIn()
+        getCDWOCPaymentsIn()
 
     } catch (error) {
     }
@@ -145,6 +176,17 @@ export default function Entry1() {
   const handleAgentForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/agents/add/payment_in`, {
         method: 'POST',
@@ -272,6 +314,17 @@ export default function Entry1() {
   const handleSupplierForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_in`, {
         method: 'POST',
@@ -317,8 +370,7 @@ export default function Entry1() {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        // setOpen(true)
-        // setClose(false);
+      
       }
 
     } catch (error) {
@@ -328,12 +380,793 @@ export default function Entry1() {
     }
   }
 
+  const handleAzadAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          // open,
+          // close,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAzadAgentPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+        // setOpen(true)
+        // setClose(false);
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleAzadCandForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAzadCandPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleAzadSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+         
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAzadSupplierPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleTicketAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/ticket/agents/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+       
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getTicketAgentPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+       
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+const handleTicketCandForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+        
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getTicketCandPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleTicketSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/ticket/suppliers/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getTicketSupplierPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleVisitAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/visit/agents/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+      
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getVisitAgentPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleVisitCandForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+         
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getVisitCandPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+       
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+
+  const handleVisitSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/visit/suppliers/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+       
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getVisitSupplierPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+     
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+  const handleCDWCForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+    
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+ 
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+  const handleCDWOCForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+       
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+
 
   return (
     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"&&handleCandidateForm)}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" && handleCDWOCForm)}>
             <div className="text-end ">
              
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment In"}</button>
@@ -347,6 +1180,17 @@ export default function Entry1() {
                  <option value="Agent">Agent</option>
                  <option value="Supplier">Supplier</option>
                  <option value="Candidate">Candidate</option>
+                 <option value="Azad Agent">Azad Agent</option>
+                 <option value="Azad Supplier">Azad Supplier</option>
+                 <option value="Azad Candidate">Azad Candidate</option>
+                 <option value="Ticket Agent">Ticket Agent</option>
+                 <option value="Ticket Supplier">Ticket Supplier</option>
+                 <option value="Ticket Candidate">Ticket Candidate</option>
+                 <option value="Visit Agent">Visit Agent</option>
+                 <option value="Visit Supplier">Visit Supplier</option>
+                 <option value="Visit Candidate">Visit Candidate</option>
+                 <option value="Credit/Debit WC">Credit/Debit WC</option>
+                 <option value="Credit/Debit WOC">Credit/Debit WOC</option>
                 </select>
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -385,6 +1229,141 @@ export default function Entry1() {
                  <option value="">Choose Candidate</option>
                   {candidate_Payments_In &&
                     candidate_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                 {type==="Azad Agent" &&
+                 <>
+                 <option value="">Choose Azad Agent</option>
+                  {azadAgent_Payments_In &&
+                    azadAgent_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Azad Supplier" &&
+                 <>
+                 <option value="">Choose Azad Supplier</option>
+                  {azadSupplier_Payments_In &&
+                    azadSupplier_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Azad Candidate" &&
+                 <>
+                 <option value="">Choose Azad Candidate</option>
+                  {azadCand_Payments_In &&
+                    azadCand_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+
+                {type==="Ticket Agent" &&
+                 <>
+                 <option value="">Choose Ticket Agent</option>
+                  {ticketAgent_Payments_In &&
+                    ticketAgent_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Ticket Supplier" &&
+                 <>
+                 <option value="">Choose Ticket Supplier</option>
+                  {ticketSupplier_Payments_In &&
+                    ticketSupplier_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Ticket Candidate" &&
+                 <>
+                 <option value="">Choose Ticket Candidate</option>
+                  {ticketCand_Payments_In &&
+                    ticketCand_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+
+               {type==="Visit Agent" &&
+                 <>
+                 <option value="">Choose Visit Agent</option>
+                  {visitAgent_Payments_In &&
+                    visitAgent_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Visit Supplier" &&
+                 <>
+                 <option value="">Choose Visit Supplier</option>
+                  {visitSupplier_Payments_In &&
+                    visitSupplier_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Visit Candidate" &&
+                 <>
+                 <option value="">Choose Visit Candidate</option>
+                  {visitCand_Payments_In &&
+                    visitCand_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+
+                  {type==="Credit/Debit WC" &&
+                 <>
+                 <option value="">Choose Credit/Debit WC</option>
+                  {crediterPurchaseParties &&
+                    crediterPurchaseParties.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {type==="Credit/Debit WOC" &&
+                 <>
+                 <option value="">Choose Credit/Debit WOC</option>
+                  {crediterPurchaseParties &&
+                    crediterPurchaseParties.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -505,7 +1484,7 @@ export default function Entry1() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {(type === "Agent" ? agent_Payments_In : type === "Supplier" ? supp_Payments_In : type === "Candidate" ? candidate_Payments_In : [])
+                  {(type === "Agent" ? agent_Payments_In : type === "Supplier" ? supp_Payments_In : type === "Candidate" ? candidate_Payments_In: type === "Azad Agent" ? azadAgent_Payments_In: type === "Azad Supplier" ? azadSupplier_Payments_In: type === "Azad Candidate" ? azadCand_Payments_In: type === "Ticket Agent" ? ticketAgent_Payments_In: type === "Ticket Supplier" ? ticketSupplier_Payments_In: type === "Ticket Candidate" ? ticketCand_Payments_In: type === "Visit Agent" ? visitAgent_Payments_In: type === "Visit Supplier" ? visitSupplier_Payments_In: type === "Visit Candidate" ? visitCand_Payments_In: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In: [])
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
@@ -527,9 +1506,8 @@ export default function Entry1() {
 
                           </TableRow>
                         ))}
-                        {/* Move these cells inside the innermost map loop */}
 
-                        <TableRow>
+                        {/* <TableRow>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
@@ -551,7 +1529,7 @@ export default function Entry1() {
                           <TableCell></TableCell>
 
                           <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
+                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{(type === "Agent" ||type === "Supplier"||type === "Candidate"||type === "Azad Candidate"||type === "Ticket Candidate"||type === "Visit Candidate")?filteredData.total_Visa_Price_In_PKR:(type === "Credit/Debit WC" ||type === "Credit/Debit WOC")?filteredData.total_Visa_Price_In_PKR:filteredData.total_Azad_Visa_Price_In_PKR}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_Curr</TableCell>
@@ -569,7 +1547,7 @@ export default function Entry1() {
                           <TableCell></TableCell>
                           <TableCell className='label border' style={{ width: '18.28%' }}>Remaining Total_Payment_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
-                        </TableRow>
+                        </TableRow> */}
                       </>
                     ))}
 

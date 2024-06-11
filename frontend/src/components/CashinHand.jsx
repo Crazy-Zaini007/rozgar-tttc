@@ -496,6 +496,7 @@ const getBankCash = async () => {
         (paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
        paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
        paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
+        paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
        paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
       )
       );
