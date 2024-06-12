@@ -509,6 +509,7 @@ const addEntry = async (req, res) => {
                 const isStatusClosed = existingPaymentInSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInSupplier.updateOne({
+              
                   $inc: {
                     "payment_In_Schema.total_Visa_Price_In_PKR":
                       visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0,
@@ -520,12 +521,12 @@ const addEntry = async (req, res) => {
                     "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
                       ? visa_Sale_Rate_Oth_Cur
                       : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInSupplier.payment_In_Schema.closing + visa_Sales_Rate_PKR) : existingPaymentInSupplier.payment_In_Schema.opening
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInSupplier.payment_In_Schema.closing + visa_Sales_Rate_PKR) : visa_Sales_Rate_PKR
                   },
                   $set:{
                     "payment_In_Schema.status":newStatus
-                  }
-                });
+                  },
+                })
               }
 
               await existingPaymentInSupplier.save();
@@ -664,6 +665,8 @@ const addEntry = async (req, res) => {
                   entry_Date: new Date().toISOString().split("T")[0],
                 });
 
+                const newStatus = existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutSupplier.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_In_Price_PKR and other fields using $inc
                 await existingPaymentOutSupplier.updateOne({
                   $inc: {
@@ -680,12 +683,12 @@ const addEntry = async (req, res) => {
                       visa_Purchase_Rate_Oth_Cur
                         ? visa_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutSupplier.payment_Out_Schema.closing+visa_Purchase_Rate_PKR
+                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutSupplier.payment_Out_Schema.closing + visa_Purchase_Rate_PKR) : visa_Purchase_Rate_PKR
 
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_Out_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -827,8 +830,11 @@ const addEntry = async (req, res) => {
                   entry_Date: new Date().toISOString().split("T")[0],
                 });
 
+                const newStatus = existingPaymentInAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInAgent.updateOne({
+                
                   $inc: {
                     "payment_In_Schema.total_Visa_Price_In_PKR":
                       visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0,
@@ -841,11 +847,12 @@ const addEntry = async (req, res) => {
                     "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
                       ? visa_Sale_Rate_Oth_Cur
                       : 0,
-                      "payment_In_Schema.opening":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAgent.payment_In_Schema.closing+visa_Sales_Rate_PKR
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAgent.payment_In_Schema.closing + visa_Sales_Rate_PKR) : visa_Sales_Rate_PKR
+
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_In_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -982,8 +989,11 @@ const addEntry = async (req, res) => {
                   entry_Date: new Date().toISOString().split("T")[0],
                 });
 
+                const newStatus = existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_In_Price_PKR and other fields using $inc
                 await existingPaymentOutAgent.updateOne({
+                 
                   $inc: {
                     "payment_Out_Schema.total_Visa_Price_Out_PKR":
                       visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0,
@@ -998,12 +1008,13 @@ const addEntry = async (req, res) => {
                       visa_Purchase_Rate_Oth_Cur
                         ? visa_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAgent.payment_Out_Schema.closing+visa_Purchase_Rate_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAgent.payment_Out_Schema.closing + visa_Purchase_Rate_PKR) : visa_Purchase_Rate_PKR
 
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_Out_Schema.status":newStatus
+                  },
+                 
                 });
               }
 
@@ -1265,8 +1276,11 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAzadSupplier.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInAzadSupplier.updateOne({
+                
                   $inc: {
                     "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
                       azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0,
@@ -1281,11 +1295,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Sales_Rate_Oth_Cur
                         ? azad_Visa_Sales_Rate_Oth_Cur
                         : 0,
-                      "payment_In_Schema.opening":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadSupplier.payment_In_Schema.closing+azad_Visa_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadSupplier.payment_In_Schema.closing + azad_Visa_Sales_PKR) : azad_Visa_Sales_PKR
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_In_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -1420,9 +1434,11 @@ const addEntry = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   }
                 );
-
+                const newStatus = existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAzadSupplier.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentOutAzadSupplier.updateOne({
+                
                   $inc: {
                     "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
                       azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0,
@@ -1437,11 +1453,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Purchase_Rate_Oth_Cur
                         ? azad_Visa_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadSupplier.payment_Out_Schema.closing+azad_Visa_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadSupplier.payment_Out_Schema.closing + azad_Visa_Purchase_PKR) : azad_Visa_Purchase_PKR
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_Out_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -1575,9 +1591,11 @@ const addEntry = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   }
                 );
-
+                const newStatus = existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAzadAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInAzadAgent.updateOne({
+                 
                   $inc: {
                     "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
                       azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0,
@@ -1592,11 +1610,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Sales_Rate_Oth_Cur
                         ? azad_Visa_Sales_Rate_Oth_Cur
                         : 0,
-                      "payment_In_Schema.opening":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadAgent.payment_In_Schema.closing+azad_Visa_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadAgent.payment_In_Schema.closing + azad_Visa_Sales_PKR) : azad_Visa_Sales_PKR
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_In_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -1731,8 +1749,11 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAzadAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentOutAzadAgent.updateOne({
+                  
                   $inc: {
                     "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
                       azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0,
@@ -1747,11 +1768,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Purchase_Rate_Oth_Cur
                         ? azad_Visa_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadAgent.payment_Out_Schema.closing+azad_Visa_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadAgent.payment_Out_Schema.closing + azad_Visa_Purchase_PKR) : azad_Visa_Purchase_PKR
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_Out_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -2012,8 +2033,11 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInTicketSupplier.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInTicketSupplier.updateOne({
+                 
                   $inc: {
                     "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
                       ticket_Sales_PKR ? ticket_Sales_PKR : 0,
@@ -2024,11 +2048,12 @@ const addEntry = async (req, res) => {
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr":
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
-                      "payment_In_Schema.opening":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketSupplier.payment_In_Schema.closing+ticket_Sales_PKR
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketSupplier.payment_In_Schema.closing + ticket_Sales_PKR) : ticket_Sales_PKR
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_In_Schema.status":newStatus
+                  },
+                 
                 });
               }
 
@@ -2163,8 +2188,11 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutTicketSupplier.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentOutTicketSupplier.updateOne({
+                 
                   $inc: {
                     "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
                       ticket_Purchase_PKR ? ticket_Purchase_PKR : 0,
@@ -2179,11 +2207,12 @@ const addEntry = async (req, res) => {
                       ticket_Purchase_Rate_Oth_Cur
                         ? ticket_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketSupplier.payment_Out_Schema.closing+ticket_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketSupplier.payment_Out_Schema.closing + ticket_Purchase_PKR) : ticket_Purchase_PKR
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_Out_Schema.status":newStatus
+                  },
+                  
                 });
               }
 
@@ -2310,9 +2339,11 @@ const addEntry = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   }
                 );
-
+                const newStatus = existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInTicketAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInTicketAgent.updateOne({
+                 
                   $inc: {
                     "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
                       ticket_Sales_PKR ? ticket_Sales_PKR : 0,
@@ -2323,11 +2354,13 @@ const addEntry = async (req, res) => {
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr":
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
-                      "payment_In_Schema.opening":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketAgent.payment_In_Schema.closing+ticket_Sales_PKR
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketAgent.payment_In_Schema.closing + ticket_Sales_PKR) : ticket_Sales_PKR
+
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_In_Schema.status":newStatus
+                  },
+                 
                 });
               }
 
@@ -2462,8 +2495,11 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutTicketAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentOutTicketAgent.updateOne({
+                 
                   $inc: {
                     "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
                       ticket_Purchase_PKR ? ticket_Purchase_PKR : 0,
@@ -2478,11 +2514,11 @@ const addEntry = async (req, res) => {
                       ticket_Purchase_Rate_Oth_Cur
                         ? ticket_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketAgent.payment_Out_Schema.closing+ticket_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketAgent.payment_Out_Schema.closing + ticket_Purchase_PKR) : ticket_Purchase_PKR
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_Out_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -2740,9 +2776,11 @@ const addEntry = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   }
                 );
-
+                const newStatus = existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInVisitSupplier.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInVisitSupplier.updateOne({
+                 
                   $inc: {
                     "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
                       visit_Sales_PKR ? visit_Sales_PKR : 0,
@@ -2753,11 +2791,11 @@ const addEntry = async (req, res) => {
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
                     "payment_In_Schema.remaining_Curr":
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
-                      "payment_In_Schema.opening":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitSupplier.payment_In_Schema.closing+visit_Sales_PKR
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitSupplier.payment_In_Schema.closing + visit_Sales_PKR) : visit_Sales_PKR
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
-                  }
+                    "payment_In_Schema.status":newStatus
+                  },
                 });
               }
 
@@ -2888,6 +2926,8 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutVisitSupplier.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentOutVisitSupplier.updateOne({
                   $inc: {
@@ -2904,10 +2944,10 @@ const addEntry = async (req, res) => {
                       visit_Purchase_Rate_Oth_Cur
                         ? visit_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitSupplier.payment_Out_Schema.closing+visit_Purchase_Rate_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitSupplier.payment_Out_Schema.closing + visit_Purchase_Rate_PKR) : visit_Purchase_Rate_PKR
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    "payment_Out_Schema.status":newStatus
                   }
                 });
               }
@@ -3035,7 +3075,8 @@ const addEntry = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   }
                 );
-
+                const newStatus = existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInVisitAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentInVisitAgent.updateOne({
                   $inc: {
@@ -3049,10 +3090,10 @@ const addEntry = async (req, res) => {
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
                     "payment_In_Schema.remaining_Curr":
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
-                      "payment_In_Schema.opening":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitAgent.payment_In_Schema.closing+visit_Sales_PKR
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitAgent.payment_In_Schema.closing + visit_Sales_PKR) : visit_Sales_PKR
                   },
                   $set:{
-                    "payment_In_Schema.status":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    "payment_In_Schema.status":newStatus
                   }
                 });
               }
@@ -3183,6 +3224,8 @@ const addEntry = async (req, res) => {
                   }
                 );
 
+                const newStatus = existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutVisitAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                 // Update total_Visa_Price_In_PKR and other fields using $inc
                 await existingPaymentOutVisitAgent.updateOne({
                   $inc: {
@@ -3199,10 +3242,10 @@ const addEntry = async (req, res) => {
                       visit_Purchase_Rate_Oth_Cur
                         ? visit_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitAgent.payment_Out_Schema.closing+visit_Purchase_Rate_PKR
+                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitAgent.payment_Out_Schema.closing + visit_Purchase_Rate_PKR) : visit_Purchase_Rate_PKR
                   },
                   $set:{
-                    "payment_Out_Schema.status":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    "payment_Out_Schema.status":newStatus
                   }
                 });
               }
@@ -3718,7 +3761,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     "payment_In_Schema.remaining_Curr":
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInSupplier.payment_In_Schema.closing + entryData?.visa_Sales_Rate_PKR) : existingPaymentInSupplier.payment_In_Schema.opening
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInSupplier.payment_In_Schema.closing + entryData?.visa_Sales_Rate_PKR) : entryData?.visa_Sales_Rate_PKR
                   },
                   $set:{
                     "payment_In_Schema.status":newStatus
@@ -3845,7 +3888,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
                     "payment_Out_Schema.remaining_Curr":
                       entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening": isStatusClosed ? (existingPaymentOutSupplier.payment_Out_Schema.closing + entryData?.visa_Purchase_Rate_PKR) : entryData?.visa_Purchase_Rate_PKR
+                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutSupplier.payment_Out_Schema.closing + entryData?.visa_Purchase_Rate_PKR) : entryData?.visa_Purchase_Rate_PKR
                   },
                   $set:{
                     "payment_Out_Schema.status":newStatus
@@ -3961,6 +4004,8 @@ const addMultipleEnteries = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   });
 
+                  const newStatus = existingPaymentInAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInAgent.updateOne({
                     $inc: {
@@ -3972,10 +4017,12 @@ const addMultipleEnteries = async (req, res) => {
                       "payment_In_Schema.total_Visa_Price_In_Curr":
                         entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
-                        entryData?.visa_Sale_Rate_Oth_Cur ?? 0,                      "payment_In_Schema.opening":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAgent.payment_In_Schema.closing+entryData?.visa_Sales_Rate_PKR
+                        entryData?.visa_Sale_Rate_Oth_Cur ?? 0,           
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAgent.payment_In_Schema.closing + entryData?.visa_Sales_Rate_PKR) : entryData?.visa_Sales_Rate_PKR
+
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -4094,6 +4141,8 @@ const addMultipleEnteries = async (req, res) => {
                     entry_Date: new Date().toISOString().split("T")[0],
                   });
 
+                  const newStatus = existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAgent.payment_Out_Schema.status;
+                  const isStatusClosed = existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_In_Price_PKR and other fields using $inc
                   await existingPaymentOutAgent.updateOne({
                     $inc: {
@@ -4106,10 +4155,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAgent.payment_Out_Schema.closing+entryData?.visa_Purchase_Rate_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAgent.payment_Out_Schema.closing + entryData?.visa_Purchase_Rate_PKR) :entryData?.visa_Purchase_Rate_PKR
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    "payment_Out_Schema.status":newStatus
+                      
                     }
                   });
                 }
@@ -4357,6 +4407,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAzadSupplier.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInAzadSupplier.updateOne({
                     $inc: {
@@ -4369,10 +4421,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
-                      "payment_In_Schema.opening":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadSupplier.payment_In_Schema.closing+entryData?.azad_Visa_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadSupplier.payment_In_Schema.closing + entryData?.azad_Visa_Sales_PKR) : entryData?.azad_Visa_Sales_PKR
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -4493,6 +4545,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAzadSupplier.payment_Out_Schema.status;
+                  const isStatusClosed = existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentOutAzadSupplier.updateOne({
                     $inc: {
@@ -4505,10 +4559,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadSupplier.payment_Out_Schema.closing+entryData?.azad_Visa_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadSupplier.payment_Out_Schema.closing + entryData?.azad_Visa_Purchase_PKR) : entryData?.azad_Visa_Purchase_PKR
+                    
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_Out_Schema.status":newStatus
                     }
                   });
                 }
@@ -4628,6 +4683,9 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAzadAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase() === 'closed';
+                // Update total_Visa_Price_In_PKR and other fields using $inc
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInAzadAgent.updateOne({
                     $inc: {
@@ -4640,10 +4698,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
-                      "payment_In_Schema.opening":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadAgent.payment_In_Schema.closing+entryData?.azad_Visa_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadAgent.payment_In_Schema.closing + entryData?.azad_Visa_Sales_PKR) : entryData?.azad_Visa_Sales_PKR
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -4763,6 +4821,9 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  
+                const newStatus = existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAzadAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentOutAzadAgent.updateOne({
                     $inc: {
@@ -4775,10 +4836,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadAgent.payment_Out_Schema.closing+entryData?.azad_Visa_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadAgent.payment_Out_Schema.closing + entryData?.azad_Visa_Purchase_PKR) : entryData?.azad_Visa_Purchase_PKR
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_Out_Schema.status":newStatus
                     }
                   });
                 }
@@ -5034,6 +5095,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInTicketSupplier.payment_In_Schema.status;
+                  const isStatusClosed = existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInTicketSupplier.updateOne({
                     $inc: {
@@ -5046,10 +5109,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
-                      "payment_In_Schema.opening":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketSupplier.payment_In_Schema.closing+entryData?.ticket_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketSupplier.payment_In_Schema.closing + entryData?.ticket_Sales_PKR) : entryData?.ticket_Sales_PKR
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -5170,6 +5233,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutTicketSupplier.payment_Out_Schema.status;
+                  const isStatusClosed = existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentOutTicketSupplier.updateOne({
                     $inc: {
@@ -5182,10 +5247,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketSupplier.payment_Out_Schema.closing+entryData?.ticket_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketSupplier.payment_Out_Schema.closing + entryData?.ticket_Purchase_PKR) : entryData?.ticket_Purchase_PKR
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_Out_Schema.status":newStatus
                     }
                   });
                 }
@@ -5303,6 +5368,9 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+
+                  const newStatus = existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInTicketAgent.payment_In_Schema.status;
+                  const isStatusClosed = existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInTicketAgent.updateOne({
                     $inc: {
@@ -5315,10 +5383,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
-                      "payment_In_Schema.opening":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketAgent.payment_In_Schema.closing+entryData?.ticket_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketAgent.payment_In_Schema.closing + entryData?.ticket_Sales_PKR) : entryData?.ticket_Sales_PKR
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -5438,6 +5506,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutTicketAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentOutTicketAgent.updateOne({
                     $inc: {
@@ -5450,10 +5520,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketAgent.payment_Out_Schema.closing+entryData?.ticket_Purchase_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketAgent.payment_Out_Schema.closing + entryData?.ticket_Purchase_PKR) : entryData?.ticket_Purchase_PKR
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_Out_Schema.status":newStatus
                     }
                   });
                 }
@@ -5704,6 +5774,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInVisitSupplier.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInVisitSupplier.updateOne({
                     $inc: {
@@ -5716,10 +5788,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
-                      "payment_In_Schema.opening":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitSupplier.payment_In_Schema.closing+entryData?.visit_Sales_PKR
+                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitSupplier.payment_In_Schema.closing + entryData?.visit_Sales_PKR) : entryData?.visit_Sales_PKR
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -5838,6 +5910,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutVisitSupplier.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentOutVisitSupplier.updateOne({
                     $inc: {
@@ -5850,10 +5924,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitSupplier.payment_Out_Schema.closing+entryData?.visit_Purchase_Rate_PKR
+                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitSupplier.payment_Out_Schema.closing + entryData?.visit_Purchase_Rate_PKR) : entryData?.visit_Purchase_Rate_PKR
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_Out_Schema.status":newStatus
                     }
                   });
                 }
@@ -5970,6 +6044,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInVisitAgent.payment_In_Schema.status;
+                const isStatusClosed = existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentInVisitAgent.updateOne({
                     $inc: {
@@ -5979,10 +6055,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
                       "payment_In_Schema.remaining_Balance":
                         entryData?.visit_Sales_PKR ?? 0,
-                      "payment_In_Schema.opening":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitAgent.payment_In_Schema.closing+entryData?.visit_Sales_PKR
+                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitAgent.payment_In_Schema.closing + entryData?.visit_Sales_PKR) : entryData?.visit_Sales_PKR
+                      
                     },
                     $set:{
-                      "payment_In_Schema.status":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_In_Schema.status":newStatus
                     }
                   });
                 }
@@ -6101,6 +6178,8 @@ const addMultipleEnteries = async (req, res) => {
                     }
                   );
 
+                  const newStatus = existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutVisitAgent.payment_Out_Schema.status;
+                const isStatusClosed = existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
                   // Update total_Visa_Price_In_PKR and other fields using $inc
                   await existingPaymentOutVisitAgent.updateOne({
                     $inc: {
@@ -6113,10 +6192,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitAgent.payment_Out_Schema.closing+entryData?.visit_Purchase_Rate_PKR
+                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitAgent.payment_Out_Schema.closing +  entryData?.visit_Purchase_Rate_PKR) :  entryData?.visit_Purchase_Rate_PKR
+                      
                     },
                     $set:{
-                      "payment_Out_Schema.status":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                      "payment_Out_Schema.status":newStatus
                     }
                   });
                 }
