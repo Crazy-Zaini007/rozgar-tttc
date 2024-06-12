@@ -652,11 +652,7 @@ export default function AgentPaymentInDetails() {
   }
 
   // Changing Status
-
-
   const [multipleIds, setMultipleIds] = useState([]);
-console.log('multipleIds',multipleIds)
-
   const handleEntryId = (id, isChecked) => {
     if (isChecked) {
     
@@ -1540,9 +1536,8 @@ const printPerson = (person) => {
                           <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
                         </>}
                         <TableCell className='label border ' style={{ width: '18.28%' }}>Status</TableCell>
-                        {/* <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
-                          Actions
-                        </TableCell> */}
+                        <TableCell className='label border ' style={{ width: '18.28%' }}>Opening</TableCell>
+                        <TableCell className='label border ' style={{ width: '18.28%' }}>Closing</TableCell>
                       </TableRow>
                     </TableHead>
 
@@ -1634,6 +1629,12 @@ const printPerson = (person) => {
                                   <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     <span>{entry.status}</span>
                                   </TableCell>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                    <span>{entry.opening}</span>
+                                  </TableCell>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                    <span>{entry.closing}</span>
+                                  </TableCell>
                                   {/* ... Other cells in non-edit mode */}
                                   {/* <TableCell className='border data_td p-1 text-center'>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -1724,12 +1725,10 @@ const printPerson = (person) => {
                     {loading5 ? "Updating" : "Change Status"}
                   </button>
                   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
                     <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
                   </ul>
                 </div>
-               
-
+                
                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                 
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>

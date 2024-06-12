@@ -61,8 +61,8 @@ export default function Invoice() {
   const[rowsValue,setRowsValue]=useState("")
 
   const [date2, setDate2] = useState('')
+  const [date3, setDate3] = useState('')
   const [mySeacrh, setMySeacrh] = useState('')
-
   const [supplierName, setSupplierName] = useState('')
   const [category2, setCategory2] = useState('')
   const [payment_Via2, setPayment_Via2] = useState('')
@@ -72,19 +72,30 @@ export default function Invoice() {
     return new Date(b.date) - new Date(a.date);
   });
 
+  
   const filteredPayment = sortedPayments
-  ? sortedPayments.filter((paymentItem) =>
-      paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
-      paymentItem.date?.toLowerCase().includes(date2.toLowerCase()) &&
-      paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
-      paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-      paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) && 
-      (paymentItem.category?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase()) ||
-      paymentItem.supplierName?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase())||
-      paymentItem.payment_Via?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase()) ||
-      paymentItem.payment_Type?.trim().toLowerCase().startsWith(mySeacrh.toLowerCase())) 
+  ? sortedPayments.filter((paymentItem) => {
+      let isDateInRange = true;
 
-    )
+      // Check if the payment item's date is within the selected date range
+      if (date2 && date3) {
+        isDateInRange =
+          paymentItem.date >= date2 && paymentItem.date <= date3;
+      }
+
+      return (
+        paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
+        isDateInRange &&
+        paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
+        paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
+        (paymentItem.supplierName?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase()) ||
+       paymentItem.payment_Via?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())||
+        paymentItem.slip_No?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())||
+       paymentItem.payment_Type?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())
+      )
+      );
+    })
   : [];
 
 
@@ -254,14 +265,14 @@ export default function Invoice() {
                            <input type="search"  value={mySeacrh} onChange={(e)=>setMySeacrh(e.target.value)}/>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Date:</label>
-                            <select value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'>
-                              <option value="">All</option>
-                              {[...new Set(overAllPayments && overAllPayments.map(data => data.date))].map(dateValue => (
-                                <option value={dateValue} key={dateValue}>{dateValue}</option>
-                              ))}
-                            </select>
-                          </div>
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                           
                           <div className="col-auto px-1">
                             <label htmlFor="">Supp/Agent/Cand:</label>

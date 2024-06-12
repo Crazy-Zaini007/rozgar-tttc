@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import CategoryHook from '../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../hooks/settingHooks/PaymentTypeHook'
@@ -74,6 +74,7 @@ const getBankCash = async () => {
 
   const fetchData = async () => {
     try {
+    await getPaymentViaData()
       setLoading2(true)
       await getCashInHandData();
       await getOverAllPayments()
@@ -81,7 +82,6 @@ const getBankCash = async () => {
       setLoading2(false)
 
     await getCategoryData()
-    await getPaymentViaData()
     await getPaymentTypeData()
 
 
@@ -705,7 +705,7 @@ const getBankCash = async () => {
            <div className="row justify-content-start">
 <div className="col-md-12 tex-start mb-3">
   <button className='btn btn-sm me-1 shadow'style={!bankName?{background:'var(--accent-stonger-blue)',color:'white',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName('')}>All</button>
-{[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
+{[...new Set(paymentVia && paymentVia.map(data => data.payment_Via))].map(dateValue => (
                                 <button className='btn btn-sm me-1 shadow' style={bankName===dateValue?{background:'var(--accent-stonger-blue)',color:'white',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName(dateValue)} value={dateValue} key={dateValue}>{dateValue}</button>
                               ))}
 </div>

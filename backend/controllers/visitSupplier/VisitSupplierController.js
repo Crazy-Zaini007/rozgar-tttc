@@ -1637,7 +1637,10 @@ const getAllAzadSupplierPaymentsIn = async (req, res) => {
             curr_Country: paymentInSchema.curr_Country,
             persons: paymentInSchema.persons || [],
             payment: paymentInSchema.payment || [],
-            status: paymentInSchema.status,
+            candPayments: paymentInSchema.candPayments || [],
+            status: paymentInSchema.status ,
+            opening: paymentInSchema.opening,
+            closing: paymentInSchema.closing,
             createdAt: moment(paymentInSchema.createdAt).format("YYYY-MM-DD"),
             updatedAt: moment(paymentInSchema.updatedAt).format("YYYY-MM-DD"),
           };
@@ -3295,7 +3298,10 @@ const getAllAzadSupplierPaymentsOut = async (req, res) => {
             curr_Country: paymentOutSchema.curr_Country,
             persons: paymentOutSchema.persons || [],
             payment: paymentOutSchema.payment || [],
+            candPayments: paymentOutSchema.candPayments || [],
             status: paymentOutSchema.status,
+            opening: paymentOutSchema.opening,
+            closing: paymentOutSchema.closing,
             createdAt: moment(paymentOutSchema.createdAt).format("YYYY-MM-DD"),
             updatedAt: moment(paymentOutSchema.updatedAt).format("YYYY-MM-DD"),
           };
@@ -3313,7 +3319,7 @@ const changeSupplierPaymentInStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    const { supplierName, newStatus } = req.body;
+    const { supplierName, newStatus,multipleIds } = req.body;
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -3328,19 +3334,25 @@ const changeSupplierPaymentInStatus = async (req, res) => {
     }
 
     // Update status of all persons to false
-    if (
-      existingSupplier.payment_In_Schema &&
-      existingSupplier.payment_In_Schema.persons
-    ) {
-      existingSupplier.payment_In_Schema.persons.forEach((person) => {
-        if (
-          existingSupplier.payment_In_Schema.status.toLowerCase() === "open" &&
-          newStatus.toLowerCase() === "closed"
-        ) {
-          person.status = "Closed";
+    if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons && newStatus.toLowerCase()==="closed") {
+      if(multipleIds.length>0){
+        for(const myId of multipleIds){
+          const allPersons=existingSupplier.payment_In_Schema.persons
+          for (const person of allPersons){
+            if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
+       
+            person.status = "Closed"
+            }
+          }
         }
-      });
+      }
+      
     }
+
+    if (existingSupplier.payment_In_Schema.status==="Open") {
+      existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out
+      existingSupplier.payment_In_Schema.opening=0
+  }
 
     // Toggle the status of the payment in schema
     existingSupplier.payment_In_Schema.status = newStatus;
@@ -3380,7 +3392,7 @@ const changeSupplierPaymentOutStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    const { supplierName, newStatus } = req.body;
+    const { supplierName, newStatus,multipleIds } = req.body;
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -3395,19 +3407,23 @@ const changeSupplierPaymentOutStatus = async (req, res) => {
     }
 
     // Update status of all persons to false
-    if (
-      existingSupplier.payment_Out_Schema &&
-      existingSupplier.payment_Out_Schema.persons
-    ) {
-      existingSupplier.payment_Out_Schema.persons.forEach((person) => {
-        if (
-          existingSupplier.payment_Out_Schema.status.toLowerCase() === "open" &&
-          newStatus.toLowerCase() === "closed"
-        ) {
-          person.status = "Closed";
+    if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons && newStatus.toLowerCase()==="closed") {
+      if(multipleIds.length>0){
+        for(const myId of multipleIds){
+          const allPersons=existingSupplier.payment_Out_Schema.persons
+          for (const person of allPersons){
+            if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
+            person.status = "Closed"
+            }
+          }
         }
-      });
+      }
+      
     }
+    if (existingSupplier.payment_Out_Schema.status==="Open") {
+      existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
+      existingSupplier.payment_Out_Schema.opening=0
+  }
 
     // Toggle the status of the payment in schema
     existingSupplier.payment_Out_Schema.status = newStatus;

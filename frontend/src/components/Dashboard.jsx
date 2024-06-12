@@ -109,7 +109,8 @@ const currentDate = new Date().toISOString().split('T')[0];
 const todayPayments =overAllPayments && overAllPayments.filter(payment => payment.date === currentDate);
 
 const collapsed = useSelector((state) => state.collapsed.collapsed);
-
+const [date2, setDate2] = useState('')
+  const [date3, setDate3] = useState('')
 const [supplierName, setSupplierName] = useState('')
 const [type, setType] = useState('')
 const [category2, setCategory2] = useState('')
@@ -117,24 +118,32 @@ const [payment_Via2, setPayment_Via2] = useState('')
 const [payment_Type2, setPayment_Type2] = useState('')
 const [search, setSearch] = useState('')
 
-const filteredPayment = todayPayments
-? todayPayments.filter((paymentItem) => {
-    return (
-      paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
-      paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
-      paymentItem.type?.toLowerCase().includes(type.toLowerCase()) &&
-      paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
-      paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
-    (paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
-     paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
-     paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
-     paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
-     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
-    )
-    );
-  })
-: [];
+const filteredPayment = (date2 && date3 ? overAllPayments : todayPayments)
+    ? (date2 && date3 ? overAllPayments : todayPayments).filter((paymentItem) => {
+      let isDateInRange = true;
+      if (date2 && date3) {
+        isDateInRange = paymentItem.date >= date2 && paymentItem.date <= date3;
+      }
 
+      return (
+        paymentItem.category?.toLowerCase().includes(category2.toLowerCase()) &&
+        isDateInRange &&
+        paymentItem.supplierName?.toLowerCase().includes(supplierName.toLowerCase()) &&
+        paymentItem.type?.toLowerCase().includes(type.toLowerCase()) &&
+        paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
+        (
+          paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
+        )
+      );
+    })
+    : [];
+
+const sortedPayments=filteredPayment&&filteredPayment.sort((a,b)=>new Date(b.date)-new Date(a.date))
 
 
 const printPaymentInvoice = (paymentItem) => {
@@ -156,7 +165,7 @@ const printContentString = `
   <p class="date">Date: ${formattedDate}</p>
   </div>
   <div class="print-header">
-    <h1 class="title">Today Payment Invoice</h1>
+    <h1 class="title">Payment Invoice</h1>
   </div>
   <hr/>
   <table class='print-table'>
@@ -473,13 +482,21 @@ if (printWindow) {
                             <label htmlFor="">Search Here:</label>
                            <input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
                           </div>
-                        
+                          <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label>
+                  <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label>
+                  <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                           
                           <div className="col-auto px-1">
                             <label htmlFor="">Supp/Agent/Cand:</label>
                             <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
-                              {[...new Set(todayPayments && todayPayments.map(data => data.supplierName))].map(dateValue => (
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.supplierName))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
@@ -488,7 +505,7 @@ if (printWindow) {
                             <label htmlFor="">Reference Type:</label>
                             <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
-                              {[...new Set(todayPayments && todayPayments.map(data => data.type))].map(dateValue => (
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.type))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
@@ -498,7 +515,7 @@ if (printWindow) {
                             <label htmlFor="">Category:</label>
                             <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
-                              {[...new Set(todayPayments && todayPayments.map(data => data.category))].map(dateValue => (
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.category))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
@@ -507,7 +524,7 @@ if (printWindow) {
                             <label htmlFor="">Payment Via:</label>
                             <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
-                              {[...new Set(todayPayments && todayPayments.map(data => data.payment_Via))].map(dateValue => (
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
@@ -516,7 +533,7 @@ if (printWindow) {
                             <label htmlFor="">Payment Type:</label>
                             <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
-                              {[...new Set(todayPayments && todayPayments.map(data => data.payment_Type))].map(dateValue => (
+                              {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Type))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
@@ -565,7 +582,7 @@ if (printWindow) {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {filteredPayment && filteredPayment.length>0 ? filteredPayment.map((cash, outerIndex) => (
+                          {sortedPayments && sortedPayments.length>0 ? sortedPayments.map((cash, outerIndex) => (
                               // Map through the payment array
                              
                                <>

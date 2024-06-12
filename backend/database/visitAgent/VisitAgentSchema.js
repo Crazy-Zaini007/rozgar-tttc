@@ -40,14 +40,22 @@ const Payment_InSchema = new mongoose.Schema(
       default: 0,
     },
 
-
     curr_Country: {
       type: String,
-
     },
     status:{
       type:String,
       default:"Open"
+          },
+          opening:{
+            type: Number,
+            default:0
+
+          },
+          closing:{
+            type: Number,
+            default:0
+
           },
     persons: [
       {
@@ -339,6 +347,16 @@ const Payment_OutSchema = new mongoose.Schema(
     status:{
       type:String,
       default:"Open"
+          },
+          opening:{
+            type: Number,
+            default:0
+
+          },
+          closing:{
+            type: Number,
+            default:0
+
           },
     persons: [
       {

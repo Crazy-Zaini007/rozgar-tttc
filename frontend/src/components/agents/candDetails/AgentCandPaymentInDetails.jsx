@@ -542,6 +542,18 @@ export default function AgentCandPaymentInDetails() {
 
   // Changing Status
 
+  const [multipleIds, setMultipleIds] = useState([]);
+  const handleEntryId = (id, isChecked) => {
+    if (isChecked) {
+    
+      setMultipleIds((prevIds) => [...prevIds, id]);
+    } else {
+     
+      setMultipleIds((prevIds) => prevIds.filter((entryId) => entryId !== id));
+    }
+   
+  }
+
   const changeStatus = async (myStatus) => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
@@ -554,7 +566,7 @@ export default function AgentCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier, newStatus })
+          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,multipleIds })
         })
 
         const json = await response.json()
@@ -1728,6 +1740,8 @@ const[rowsValue1,setRowsValue1]=useState("")
                           <TableCell className='label border' style={{ width: '18.28%' }}>RPI_Curr</TableCell>
                         </>}
                         <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
+                        <TableCell className='label border ' style={{ width: '18.28%' }}>Opening</TableCell>
+                        <TableCell className='label border ' style={{ width: '18.28%' }}>Closing</TableCell>
                         {/* <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
                           Actions
                         </TableCell> */}
@@ -1819,6 +1833,12 @@ const[rowsValue1,setRowsValue1]=useState("")
                                   </>}
                                   <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
                                     <span>{entry.status}</span>
+                                  </TableCell>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                    <span>{entry.opening}</span>
+                                  </TableCell>
+                                  <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                    <span>{entry.closing}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
                                   {/* <TableCell className='border data_td p-1 text-center'>
@@ -1915,10 +1935,8 @@ const[rowsValue1,setRowsValue1]=useState("")
                   {loading5 ? "Updating" : "Change Status"}
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
-                  <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
-
-                </ul>
+                    <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
+                  </ul>
               </div>
          }
               <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
@@ -2841,6 +2859,128 @@ const[rowsValue1,setRowsValue1]=useState("")
           </div>
 </>
 }
+ {/* Modal for closing the status of  persons*/}
+
+ <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-xl">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h4 className="modal-title" id="exampleModalLabel">Select Persons to closed</h4>
+        <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
+      </div>
+      <div className="modal-body detail_table">
+      <TableContainer component={Paper} >
+              <Table stickyHeader>
+                <TableHead className="thead">
+                  <TableRow>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Select</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Name</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>PP#</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Entry_Mode</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Company</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Trade</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Country</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Final_Status</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Flight_Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>VPI_PKR</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Total In</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Remaining_PKR</TableCell>
+                    {show === true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border'>Status</TableCell>
+                    
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredPersons.map((filteredData) => (
+                    <>
+                      {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
+
+                        <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode2 && editedRowIndex2 === index ? (
+                            <>
+                             
+                            </>
+                          ) : (
+                            <>
+                             <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.pp_No}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Mode}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.company}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.trade}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.country}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.final_Status}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.flight_Date}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_PKR}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.total_In}</TableCell>
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.remaining_Price}</TableCell>
+                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.visa_Price_In_Curr}</TableCell>}
+                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
+                            </>
+                          )}
+                         
+
+                        </TableRow>
+                      ))}
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                        <TableCell className='border data_td text-center bg-warning text-white'>
+                          
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-success text-white'>
+                          
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.total_In);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                        <TableCell className='border data_td text-center bg-danger text-white'>
+                          
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.remaining_Price);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
+        <button type="button" className="btn btn-success btn-sm shadow" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
+      </div>
+    </div>
+  </div>
+</div>
     </>
   )
 }

@@ -417,6 +417,8 @@ const addEntry = async (req, res) => {
                     ? visa_Sale_Rate_Oth_Cur
                     : 0,
                   curr_Country: cur_Country_One,
+                  opening:visa_Sales_Rate_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -461,7 +463,7 @@ const addEntry = async (req, res) => {
                 );
 
               if (existingPersonIndex !== -1) {
-                // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+               
                 existingPaymentInSupplier.payment_In_Schema.total_Visa_Price_In_PKR +=
                   visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0;
                 existingPaymentInSupplier.payment_In_Schema.remaining_Balance +=
@@ -470,6 +472,10 @@ const addEntry = async (req, res) => {
                   visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0;
                 existingPaymentInSupplier.payment_In_Schema.remaining_Curr +=
                   visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0;
+                  if(existingPaymentInSupplier.payment_In_Schema.status.toLowerCase()==='closed'){
+                    existingPaymentInSupplier.payment_In_Schema.status='Open'
+                    existingPaymentInSupplier.payment_In_Schema.opening+=existingPaymentInSupplier.payment_In_Schema.closing+visa_Sales_Rate_PKR
+                  }
               } else {
                 // If the person does not exist, add them to the persons array
                 existingPaymentInSupplier.payment_In_Schema.persons.push({
@@ -506,13 +512,16 @@ const addEntry = async (req, res) => {
                     "payment_In_Schema.remaining_Balance": visa_Sales_Rate_PKR
                       ? visa_Sales_Rate_PKR
                       : 0,
-
                     "payment_In_Schema.total_Visa_Price_In_Curr":
                       visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
                       ? visa_Sale_Rate_Oth_Cur
                       : 0,
+                      "payment_In_Schema.opening":existingPaymentInSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInSupplier.payment_In_Schema.closing+visa_Sales_Rate_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -566,6 +575,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
+                  opening:visa_Purchase_Rate_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -619,6 +630,7 @@ const addEntry = async (req, res) => {
                   visa_Purchase_Rate_Oth_Cur ? visa_Purchase_Rate_Oth_Cur : 0;
                 existingPaymentOutSupplier.payment_Out_Schema.remaining_Curr +=
                   visa_Purchase_Rate_Oth_Cur ? visa_Purchase_Rate_Oth_Cur : 0;
+                  
               } else {
                 // If the person does not exist, add them to the persons array
                 existingPaymentOutSupplier.payment_Out_Schema.persons.push({
@@ -665,7 +677,12 @@ const addEntry = async (req, res) => {
                       visa_Purchase_Rate_Oth_Cur
                         ? visa_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutSupplier.payment_Out_Schema.closing+visa_Purchase_Rate_PKR
+
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -722,6 +739,8 @@ const addEntry = async (req, res) => {
                     ? visa_Sale_Rate_Oth_Cur
                     : 0,
                   curr_Country: cur_Country_One,
+                  opening:visa_Sales_Rate_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -819,7 +838,11 @@ const addEntry = async (req, res) => {
                     "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
                       ? visa_Sale_Rate_Oth_Cur
                       : 0,
+                      "payment_In_Schema.opening":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAgent.payment_In_Schema.closing+visa_Sales_Rate_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -873,6 +896,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
+                  opening:visa_Purchase_Rate_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -970,7 +995,12 @@ const addEntry = async (req, res) => {
                       visa_Purchase_Rate_Oth_Cur
                         ? visa_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAgent.payment_Out_Schema.closing+visa_Purchase_Rate_PKR
+
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -1155,6 +1185,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
+                  opening:azad_Visa_Sales_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -1246,7 +1278,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Sales_Rate_Oth_Cur
                         ? azad_Visa_Sales_Rate_Oth_Cur
                         : 0,
+                      "payment_In_Schema.opening":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadSupplier.payment_In_Schema.closing+azad_Visa_Sales_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -1304,7 +1340,9 @@ const addEntry = async (req, res) => {
                     ? azad_Visa_Purchase_Rate_Oth_Cur
                     : 0,
 
-                  curr_Country: cur_Country_One,
+                  curr_Country: cur_Country_Two,
+                  opening:azad_Visa_Purchase_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -1396,7 +1434,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Purchase_Rate_Oth_Cur
                         ? azad_Visa_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadSupplier.payment_Out_Schema.closing+azad_Visa_Purchase_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -1454,6 +1496,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
+                  opening:azad_Visa_Sales_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -1545,7 +1589,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Sales_Rate_Oth_Cur
                         ? azad_Visa_Sales_Rate_Oth_Cur
                         : 0,
+                      "payment_In_Schema.opening":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadAgent.payment_In_Schema.closing+azad_Visa_Sales_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -1602,7 +1650,9 @@ const addEntry = async (req, res) => {
                     ? azad_Visa_Purchase_Rate_Oth_Cur
                     : 0,
 
-                  curr_Country: cur_Country_One,
+                  curr_Country: cur_Country_Two,
+                  opening:azad_Visa_Purchase_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -1694,7 +1744,11 @@ const addEntry = async (req, res) => {
                       azad_Visa_Purchase_Rate_Oth_Cur
                         ? azad_Visa_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadAgent.payment_Out_Schema.closing+azad_Visa_Purchase_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -1881,6 +1935,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
+                  opening:ticket_Sales_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -1965,7 +2021,11 @@ const addEntry = async (req, res) => {
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr":
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
+                      "payment_In_Schema.opening":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketSupplier.payment_In_Schema.closing+ticket_Sales_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -2021,7 +2081,9 @@ const addEntry = async (req, res) => {
                     ? ticket_Purchase_Rate_Oth_Cur
                     : 0,
 
-                  curr_Country: cur_Country_One,
+                    curr_Country: cur_Country_Two,
+                    opening:ticket_Purchase_PKR,
+                    closing:0,
                   persons: [
                     {
                       name,
@@ -2114,7 +2176,11 @@ const addEntry = async (req, res) => {
                       ticket_Purchase_Rate_Oth_Cur
                         ? ticket_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketSupplier.payment_Out_Schema.closing+ticket_Purchase_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -2168,7 +2234,9 @@ const addEntry = async (req, res) => {
                     ? ticket_Sales_Rate_Oth_Cur
                     : 0,
 
-                  curr_Country: cur_Country_One,
+                    curr_Country: cur_Country_One,
+                    opening:ticket_Sales_PKR,
+                    closing:0,
                   persons: [
                     {
                       name,
@@ -2252,7 +2320,11 @@ const addEntry = async (req, res) => {
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr":
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
+                      "payment_In_Schema.opening":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketAgent.payment_In_Schema.closing+ticket_Sales_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -2309,7 +2381,9 @@ const addEntry = async (req, res) => {
                     ? ticket_Purchase_Rate_Oth_Cur
                     : 0,
 
-                  curr_Country: cur_Country_One,
+                    curr_Country: cur_Country_Two,
+                    opening:ticket_Purchase_PKR,
+                    closing:0,
                   persons: [
                     {
                       name,
@@ -2401,7 +2475,11 @@ const addEntry = async (req, res) => {
                       ticket_Purchase_Rate_Oth_Cur
                         ? ticket_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketAgent.payment_Out_Schema.closing+ticket_Purchase_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -2587,6 +2665,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
+                  opening:visit_Sales_PKR,
+                    closing:0,
                   persons: [
                     {
                       name,
@@ -2670,7 +2750,11 @@ const addEntry = async (req, res) => {
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
                     "payment_In_Schema.remaining_Curr":
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
+                      "payment_In_Schema.opening":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitSupplier.payment_In_Schema.closing+visit_Sales_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -2726,7 +2810,9 @@ const addEntry = async (req, res) => {
                     ? visit_Purchase_Rate_Oth_Cur
                     : 0,
 
-                  curr_Country: cur_Country_One,
+                    curr_Country: cur_Country_Two,
+                    opening:visit_Purchase_Rate_PKR,
+                    closing:0,
                   persons: [
                     {
                       name,
@@ -2815,7 +2901,11 @@ const addEntry = async (req, res) => {
                       visit_Purchase_Rate_Oth_Cur
                         ? visit_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitSupplier.payment_Out_Schema.closing+visit_Purchase_Rate_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -2870,6 +2960,8 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
+                  opening:visit_Sales_PKR,
+                  closing:0,
                   persons: [
                     {
                       name,
@@ -2954,7 +3046,11 @@ const addEntry = async (req, res) => {
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
                     "payment_In_Schema.remaining_Curr":
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
+                      "payment_In_Schema.opening":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitAgent.payment_In_Schema.closing+visit_Sales_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -3010,8 +3106,9 @@ const addEntry = async (req, res) => {
                   remaining_Curr: visit_Purchase_Rate_Oth_Cur
                     ? visit_Purchase_Rate_Oth_Cur
                     : 0,
-
-                  curr_Country: cur_Country_One,
+                    curr_Country: cur_Country_Two,
+                    opening:visit_Purchase_Rate_PKR,
+                    closing:0,
                   persons: [
                     {
                       name,
@@ -3099,7 +3196,11 @@ const addEntry = async (req, res) => {
                       visit_Purchase_Rate_Oth_Cur
                         ? visit_Purchase_Rate_Oth_Cur
                         : 0,
+                      "payment_Out_Schema.opening":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitAgent.payment_Out_Schema.closing+visit_Purchase_Rate_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -3532,6 +3633,8 @@ const addMultipleEnteries = async (req, res) => {
                     entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                   remaining_Curr: entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                   curr_Country: entryData.cur_Country_One,
+                  opening:entryData?.visa_Sales_Rate_PKR,
+                  closing:0,
                   persons: [
                     {
                       name: entryData.name,
@@ -3608,7 +3711,11 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     "payment_In_Schema.remaining_Curr":
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInSupplier.payment_In_Schema.closing+entryData?.visa_Sales_Rate_PKR
                   },
+                  $set:{
+                    "payment_In_Schema.status":existingPaymentInSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -3647,6 +3754,8 @@ const addMultipleEnteries = async (req, res) => {
                   remaining_Curr: entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
 
                   curr_Country: entryData.cur_Country_Two,
+                  opening:entryData?.visa_Purchase_Rate_PKR,
+                  closing:0,
                   persons: [
                     {
                       name: entryData.name,
@@ -3725,7 +3834,11 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
                     "payment_Out_Schema.remaining_Curr":
                       entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutSupplier.payment_Out_Schema.closing+entryData?.visa_Purchase_Rate_PKR
                   },
+                  $set:{
+                    "payment_Out_Schema.status":existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                  }
                 });
               }
 
@@ -3767,8 +3880,9 @@ const addMultipleEnteries = async (req, res) => {
                     total_Visa_Price_In_Curr:
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     remaining_Curr: entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
-
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.visa_Sales_Rate_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -3847,8 +3961,11 @@ const addMultipleEnteries = async (req, res) => {
                       "payment_In_Schema.total_Visa_Price_In_Curr":
                         entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
-                        entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
+                        entryData?.visa_Sale_Rate_Oth_Cur ?? 0,                      "payment_In_Schema.opening":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAgent.payment_In_Schema.closing+entryData?.visa_Sales_Rate_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -3896,6 +4013,8 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.visa_Purchase_Rate_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -3976,7 +4095,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAgent.payment_Out_Schema.closing+entryData?.visa_Purchase_Rate_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -4156,6 +4279,8 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.azad_Visa_Sales_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -4233,7 +4358,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadSupplier.payment_In_Schema.closing+entryData?.azad_Visa_Sales_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -4284,7 +4413,9 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr:
                       entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
 
-                    curr_Country: entryData.cur_Country_One,
+                    curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.azad_Visa_Purchase_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -4363,7 +4494,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadSupplier.payment_Out_Schema.closing+entryData?.azad_Visa_Purchase_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -4415,6 +4550,8 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.azad_Visa_Sales_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -4492,7 +4629,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInAzadAgent.payment_In_Schema.closing+entryData?.azad_Visa_Sales_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -4543,7 +4684,9 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr:
                       entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
 
-                    curr_Country: entryData.cur_Country_One,
+                    curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.azad_Visa_Purchase_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -4621,7 +4764,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutAzadAgent.payment_Out_Schema.closing+entryData?.azad_Visa_Purchase_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -4809,6 +4956,8 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.ticket_Sales_PKR,
+                  closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -4886,7 +5035,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketSupplier.payment_In_Schema.closing+entryData?.ticket_Sales_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -4937,7 +5090,9 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr:
                       entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
 
-                    curr_Country: entryData.cur_Country_One,
+                    curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.ticket_Purchase_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5016,7 +5171,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketSupplier.payment_Out_Schema.closing+entryData?.ticket_Purchase_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -5067,6 +5226,8 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.ticket_Sales_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5143,7 +5304,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInTicketAgent.payment_In_Schema.closing+entryData?.ticket_Sales_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -5194,7 +5359,9 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr:
                       entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
 
-                    curr_Country: entryData.cur_Country_One,
+                    curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.ticket_Purchase_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5272,7 +5439,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutTicketAgent.payment_Out_Schema.closing+entryData?.ticket_Purchase_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -5456,6 +5627,8 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.visit_Sales_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5532,7 +5705,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitSupplier.payment_In_Schema.closing+entryData?.visit_Sales_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -5581,8 +5758,9 @@ const addMultipleEnteries = async (req, res) => {
                     total_Azad_Visa_Price_Out_Curr:
                       entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                     remaining_Curr: entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
-
-                    curr_Country: entryData.cur_Country_One,
+                    curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.visit_Purchase_Rate_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5661,7 +5839,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitSupplier.payment_Out_Schema.closing+entryData?.visit_Purchase_Rate_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -5712,6 +5894,8 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
+                    opening:entryData?.visit_Sales_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5784,7 +5968,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
                       "payment_In_Schema.remaining_Balance":
                         entryData?.visit_Sales_PKR ?? 0,
+                      "payment_In_Schema.opening":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&existingPaymentInVisitAgent.payment_In_Schema.closing+entryData?.visit_Sales_PKR
                     },
+                    $set:{
+                      "payment_In_Schema.status":existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
@@ -5834,7 +6022,9 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                     remaining_Curr: entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
 
-                    curr_Country: entryData.cur_Country_One,
+                    curr_Country: entryData.cur_Country_Two,
+                    opening:entryData?.visit_Purchase_Rate_PKR,
+                    closing:0,
                     persons: [
                       {
                         name: entryData.name,
@@ -5912,7 +6102,11 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
+                      "payment_Out_Schema.opening":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&existingPaymentOutVisitAgent.payment_Out_Schema.closing+entryData?.visit_Purchase_Rate_PKR
                     },
+                    $set:{
+                      "payment_Out_Schema.status":existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase()==='closed'&&"Open"
+                    }
                   });
                 }
 
