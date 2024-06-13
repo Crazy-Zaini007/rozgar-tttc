@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -18,13 +18,17 @@ import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
 import CandidateHook from '../../../hooks/candidateHooks/CandidateHook';
-
 import AzadVisaHook from '../../../hooks/azadVisaHooks/AzadVisaHooks';
 import TicketHook from '../../../hooks/ticketHooks/TicketHook';
 import VisitHook from '../../../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../../../hooks/settingHooks/CPPHook';
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
+import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
+import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
+import ProtectorHook from '../../../hooks/protectorHooks//ProtectorHook';
+import ExpeCategoryHook from '../../../hooks/settingHooks/ExpeCategoryHook'
+
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function Entry2() {
@@ -48,10 +52,14 @@ export default function Entry2() {
   const visitAgent_Payments_Out = useSelector((state) => state.visits.visitAgent_Payments_Out)
   const visitCand_Payments_Out = useSelector((state) => state.visits.visitCand_Payments_Out)
   const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupplier_Payments_Out)
+  const protector_Payments_Out = useSelector((state) => state.protectors.protector_Payments_Out)
 
   const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
   const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
   const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
+  const assets = useSelector((state) => state.setting.assets)
+  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
+  const expenseCategories = useSelector((state) => state.setting.expenseCategories);
 
   const [selectedSupplier, setSelectedSupplier] = useState('');
 
@@ -59,7 +67,7 @@ export default function Entry2() {
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
-  const { getPaymentsOut } = AgentHook()
+  const { getAgentPaymentsOut } = AgentHook()
   const { getSupplierPaymentsOut } = SupplierHook()
   const { getCandPaymentsOut } = CandidateHook()
   const { getAzadAgentPaymentsOut,getAzadCandPaymentsOut,getAzadSupplierPaymentsOut } = AzadVisaHook()
@@ -68,8 +76,14 @@ export default function Entry2() {
   const { getCDWCPaymentsOut } = CDWCHook()
   const { getCDWOCPaymentsOut } = CDWOCHook()
   const { getCPPData } = CPPHook()
+  const { getAssetsData } = NewAssetsHook()
+  const { getPayments } = AssetsHook()
+  const { getPaymentsOut } = ProtectorHook()
+  const { getExpenseCategoryData } = ExpeCategoryHook()
 
   // getting Data from DB
+  const abortCont = useRef(new AbortController());
+
   const { user } = useAuthContext()
   const fetchData = async () => {
     try {
@@ -78,6 +92,8 @@ export default function Entry2() {
         getCategoryData()
         getPaymentViaData()
         getPaymentTypeData()
+        getExpenseCategoryData()
+        getAgentPaymentsOut()
         getPaymentsOut()
         getSupplierPaymentsOut()
         getCandPaymentsOut()
@@ -91,6 +107,8 @@ export default function Entry2() {
         getVisitCandPaymentsOut()
         getVisitSupplierPaymentsOut()
         getCPPData()
+        getAssetsData()
+        getPayments()
         getCDWCPaymentsOut()
         getCDWOCPaymentsOut()
     } catch (error) {
@@ -99,6 +117,11 @@ export default function Entry2() {
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch])
 
 
@@ -119,8 +142,6 @@ export default function Entry2() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-  // const [open, setOpen] = useState(true)
-  // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
 
   useEffect(() => {
@@ -175,6 +196,7 @@ export default function Entry2() {
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
+  
   const handleAgentForm = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -267,8 +289,7 @@ export default function Entry2() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          // open,
-          // close,
+          
           date
         }),
       });
@@ -296,8 +317,7 @@ export default function Entry2() {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        // setOpen(true)
-        // setClose(false);
+      
 
       }
 
@@ -1163,11 +1183,226 @@ const handleTicketCandForm = async (e) => {
       setLoading(false);
     }
   };
+
+  
+  const handleAssetForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/assets/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          assetName:supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPayments();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+       
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+  const handleProtectorForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/protectors/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          // open,
+          // close,
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+        // setOpen(true)
+        // setClose(false);
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+  const handleExpenseForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    try {
+        const response = await fetch(`${apiUrl}/auth/expenses/add/expense`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+                name:supplierName,
+                expCategory:category,
+                payment_Out,
+                payment_Via,
+                payment_Type,
+                slip_No,
+                slip_Pic,
+                details,
+                curr_Country,
+                curr_Rate,
+                curr_Amount,
+                date
+            }),
+        });
+
+        const json = await response.json();
+        if (!response.ok) {
+
+            setNewMessage(toast.error(json.message));
+            setLoading(false)
+
+        }
+        if (response.ok) {
+            setNewMessage(toast.success(json.message));
+            setLoading(false);
+            setSupplierName('')
+            setCategory('');
+            setPayment_Via('');
+            setPayment_Type('');
+            setSlip_No('');
+            setPayment_Out('');
+            setSlip_Pic('');
+            setDetails('');
+            setCurr_Country('');
+            setCurr_Rate('');
+            setDate('')
+
+        }
+
+    } catch (error) {
+
+        setNewMessage(toast.error('Server is not Responding...'));
+        setLoading(false);
+    }
+};
   return (
     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" && handleCDWOCForm)}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"? handleAssetForm:type === "Protector"? handleProtectorForm:type === "Expense"&& handleExpenseForm)}>
             <div className="text-end ">
              
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment Out"}</button>
@@ -1181,6 +1416,7 @@ const handleTicketCandForm = async (e) => {
                   <option value="Agent">Agent</option>
                  <option value="Supplier">Supplier</option>
                  <option value="Candidate">Candidate</option>
+                 <option value="Protector">Protector</option>
                  <option value="Azad Agent">Azad Agent</option>
                  <option value="Azad Supplier">Azad Supplier</option>
                  <option value="Azad Candidate">Azad Candidate</option>
@@ -1192,11 +1428,16 @@ const handleTicketCandForm = async (e) => {
                  <option value="Visit Candidate">Visit Candidate</option>
                  <option value="Credit/Debit WC">Credit/Debit WC</option>
                  <option value="Credit/Debit WOC">Credit/Debit WOC</option>
+                 <option value="Assets">Assets</option>
+                 <option value="Expense">Expense</option>
+
+
                 </select>
               </div>
               
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Name</label>
+                {(type!=='Expense' || type==='')  ?
                 <select required value={supplierName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
@@ -1231,6 +1472,18 @@ const handleTicketCandForm = async (e) => {
                  <option value="">Choose Candidate</option>
                   {candidate_Payments_Out &&
                     candidate_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                   {type==="Protector" &&
+                 <>
+                 <option value="">Choose Protector</option>
+                  {protector_Payments_Out &&
+                    protector_Payments_Out.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1373,17 +1626,42 @@ const handleTicketCandForm = async (e) => {
                   }
                  </>
                  }
-                </select>
+                  {type==="Assets" &&
+                 <>
+                 <option value="">Choose Asset</option>
+                  {assets &&
+                    assets.map((data) => (
+                      <option key={data._id} value={data.assetName}>
+                        {data.assetName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                </select>:
+                <input type="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
+                }
 
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label >Category </label>
+                <label>{type==="Expense"&&"Expense"} Category </label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                   <option value="">Choose</option>
+                 {type !=="Expense" &&
+                 <>
                   {categories && categories.map((data) => (
                     <option key={data._id} value={data.category}>{data.category}</option>
                   ))}
+                 </>
+                 }
+                  {type ==="Expense" &&
+                 <>
+                  {expenseCategories && expenseCategories.map((data) => (
+                    <option key={data._id} value={data.category}>{data.category}</option>
+                  ))}
+                 </>
+                 }
                 </select>
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -1489,8 +1767,8 @@ const handleTicketCandForm = async (e) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {(type === "Agent" ? agent_Payments_Out : type === "Supplier" ? supp_Payments_Out : type === "Candidate" ? candidate_Payments_Out: type === "Azad Agent" ? azadAgent_Payments_Out: type === "Azad Supplier" ? azadSupplier_Payments_Out: type === "Azad Candidate" ? azadCand_Payments_Out: type === "Ticket Agent" ? ticketAgent_Payments_Out: type === "Ticket Supplier" ? ticketSupplier_Payments_Out: type === "Ticket Candidate" ? ticketCand_Payments_Out: type === "Visit Agent" ? visitAgent_Payments_Out: type === "Visit Supplier" ? visitSupplier_Payments_Out: type === "Visit Candidate" ? visitCand_Payments_Out: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In: [])
-                    .filter((data) => data.supplierName === selectedSupplier)
+                {(type === "Agent" ? agent_Payments_Out : type === "Supplier" ? supp_Payments_Out : type === "Candidate" ? candidate_Payments_Out: type === "Azad Agent" ? azadAgent_Payments_Out: type === "Azad Supplier" ? azadSupplier_Payments_Out: type === "Azad Candidate" ? azadCand_Payments_Out: type === "Ticket Agent" ? ticketAgent_Payments_Out: type === "Ticket Supplier" ? ticketSupplier_Payments_Out: type === "Ticket Candidate" ? ticketCand_Payments_Out: type === "Visit Agent" ? visitAgent_Payments_Out: type === "Visit Supplier" ? visitSupplier_Payments_Out: type === "Visit Candidate" ? visitCand_Payments_Out: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In:type === "Assets" ? assetsPayments:type === "Protector" ? protector_Payments_Out: [])
+                    .filter((data) => type === "Assets"? data.assetName:data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>

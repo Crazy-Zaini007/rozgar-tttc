@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -59,9 +59,15 @@ export default function Entry1() {
     } catch (error) {
     }
   };
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch])
 
 

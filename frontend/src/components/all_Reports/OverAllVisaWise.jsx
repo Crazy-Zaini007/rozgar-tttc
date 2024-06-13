@@ -27,11 +27,16 @@ export default function OverAllVisaWise() {
     }
   };
   
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
   
       fetchData()
-    
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
   }, []);
 
   const enteries = useSelector((state) => state.enteries.enteries);

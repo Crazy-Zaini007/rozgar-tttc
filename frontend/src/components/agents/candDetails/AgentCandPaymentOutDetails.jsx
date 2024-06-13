@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import AgentHook from '../../../hooks/agentHooks/AgentHook'
 import { useSelector, useDispatch } from 'react-redux';
 import { saveAs } from 'file-saver';
@@ -45,6 +45,7 @@ export default function AgentCandPaymentOutDetails() {
   const { user } = useAuthContext()
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  const abortCont = useRef(new AbortController());
 
   const[details,setDetails]=useState()
   const handleDetails=(paymentDetails)=>{
@@ -77,6 +78,12 @@ export default function AgentCandPaymentOutDetails() {
     if (user) {
       fetchData();
     }
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); // Abort the fetch request on component unmount or hook call again
+      }
+    }
+
   }, [])
 
   const currencies = useSelector((state) => state.setting.currencies);

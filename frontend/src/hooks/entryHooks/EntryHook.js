@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useRef} from 'react'
 import { getEntry, deleteEntry } from '../../redux/reducers/entrySlice'
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ export default function EntryHook() {
   const [loading, setLoading] = useState(false)
   const [, setNewMessage] = useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
+  const abortCont = useRef(new AbortController());
 
   const getEntries = async () => {
     setLoading(true)
@@ -18,6 +19,8 @@ export default function EntryHook() {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
+        signal: abortCont.current.signal
+
       });
 
       const json = await response.json();
@@ -26,11 +29,15 @@ export default function EntryHook() {
         dispatch(getEntry(json.data)); // Dispatch the action with received data
       }
     } catch (error) {
+      if (error.name === 'AbortError') {
+                
+      } else {
+        console.log(error);
+      }
       setLoading(false)
 
     }
   }
-
 
   // Deleting a single entry Hook
   const delEntry = async (entryId) => {

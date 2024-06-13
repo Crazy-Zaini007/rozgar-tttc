@@ -73,11 +73,16 @@ export default function ReceivableReports() {
     }
   };
   
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
       fetchData()
-    
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
   }, []);
 
   

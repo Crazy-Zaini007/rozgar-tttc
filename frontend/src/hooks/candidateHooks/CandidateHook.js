@@ -1,9 +1,11 @@
+import {useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getCandidate_Payments_In, getCandidate_Payments_Out } from '../../redux/reducers/candidateSlice'
 
 export default function CandidateHook() {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const abortCont = useRef(new AbortController());
 
     const dispatch = useDispatch()
     const { user } = useAuthContext()
@@ -14,6 +16,8 @@ export default function CandidateHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -24,7 +28,11 @@ export default function CandidateHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -36,6 +44,8 @@ export default function CandidateHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -46,7 +56,11 @@ export default function CandidateHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -59,6 +73,8 @@ export default function CandidateHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -69,7 +85,11 @@ export default function CandidateHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -81,6 +101,8 @@ export default function CandidateHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -91,7 +113,11 @@ export default function CandidateHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }

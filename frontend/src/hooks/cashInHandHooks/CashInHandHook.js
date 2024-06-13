@@ -1,9 +1,8 @@
-import React,{useState} from 'react'
+import React,{useState,useRef} from 'react'
 import { getCashInHand } from '../../redux/reducers/cashInHandSlice'
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function CashInHandHook() {
     const dispatch = useDispatch();
@@ -11,6 +10,9 @@ export default function CashInHandHook() {
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(null)
     const [, setNewMessage] = useState('')
+
+const abortCont = useRef(new AbortController());
+const apiUrl = process.env.REACT_APP_API_URL;
    
     const getCashInHandData = async () => {
       setLoading(true)
@@ -21,7 +23,9 @@ export default function CashInHandHook() {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.token}`
-          }
+          },
+          signal: abortCont.current.signal
+
         })
   
         const json = await response.json();
@@ -36,6 +40,11 @@ export default function CashInHandHook() {
         }
       }
       catch (error) {
+        if (error.name === 'AbortError') {
+                
+        } else {
+          console.log(error);
+        }
         setLoading(false);
       }
     }
@@ -50,7 +59,9 @@ export default function CashInHandHook() {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.token}`
-          }
+          },
+          signal: abortCont.current.signal
+
         })
   
         const json = await response.json();
@@ -65,6 +76,11 @@ export default function CashInHandHook() {
         }
       }
       catch (error) {
+        if (error.name === 'AbortError') {
+                
+        } else {
+          console.log(error);
+        }
         setLoading(false);
       }
     }

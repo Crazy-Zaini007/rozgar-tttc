@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
@@ -81,8 +81,15 @@ const getBankCash = async () => {
     }
   };
 
+  const abortCont = useRef(new AbortController());
+
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [])
 
 
@@ -378,6 +385,7 @@ const getBankCash = async () => {
           </tr>
         `).join('')
       }
+      <tr>
       <td></td>
       <td></td>
       <td></td>

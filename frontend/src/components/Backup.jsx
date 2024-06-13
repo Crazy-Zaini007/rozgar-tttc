@@ -1,18 +1,23 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
 import BackupHook from '../hooks/backupHooks/BackupHook'
 import { useSelector } from 'react-redux';
 
 export default function Backup() {
+  const abortCont = useRef(new AbortController());
+
   const {getBackup,backup}=BackupHook()
   useEffect(() => {
     getBackup()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [])
   const[dateFrom,setDateFrom]=useState('')
   const[dateTo,setDateTo]=useState('')
-
-
 
   const filteredBackup = backup && backup.filter(backup => {
     let isDateInRange = true;

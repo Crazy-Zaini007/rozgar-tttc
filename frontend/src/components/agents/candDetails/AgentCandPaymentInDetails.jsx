@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import AgentHook from '../../../hooks/agentHooks/AgentHook'
 import { useSelector, useDispatch } from 'react-redux';
 import { saveAs } from 'file-saver';
@@ -73,9 +73,17 @@ export default function AgentCandPaymentInDetails() {
       setIsLoading(false);
     }
   }
+
+  const abortCont = useRef(new AbortController());
+
   useEffect(() => {
     if (user) {
       fetchData();
+    }
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
     }
   }, [])
 

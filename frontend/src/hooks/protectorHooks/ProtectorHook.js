@@ -1,3 +1,4 @@
+import {useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getProtctor_Payments_Out } from '../../redux/reducers/protectorSlice'
@@ -6,6 +7,7 @@ export default function ProtectorHook() {
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const apiUrl = process.env.REACT_APP_API_URL;
+    const abortCont = useRef(new AbortController());
    
     const getPaymentsOut = async () => {
         try {
@@ -14,6 +16,8 @@ export default function ProtectorHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -24,7 +28,11 @@ export default function ProtectorHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }

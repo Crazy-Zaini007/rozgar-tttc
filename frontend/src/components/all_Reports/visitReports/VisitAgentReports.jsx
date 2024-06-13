@@ -44,11 +44,16 @@ export default function VisitAgentReports() {
     }
   };
   
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
       fetchData()
-    
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
   }, []);
 
   

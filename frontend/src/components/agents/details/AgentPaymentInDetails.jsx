@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import AgentHook from '../../../hooks/agentHooks/AgentHook'
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
@@ -46,6 +46,7 @@ export default function AgentPaymentInDetails() {
   const { user } = useAuthContext()
   const dispatch = useDispatch()
 
+  const abortCont = useRef(new AbortController());
 
   const fetchData = async () => {
 
@@ -73,6 +74,11 @@ export default function AgentPaymentInDetails() {
   useEffect(() => {
     if (user) {
       fetchData();
+    }
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
     }
   }, [])
 

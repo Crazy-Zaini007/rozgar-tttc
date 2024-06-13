@@ -1,9 +1,11 @@
+import {useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getAzadAgent_Payments_In, getAzadAgent_Payments_Out, getAzadSupplier_Payments_In, getAzadSupplier_Payments_Out, getAzadCand_Payments_In, getAzadCand_Payments_Out } from '../../redux/reducers/azadVisaSlice'
 
 export default function AzadVisaHook() {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const abortCont = useRef(new AbortController());
 
     const dispatch = useDispatch()
     const { user } = useAuthContext()
@@ -14,6 +16,7 @@ export default function AzadVisaHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
             });
 
             const json = await response.json();
@@ -24,7 +27,11 @@ export default function AzadVisaHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -36,6 +43,8 @@ export default function AzadVisaHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -46,7 +55,11 @@ export default function AzadVisaHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -59,6 +72,8 @@ export default function AzadVisaHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -69,7 +84,11 @@ export default function AzadVisaHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -81,6 +100,8 @@ export default function AzadVisaHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -91,7 +112,11 @@ export default function AzadVisaHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -103,6 +128,8 @@ export default function AzadVisaHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -113,7 +140,11 @@ export default function AzadVisaHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -125,6 +156,8 @@ export default function AzadVisaHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -135,7 +168,11 @@ export default function AzadVisaHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }

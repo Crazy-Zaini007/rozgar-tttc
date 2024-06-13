@@ -1,9 +1,12 @@
+import {useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getCDWOC_Payments_In, getCDWOC_Payments_Out } from '../../redux/reducers/creditsDebitsWOCSlice'
 
 export default function CDWOCHook() {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const abortCont = useRef(new AbortController());
+
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const getPaymentsIn = async () => {
@@ -13,6 +16,8 @@ export default function CDWOCHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -23,7 +28,11 @@ export default function CDWOCHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -35,6 +44,8 @@ export default function CDWOCHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -45,7 +56,11 @@ export default function CDWOCHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -56,6 +71,8 @@ export default function CDWOCHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -66,7 +83,11 @@ export default function CDWOCHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -78,6 +99,8 @@ export default function CDWOCHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -88,7 +111,11 @@ export default function CDWOCHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }

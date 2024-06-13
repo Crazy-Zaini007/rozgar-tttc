@@ -89,10 +89,15 @@ const[payments,setPayments]=useState('')
       entry.reference_Out?.toLowerCase().startsWith(search1.trim().toLowerCase()))
     )
   })
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
-  
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
 }, [date,trade,company,country,final_Status,entry_Mode,reference_Out,reference_In,reference_Out_Type,reference_In_Type,flight_Date]);
 
   const downloadExcel = () => {

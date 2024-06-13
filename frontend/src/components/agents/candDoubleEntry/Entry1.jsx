@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState,useRef } from 'react'
 import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -14,6 +14,8 @@ import PaymentViaHook from "../../../hooks/settingHooks/PaymentViaHook";
 import PaymentTypeHook from "../../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../../hooks/settingHooks/CurrCountryHook";
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
+import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
+
 import Entry2 from './Entry2'
 
 export default function Entry1() {
@@ -26,33 +28,43 @@ export default function Entry1() {
   const agent_Payments_In = useSelector(
     (state) => state.agents.agent_Payments_In
   );
+  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In)
+
+  const abortCont = useRef(new AbortController());
 
   const { getCurrCountryData } = CurrCountryHook();
   const { getCategoryData } = CategoryHook();
   const { getPaymentViaData } = PaymentViaHook();
   const { getPaymentTypeData } = PaymentTypeHook();
-  const { getPaymentsIn } = AgentHook();
+  const { getAgentPaymentsIn } = AgentHook();
+  const { getSupplierPaymentsIn } = SupplierHook()
+
   // getting Data from DB
   const { user } = useAuthContext();
   const fetchData = async () => {
     try {
-      // Use Promise.all to execute all promises concurrently
-      await Promise.all([
-        getCurrCountryData(),
-        getCategoryData(),
-        getPaymentViaData(),
-        getPaymentTypeData(),
-        getPaymentsIn(),
-      ]);
+        getCurrCountryData()
+        getCategoryData()
+        getPaymentViaData()
+        getPaymentTypeData()
+        getAgentPaymentsIn()
+        getSupplierPaymentsIn()
+      
     } catch (error) { }
   };
 
   useEffect(() => {
     fetchData();
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch]);
 
   const [option, setOption] = useState(false);
   // Form input States
+  const [type, setType] = useState('');
   const [supplierName, setSupplierName] = useState("");
   const [category, setCategory] = useState("");
   const [payment_Via, setPayment_Via] = useState("");
@@ -65,6 +77,11 @@ export default function Entry1() {
 
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [supplierNames, setSupplierNames] = useState([]);
+
+
+useEffect(() => {
+
+}, [type])
 
   
   const [candData, setCandData] = useState([]);
@@ -119,7 +136,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   
     const printContentString = `
     <div class="print-header">
-      <p class="invoice">Agent: ${selectedSupplier}</p>
+      <p class="invoice">Agent/Supplier: ${selectedSupplier}</p>
         <h1 class="title">ROZGAR TTTC</h1>
         <p class="date">Date: ${formattedDate}</p>
       </div>
@@ -274,7 +291,56 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
-  const handleForm = async (e) => {
+ 
+
+
+  const handlePersonChange = (selectedPersonName, index) => {
+    const selectedSupplierData =(type==="Agent" ?agent_Payments_In:type==="Supplier"&&supp_Payments_In).find(
+      (data) => data.supplierName === selectedSupplier
+    );
+  
+    if (selectedSupplierData) {
+      const selectedPerson = selectedSupplierData.persons.find(
+        (person) => person.name === selectedPersonName
+      );
+  
+      const updatedCandData = [...candData];
+      updatedCandData[index] = {
+        ...updatedCandData[index],
+        cand_Name: selectedPersonName,
+      };
+      setCandData(updatedCandData);
+  
+      setSelectedPersonDetails((prevDetails) => {
+        const newDetails = [...prevDetails];
+        newDetails[index] = selectedPerson || {};
+        return newDetails;
+      });
+    }
+  };
+
+  const sumPaymentIn = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
+  };
+  const sumCurrency = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
+  };
+
+  const disableAddMore = totalPayments <= sumPaymentIn(candData);
+
+  const handleChangePaymentIn = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].payment_In = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_In);
+    setCandData(newCandData);
+  };
+  const handleChangeCurrency = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
+    setCandData(newCandData);
+  };
+
+
+  const handleAgentForm = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSupplierName("");
@@ -315,7 +381,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsIn();
+        getAgentPaymentsIn();
         setLoading(false);
         setSupplierName("");
         setCategory("");
@@ -335,55 +401,69 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
   };
 
 
-
-
-  const handlePersonChange = (selectedPersonName, index) => {
-    const selectedSupplierData = agent_Payments_In.find(
-      (data) => data.supplierName === selectedSupplier
-    );
   
-    if (selectedSupplierData) {
-      const selectedPerson = selectedSupplierData.persons.find(
-        (person) => person.name === selectedPersonName
-      );
-  
-      const updatedCandData = [...candData];
-      updatedCandData[index] = {
-        ...updatedCandData[index],
-        cand_Name: selectedPersonName,
-      };
-      setCandData(updatedCandData);
-  
-      setSelectedPersonDetails((prevDetails) => {
-        const newDetails = [...prevDetails];
-        newDetails[index] = selectedPerson || {};
-        return newDetails;
+  const handleSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName("");
+    setCategory("");
+    setPayment_Via("");
+    setPayment_Type("");
+    setSlip_No("");
+    setSlip_Pic("");
+    setDetails("");
+    setCurr_Country("");
+    setDate("");
+    setTotalCurrRate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          slip_Pic,
+          details,
+          curr_Country,
+          date,
+          totalCurrRate,
+          payments:candData
+        }),
       });
+
+      const json = await response.json();
+      if (!response.ok) {
+        setNewMessage(toast.error(json.message));
+        setLoading(false);
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getSupplierPaymentsIn();
+        setLoading(false);
+        setSupplierName("");
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setDate("");
+        setTotalCurrRate('')
+      }
+    } catch (error) {
+   
+      setNewMessage(toast.error("Server is not Responding..."));
+      setLoading(false);
     }
   };
 
-
-
-
-  const sumPaymentIn = (data) => {
-    return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
-  };
-  const sumCurrency = (data) => {
-    return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
-  };
-
-  const disableAddMore = totalPayments <= sumPaymentIn(candData);
-
-  const handleChangePaymentIn = (index, value) => {
-    const newCandData = [...candData];
-    newCandData[index].payment_In = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_In);
-    setCandData(newCandData);
-  };
-  const handleChangeCurrency = (index, value) => {
-    const newCandData = [...candData];
-    newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
-    setCandData(newCandData);
-  };
 
   return (
    <>
@@ -391,13 +471,25 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
       <div className="col-md-12 ">
         {!option && (
           <>
-            <form className="py-3 px-2" onSubmit={handleForm}>
+            <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
               <div className="text-end ">
                 <button className="btn submit_btn btn-sm m-1" disabled={loading || !disableAddMore}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>
               <div className="row p-0 m-0 my-1">
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Reference</label>
+                  <select
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    required
+                  >
+                    <option value="">Choose</option>
+                   <option value="Agent">Agent</option>
+                   <option value="Supplier">Supplier</option>
+                  </select>
+                </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Name</label>
                   <select
@@ -417,7 +509,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                         setSupplierName(selectedSupplierValue);
 
                         // Filter supp_Payments_Out based on the selected supplier
-                        const selectedSupplierData = agent_Payments_In.find(
+                        const selectedSupplierData = (type==="Agent"?agent_Payments_In :type==="Supplier"&&supp_Payments_In).find(
                           (data) => data.supplierName === selectedSupplierValue
                         );
 
@@ -430,13 +522,29 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                       }
                     }}
                   >
-                    <option value="">Choose Agent</option>
+                    {type==="Agent" &&
+                    <>
+                     <option value="">Choose Agent</option>
                     {agent_Payments_In &&
                       agent_Payments_In.map((data) => (
                         <option key={data._id} value={data.supplierName}>
                           {data.supplierName}
                         </option>
                       ))}
+                    </>
+                    }
+                      {type==="Supplier" &&
+                    <>
+                     <option value="">Choose Supplier</option>
+                    {supp_Payments_In &&
+                      supp_Payments_In.map((data) => (
+                        <option key={data._id} value={data.supplierName}>
+                          {data.supplierName}
+                        </option>
+                      ))}
+                    </>
+                    }
+                   
                   </select>
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -593,7 +701,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {agent_Payments_In
+                  {(type === "Agent" ? agent_Payments_In : type === "Supplier"&& supp_Payments_In: [])
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -13,6 +13,7 @@ import CategoryHook from "../../../hooks/settingHooks/CategoryHook";
 import PaymentViaHook from "../../../hooks/settingHooks/PaymentViaHook";
 import PaymentTypeHook from "../../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../../hooks/settingHooks/CurrCountryHook";
+import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
 
 export default function Entry2() {
@@ -22,36 +23,47 @@ export default function Entry2() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const supp_Payments_Out = useSelector(
-    (state) => state.suppliers.supp_Payments_Out
+  const agent_Payments_Out = useSelector(
+    (state) => state.agents.agent_Payments_Out
   );
+  const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
+
+  const abortCont = useRef(new AbortController());
 
   const { getCurrCountryData } = CurrCountryHook();
   const { getCategoryData } = CategoryHook();
   const { getPaymentViaData } = PaymentViaHook();
   const { getPaymentTypeData } = PaymentTypeHook();
-  const { getPaymentsOut } = SupplierHook();
+  const { getPaymentsOut } = AgentHook();
+  const { getSupplierPaymentsOut } = SupplierHook()
+
   // getting Data from DB
   const { user } = useAuthContext();
   const fetchData = async () => {
     try {
       // Use Promise.all to execute all promises concurrently
-      await Promise.all([
-        getCurrCountryData(),
-        getCategoryData(),
-        getPaymentViaData(),
-        getPaymentTypeData(),
-        getPaymentsOut(),
-      ]);
+        getCurrCountryData()
+        getCategoryData()
+        getPaymentViaData()
+        getPaymentTypeData()
+        getPaymentsOut()
+        getSupplierPaymentsOut()
+    
     } catch (error) { }
   };
 
   useEffect(() => {
     fetchData();
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch]);
 
   const [option, setOption] = useState(false);
   // Form input States
+  const [type, setType] = useState('');
   const [supplierName, setSupplierName] = useState("");
   const [category, setCategory] = useState("");
   const [payment_Via, setPayment_Via] = useState("");
@@ -64,6 +76,10 @@ export default function Entry2() {
 
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [supplierNames, setSupplierNames] = useState([]);
+
+  useEffect(() => {
+
+  }, [type])
 
   const [candData, setCandData] = useState([]);
   const [selectedPersonDetails, setSelectedPersonDetails] = useState([]);
@@ -104,132 +120,132 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   }
 
   const printPersonsTable = (selectedPersonDetails) => {
-    // Convert JSX to HTML string
-    const formatDate = (date) => {
-     const d = new Date(date);
-     const day = String(d.getDate()).padStart(2, '0');
-     const month = String(d.getMonth() + 1).padStart(2, '0');
-     const year = d.getFullYear();
-     return `${day}-${month}-${year}`;
-   }
-   const formattedDate = formatDate(new Date());
-     const printContentString = `
-   <div class="print-header">
-     <p class="invoice">Supplier: ${selectedSupplier}</p>
-       <h1 class="title">ROZGAR TTTC</h1>
-       <p class="date">Date: ${formattedDate}</p>
-     </div>
-     <div class="print-header">
-       <h1 class="title"> Candidate Payments Details</h1>
-     </div>
-     <hr/>
-   <table class='print-table'>
-     <thead>
-       <tr>
-       <th>Date</th>
-       <th>Name</th>
-       <th>PP#</th>
-       <th>Entry Mode</th>
-       <th>Company</th>
-       <th>Trade</th>
-       <th>Country</th>
-       <th>Final Status</th>
-       <th>Flight Date</th>
-       <th>VPI PKR</th>
-       <th>Total In PKR</th>
-       <th>Remaining PKR</th>
-       <th>VPI Oth Curr</th>
-       <th>Remaining Curr</th>
-       
-       </tr>
-     </thead>
-     <tbody>
-    
-         <tr>
-           <td>${String(selectedPersonDetails?.entry_Date)}</td>
-           <td>${String(selectedPersonDetails?.name)}</td>
-           <td>${String(selectedPersonDetails?.pp_No)}</td>
-           <td>${String(selectedPersonDetails?.entry_Mode)}</td>
-           <td>${String(selectedPersonDetails?.company)}</td>
-           <td>${String(selectedPersonDetails?.trade)}</td>
-           <td>${String(selectedPersonDetails?.country)}</td>
-           <td>${String(selectedPersonDetails?.final_Status)}</td>
-           <td>${String(selectedPersonDetails?.flight_Date)}</td>
-           <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)}</td>
-           <td>${String(selectedPersonDetails?.total_In)}</td>
-           <td>${String(
-     (selectedPersonDetails?.visa_Price_Out_PKR - selectedPersonDetails?.total_In) +
-     selectedPersonDetails?.cash_Out
-   )}</td>
-           <td>${String(selectedPersonDetails?.visa_Price_Out_Curr)}</td>
-           <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
-
-         </tr>
+     // Convert JSX to HTML string
+     const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    const formattedDate = formatDate(new Date());
+      const printContentString = `
+    <div class="print-header">
+      <p class="invoice">Agent: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title"> Candidate Payments Details</h1>
+      </div>
+      <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>PP#</th>
+        <th>Entry Mode</th>
+        <th>Company</th>
+        <th>Trade</th>
+        <th>Country</th>
+        <th>Final Status</th>
+        <th>Flight Date</th>
+        <th>VPI PKR</th>
+        <th>Total In PKR</th>
+        <th>Remaining PKR</th>
+        <th>VPI Oth Curr</th>
+        <th>Remaining Curr</th>
+        
+        </tr>
+      </thead>
+      <tbody>
      
-   
-   </tbody>
-   </table>
-   <style>
-     /* Add your custom print styles here */
-     body {
-       background-color: #fff;
-     }
-     .print-header {
-       display: flex;
-       align-items: center;
-       justify-content: space-between;
-     }
-     .title {
-       flex-grow: 1;
-       text-align: center;
-       margin: 0;
-       font-size: 24px;
-     }
-     .date {
-       flex-grow: 0;
-       text-align: right;
-       font-size: 20px;
-     }
-     .print-table {
-       width: 100%;
-       border-collapse: collapse;
-       margin: 20px 0;
-     }
-     .print-table th, .print-table td {
-       border: 1px solid #ddd;
-       padding: 8px;
-       text-align: left;
-     }
-     .print-table th {
-       background-color: #f2f2f2;
-     }
-   </style>
- `;
+          <tr>
+            <td>${String(selectedPersonDetails?.entry_Date)}</td>
+            <td>${String(selectedPersonDetails?.name)}</td>
+            <td>${String(selectedPersonDetails?.pp_No)}</td>
+            <td>${String(selectedPersonDetails?.entry_Mode)}</td>
+            <td>${String(selectedPersonDetails?.company)}</td>
+            <td>${String(selectedPersonDetails?.trade)}</td>
+            <td>${String(selectedPersonDetails?.country)}</td>
+            <td>${String(selectedPersonDetails?.final_Status)}</td>
+            <td>${String(selectedPersonDetails?.flight_Date)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_Out_PKR)}</td>
+            <td>${String(selectedPersonDetails?.total_In)}</td>
+            <td>${String(
+      (selectedPersonDetails?.visa_Price_Out_PKR - selectedPersonDetails?.total_In) +
+      selectedPersonDetails?.cash_Out
+    )}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_Out_Curr)}</td>
+            <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
 
-   // Create a new window for printing
-   const printWindow = window.open('', '_blank');
-   if (printWindow) {
-     // Write the print content to the new window
-     printWindow.document.write(`
-     <html>
-       <head>
-         <title>${selectedPersonDetails.name} Details</title>
-       </head>
-       <body class='bg-dark'>${printContentString}</body>
-     </html>
-   `);
+          </tr>
+      
+    
+    </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
 
-     // Trigger print dialog
-     printWindow.print();
-     // Close the new window after printing
-     printWindow.onafterprint = function () {
-       printWindow.close();
-     };
-   } else {
-     // Handle if the new window cannot be opened
-     alert('Could not open print window. Please check your browser settings.');
-   }
- }
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedPersonDetails.name} Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
   const handleOpen = () => {
     setOption(!option);
   };
@@ -263,6 +279,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
   
   const[totalPayments,setTotalPayments]=useState(0)
   const[totalCurrRate,setTotalCurrRate]=useState(0)
@@ -271,7 +288,121 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
-  const handleForm = async (e) => {
+ 
+
+
+  const handlePersonChange = (selectedPersonName, index) => {
+    const selectedSupplierData = (type==="Agent" ?agent_Payments_Out:type==="Supplier"&&supp_Payments_Out).find(
+      (data) => data.supplierName === selectedSupplier
+    );
+  
+    if (selectedSupplierData) {
+      const selectedPerson = selectedSupplierData.persons.find(
+        (person) => person.name === selectedPersonName
+      );
+  
+      const updatedCandData = [...candData];
+      updatedCandData[index] = {
+        ...updatedCandData[index],
+        cand_Name: selectedPersonName,
+      };
+      setCandData(updatedCandData);
+  
+      setSelectedPersonDetails((prevDetails) => {
+        const newDetails = [...prevDetails];
+        newDetails[index] = selectedPerson || {};
+        return newDetails;
+      });
+    }
+  };
+  
+
+
+  const sumPaymentIn = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.payment_Out), 0);
+  };
+  const sumCurrency = (data) => {
+    return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
+  };
+
+  const disableAddMore = totalPayments <= sumPaymentIn(candData);
+
+  const handleChangePaymentIn = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].payment_Out = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_Out);
+    setCandData(newCandData);
+  };
+  const handleChangeCurrency = (index, value) => {
+    const newCandData = [...candData];
+    newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
+    setCandData(newCandData);
+  };
+
+
+  const handleAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName("");
+    setCategory("");
+    setPayment_Via("");
+    setPayment_Type("");
+    setSlip_No("");
+    setSlip_Pic("");
+    setDetails("");
+    setCurr_Country("");
+    setDate("");
+    setTotalCurrRate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/agents/add/cand_vise/payment_out`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          slip_Pic,
+          details,
+          curr_Country,
+          date,
+          totalCurrRate,
+          payments:candData
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+        setNewMessage(toast.error(json.message));
+        setLoading(false);
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName("");
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setDate("");
+        setTotalCurrRate('')
+
+      }
+    } catch (error) {
+    
+      setNewMessage(toast.error("Server is not Responding..."));
+      setLoading(false);
+    }
+  };
+
+  const handleSupplierForm = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSupplierName("");
@@ -313,7 +444,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsOut();
+        getSupplierPaymentsOut();
         setLoading(false);
         setSupplierName("");
         setCategory("");
@@ -333,70 +464,33 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
     }
   };
 
-
-
-
-  const handlePersonChange = (selectedPersonName, index) => {
-    const selectedSupplierData = supp_Payments_Out.find(
-      (data) => data.supplierName === selectedSupplier
-    );
-  
-    if (selectedSupplierData) {
-      const selectedPerson = selectedSupplierData.persons.find(
-        (person) => person.name === selectedPersonName
-      );
-  
-      const updatedCandData = [...candData];
-      updatedCandData[index] = {
-        ...updatedCandData[index],
-        cand_Name: selectedPersonName,
-      };
-      setCandData(updatedCandData);
-  
-      setSelectedPersonDetails((prevDetails) => {
-        const newDetails = [...prevDetails];
-        newDetails[index] = selectedPerson || {};
-        return newDetails;
-      });
-    }
-  };
-
-
-
-  const sumPaymentIn = (data) => {
-    return data.reduce((acc, curr) => acc + Number(curr.payment_Out), 0);
-  };
-  const sumCurrency = (data) => {
-    return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
-  };
-
-  const disableAddMore = totalPayments <= sumPaymentIn(candData);
-  
-  const handleChangePaymentIn = (index, value) => {
-    const newCandData = [...candData];
-    newCandData[index].payment_Out = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_Out);
-    setCandData(newCandData);
-  };
-  const handleChangeCurrency = (index, value) => {
-    const newCandData = [...candData];
-    newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
-    setCandData(newCandData);
-  };
-
-  
   return (
    <>
     <TableContainer component={Paper} className="mt-1">
       <div className="col-md-12 ">
         {!option && (
           <>
-            <form className="py-3 px-2" onSubmit={handleForm}>
+            <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
               <div className="text-end ">
-                <button className="btn submit_btn m-1" disabled={loading || !disableAddMore}>
+                <button className="btn btn-sm submit_btn m-1" disabled={loading || !disableAddMore}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>
+              
               <div className="row p-0 m-0 my-1">
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Reference</label>
+                  <select
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    required
+                  >
+                    <option value="">Choose</option>
+                   <option value="Agent">Agent</option>
+                   <option value="Supplier">Supplier</option>
+                  </select>
+                </div>
+
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Name</label>
                   <select
@@ -416,7 +510,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                         setSupplierName(selectedSupplierValue);
 
                         // Filter supp_Payments_Out based on the selected supplier
-                        const selectedSupplierData = supp_Payments_Out.find(
+                        const selectedSupplierData = (type==="Agent"?agent_Payments_Out :type==="Supplier"&&supp_Payments_Out).find(
                           (data) => data.supplierName === selectedSupplierValue
                         );
 
@@ -429,13 +523,28 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                       }
                     }}
                   >
-                    <option value="">Choose Supplier</option>
+                    {type==="Agent" &&
+                    <>
+                     <option value="">Choose Agent</option>
+                    {agent_Payments_Out &&
+                      agent_Payments_Out.map((data) => (
+                        <option key={data._id} value={data.supplierName}>
+                          {data.supplierName}
+                        </option>
+                      ))}
+                    </>
+                    }
+                      {type==="Supplier" &&
+                    <>
+                     <option value="">Choose Supplier</option>
                     {supp_Payments_Out &&
                       supp_Payments_Out.map((data) => (
                         <option key={data._id} value={data.supplierName}>
                           {data.supplierName}
                         </option>
                       ))}
+                    </>
+                    }
                   </select>
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -592,7 +701,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {supp_Payments_Out
+                  {(type === "Agent" ? agent_Payments_Out : type === "Supplier"&& supp_Payments_Out: [])
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
@@ -721,7 +830,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
           ))}
         </select>
       </div>
-      <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor="" className="text-sm text-muted mb-1">Payment Out</label>
                 {/* Payment_In */}
                 <input
@@ -743,6 +852,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                   placeholder="Currency Amount"
                 />
               </div>
+             
               {/* Button to remove this additional form */}
               <div className="col-md-12 text-end">
               <button onClick={() => handleRemove(index)} className={`btn shadow btn-sm text-white text-bold ms-1 bg-danger`}>
@@ -907,7 +1017,8 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
 
         </>
       ))}
- <hr/>
+
+<hr/>
 <div className="col-md-12">
 <h4 className="text-center">Payment Summary</h4>
 <form className="py-3 px-2" >
@@ -943,7 +1054,6 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
   </div>
 </form>
 </div>
-
     </TableContainer>
 
    </>

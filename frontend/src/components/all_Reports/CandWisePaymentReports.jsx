@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect,useRef } from 'react'
 import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import SyncLoader from 'react-spinners/SyncLoader'
@@ -22,10 +22,15 @@ export default function CandWisePaymentReports() {
     }
   };
 
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
-
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, []);
 
 

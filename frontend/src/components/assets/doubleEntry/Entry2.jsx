@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -59,9 +59,15 @@ export default function Entry2() {
     } catch (error) {
     }
   };
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch])
 
 
@@ -132,6 +138,7 @@ export default function Entry2() {
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
+  
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);

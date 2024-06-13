@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import AgentHook from '../../../hooks/agentHooks/AgentHook'
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
@@ -31,6 +31,7 @@ export default function AgentPaymentOutDetails() {
   const [show2, setShow2] = useState(false)
 
   const apiUrl = process.env.REACT_APP_API_URL;
+  const abortCont = useRef(new AbortController());
 
   const [, setNewMessage] = useState('')
 
@@ -75,6 +76,11 @@ export default function AgentPaymentOutDetails() {
   useEffect(() => {
     if (user) {
       fetchData();
+    }
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
     }
   }, [])
 

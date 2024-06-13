@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
@@ -33,9 +33,15 @@ export default function Invoice() {
 
     }
   };
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [])
 
 

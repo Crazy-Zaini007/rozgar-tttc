@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect,useRef } from 'react'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import { useSelector } from 'react-redux';
 import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
@@ -91,15 +91,20 @@ export default function DayBook() {
     }
   };
 
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
-
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, []);
 
 
 
-  const currentDate = new Date().toISOString().split('T')[0];
+  const myDate = new Date(); myDate .setHours(0, 0, 0, 0);const currentDate = myDate.toLocaleDateString('en-CA');
   // Filter payments based on the current date
   const todayPayments = overAllPayments && overAllPayments.filter(payment => payment.date === currentDate )
 
@@ -143,7 +148,7 @@ export default function DayBook() {
     </thead>
     <tbody>
       ${todayPayments
-        .filter(entry => entry.type.toLowerCase().includes('in'))
+        .filter(entry => (entry.payment_In ||entry.payment_In>0))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -227,7 +232,7 @@ export default function DayBook() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = todayPayments.filter(payment => payment.type?.toLowerCase().includes('in'));
+    const filteredPaymentsIn = todayPayments.filter(payment => (payment.payment_In ||payment.payment_In>0));
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {
@@ -299,7 +304,7 @@ export default function DayBook() {
     </thead>
     <tbody>
       ${todayPayments
-        .filter(entry => entry.type?.toLowerCase().includes('out'))
+        .filter(entry => (entry.payment_Out ||entry.payment_Out>0))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -383,7 +388,7 @@ export default function DayBook() {
 
 
   const downloadPaymenOutExcel = () => {
-    const filteredPaymentsOut = todayPayments.filter(payment => payment.type?.toLowerCase().includes('out'));
+    const filteredPaymentsOut = todayPayments.filter(payment => (payment.payment_Out ||payment.payment_Out>0));
 
     const data = [];
     // Iterate over entries and push all fields
@@ -974,8 +979,8 @@ body {
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Supp/Agent/Cand</TableCell>
-                              <TableCell className='label border'>Reference_Type</TableCell>
+                              <TableCell className='label border'>Name</TableCell>
+                              <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
                               <TableCell className='label border'>Payment_Via</TableCell>
                               <TableCell className='label border'>Payment_Type</TableCell>
@@ -988,7 +993,7 @@ body {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash => cash.type.toLowerCase().includes('in')).map((cash, outerIndex) => (
+                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash => (cash.payment_In || cash.payment_In>0)).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -1036,7 +1041,7 @@ body {
                             {/* Calculate the total sum of payment_In */}
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(entry => entry.type.toLowerCase().includes('in'))
+                                .filter(cash => (cash.payment_In || cash.payment_In>0))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
@@ -1045,7 +1050,7 @@ body {
                             {/* Calculate the total sum of cash_Out */}
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(entry => entry.type.toLowerCase().includes('in'))
+                                .filter(cash => (cash.payment_In || cash.payment_In>0))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}
@@ -1070,8 +1075,8 @@ body {
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Supp/Agent/Cand</TableCell>
-                              <TableCell className='label border'>Reference_Type</TableCell>
+                              <TableCell className='label border'>Name</TableCell>
+                              <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
                               <TableCell className='label border'>Payment_Via</TableCell>
                               <TableCell className='label border'>Payment_Type</TableCell>
@@ -1084,7 +1089,7 @@ body {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash => cash.type.toLowerCase().includes('out')).map((cash, outerIndex) => (
+                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash =>(cash.payment_Out || cash.payment_Out>0)).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -1133,7 +1138,7 @@ body {
                             
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .filter(cash => (cash.payment_Out || cash.payment_Out>0))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
@@ -1142,7 +1147,7 @@ body {
                             {/* Calculate the total sum of cash_Out */}
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .filter(cash => (cash.payment_Out || cash.payment_Out>0))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}

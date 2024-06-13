@@ -45,11 +45,16 @@ export default function AdvancePayments() {
     }
   };
   
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
       fetchData()
-    
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
   }, []);
 
   

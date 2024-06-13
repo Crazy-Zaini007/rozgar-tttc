@@ -45,11 +45,16 @@ export default function SuppliersReports() {
     }
   };
   
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
       fetchData()
-    
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
   }, []);
 
   

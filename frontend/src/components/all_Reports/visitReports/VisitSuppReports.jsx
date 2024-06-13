@@ -43,11 +43,17 @@ export default function VisitSuppReports() {
       // Handle errors if needed
     }
   };
-  
+
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
       fetchData()
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
     
   }, []);
 

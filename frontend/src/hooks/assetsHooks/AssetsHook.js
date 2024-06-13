@@ -1,9 +1,12 @@
+import {useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getAssets_Payments_In} from '../../redux/reducers/assetsSlice'
 
 export default function AssetsHook() {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const abortCont = useRef(new AbortController());
+
     const dispatch = useDispatch()
     const { user } = useAuthContext()
     const getPayments = async () => {
@@ -13,6 +16,7 @@ export default function AssetsHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
             });
 
             const json = await response.json();
@@ -23,7 +27,11 @@ export default function AssetsHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+               
+              } else {
+                console.log(error);
+              }
 
         }
     }

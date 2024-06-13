@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { useAuthContext } from "../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -14,11 +14,18 @@ import PaymentViaHook from "../hooks/settingHooks/PaymentViaHook";
 import PaymentTypeHook from "../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../hooks/settingHooks/CurrCountryHook";
 import AgentHook from '../hooks/agentHooks/AgentHook';
-import AzadVisaHook from '../hooks/azadVisaHooks/AzadVisaHooks'
-import CandidateHook from '../hooks/candidateHooks/CandidateHook'
-import SupplierHook from '../hooks/supplierHooks/SupplierHook'
-import TicketHook from '../hooks/ticketHooks/TicketHook'
-import VisitHook from '../hooks/visitsHooks/VisitHook'
+import SupplierHook from '../hooks/supplierHooks/SupplierHook';
+import CandidateHook from '../hooks/candidateHooks/CandidateHook';
+import AzadVisaHook from '../hooks/azadVisaHooks/AzadVisaHooks';
+import TicketHook from '../hooks/ticketHooks/TicketHook';
+import VisitHook from '../hooks/visitsHooks/VisitHook';
+import CDWCHook from '../hooks/creditsDebitsWCHooks/CDWCHook'
+import CPPHook from '../hooks/settingHooks/CPPHook';
+import CDWOCHook from '../hooks/creditsDebitsWOCHooks/CDWOCHook'
+import NewAssetsHook from '../hooks/settingHooks/NewAssetsHook';
+import AssetsHook from '../hooks/assetsHooks/AssetsHook'
+import ProtectorHook from '../hooks/protectorHooks//ProtectorHook';
+import ExpeCategoryHook from '../hooks/settingHooks/ExpeCategoryHook'
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -28,31 +35,32 @@ export default function DirectPaymentOut() {
 const [show, setShow] = useState(false)
 
   // getting data from redux store
+  
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
+  const agent_Payments_Out = useSelector((state) => state.agents.agent_Payments_Out)
+  const candidate_Payments_Out = useSelector((state) => state.candidates.candidate_Payments_Out)
+  const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
 
+  const azadAgent_Payments_Out = useSelector((state) => state.azadVisa.azadAgent_Payments_Out)
+  const azadCand_Payments_Out = useSelector((state) => state.azadVisa.azadCand_Payments_Out)
+  const azadSupplier_Payments_Out = useSelector((state) => state.azadVisa.azadSupplier_Payments_Out)
+  const ticketAgent_Payments_Out = useSelector((state) => state.tickets.ticketAgent_Payments_Out)
+  const ticketCand_Payments_Out = useSelector((state) => state.tickets.ticketCand_Payments_Out)
+  const ticketSupplier_Payments_Out = useSelector((state) => state.tickets.ticketSupplier_Payments_Out)
+  const visitAgent_Payments_Out = useSelector((state) => state.visits.visitAgent_Payments_Out)
+  const visitCand_Payments_Out = useSelector((state) => state.visits.visitCand_Payments_Out)
+  const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupplier_Payments_Out)
+  const protector_Payments_Out = useSelector((state) => state.protectors.protector_Payments_Out)
 
-  const agent_Payments_Out = useSelector((state) => state.agents.agent_Payments_Out);
-  const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out);
-  const candidate_Payments_Out = useSelector((state) => state.candidates.candidate_Payments_Out);
-
-//   AzadVisa
-  const azadAgent_Payments_Out = useSelector((state) => state.azadVisa.azadAgent_Payments_Out);
-  const azadSupplier_Payments_Out = useSelector((state) => state.azadVisa.azadSupplier_Payments_Out);
-  const azadCand_Payments_Out = useSelector((state) => state.azadVisa.azadCand_Payments_Out);
-
-//   Ticket Visa
-const ticketAgent_Payments_Out = useSelector((state) => state.tickets.ticketAgent_Payments_Out);
-const ticketSupplier_Payments_Out = useSelector((state) => state.tickets.ticketSupplier_Payments_Out);
-const ticketCand_Payments_Out = useSelector((state) => state.tickets.ticketCand_Payments_Out);
-
-// Visit Visa
-const visitAgent_Payments_Out = useSelector((state) => state.visits.visitAgent_Payments_Out);
-const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupplier_Payments_Out);
-const visitCand_Payments_Out = useSelector((state) => state.visits.visitCand_Payments_Out);
-
+  const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
+  const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
+  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
+  const assets = useSelector((state) => state.setting.assets)
+  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
+  const expenseCategories = useSelector((state) => state.setting.expenseCategories);
 
 const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
 
@@ -84,17 +92,24 @@ const getBankCash = async () => {
   }
 }
 
-const { getCurrCountryData } = CurrCountryHook();
-const { getCategoryData } = CategoryHook();
-const { getPaymentViaData } = PaymentViaHook();
-const { getPaymentTypeData } = PaymentTypeHook();
 
-const { getPaymentsOut } = AgentHook();
-const { getAzadAgentPaymentsOut,getAzadSupplierPaymentsOut,getAzadCandPaymentsOut } = AzadVisaHook();
-const {getCandPaymentsOut } = CandidateHook();
-const { getSupplierPaymentsOut } = SupplierHook();
-const { getTicketAgentPaymentsOut,getTicketSupplierPaymentsOut,getTicketCandPaymentsOut } = TicketHook();
-const { getVisitAgentPaymentsOut,getVisitSupplierPaymentsOut,getVisitCandPaymentsOut } = VisitHook()
+const { getCurrCountryData } = CurrCountryHook()
+const { getCategoryData } = CategoryHook()
+const { getPaymentViaData } = PaymentViaHook()
+const { getPaymentTypeData } = PaymentTypeHook()
+const { getAgentPaymentsOut } = AgentHook()
+const { getSupplierPaymentsOut } = SupplierHook()
+const { getCandPaymentsOut } = CandidateHook()
+const { getAzadAgentPaymentsOut,getAzadCandPaymentsOut,getAzadSupplierPaymentsOut } = AzadVisaHook()
+const { getTicketAgentPaymentsOut,getTicketCandPaymentsOut,getTicketSupplierPaymentsOut } = TicketHook()
+const { getVisitAgentPaymentsOut,getVisitCandPaymentsOut,getVisitSupplierPaymentsOut } = VisitHook()
+const { getCDWCPaymentsOut } = CDWCHook()
+const { getCDWOCPaymentsOut } = CDWOCHook()
+const { getCPPData } = CPPHook()
+const { getAssetsData } = NewAssetsHook()
+const { getPayments } = AssetsHook()
+const { getPaymentsOut } = ProtectorHook()
+const { getExpenseCategoryData } = ExpeCategoryHook()
 
 const { getCashInHandData,getOverAllPayments, overAllPayments } = CashInHandHook()
 
@@ -112,8 +127,6 @@ const [slip_Pic, setSlip_Pic] = useState("");
 const [details, setDetails] = useState("");
 const [curr_Country, setCurr_Country] = useState("");
 const [curr_Rate, setCurr_Rate] = useState();
-// const [open, setOpen] = useState(true);
-// const [close, setClose] = useState(false);
 const [cand_Name, setCand_Name] = useState("");
 const [date, setDate] = useState("");
 let curr_Amount = Math.round(payment_Out / curr_Rate)
@@ -125,34 +138,45 @@ const [selectedPersonDetails, setSelectedPersonDetails] = useState({});
 const { user } = useAuthContext();
 const fetchData = async () => {
   try {
-    // Use Promise.all to execute all promises concurrently
-    await Promise.all([
-      getCashInHandData(),
-      getOverAllPayments(),
-      getBankCash(),
-      getCurrCountryData(),
-      getCategoryData(),
-      getPaymentViaData(),
-      getPaymentTypeData(),
-      getPaymentsOut(),
-      getAzadAgentPaymentsOut(),
-      getAzadSupplierPaymentsOut(),
-      getAzadCandPaymentsOut(),
-      getCandPaymentsOut(),
-      getSupplierPaymentsOut(),
-      getTicketAgentPaymentsOut(),
-      getTicketSupplierPaymentsOut(),
-      getTicketCandPaymentsOut(),
-      getVisitAgentPaymentsOut(),
-      getVisitSupplierPaymentsOut(),
-      getVisitCandPaymentsOut()
-
-    ]);
+    getCashInHandData()
+    getOverAllPayments()
+    getBankCash()
+    getCurrCountryData()
+    getCategoryData()
+    getPaymentViaData()
+    getPaymentTypeData()
+    getExpenseCategoryData()
+    getAgentPaymentsOut()
+    getPaymentsOut()
+    getSupplierPaymentsOut()
+    getCandPaymentsOut()
+    getAzadAgentPaymentsOut()
+    getAzadCandPaymentsOut()
+    getAzadSupplierPaymentsOut()
+    getTicketAgentPaymentsOut()
+    getTicketCandPaymentsOut()
+    getTicketSupplierPaymentsOut()
+    getVisitAgentPaymentsOut()
+    getVisitCandPaymentsOut()
+    getVisitSupplierPaymentsOut()
+    getCPPData()
+    getAssetsData()
+    getPayments()
+    getCDWCPaymentsOut()
+    getCDWOCPaymentsOut()
+   
   } catch (error) { }
 };
 
+const abortCont = useRef(new AbortController());
+
 useEffect(() => {
   fetchData();
+  return () => {
+    if (abortCont.current) {
+      abortCont.current.abort(); 
+    }
+  }
 }, [user, dispatch,selectedSupplier,supplierNames,selectedPersonDetails,cand_Name]);
 
 useEffect(() => {
@@ -299,78 +323,6 @@ useEffect(() => {
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
-  const handleForm = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSupplierName("");
-        setCategory("");
-        setPayment_Via("");
-        setPayment_Type("");
-        setSlip_No("");
-        setPayment_Out("");
-        setSlip_Pic("");
-        setDetails("");
-        setCurr_Country("");
-        setCurr_Rate("");
-        setDate("");
-        setCand_Name("");
-    try {
-      const response = await fetch(`${apiUrl}/auth/direct/payment_out`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-           Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          ref,
-          supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No,
-          payment_Out,
-          slip_Pic,
-          details,
-          curr_Country,
-          curr_Rate,
-          curr_Amount,
-          date,
-          cand_Name,
-        }),
-      });
-
-      const json = await response.json();
-      if (!response.ok) {
-        setNewMessage(toast.error(json.message));
-        setLoading(false);
-      }
-      if (response.ok) {
-        getCashInHandData()
-        getOverAllPayments()
-        getBankCash()
-        setNewMessage(toast.success(json.message));
-        getPaymentsOut();
-        setLoading(false);
-        setSupplierName("");
-        setCategory("");
-        setPayment_Via("");
-        setPayment_Type("");
-        setSlip_No("");
-        setPayment_Out("");
-        setSlip_Pic("");
-        setDetails("");
-        setCurr_Country("");
-        setCurr_Rate("");
-        setDate("");
-        setCand_Name("");
-      }
-    } catch (error) {
-   
-      setNewMessage(toast.error("Server is not Responding..."));
-      setLoading(false);
-    }
-  };
-
   // Update the state when the cand_Name value changes
   const handlePersonChange = (selectedPersonName) => {
     // Find the selected person in the persons array of the selected supplier
@@ -410,7 +362,7 @@ useEffect(() => {
     }
   }
 
-  const currentDate = new Date().toISOString().split('T')[0];
+  const myDate = new Date(); myDate .setHours(0, 0, 0, 0);const currentDate = myDate.toLocaleDateString('en-CA');
   const [mySearch, setMySearch] = useState('')
   const [reference_Out, setReference_Out] = useState('')
   
@@ -418,23 +370,1226 @@ useEffect(() => {
   
   const filteredPayments =todayPayments && todayPayments.filter(entry => {
     return (
-     (entry?.supplierName?.toLowerCase().includes(mySearch.toLowerCase()) ||
-      entry?.category?.toLowerCase().includes(mySearch.toLowerCase()) ||
-      entry?.payment_Via?.toLowerCase().includes(mySearch.toLowerCase()) ||
-      entry?.payment_Type?.toLowerCase().includes(mySearch.toLowerCase())) &&
-      entry?.supplierName?.toLowerCase().includes(reference_Out.toLowerCase()) 
+     (entry?.supplierName?.trim().toLowerCase().includes(mySearch.trim().toLowerCase()) ||
+      entry?.category?.trim().toLowerCase().includes(mySearch.trim().toLowerCase()) ||
+      entry?.payment_Via?.trim().toLowerCase().includes(mySearch.trim().toLowerCase()) ||
+      entry?.payment_Type?.trim().toLowerCase().includes(mySearch.trim().toLowerCase())) &&
+      entry?.supplierName?.trim().toLowerCase().includes(reference_Out.trim().toLowerCase()) 
     )
   })
   
+
+  
+  const handleAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/agents/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+  const handleSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+
+  const handleCandidateForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+
+  
+  const handleAzadAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          // open,
+          // close,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAzadAgentPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+        // setOpen(true)
+        // setClose(false);
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleAzadCandForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAzadCandPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleAzadSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+         
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAzadSupplierPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleTicketAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/ticket/agents/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+       
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getTicketAgentPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+       
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+const handleTicketCandForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+        
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getTicketCandPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleTicketSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/ticket/suppliers/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getTicketSupplierPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleVisitAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/visit/agents/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+      
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getVisitAgentPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+  const handleVisitCandForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+         
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getVisitCandPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+       
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
+
+  const handleVisitSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/visit/suppliers/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+       
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getVisitSupplierPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+     
+      }
+
+    } catch (error) {
+     
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+  const handleCDWCForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+    
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+ 
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+  const handleCDWOCForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+       
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+  
+  const handleAssetForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/assets/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          assetName:supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPayments();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+       
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+
+  const handleProtectorForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/protectors/add/payment_out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_Out,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          // open,
+          // close,
+          date
+        }),
+      });
+
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+        // setOpen(true)
+        // setClose(false);
+
+      }
+
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
+  const handleExpenseForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_Out('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+    try {
+        const response = await fetch(`${apiUrl}/auth/expenses/add/expense`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+                name:supplierName,
+                expCategory:category,
+                payment_Out,
+                payment_Via,
+                payment_Type,
+                slip_No,
+                slip_Pic,
+                details,
+                curr_Country,
+                curr_Rate,
+                curr_Amount,
+                date
+            }),
+        });
+
+        const json = await response.json();
+        if (!response.ok) {
+
+            setNewMessage(toast.error(json.message));
+            setLoading(false)
+
+        }
+        if (response.ok) {
+            setNewMessage(toast.success(json.message));
+            setLoading(false);
+            setSupplierName('')
+            setCategory('');
+            setPayment_Via('');
+            setPayment_Type('');
+            setSlip_No('');
+            setPayment_Out('');
+            setSlip_Pic('');
+            setDetails('');
+            setCurr_Country('');
+            setCurr_Rate('');
+            setDate('')
+
+        }
+
+    } catch (error) {
+
+        setNewMessage(toast.error('Server is not Responding...'));
+        setLoading(false);
+    }
+};
   return (
     <>
     
 <Paper className="col-md-12 py-3 mb-1 detail_table p-0 m-0">
   <div className="row p-0 m-0">
-    <div className="col-md-12">
+    <div className="col-12 p-0 m-0">
     {!option && (
          
-         <form className="py-3 px-2" onSubmit={handleForm}>
+         <form className="py-3 px-2" onSubmit={(ref==='Agent'?handleAgentForm:ref==="Supplier"?handleSupplierForm:ref==="Candidate"?handleCandidateForm: ref=== "Azad Agent" ? handleAzadAgentForm: ref=== "Azad Supplier" ? handleAzadSupplierForm: ref=== "Azad Candidate" ? handleAzadCandForm: ref=== "Ticket Agent" ? handleTicketAgentForm: ref=== "Ticket Supplier" ? handleTicketSupplierForm: ref=== "Ticket Candidate" ? handleTicketCandForm: ref=== "Visit Agent" ? handleVisitAgentForm: ref=== "Visit Supplier" ? handleVisitSupplierForm: ref=== "Visit Candidate" ? handleVisitCandForm: ref=== "Credit/Debit WC" ? handleCDWCForm: ref=== "Credit/Debit WOC" ? handleCDWOCForm:ref=== "Assets"? handleAssetForm:ref=== "Protector"? handleProtectorForm:ref=== "Expense"&& handleExpenseForm)}>
               <div className="d-flex justify-content-between">
                 <div className="left">
                 <h4 className='text-sm d-inline'>Payment Out</h4>
@@ -442,28 +1597,28 @@ useEffect(() => {
                 </div>
                 <div className="right ">
                   <div className="text-end ">
-                       <span className="btn btn-sm submit_btn bg-info m-1 px-2 border-0">
-  Closing Balance : {Math.round((
-    (cashInHand.total_Cash || 0) -
-    (overAllPayments && overAllPayments.length > 0
-      ? overAllPayments
-          .filter(entry => entry.date === currentDate)
-          .reduce((total, entry) => {
-            return total + (entry.payment_In || 0);
-          }, 0)
-      : 0)+ (overAllPayments && overAllPayments.length > 0
-        ? overAllPayments
-            .filter(entry => entry.date === currentDate)
-            .reduce((total, entry) => {
-              return total + (entry.payment_Out || 0);
-            }, 0)
-        : 0)
-      
-  ).toFixed(2))}
-</span>
+                  <span className="btn btn-sm submit_btn bg-info m-1 px-2 border-0">
+                Yesterday Balance : {Math.round((
+                  
+                  (overAllPayments && overAllPayments.length > 0
+                    ? overAllPayments
+                        .filter(entry => entry.date !== currentDate)
+                        .reduce((total, entry) => {
+                          return total + (entry.payment_In || 0);
+                        }, 0)
+                    : 0)+ (overAllPayments && overAllPayments.length > 0
+                      ? overAllPayments
+                          .filter(entry => entry.date !== currentDate)
+                          .reduce((total, entry) => {
+                            return total + (entry.payment_Out || 0);
+                          }, 0)
+                      : 0)
+                    
+                ).toFixed(2))}
+              </span>
                   <span className="btn btn-sm submit_btn m-1 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>{Math.round(overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => entry.date===currentDate && entry.type.toLowerCase().includes('out'))
+                                .filter(entry => entry.date===currentDate && entry.payment_Out>0)
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0))}</span>
@@ -481,7 +1636,7 @@ useEffect(() => {
                   <TableRow>
                     <TableCell className="label border">Reference_Type</TableCell>
                     <TableCell className="label border">Name</TableCell>
-                    <TableCell className="label border">Category</TableCell>
+                    <TableCell className="label border">{ref==="Expense"&& "Expense"} Category</TableCell>
                     <TableCell className="label border">Payment_Via</TableCell>
                     <TableCell className="label border">Payment_Type</TableCell>
                     <TableCell className="label border">Slip_No</TableCell>
@@ -497,203 +1652,257 @@ useEffect(() => {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="border data_td p-1">
+                    <TableCell className="border data_td p-0">
                       <select name="" id="" value={ref} onChange={(e)=>setRef(e.target.value)}>
-                        <option value="">Select Reference</option>
-                        <option value="Agent">Agent</option>
-                        <option value="Agent Cand-Vise">Agent Cand-Vise</option>
-                        <option value="Supplier">Supplier</option>
-                        <option value="Supplier Cand-Vise">Supplier Cand-Vise</option>
-                        <option value="Candidate">Candidate</option>
-                        <option value="Ticket Supplier">Ticket Supplier</option>
-                        <option value="Ticket Agent">Ticket Agent</option>
-                        <option value="Ticket Candidate">Ticket Candidate</option>
-                        <option value="Visit Supplier">Visit Supplier</option>
-                        <option value="Visit Agent">Visit Agent</option>
-                        <option value="Visit Candidate">Visit Candidate</option>
-                        <option value="Azad Supplier">Azad Supplier</option>
-                        <option value="Azad Agent">Azad Agent</option>
-                        <option value="Azad Candidate">Azad Candidate</option>
+                      
+                    <option value="">Choose</option>
+                  <option value="Agent">Agent</option>
+                 <option value="Supplier">Supplier</option>
+                 <option value="Candidate">Candidate</option>
+                 <option value="Protector">Protector</option>
+                 <option value="Azad Agent">Azad Agent</option>
+                 <option value="Azad Supplier">Azad Supplier</option>
+                 <option value="Azad Candidate">Azad Candidate</option>
+                 <option value="Ticket Agent">Ticket Agent</option>
+                 <option value="Ticket Supplier">Ticket Supplier</option>
+                 <option value="Ticket Candidate">Ticket Candidate</option>
+                 <option value="Visit Agent">Visit Agent</option>
+                 <option value="Visit Supplier">Visit Supplier</option>
+                 <option value="Visit Candidate">Visit Candidate</option>
+                 <option value="Credit/Debit WC">Credit/Debit WC</option>
+                 <option value="Credit/Debit WOC">Credit/Debit WOC</option>
+                 <option value="Assets">Assets</option>
+                 <option value="Expense">Expense</option>
 
                       </select>
                     </TableCell>
                     <TableCell className="border data_td p-1">
-                    <select
-                    required
-                    value={supplierName}
+                    {(ref!=='Expense' || ref==='')  ?
+                <select className='p-0' required value={supplierName} onChange={(e) => {
+                  setSelectedSupplier(e.target.value);
+                  setSupplierName(e.target.value)
+                }}>
+                  
+                 {ref==="Agent" &&
+                 <>
+                 <option value="">Choose Agent</option>
+                  {agent_Payments_Out &&
+                    agent_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Supplier" &&
+                 <>
+                 <option value="">Choose Supplier</option>
+                  {supp_Payments_Out &&
+                    supp_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Candidate" &&
+                 <>
+                 <option value="">Choose Candidate</option>
+                  {candidate_Payments_Out &&
+                    candidate_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                   {ref==="Protector" &&
+                 <>
+                 <option value="">Choose Protector</option>
+                  {protector_Payments_Out &&
+                    protector_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                 {ref==="Azad Agent" &&
+                 <>
+                 <option value="">Choose Azad Agent</option>
+                  {azadAgent_Payments_Out &&
+                    azadAgent_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Azad Supplier" &&
+                 <>
+                 <option value="">Choose Azad Supplier</option>
+                  {azadSupplier_Payments_Out &&
+                    azadSupplier_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Azad Candidate" &&
+                 <>
+                 <option value="">Choose Azad Candidate</option>
+                  {azadCand_Payments_Out &&
+                    azadCand_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
 
-                    onChange={(e) => {
-                      const selectedSupplierValue = e.target.value;
+                {ref==="Ticket Agent" &&
+                 <>
+                 <option value="">Choose Ticket Agent</option>
+                  {ticketAgent_Payments_Out &&
+                    ticketAgent_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Ticket Supplier" &&
+                 <>
+                 <option value="">Choose Ticket Supplier</option>
+                  {ticketSupplier_Payments_Out &&
+                    ticketSupplier_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Ticket Candidate" &&
+                 <>
+                 <option value="">Choose Ticket Candidate</option>
+                  {ticketCand_Payments_Out &&
+                    ticketCand_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
 
-                      if (selectedSupplierValue === "") {
-                        // User selected "Choose Supplier", reset both values
-                        setSelectedSupplier("");
-                        setSupplierName("");
-                        setSupplierNames([]); // Reset the names of persons array
-                      } else {
-                        // User selected an actual supplier
-                        setSelectedSupplier(selectedSupplierValue);
-                        setSupplierName(selectedSupplierValue);
+               {ref==="Visit Agent" &&
+                 <>
+                 <option value="">Choose Visit Agent</option>
+                  {visitAgent_Payments_Out &&
+                    visitAgent_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Visit Supplier" &&
+                 <>
+                 <option value="">Choose Visit Supplier</option>
+                  {visitSupplier_Payments_Out &&
+                    visitSupplier_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Visit Candidate" &&
+                 <>
+                 <option value="">Choose Visit Candidate</option>
+                  {visitCand_Payments_Out &&
+                    visitCand_Payments_Out.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
 
-                       if(ref==="Agent Cand-Vise"){
-                         
-                        const selectedAgentData = agent_Payments_Out.find(
-                          (data) => data.supplierName === selectedSupplierValue
-                        );
-
-                        // Update the supplierNames state with the names of persons array of the selected supplier
-                        if (selectedAgentData) {
-                          const namesOfPersons =
-                          selectedAgentData.persons || [];
-                          setSupplierNames(namesOfPersons);
-                        }
-                       }
-                       if(ref==="Supplier Cand-Vise"){
-                         
-                        const selectedSupplierData = supp_Payments_Out.find(
-                          (data) => data.supplierName === selectedSupplierValue
-                        );
-
-                        // Update the supplierNames state with the names of persons array of the selected supplier
-                        if (selectedSupplierData) {
-                          const namesOfPersons =
-                          selectedSupplierData.persons || [];
-                          setSupplierNames(namesOfPersons);
-                        }
-                       }
-                      }
-                    }}
-                  >
-                   {(ref==="Agent" || ref==="Agent Cand-Vise") && <>
-                   <option value="">Choose Agent</option>
-                    {agent_Payments_Out &&
-                      agent_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Supplier" || ref==="Supplier Cand-Vise") && <>
-                   <option value="">Choose Supplier</option>
-                    {supp_Payments_Out &&
-                      supp_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Candidate") && <>
-                   <option value="">Choose Candidate</option>
-                    {candidate_Payments_Out &&
-                      candidate_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Ticket Supplier") && <>
-                   <option value="">Choose Ticket Supplier</option>
-                    {ticketSupplier_Payments_Out &&
-                      ticketSupplier_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Ticket Agent") && <>
-                   <option value="">Choose Ticket Agent</option>
-                    {ticketAgent_Payments_Out &&
-                      ticketAgent_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Ticket Candidate") && <>
-                   <option value="">Choose Ticket Candidate</option>
-                    {ticketCand_Payments_Out &&
-                      ticketCand_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-
-                   {(ref==="Visit Supplier") && <>
-                   <option value="">Choose Visit Supplier</option>
-                    {visitSupplier_Payments_Out &&
-                      visitSupplier_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Visit Agent") && <>
-                   <option value="">Choose Visit Agent</option>
-                    {visitAgent_Payments_Out &&
-                      visitAgent_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Visit Candidate") && <>
-                   <option value="">Choose Visit Candidate</option>
-                    {visitCand_Payments_Out &&
-                      visitCand_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-
-                   {(ref==="Azad Supplier") && <>
-                   <option value="">Choose Azad Supplier</option>
-                    {azadSupplier_Payments_Out &&
-                      azadSupplier_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Azad Agent") && <>
-                   <option value="">Choose Azad Agent</option>
-                    {azadAgent_Payments_Out &&
-                      azadAgent_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   {(ref==="Azad Candidate") && <>
-                   <option value="">Choose Azad Candidate</option>
-                    {azadCand_Payments_Out &&
-                      azadCand_Payments_Out.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                   </>}
-                   
-                  </select>
+                  {ref==="Credit/Debit WC" &&
+                 <>
+                 <option value="">Choose Credit/Debit WC</option>
+                  {crediterPurchaseParties &&
+                    crediterPurchaseParties.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Credit/Debit WOC" &&
+                 <>
+                 <option value="">Choose Credit/Debit WOC</option>
+                  {crediterPurchaseParties &&
+                    crediterPurchaseParties.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                  {ref==="Assets" &&
+                 <>
+                 <option value="">Choose Asset</option>
+                  {assets &&
+                    assets.map((data) => (
+                      <option key={data._id} value={data.assetName}>
+                        {data.assetName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
+                </select>:
+                <input type="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
+                }
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
-                  >
-                    <option value="">Choose</option>
-                    {categories &&
-                      categories.map((data) => (
-                        <option key={data._id} value={data.category}>
-                          {data.category}
-                        </option>
-                      ))}
-                  </select>
+                    <TableCell className="border data_td p-0">
+                    <select className='p-0' value={category} onChange={(e) => setCategory(e.target.value)} required>
+                  <option value="">Choose</option>
+                 {ref !=="Expense" &&
+                 <>
+                  {categories && categories.map((data) => (
+                    <option key={data._id} value={data.category}>{data.category}</option>
+                  ))}
+                 </>
+                 }
+                  {ref ==="Expense" &&
+                 <>
+                  {expenseCategories && expenseCategories.map((data) => (
+                    <option key={data._id} value={data.category}>{data.category}</option>
+                  ))}
+                 </>
+                 }
+                </select>
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <select
+                    <TableCell className="border data_td p-0">
+                    <select className="p-0"
                     value={payment_Via}
                     onChange={(e) => setPayment_Via(e.target.value)}
                     required
@@ -707,8 +1916,8 @@ useEffect(() => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <select
+                    <TableCell className="border data_td p-0">
+                    <select className="p-0"
                     value={payment_Type}
                     onChange={(e) => setPayment_Type(e.target.value)}
                     required
@@ -722,15 +1931,15 @@ useEffect(() => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <input
+                    <TableCell className="border data_td p-0">
+                    <input className="p-0"
                     type="text"
                     value={slip_No}
                     onChange={(e) => setSlip_No(e.target.value)}
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <input
+                    <TableCell className="border data_td p-0">
+                    <input className="p-0"
                     type="number"
                     min="0"
                     value={payment_Out}
@@ -738,8 +1947,8 @@ useEffect(() => {
                     required
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <input
+                    <TableCell className="border data_td p-0">
+                    <input className="p-0"
                     type="date"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
@@ -747,8 +1956,8 @@ useEffect(() => {
                   />
                     </TableCell>
                     {(ref==="Agent Cand-Vise" || ref==="Supplier Cand-Vise") && <>
-                    <TableCell className="border data_td p-1">
-                    <select
+                    <TableCell className="border data_td p-0">
+                    <select className="p-0"
                     value={cand_Name}
                     onChange={(e) => {
                       const selectedPersonName = e.target.value;
@@ -772,15 +1981,15 @@ useEffect(() => {
                     </TableCell>
                    
                     </>}
-                    <TableCell className="border data_td p-1">
+                    <TableCell className="border data_td p-0">
                     <textarea
-                    className="pt-2"
+                    className="p-0"
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <select
+                    <TableCell className="border data_td p-0">
+                    <select className="p-0"
                       value={curr_Country}
                       onChange={(e) => setCurr_Country(e.target.value)}
                     >
@@ -793,19 +2002,19 @@ useEffect(() => {
                         ))}
                     </select>
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <input
+                    <TableCell className="border data_td p-0">
+                    <input className="p-0"
                       type="number"
                       min="0"
                       value={curr_Rate}
                       onChange={(e) => setCurr_Rate(e.target.value)}
                     />
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                    <input type="number" value={curr_Amount} readOnly />
+                    <TableCell className="border data_td p-0">
+                    <input className="p-0" type="number" value={curr_Amount} readOnly />
                     </TableCell>
-                    <TableCell className="border data_td p-1">
-                  <input type="file" accept="image/*" onChange={handleImage} />
+                    <TableCell className="border data_td p-0">
+                  <input className="p-0" type="file" accept="image/*" onChange={handleImage} />
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -854,28 +2063,28 @@ useEffect(() => {
         <Table stickyHeader>
         <TableHead>
           <TableRow>
-                              <TableCell className='label border text-center p-1'>SN</TableCell>
-                              <TableCell className='label border text-center p-1'>Date</TableCell>
-                              <TableCell className='label border text-center p-1'>Supp/Agent/Cand</TableCell>
-                              <TableCell className='label border text-center p-1'>Reference_Type</TableCell>
-                              <TableCell className='label border  text-center p-1'>Category</TableCell>
-                              <TableCell className='label border text-center p-1'>Payment_Via</TableCell>
-                              <TableCell className='label border  text-center p-1'>Payment_Type</TableCell>
-                              <TableCell className='label border text-center p-1'>Slip_No</TableCell>
-                              <TableCell className='label border text-center p-1'>Cash_Out</TableCell>
-                              <TableCell className='label border text-center p-1'>Cash_Return</TableCell>
+                              <TableCell className='label border  p-1'>SN</TableCell>
+                              <TableCell className='label border p-1'>Date</TableCell>
+                              <TableCell className='label border  p-1'>Name</TableCell>
+                              <TableCell className='label border p-1'>Type</TableCell>
+                              <TableCell className='label border p-1'>Category</TableCell>
+                              <TableCell className='label border  p-1'>Payment_Via</TableCell>
+                              <TableCell className='label border  p-1'>Payment_Type</TableCell>
+                              <TableCell className='label border p-1'>Slip_No</TableCell>
+                              <TableCell className='label border p-1'>Cash_Out</TableCell>
+                              <TableCell className='label border  p-1'>Cash_Return</TableCell>
                              {show && <>
-                              <TableCell className='label border text-center p-1'>Curr_Rate</TableCell>
-                            <TableCell className='label border text-center p-1'>Curr_Amount</TableCell>
-                            <TableCell className='label border  text-center p-1'>Payment_In_Curr</TableCell>
+                              <TableCell className='label border  p-1'>Curr_Rate</TableCell>
+                            <TableCell className='label border  p-1'>Curr_Amount</TableCell>
+                            <TableCell className='label border   p-1'>Payment_In_Curr</TableCell>
                              </>}
-                              <TableCell className='label border  text-center p-1'>Details</TableCell>
-                              <TableCell className='label border text-center p-1'>Invoice</TableCell>
-                              <TableCell className='label border text-center p-1'>Slip_Pic</TableCell>
+                              <TableCell className='label border  p-1'>Details</TableCell>
+                              <TableCell className='label border  p-1'>Invoice</TableCell>
+                              <TableCell className='label border  p-1'>Slip_Pic</TableCell>
                             </TableRow>
         </TableHead>
         <TableBody>
-                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => cash.type.toLowerCase().includes('out')).map((cash, outerIndex) => (
+                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_Out || cash?.payment_Out>0)).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -890,7 +2099,7 @@ useEffect(() => {
                                     <TableCell className='border data_td text-center p-1'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center p-1'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                    <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-down text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                    {show && <>
                                     <TableCell className='border data_td text-center  p-1'>{Math.round(cash?.curr_Rate||0)}</TableCell>
                                       <TableCell className='border data_td text-center p-1 '>{Math.round(cash?.curr_Amount||0)}</TableCell>
@@ -924,11 +2133,11 @@ useEffect(() => {
                             <TableRow>
                               <TableCell colSpan={7}></TableCell>
                               <TableCell className='border data_td text-center bg-secondary text-white  p-1'>Total</TableCell>
-                              <TableCell className='border data_td text-center bg-success text-white p-1'>
+                              <TableCell className='border data_td text-center bg-danger text-white p-1'>
                             {/* Calculate the total sum of payment_In */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .filter(entry => entry.payment_Out>0)
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.payment_Out || 0));
                                 }, 0)}
@@ -937,7 +2146,7 @@ useEffect(() => {
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .filter(entry => entry?.payment_Out)
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.cash_Out || 0));
                                 }, 0)}
@@ -948,7 +2157,7 @@ useEffect(() => {
                             {/* Calculate the total sum of payment_Out */}
                              {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .filter(entry => entry?.payment_Out)
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.curr_Rate || 0));
                                 }, 0)}
@@ -957,7 +2166,7 @@ useEffect(() => {
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out'))
+                                .filter(entry => entry?.payment_Out)
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.curr_Amount || 0));
                                 }, 0)}

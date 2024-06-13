@@ -1,10 +1,10 @@
+import {useRef } from 'react';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getTrades } from '../../redux/reducers/settingSlice';
 import { useDispatch } from 'react-redux';
 
 export default function TradeHook() {
-
-
+  const abortCont = useRef(new AbortController());
   const dispatch = useDispatch();
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,6 +17,8 @@ export default function TradeHook() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
+        signal: abortCont.current.signal
+
       });
 
       const json = await response.json();
@@ -24,8 +26,11 @@ export default function TradeHook() {
         dispatch(getTrades(json.data)); // Dispatch the action with received data
       }
     } catch (error) {
-    
-      
+      if (error.name === 'AbortError') {
+                
+      } else {
+        console.log(error);
+      }
     }
   };
 

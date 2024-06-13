@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import NoteHook from '../hooks/noteHooks/NoteHook'
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook';
 import { toast } from 'react-toastify';
@@ -34,8 +34,16 @@ export default function Notes() {
     const[dateFrom,setDateFrom]=useState('')
     const[dateTo,setDateTo]=useState('')
     const {getNotes,notes}=NoteHook()
+
+  const abortCont = useRef(new AbortController());
+
     useEffect(() => {
         getNotes()
+        return () => {
+          if (abortCont.current) {
+            abortCont.current.abort(); 
+          }
+        }
     }, [])
 
     const [view,setView]=useState('')

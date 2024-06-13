@@ -79,10 +79,15 @@ const[show,setShow]=useState(false)
       entry.reference_Out?.toLowerCase().startsWith(search1.trim().toLowerCase()))
     )
   })
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
-  
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
 }, []);
 
   const downloadExcel = () => {

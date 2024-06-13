@@ -1,3 +1,4 @@
+import {useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getSup_Payments_In, getSup_Payments_Out } from '../../redux/reducers/supplierSlice'
@@ -5,6 +6,8 @@ import { getSup_Payments_In, getSup_Payments_Out } from '../../redux/reducers/su
 export default function SupplierHook() {
     const dispatch = useDispatch()
     const { user } = useAuthContext()
+    const abortCont = useRef(new AbortController());
+
     const apiUrl = process.env.REACT_APP_API_URL;
     const getPaymentsIn = async () => {
         try {
@@ -13,6 +16,8 @@ export default function SupplierHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -23,7 +28,11 @@ export default function SupplierHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -35,6 +44,8 @@ export default function SupplierHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -45,7 +56,11 @@ export default function SupplierHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -57,6 +72,8 @@ export default function SupplierHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -67,7 +84,11 @@ export default function SupplierHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }
@@ -79,6 +100,8 @@ export default function SupplierHook() {
 
                     'Authorization': `Bearer ${user.token}`,
                 },
+                signal: abortCont.current.signal
+
             });
 
             const json = await response.json();
@@ -89,7 +112,11 @@ export default function SupplierHook() {
                 console.log(json.message)
             }
         } catch (error) {
-            console.log(error)
+            if (error.name === 'AbortError') {
+                
+            } else {
+              console.log(error);
+            }
 
         }
     }

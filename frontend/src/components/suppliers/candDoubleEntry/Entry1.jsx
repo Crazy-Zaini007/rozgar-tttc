@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState,useRef } from 'react'
 import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -13,7 +13,9 @@ import CategoryHook from "../../../hooks/settingHooks/CategoryHook";
 import PaymentViaHook from "../../../hooks/settingHooks/PaymentViaHook";
 import PaymentTypeHook from "../../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../../hooks/settingHooks/CurrCountryHook";
+import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
+
 import Entry2 from './Entry2'
 
 export default function Entry1() {
@@ -23,35 +25,46 @@ export default function Entry1() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const supp_Payments_In = useSelector(
-    (state) => state.suppliers.supp_Payments_In
+  const agent_Payments_In = useSelector(
+    (state) => state.agents.agent_Payments_In
   );
+  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In)
+
+  const abortCont = useRef(new AbortController());
+
   const { getCurrCountryData } = CurrCountryHook();
   const { getCategoryData } = CategoryHook();
   const { getPaymentViaData } = PaymentViaHook();
   const { getPaymentTypeData } = PaymentTypeHook();
-  const { getPaymentsIn } = SupplierHook();
+  const { getAgentPaymentsIn } = AgentHook();
+  const { getSupplierPaymentsIn } = SupplierHook()
+
   // getting Data from DB
   const { user } = useAuthContext();
   const fetchData = async () => {
     try {
-      // Use Promise.all to execute all promises concurrently
-      await Promise.all([
-        getCurrCountryData(),
-        getCategoryData(),
-        getPaymentViaData(),
-        getPaymentTypeData(),
-        getPaymentsIn(),
-      ]);
+        getCurrCountryData()
+        getCategoryData()
+        getPaymentViaData()
+        getPaymentTypeData()
+        getAgentPaymentsIn()
+        getSupplierPaymentsIn()
+      
     } catch (error) { }
   };
 
   useEffect(() => {
     fetchData();
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch]);
 
   const [option, setOption] = useState(false);
   // Form input States
+  const [type, setType] = useState('');
   const [supplierName, setSupplierName] = useState("");
   const [category, setCategory] = useState("");
   const [payment_Via, setPayment_Via] = useState("");
@@ -65,8 +78,13 @@ export default function Entry1() {
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [supplierNames, setSupplierNames] = useState([]);
 
-  const [candData, setCandData] = useState([]);
+
+useEffect(() => {
+
+}, [type])
+
   
+  const [candData, setCandData] = useState([]);
   const [selectedPersonDetails, setSelectedPersonDetails] = useState([]);
   let totalVisaPriceInPKR = selectedPersonDetails.reduce((total, person) => {
     return total + person?.visa_Price_In_PKR;
@@ -79,6 +97,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   return total + person?.remaining_Price;
 }, 0);
 
+  
   // Function to handle the "Add More" button click
   const handleAddMore = () => {
     setCandData([...candData, { cand_Name: "", payment_In: 0, curr_Amount: 0,curr_Rate:0 }]);
@@ -105,6 +124,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   }
 
   const printPersonsTable = (selectedPersonDetails) => {
+    // Convert JSX to HTML string
     const formatDate = (date) => {
       const d = new Date(date);
       const day = String(d.getDate()).padStart(2, '0');
@@ -116,12 +136,12 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   
     const printContentString = `
     <div class="print-header">
-      <p class="invoice">Supplier: ${selectedSupplier}</p>
+      <p class="invoice">Agent/Supplier: ${selectedSupplier}</p>
         <h1 class="title">ROZGAR TTTC</h1>
         <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title">Candidate Payments Details</h1>
+        <h1 class="title"> Candidate Payments Details</h1>
       </div>
       <hr/>
     <table class='print-table'>
@@ -130,7 +150,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
         <th>Date</th>
         <th>Name</th>
         <th>PP#</th>
-        <th>Entry_Mode</th>
+        <th>Entry Mode</th>
         <th>Company</th>
         <th>Trade</th>
         <th>Country</th>
@@ -264,79 +284,18 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
- 
   const[totalPayments,setTotalPayments]=useState(0)
   const[totalCurrRate,setTotalCurrRate]=useState(0)
 let totalCurrency=Math.round(totalPayments/totalCurrRate)
+
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
-  const handleForm = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSupplierName("");
-    setCategory("");
-    setPayment_Via("");
-    setPayment_Type("");
-    setSlip_No("");
-    setSlip_Pic("");
-    setDetails("");
-    setCurr_Country("");
-    setDate("");
-    setTotalCurrRate('')
-    try {
-      const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_in`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No,
-          slip_Pic,
-          details,
-          curr_Country,
-          date,
-          totalCurrRate,
-          payments:candData
-        }),
-      });
-
-      const json = await response.json();
-      if (!response.ok) {
-        setNewMessage(toast.error(json.message));
-        setLoading(false);
-      }
-      if (response.ok) {
-        setNewMessage(toast.success(json.message));
-        getPaymentsIn();
-        setLoading(false);
-        setSupplierName("");
-        setCategory("");
-        setPayment_Via("");
-        setPayment_Type("");
-        setSlip_No("");
-        setSlip_Pic("");
-        setDetails("");
-        setCurr_Country("");
-        setDate("");
-        setTotalCurrRate('')
-      }
-    } catch (error) {
-   
-      setNewMessage(toast.error("Server is not Responding..."));
-      setLoading(false);
-    }
-  };
-
+ 
 
 
   const handlePersonChange = (selectedPersonName, index) => {
-    const selectedSupplierData = supp_Payments_In.find(
+    const selectedSupplierData =(type==="Agent" ?agent_Payments_In:type==="Supplier"&&supp_Payments_In).find(
       (data) => data.supplierName === selectedSupplier
     );
   
@@ -379,19 +338,158 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
     newCandData[index].curr_Rate = Math.min(value, totalCurrency - sumCurrency(newCandData) + newCandData[index].curr_Rate);
     setCandData(newCandData);
   };
+
+
+  const handleAgentForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName("");
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setDate("");
+    try {
+      const response = await fetch(`${apiUrl}/auth/agents/add/cand_vise/payment_in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          slip_Pic,
+          details,
+          curr_Country,
+          date,
+          totalCurrRate,
+          payments:candData
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+        setNewMessage(toast.error(json.message));
+        setLoading(false);
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getAgentPaymentsIn();
+        setLoading(false);
+        setSupplierName("");
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setDate("");
+      }
+    } catch (error) {
+     
+      setNewMessage(toast.error("Server is not Responding..."));
+      setLoading(false);
+    }
+  };
+
+
+  
+  const handleSupplierForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName("");
+    setCategory("");
+    setPayment_Via("");
+    setPayment_Type("");
+    setSlip_No("");
+    setSlip_Pic("");
+    setDetails("");
+    setCurr_Country("");
+    setDate("");
+    setTotalCurrRate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          slip_Pic,
+          details,
+          curr_Country,
+          date,
+          totalCurrRate,
+          payments:candData
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+        setNewMessage(toast.error(json.message));
+        setLoading(false);
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getSupplierPaymentsIn();
+        setLoading(false);
+        setSupplierName("");
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setDate("");
+        setTotalCurrRate('')
+      }
+    } catch (error) {
+   
+      setNewMessage(toast.error("Server is not Responding..."));
+      setLoading(false);
+    }
+  };
+
+
   return (
    <>
     <TableContainer component={Paper} className="mb-1">
       <div className="col-md-12 ">
         {!option && (
           <>
-            <form className="py-3 px-2" onSubmit={handleForm}>
+            <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
               <div className="text-end ">
-                <button className="btn submit_btn m-1" disabled={loading || !disableAddMore}>
+                <button className="btn submit_btn btn-sm m-1" disabled={loading || !disableAddMore}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>
               <div className="row p-0 m-0 my-1">
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Reference</label>
+                  <select
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    required
+                  >
+                    <option value="">Choose</option>
+                   <option value="Agent">Agent</option>
+                   <option value="Supplier">Supplier</option>
+                  </select>
+                </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Name</label>
                   <select
@@ -411,7 +509,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                         setSupplierName(selectedSupplierValue);
 
                         // Filter supp_Payments_Out based on the selected supplier
-                        const selectedSupplierData = supp_Payments_In.find(
+                        const selectedSupplierData = (type==="Agent"?agent_Payments_In :type==="Supplier"&&supp_Payments_In).find(
                           (data) => data.supplierName === selectedSupplierValue
                         );
 
@@ -424,13 +522,29 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                       }
                     }}
                   >
-                    <option value="">Choose Supplier</option>
+                    {type==="Agent" &&
+                    <>
+                     <option value="">Choose Agent</option>
+                    {agent_Payments_In &&
+                      agent_Payments_In.map((data) => (
+                        <option key={data._id} value={data.supplierName}>
+                          {data.supplierName}
+                        </option>
+                      ))}
+                    </>
+                    }
+                      {type==="Supplier" &&
+                    <>
+                     <option value="">Choose Supplier</option>
                     {supp_Payments_In &&
                       supp_Payments_In.map((data) => (
                         <option key={data._id} value={data.supplierName}>
                           {data.supplierName}
                         </option>
                       ))}
+                    </>
+                    }
+                   
                   </select>
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -587,7 +701,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {supp_Payments_In
+                  {(type === "Agent" ? agent_Payments_In : type === "Supplier"&& supp_Payments_In: [])
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
@@ -716,9 +830,9 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
           ))}
         </select>
       </div>
-      <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor="" className="text-sm text-muted  mb-1">Payment In</label>
-             
+                {/* Payment_In */}
                 <input
                   type="number"
                   required
@@ -728,7 +842,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                   placeholder="Payment In"
                 />
               </div>
-           
+             
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
                 <input

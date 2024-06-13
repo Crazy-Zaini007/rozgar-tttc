@@ -35,7 +35,6 @@ const getAllPayments = async (req, res) => {
       return;
     }
 
-    // Find all agents
     const agents = await Agents.find();
     const suppliers = await Suppliers.find();
     const candidates = await Candidates.find();
@@ -51,10 +50,54 @@ const getAllPayments = async (req, res) => {
     const cashInHand = await CashInHand.find();
     const cdwocs = await CDWOC.find();
     const cdwcs = await CDWC.find();
-
+    const assets = await Assets.find();
+    const expenses = await Expenses.find();
+    const employees = await Employees.find();
 
     // Initialize an empty array to store merged payments
     let mergedPayments = [];
+
+    expenses.forEach((expense) => {
+      // Add necessary details from expense to mergedPayments
+      const expenseDetails = {
+        supplierName: expense.name,
+        type: "Expense",
+        payment_Out: expense.payment_Out,
+        date: expense.date,
+        category: expense.expCategory,
+        payment_Type: expense.payment_Type,
+        payment_Via: expense.payment_Type,
+        slip_No: expense.slip_No,
+        slip_Pic: expense.slip_Pic,
+        details: expense.details,
+        payment_In_Curr: expense.curr_Country,
+        curr_Rate: expense.curr_Rate,
+        curr_Amount: expense.curr_Amount,
+        invoice: expense.invoice,
+        cash_Out:0
+      };
+      mergedPayments.push(expenseDetails);
+    })
+    
+    for (const employee of employees) {
+      if (employee.payments) {
+        const allMonths = employee.payments;
+        for (const month of allMonths) {
+          if (month.payment && month.payment.length > 0) {
+            const paymentDetails=month.payment.map(
+              (payment)=>({
+                supplierName:employee.employeeName,
+                type:'Employee Payment',
+                ...payment.toObject(),
+
+              })
+            )
+        mergedPayments = mergedPayments.concat(paymentDetails);
+
+          }
+        }
+      }
+    }
 
     // Iterate through CDWOC 
     cdwocs.forEach((cdwoc) => {
@@ -64,6 +107,21 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: cdwoc.payment_In_Schema.supplierName,
             type: "CDWOC_Payment",
+            ...payment.toObject(),
+          })
+        );
+        mergedPayments = mergedPayments.concat(paymentInDetails);
+      }
+     
+    })
+     // Iterate through Assets 
+     assets.forEach((asset) => {
+      // Check if payment_In_Schema exists and has the expected structure
+      if (asset.payment_In_Schema && asset.payment_In_Schema.payment) {
+        const paymentInDetails = asset.payment_In_Schema.payment.map(
+          (payment) => ({
+            supplierName: asset.payment_In_Schema.assetName,
+            type: "Asset_Payment",
             ...payment.toObject(),
           })
         );
@@ -482,7 +540,7 @@ const getAllPayments = async (req, res) => {
   mergedPayments = mergedPayments.concat(allPayments);
  }
  let sortedPayments=mergedPayments.sort((a, b) => new Date(a.date) - new Date(b.date));
-
+console.log('sortedPayments',)
     // Send the resulting mergedPayments array in the response
     res.status(200).json({ data: sortedPayments });
   } catch (error) {
@@ -1832,10 +1890,10 @@ const getTodayAllPayments = async (req, res) => {
       { model: AzadCandidates, schemaType: "payment_In_Schema" },
       { model: TicketCandidates, schemaType: "payment_In_Schema" },
       { model: VisitCandidates, schemaType: "payment_In_Schema" },
-      // { model: CashInHand, schemaType: "CashInHandSchema" },
-      // { model: CDWC, schemaType: "payment_In_Schema" },
-      // { model: CDWOC, schemaType: "payment_In_Schema" },
-      // { model: Assets, schemaType: "payment_In_Schema" },
+      { model: CashInHand, schemaType: "CashInHandSchema" },
+      { model: CDWC, schemaType: "payment_In_Schema" },
+      { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
 
     ];
 
@@ -1853,17 +1911,17 @@ const getTodayAllPayments = async (req, res) => {
       { model: AzadCandidates, schemaType: "payment_Out_Schema" },
       { model: TicketCandidates, schemaType: "payment_Out_Schema" },
       { model: VisitCandidates, schemaType: "payment_Out_Schema" },
-      // { model: CashInHand, schemaType: "CashInHandSchema" },
-      // { model: Protector, schemaType: "payment_Out_Schema" },
-      // { model: CDWC, schemaType: "payment_In_Schema" },
-      // { model: CDWOC, schemaType: "payment_In_Schema" },
-      // { model: Assets, schemaType: "payment_In_Schema" },
+      { model: CashInHand, schemaType: "CashInHandSchema" },
+      { model: Protector, schemaType: "payment_Out_Schema" },
+      { model: CDWC, schemaType: "payment_In_Schema" },
+      { model: CDWOC, schemaType: "payment_In_Schema" },
+      { model: Assets, schemaType: "payment_In_Schema" },
     ];
 
     // Initialize objects to store combined payments in and out separately
     const combinedPaymentsIn = {};
     const combinedPaymentsOut = {};
-    const currentDate = new Date().toISOString().split("T")[0];
+    
 
     // Process payments for payment_In
     for (const { model, schemaType } of inCollections) {
@@ -1874,7 +1932,7 @@ const getTodayAllPayments = async (req, res) => {
           for (const payment of item[schemaType].payment) {
             const payment_Via=payment.payment_Via.toLowerCase();
           
-            if (payment?.date===currentDate && payment.payment_In>0) {
+            if (payment.payment_In>0) {
               if (!combinedPaymentsIn[payment_Via]) {
                 combinedPaymentsIn[payment_Via] = 0;
               }
@@ -1888,7 +1946,7 @@ const getTodayAllPayments = async (req, res) => {
             const payment_Via = payment.payment_Via.toLowerCase();
           
 
-            if (payment?.date===currentDate && payment.payment_In>0) {
+            if (payment.payment_In>0) {
               if (!combinedPaymentsIn[payment_Via]) {
                 combinedPaymentsIn[payment_Via] = 0;
               }
@@ -1910,7 +1968,7 @@ const getTodayAllPayments = async (req, res) => {
             const payment_Via=payment.payment_Via.toLowerCase();
           
 
-            if (payment?.date===currentDate && payment.payment_Out>0) {
+            if (payment.payment_Out>0) {
               // Ignore cash payments
 
               if (!combinedPaymentsOut[payment_Via]) {
@@ -1926,7 +1984,7 @@ const getTodayAllPayments = async (req, res) => {
             const payment_Via = payment.payment_Via.toLowerCase();
           
 
-            if (payment?.date===currentDate&& payment.payment_Out>0) {
+            if ( payment.payment_Out>0) {
               // Ignore cash payments
 
               if (!combinedPaymentsOut[payment_Via]) {
@@ -1939,6 +1997,71 @@ const getTodayAllPayments = async (req, res) => {
       }
     }
 
+    // Process payments for CashInHand schema
+    const cashInHandPayments = await CashInHand.find();
+    for (const cash of cashInHandPayments) {
+      if (cash.payment) {
+        for (const payment of cash.payment) {
+          const payment_Via = payment.payment_Via.toLowerCase();
+        
+
+          if (payment?.payment_Via?.toLowerCase() !== "cash") {
+            if (!combinedPaymentsOut[payment_Via]) {
+              combinedPaymentsOut[payment_Via] = 0;
+            }
+            combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
+          }
+          if (payment?.payment_Via) {
+            if (!combinedPaymentsIn[payment_Via]) {
+              combinedPaymentsIn[payment_Via] = 0;
+            }
+            combinedPaymentsIn[payment_Via] += payment.payment_In || 0;
+          }
+        }
+      }
+    }
+
+    // Process payments for Expenses schema
+    const expensesPayments = await Expenses.find();
+    for (const expense of expensesPayments) {
+      const payment_Via = expense.payment_Via.toLowerCase();
+    
+      if (expense?.payment_Via) {
+        // Ignore cash payments
+
+        if (!combinedPaymentsOut[payment_Via]) {
+          combinedPaymentsOut[payment_Via] = 0;
+        }
+        combinedPaymentsOut[payment_Via] += expense.payment_Out || 0;
+      }
+    }
+
+    // Process payments for Expenses schema
+    
+    const employeesPayments = await Employees.find();
+
+    for(const employee of employeesPayments){
+      if(employee.payments){
+        const allMonths=employee.payments
+        for (const month of allMonths){
+          if(month.payment && month.payment.length>0){
+            const payments= month.payment
+            for (const payment of payments){
+              const payment_Via=payment.payment_Via.toLowerCase();
+              if (payment?.payment_Via) {
+                // Ignore cash payments
+    
+                if (!combinedPaymentsOut[payment_Via]) {
+                  combinedPaymentsOut[payment_Via] = 0;
+                }
+                combinedPaymentsOut[payment_Via] += payment.payment_Out || 0;
+              }
+            }
+          }
+        }
+      }
+    }
+   
 
 
     // Combine payments in and out separately for each payment_via and subtract payment_Out from payment_In

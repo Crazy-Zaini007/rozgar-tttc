@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useRef} from 'react'
 import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
 import CategoryHook from '../../../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../../../hooks/settingHooks/PaymentViaHook'
@@ -45,9 +45,16 @@ export default function AssetsPaymentsDetails() {
       setIsLoading(false);
     }
   }
+  const abortCont = useRef(new AbortController());
+
   useEffect(() => {
     if (user) {
       fetchData();
+    }
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
     }
   }, [])
   

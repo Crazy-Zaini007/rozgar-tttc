@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState,useEffect,useRef } from 'react'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -397,9 +397,15 @@ export default function SingleEntry() {
 
     }
   };
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch])
 
 

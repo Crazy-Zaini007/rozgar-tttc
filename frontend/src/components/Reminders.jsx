@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import ReminderHook from '../hooks/reminderHooks/ReminderHook'
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook';
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
@@ -13,8 +13,15 @@ export default function Reminders() {
 
     const [search,setSearch]=useState('')
     const {getReminders,reminders}=ReminderHook()
+  const abortCont = useRef(new AbortController());
+
     useEffect(() => {
       getReminders()
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
     }, [])
 
     const filteredReminders=reminders && reminders.filter(data=>{

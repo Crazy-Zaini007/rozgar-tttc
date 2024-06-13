@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import SupplierHook from '../../../hooks/supplierHooks//SupplierHook'
 import { useSelector, useDispatch } from 'react-redux';
 import { saveAs } from 'file-saver';
@@ -73,9 +73,16 @@ export default function SupCandPaymentInDetails() {
       setIsLoading(false);
     }
   }
+  const abortCont = useRef(new AbortController());
+  
   useEffect(() => {
     if (user) {
       fetchData();
+    }
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
     }
   }, [])
 

@@ -1,4 +1,4 @@
-
+import {useRef } from 'react';
 import { useAuthContext } from '../userHooks/UserAuthHook';
 import { getTicketSalesParty } from '../../redux/reducers/settingSlice';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ export default function TSPHook() {
 
   const { user } = useAuthContext();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const abortCont = useRef(new AbortController());
   
   const getTSPData = async () => {
     try {
@@ -16,6 +17,8 @@ export default function TSPHook() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
+        signal: abortCont.current.signal
+
       });
 
       const json = await response.json();
@@ -24,7 +27,11 @@ export default function TSPHook() {
       }
     } catch (error) {
       
-      
+      if (error.name === 'AbortError') {
+                
+      } else {
+        console.log(error);
+      }
     }
   };
 

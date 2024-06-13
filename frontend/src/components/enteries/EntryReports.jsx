@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import EntryHook from '../../hooks/entryHooks/EntryHook';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
@@ -93,11 +93,16 @@ const EntryReports = () => {
     }
   };
 
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
     fetchData()
-
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, []);
 
   

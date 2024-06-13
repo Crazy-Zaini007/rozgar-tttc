@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -24,7 +24,8 @@ import VisitHook from '../../../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../../../hooks/settingHooks/CPPHook';
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
-
+import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
+import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
 import Entry2 from './Entry2'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -51,6 +52,8 @@ export default function Entry1() {
 
   const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
   const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
+  const assets = useSelector((state) => state.setting.assets)
+  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
 
   const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const [selectedSupplier, setSelectedSupplier] = useState('');
@@ -69,7 +72,13 @@ export default function Entry1() {
   const { getCDWCPaymentsIn } = CDWCHook()
   const { getCDWOCPaymentsIn } = CDWOCHook()
   const { getCPPData } = CPPHook()
+  const { getAssetsData } = NewAssetsHook()
+  const { getPayments } = AssetsHook()
+
   // getting Data from DB
+
+  const abortCont = useRef(new AbortController());
+
   const { user } = useAuthContext()
   const fetchData = async () => {
     try {
@@ -90,6 +99,8 @@ export default function Entry1() {
         getVisitCandPaymentsIn()
         getVisitSupplierPaymentsIn()
         getCPPData()
+        getAssetsData()
+        getPayments()
         getCDWCPaymentsIn()
         getCDWOCPaymentsIn()
 
@@ -99,6 +110,11 @@ export default function Entry1() {
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch])
 
 
@@ -116,8 +132,6 @@ export default function Entry1() {
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState()
-  // const [open, setOpen] = useState(true)
-  // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
   
   useEffect(() => {
@@ -1160,13 +1174,81 @@ const handleTicketCandForm = async (e) => {
   };
 
 
+  const handleAssetForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/assets/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          assetName:supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+      
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
 
 
   return (
     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" && handleCDWOCForm)}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"&& handleAssetForm)}>
             <div className="text-end ">
              
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment In"}</button>
@@ -1191,6 +1273,7 @@ const handleTicketCandForm = async (e) => {
                  <option value="Visit Candidate">Visit Candidate</option>
                  <option value="Credit/Debit WC">Credit/Debit WC</option>
                  <option value="Credit/Debit WOC">Credit/Debit WOC</option>
+                 <option value="Assets">Assets</option>
                 </select>
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -1371,6 +1454,18 @@ const handleTicketCandForm = async (e) => {
                   }
                  </>
                  }
+                 {type==="Assets" &&
+                 <>
+                 <option value="">Choose Asset</option>
+                  {assets &&
+                    assets.map((data) => (
+                      <option key={data._id} value={data.assetName}>
+                        {data.assetName}
+                      </option>
+                    ))
+                  }
+                 </>
+                 }
                 </select>
 
               </div>
@@ -1484,8 +1579,8 @@ const handleTicketCandForm = async (e) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {(type === "Agent" ? agent_Payments_In : type === "Supplier" ? supp_Payments_In : type === "Candidate" ? candidate_Payments_In: type === "Azad Agent" ? azadAgent_Payments_In: type === "Azad Supplier" ? azadSupplier_Payments_In: type === "Azad Candidate" ? azadCand_Payments_In: type === "Ticket Agent" ? ticketAgent_Payments_In: type === "Ticket Supplier" ? ticketSupplier_Payments_In: type === "Ticket Candidate" ? ticketCand_Payments_In: type === "Visit Agent" ? visitAgent_Payments_In: type === "Visit Supplier" ? visitSupplier_Payments_In: type === "Visit Candidate" ? visitCand_Payments_In: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In: [])
-                    .filter((data) => data.supplierName === selectedSupplier)
+                  {(type === "Agent" ? agent_Payments_In : type === "Supplier" ? supp_Payments_In : type === "Candidate" ? candidate_Payments_In: type === "Azad Agent" ? azadAgent_Payments_In: type === "Azad Supplier" ? azadSupplier_Payments_In: type === "Azad Candidate" ? azadCand_Payments_In: type === "Ticket Agent" ? ticketAgent_Payments_In: type === "Ticket Supplier" ? ticketSupplier_Payments_In: type === "Ticket Candidate" ? ticketCand_Payments_In: type === "Visit Agent" ? visitAgent_Payments_In: type === "Visit Supplier" ? visitSupplier_Payments_In: type === "Visit Candidate" ? visitCand_Payments_In: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In:type === "Assets" ? assetsPayments: [])
+                    .filter((data) =>type === "Assets"? data.assetName:data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>

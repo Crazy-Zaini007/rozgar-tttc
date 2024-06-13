@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import { toast } from 'react-toastify';
 import {useDispatch ,useSelector} from "react-redux";
@@ -75,9 +75,15 @@ export default function ProfitLoseReport() {
     } catch (error) {
     }
   };
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
     fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort(); 
+      }
+    }
   }, [user, dispatch])
 
 

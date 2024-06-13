@@ -45,10 +45,16 @@ export default function VisitCandReports() {
     }
   };
   
+  const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
       fetchData()
+      return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
     
   }, []);
 

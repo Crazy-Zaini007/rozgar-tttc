@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { useSelector } from "react-redux";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -16,11 +16,12 @@ export default function DirectInOut() {
   const { user } = useAuthContext();
 
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
-  const currentDate = new Date().toISOString().split('T')[0];
+  const myDate = new Date(); myDate .setHours(0, 0, 0, 0);const currentDate = myDate.toLocaleDateString('en-CA');
 
   const[banks,setBanks]=useState('')
   const[total,setTotal]=useState()
 
+  const abortCont = useRef(new AbortController());
   
 const apiUrl = process.env.REACT_APP_API_URL;
 const getBankCash = async () => {
@@ -49,6 +50,11 @@ const { getCashInHandData } = CashInHandHook()
  useEffect(() => {
     getCashInHandData();
     getBankCash();
+    return () => {
+        if (abortCont.current) {
+          abortCont.current.abort(); 
+        }
+      }
   }, [user]);
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
@@ -86,7 +92,7 @@ const { getCashInHandData } = CashInHandHook()
                                     </TableRow>
                                 ))}
                                 <TableRow>
-                                    <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Today Total</TableCell>
+                                    <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Total</TableCell>
                                     <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{Math.round(total && total||0)}</TableCell>
                                 </TableRow>
                             </TableBody>
