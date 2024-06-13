@@ -5,7 +5,7 @@ import SyncLoader from 'react-spinners/SyncLoader'
 import * as XLSX from 'xlsx';
 import { useSelector } from 'react-redux';
 
-export default function OverAllSystemPaymentReports() {
+export default function CombinePaymentReports() {
   const [option, setOption] = useState(0)
   const [loading1, setLoading1] = useState(false)
   const { getOverAllPayments, overAllPayments } = CashInHandHook()
@@ -57,7 +57,7 @@ export default function OverAllSystemPaymentReports() {
     </thead>
     <tbody>
       ${overAllPayments && overAllPayments 
-        .filter(entry => (entry.payment_In || entry.payment_In>0) && (!entry.payments))
+        .filter(entry => entry.type.toLowerCase().includes('in'))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -124,7 +124,7 @@ export default function OverAllSystemPaymentReports() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => (payment.payment_In || payment.payment_In>0) && (!payment.payments));
+    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment =>payment.type.toLowerCase().includes('in'));
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {
@@ -178,7 +178,7 @@ export default function OverAllSystemPaymentReports() {
     </thead>
     <tbody>
       ${overAllPayments && overAllPayments 
-        .filter(entry => (entry.payment_Out || entry.payment_Out>0) && (!entry.payments))
+        .filter(entry => entry.type.toLowerCase().includes('out'))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
@@ -245,7 +245,7 @@ export default function OverAllSystemPaymentReports() {
 
 
   const downloadPaymenOutExcel = () => {
-    const filteredPaymentsOut = overAllPayments && overAllPayments .filter(payment => (payment.payment_Out || payment.payment_Out>0) && (!payment.payments));
+    const filteredPaymentsOut = overAllPayments && overAllPayments .filter(payment => payment.type.toLowerCase().includes('in'));
 
     const data = [];
     // Iterate over entries and push all fields
@@ -287,7 +287,7 @@ export default function OverAllSystemPaymentReports() {
                 <div className="col-md-12">
                 <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Overall System Payments</h4>
+                  <h4>Combine Payments Report</h4>
                 </div>
                 <div className="right d-flex">
                 <button className='btn m-1 btn-sm shadow border' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Payment In</button>
@@ -344,7 +344,7 @@ export default function OverAllSystemPaymentReports() {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => (cash.payment_In || cash.payment_In>0) && (!cash.payments)).map((cash, outerIndex) => (
+                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => cash.type.toLowerCase().includes('in')).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -392,7 +392,7 @@ export default function OverAllSystemPaymentReports() {
                             {/* Calculate the total sum of payment_In */}
                             {overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => (entry.payment_In || entry.payment_In>0) && (!entry.payments))
+                                .filter(entry => entry.type.toLowerCase().includes('in'))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
@@ -401,7 +401,7 @@ export default function OverAllSystemPaymentReports() {
                             {/* Calculate the total sum of cash_Out */}
                             {overAllPayments && overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => (entry.payment_In || entry.payment_In>0) && (!entry.payments))
+                                .filter(entry => entry.type.toLowerCase().includes('in'))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}
@@ -440,7 +440,7 @@ export default function OverAllSystemPaymentReports() {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ? overAllPayments.filter(cash => (cash.payment_Out || cash.payment_Out>0) && (!cash.payments)).map((cash, outerIndex) => (
+                            {overAllPayments && overAllPayments.length > 0 ? overAllPayments.filter(cash => cash.type.toLowerCase().includes('out')).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -489,7 +489,7 @@ export default function OverAllSystemPaymentReports() {
                             
                             { overAllPayments && overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => (entry.payment_Out || entry.payment_Out>0) && (!entry.payments))
+                                .filter(entry =>entry.type.toLowerCase().includes('out'))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
@@ -498,7 +498,7 @@ export default function OverAllSystemPaymentReports() {
                             {/* Calculate the total sum of cash_Out */}
                             { overAllPayments && overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => (entry.payment_Out || entry.payment_Out>0) && (!entry.payments))
+                                .filter(entry =>entry.type.toLowerCase().includes('out'))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}

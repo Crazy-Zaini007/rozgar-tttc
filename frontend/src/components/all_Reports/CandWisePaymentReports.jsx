@@ -286,7 +286,7 @@ export default function CandWisePaymentReports() {
                 <div className="col-md-12">
                 <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Candidate Wise Payments</h4>
+                  <h4>Candidate Vise Payments</h4>
                 </div>
                 <div className="right d-flex">
                   {overAllPayments && overAllPayments.length > 0 &&

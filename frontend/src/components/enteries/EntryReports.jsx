@@ -27,7 +27,7 @@ import SyncLoader from 'react-spinners/SyncLoader'
 
 const rowsPerPageOptions = [50, 75, 100,200];
 
-const EntryReports = () => {
+const EntryDetails = () => {
   const { getEntries } = EntryHook();
   const { user } = useAuthContext();
   const dispatch = useDispatch();
@@ -158,7 +158,7 @@ const EntryReports = () => {
       setMultipleIds((prevIds) => prevIds.filter((entryId) => entryId !== id));
     }
    
-  };
+  }
 
   const deleteMultipleEntries = async (entry) => {
     if (window.confirm(`Are you sure you want to delete ${multipleIds.length} Entries Record?`)){
@@ -179,7 +179,6 @@ const EntryReports = () => {
           setDelLoading(false)
           setNewMessage(toast.success(json.message))
           setMultipleIds([])
-        
         }
         if (!response.ok) {
           
@@ -1755,45 +1754,46 @@ const EntryReports = () => {
                             ) : (
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
-                              <TableCell className='border data_td  text-center'>
+                              <TableCell className='border data_td px-1 py-0 text-center'>
                                 <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
                               </TableCell>
-                                <TableCell className='border data_td  '>{index+1}</TableCell>
-                                <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
-                                <TableCell className='border data_td  '>{entry.name}</TableCell>
-                                <TableCell className='border data_td '>{entry.pp_No}</TableCell>
-                                <TableCell className='border data_td '>{entry.trade}</TableCell>
-                                <TableCell className='border data_td  '>{entry.company}</TableCell>
-                                <TableCell className='border data_td '>{entry.remarks}</TableCell>
-                                <TableCell className='border data_td  '>{entry.contact}</TableCell>
-                                <TableCell className='border data_td  '>{entry.final_Status}</TableCell>
-                                <TableCell className='border data_td  '>{entry.flight_Date}</TableCell>
-                                <TableCell className='border data_td '>{entry.country}</TableCell>
-                                <TableCell className='border data_td '>{entry.entry_Mode}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Sales_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Sale_Rate_Oth_Cur}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_Oth_Cur}</TableCell>
-                                <TableCell className='border data_td '>{entry.reference_Out}</TableCell>
-                                <TableCell className='border data_td '>{entry.reference_Out_Name}</TableCell>
-                                <TableCell className='border data_td  '>{entry.reference_In}</TableCell>
-                                <TableCell className='border data_td  '>{entry.reference_In_Name}</TableCell>
-                                <TableCell className='border data_td text-center'>{entry.picture ? <a href={entry.picture} target="_blank" rel="noopener noreferrer"> <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{index+1}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.entry_Date}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.name}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.pp_No}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.trade}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.company}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.remarks}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.contact}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.final_Status}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.flight_Date}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.country}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.entry_Mode}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Sales_Rate_PKR}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Sale_Rate_Oth_Cur}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Purchase_Rate_PKR}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Purchase_Rate_Oth_Cur}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_Out}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_Out_Name}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_In}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_In_Name}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.picture ? <a href={entry.picture} target="_blank" rel="noopener noreferrer"> <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                 {section1 &&
                                   <>
 
                                     {/* Visit Sales Purchase Section Data */}
                                    
-                                    <TableCell className='border data_td'>{entry.visit_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Sales_Rate_Oth_Curr}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Purchase_Rate_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Purchase_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Reference_Out}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Reference_Out_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Reference_In}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Section_Picture ? <a href={entry.visit_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.visit_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Sales_Rate_Oth_Curr}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Purchase_Rate_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Purchase_Rate_Oth_Cur}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_Out}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_In}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Section_Picture ? <a href={entry.visit_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.visit_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
+
                                   </>
                                 }
 
@@ -1801,16 +1801,15 @@ const EntryReports = () => {
                                   <>
                                     {/* Ticket Sales Purchase Section Data */}
                                    
-                                    <TableCell className='border data_td'>{entry.ticket_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Sales_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Purchase_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Purchase_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Reference_Out}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Reference_Out_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Reference_In}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Section_Picture ? <a href={entry.ticket_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.ticket_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
-
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Sales_Rate_Oth_Cur}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Purchase_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Purchase_Rate_Oth_Cur}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_Out}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_In}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Section_Picture ? <a href={entry.ticket_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.ticket_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                   </>
                                 }
@@ -1819,15 +1818,15 @@ const EntryReports = () => {
                                   <>
                                     {/* Azad Visa Sales Purchase Section Data */}
                                   
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Sales_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Purchase_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Purchase_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Reference_Out}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Reference_Out_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Reference_In}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Section_Picture ? <a href={entry.azad_Visa_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.azad_Visa_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Sales_Rate_Oth_Cur}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Purchase_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Purchase_Rate_Oth_Cur}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_Out}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_In}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Section_Picture ? <a href={entry.azad_Visa_Section_Picture} target="_blank" rel="noopener noreferrer"> <img src={entry.azad_Visa_Section_Picture} alt='Images' className='rounded text-center mx-auto' /></a>  : "No Picture"}</TableCell>
 
                                   </>
                                 }
@@ -1835,18 +1834,18 @@ const EntryReports = () => {
                                 {section4 &&
                                   <>
                                     {/* Protector Section Data */}
-                                    <TableCell className='border data_td'>{entry.protector_Price_In}</TableCell>
-                                    <TableCell className='border data_td'>{entry.protector_Price_In_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.protector_Reference_In}</TableCell>
-                                    <TableCell className='border data_td'>{entry.protector_Reference_In_Name}</TableCell>
-                                    <TableCell className='border data_td'>{entry.protector_Price_Out}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_In}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_In_Oth_Cur}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Reference_In}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_Out}</TableCell>
                                   </>
                                 }
 
                                 {/* Repeat similar blocks for other non-editable fields */}
                               </>
                             )}
-                            <TableCell className='border data_td p-1 text-center'>
+                            <TableCell className='border data_td px-1 py-0 text-center'>
                               {editMode && editedRowIndex === index ? (
                                 // Render Save button when in edit mode for the specific row
                                 <>
@@ -1890,4 +1889,4 @@ const EntryReports = () => {
   );
 };
 
-export default EntryReports;
+export default EntryDetails;

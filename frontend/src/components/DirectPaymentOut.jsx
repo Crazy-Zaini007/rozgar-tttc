@@ -440,6 +440,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
+        getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
       }
 
 
@@ -500,7 +503,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-      
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
 
       }
 
@@ -574,7 +579,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-      
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
 
       }
 
@@ -649,8 +656,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        // setOpen(true)
-        // setClose(false);
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -720,7 +728,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-      
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -791,7 +801,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-     
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -862,7 +874,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-       
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -933,7 +947,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-    
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1003,7 +1019,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-     
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1074,7 +1092,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-    
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1145,7 +1165,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-       
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1217,7 +1239,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-     
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1287,7 +1311,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
- 
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1357,7 +1383,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-    
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
       }
 
     } catch (error) {
@@ -1428,7 +1456,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-       
+        getCashInHandData()
+        getOverAllPayments()
+        getBankCash()
 
       }
 
@@ -1502,8 +1532,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        // setOpen(true)
-        // setClose(false);
+        getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
 
       }
 
@@ -1572,7 +1603,9 @@ const handleTicketCandForm = async (e) => {
             setCurr_Country('');
             setCurr_Rate('');
             setDate('')
-
+            getCashInHandData()
+            getOverAllPayments()
+            getBankCash()
         }
 
     } catch (error) {

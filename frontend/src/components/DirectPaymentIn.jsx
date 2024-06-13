@@ -424,8 +424,9 @@ const handleAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      // setOpen(true)
-      // setClose(false);
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -494,6 +495,9 @@ const handleCandidateForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
    
     }
 
@@ -563,7 +567,9 @@ const handleSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-    
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -634,8 +640,9 @@ const handleAzadAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      // setOpen(true)
-      // setClose(false);
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -705,7 +712,9 @@ const handleAzadCandForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-    
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -776,7 +785,9 @@ const handleAzadSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-   
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -847,7 +858,9 @@ const handleTicketAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-     
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -918,7 +931,9 @@ const handleTicketCandForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-  
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -988,7 +1003,9 @@ const handleTicketSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-   
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -1059,7 +1076,9 @@ const handleVisitAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-  
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -1130,7 +1149,9 @@ const handleVisitCandForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-     
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -1202,7 +1223,9 @@ const handleVisitSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-   
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -1272,7 +1295,9 @@ const handleCDWCForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -1342,7 +1367,9 @@ const handleCDWOCForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-  
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {
@@ -1411,7 +1438,9 @@ const handleAssetForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-    
+      getCashInHandData()
+      getOverAllPayments()
+      getBankCash()
     }
 
   } catch (error) {

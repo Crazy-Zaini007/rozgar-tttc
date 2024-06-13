@@ -551,11 +551,11 @@ const navigationButtons=[
      <div className="row px-3 ">
       <h4>Admin Dashboard</h4>
       <div className="col-md-12 navigate_buttons ">
-        <ul className='px-0 py-1'>
+       
           {navigationButtons.map((data)=>(
-            <li key={data.navigate}><Link className=' mx-1 px-2 py-1 rounded' to={data.navigate}>{data.text}</Link></li>
+            <Link key={data.navigate} className='btn m-1 px-2 py-1 rounded' to={data.navigate}>{data.text}</Link>
           ))}
-        </ul>
+        
       </div>
         <div className="col-md-12 admin-main p-0">
           <div className="row p-0 ">
