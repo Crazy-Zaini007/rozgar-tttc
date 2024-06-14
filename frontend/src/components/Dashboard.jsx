@@ -507,6 +507,10 @@ const downloadPaymentExcel = (payments) => {
 
 
 
+const topButtons=[
+  {text:'Add Expense',navigate:'/rozgar/expenses/add_new_expense'},
+  {text:'Candidate Payment In',navigate:'/rozgar/candidates/payment_in'},
+]
 const navigationButtons=[
   {text:'Add New Entry',navigate:'/rozgar/enteries/add_new_entry'},
   {text:'Direct Payment',navigate:'/rozgar/direct/payment_in_out'},
@@ -520,7 +524,6 @@ const navigationButtons=[
   {text:'Supplier Payment Return',navigate:'/rozgar/suppliers/payment_return'},
   {text:'Supplier Cand-Vise Payment In',navigate:'/rozgar/suppliers/cand_vise_payment_in'},
   {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/suppliers/cand_vise_payment_out'},
-  {text:'Candidate Payment In',navigate:'/rozgar/candidates/payment_in'},
   {text:'Candidate Payment Out',navigate:'/rozgar/candidates/payment_out'},
   {text:'Candidate Payment Return',navigate:'/rozgar/candidates/payment_return'},
   {text:'Protector Payment Out',navigate:'/rozgar/protector/payment_out'},
@@ -539,7 +542,6 @@ const navigationButtons=[
   {text:'CDWOC Payment Out',navigate:'/rozgar/credites&debits/payment_out/without_cash_in_hand'},
   {text:'Asset Payment In',navigate:'/rozgar/assets/payment_in'},
   {text:'Asset Payment Out',navigate:'/rozgar/assets/payment_out'},
-  {text:'Add Expense',navigate:'/rozgar/expenses/add_new_expense'},
   {text:'Add Employee',navigate:'/rozgar/employees/add'},
   {text:'Add Employee Payment',navigate:'/rozgar/employees/add_payment'},
 
@@ -550,9 +552,9 @@ const navigationButtons=[
     <div className="container-fluid admin-dashboard mt-3">
      <div className="row px-3 ">
       <h4>Admin Dashboard</h4>
-      <div className="col-md-12 navigate_buttons ">
+      <div className="col-md-12 top_buttons text-md-end">
        
-          {navigationButtons.map((data)=>(
+          {topButtons.map((data)=>(
             <Link key={data.navigate} className='btn m-1 px-2 py-1 rounded' to={data.navigate}>{data.text}</Link>
           ))}
         
@@ -745,7 +747,13 @@ const navigationButtons=[
             </div>
           </div>
         </div>
-        
+        <div className="col-md-12 navigate_buttons p-0 my-3">
+       <h4>Quick Links</h4>
+       {navigationButtons.map((data)=>(
+         <Link key={data.navigate} className='btn m-1 px-2 py-1 rounded' to={data.navigate}>{data.text}</Link>
+       ))}
+     
+   </div>
         <div className="col-md-12 payment_details p-0 my-3">
           <div className="row">
           <h3 className="text-center my-2"><strong>Day Book</strong> </h3>
