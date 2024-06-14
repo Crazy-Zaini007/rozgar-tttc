@@ -427,11 +427,11 @@ const EntryDetails = () => {
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className='container-fluid entry_details'>
-          <div className='row'>
-            <div className='col-md-12 '>
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+          <div className='row shadow border-0'>
+            <div className='col-md-12 p-0'>
+              <div className='py-3 mb-2 px-2 d-flex justify-content-between border-bottom'>
                 <div className="left d-flex">
-                  <h4>Enteries Details</h4>
+                  <h4>Entries Details</h4>
                 </div>
                 <div className="right d-flex">
                   {enteries.length > 0 &&
@@ -453,7 +453,7 @@ const EntryDetails = () => {
                     </ul>
                   </div>
                 </div>
-              </Paper>
+              </div>
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
@@ -463,8 +463,8 @@ const EntryDetails = () => {
 
             {/* Filters */}
             {enteries && enteries.length > 0 &&
-              <div className="col-md-12 filters">
-                <Paper className='py-1 mb-2 px-3'>
+              <div className="col-md-12 filters ">
+                <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
                       <label htmlFor="">Search by Name:</label>
@@ -581,14 +581,14 @@ const EntryDetails = () => {
                     </div>
 
                   </div>
-                </Paper>
+                </div>
               </div>
             }
 
 
             {!loading1 &&
-              <div className='col-md-12'>
-                <Paper className='py-3 mb-1 px-2 detail_table'>
+              <div className='col-md-12 p-0'>
+                <div className='py-3 mb-1 detail_table'>
                   <div className="d-flex justify-content-between">
                     <div className="d-flex left">
                     <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
@@ -1879,7 +1879,7 @@ const EntryDetails = () => {
                     </Table>
                   </TableContainer>
                  
-                </Paper>
+                </div>
               </div>
             }
           </div>

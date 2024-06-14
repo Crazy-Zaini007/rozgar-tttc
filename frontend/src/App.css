@@ -642,6 +642,27 @@ display: inline-block;
   background-color: var(--accent-stong-blue);
   color: var(--white);
 }
+
+
+/* Track */
+.entry_details::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  border-radius: 100px;
+}
+
+.entry_details::-webkit-scrollbar-track {
+  background: #ededed;
+  border-radius: 100px;
+
+}
+
+/* Handle */
+.entry_details::-webkit-scrollbar-thumb {
+  background: #5c5f62;
+  border-radius: 100px;
+}
+
 .entry_details .filters {
   overflow: scroll;
 }
