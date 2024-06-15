@@ -24,10 +24,10 @@ export default function VisitSection() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 entry_setting">
           <div className="row justify-content-start">
-            <div className="col-md-12 ">
-              <Paper className='py-3 mb-2 px-2' >
+            <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-3 mb-2 px-2' >
                 <h4>Manage Visit Sections</h4>
-              </Paper>
+              </div>
             </div>
             {/* Tabs */}
             <div className='col-md-12 my-2 p-0'>

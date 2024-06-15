@@ -930,18 +930,18 @@ body {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid payment_details">
+        <div className="container-fluid payment_details mt-3">
           <div className="row">
-            <div className="col-md-12">
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Day Book</h4>
                 </div>
                 <div className="right d-flex">
                   {todayPayments.length > 0 &&
                     <>
-                      <button className='btn m-1 btn-sm shadow border' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Payment In</button>
-                      <button className='btn m-1 btn-sm shadow border' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Payment Out</button>
+                      <button className='btn m-1 btn-sm ' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {background: 'white', color: 'var(--accent-stonger-blue',border:'1px solid var(--accent-stonger-blue)'}} onClick={() => setOption(0)}>Payment In</button>
+                      <button className='btn m-1 btn-sm ' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {background: 'white', color: 'var(--accent-stonger-blue',border:'1px solid var(--accent-stonger-blue)'}} onClick={() => setOption(1)}>Payment Out</button>
                      {option===0 &&
                      <>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenInExcel}>Download </button>
@@ -958,7 +958,7 @@ body {
                   }
 
                 </div>
-              </Paper>
+              </div>
             </div>
 
 
@@ -971,8 +971,8 @@ body {
             {!loading1 &&
               <>
                 {option === 0 &&
-                  <div className='col-md-12'>
-                    <Paper className='py-3 mb-1 px-2 detail_table'>
+                  <div className='col-md-12 p-0'>
+                    <div className='py-3 mb-1 px-2 detail_table'>
                       <TableContainer sx={{ maxHeight: 600 }}>
                         <Table stickyHeader >
                           <TableHead className="thead" >
@@ -993,7 +993,7 @@ body {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash => (cash.payment_In || cash.payment_In>0)).map((cash, outerIndex) => (
+                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash => (cash.payment_In || cash.payment_In>0||cash.type.toLowerCase().includes('in'))).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -1041,7 +1041,7 @@ body {
                             {/* Calculate the total sum of payment_In */}
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(cash => (cash.payment_In || cash.payment_In>0))
+                                .filter(cash => (cash.payment_In || cash.payment_In>0||cash.type.toLowerCase().includes('in')))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
@@ -1050,7 +1050,7 @@ body {
                             {/* Calculate the total sum of cash_Out */}
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(cash => (cash.payment_In || cash.payment_In>0))
+                                .filter(cash => (cash.payment_In || cash.payment_In>0||cash.type.toLowerCase().includes('in')))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}
@@ -1061,14 +1061,14 @@ body {
                           </TableBody>
                         </Table>
                       </TableContainer>
-                    </Paper>
+                    </div>
                   </div>
                 }
 
 
                 {option === 1 &&
-                  <div className='col-md-12'>
-                    <Paper className='py-3 mb-1 px-2 detail_table'>
+                  <div className='col-md-12 p-0'>
+                    <Paper className='py-3 mb-1 px-1 detail_table'>
                       <TableContainer sx={{ maxHeight: 600 }}>
                         <Table stickyHeader >
                           <TableHead className="thead" >
@@ -1089,7 +1089,7 @@ body {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash =>(cash.payment_Out || cash.payment_Out>0)).map((cash, outerIndex) => (
+                            {todayPayments && todayPayments.length > 0 ? todayPayments.filter(cash =>(cash.payment_Out || cash.payment_Out>0||cash.type.toLowerCase().includes('out'))).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -1138,7 +1138,7 @@ body {
                             
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(cash => (cash.payment_Out || cash.payment_Out>0))
+                                .filter(cash => (cash.payment_Out || cash.payment_Out>0||cash.type.toLowerCase().includes('out')))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
@@ -1147,7 +1147,7 @@ body {
                             {/* Calculate the total sum of cash_Out */}
                             {todayPayments && todayPayments.length > 0 &&
                               todayPayments
-                                .filter(cash => (cash.payment_Out || cash.payment_Out>0))
+                                .filter(cash => (cash.payment_Out || cash.payment_Out>0||cash.type.toLowerCase().includes('out')))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
                                 }, 0)}
@@ -1164,8 +1164,8 @@ body {
             }
 
 
-            <div className="col-md-12">
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className="col-md-12 p-0 border-0 border-bottom border-top">
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Expenses</h4>
                 </div>
@@ -1179,7 +1179,7 @@ body {
                   }
 
                 </div>
-              </Paper>
+              </div>
             </div>
             {loading2 &&
               <div className='col-md-12 text-center my-4'>
@@ -1187,7 +1187,7 @@ body {
               </div>
             }
  <div className="col-md-12 filters">
-              <Paper className='py-1 mb-2 px-3'>
+              <div className='py-1 mb-2 '>
                 <div className="row">
                 
                 <div className="col-auto px-1">
@@ -1239,11 +1239,11 @@ body {
                     </select>
                   </div>
                 </div>
-              </Paper>
+              </div>
             </div>
             {!loading2 &&
-              <div className='col-md-12'>
-                <Paper className='py-3 mb-1 px-2 detail_table'>
+              <div className='col-md-12 p-0'>
+                <div className='py-3 mb-1 px-1 detail_table'>
                   <TableContainer >
                     <Table stickyHeader sx={{ maxHeight: 600 }}>
                       <TableHead className="thead" >
@@ -1320,12 +1320,12 @@ body {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                </Paper>
+                </div>
               </div>
             }
 
-            <div className="col-md-12">
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className="col-md-12 p-0 border-0 border-bottom border-top ">
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Protectors</h4>
                 </div>
@@ -1339,7 +1339,7 @@ body {
                   }
 
                 </div>
-              </Paper>
+              </div>
             </div>
             {loading3 &&
               <div className='col-md-12 text-center my-4'>
@@ -1348,8 +1348,8 @@ body {
             }
 
             {!loading3 &&
-              <div className='col-md-12'>
-                <Paper className='py-3 mb-1 px-2 detail_table'>
+              <div className='col-md-12 p-0'>
+                <div className='py-3 mb-1 px-1 detail_table'>
                   <TableContainer sx={{ maxHeight: 600 }}>
                     <Table stickyHeader  >
                       <TableHead className="thead" >
@@ -1423,13 +1423,13 @@ body {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                </Paper>
+                </div>
               </div>
             }
 
 
-            <div className="col-md-12">
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className="col-md-12 p-0 border-0 border-bottom border-top">
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Employees</h4>
                 </div>
@@ -1443,7 +1443,7 @@ body {
                   }
 
                 </div>
-              </Paper>
+              </div>
             </div>
             {loading4 &&
               <div className='col-md-12 text-center my-4'>
@@ -1452,8 +1452,8 @@ body {
             }
 
             {!loading4 &&
-              <div className='col-md-12'>
-                <Paper className='py-3 mb-1 px-2 detail_table'>
+              <div className='col-md-12 p-0'>
+                <div className='py-3 mb-1 px-1 detail_table'>
                   <TableContainer sx={{ maxHeight: 600 }}>
                     <Table stickyHeader  >
                       <TableHead className="thead" >
@@ -1534,7 +1534,7 @@ body {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                </Paper>
+                </div>
               </div>
             }
           </div>

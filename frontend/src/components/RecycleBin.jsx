@@ -248,11 +248,11 @@ export default function AgnetsReports() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details">
+        <div className="container-fluid entry_details mt-3">
             <div className="row">
-            <div className='col-md-12 '>
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
-                <div className="left d-flex">
+            <div className='col-md-12 p-0 border-bottom border-0'>
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
+                <div className="left">
                   <h4>Recycle Bin</h4>
                 </div>
                 <div className="right d-flex">
@@ -266,7 +266,7 @@ export default function AgnetsReports() {
                     </>
                   }
                 </div>
-              </Paper>
+              </div>
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
@@ -309,8 +309,8 @@ export default function AgnetsReports() {
             }
 
             {!loading1 &&
-            <div className='col-md-12'>
-              <Paper className='py-3 mb-1 px-2 detail_table'>
+            <div className='col-md-12 p-0'>
+              <div className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                   <TableHead>
@@ -397,7 +397,7 @@ export default function AgnetsReports() {
                   </Table>
                 </TableContainer>
                 
-              </Paper>
+              </div>
             </div>
             }
             </div>

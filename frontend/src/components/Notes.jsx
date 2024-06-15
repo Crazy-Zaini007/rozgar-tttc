@@ -70,7 +70,7 @@ export default function Notes() {
       }
       return (
         isDateInRange &&
-        note.title.toLowerCase().includes(myTitle.toLowerCase()) 
+        note.title.trim().toLowerCase().startsWith(myTitle.trim().toLowerCase()) 
       );
     })
 
@@ -213,10 +213,10 @@ const addNote=async(e)=>{
   return (
     <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid notes mt-3">
-        <div className="row px-3">
+        <div className="row">
         
-        <div className='col-md-12 '>
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+        <div className='col-md-12 p-0 border-bottom border-0'>
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left">
             <h4>Daily Notes</h4>
                 </div>
@@ -224,24 +224,18 @@ const addNote=async(e)=>{
                   <button className='btn btn-sm m-1 add_btn' onClick={()=>setOption(1)} disabled={loading1}>Add New</button>
                 </div>
                 
-              </Paper>
+              </div>
             </div>
        {option===0 &&
        <>
        
        <div className=" col-md-12 filters">
 
-<Paper className='py-1 mb-2 px-3'>
+<div className='py-1 mb-2 '>
 <div className="row">
 <div className="col-auto my-2 p-1">
-<label htmlFor="">Filter by Title:</label>
-            <select name="" id="" value={myTitle} onChange={(e)=>setMyTitle(e.target.value)}>
-                <option value="">Select note title</option>
-                {[...new Set(notes && notes.map(data => data.title))]
-                                    .map(dateValue => (
-                                        <option value={dateValue} key={dateValue}>{dateValue}</option>
-                                    ))}
-            </select>
+<label htmlFor="">Search here:</label>
+           <input type="search" value={myTitle} onChange={(e)=>setMyTitle(e.target.value)} />
         </div>
         <div className="col-auto my-2 p-1">
           <label htmlFor="">Date From:</label>
@@ -252,24 +246,24 @@ const addNote=async(e)=>{
             <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
         </div>
 </div>
-</Paper>
+</div>
          
         </div>
         
-        <div className="row px-3">
+        <div className="row">
           {filteredNotes && filteredNotes.length>0 ? filteredNotes.map((data)=>(
-            <div className="col-lg-4 col-md-6 col-sm-12 p-1">
-              <Paper className="note border rounded m-1 p-3">
+            <div className="col-lg-4 col-md-6 col-sm-12 px-1">
+              <div className="note border rounded m-1 p-3">
                 <div className="d-flex justify-content-between">
                   <div className="left">
-                    <h6 className='mb-2'><i className="fas fa-sticky-note me-2"></i>{data.title}</h6> 
+                    <h6 className='mb-2'><i className="fas fa-sticky-note me-2"></i>{data.title.slice(0,17)}</h6> 
                     <small>{data.date}</small>
                   </div>
                   <div className="right">
                     <button className='btn btn-sm btn-sm mt-2' onClick={()=>handleView(data)}>View</button>
                   </div>
                 </div>
-              </Paper>
+              </div>
             </div>
           )):<img src={notfound} alt="" />}
         </div>
@@ -306,7 +300,7 @@ const addNote=async(e)=>{
       </div>
       }
 
-<div className='note_details px-md-4 px-2'>
+<div className='note_details '>
       <Dialog
         fullScreen
         open={open}

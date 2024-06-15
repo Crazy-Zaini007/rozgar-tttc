@@ -110,16 +110,16 @@ export default function User() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 payment_details">
             <div className="row">
-            <div className='col-md-12 '>
-            <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className='col-md-12 p-0 border-0 border-bottom'>
+            <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>Manage Account</h4>
               </div>
-            </Paper>
+            </div>
           </div>
-          <div className="col-md-12 detail_table my-2">
+          <div className="col-md-12 detail_table my-2 p-0">
 
-<TableContainer component={Paper}>
+<TableContainer>
   <Table>
     <TableHead className="thead">
       <TableRow>

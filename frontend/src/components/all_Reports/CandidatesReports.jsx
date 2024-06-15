@@ -237,10 +237,10 @@ export default function CandidatesReports() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details">
+        <div className="container-fluid entry_details mt-3">
             <div className="row">
-            <div className='col-md-12 '>
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className='col-md-12 p-0 border-0 border-bottom'>
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Candidates Payments Reports</h4>
                 </div>
@@ -254,7 +254,7 @@ export default function CandidatesReports() {
                     </>
                   }
                 </div>
-              </Paper>
+              </div>
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
@@ -263,7 +263,7 @@ export default function CandidatesReports() {
             }
          {payments && payments.length > 0 &&
               <div className="col-md-12 filters">
-                <Paper className='py-1 mb-2 px-3'>
+                <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
                   <label htmlFor="">Serach Here:</label>
@@ -296,13 +296,13 @@ export default function CandidatesReports() {
                       </select>
                     </div>
                   </div>
-                </Paper>
+                </div>
               </div>
             }
 
             {!loading1 &&
-            <div className='col-md-12'>
-              <Paper className='py-3 mb-1 px-2 detail_table'>
+            <div className='col-md-12 p-0'>
+              <div className='py-3 mb-1 px-1 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                   <TableHead>
@@ -386,7 +386,7 @@ export default function CandidatesReports() {
                   </Table>
                 </TableContainer>
                 
-              </Paper>
+              </div>
             </div>
             }
             </div>

@@ -386,8 +386,8 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
   };
 
   return (
-    <TableContainer component={Paper}>
-      <div className="col-md-12 ">
+    <TableContainer>
+      <div className="col-md-12 p-0">
         {!option && (
           <>
             <form className="py-3 px-2" onSubmit={handleForm}>
@@ -570,8 +570,8 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
           </div>
         </div>
         {option && (
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
+          <div className="col-md-12 detail_table p-0">
+            <TableContainer>
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>

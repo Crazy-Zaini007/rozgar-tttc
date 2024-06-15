@@ -222,10 +222,10 @@ export default function SummerizeProfitLose() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid payment_details">
+        <div className="container-fluid payment_details mt-3">
           <div className="row">
-            <div className="col-md-12">
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Summerize Profit/Loss Report</h4>
                 </div>
@@ -239,11 +239,11 @@ export default function SummerizeProfitLose() {
                   }
 
                 </div>
-              </Paper>
+              </div>
             </div>
 
             <div className="col-md-12 filters">
-              <Paper className='py-1 mb-2 px-3'>
+              <div className='py-1 mb-2 '>
                 <div className="row">
                   <div className="col-auto px-1">
                     <label htmlFor="">Date:</label>
@@ -265,7 +265,7 @@ export default function SummerizeProfitLose() {
                   </div> */}
                  
                 </div>
-              </Paper>
+              </div>
             </div>
             {isLoading &&
             <div className='col-md-12 text-center my-4'>
@@ -273,8 +273,8 @@ export default function SummerizeProfitLose() {
             </div>
           }
           {!isLoading && 
-          <div className="col-sm-12 detail_table my-2">
-          <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+          <div className="col-sm-12 detail_table my-2 p-0">
+          <TableContainer >
             <Table stickyHeader>
               <TableHead className="thead">
                 <TableRow>

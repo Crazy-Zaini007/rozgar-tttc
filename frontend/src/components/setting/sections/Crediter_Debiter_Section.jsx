@@ -23,10 +23,10 @@ export default function CrediterDebiterSection() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid py-2 entry_setting">
           <div className="row justify-content-start">
-            <div className="col-md-12 ">
-              <Paper className='py-3 mb-2 px-2' >
+            <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-3 mb-2 px-2' >
                 <h4>Manage Crediter Debiter </h4>
-              </Paper>
+              </div>
             </div>
             {value===0 &&
             <CPP></CPP>

@@ -74,7 +74,8 @@ const getAllPayments = async (req, res) => {
         curr_Rate: expense.curr_Rate,
         curr_Amount: expense.curr_Amount,
         invoice: expense.invoice,
-        cash_Out:0
+        cash_Out:0,
+        remaining:0,
       };
       mergedPayments.push(expenseDetails);
     })
@@ -87,6 +88,7 @@ const getAllPayments = async (req, res) => {
             const paymentDetails=month.payment.map(
               (payment)=>({
                 supplierName:employee.employeeName,
+                remaining:employee.remaining,
                 type:'Employee Payment',
                 ...payment.toObject(),
 
@@ -107,6 +109,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: cdwoc.payment_In_Schema.supplierName,
             type: "CDWOC_Payment",
+            remaining: cdwoc.payment_In_Schema.total_Payment_In-cdwoc.payment_In_Schema.total_Payment_Out,
             ...payment.toObject(),
           })
         );
@@ -121,6 +124,7 @@ const getAllPayments = async (req, res) => {
         const paymentInDetails = asset.payment_In_Schema.payment.map(
           (payment) => ({
             supplierName: asset.payment_In_Schema.assetName,
+            remaining: asset.payment_In_Schema.total_Payment_In-asset.payment_In_Schema.total_Payment_Out,
             type: "Asset_Payment",
             ...payment.toObject(),
           })
@@ -136,6 +140,7 @@ const getAllPayments = async (req, res) => {
     const paymentInDetails = cdwc.payment_In_Schema.payment.map(
       (payment) => ({
         supplierName: cdwc.payment_In_Schema.supplierName,
+        remaining: cdwc.payment_In_Schema.total_Payment_In-cdwc.payment_In_Schema.total_Payment_Out,
         type: "CDWC_Payment",
         ...payment.toObject(),
       })
@@ -153,6 +158,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Agent_Payment_In",
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             ...payment.toObject(),
           })
         );
@@ -164,6 +170,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Agent_Cand_Wise_Payment_In",
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             ...payment.toObject(),
           })
         );
@@ -175,6 +182,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Agent_Payment_Out",
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             ...payment.toObject(),
           })
         );
@@ -184,6 +192,7 @@ const getAllPayments = async (req, res) => {
         const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Agent_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
@@ -199,6 +208,7 @@ const getAllPayments = async (req, res) => {
         const supplierPaymentInDetails = agent.payment_In_Schema.payment.map(
           (payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Supplier_Payment_In",
             ...payment.toObject(),
           })
@@ -212,6 +222,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Supplier_Cand_Wise_Payment_In",
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             ...payment.toObject(),
           })
         );
@@ -221,6 +232,7 @@ const getAllPayments = async (req, res) => {
         const supplierPaymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Supplier_Payment_Out",
             ...payment.toObject(),
           })
@@ -232,6 +244,7 @@ const getAllPayments = async (req, res) => {
         const paymentOutDetails = agent.payment_Out_Schema.candPayments.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Supplier_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
@@ -248,6 +261,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Candidate_Payment_In",
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             ...payment.toObject(),
           })
         );
@@ -257,6 +271,7 @@ const getAllPayments = async (req, res) => {
         const candPaymentOutDetails = agent.payment_Out_Schema.payment.map(
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Candidate_Payment_Out",
             ...payment.toObject(),
           })
@@ -275,6 +290,7 @@ const getAllPayments = async (req, res) => {
         const azadAgentsPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Azad_Agent_In",
             ...payment.toObject(),
           }));
@@ -288,6 +304,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Azad_Agent_Out",
+            remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(azadAgentsPaymentOutDetails);
@@ -304,6 +321,7 @@ const getAllPayments = async (req, res) => {
         const ticketAgentsPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Ticket_Agent_In",
             ...payment.toObject(),
           }));
@@ -316,6 +334,7 @@ const getAllPayments = async (req, res) => {
         const ticketAgentsPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Ticket_Agent_Out",
             ...payment.toObject(),
           }));
@@ -333,6 +352,7 @@ const getAllPayments = async (req, res) => {
         const visitAgentsPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Visit_Agent_In",
             ...payment.toObject(),
           }));
@@ -345,6 +365,7 @@ const getAllPayments = async (req, res) => {
         const visitAgentsPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Visit_Agent_Out",
             ...payment.toObject(),
           }));
@@ -362,6 +383,7 @@ const getAllPayments = async (req, res) => {
         const azadSuppliersPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Azad_Supplier_In",
             ...payment.toObject(),
           }));
@@ -374,6 +396,7 @@ const getAllPayments = async (req, res) => {
         const azadSuppliersPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Azad_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -391,6 +414,7 @@ const getAllPayments = async (req, res) => {
         const ticketSuppliersPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Ticket_Supplier_In",
 
             ...payment.toObject(),
@@ -404,6 +428,7 @@ const getAllPayments = async (req, res) => {
         const ticketSuppliersPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Ticket_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -423,6 +448,7 @@ const getAllPayments = async (req, res) => {
         const visitSuppliersPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Visit_Supplier_In",
             ...payment.toObject(),
           }));
@@ -435,6 +461,7 @@ const getAllPayments = async (req, res) => {
         const visitSuppliersPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Visit_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -451,6 +478,7 @@ const getAllPayments = async (req, res) => {
         const azadCandPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Azad_Candidate_In",
 
             ...payment.toObject(),
@@ -464,6 +492,7 @@ const getAllPayments = async (req, res) => {
         const azadCandPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Azad_Candidate_Out",
 
             ...payment.toObject(),
@@ -482,6 +511,8 @@ const getAllPayments = async (req, res) => {
         const ticketCandPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+
             type: "Ticket_Candidate_In",
             ...payment.toObject(),
           }));
@@ -494,6 +525,7 @@ const getAllPayments = async (req, res) => {
         const ticketCandPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Ticket_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -511,6 +543,7 @@ const getAllPayments = async (req, res) => {
         const visitCandPaymentInDetails =
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
+            remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
             type: "Visit_Candidate_In",
             ...payment.toObject(),
           }));
@@ -523,6 +556,7 @@ const getAllPayments = async (req, res) => {
         const visitCandPaymentOutDetails =
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
+            remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
             type: "Visit_Candidate_Out",
             ...payment.toObject(),
           }))
@@ -534,13 +568,13 @@ const getAllPayments = async (req, res) => {
  for (const myCashInHand of cashInHand){
   let allPayments=myCashInHand.payment && myCashInHand.payment.map((myPayment)=>({
     supplierName:'Direct Cash',
+    remaining: 0,
     type:"Direct Cash",
     ...myPayment.toObject()
   }))
   mergedPayments = mergedPayments.concat(allPayments);
  }
  let sortedPayments=mergedPayments.sort((a, b) => new Date(a.date) - new Date(b.date));
-console.log('sortedPayments',)
     // Send the resulting mergedPayments array in the response
     res.status(200).json({ data: sortedPayments });
   } catch (error) {

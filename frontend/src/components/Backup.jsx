@@ -69,17 +69,17 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid backup payment_details">
-        <div className="row px-2">
-        <div className='col-md-12 '>
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+        <div className="row">
+        <div className='col-md-12 p-0 border-0 border-bottom'>
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left">
                <h4>Download Daily Backup</h4>
                 </div>
-              </Paper>
+              </div>
             </div>
             <div className=" col-md-12 filters">
 
-<Paper className='py-1 mb-2 px-3'>
+<div className='py-1 mb-2 '>
 <div className="row">
         <div className="col-auto my-2 p-1">
           <label htmlFor="">Date From:</label>
@@ -90,11 +90,11 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
             <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
         </div>
 </div>
-</Paper>
+</div>
          
         </div>
-            <div className="col-md-12 detail_table my-2">
-                <TableContainer component={Paper}  sx={{ maxHeight: 600 }}>
+            <div className="col-md-12 detail_table my-2 p-0">
+                <TableContainer >
                     <Table stickyHeader>
                         <TableHead className="thead">
                             <TableRow>

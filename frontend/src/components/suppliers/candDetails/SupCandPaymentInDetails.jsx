@@ -1665,8 +1665,8 @@ const[rowsValue1,setRowsValue1]=useState("")
     <>
       {!option &&
         <>
-          <div className='col-md-12 '>
-            <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+          <div className='col-md-12 p-0'>
+            <div className='pt-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>Cand-Vise PaymentIn Details</h4>
               </div>
@@ -1679,7 +1679,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </>
                 }
               </div>
-            </Paper>
+            </div>
           </div>
 
 
@@ -1689,7 +1689,7 @@ const[rowsValue1,setRowsValue1]=useState("")
             </div>
           }
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2 px-3'>
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label>
@@ -1719,12 +1719,12 @@ const[rowsValue1,setRowsValue1]=useState("")
 
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
 
           {!isLoading &&
-            <div className='col-md-12'>
-              <Paper className='py-3 mb-1 px-2 detail_table'>
+            <div className='col-md-12 p-0'>
+              <div className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                     <TableHead>
@@ -1914,7 +1914,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-              </Paper>
+              </div>
             </div>
           }
         </>

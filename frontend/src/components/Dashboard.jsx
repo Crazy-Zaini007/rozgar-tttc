@@ -13,10 +13,15 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import CircularProgress from '@mui/material/CircularProgress';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { green, pink,deepOrange,purple,red   } from '@mui/material/colors';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
+import EmployeeHook from '../hooks/employeeHooks/EmployeeHook';
+
 export default function AdminDashboard() {
 
   const { user } = useAuthContext()
@@ -24,8 +29,82 @@ export default function AdminDashboard() {
   const [show, setShow] = useState(false)
 
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
+  const { getEmployees } = EmployeeHook()
+
   const enteries = useSelector((state) => state.enteries.enteries);
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
+  const employees = useSelector((state) => state.employees.employees)
+
+
+const today = new Date();
+
+  let totalEmployeeExpense=0
+  const filterTotalEmployeeExpense=employees && employees.map((employee)=>{
+    if(employee.payments){
+      const allMonths=employee.payments
+      for (const month of allMonths){
+        if(month.payment && month.payment.length>0){
+          const payments= month.payment
+          for (const payment of payments){
+            totalEmployeeExpense+=payment.payment_Out
+          }
+        }
+      }
+    }
+
+}
+)
+const currentMonthStart = new Date();
+currentMonthStart.setDate(1);
+currentMonthStart.setHours(0, 0, 0, 0);
+
+today.setHours(23, 59, 59, 999);
+
+let currentMonthEmployeeExpense = 0;
+
+const filterCurrentMonthEmployeeExpense = employees && employees.map((employee) => {
+  if (employee.payments) {
+    const allMonths = employee.payments;
+    for (const month of allMonths) {
+      if (month.payment && month.payment.length > 0) {
+        const payments = month.payment;
+        for (const payment of payments) {
+          const paymentDate = new Date(payment.date); // Assuming payment.date is the date of the payment
+          if (paymentDate >= currentMonthStart && paymentDate <= today) {
+            currentMonthEmployeeExpense += payment.payment_Out;
+          }
+        }
+      }
+    }
+  }
+});
+
+
+const lastThreeMonthsAgo = new Date();
+lastThreeMonthsAgo.setMonth(lastThreeMonthsAgo.getMonth() - 3);
+lastThreeMonthsAgo.setHours(0, 0, 0, 0);
+today.setHours(23, 59, 59, 999);
+
+let threeMonthsEmployeeExpense = 0;
+
+const threeMonthsTotalEmployeeExpense = employees && employees.map((employee) => {
+  if (employee.payments) {
+    const allMonths = employee.payments;
+    for (const month of allMonths) {
+      if (month.payment && month.payment.length > 0) {
+        const payments = month.payment;
+        for (const payment of payments) {
+          const paymentDate = new Date(payment.date); // Assuming payment.date is the date of the payment
+          if (paymentDate >= lastThreeMonthsAgo && paymentDate <= today) {
+            threeMonthsEmployeeExpense += payment.payment_Out;
+          }
+        }
+      }
+    }
+  }
+});
+
+
 
   const[totalAdvancePaymentIn,setTotalAdvancePaymentIn]=useState()
   const[totalAdvancePaymentOut,setTotalAdvancePaymentOut]=useState()
@@ -37,6 +116,8 @@ const[loading1,setLoading1]=useState(false)
 const[loading2,setLoading2]=useState(false)
 const[loading3,setLoading3]=useState(false)
 const[loading4,setLoading4]=useState(false)
+const[loading5,setLoading5]=useState(false)
+
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -77,8 +158,11 @@ const fetchData = async () => {
     setLoading2(true)
     setLoading3(true)
     setLoading4(true)
+    setLoading5(true)
     await getEntries();
     setLoading1(false)
+    await getEmployees();
+    setLoading5(false)
     await getCashInHandData();
     setLoading2(false)
     await getOverAllPayments();
@@ -109,8 +193,33 @@ useEffect(() => {
 }, []);
 
 
-const myDate = new Date(); myDate .setHours(0, 0, 0, 0);const currentDate = myDate.toLocaleDateString('en-CA');
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  
+  const flightsThisMonth = enteries ? enteries.filter(entry => {
+    if (entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly") {
+      return false;
+    }
+    
+    const flightDate = new Date(entry.flight_Date);
+    return flightDate >= firstDayOfMonth && flightDate < today;
+  }).length : 0;
 
+
+  const threeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
+  const flightsLastThreeMonths = enteries ? enteries.filter(entry => {
+    if (entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly") {
+      return false;
+    }
+
+    const flightDate = new Date(entry.flight_Date);
+    // Exclude today's date
+    return flightDate >= threeMonthsAgo && flightDate < today;
+  }).length : 0;
+
+
+
+
+const myDate = new Date(); myDate .setHours(0, 0, 0, 0);const currentDate = myDate.toLocaleDateString('en-CA');
 // Filter payments based on the current date
 const todayPayments =overAllPayments && overAllPayments.filter(payment => payment.date === currentDate);
 
@@ -186,9 +295,12 @@ const printContentString = `
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Details</th>
-        <th>Cash In</th>
+         <th>Cash In</th>
         <th>Cash Out</th>
-        <th>Cash Return</th>
+        <th>Cash In Return</th>
+        <th>Cash Out Return</th>
+        <th>Remaining In</th>
+        <th>Remaining Out</th>
         <th>Curr Rate</th>
         <th>Curr Amount</th>
         <th>Payment In Curr</th>
@@ -205,9 +317,10 @@ const printContentString = `
         <td>${String(paymentItem?.payment_Type)}</td>
         <td>${String(paymentItem?.slip_No)}</td>
         <td>${String(paymentItem?.details)}</td>
-        <td>${String(paymentItem?.payment_In||0)}</td>
-        <td>${String(paymentItem?.payment_Out||0)}</td>
-        <td>${String(paymentItem?.cash_Out||0)}</td>
+        <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.cash_Out : 0)}</td>
+        <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.cash_Out : 0)}</td>
+        <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.remaining : 0)}</td>
+        <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.remaining : 0)}</td>
         <td>${String(paymentItem?.curr_Rate||0)}</td>
         <td>${String(paymentItem?.curr_Amount||0)}</td>
         <td>${String(paymentItem?.payment_In_curr?paymentItem?.payment_In_curr:paymentItem?.payment_Out_curr||'NIL')}</td>
@@ -321,7 +434,10 @@ const printContentString = `
         <th>Details</th>
         <th>Cash In</th>
         <th>Cash Out</th>
-        <th>Cash Return</th>
+        <th>Cash In Return</th>
+        <th>Cash Out Return</th>
+         <th>Remaining In</th>
+        <th>Remaining Out</th>
         <th>Curr Rate</th>
         <th>Curr Amount</th>
         <th>Payment In Curr</th>
@@ -339,7 +455,10 @@ const printContentString = `
         <td>${String(paymentItem?.payment_Type)}</td>
         <td>${String(paymentItem?.slip_No)}</td>
         <td>${String(paymentItem?.details)}</td>
-        <td>${String(paymentItem?.payment_In||0)}</td>
+        <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.cash_Out : 0)}</td>
+        <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.cash_Out : 0)}</td>
+        <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.remaining : 0)}</td>
+        <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.remaining : 0)}</td>
         <td>${String(paymentItem?.payment_Out||0)}</td>
         <td>${String(paymentItem?.cash_Out||0)}</td>
         <td>${String(paymentItem?.curr_Rate||0)}</td>
@@ -358,14 +477,16 @@ const printContentString = `
       <td></td>
       <td></td>
       <td>Total</td>
-        <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.payment_In || 0), 0))}</td>
+    <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.payment_In || 0), 0))}</td>
     <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.payment_Out || 0), 0))}</td>
-    <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.cash_Out || 0), 0))}</td>
+     <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.type.toLowerCase().includes('in')? paymentItem.cash_Out : 0), 0))}</td>
+    <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.type.toLowerCase().includes('out') ? paymentItem.cash_Out : 0), 0))}</td>
+    <td>${String(sortedPayments.reduce((total, paymentItem) => total + ((paymentItem?.payment_In || paymentItem?.payment_In > 0) ? paymentItem.remaining : 0), 0))}</td>
+    <td>${String(sortedPayments.reduce((total, paymentItem) => total + ((paymentItem?.payment_Out || paymentItem?.payment_Out > 0) ? paymentItem.remaining : 0), 0))}</td>
     <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.curr_Rate || 0), 0))}</td>
     <td>${String(sortedPayments.reduce((total, paymentItem) => total + (paymentItem?.curr_Amount || 0), 0))}</td>
 
       </tr>
-      
     </tbody>
   </table>
   <style>
@@ -455,7 +576,10 @@ const downloadExcel = () => {
       Details:payments.details,
       Payment_In:payments.payment_In,
       Payment_Out:payments.payment_Out,
-      Cash_Return:payments.cash_Out,
+      Cash_In_Return:(payments.payment_In ||payments.payment_In>0)?payments.cash_Out:0,
+      Cash_Out_Return:(payments.payment_Out ||payments.payment_Out>0)?payments.cash_Out:0,
+      Remaining_In:(payments.payment_In ||payments.payment_In>0)?payments.remaining:0,
+      Remaining_Out:(payments.payment_Out ||payments.payment_Out>0)?payments.remaining:0,
       Curr_Rate:payments.curr_Rate,
       Curr_Amount:payments.curr_Amount,
       Payment_In_curr:payments.payment_In_curr?payments.payment_In_curr:payments.payment_Out_curr,
@@ -488,7 +612,10 @@ const downloadPaymentExcel = (payments) => {
       Details:payments.details,
       Payment_In:payments.payment_In,
       Payment_Out:payments.payment_Out,
-      Cash_Return:payments.cash_Out,
+      Cash_In_Return:(payments.payment_In ||payments.payment_In>0)?payments.cash_Out:0,
+      Cash_Out_Return:(payments.payment_Out ||payments.payment_Out>0)?payments.cash_Out:0,
+      Remaining_In:(payments.payment_In ||payments.payment_In>0)?payments.remaining:0,
+      Remaining_Out:(payments.payment_Out ||payments.payment_Out>0)?payments.remaining:0,
       Curr_Rate:payments.curr_Rate,
       Curr_Amount:payments.curr_Amount,
       Payment_In_curr:payments.payment_In_curr?payments.payment_In_curr:payments.payment_Out_curr,
@@ -508,22 +635,24 @@ const downloadPaymentExcel = (payments) => {
 
 
 const topButtons=[
+  {text:'Add New Entry',navigate:'/rozgar/enteries/add_new_entry'},
   {text:'Add Expense',navigate:'/rozgar/expenses/add_new_expense'},
   {text:'Candidate Payment In',navigate:'/rozgar/candidates/payment_in'},
+  {text:'Agent Payment Out',navigate:'/rozgar/agents/payment_out'},
+  {text:'Agent Cand-Vise Payment Out',navigate:'/rozgar/agents/cand_vise_payment_out'},
+  {text:'Supplier Payment Out',navigate:'/rozgar/suppliers/payment_out'},
+  {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/suppliers/cand_vise_payment_out'},
+
+
 ]
 const navigationButtons=[
-  {text:'Add New Entry',navigate:'/rozgar/enteries/add_new_entry'},
   {text:'Direct Payment',navigate:'/rozgar/direct/payment_in_out'},
   {text:'Agent Payment In',navigate:'/rozgar/agents/payment_in'},
-  {text:'Agent Payment Out',navigate:'/rozgar/agents/payment_out'},
   {text:'Agent Payment Return',navigate:'/rozgar/agents/payment_return'},
   {text:'Agent Cand-Vise Payment In',navigate:'/rozgar/agents/cand_vise_payment_in'},
-  {text:'Agent Cand-Vise Payment Out',navigate:'/rozgar/agents/cand_vise_payment_out'},
   {text:'Supplier Payment In',navigate:'/rozgar/suppliers/payment_in'},
-  {text:'Supplier Payment Out',navigate:'/rozgar/suppliers/payment_out'},
   {text:'Supplier Payment Return',navigate:'/rozgar/suppliers/payment_return'},
   {text:'Supplier Cand-Vise Payment In',navigate:'/rozgar/suppliers/cand_vise_payment_in'},
-  {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/suppliers/cand_vise_payment_out'},
   {text:'Candidate Payment Out',navigate:'/rozgar/candidates/payment_out'},
   {text:'Candidate Payment Return',navigate:'/rozgar/candidates/payment_return'},
   {text:'Protector Payment Out',navigate:'/rozgar/protector/payment_out'},
@@ -547,12 +676,16 @@ const navigationButtons=[
 
 ]
 
+const[option,setOption]=useState(false)
+
   return (
     <div className={`${collapsed ?"collapsed":"main"}`}>
     <div className="container-fluid admin-dashboard mt-3">
      <div className="row px-3 ">
+      <div className="col-md-12 p-0">
       <h4>Admin Dashboard</h4>
-      <div className="col-md-12 top_buttons text-md-end">
+      </div>
+      <div className="col-md-12 top_buttons p-0">
        
           {topButtons.map((data)=>(
             <Link key={data.navigate} className='btn m-1 px-2 py-1 rounded' to={data.navigate}>{data.text}</Link>
@@ -560,22 +693,20 @@ const navigationButtons=[
         
       </div>
         <div className="col-md-12 admin-main p-0">
-          <div className="row p-0 ">
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1">
-             <Paper className="data px-3 py-1 rounded border m-0 ">
+          <div className="row">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1">
+             <Paper className="data px-3 py-0 rounded border m-0 ">
            <Link to='/rozgar/enteries/reports_details'>
-           <div className="d-flex justify-content-between py-1 mt-2">
+           <div className="d-flex justify-content-between py-1 mt-1">
             <div className=" ">
               <div className="side">
-                <Avatar   sx={{ width: 35, height: 35, bgcolor: green[400]  }}><ConfirmationNumberIcon/></Avatar>
-              
+                <Avatar  sx={{ width: 35, height: 35, bgcolor: green[400]  }}><LocalActivityIcon/></Avatar>
+        
               </div>
             </div>
             <div className="side text-end">
-            {loading1 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa issued") ||(entry.final_Status.toLowerCase() === "visa issue") ).length:0 }</h5> }
-                
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa issued") ||(entry.final_Status.toLowerCase() === "visa issue") ).length:0 }</h5> }
                 <h6 className='ml-2'>Total Visa Issued</h6>
-            
             </div>
           </div> 
            </Link>
@@ -583,8 +714,48 @@ const navigationButtons=[
              </Paper>
             </div>
 
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1  ">
-            <Paper className="data px-3 py-1 rounded border m-0 ">
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1">
+             <Paper className="data px-3 py-0 rounded border m-0 ">
+           <Link to='/rozgar/enteries/reports_details'>
+           <div className="d-flex justify-content-between py-1 mt-1">
+            <div className=" ">
+              <div className="side">
+                <Avatar  sx={{ width: 35, height: 35, bgcolor: green[400]  }}><LocalActivityIcon/></Avatar>
+        
+              </div>
+            </div>
+            <div className="side text-end">
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa expired") ||(entry.final_Status.toLowerCase() === "visa expire")||(entry.final_Status.toLowerCase() === "visa expired") ).length:0 }</h5> }
+                <h6 className='ml-2'>Total Visa Expired</h6>
+            </div>
+          </div> 
+           </Link>
+        
+             </Paper>
+            </div>
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1">
+             <Paper className="data px-3 py-0 rounded border m-0 ">
+           <Link to='/rozgar/enteries/reports_details'>
+           <div className="d-flex justify-content-between py-1 mt-1">
+            <div className=" ">
+              <div className="side">
+                <Avatar  sx={{ width: 35, height: 35, bgcolor: green[400]  }}><LocalActivityIcon/></Avatar>
+              </div>
+            </div>
+            <div className="side text-end">
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "visa loss") ||(entry.final_Status.toLowerCase() === "visa los")||(entry.final_Status.toLowerCase() === "visa lost") ).length:0 }</h5> }
+                <h6 className='ml-2'>Total Visa Loss</h6>
+            </div>
+          </div> 
+           </Link>
+        
+             </Paper>
+            </div>
+
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
             <Link to='/rozgar/enteries/reports_details'>
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
@@ -594,8 +765,8 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end ">
-            {loading1 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{enteries ? enteries.filter(entry => !(entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly")).length:0 }</h5> }
-                <h6 className='ml-2'>Total Fly <br /> </h6>
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? enteries.filter(entry => !(entry.flight_Date.toLowerCase() === "no fly" || entry.flight_Date.toLowerCase() === "not fly")).length:0 }</h5> }
+                <h6 className='ml-2'>Total Flights <br /> </h6>
             </div>
           </div> 
             </Link>
@@ -603,9 +774,135 @@ const navigationButtons=[
             </Paper>
            
             </div>
-             <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
+            <Link to='/rozgar/enteries/reports_details'>
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side ">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: purple [400]  }}><AirplaneTicketIcon/></Avatar>
+             
+              </div>
+            </div>
+            <div className="side text-end ">
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? flightsThisMonth:0 }</h5> }
+                <h6 className='ml-2'>This Month Flights <br /> </h6>
+            </div>
+          </div> 
+            </Link>
+          
+            </Paper>
            
-            <Paper className="data px-3 py-1 rounded border m-0">
+            </div>
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
+            <Link to='/rozgar/enteries/reports_details'>
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side ">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: purple [400]  }}><AirplaneTicketIcon/></Avatar>
+             
+              </div>
+            </div>
+            <div className="side text-end ">
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? flightsLastThreeMonths:0 }</h5> }
+                <h6 className='ml-2'>Last 3 Months Flights <br /> </h6>
+            </div>
+          </div> 
+            </Link>
+          
+            </Paper>
+           
+            </div>
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
+            <Link to='/rozgar/enteries/reports_details'>
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side ">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: deepOrange [400]  }}><ConfirmationNumberIcon/></Avatar>
+             
+              </div>
+            </div>
+            <div className="side text-end ">
+            {loading1 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{enteries ? enteries.filter(entry => (entry.final_Status.toLowerCase() === "ticket" || entry.final_Status.toLowerCase() === "tickets")||entry.final_Status.toLowerCase() === "tkt").length:0 }</h5> }
+                <h6 className='ml-2'>Total Tickets <br /> </h6>
+            </div>
+          </div> 
+            </Link>
+          
+            </Paper>
+           
+            </div>
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
+            <Link to='/rozgar/enteries/reports_details'>
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side ">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: pink [400]  }}><AttachMoneyIcon/></Avatar>
+              </div>
+            </div>
+            <div className="side text-end ">
+            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{employees ? totalEmployeeExpense:0 }</h5> }
+                <h6 className='ml-2'>Employees Total Expense <br /> </h6>
+            </div>
+          </div> 
+            </Link>
+          
+            </Paper>
+           
+            </div>
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
+            <Link to='/rozgar/enteries/reports_details'>
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side ">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: pink [400]  }}><AttachMoneyIcon/></Avatar>
+
+             
+              </div>
+            </div>
+            <div className="side text-end ">
+            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{employees ? currentMonthEmployeeExpense:0 }</h5> }
+                <h6 className='ml-2'>Employees Current Month Expenses <br /> </h6>
+            </div>
+          </div> 
+            </Link>
+          
+            </Paper>
+           
+            </div>
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
+            <Paper className="data px-3 py-0 rounded border m-0 ">
+            <Link to='/rozgar/enteries/reports_details'>
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side ">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: pink [400]  }}><AttachMoneyIcon/></Avatar>
+              </div>
+            </div>
+            <div className="side text-end ">
+            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{employees ? threeMonthsEmployeeExpense:0 }</h5> }
+                <h6 className='ml-2'>Employees Last 3 Month Expenses <br /> </h6>
+            </div>
+          </div> 
+            </Link>
+          
+            </Paper>
+           
+            </div>
+
+             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">
+           
+            <Paper className="data px-3 py-0 rounded border m-0">
             <Link to='/rozgar/cash_in_hand'>
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
@@ -615,7 +912,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading2 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{Math.round( cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0)}</h5> }
+            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{Math.round( cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0)}</h5> }
             <h6 className='ml-2'>Cash In Hand</h6>
             </div>
           </div> 
@@ -623,8 +920,8 @@ const navigationButtons=[
           
             </Paper>
             </div>
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1">          
-            <Paper className="data px-3 py-1 rounded border m-0">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1">          
+            <Paper className="data px-3 py-0 rounded border m-0">
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side">
@@ -634,7 +931,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{ Math.round(todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0)}</h5> }
+            {loading4 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{ Math.round(todayTotalCashIn && todayTotalCashIn>0 ?todayTotalCashIn :0)}</h5> }
 
 <h6 className='ml-2'>Today Cash In</h6>
             </div>
@@ -643,8 +940,8 @@ const navigationButtons=[
             </Paper>
             </div>
          
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1">
-             <Paper className="data px-3 py-1 rounded border m-0">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1">
+             <Paper className="data px-3 py-0 rounded border m-0">
              <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side">
@@ -652,7 +949,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{ Math.round(todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0)}</h5> }
+            {loading4 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{ Math.round(todayTotalCashOut && todayTotalCashOut>0 ? todayTotalCashOut:0)}</h5> }
 
                 <h6 className='ml-2'>Today Cash Out</h6>
             </div>
@@ -662,8 +959,34 @@ const navigationButtons=[
              </Paper>
             </div>
 
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
-            <Paper className="data px-3 py-1 rounded border m-0">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1">          
+            <Paper className="data px-3 py-0 rounded border m-0">
+            <div className="d-flex justify-content-between py-1 mt-2">
+            <div className=" ">
+              <div className="side">
+              <Avatar   sx={{width: 35, height: 35, bgcolor: green [500]  }}><KeyboardReturnIcon/></Avatar>
+
+            
+              </div>
+            </div>
+            <div className="side text-end">
+            {loading3 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{overAllPayments
+      ? Math.round(
+          overAllPayments.reduce((total, payment) => {
+            const cashOut = isNaN(payment.cash_Out) ? 0 : payment.cash_Out;
+            return total + (payment.type.toLowerCase().includes('in') ? cashOut : 0);
+          }, 0)
+        )
+      : 0}</h5> }
+<h6 className='ml-2'>Cash Retrun</h6>
+            </div>
+          </div> 
+          
+            </Paper>
+            </div>
+
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">
+            <Paper className="data px-3 py-0 rounded border m-0">
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -673,7 +996,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{ Math.round(todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0)}</h5> }
+            {loading4 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{ Math.round(todayAdvancePaymentIn && todayAdvancePaymentIn>0 ?todayAdvancePaymentIn:0)}</h5> }
                 
                 <h6 className='ml-2'>Today Advance In</h6>
             </div>
@@ -684,9 +1007,9 @@ const navigationButtons=[
 
 
             </div>
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">
            
-            <Paper className="data px-3 py-1 rounded border m-0">
+            <Paper className="data px-3 py-0 rounded border m-0">
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -696,7 +1019,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{ Math.round(todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0)}</h5> }
+            {loading4 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{ Math.round(todayAdvancePaymentOut && todayAdvancePaymentOut>0 ?todayAdvancePaymentOut :0)}</h5> }
 
 <h6 className='ml-2'>Today Advance Out</h6>
             
@@ -705,8 +1028,8 @@ const navigationButtons=[
           
             </Paper>
             </div>
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">          
-            <Paper className="data px-3 py-1 rounded border m-0">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">          
+            <Paper className="data px-3 py-0 rounded border m-0">
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side">
@@ -716,7 +1039,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{ Math.round(totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0)}</h5> }
+            {loading4 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{ Math.round(totalAdvancePaymentIn && totalAdvancePaymentIn>0?totalAdvancePaymentIn:0)}</h5> }
                 <h6 className='ml-2'>Total Advance In</h6>
             
             </div>
@@ -725,8 +1048,8 @@ const navigationButtons=[
             </Paper>
             </div>
 
-            <div className="col-sm-6 col-sm-12 col-md-4 my-1 p-1 ">          
-            <Paper className="data px-3 py-1 rounded border m-0">
+            <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">          
+            <Paper className="data px-3 py-0 rounded border m-0">
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side">
@@ -736,7 +1059,7 @@ const navigationButtons=[
               </div>
             </div>
             <div className="side text-end">
-            {loading4 ? <CircularProgress  sx={{ width: 20, height: 20  }}  disableShrink />:<h5>{ Math.round(totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0)}</h5> }
+            {loading4 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{ Math.round(totalAdvancePaymentOut && totalAdvancePaymentOut>0 ? totalAdvancePaymentOut:0)}</h5> }
                 
                 <h6 className='ml-2'>Total Advance Out</h6>
             
@@ -747,18 +1070,18 @@ const navigationButtons=[
             </div>
           </div>
         </div>
-        <div className="col-md-12 navigate_buttons p-0 my-3">
-       <h4>Quick Links</h4>
-       {navigationButtons.map((data)=>(
+        <div className="col-md-12 navigate_buttons p-0 mt-2">
+       <h4><button className="btn link_btn shadow" onClick={()=>setOption(!option)}>{option?"Hide":"Show"} Quick Links</button></h4>
+       {option && navigationButtons.map((data)=>(
          <Link key={data.navigate} className='btn m-1 px-2 py-1 rounded' to={data.navigate}>{data.text}</Link>
        ))}
      
    </div>
-        <div className="col-md-12 payment_details p-0 my-3">
-          <div className="row">
+        <div className="col-md-12 payment_details p-0 my-2">
+          <div className="row ">
           <h3 className="text-center my-2"><strong>Day Book</strong> </h3>
           <div className="col-md-12 filters">
-                      <Paper className='py-1 mb-2 px-3'>
+                      <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
                             <label htmlFor="">Search Here:</label>
@@ -821,7 +1144,7 @@ const navigationButtons=[
                             </select>
                           </div>
                         </div>
-                      </Paper>
+                      </div>
                     </div>
           </div>
           <div className="text-end">
@@ -835,7 +1158,7 @@ const navigationButtons=[
           </div>
          }
                       {!loading3 &&
-                      <TableContainer className='detail_table' component={Paper}>
+                      <TableContainer className='detail_table'>
                       <Table stickyHeader  sx={{ maxHeight: 100 }}>
                         <TableHead className="thead" >
                           <TableRow>
@@ -849,7 +1172,10 @@ const navigationButtons=[
                             <TableCell className='label border'>Slip_No</TableCell>
                             <TableCell className='label border'>Cash_In</TableCell>
                             <TableCell className='label border'>Cash_Out</TableCell>
-                            <TableCell className='label border'>Cash_Return</TableCell>
+                            <TableCell className='label border'>Cash_In_Return</TableCell>
+                            <TableCell className='label border'>Cash_Out_Return</TableCell>
+                            <TableCell className='label border'>Remining_In</TableCell>
+                            <TableCell className='label border'>Remining_Out</TableCell>
                            {show && 
                            <>
                             <TableCell className='label border'>Curr_Rate</TableCell>
@@ -880,9 +1206,12 @@ const navigationButtons=[
                                       <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash?.payment_In||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0)?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0)?cash.remaining:0}</TableCell>
                                      {show &&
                                      <>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
@@ -933,23 +1262,43 @@ const navigationButtons=[
                                   <TableCell></TableCell>
                                   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                                   <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.payment_In || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-danger text-white'>
-    {/* Calculate the total sum of payment_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
+  {/* Calculate the total sum of payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.payment_In || 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-danger text-white'>
+  {/* Calculate the total sum of payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.payment_Out || 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-warning text-white'>
+  {/* Calculate the total sum of cash_Out based on payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-warning text-white'>
+  {/* Calculate the total sum of cash_Out based on payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-success text-white'>
+  {/* Calculate the total sum of remaining based on payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.payment_In > 0 ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-danger text-white'>
+  {/* Calculate the total sum of remaining based on payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.payment_Out > 0 ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+
+   
  {show &&
  <>
   <TableCell className='border data_td text-center bg-info text-white'>
@@ -959,7 +1308,6 @@ const navigationButtons=[
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
     {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
       return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
     }, 0)}

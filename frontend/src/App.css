@@ -82,6 +82,22 @@
   border-radius: 100px;
 
 }
+.admin-dashboard .navigate_buttons .link_btn{
+  text-decoration: none;
+  font-size: 12px;
+  background-color: var(--accent-stonger-blue);
+  color: var(--white);
+  font-weight: 600;
+  border: 1px solid var(--accent-stonger-blue);
+}
+.admin-dashboard .top_buttons .link_btn:hover{
+  text-decoration: none;
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
+  border: 1px solid var(--accent-stonger-blue);
+  background-color: none;
+}
 /* .admin-dashboard .navigate_buttons ul{
   width: 100%;
     list-style: none;

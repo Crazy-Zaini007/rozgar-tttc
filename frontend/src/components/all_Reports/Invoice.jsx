@@ -228,7 +228,7 @@ export default function Invoice() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid py-2 cash_in_hand">
+        <div className="container-fluid mt-3 cash_in_hand">
           
 
 
@@ -236,8 +236,8 @@ export default function Invoice() {
           {current === 0 &&
             <div className="row">
 
-              <div className='col-md-12 payment_details'>
-                <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+              <div className='col-md-12 payment_details p-0 border-0 border-bottom'>
+                <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                   <div className="left d-flex">
                     <h4>Search Invoice</h4>
                   </div>
@@ -252,7 +252,7 @@ export default function Invoice() {
                    
 
                   </div>
-                </Paper>
+                </div>
               </div>
 
               {loading &&
@@ -264,7 +264,7 @@ export default function Invoice() {
                 <div className="col-md-12 payment_details">
                   <div className='row'>
                   <div className="col-md-12 filters">
-                      <Paper className='py-1 mb-2 px-3'>
+                      <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
                             <label htmlFor="">Seacrh Here:</label>
@@ -333,13 +333,13 @@ export default function Invoice() {
                   </select>
                           </div>
                         </div>
-                      </Paper>
+                      </div>
                     </div>
 
 
-                    <div className="col-md-12 detail_table my-2">
+                    <div className="col-md-12 detail_table my-2 px-1">
 
-                      <TableContainer component={Paper}>
+                      <TableContainer>
                         <Table stickyHeader>
                           <TableHead className="thead">
                             <TableRow>

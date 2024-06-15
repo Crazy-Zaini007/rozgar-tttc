@@ -70,8 +70,19 @@ export default function Reminders() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
 
       <div className="container-fluid reminders mt-3">
-        <div className="row px-3">
-            <h4>Reminders</h4>
+        <div className="row">
+          <div className="col-md-12 p-0 border-0 border-bottom">
+          <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
+                <div className="left">
+                <h4>Reminders</h4>
+                </div>
+                <div className="right d-flex">
+                 
+                </div>
+                
+              </div>
+
+          </div>
         </div>
         <div className="col-md-3 my-3 p-1">
             <select name="" id="" value={search} onChange={(e)=>setSearch(e.target.value)}>

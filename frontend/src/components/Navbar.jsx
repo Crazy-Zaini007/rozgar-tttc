@@ -18,7 +18,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
         <div className="row p-0 m-0 ">
       <input type="checkbox" id='mycheck'/>
             <div className="col-md-12 p-0 m-0 my_Navbar">
-                <div className="d-flex justify-content-between border py-3">
+                <div className="d-flex justify-content-between border-bottom border-0 py-3">
                     <div className="left">
       <label htmlFor="mycheck" onClick={()=>toggleSidebar()}>
     <span className='fas fa-times my_span ' id='times'></span>

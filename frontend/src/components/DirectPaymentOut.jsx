@@ -1617,7 +1617,7 @@ const handleTicketCandForm = async (e) => {
   return (
     <>
     
-<Paper className="col-md-12 py-3 mb-1 detail_table p-0 m-0">
+<div className="col-md-12 py-3 mb-1 detail_table p-0 m-0">
   <div className="row p-0 m-0">
     <div className="col-12 p-0 m-0">
     {!option && (
@@ -1639,7 +1639,7 @@ const handleTicketCandForm = async (e) => {
                         .reduce((total, entry) => {
                           return total + (entry.payment_In || 0);
                         }, 0)
-                    : 0)+ (overAllPayments && overAllPayments.length > 0
+                    : 0)-(overAllPayments && overAllPayments.length > 0
                       ? overAllPayments
                           .filter(entry => entry.date !== currentDate)
                           .reduce((total, entry) => {
@@ -1649,12 +1649,24 @@ const handleTicketCandForm = async (e) => {
                     
                 ).toFixed(2))}
               </span>
-                  <span className="btn btn-sm submit_btn m-1 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>{Math.round(overAllPayments &&  overAllPayments.length > 0 &&
-                              overAllPayments
-                                .filter(entry => entry.date===currentDate && entry.payment_Out>0)
-                                .reduce((total, entry) => {
-                                  return total + (entry.payment_Out || 0);
-                                }, 0))}</span>
+                  <span className="btn btn-sm submit_btn m-1 px-3 bg-danger border-0">Today : <i className="fas fa-arrow-up me-1 ms-2"></i>
+                  {Math.round((
+                    (overAllPayments && overAllPayments.length > 0
+                      ? overAllPayments
+                          .filter(entry => entry.date === currentDate)
+                          .reduce((total, entry) => {
+                            return total + (entry.payment_Out || 0);
+                          }, 0)
+                      : 0)+(overAllPayments && overAllPayments.length > 0
+                        ? overAllPayments
+                            .filter(entry => entry.date === currentDate)
+                            .reduce((total, entry) => {
+                              return total + ((entry.payment_Out ||entry.payment_Out<1 || entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0);
+                            }, 0)
+                        : 0)
+                      
+                  ).toFixed(2))}
+                                </span>
                                 
 
                 <button className="btn btn-sm submit_btn m-1" disabled={loading}>
@@ -2067,8 +2079,8 @@ const handleTicketCandForm = async (e) => {
           
         )}
     </div>
-    <div className="col-md-12 filters">
-                <Paper className='py-1 mb-2 px-3'>
+    <div className="col-md-12 filters ">
+                <div className='py-1 mb-2'>
                 <div className="row">
                   <div className="col-auto px-1">
                       <label htmlFor="">Search:</label>
@@ -2086,9 +2098,9 @@ const handleTicketCandForm = async (e) => {
                     </div>
 
                   </div>
-                </Paper>
+                </div>
               </div>
-    <div className="col-md-12 today_Payments_Table">
+    <div className="col-md-12 today_Payments_Table p-0">
     <div className="text-end">
     <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
     </div>
@@ -2117,7 +2129,7 @@ const handleTicketCandForm = async (e) => {
                             </TableRow>
         </TableHead>
         <TableBody>
-                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_Out || cash?.payment_Out>0)).map((cash, outerIndex) => (
+                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_Out || cash?.payment_Out>0 ||cash?.type.toLowerCase().includes('out'))).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -2179,7 +2191,7 @@ const handleTicketCandForm = async (e) => {
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry?.payment_Out)
+                                .filter(entry => (entry?.payment_Out||entry?.type.toLowerCase().includes('out')))
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.cash_Out || 0));
                                 }, 0)}
@@ -2214,7 +2226,7 @@ const handleTicketCandForm = async (e) => {
     </div>
   </div>
         
-      </Paper>    
+      </div>    
 
          {/* <div className="col-md-12 mb-1 px-0  total_cash">
         <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>

@@ -411,9 +411,9 @@ export default function SingleEntry() {
 
   return (
     <>
-      <div className="col-md-12">
+      <div className="col-md-12 p-0">
 
-        <TableContainer component={Paper}>
+        <TableContainer>
           <form className='py-3 px-2' onSubmit={handleSubmit}>
             <div className="text-end ">
               <button className='btn submit_btn m-1 btn-sm' type='submit' disabled={loading}>{loading === true ? "Submitting" : "Add New Entry"}</button>

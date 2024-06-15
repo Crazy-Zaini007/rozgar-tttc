@@ -132,6 +132,10 @@ import OverAllVisaProfitReports from './components/all_Reports/OverAllVisaProfit
 import CandVisaPaymentReports from './components/all_Reports/CandWisePaymentReports.jsx'
 import OverAllSystemPaymentReport from './components/all_Reports/OverAllSystemPaymentReport.jsx'
 import CombinePaymentReports from './components/all_Reports/CombinePaymentReport.jsx'
+import PaymentInReports from './components/all_Reports/PaymentInReports.jsx'
+import PaymentOutReports from './components/all_Reports/PaymentOutReports.jsx'
+
+
 
 
 import DayBook from './components/all_Reports/DayBook.jsx'
@@ -295,7 +299,8 @@ function App() {
           <Route path='/rozgar/reports/net_visa_reports' element={user && <NetVisaReports></NetVisaReports>}></Route>
           <Route path='/rozgar/reports/overall_visa_profit_reports' element={user && <OverAllVisaProfitReports></OverAllVisaProfitReports>}></Route>
           <Route path='/rozgar/reports/cand_visa_payment_reports' element={user && <CandVisaPaymentReports></CandVisaPaymentReports>}></Route>
-          <Route path='/rozgar/reports/overall_system_payment_reports' element={user && <OverAllSystemPaymentReport></OverAllSystemPaymentReport>}></Route>
+          <Route path='/rozgar/reports/direct_payment_in_reports' element={user && <PaymentInReports></PaymentInReports>}></Route>
+          <Route path='/rozgar/reports/direct_payment_out_reports' element={user && <PaymentOutReports></PaymentOutReports>}></Route>
           <Route path='/rozgar/reports/overall_combine_payment_reports' element={user && <CombinePaymentReports></CombinePaymentReports>}></Route>
 
 

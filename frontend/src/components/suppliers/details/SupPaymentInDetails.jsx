@@ -1469,7 +1469,7 @@ export default function SupPaymentInDetails() {
       {!option &&
         <>
           <div className='col-md-12 '>
-            <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className='pt-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>PaymentIn Details</h4>
               </div>
@@ -1483,7 +1483,7 @@ export default function SupPaymentInDetails() {
                   </>
                 }
               </div>
-            </Paper>
+            </div>
           </div>
           {isLoading &&
             <div className='col-md-12 text-center my-4'>
@@ -1491,8 +1491,8 @@ export default function SupPaymentInDetails() {
             </div>
           }
 
-          <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+          <div className="col-md-12 filters ">
+            <div className='py-1 mb-2 px-3'>
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label>
@@ -1522,12 +1522,12 @@ export default function SupPaymentInDetails() {
 
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
 
           {!isLoading &&
-            <div className='col-md-12'>
-              <Paper className='py-3 mb-1 px-2 detail_table'>
+            <div className='col-md-12 p-0'>
+              <div className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                     <TableHead>
@@ -1719,7 +1719,7 @@ export default function SupPaymentInDetails() {
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-              </Paper>
+              </div>
             </div>
           }
         </>
@@ -1728,7 +1728,7 @@ export default function SupPaymentInDetails() {
       {option && selectedSupplier && (
         <>
           {/* Display Table for selectedSupplier's payment details array */}
-          <div className="col-md-12 my-2">
+          <div className="col-md-12 my-2 ">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
                 <h4 className='d-inline '>Supplier Name: <span>{selectedSupplier}</span></h4>
@@ -1754,7 +1754,7 @@ export default function SupPaymentInDetails() {
           </div>
 
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Serach Here:</label>
@@ -1796,10 +1796,10 @@ export default function SupPaymentInDetails() {
                   </select>
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
 
-          <div className="col-md-12 detail_table my-2">
+          <div className="col-md-12 detail_table my-2 ">
              <div className="d-flex justify-content-between">
               <div className="left d-flex">
               <h6>Payment In Details</h6>
@@ -1820,7 +1820,7 @@ export default function SupPaymentInDetails() {
                   </select>
               </div>
             </div>
-            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+            <TableContainer sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
@@ -2035,7 +2035,7 @@ export default function SupPaymentInDetails() {
 
 
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Search Here:</label>
@@ -2155,10 +2155,10 @@ export default function SupPaymentInDetails() {
                   </select>
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
           {/* Display Table for payment array */}
-          <div className="col-md-12 detail_table my-2">
+          <div className="col-md-12 detail_table my-2 p-0">
             <div className="d-flex justify-content-between">
               <div className="left d-flex">
                 <h6>Persons Details</h6>
@@ -2182,7 +2182,7 @@ export default function SupPaymentInDetails() {
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
               </div>
             </div>
-            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+            <TableContainer sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>

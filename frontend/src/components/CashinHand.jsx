@@ -677,8 +677,8 @@ const getBankCash = async () => {
           {current === 1 &&
             <div className="row">
 
-              <div className='col-md-12 payment_details'>
-                <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+              <div className='col-md-12 payment_details p-0 border-0 border-bottom'>
+                <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
                   <div className="left d-flex">
                     <button className= 'btn btn-sm  m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
                     <button className= 'btn btn-sm  m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
@@ -701,14 +701,14 @@ const getBankCash = async () => {
                     <button className= 'btn btn-sm  detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
 
                   </div>
-                </Paper>
+                </div>
               </div>
 
               {option === 0  &&
                 <div className="col-md-12 payment_details">
                   <div className="row">
                     <div className="col-md-12 filters">
-                      <Paper className='py-1 mb-2 px-3'>
+                      <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
                             <label htmlFor="">Search Here:</label>
@@ -755,12 +755,12 @@ const getBankCash = async () => {
                           </div>
                          
                         </div>
-                      </Paper>
+                      </div>
                     </div>
 
-                    <div className="col-md-12 detail_table my-2">
+                    <div className="col-md-12 detail_table my-2 p-0">
 
-                      <TableContainer component={Paper}  sx={{ maxHeight: 600 }}>
+                      <TableContainer   sx={{ maxHeight: 600 }}>
                         <Table stickyHeader>
                           <TableHead className="thead">
                             <TableRow>
@@ -907,7 +907,7 @@ const getBankCash = async () => {
                 <div className="col-md-12 payment_details">
                   <div className='row'>
                   <div className="col-md-12 filters">
-                      <Paper className='py-1 mb-2 px-3'>
+                      <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
                             <label htmlFor="">Search Here:</label>
@@ -970,7 +970,7 @@ const getBankCash = async () => {
                             </select>
                           </div>
                         </div>
-                      </Paper>
+                      </div>
                     </div>
 
 

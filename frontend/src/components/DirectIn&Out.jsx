@@ -60,7 +60,7 @@ const { getCashInHandData } = CashInHandHook()
 
   return (
     <div className={`${collapsed ? "collapsed" : "main"}`}>
-    <div className="py-2 direct_payment">
+    <div className="py-2 direct_payment px-0">
         <div className="d-flex payment_form p-0 m-0">
           
             <div className="d-flex overflow-x-auto">
@@ -76,7 +76,7 @@ const { getCashInHandData } = CashInHandHook()
                 <h6 className="bg-success text-white py-2 text-center my-0">{Math.round((cashInHand.total_Cash ? cashInHand.total_Cash : 0))}</h6>
                 <div className="details">
                     <h6 className="text-center my-0 bg-info text-white py-2 my-0">Today Cash Details</h6>
-                    <TableContainer className='detail_table' component={Paper}>
+                    <TableContainer className='detail_table'>
                         <Table stickyHeader>
                             <TableHead className="thead">
                                 <TableRow>

@@ -49,6 +49,7 @@ export default function CandWisePaymentReports() {
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Cash In</th>
+        <th>Remaining</th>
         <th>Details</th>
         <th>Candidates</th>
         <th>Invoice</th>
@@ -68,8 +69,8 @@ export default function CandWisePaymentReports() {
           <td>${String(entry.payment_Via)}</td>
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
-          <td>${String(entry.payment_In)}</td>
-       
+          <td>${String(entry.payment_In||0)}</td>
+          <td>${String(entry.remaining||0)}</td>
           <td>${String(entry.details)}</td>
           <td>${String(entry.payments.length)}</td>
           <td>${String(entry.invoice)}</td>   
@@ -139,6 +140,7 @@ export default function CandWisePaymentReports() {
         Payment_Type: payments.payment_Type,
         Slip_No: payments.slip_No,
         Cash_In: payments.payment_In,
+        Remaining: payments.remaining,
         Details: payments.details,
         Candidates: payments.payments.length,
         Invoice: payments.invoice,
@@ -170,6 +172,7 @@ export default function CandWisePaymentReports() {
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Cash Out</th>
+        <th>Remaining</th>
         <th>Details</th>
         <th>Candidates</th>
         <th>Invoice</th>
@@ -189,7 +192,8 @@ export default function CandWisePaymentReports() {
           <td>${String(entry.payment_Via)}</td>
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
-          <td>${String(entry.payment_Out)}</td>
+          <td>${String(entry.payment_Out||0)}</td>
+          <td>${String(entry.remaining||0)}</td>
           <td>${String(entry.details)}</td>
           <td>${String(entry.payments.length)}</td>
           <td>${String(entry.invoice)}</td>   
@@ -260,6 +264,7 @@ export default function CandWisePaymentReports() {
         Payment_Type: payments.payment_Type,
         Slip_No: payments.slip_No,
         Cash_Out: payments.payment_Out,
+        Remaining: payments.remaining,
         Details: payments.details,
         Candidates: payments.payments.length,
         Invoice: payments.invoice,
@@ -281,18 +286,18 @@ export default function CandWisePaymentReports() {
     <div>
          <div className={`${collapsed ?"collapsed":"main"}`}>
 
-        <div className="container-fluid payment_details">
+        <div className="container-fluid payment_details mt-3">
             <div className="row">
-                <div className="col-md-12">
-                <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+                <div className="col-md-12 p-0 border-0 border-bottom">
+                <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Candidate Vise Payments</h4>
                 </div>
                 <div className="right d-flex">
                   {overAllPayments && overAllPayments.length > 0 &&
                     <>
-                      <button className='btn m-1 btn-sm shadow border' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Payment In</button>
-                      <button className='btn m-1 btn-sm shadow border' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Payment Out</button>
+                      <button className='btn m-1 btn-sm ' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {background: 'white', color: 'var(--accent-stonger-blue',border:'1px solid var(--accent-stonger-blue)'}} onClick={() => setOption(0)}>Payment In</button>
+                      <button className='btn m-1 btn-sm ' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {background: 'white', color: 'var(--accent-stonger-blue',border:'1px solid var(--accent-stonger-blue)'}} onClick={() => setOption(1)}>Payment Out</button>
                      {option===0 &&
                      <>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenInExcel}>Download </button>
@@ -309,7 +314,7 @@ export default function CandWisePaymentReports() {
                   }
 
                 </div>
-              </Paper>
+              </div>
                 </div>
                 {loading1 &&
               <div className='col-md-12 text-center my-4'>
@@ -320,8 +325,8 @@ export default function CandWisePaymentReports() {
 {!loading1 &&
               <>
                 {option === 0 &&
-                  <div className='col-md-12'>
-                    <Paper className='py-3 mb-1 px-2 detail_table'>
+                  <div className='col-md-12 p-0'>
+                    <div className='py-3 mb-1 px-1 detail_table'>
                       <TableContainer sx={{ maxHeight: 600 }}>
                         <Table stickyHeader >
                           <TableHead className="thead" >
@@ -335,6 +340,7 @@ export default function CandWisePaymentReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_In</TableCell>
+                              <TableCell className='label border'>Remaining</TableCell>
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
@@ -357,6 +363,7 @@ export default function CandWisePaymentReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.remaining}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
@@ -395,21 +402,29 @@ export default function CandWisePaymentReports() {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
                           </TableCell>
-                         
+                          <TableCell className='border data_td text-center bg-success text-white'>
+                            {/* Calculate the total sum of payment_In */}
+                            {overAllPayments &&  overAllPayments.length > 0 &&
+                              overAllPayments
+                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.payments && entry.payments.length > 0)
+                                .reduce((total, entry) => {
+                                  return total + (entry.remaining || 0);
+                                }, 0)}
+                          </TableCell>
 
 
                             </TableRow>
                           </TableBody>
                         </Table>
                       </TableContainer>
-                    </Paper>
+                    </div>
                   </div>
                 }
 
 
                 {option === 1 &&
-                  <div className='col-md-12'>
-                    <Paper className='py-3 mb-1 px-2 detail_table'>
+                  <div className='col-md-12 p-0'>
+                    <div className='py-3 mb-1 px-1 detail_table'>
                       <TableContainer sx={{ maxHeight: 600 }}>
                         <Table stickyHeader >
                           <TableHead className="thead" >
@@ -423,6 +438,7 @@ export default function CandWisePaymentReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_Out</TableCell>
+                              <TableCell className='label border'>Remaining</TableCell>
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
@@ -445,6 +461,7 @@ export default function CandWisePaymentReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.remaining}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
@@ -484,13 +501,21 @@ export default function CandWisePaymentReports() {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
                           </TableCell>
-                          
+                          <TableCell className='border data_td text-center bg-danger text-white'>
+                            
+                            { overAllPayments && overAllPayments.length > 0 &&
+                              overAllPayments
+                                .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+                                .reduce((total, entry) => {
+                                  return total + (entry.remaining || 0);
+                                }, 0)}
+                          </TableCell>
 
                             </TableRow>
                           </TableBody>
                         </Table>
                       </TableContainer>
-                    </Paper>
+                    </div>
                   </div>
                 }
               </>

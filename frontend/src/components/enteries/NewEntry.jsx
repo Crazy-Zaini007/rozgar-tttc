@@ -149,8 +149,8 @@ export default function NewEntry() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
       <div className="container-fluid new_entry">
         <div className="row">
-          <div className="col-md-12 ">
-            <Paper className='py-3 mb-1 px-2' >
+          <div className="col-md-12 p-0 border-0 border-bottom">
+            <div className='py-3 mb-1 px-2' >
               <h4>Add New Entry</h4>
               <button className='btn m-1  btn-sm entry_btn text-sm' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Entry</button>
               <button className='btn m-1  btn-sm entry_btn text-sm' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Entries</button>
@@ -159,19 +159,19 @@ export default function NewEntry() {
                 Upload New List
                 <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
               </label>}
-            </Paper>
+            </div>
           </div>
           {/* Single Entry */}
           {single === 0 &&
             <SingleEntry></SingleEntry>}
 
-          {/* Multiple  Entries */}
+        
 
           {single === 1 &&
             <>
-              <div className="col-md-12 multiple_form">
+              <div className="col-md-12 multiple_form p-0">
 
-                <Paper>
+                <div>
                   <form className='py-0 px-2' onSubmit={addMultipleentries} >
                     <div className="text-end">
                       {entries && <button className='btn submit_btn m-1 btn-sm' disabled={loading}>{loading ? "Uploading..." : "Add Entries"}{uploadProgress>0 && uploadProgress}</button>}
@@ -269,7 +269,7 @@ export default function NewEntry() {
                     </div>
 
                   </form>
-                </Paper>
+                </div>
 
               </div>
             </>

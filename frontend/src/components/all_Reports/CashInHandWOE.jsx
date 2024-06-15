@@ -366,10 +366,10 @@ const total = totalCashInHand + totalExpenses;
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid payment_details">
+        <div className="container-fluid payment_details mt-3">
           <div className="row">
-            <div className="col-md-12">
-              <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className="col-md-12 p-0  border-0 border-bottom">
+              <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Expenses Report</h4>
                 </div>
@@ -383,11 +383,11 @@ const total = totalCashInHand + totalExpenses;
                   }
 
                 </div>
-              </Paper>
+              </div>
             </div>
 
             <div className="col-md-12 filters">
-              <Paper className='py-1 mb-2 px-3'>
+              <div className='py-1 mb-2'>
                 <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Serach Here:</label>
@@ -451,12 +451,12 @@ const total = totalCashInHand + totalExpenses;
                     </select>
                   </div>
                 </div>
-              </Paper>
+              </div>
             </div>
 
             <div className="col-md-12 detail_table my-2">
 
-              <TableContainer component={Paper}  sx={{ maxHeight: 600 }}>
+              <TableContainer  sx={{ maxHeight: 600 }}>
                 <Table stickyHeader>
                   <TableHead className="thead">
                     <TableRow>
@@ -478,7 +478,7 @@ const total = totalCashInHand + totalExpenses;
                   </TableHead>
                   <TableBody>
                     {filteredExpenses
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((expense, outerIndex) => (
+                      .map((expense, outerIndex) => (
                         // Map through the payment array
                         <React.Fragment key={outerIndex}>
                           <TableRow key={expense?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
@@ -586,21 +586,7 @@ const total = totalCashInHand + totalExpenses;
                   </TableBody>
                 </Table>
               </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={rowsPerPageOptions}
-                component='div'
-                count={filteredExpenses.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                style={{
-                  color: 'blue',
-                  fontSize: '14px',
-                  fontWeight: '700',
-                  textTransform: 'capitalize',
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              
             </div>
             
           </div>
