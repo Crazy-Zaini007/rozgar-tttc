@@ -147,7 +147,7 @@ export default function Entry2() {
   useEffect(() => {
   }, [type,supplierName,selectedSupplier])
 
-  let curr_Amount = Math.round(payment_Out / curr_Rate);
+  let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
 
 
   const handleOpen = () => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect,useRef } from "react";
 import { useSelector } from "react-redux";
 import TableContainer from "@mui/material/TableContainer";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -73,9 +72,9 @@ const { getCashInHandData } = CashInHandHook()
             </div>
             <div className="col-md-2 col-sm-12 p-0 m-0 total_cash">
                 <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
-                <h6 className="bg-success text-white py-2 text-center my-0">{Math.round((cashInHand.total_Cash ? cashInHand.total_Cash : 0))}</h6>
+                <h6 className="bg-success text-white py-2 text-center my-0">{Math.round((total ? total : 0))}</h6>
                 <div className="details">
-                    <h6 className="text-center my-0 bg-info text-white py-2 my-0">Today Cash Details</h6>
+                    <h6 className="text-center my-0 bg-info text-white py-2 my-0">Cash Details</h6>
                     <TableContainer className='detail_table'>
                         <Table stickyHeader>
                             <TableHead className="thead">

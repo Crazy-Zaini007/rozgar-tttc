@@ -76,7 +76,7 @@ export default function AzadVisaCandPayOutReturn() {
   // const [open, setOpen] = useState(true)
   const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
-  let curr_Amount = Math.round(cash_Out / curr_Rate);
+  let curr_Amount = (cash_Out / curr_Rate).toFixed(2)
   const handleOpen = () => {
     setOption(!option)
   }

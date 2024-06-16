@@ -129,7 +129,7 @@ const [curr_Country, setCurr_Country] = useState("");
 const [curr_Rate, setCurr_Rate] = useState();
 const [cand_Name, setCand_Name] = useState("");
 const [date, setDate] = useState("");
-let curr_Amount = Math.round(payment_Out / curr_Rate)
+let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
 
 const [selectedSupplier, setSelectedSupplier] = useState("");
 const [supplierNames, setSupplierNames] = useState([]);
@@ -1697,7 +1697,7 @@ const handleTicketCandForm = async (e) => {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                       <select name="" id="" value={ref} onChange={(e)=>setRef(e.target.value)}>
                       
                     <option value="">Choose</option>
@@ -1927,7 +1927,7 @@ const handleTicketCandForm = async (e) => {
                 <input type="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
                 }
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className='p-0' value={category} onChange={(e) => setCategory(e.target.value)} required>
                   <option value="">Choose</option>
                  {ref !=="Expense" &&
@@ -1946,7 +1946,7 @@ const handleTicketCandForm = async (e) => {
                  }
                 </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     value={payment_Via}
                     onChange={(e) => setPayment_Via(e.target.value)}
@@ -1961,7 +1961,7 @@ const handleTicketCandForm = async (e) => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     value={payment_Type}
                     onChange={(e) => setPayment_Type(e.target.value)}
@@ -1976,14 +1976,14 @@ const handleTicketCandForm = async (e) => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                     type="text"
                     value={slip_No}
                     onChange={(e) => setSlip_No(e.target.value)}
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                     type="number"
                     min="0"
@@ -1992,7 +1992,7 @@ const handleTicketCandForm = async (e) => {
                     required
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                     type="date"
                     value={date}
@@ -2001,7 +2001,7 @@ const handleTicketCandForm = async (e) => {
                   />
                     </TableCell>
                     {(ref==="Agent Cand-Vise" || ref==="Supplier Cand-Vise") && <>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     value={cand_Name}
                     onChange={(e) => {
@@ -2026,14 +2026,14 @@ const handleTicketCandForm = async (e) => {
                     </TableCell>
                    
                     </>}
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <textarea
                     className="p-0"
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                       value={curr_Country}
                       onChange={(e) => setCurr_Country(e.target.value)}
@@ -2047,7 +2047,7 @@ const handleTicketCandForm = async (e) => {
                         ))}
                     </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                       type="number"
                       min="0"
@@ -2055,10 +2055,10 @@ const handleTicketCandForm = async (e) => {
                       onChange={(e) => setCurr_Rate(e.target.value)}
                     />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0" type="number" value={curr_Amount} readOnly />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                   <input className="p-0" type="file" accept="image/*" onChange={handleImage} />
                     </TableCell>
                   </TableRow>
@@ -2110,7 +2110,7 @@ const handleTicketCandForm = async (e) => {
           <TableRow>
                               <TableCell className='label border  p-1'>SN</TableCell>
                               <TableCell className='label border p-1'>Date</TableCell>
-                              <TableCell className='label border  p-1'>Name</TableCell>
+                              <TableCell className='label border  p-1'>Name/PP#</TableCell>
                               <TableCell className='label border p-1'>Type</TableCell>
                               <TableCell className='label border p-1'>Category</TableCell>
                               <TableCell className='label border  p-1'>Payment_Via</TableCell>
@@ -2137,7 +2137,7 @@ const handleTicketCandForm = async (e) => {
                                   <>
                                     <TableCell className='border data_td text-center  p-1'>{outerIndex + 1}</TableCell>
                                     <TableCell className='border data_td text-center p-1'>{cash.date}</TableCell>
-                                    <TableCell className='border data_td text-center p-1'>{cash.supplierName}</TableCell>
+                                    <TableCell className='border data_td text-center p-1'>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                     <TableCell className='border data_td text-center p-1'>{cash.type}</TableCell>
                                     <TableCell className='border data_td text-center p-1'>{cash.category}</TableCell>
                                     <TableCell className='border data_td text-center p-1'>{cash.payment_Via}</TableCell>
@@ -2146,8 +2146,8 @@ const handleTicketCandForm = async (e) => {
                                     <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                     <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                    {show && <>
-                                    <TableCell className='border data_td text-center  p-1'>{Math.round(cash?.curr_Rate||0)}</TableCell>
-                                      <TableCell className='border data_td text-center p-1 '>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                    <TableCell className='border data_td text-center  p-1'>{(cash?.curr_Rate||0).toFixed(2)}</TableCell>
+                                      <TableCell className='border data_td text-center p-1 '>{(cash?.curr_Amount||0).toFixed(2)}</TableCell>
                                       <TableCell className='border data_td text-center p-1 '>{cash?.payment_Out_curr}</TableCell>
                                    </>}
                                     <TableCell className='border data_td text-center p-1'>{cash?.details}</TableCell>
@@ -2204,7 +2204,7 @@ const handleTicketCandForm = async (e) => {
                               filteredPayments
                                 .filter(entry => entry?.payment_Out)
                                 .reduce((total, entry) => {
-                                  return total + (Math.round(entry.curr_Rate || 0));
+                                  return total + ((entry.curr_Rate || 0).toFixed(2));
                                 }, 0)}
                           </TableCell>
                           <TableCell className='border data_td text-center bg-warning text-white  p-1'>
@@ -2213,7 +2213,7 @@ const handleTicketCandForm = async (e) => {
                               filteredPayments
                                 .filter(entry => entry?.payment_Out)
                                 .reduce((total, entry) => {
-                                  return total + (Math.round(entry.curr_Amount || 0));
+                                  return total + ((entry.curr_Amount || 0).toFixed(2));
                                 }, 0)}
                           </TableCell>
                          </>

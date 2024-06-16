@@ -270,7 +270,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   
   const[totalPayments,setTotalPayments]=useState(0)
   const[totalCurrRate,setTotalCurrRate]=useState(0)
-let totalCurrency=Math.round(totalPayments/totalCurrRate)
+let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
   const [, setNewMessage] = useState("");
@@ -943,7 +943,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                   type="number"
                   min="0"
                   disabled
-                  value={Math.round(cand.payment_Out/totalCurrRate)}
+                  value={(cand.payment_Out/totalCurrRate).toFixed(2)}
                   placeholder="Currency Amount"
                 />
               </div>

@@ -5,11 +5,11 @@ import SyncLoader from 'react-spinners/SyncLoader'
 import * as XLSX from 'xlsx';
 import { useSelector } from 'react-redux';
 
-export default function PaymentInReports() {
+export default function CandWisePaymentInReports() {
   const [option, setOption] = useState(0)
   const [loading1, setLoading1] = useState(false)
   const { getOverAllPayments, overAllPayments } = CashInHandHook()
-
+ 
    // fteching Data from DB
    const fetchData = async () => {
     try {
@@ -42,36 +42,37 @@ export default function PaymentInReports() {
       <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Name/PP#</th>
-        <th>Type</th>
+        <th>Supplier</th>
+        <th>Reference Type</th>
         <th>Category</th>
         <th>Payment Via</th>
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Cash In</th>
-        <th>Cash Retrun</th>
+        <th>Remaining</th>
         <th>Details</th>
+        <th>Candidates</th>
         <th>Invoice</th>
         
       </tr>
     </thead>
     <tbody>
       ${overAllPayments && overAllPayments 
-        .filter(entry => (entry.payment_In || entry.payment_In>0||entry.type.toLowerCase().includes('in')) && (!entry.payments))
+        .filter(entry => entry.type.toLowerCase().includes('in') &&  entry.payments && entry.payments.length > 0)
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
           <td>${String(entry.date)}</td>       
-          <td>${String(entry.supplierName)}/${String(entry?.pp_No)}</td>
+          <td>${String(entry.supplierName)}</td>
           <td>${String(entry.type)}</td>
           <td>${String(entry.category)}</td>
           <td>${String(entry.payment_Via)}</td>
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
           <td>${String(entry.payment_In||0)}</td>
-          <td>${String(entry.cash_Out||0)}</td>
           <td>${String(entry.remaining||0)}</td>
           <td>${String(entry.details)}</td>
+          <td>${String(entry.payments.length)}</td>
           <td>${String(entry.invoice)}</td>   
         </tr>
       `).join('')}
@@ -105,7 +106,7 @@ export default function PaymentInReports() {
       printWindow.document.write(`
     <html>
       <head>
-        <title>Payment_In Details</title>
+        <title>Candidate Wise Payment_In Details</title>
       </head>
       <body class='bg-dark'>${printContentString}</body>
     </html>
@@ -125,7 +126,7 @@ export default function PaymentInReports() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => (payment.payment_In || payment.payment_In>0|| payment.type.toLowerCase().includes('in')) && (!payment.payments));
+    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => payment.type.toLowerCase().includes('in') && payment.payments && payment.payments.length > 0);
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {
@@ -139,10 +140,9 @@ export default function PaymentInReports() {
         Payment_Type: payments.payment_Type,
         Slip_No: payments.slip_No,
         Cash_In: payments.payment_In,
-        Payment_Out: payments.payment_Out,
-        Cash_Out: payments.cash_Out,
         Remaining: payments.remaining,
         Details: payments.details,
+        Candidates: payments.payments.length,
         Invoice: payments.invoice,
       }
 
@@ -152,8 +152,11 @@ export default function PaymentInReports() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Payments Details.xlsx');
+    XLSX.writeFile(wb, 'Candidate Wise Payments_In Details.xlsx');
   }
+
+
+
 
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
@@ -167,19 +170,19 @@ export default function PaymentInReports() {
                 <div className="col-md-12 p-0 border-0 border-bottom">
                 <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Direct Payment In Report</h4>
+                  <h4>Candidate Vise Payment In</h4>
                 </div>
                 <div className="right d-flex">
                   {overAllPayments && overAllPayments.length > 0 &&
                     <>
-                     
+                   
                      {option===0 &&
                      <>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenInExcel}>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymenInMainTable}>Print </button>
                      </>
                      }
-                     
+                   
                     </>
                   }
 
@@ -192,7 +195,7 @@ export default function PaymentInReports() {
               </div>
             }
 
-          {!loading1 &&
+{!loading1 &&
               <>
                 {option === 0 &&
                   <div className='col-md-12 p-0'>
@@ -203,22 +206,22 @@ export default function PaymentInReports() {
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Name/PP#</TableCell>
-                              <TableCell className='label border'>Reference_Type</TableCell>
+                              <TableCell className='label border'>Name</TableCell>
+                              <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
                               <TableCell className='label border'>Payment_Via</TableCell>
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
                               <TableCell className='label border'>Remaining</TableCell>
                               <TableCell className='label border'>Details</TableCell>
+                              <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => (cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in')) && (!cash.payments)).map((cash, outerIndex) => (
+                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => cash.type.toLowerCase().includes('in')&&  cash.payments && cash.payments.length > 0).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -226,18 +229,18 @@ export default function PaymentInReports() {
                                   <>
                                     <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.remaining}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ?<a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                   </>
 
                                 </TableRow>
@@ -267,29 +270,21 @@ export default function PaymentInReports() {
                             {/* Calculate the total sum of payment_In */}
                             {overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => (entry.payment_In || entry.payment_In>0|| entry.type.toLowerCase().includes('in')) && (!entry.payments))
+                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.payments && entry.payments.length > 0)
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
                           </TableCell>
-                          <TableCell className='border data_td text-center bg-warning text-white'>
-                            {/* Calculate the total sum of cash_Out */}
-                            {overAllPayments && overAllPayments.length > 0 &&
+                          <TableCell className='border data_td text-center bg-success text-white'>
+                            {/* Calculate the total sum of payment_In */}
+                            {overAllPayments &&  overAllPayments.length > 0 &&
                               overAllPayments
-                                .filter(entry => (entry.payment_In || entry.payment_In>0 || entry.type.toLowerCase().includes('in')) && (!entry.payments))
-                                .reduce((total, entry) => {
-                                  return total + (entry.cash_Out || 0);
-                                }, 0)}
-                          </TableCell>
-                          <TableCell className='border data_td text-center bg-warning text-white'>
-                            {/* Calculate the total sum of cash_Out */}
-                            {overAllPayments && overAllPayments.length > 0 &&
-                              overAllPayments
-                                .filter(entry => (entry.payment_In || entry.payment_In>0 || entry.type.toLowerCase().includes('in')) && (!entry.payments))
+                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.payments && entry.payments.length > 0)
                                 .reduce((total, entry) => {
                                   return total + (entry.remaining || 0);
                                 }, 0)}
                           </TableCell>
+
 
                             </TableRow>
                           </TableBody>

@@ -221,10 +221,10 @@ export default function Invoice() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid entry_details mt-3">
             <div className="row">
-            <div className='col-md-12 p-0 border-0 border-bottom border-top'>
+            <div className='col-md-12 p-0 border-0 border-bottom '>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Overall Payment Visa Wise</h4>
+                  <h4>Overall Payment Visa Vise</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredEntries.length > 0 &&

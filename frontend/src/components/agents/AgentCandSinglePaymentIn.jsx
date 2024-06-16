@@ -269,7 +269,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
 
   const[totalPayments,setTotalPayments]=useState(0)
   const[totalCurrRate,setTotalCurrRate]=useState(0)
-let totalCurrency=Math.round(totalPayments/totalCurrRate)
+let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
   // Submitting Form Data
   const [loading, setLoading] = useState(false);
@@ -746,7 +746,7 @@ let totalCurrency=Math.round(totalPayments/totalCurrRate)
                   type="number"
                   min="0"
                   disabled
-                  value={Math.round(cand.payment_In/totalCurrRate)}
+                  value={(cand.payment_In/totalCurrRate).toFixed(2)}
                   placeholder="Currency Amount"
                 />
               </div>

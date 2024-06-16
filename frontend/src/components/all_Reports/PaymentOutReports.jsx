@@ -41,7 +41,7 @@ export default function PaymentOutReports() {
       <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Supplier</th>
+        <th>Name/PP#</th>
         <th>Reference Type</th>
         <th>Category</th>
         <th>Payment Via</th>
@@ -62,7 +62,7 @@ export default function PaymentOutReports() {
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
           <td>${String(entry.date)}</td>       
-          <td>${String(entry.supplierName)}</td>
+          <td>${String(entry.supplierName)}/${String(entry?.pp_No)}</td>
           <td>${String(entry.type)}</td>
           <td>${String(entry.category)}</td>
           <td>${String(entry.payment_Via)}</td>
@@ -203,7 +203,7 @@ export default function PaymentOutReports() {
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Name</TableCell>
+                              <TableCell className='label border'>Name/PP#</TableCell>
                               <TableCell className='label border'>Reference_Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
                               <TableCell className='label border'>Payment_Via</TableCell>
@@ -226,7 +226,7 @@ export default function PaymentOutReports() {
                                   <>
                                     <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>

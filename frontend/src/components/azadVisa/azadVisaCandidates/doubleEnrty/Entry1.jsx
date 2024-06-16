@@ -138,7 +138,7 @@ export default function Entry1() {
   }, [type,supplierName,selectedSupplier])
 
   
-  let curr_Amount = Math.round(payment_In / curr_Rate);
+  let curr_Amount = (payment_In / curr_Rate).toFixed(2)
   const handleOpen = () => {
     setOption(!option)
   }

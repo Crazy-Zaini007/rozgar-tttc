@@ -92,7 +92,8 @@ export default function CandidatesReports() {
     paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
     (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.supplierName.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.supplierName?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.pp_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
@@ -309,7 +310,7 @@ export default function CandidatesReports() {
                         <TableRow>
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Candidates</TableCell>
+                          <TableCell className='label border'>Candidate/PP#</TableCell>
                           <TableCell className='label border'>Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
                           <TableCell className='label border'>Payment_Via</TableCell>
@@ -326,7 +327,7 @@ export default function CandidatesReports() {
                           <TableRow>
                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
-                                <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
+                                <TableCell className='border data_td  '>{entry.supplierName}/{entry?.pp_No}</TableCell>
                                 <TableCell className='border data_td  '>{entry.type}</TableCell>
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>

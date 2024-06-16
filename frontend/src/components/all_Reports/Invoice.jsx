@@ -96,6 +96,7 @@ export default function Invoice() {
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
         paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
         (paymentItem.supplierName?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase()) ||
+       paymentItem.pp_No?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())||
        paymentItem.payment_Via?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())||
         paymentItem.slip_No?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())||
        paymentItem.payment_Type?.trim().toLowerCase().startsWith(mySeacrh.trim().toLowerCase())
@@ -108,13 +109,32 @@ export default function Invoice() {
 
   const printOverAllCashTable = () => {
     // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
     const printContentString = `
+       <div class="print-header">
+      
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Payment Invoices</h1>
+      </div>
+      <hr/>
     <table class='print-table'>
       <thead>
         <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Supp/Agent/Cand</th>
+        <th>Name/PP#</th>
         <th>Type</th>
         <th>Category</th>
         <th>Payment_Via</th>
@@ -132,7 +152,7 @@ export default function Invoice() {
           <tr key="${entry?._id}">
             <td>${index + 1}</td>
             <td>${String(entry?.date)}</td>
-            <td>${String(entry?.supplierName)}</td>
+            <td>${String(entry?.supplierName)}/${String(entry?.pp_No)}</td>
             <td>${String(entry?.type)}</td>
             <td>${String(entry?.category)}</td>
             <td>${String(entry?.payment_Via)}</td>
@@ -158,6 +178,22 @@ export default function Invoice() {
         border-collapse: collapse;
         margin: 20px 0;
       }
+        print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
       .print-table th, .print-table td {
         border: 1px solid #ddd;
         padding: 8px;
@@ -345,7 +381,7 @@ export default function Invoice() {
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'>Name/PP#</TableCell>
                               <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
                               <TableCell className='label border'>Payment_Via</TableCell>
@@ -369,7 +405,7 @@ export default function Invoice() {
                                       <>
                                         <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>

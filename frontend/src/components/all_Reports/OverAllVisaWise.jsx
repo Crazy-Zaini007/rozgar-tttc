@@ -200,7 +200,7 @@ export default function OverAllVisaWise() {
             <div className='col-md-12 p-0 border border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Overall Visa Wise</h4>
+                  <h4>Overall Visa Vise</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredEntries.length > 0 &&

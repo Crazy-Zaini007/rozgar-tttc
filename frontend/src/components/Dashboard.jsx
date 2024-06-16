@@ -250,6 +250,7 @@ const filteredPayment = (date2 && date3 ? overAllPayments : todayPayments)
         (
           paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
           paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.pp_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
           paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
           paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
           paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
@@ -288,7 +289,7 @@ const printContentString = `
       <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Name</th>
+        <th>Name/PP#</th>
         <th>Reference</th>
         <th>Category</th>
         <th>Payment Via</th>
@@ -310,7 +311,7 @@ const printContentString = `
       <tr>
         <td>1</td>
         <td>${String(paymentItem?.date)}</td>
-        <td>${String(paymentItem.supplierName)}</td>
+        <td>${String(paymentItem.supplierName)}/${String(paymentItem?.pp_No)}</td>
         <td>${String(paymentItem.type)}</td>
         <td>${String(paymentItem?.category)}</td>
         <td>${String(paymentItem?.payment_Via)}</td>
@@ -425,7 +426,7 @@ const printContentString = `
       <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Name</th>
+        <th>Name/PP#</th>
         <th>Reference</th>
         <th>Category</th>
         <th>Payment Via</th>
@@ -448,7 +449,7 @@ const printContentString = `
       <tr key="${paymentItem?._id}">
         <td>${index + 1}</td>
         <td>${String(paymentItem?.date)}</td>
-        <td>${String(paymentItem.supplierName)}</td>
+        <td>${String(paymentItem.supplierName)}/${String(paymentItem?.pp_No)}</td>
         <td>${String(paymentItem.type)}</td>
         <td>${String(paymentItem?.category)}</td>
         <td>${String(paymentItem?.payment_Via)}</td>
@@ -566,7 +567,7 @@ const downloadExcel = () => {
     const rowData = {
       SN: index + 1,
       Name:payments.supplierName,
-      Type:payments.type,
+      PP_No:payments?.pp_No,
       Type:payments.type,
       Date:payments.date,
       Category:payments.category,
@@ -602,7 +603,7 @@ const downloadPaymentExcel = (payments) => {
   // Iterate over entries and push all fields
     const rowData = {
       Name:payments.supplierName,
-      Type:payments.type,
+      PP_No:payments?.pp_No,
       Type:payments.type,
       Date:payments.date,
       Category:payments.category,
@@ -1164,7 +1165,7 @@ const[option,setOption]=useState(false)
                           <TableRow>
                             <TableCell className='label border'>SN</TableCell>
                             <TableCell className='label border'>Date</TableCell>
-                            <TableCell className='label border'>Name</TableCell>
+                            <TableCell className='label border'>Name/PP#</TableCell>
                             <TableCell className='label border'>Type</TableCell>
                             <TableCell className='label border'>Category</TableCell>
                             <TableCell className='label border'>Payment_Via</TableCell>
@@ -1200,7 +1201,7 @@ const[option,setOption]=useState(false)
                                     <>
                                       <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                      <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>

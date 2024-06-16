@@ -124,7 +124,7 @@ const getBankCash = async () => {
   const [curr_Rate, setCurr_Rate] = useState();
   const [cand_Name, setCand_Name] = useState("");
   const [date, setDate] = useState("");
-  let curr_Amount = Math.round(payment_In / curr_Rate);
+  let curr_Amount = (payment_In / curr_Rate).toFixed(2);
 
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [supplierNames, setSupplierNames] = useState([]);
@@ -1551,7 +1551,7 @@ const handleAssetForm = async (e) => {
 
                       </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     required
                     value={supplierName}
@@ -1772,7 +1772,7 @@ const handleAssetForm = async (e) => {
                  }   
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
@@ -1787,7 +1787,7 @@ const handleAssetForm = async (e) => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     value={payment_Via}
                     onChange={(e) => setPayment_Via(e.target.value)}
@@ -1802,7 +1802,7 @@ const handleAssetForm = async (e) => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                     value={payment_Type}
                     onChange={(e) => setPayment_Type(e.target.value)}
@@ -1817,14 +1817,14 @@ const handleAssetForm = async (e) => {
                       ))}
                   </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                     type="text"
                     value={slip_No}
                     onChange={(e) => setSlip_No(e.target.value)}
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                     type="number"
                     min="0"
@@ -1833,7 +1833,7 @@ const handleAssetForm = async (e) => {
                     required
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                     type="date"
                     value={date}
@@ -1867,14 +1867,14 @@ const handleAssetForm = async (e) => {
                     </TableCell>
                    
                     </>}
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <textarea className="p-0"
                     
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
                   />
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <select className="p-0"
                       value={curr_Country}
                       onChange={(e) => setCurr_Country(e.target.value)}
@@ -1888,7 +1888,7 @@ const handleAssetForm = async (e) => {
                         ))}
                     </select>
                     </TableCell>
-                    <TableCell className="border data_td p-0">
+                    <TableCell className="border data_td p-1">
                     <input className="p-0"
                       type="number"
                       min="0"
@@ -1952,7 +1952,7 @@ const handleAssetForm = async (e) => {
           <TableRow>
                               <TableCell className='label border  p-1'>SN</TableCell>
                               <TableCell className='label border p-1'>Date</TableCell>
-                              <TableCell className='label border p-1'>Name</TableCell>
+                              <TableCell className='label border p-1'>Name/PP#</TableCell>
                               <TableCell className='label border p-1'>Type</TableCell>
                               <TableCell className='label border p-1'>Category</TableCell>
                               <TableCell className='label border  p-1'>Payment_Via</TableCell>
@@ -1982,7 +1982,7 @@ const handleAssetForm = async (e) => {
                                   <>
                                     <TableCell className='border text-center data_td  p-1'>{outerIndex + 1}</TableCell>
                                     <TableCell className='border text-center data_td  p-1'>{cash.date}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'>{cash.supplierName}</TableCell>
+                                    <TableCell className='border data_td text-center p-1'>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                     <TableCell className='border text-center data_td p-1'>{cash.type}</TableCell>
                                     <TableCell className='border text-center data_td  p-1'>{cash.category}</TableCell>
                                     <TableCell className='border text-center data_td  p-1'>{cash.payment_Via}</TableCell>
@@ -1992,8 +1992,8 @@ const handleAssetForm = async (e) => {
                                     <TableCell className='border text-center data_td  p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
                                     {show &&
                                        <>
-                                        <TableCell className='border text-center data_td p-1'>{Math.round(cash?.curr_Rate||0)}</TableCell>
-                                      <TableCell className='border text-center data_td  p-1'>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                        <TableCell className='border text-center data_td p-1'>{(cash?.curr_Rate||0).toFixed(2)}</TableCell>
+                                      <TableCell className='border text-center data_td  p-1'>{(cash?.curr_Amount||0).toFixed(2)}</TableCell>
                                       <TableCell className='border text-center data_td  p-1'>{cash?.payment_In_curr}</TableCell>
                                        </>
                                        }
@@ -2050,7 +2050,7 @@ const handleAssetForm = async (e) => {
                               filteredPayments
                                 .filter(entry => entry?.payment_In)
                                 .reduce((total, entry) => {
-                                  return total + (Math.round(entry.curr_Rate || 0));
+                                  return total + ((entry.curr_Rate || 0).toFixed(2));
                                 }, 0)}
                           </TableCell>
                           <TableCell className='border data_td text-center bg-warning text-white p-1'>
@@ -2059,7 +2059,7 @@ const handleAssetForm = async (e) => {
                               filteredPayments
                                 .filter(entry =>entry?.payment_In)
                                 .reduce((total, entry) => {
-                                  return total + (Math.round(entry.curr_Amount || 0));
+                                  return total + ((entry.curr_Amount || 0).toFixed(2));
                                 }, 0)}
                           </TableCell>
                          </>

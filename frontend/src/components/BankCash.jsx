@@ -14,35 +14,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 export default function BankCash() {
   const { user } = useAuthContext()
   const [single,setSingle]=useState(0)
-const[banks,setBanks]=useState('')
-const[total,setTotal]=useState()
-const[loading2,setLoading2]=useState(false)
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const [show, setShow] = useState(false)
-
-const getBankCash = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
-
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
-    })
-
-    const json = await response.json();
-    if (response.ok) {
-     setBanks(json.data)
-     setTotal(json.bank_Cash)
-    }
-  }
-  catch (error) {
-    console.error('Fetch error:', error);
-    setNewMessage(toast.error('Server is not Responding...'));
-    setLoading(false);
-  }
-}
 
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
@@ -58,13 +32,60 @@ const getBankCash = async () => {
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
+  const[loading2,setLoading2]=useState(false)
 
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
 
-  console.log('overAllPayments',overAllPayments)
+  const aggregatedPayments = {};
+  let totalBankPaymentIn = 0;
+  let totalBankCashOutIn = 0;
+  let totalBankPaymentOut = 0;
+  let totalBankCashOutOut = 0;
+  
+  // Iterate through all payments
+  overAllPayments.forEach(payment => {
+    const paymentVia = payment.payment_Via;
+  
+    // Initialize the entry for this payment_Via if it doesn't exist
+    if (!aggregatedPayments[paymentVia]) {
+      aggregatedPayments[paymentVia] = {
+       
+        totalBankPaymentIn: 0,
+        totalBankCashOutIn: 0,
+        totalBankPaymentOut: 0,
+        totalBankCashOutOut: 0,
+      };
+    }
+    if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) && payment.payment_Via.toLowerCase() !== 'cash') {
+      aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
+      aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
+  
+      totalBankPaymentIn += payment.payment_In || 0;
+      totalBankCashOutIn += payment.cash_Out || 0;
+    }
+  
+  
+    if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) && payment.payment_Via.toLowerCase() !== 'cash') {
+      aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
+      aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
+  
+      totalBankPaymentOut += payment.payment_Out || 0;
+      totalBankCashOutOut += payment.cash_Out || 0;
+    }
+  });
+  
+  // Calculate the combined total for each payment_Via
+const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, totals]) => {
+  return {
+    paymentVia,
+    total: (totals.totalBankPaymentIn + totals.totalBankCashOutIn) - (totals.totalBankPaymentOut + totals.totalBankCashOutOut),
+  };
+});
+
+  const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
   // getting Data from DB
 
 
@@ -79,7 +100,6 @@ const getBankCash = async () => {
       setLoading2(true)
       await getCashInHandData();
       await getOverAllPayments()
-      await getBankCash()
       setLoading2(false)
 
     await getCategoryData()
@@ -135,7 +155,15 @@ const getBankCash = async () => {
   const handleCashIn = async (e) => {
     setLoading(true)
     e.preventDefault()
-
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setDate('');
     try {
       const response = await fetch(`${apiUrl}/auth/cash_in_hand/add/cash`, {
         method: "POST",
@@ -495,6 +523,7 @@ const getBankCash = async () => {
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
         paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase())&&
         (paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+        paymentItem.pp_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
         paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
         paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
         paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
@@ -670,7 +699,7 @@ const getBankCash = async () => {
                   <h4 className='text-center'>Bank Account Details</h4>
                 </div>
                 <div className="account-text mt-md-4 mt-3 text-center">
-                  <h6 className='my-2' onClick={() => setCurrent(1)}>{loading2 ? <CircularProgress></CircularProgress>: Math.round(total && total)}</h6>
+                  <h6 className='my-2' onClick={() => setCurrent(1)}>{loading2 ? <CircularProgress></CircularProgress>: Math.round(combinedTotalBankCash && combinedTotalBankCash)}</h6>
                   <h5 className='my-2'>Bank Cash </h5>
                   <Link className="cash_in_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
                   <Link className="cash_out_btn m-1 btn btn-sm shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
@@ -683,9 +712,9 @@ const getBankCash = async () => {
            <Table stickyHeader>
              <TableHead className="thead">
                <TableRow>
-                 {banks && banks.map((data)=>(
+                 {paymentViaTotals && paymentViaTotals.map((data)=>(
                    <>
-                   <TableCell className='label border text-center' style={{ width: '18.28%' }}>{data.payment_Via}</TableCell>
+                   <TableCell className='label border text-center' style={{ width: '18.28%' }}>{data.paymentVia}</TableCell>
                    </>
                  ))}
                <TableCell className='label border text-center' style={{ width: '18.28%' }}>TOTAL</TableCell>
@@ -693,12 +722,14 @@ const getBankCash = async () => {
                </TableRow>
              </TableHead>
              <TableBody>
-             {banks && banks.map((data)=>(
+             {paymentViaTotals && paymentViaTotals.map((data,index)=>(
                    <>
-                   <TableCell className='border data_td text-center ' style={{ width: '18.28%' }}>{Math.round(data.total_payment)}</TableCell>
+                   <TableCell className='border data_td text-center ' key={index} style={{ width: '18.28%' }}>{Math.round(data.total)}</TableCell>
                    </>
                  ))}
-                   <TableCell className='border data_td text-center text-white bg-success' style={{ width: '18.28%' }}>{Math.round(total && total)}</TableCell>
+                    <TableCell className='border data_td text-center text-white bg-success' style={{ width: '18.28%' }}>
+      {Math.round(paymentViaTotals ? paymentViaTotals.reduce((total, data) => total + data.total, 0) : 0)}
+    </TableCell>
              </TableBody>
            </Table>
           </TableContainer>
@@ -724,7 +755,7 @@ const getBankCash = async () => {
                             <TableRow>
                               <TableCell className='label border text-center' style={{ width: '18.28%' }}>SN</TableCell>
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Date</TableCell>
-                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border text-center'style={{ width: '18.28%' }}>Name</TableCell>
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Type</TableCell>
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Category</TableCell>
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Payment_Via</TableCell>
@@ -1136,7 +1167,7 @@ const getBankCash = async () => {
                             <TableRow>
                               <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Date</TableCell>
-                              <TableCell className='label border'style={{ width: '18.28%' }}>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Name/PP#</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Type</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Category</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Payment_Via</TableCell>
@@ -1167,7 +1198,7 @@ const getBankCash = async () => {
                                       <>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>

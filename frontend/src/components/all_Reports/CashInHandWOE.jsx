@@ -21,7 +21,6 @@ export default function CashInHandWOE() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const expenseCategories = useSelector((state) => state.setting.expenseCategories);
-  const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const { getCurrCountryData } = CurrCountryHook()
@@ -29,7 +28,32 @@ export default function CashInHandWOE() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const { getExpenses } = ExpenseHook()
-  const {getCashInHandData}=CashInHandHook()
+
+
+  const[totalCash,setTotalCash]=useState()
+
+  
+  const getBankCash = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/auth/reports/get/all/today/payments`, {
+  
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+  
+      const json = await response.json();
+      if (response.ok) {
+        setTotalCash(json.bank_Cash)
+      }
+    }
+    catch (error) {
+    
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  }
 
 
   const rowsPerPageOptions = [10, 15, 30];
@@ -121,13 +145,8 @@ export default function CashInHandWOE() {
   const { user } = useAuthContext()
   const fetchData = async () => {
     try {
-      // Use Promise.all to execute all promises concurrently
-      await Promise.all([
-        getCashInHandData(),
+        getBankCash()
         getExpenses()
-
-      ]);
-
     } catch (error) {
     }
   };
@@ -262,13 +281,12 @@ export default function CashInHandWOE() {
   });
   
   // Calculate total cash in hand
-const totalCashInHand = cashInHand.total_Cash ? cashInHand.total_Cash : 0;
 
 // Calculate total expenses
 const totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0);
 
 // Add total cash in hand and total expenses
-const total = totalCashInHand + totalExpenses;
+const total = totalCash + totalExpenses;
 
 
   const printExpenseTable = () => {

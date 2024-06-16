@@ -182,7 +182,7 @@ const[show,setShow]=useState(false)
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className='container-fluid entry_details mt-3'>
           <div className='row'>
-            <div className='col-md-12 p-0 border border-bottom'>
+            <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Overall Visa Profit Reports</h4>

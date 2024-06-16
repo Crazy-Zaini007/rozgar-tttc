@@ -79,7 +79,7 @@ export default function VisitAgentSinglePayOut() {
   // const [open, setOpen] = useState(true)
   // const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
-  let curr_Amount = Math.round(payment_Out / curr_Rate);
+  let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
 
 
   const [single, setSingle] = useState(0)

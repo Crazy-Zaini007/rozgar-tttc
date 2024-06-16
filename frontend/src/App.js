@@ -129,14 +129,14 @@ import VisitReports from './components/all_Reports/visitReports/VisitReports.jsx
 import EmployeeReports from './components/all_Reports/EmployeeReports.jsx'
 import NetVisaReports from './components/all_Reports/NetVisaReports.jsx'
 import OverAllVisaProfitReports from './components/all_Reports/OverAllVisaProfitReports.jsx'
-import CandVisaPaymentReports from './components/all_Reports/CandWisePaymentReports.jsx'
-import OverAllSystemPaymentReport from './components/all_Reports/OverAllSystemPaymentReport.jsx'
-import CombinePaymentReports from './components/all_Reports/CombinePaymentReport.jsx'
+import CandWisePaymentInReports from './components/all_Reports/CandWisePaymentInReports.jsx'
+import CandWisePaymentOutReports from './components/all_Reports/CandWisePaymentOutReports.jsx'
+
+import CombinePaymentInReports from './components/all_Reports/CombinePaymentInReport.jsx'
+import CombinePaymentOutReports from './components/all_Reports/CombinePaymentOutReport.jsx'
+
 import PaymentInReports from './components/all_Reports/PaymentInReports.jsx'
 import PaymentOutReports from './components/all_Reports/PaymentOutReports.jsx'
-
-
-
 
 import DayBook from './components/all_Reports/DayBook.jsx'
 import User from './components/user/User.jsx'
@@ -298,10 +298,14 @@ function App() {
           <Route path='/rozgar/reports/day_book' element={user && <DayBook></DayBook>}></Route>
           <Route path='/rozgar/reports/net_visa_reports' element={user && <NetVisaReports></NetVisaReports>}></Route>
           <Route path='/rozgar/reports/overall_visa_profit_reports' element={user && <OverAllVisaProfitReports></OverAllVisaProfitReports>}></Route>
-          <Route path='/rozgar/reports/cand_visa_payment_reports' element={user && <CandVisaPaymentReports></CandVisaPaymentReports>}></Route>
+          <Route path='/rozgar/reports/cand_visa_payment_in_reports' element={user && <CandWisePaymentInReports></CandWisePaymentInReports>}></Route>
+          <Route path='/rozgar/reports/cand_visa_payment_out_reports' element={user && <CandWisePaymentOutReports></CandWisePaymentOutReports>}></Route>
+
           <Route path='/rozgar/reports/direct_payment_in_reports' element={user && <PaymentInReports></PaymentInReports>}></Route>
           <Route path='/rozgar/reports/direct_payment_out_reports' element={user && <PaymentOutReports></PaymentOutReports>}></Route>
-          <Route path='/rozgar/reports/overall_combine_payment_reports' element={user && <CombinePaymentReports></CombinePaymentReports>}></Route>
+          <Route path='/rozgar/reports/overall_combine_payment_in_reports' element={user && <CombinePaymentInReports></CombinePaymentInReports>}></Route>
+          <Route path='/rozgar/reports/overall_combine_payment_out_reports' element={user && <CombinePaymentOutReports></CombinePaymentOutReports>}></Route>
+
 
 
           {/* Employee Routes */}

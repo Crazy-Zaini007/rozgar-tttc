@@ -36,7 +36,106 @@ export default function CashinHand() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
+  
+  const aggregatedPayments = {};
+  let totalPaymentIn = 0;
+  let totalCashOutIn = 0;
+  let totalPaymentOut = 0;
+  let totalCashOutOut = 0;
+  let totalCashPaymentIn = 0;
+  let totalCashCashOutIn = 0;
+  let totalCashPaymentOut = 0;
+  let totalCashCashOutOut = 0;
+  let totalBankPaymentIn = 0;
+  let totalBankCashOutIn = 0;
+  let totalBankPaymentOut = 0;
+  let totalBankCashOutOut = 0;
+  
+  // Iterate through all payments
+  overAllPayments.forEach(payment => {
+    const paymentVia = payment.payment_Via;
+  
+    // Initialize the entry for this payment_Via if it doesn't exist
+    if (!aggregatedPayments[paymentVia]) {
+      aggregatedPayments[paymentVia] = {
+        totalPaymentIn: 0,
+        totalCashOutIn: 0,
+        totalPaymentOut: 0,
+        totalCashOutOut: 0,
+        totalCashPaymentIn: 0,
+        totalCashCashOutIn: 0,
+        totalCashPaymentOut: 0,
+        totalCashCashOutOut: 0,
+        totalBankPaymentIn: 0,
+        totalBankCashOutIn: 0,
+        totalBankPaymentOut: 0,
+        totalBankCashOutOut: 0,
+      };
+    }
+  
+    // Update the sums based on payment type
+    if (payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) {
+      aggregatedPayments[paymentVia].totalPaymentIn += payment.payment_In || 0;
+      aggregatedPayments[paymentVia].totalCashOutIn += payment.cash_Out || 0;
+  
+      totalPaymentIn += payment.payment_In || 0;
+      totalCashOutIn += payment.cash_Out || 0;
+    }
+  
+    if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) && payment.payment_Via.toLowerCase() === 'cash') {
+      aggregatedPayments[paymentVia].totalCashPaymentIn += payment.payment_In || 0;
+      aggregatedPayments[paymentVia].totalCashCashOutIn += payment.cash_Out || 0;
+  
+      totalCashPaymentIn += payment.payment_In || 0;
+      totalCashCashOutIn += payment.cash_Out || 0;
+    }
+  
+    if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) && payment.payment_Via.toLowerCase() !== 'cash') {
+      aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
+      aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
+  
+      totalBankPaymentIn += payment.payment_In || 0;
+      totalBankCashOutIn += payment.cash_Out || 0;
+    }
+  
+    if (payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) {
+      aggregatedPayments[paymentVia].totalPaymentOut += payment.payment_Out || 0;
+      aggregatedPayments[paymentVia].totalCashOutOut += payment.cash_Out || 0;
+  
+      totalPaymentOut += payment.payment_Out || 0;
+      totalCashOutOut += payment.cash_Out || 0;
+    }
+  
+    if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) && payment.payment_Via.toLowerCase() === 'cash') {
+      aggregatedPayments[paymentVia].totalCashPaymentOut += payment.payment_Out || 0;
+      aggregatedPayments[paymentVia].totalCashCashOutOut += payment.cash_Out || 0;
+  
+      totalCashPaymentOut += payment.payment_Out || 0;
+      totalCashCashOutOut += payment.cash_Out || 0;
+    }
+  
+    if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) && payment.payment_Via.toLowerCase() !== 'cash') {
+      aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
+      aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
+  
+      totalBankPaymentOut += payment.payment_Out || 0;
+      totalBankCashOutOut += payment.cash_Out || 0;
+    }
+  });
+  
+  // Calculate the combined total for each payment_Via
+const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, totals]) => {
+  return {
+    paymentVia,
+    total: (totals.totalPaymentIn + totals.totalCashOutIn) - (totals.totalPaymentOut + totals.totalCashOutOut),
+  };
+});
 
+  // Calculate the combined total
+  const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
+  const combinedTotalCash = (totalCashPaymentIn + totalCashCashOutIn) - (totalCashPaymentOut + totalCashCashOutOut);
+  const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
+  
   // getting Data from DB
 
 
@@ -44,27 +143,7 @@ export default function CashinHand() {
   const [, setNewMessage] = useState('')
   const { user } = useAuthContext()
 
-const getBankCash = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
 
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
-    })
-
-    const json = await response.json();
-    if (response.ok) {
-     setTotal(json.bank_Cash)
-    }
-  }
-  catch (error) {
-    console.error('Fetch error:', error);
-    setNewMessage(toast.error('Server is not Responding...'));
-    setLoading(false);
-  }
-}
   const fetchData = async () => {
     try {
 
@@ -73,10 +152,6 @@ const getBankCash = async () => {
       await getCategoryData()
       await getPaymentViaData()
       await getPaymentTypeData()
-     
-      await getBankCash()
-
-
     } catch (error) {
     }
   };
@@ -138,7 +213,15 @@ const getBankCash = async () => {
   const handleCashIn = async (e) => {
     setLoading(true)
     e.preventDefault()
-
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setDate('');
     try {
       const response = await fetch(`${apiUrl}/auth/cash_in_hand/add/cash`, {
         method: "POST",
@@ -472,9 +555,6 @@ const getBankCash = async () => {
     XLSX.writeFile(wb, 'cashInHand.xlsx');
   };
 
-
-
-
   const [date2, setDate2] = useState('')
   const [date3, setDate3] = useState('')
   const [supplierName, setSupplierName] = useState('')
@@ -656,11 +736,11 @@ const getBankCash = async () => {
                 <div className="account-text mt-md-4 mt-3">
                  
                  <div className="middle text-center">
-                 <h6 className='my-2'>{Math.round((cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0))}</h6>
+                 <h6 className='my-2'>{Math.round(combinedTotalCash?combinedTotalCash:0)}</h6>
                   <h5 className='my-2'>Cash</h5>
-                  <h6 className='my-2'>{Math.round(total ? total :0)}</h6>
+                  <h6 className='my-2'>{Math.round(combinedTotalBankCash ? combinedTotalBankCash :0)}</h6>
                   <h5 className='my-2'>Banks Cash</h5>
-                 <h6 className='my-2' onClick={() => setCurrent(1)}>{Math.round(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
+                 <h6 className='my-2' onClick={() => setCurrent(1)}>{Math.round(combinedTotal?combinedTotal:0)}</h6>
                   <h5 className='my-2'>Total Cash In Hand</h5>
                   <Link className="cash_in_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
                   <Link className="cash_out_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
@@ -723,8 +803,7 @@ const getBankCash = async () => {
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
-                         
-
+                        
                           <div className="col-auto px-1">
                             <label htmlFor="">Category:</label>
                             <select value={category1} onChange={(e) => setCategory1(e.target.value)} className='m-0 p-1'>
@@ -982,7 +1061,7 @@ const getBankCash = async () => {
                             <TableRow>
                               <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Date</TableCell>
-                              <TableCell className='label border'style={{ width: '18.28%' }}>Supp/Agent/Cand</TableCell>
+                              <TableCell className='label border'style={{ width: '18.28%' }}>Name/PP#</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Type</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Category</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Payment_Via</TableCell>
@@ -1013,7 +1092,7 @@ const getBankCash = async () => {
                                       <>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}/{cash?.pp_N}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
