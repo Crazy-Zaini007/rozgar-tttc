@@ -76,6 +76,9 @@ employees && employees.forEach(employee => {
   }
 });
 
+
+// Calculating Expenses
+
 let totalExpense = 0;
 let currentMonthExpense = 0;
 let threeMonthsExpense = 0;
