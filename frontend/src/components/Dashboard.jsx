@@ -21,6 +21,7 @@ import { green, pink,deepOrange,purple,red   } from '@mui/material/colors';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
 import EmployeeHook from '../hooks/employeeHooks/EmployeeHook';
+import ExpenseHook from '../hooks/expenseHooks/ExpenseHook'
 
 export default function AdminDashboard() {
 
@@ -30,80 +31,70 @@ export default function AdminDashboard() {
 
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
   const { getEmployees } = EmployeeHook()
+  const { getExpenses } = ExpenseHook()
 
   const enteries = useSelector((state) => state.enteries.enteries);
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
   const employees = useSelector((state) => state.employees.employees)
+  const expenses = useSelector((state) => state.expenses.expenses);
 
 
 const today = new Date();
-
-  let totalEmployeeExpense=0
-  const filterTotalEmployeeExpense=employees && employees.map((employee)=>{
-    if(employee.payments){
-      const allMonths=employee.payments
-      for (const month of allMonths){
-        if(month.payment && month.payment.length>0){
-          const payments= month.payment
-          for (const payment of payments){
-            totalEmployeeExpense+=payment.payment_Out
-          }
-        }
-      }
-    }
-
-}
-)
-const currentMonthStart = new Date();
-currentMonthStart.setDate(1);
-currentMonthStart.setHours(0, 0, 0, 0);
-
 today.setHours(23, 59, 59, 999);
 
-let currentMonthEmployeeExpense = 0;
+// Calculate the start of the current month
+const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 
-const filterCurrentMonthEmployeeExpense = employees && employees.map((employee) => {
+// Calculate the date three months ago
+const lastThreeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 3, 1);
+
+let totalEmployeeExpense = 0;
+let currentMonthEmployeeExpense = 0;
+let threeMonthsEmployeeExpense = 0;
+
+// Iterate over all employees
+employees && employees.forEach(employee => {
   if (employee.payments) {
-    const allMonths = employee.payments;
-    for (const month of allMonths) {
+    employee.payments.forEach(month => {
       if (month.payment && month.payment.length > 0) {
-        const payments = month.payment;
-        for (const payment of payments) {
+        month.payment.forEach(payment => {
           const paymentDate = new Date(payment.date); // Assuming payment.date is the date of the payment
+          totalEmployeeExpense += payment.payment_Out;
+
+          // Check if the payment is within the current month
           if (paymentDate >= currentMonthStart && paymentDate <= today) {
             currentMonthEmployeeExpense += payment.payment_Out;
           }
-        }
-      }
-    }
-  }
-});
 
-
-const lastThreeMonthsAgo = new Date();
-lastThreeMonthsAgo.setMonth(lastThreeMonthsAgo.getMonth() - 3);
-lastThreeMonthsAgo.setHours(0, 0, 0, 0);
-today.setHours(23, 59, 59, 999);
-
-let threeMonthsEmployeeExpense = 0;
-
-const threeMonthsTotalEmployeeExpense = employees && employees.map((employee) => {
-  if (employee.payments) {
-    const allMonths = employee.payments;
-    for (const month of allMonths) {
-      if (month.payment && month.payment.length > 0) {
-        const payments = month.payment;
-        for (const payment of payments) {
-          const paymentDate = new Date(payment.date); // Assuming payment.date is the date of the payment
+          // Check if the payment is within the last three months
           if (paymentDate >= lastThreeMonthsAgo && paymentDate <= today) {
             threeMonthsEmployeeExpense += payment.payment_Out;
           }
-        }
+        });
       }
-    }
+    });
   }
 });
 
+let totalExpense = 0;
+let currentMonthExpense = 0;
+let threeMonthsExpense = 0;
+
+// Iterate over all expenses
+expenses && expenses.forEach(expense => {
+  const expenseDate = new Date(expense.date); // Assuming expense.date is the date of the expense
+  totalExpense += expense.payment_Out; // Assuming the amount of the expense is stored in expense.amount
+
+  // Check if the expense is within the current month
+  if (expenseDate >= currentMonthStart && expenseDate <= today) {
+    currentMonthExpense += expense.payment_Out;
+  }
+
+  // Check if the expense is within the last three months
+  if (expenseDate >= lastThreeMonthsAgo && expenseDate <= today) {
+    threeMonthsExpense += expense.payment_Out;
+  }
+});
 
 
   const[totalAdvancePaymentIn,setTotalAdvancePaymentIn]=useState()
@@ -141,11 +132,10 @@ const apiUrl = process.env.REACT_APP_API_URL;
         setTodayAdvancePaymentOut(json.todayAdvancePaymentOut)
         setTodayTotalCashIn(json.todayCashIn)
         setTodayTotalCashOut(json.todayCashOut)
-        
       }
     }
     catch (error) {
-      console.error('Fetch error:', error);
+      
       
     }
   }
@@ -162,12 +152,12 @@ const fetchData = async () => {
     await getEntries();
     setLoading1(false)
     await getEmployees();
+    await getExpenses()
     setLoading5(false)
     await getCashInHandData();
     setLoading2(false)
     await getOverAllPayments();
     setLoading3(false)
-
     await getCash()
     setLoading4(false)
 
@@ -639,7 +629,7 @@ const topButtons=[
   {text:'Add New Entry',navigate:'/rozgar/enteries/add_new_entry'},
   {text:'Add Expense',navigate:'/rozgar/expenses/add_new_expense'},
   {text:'Candidate Payment In',navigate:'/rozgar/candidates/payment_in'},
-  {text:'Agent Payment Out',navigate:'/rozgar/agents/payment_out'},
+  {text:'Agent Payment In',navigate:'/rozgar/agents/payment_in'},
   {text:'Agent Cand-Vise Payment Out',navigate:'/rozgar/agents/cand_vise_payment_out'},
   {text:'Supplier Payment Out',navigate:'/rozgar/suppliers/payment_out'},
   {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/suppliers/cand_vise_payment_out'},
@@ -648,7 +638,7 @@ const topButtons=[
 ]
 const navigationButtons=[
   {text:'Direct Payment',navigate:'/rozgar/direct/payment_in_out'},
-  {text:'Agent Payment In',navigate:'/rozgar/agents/payment_in'},
+  {text:'Agent Payment Out',navigate:'/rozgar/agents/payment_out'},
   {text:'Agent Payment Return',navigate:'/rozgar/agents/payment_return'},
   {text:'Agent Cand-Vise Payment In',navigate:'/rozgar/agents/cand_vise_payment_in'},
   {text:'Supplier Payment In',navigate:'/rozgar/suppliers/payment_in'},
@@ -849,8 +839,8 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{employees ? totalEmployeeExpense:0 }</h5> }
-                <h6 className='ml-2'>Employees Total Expense <br /> </h6>
+            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? totalEmployeeExpense:0)+(expenses?totalExpense:0) }</h5> }
+                <h6 className='ml-2'>Total Expenses with Employess <br /> </h6>
             </div>
           </div> 
             </Link>
@@ -871,8 +861,8 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{employees ? currentMonthEmployeeExpense:0 }</h5> }
-                <h6 className='ml-2'>Employees Current Month Expenses <br /> </h6>
+            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? currentMonthEmployeeExpense:0)+(expenses? currentMonthExpense:0) }</h5> }
+                <h6 className='ml-2'> Current Month Expenses with Employess<br /> </h6>
             </div>
           </div> 
             </Link>
@@ -891,8 +881,8 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{employees ? threeMonthsEmployeeExpense:0 }</h5> }
-                <h6 className='ml-2'>Employees Last 3 Month Expenses <br /> </h6>
+            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? threeMonthsEmployeeExpense:0)+(expenses ?threeMonthsExpense:0)}</h5> }
+                <h6 className='ml-2'>Last 3 Month Expenses with Employess<br /> </h6>
             </div>
           </div> 
             </Link>
