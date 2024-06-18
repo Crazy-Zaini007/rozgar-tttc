@@ -178,7 +178,7 @@ useEffect(() => {
     fetchData()
     return () => {
       if (abortCont.current) {
-        abortCont.current.abort(); 
+        abortCont.current.abort() 
       }
     }
 }, []);
