@@ -208,8 +208,8 @@ export default function SinglePaymentIn() {
 
   return (
     <>
-      <div className="col-md-12 ">
-        {!option && <TableContainer component={Paper}>
+      <div className="col-md-12 p-0 border-0 border-bottom">
+        {!option && <TableContainer>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
               {close === false &&

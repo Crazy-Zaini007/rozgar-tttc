@@ -1468,7 +1468,7 @@ export default function SupPaymentInDetails() {
     <>
       {!option &&
         <>
-          <div className='col-md-12 '>
+          <div className='col-md-12 p-0 border-0 border-bottom'>
             <div className='pt-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>PaymentIn Details</h4>
@@ -1492,7 +1492,7 @@ export default function SupPaymentInDetails() {
           }
 
           <div className="col-md-12 filters ">
-            <div className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2'>
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label>
@@ -1527,7 +1527,7 @@ export default function SupPaymentInDetails() {
 
           {!isLoading &&
             <div className='col-md-12 p-0'>
-              <div className='py-3 mb-1 px-2 detail_table'>
+              <div className='py-3 mb-1 px-1 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                     <TableHead>
@@ -1728,7 +1728,7 @@ export default function SupPaymentInDetails() {
       {option && selectedSupplier && (
         <>
           {/* Display Table for selectedSupplier's payment details array */}
-          <div className="col-md-12 my-2 ">
+          <div className="col-md-12 my-2 p-0">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
                 <h4 className='d-inline '>Supplier Name: <span>{selectedSupplier}</span></h4>

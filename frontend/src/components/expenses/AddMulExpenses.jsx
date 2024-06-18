@@ -135,18 +135,18 @@ export default function AddMulExpenses() {
       <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
             <div className="row">
-            <div className="col-md-12">
-                            <Paper className='py-3 mb-1 px-2'>
+            <div className="col-md-12 p-0 border-0 border-bottom">
+                            <div className='py-3 mb-1 px-2'>
                                 <h4>Adding Multiple Expenses</h4>
                                 <label className="btn m-1 py-2 btn-sm upload_btn">
-                  Upload New List
+                  Upload New List 
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>
-                            </Paper>
+                            </div>
                         </div>
-                        <div className="col-md-12 multiple_form">
+                        <div className="col-md-12 multiple_form p-0">
 
-<Paper>
+<div>
   <form className='py-0 px-2' onSubmit={handleUploadList} >
     <div className="text-end">
       <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Expenses"}</button>
@@ -194,7 +194,7 @@ export default function AddMulExpenses() {
     </div>
 
   </form>
-</Paper>
+</div>
 
 </div>
             </div>

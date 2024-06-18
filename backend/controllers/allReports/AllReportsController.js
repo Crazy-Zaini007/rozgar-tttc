@@ -76,6 +76,8 @@ const getAllPayments = async (req, res) => {
         invoice: expense.invoice,
         cash_Out:0,
         remaining:0,
+        remaining_Curr:0,
+
       };
       mergedPayments.push(expenseDetails);
     })
@@ -89,6 +91,7 @@ const getAllPayments = async (req, res) => {
               (payment)=>({
                 supplierName:employee.employeeName,
                 remaining:employee.remaining,
+                remaining_Curr:0,
                 type:'Employee Payment',
                 ...payment.toObject(),
 
@@ -110,6 +113,7 @@ const getAllPayments = async (req, res) => {
             supplierName: cdwoc.payment_In_Schema.supplierName,
             type: "CDWOC_Payment",
             remaining: cdwoc.payment_In_Schema.total_Payment_In-cdwoc.payment_In_Schema.total_Payment_Out,
+            remaining_Curr:0,
             ...payment.toObject(),
           })
         );
@@ -125,6 +129,8 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: asset.payment_In_Schema.assetName,
             remaining: asset.payment_In_Schema.total_Payment_In-asset.payment_In_Schema.total_Payment_Out,
+        remaining_Curr:0,
+
             type: "Asset_Payment",
             ...payment.toObject(),
           })
@@ -141,6 +147,7 @@ const getAllPayments = async (req, res) => {
       (payment) => ({
         supplierName: cdwc.payment_In_Schema.supplierName,
         remaining: cdwc.payment_In_Schema.total_Payment_In-cdwc.payment_In_Schema.total_Payment_Out,
+        remaining_Curr:0,
         type: "CDWC_Payment",
         ...payment.toObject(),
       })
@@ -159,6 +166,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Agent_Payment_In",
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             ...payment.toObject(),
           })
         );
@@ -171,6 +179,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Agent_Cand_Wise_Payment_In",
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             ...payment.toObject(),
           })
         );
@@ -183,6 +192,8 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Agent_Payment_Out",
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
+
             ...payment.toObject(),
           })
         );
@@ -193,6 +204,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Agent_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
@@ -209,6 +221,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Supplier_Payment_In",
             ...payment.toObject(),
           })
@@ -223,6 +236,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_In_Schema.supplierName,
             type: "Supplier_Cand_Wise_Payment_In",
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             ...payment.toObject(),
           })
         );
@@ -233,6 +247,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Supplier_Payment_Out",
             ...payment.toObject(),
           })
@@ -245,6 +260,7 @@ const getAllPayments = async (req, res) => {
           (payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Supplier_Cand_Wise_Payment_Out",
             ...payment.toObject(),
           })
@@ -263,6 +279,7 @@ const getAllPayments = async (req, res) => {
             pp_No:agent.payment_In_Schema.pp_No,
             type: "Candidate_Payment_In",
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             ...payment.toObject(),
           })
         );
@@ -274,6 +291,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             pp_No:agent.payment_Out_Schema.pp_No,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Candidate_Payment_Out",
             ...payment.toObject(),
           })
@@ -293,6 +311,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Azad_Agent_In",
             ...payment.toObject(),
           }));
@@ -307,6 +326,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             type: "Azad_Agent_Out",
             remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             ...payment.toObject(),
           }));
         mergedPayments = mergedPayments.concat(azadAgentsPaymentOutDetails);
@@ -324,6 +344,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Ticket_Agent_In",
             ...payment.toObject(),
           }));
@@ -337,6 +358,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Ticket_Agent_Out",
             ...payment.toObject(),
           }));
@@ -355,6 +377,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Visit_Agent_In",
             ...payment.toObject(),
           }));
@@ -368,6 +391,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Visit_Agent_Out",
             ...payment.toObject(),
           }));
@@ -386,6 +410,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Azad_Supplier_In",
             ...payment.toObject(),
           }));
@@ -399,6 +424,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Azad_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -417,6 +443,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Ticket_Supplier_In",
 
             ...payment.toObject(),
@@ -431,6 +458,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Ticket_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -451,6 +479,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_In_Schema.payment.map((payment) => ({
             supplierName: agent.payment_In_Schema.supplierName,
             remaining: agent.payment_In_Schema.total_Azad_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Visit_Supplier_In",
             ...payment.toObject(),
           }));
@@ -464,6 +493,7 @@ const getAllPayments = async (req, res) => {
           agent.payment_Out_Schema.payment.map((payment) => ({
             supplierName: agent.payment_Out_Schema.supplierName,
             remaining: agent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Visit_Supplier_Out",
             ...payment.toObject(),
           }));
@@ -482,6 +512,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_In_Schema.supplierName,
             pp_No:agent.payment_In_Schema.pp_No,
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Azad_Candidate_In",
 
             ...payment.toObject(),
@@ -497,6 +528,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             pp_No:agent.payment_Out_Schema.pp_No,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Azad_Candidate_Out",
 
             ...payment.toObject(),
@@ -517,7 +549,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_In_Schema.supplierName,
             pp_No:agent.payment_In_Schema.pp_No,
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
-
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Ticket_Candidate_In",
             ...payment.toObject(),
           }));
@@ -532,6 +564,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             pp_No:agent.payment_Out_Schema.pp_No,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Ticket_Candidate_Out",
             ...payment.toObject(),
           }));
@@ -551,6 +584,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_In_Schema.supplierName,
             pp_No:agent.payment_In_Schema.pp_No,
             remaining: agent.payment_In_Schema.total_Visa_Price_In_PKR-agent.payment_In_Schema.total_Payment_In+agent.payment_In_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_In_Schema.total_Visa_Price_In_Curr-agent.payment_In_Schema.total_Payment_In_Curr,
             type: "Visit_Candidate_In",
             ...payment.toObject(),
           }));
@@ -565,6 +599,7 @@ const getAllPayments = async (req, res) => {
             supplierName: agent.payment_Out_Schema.supplierName,
             pp_No:agent.payment_Out_Schema.pp_No,
             remaining: agent.payment_Out_Schema.total_Visa_Price_Out_PKR-agent.payment_Out_Schema.total_Payment_Out+agent.payment_Out_Schema.total_Cash_Out,
+            remaining_Curr: agent.payment_Out_Schema.total_Visa_Price_Out_Curr-agent.payment_Out_Schema.total_Payment_Out_Curr,
             type: "Visit_Candidate_Out",
             ...payment.toObject(),
           }))
@@ -577,6 +612,7 @@ const getAllPayments = async (req, res) => {
   let allPayments=myCashInHand.payment && myCashInHand.payment.map((myPayment)=>({
     supplierName:'Direct Cash',
     remaining: 0,
+    remaining_Curr: 0,
     type:"Direct Cash",
     ...myPayment.toObject()
   }))

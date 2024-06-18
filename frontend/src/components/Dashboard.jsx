@@ -156,8 +156,6 @@ const fetchData = async () => {
     setLoading1(false)
     await getEmployees();
     await getExpenses()
-    setLoading5(false)
-    await getCashInHandData();
     setLoading2(false)
     await getOverAllPayments();
     setLoading3(false)
@@ -186,6 +184,51 @@ useEffect(() => {
 }, []);
 
 
+
+const aggregatedPayments = {};
+let totalPaymentIn = 0;
+let totalCashOutIn = 0;
+let totalPaymentOut = 0;
+let totalCashOutOut = 0;
+
+// Iterate through all payments
+overAllPayments.forEach(payment => {
+  const paymentVia = payment.payment_Via;
+
+  // Initialize the entry for this payment_Via if it doesn't exist
+  if (!aggregatedPayments[paymentVia]) {
+    aggregatedPayments[paymentVia] = {
+      totalPaymentIn: 0,
+      totalCashOutIn: 0,
+      totalPaymentOut: 0,
+      totalCashOutOut: 0,
+    };
+  }
+
+  // Update the sums based on payment type
+  if (payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) {
+    aggregatedPayments[paymentVia].totalPaymentIn += payment.payment_In || 0;
+    aggregatedPayments[paymentVia].totalCashOutIn += payment.cash_Out || 0;
+
+    totalPaymentIn += payment.payment_In || 0;
+    totalCashOutIn += payment.cash_Out || 0;
+  }
+  if (payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) {
+    aggregatedPayments[paymentVia].totalPaymentOut += payment.payment_Out || 0;
+    aggregatedPayments[paymentVia].totalCashOutOut += payment.cash_Out || 0;
+
+    totalPaymentOut += payment.payment_Out || 0;
+    totalCashOutOut += payment.cash_Out || 0;
+  }
+});
+
+
+// Calculate the combined total
+const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
+
+
+
+
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   
   const flightsThisMonth = enteries ? enteries.filter(entry => {
@@ -208,6 +251,7 @@ useEffect(() => {
     // Exclude today's date
     return flightDate >= threeMonthsAgo && flightDate < today;
   }).length : 0;
+
 
 
 
@@ -906,7 +950,7 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end">
-            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{Math.round( cashInHand && cashInHand.total_Cash ? cashInHand.total_Cash:0)}</h5> }
+            {loading3 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{( overAllPayments ? combinedTotal:0).toFixed(2)}</h5> }
             <h6 className='ml-2'>Cash In Hand</h6>
             </div>
           </div> 
@@ -1169,7 +1213,10 @@ const[option,setOption]=useState(false)
                             <TableCell className='label border'>Cash_In_Return</TableCell>
                             <TableCell className='label border'>Cash_Out_Return</TableCell>
                             <TableCell className='label border'>Remining_In</TableCell>
+                            <TableCell className='label border'>Remining_In_Curr</TableCell>
                             <TableCell className='label border'>Remining_Out</TableCell>
+                            <TableCell className='label border'>Remining_Out_Curr</TableCell>
+
                            {show && 
                            <>
                             <TableCell className='label border'>Curr_Rate</TableCell>
@@ -1204,8 +1251,10 @@ const[option,setOption]=useState(false)
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0)?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0)?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
                                      {show &&
                                      <>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
@@ -1279,18 +1328,7 @@ const[option,setOption]=useState(false)
     return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
   }, 0)}
 </TableCell>
-<TableCell className='border data_td text-center bg-success text-white'>
-  {/* Calculate the total sum of remaining based on payment_In */}
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.payment_In > 0 ? entry.remaining || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-danger text-white'>
-  {/* Calculate the total sum of remaining based on payment_Out */}
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.payment_Out > 0 ? entry.remaining || 0 : 0)); 
-  }, 0)}
-</TableCell>
+
 
    
  {show &&

@@ -861,8 +861,8 @@ const formattedDate = formatDate(new Date());
     <>
       {!option &&
         <>
-          <div className='col-md-12 '>
-            <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+          <div className='col-md-12 p-0 border-0 border-bottom'>
+            <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>Payment Details</h4>
               </div>
@@ -875,7 +875,7 @@ const formattedDate = formatDate(new Date());
                   </>
                 }
               </div>
-            </Paper>
+            </div>
           </div>
           {isLoading &&
             <div className='col-md-12 text-center my-4'>
@@ -883,7 +883,7 @@ const formattedDate = formatDate(new Date());
             </div>
           }
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2 '>
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label>
@@ -904,11 +904,11 @@ const formattedDate = formatDate(new Date());
                   </select>
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
          {!isLoading && 
-          <div className='col-md-12'>
-          <Paper className='py-3 mb-1 px-2 detail_table'>
+          <div className='col-md-12 p-0'>
+          <div className='py-3 mb-1 px-1 detail_table'>
             <TableContainer sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead>
@@ -928,7 +928,7 @@ const formattedDate = formatDate(new Date());
                 </TableHead>
 
                 <TableBody>
-                  {filteredTotalPaymentIn.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
+                  {filteredTotalPaymentIn.map((entry, index) => (
                     <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
                       <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
@@ -994,22 +994,9 @@ const formattedDate = formatDate(new Date());
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={rowsPerPageOptions}
-              component='div'
-              count={filteredTotalPaymentIn.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              style={{
-                color: 'blue',
-                fontSize: '14px',
-                fontWeight: '700',
-                textTransform: 'capitalize',
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
+           
+           
+          </div>
         </div>
          }
         </>
@@ -1018,7 +1005,7 @@ const formattedDate = formatDate(new Date());
       {option && selectedSupplier && (
         <>
           {/* Display Table for selectedSupplier's payment details array */}
-          <div className="col-md-12 my-2">
+          <div className="col-md-12 my-2 p-0">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
                 <h4 className='d-inline '>Supplier Name: <span>{selectedSupplier}</span></h4>
@@ -1033,7 +1020,7 @@ const formattedDate = formatDate(new Date());
             </div>
           </div>
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Serach Here:</label>
@@ -1077,11 +1064,11 @@ const formattedDate = formatDate(new Date());
                   </select>
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
           <div className="col-md-12 detail_table my-2">
             <h6>Payment In/Out Details</h6>
-            <TableContainer component={Paper}>
+            <TableContainer>
               <Table>
                 <TableHead className="thead">
                   <TableRow>

@@ -1960,6 +1960,8 @@ const handleAssetForm = async (e) => {
                               <TableCell className='label border p-1'>Slip_No</TableCell>
                               <TableCell className='label border p-1'>Cash_In</TableCell>
                               <TableCell className='label border p-1'>Cash_Return</TableCell>
+                              <TableCell className='label border p-1'>Remining_In</TableCell>
+                              <TableCell className='label border p-1'>Remining_In_Curr</TableCell>
                              
                               {show && 
                               <>
@@ -1980,16 +1982,18 @@ const handleAssetForm = async (e) => {
                               <>
                                 <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
                                   <>
-                                    <TableCell className='border text-center data_td  p-1'>{outerIndex + 1}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'>{cash.date}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'>{outerIndex + 1}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'>{cash.date}</TableCell>
                                     <TableCell className='border data_td text-center p-1'>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                     <TableCell className='border text-center data_td p-1'>{cash.type}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'>{cash.category}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'>{cash.payment_Via}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'>{cash.payment_Type}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'>{cash?.slip_No}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'>{cash.category}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'>{cash.payment_Via}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'>{cash.payment_Type}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border text-center data_td p-1'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                    <TableCell className='border text-center data_td  p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border text-center data_td p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border data_td text-center p-1'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
+                                    <TableCell className='border data_td text-center p-1'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
                                     {show &&
                                        <>
                                         <TableCell className='border text-center data_td p-1'>{(cash?.curr_Rate||0).toFixed(2)}</TableCell>

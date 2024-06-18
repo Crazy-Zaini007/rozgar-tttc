@@ -339,8 +339,8 @@ export default function CDWOCPaymentOut() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
-            <div className="col-md-12">
-              <Paper className='py-3 mb-1 px-2'>
+            <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-3 mb-1 px-2'>
                 <h4>Credits&Debits Payment Out</h4>
                 <button className='btn btn-sm  m-1  entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
                 <button className='btn btn-sm  m-1  entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
@@ -349,13 +349,13 @@ export default function CDWOCPaymentOut() {
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
                 <button className='btn btn-sm  m-1  entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
-              </Paper>
+              </div>
             </div>
             {single === 1 &&
               <>
-                <div className="col-md-12 multiple_form">
+                <div className="col-md-12 multiple_form p-0 border-0 border-bottom">
 
-                  <Paper>
+                 
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
                         <button className='btn btn-sm  submit_btn m-1'>Add Payment</button>
@@ -403,15 +403,14 @@ export default function CDWOCPaymentOut() {
                       </div>
 
                     </form>
-                  </Paper>
-
+            
                 </div>
               </>
             }
             {single === 0 &&
               <>
-                <div className="col-md-12 ">
-                  {!option && <TableContainer component={Paper}>
+                <div className="col-md-12 p-0 border-0 border-bottom">
+                  {!option && <TableContainer>
                     <form className='py-3 px-2' onSubmit={handleForm}>
                       <div className="text-end ">
                         {close === false &&
@@ -538,8 +537,8 @@ export default function CDWOCPaymentOut() {
                     {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
                   </div>
                   {option && (
-                    <div className="col-md-12 detail_table">
-                      <TableContainer component={Paper}>
+                    <div className="col-md-12 detail_table p-0">
+                      <TableContainer >
                         <Table aria-label="customized table">
                           <TableHead className="thead">
                             <TableRow>

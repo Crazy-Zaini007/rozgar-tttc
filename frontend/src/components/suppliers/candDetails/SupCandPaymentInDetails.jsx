@@ -1665,7 +1665,7 @@ const[rowsValue1,setRowsValue1]=useState("")
     <>
       {!option &&
         <>
-          <div className='col-md-12 p-0'>
+          <div className='col-md-12 p-0 border-0 border-bottom'>
             <div className='pt-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>Cand-Vise PaymentIn Details</h4>
@@ -1689,7 +1689,7 @@ const[rowsValue1,setRowsValue1]=useState("")
             </div>
           }
           <div className="col-md-12 filters">
-            <div className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2 '>
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label>
@@ -1724,7 +1724,7 @@ const[rowsValue1,setRowsValue1]=useState("")
 
           {!isLoading &&
             <div className='col-md-12 p-0'>
-              <div className='py-3 mb-1 px-2 detail_table'>
+              <div className='py-3 mb-1 px-1 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                     <TableHead>
@@ -1752,7 +1752,7 @@ const[rowsValue1,setRowsValue1]=useState("")
 
                     <TableBody>
                       {filteredTotalPaymentIn
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, outerIndex) => (
+                        .map((entry, outerIndex) => (
                           // Map through the payment array
                           <React.Fragment key={outerIndex}>
 
@@ -1899,21 +1899,7 @@ const[rowsValue1,setRowsValue1]=useState("")
 
                   </Table>
                 </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={rowsPerPageOptions}
-                  component='div'
-                  count={filteredTotalPaymentIn.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  style={{
-                    color: 'blue',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    textTransform: 'capitalize',
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+              
               </div>
             </div>
           }
@@ -1923,7 +1909,7 @@ const[rowsValue1,setRowsValue1]=useState("")
       {option && selectedSupplier && (
         <>
           {/* Display Table for selectedSupplier's payment details array */}
-          <div className="col-md-12 my-2">
+          <div className="col-md-12 my-2 p-0">
             <div className="d-flex justify-content-between supplier_Name">
               <div className="left d-flex">
                 <h4 className='d-inline '>Supplier Name: <span>{selectedSupplier}</span></h4>
@@ -1961,7 +1947,7 @@ const[rowsValue1,setRowsValue1]=useState("")
          {!details &&
          <>
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Serach Here:</label>
@@ -2005,7 +1991,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
           <div className="col-md-12 detail_table my-2">
           <div className="d-flex justify-content-between">
@@ -2028,7 +2014,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
               </div>
             </div>
-            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+            <TableContainer  sx={{ maxHeight: 600 }}>
             <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
@@ -2223,7 +2209,7 @@ const[rowsValue1,setRowsValue1]=useState("")
           </div>
 
           <div className="col-md-12 filters">
-            <Paper className='py-1 mb-2 px-3'>
+            <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Search Here:</label>
@@ -2343,7 +2329,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
               </div>
-            </Paper>
+            </div>
           </div>
           <div className="col-md-12 detail_table my-2">
             <div className="d-flex justify-content-between">
@@ -2370,7 +2356,7 @@ const[rowsValue1,setRowsValue1]=useState("")
 
               </div>
             </div>
-            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+            <TableContainer sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
@@ -2600,7 +2586,7 @@ const[rowsValue1,setRowsValue1]=useState("")
 <>
 <div className="col-md-12 detail_table my-2">
             <h6>Individual Payment Details</h6>
-            <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+            <TableContainer  sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>

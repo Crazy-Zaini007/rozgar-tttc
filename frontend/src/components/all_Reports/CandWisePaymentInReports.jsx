@@ -213,7 +213,8 @@ export default function CandWisePaymentInReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Remaining</TableCell>
+                              <TableCell className='label border'>Remining_In</TableCell>
+                              <TableCell className='label border'>Remining_In_Curr</TableCell>
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
@@ -236,7 +237,8 @@ export default function CandWisePaymentInReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.remaining}</TableCell>
+                                    <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
@@ -275,15 +277,7 @@ export default function CandWisePaymentInReports() {
                                   return total + (entry.payment_In || 0);
                                 }, 0)}
                           </TableCell>
-                          <TableCell className='border data_td text-center bg-success text-white'>
-                            {/* Calculate the total sum of payment_In */}
-                            {overAllPayments &&  overAllPayments.length > 0 &&
-                              overAllPayments
-                                .filter(entry => entry.type.toLowerCase().includes('in')&& entry.payments && entry.payments.length > 0)
-                                .reduce((total, entry) => {
-                                  return total + (entry.remaining || 0);
-                                }, 0)}
-                          </TableCell>
+                        
 
 
                             </TableRow>

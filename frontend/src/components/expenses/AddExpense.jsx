@@ -115,6 +115,7 @@ export default function AddExpense() {
         setExpCategory('');
         setPayment_Via('');
         setPayment_Type('');
+        setPayment_Out('')
         setSlip_No('');
         setSlip_Pic('');
         setDetails('');
@@ -183,13 +184,13 @@ export default function AddExpense() {
       <div className={`${collapsed ?"collapsed":"main"}`}>
                 <div className="container-fluid payment_form">
                     <div className="row">
-                        <div className="col-md-12">
-                            <Paper className='py-3 mb-1 px-2'>
+                        <div className="col-md-12 p-0 border-0 border-bottom">
+                            <div className='py-3 mb-1 px-2'>
                                 <h4>Adding Expenses</h4>
-                            </Paper>
+                            </div>
                         </div>
-                        <div className="col-md-12 ">
-                            <TableContainer component={Paper}>
+                        <div className="col-md-12 p-0 ">
+                            <TableContainer >
                                 <form className='py-3 px-2' onSubmit={handleForm}>
                                     <div className="text-end ">
                                         <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Expense"}</button>

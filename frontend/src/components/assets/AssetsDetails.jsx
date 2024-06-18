@@ -11,9 +11,9 @@ export default function CDWCDetails() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid py-2 payment_details">
+        <div className="container-fluid payment_details">
           <div className="row">
-            <div className='col-md-12 '>
+            <div className='col-md-12 p-0 border-0 border-bottom'>
             </div>
             {option === 0 &&
               <AssetsPaymentsDetails></AssetsPaymentsDetails>

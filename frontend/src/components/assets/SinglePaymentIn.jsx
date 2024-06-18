@@ -193,8 +193,8 @@ export default function SinglePaymentIn() {
 
   return (
     <>
-      <div className="col-md-12 ">
-        {!option && <TableContainer component={Paper}>
+      <div className="col-md-12 p-0 border-0 border-bottom">
+        {!option && <TableContainer >
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
              
@@ -306,12 +306,12 @@ export default function SinglePaymentIn() {
 
       {/* Details */}
       <div className="row payment_details mt-0">
-        <div className="col-md-12 my-2">
+        <div className="col-md-12 my-2 ">
           {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
+          <div className="col-md-12 detail_table p-0" >
+            <TableContainer >
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>

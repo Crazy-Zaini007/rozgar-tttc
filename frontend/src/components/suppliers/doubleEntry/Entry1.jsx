@@ -1246,8 +1246,8 @@ const handleTicketCandForm = async (e) => {
 
   return (
     <>
-      <div className="col-md-12 ">
-        {!option && <TableContainer component={Paper}>
+      <div className="col-md-12 p-0 border-0 border-bottom">
+        {!option && <TableContainer >
           <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"&& handleAssetForm)}>
             <div className="text-end ">
              
@@ -1559,8 +1559,8 @@ const handleTicketCandForm = async (e) => {
           {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
+          <div className="col-md-12 detail_table p-0">
+            <TableContainer>
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>

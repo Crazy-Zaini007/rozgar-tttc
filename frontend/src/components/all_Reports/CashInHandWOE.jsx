@@ -22,53 +22,8 @@ export default function CashInHandWOE() {
   const paymentType = useSelector((state) => state.setting.paymentType);
   const expenseCategories = useSelector((state) => state.setting.expenseCategories);
   const apiUrl = process.env.REACT_APP_API_URL;
-
-  const { getCurrCountryData } = CurrCountryHook()
-  const { getExpenseCategoryData } = ExpeCategoryHook()
-  const { getPaymentViaData } = PaymentViaHook()
-  const { getPaymentTypeData } = PaymentTypeHook()
   const { getExpenses } = ExpenseHook()
-
-
-  const[totalCash,setTotalCash]=useState()
-
-  
-  const getBankCash = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/auth/reports/get/all/today/payments`, {
-  
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`
-        }
-      })
-  
-      const json = await response.json();
-      if (response.ok) {
-        setTotalCash(json.bank_Cash)
-      }
-    }
-    catch (error) {
-    
-      setNewMessage(toast.error('Server is not Responding...'));
-      setLoading(false);
-    }
-  }
-
-
-  const rowsPerPageOptions = [10, 15, 30];
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const {getOverAllPayments,overAllPayments}=CashInHandHook()
 
 
   const expenses = useSelector((state) => state.expenses.expenses);
@@ -145,7 +100,7 @@ export default function CashInHandWOE() {
   const { user } = useAuthContext()
   const fetchData = async () => {
     try {
-        getBankCash()
+      getOverAllPayments()
         getExpenses()
     } catch (error) {
     }
@@ -285,8 +240,50 @@ export default function CashInHandWOE() {
 // Calculate total expenses
 const totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0);
 
+
+const aggregatedPayments = {};
+let totalPaymentIn = 0;
+let totalCashOutIn = 0;
+let totalPaymentOut = 0;
+let totalCashOutOut = 0;
+
+// Iterate through all payments
+overAllPayments.forEach(payment => {
+  const paymentVia = payment.payment_Via;
+
+  // Initialize the entry for this payment_Via if it doesn't exist
+  if (!aggregatedPayments[paymentVia]) {
+    aggregatedPayments[paymentVia] = {
+      totalPaymentIn: 0,
+      totalCashOutIn: 0,
+      totalPaymentOut: 0,
+      totalCashOutOut: 0,
+    };
+  }
+
+  // Update the sums based on payment type
+  if (payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) {
+    aggregatedPayments[paymentVia].totalPaymentIn += payment.payment_In || 0;
+    aggregatedPayments[paymentVia].totalCashOutIn += payment.cash_Out || 0;
+
+    totalPaymentIn += payment.payment_In || 0;
+    totalCashOutIn += payment.cash_Out || 0;
+  }
+  if (payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) {
+    aggregatedPayments[paymentVia].totalPaymentOut += payment.payment_Out || 0;
+    aggregatedPayments[paymentVia].totalCashOutOut += payment.cash_Out || 0;
+
+    totalPaymentOut += payment.payment_Out || 0;
+    totalCashOutOut += payment.cash_Out || 0;
+  }
+});
+
+
+// Calculate the combined total
+const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
+
 // Add total cash in hand and total expenses
-const total = totalCash + totalExpenses;
+const total = combinedTotal + totalExpenses;
 
 
   const printExpenseTable = () => {

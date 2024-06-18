@@ -466,8 +466,8 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
   return (
    <>
-    <TableContainer component={Paper} className="mt-1">
-      <div className="col-md-12 ">
+    <TableContainer className="mt-1">
+      <div className="col-md-12 p-0 border-0 border-bottom">
         {!option && (
           <>
             <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
@@ -679,8 +679,8 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
           </div>
         </div>
         {option && (
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
+          <div className="col-md-12 detail_table p-0">
+            <TableContainer>
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>

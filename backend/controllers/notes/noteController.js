@@ -39,8 +39,8 @@ const getNotes=async(req,res)=>{
             res.status(404).json({ message: "User not found" })
         }
         if(user){
-            const{title,content}=req.body
-            const allNotes=await Notes.find({}).sort({ createdAt: -1 })
+          
+            const allNotes=await Notes.find({}).sort({ updatedAt: -1 })
                 res.status(200).json({data:allNotes})
         } 
     } catch (err) {

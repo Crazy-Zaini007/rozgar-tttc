@@ -67,10 +67,7 @@ const addPaymentOut = async (req, res) => {
           return res.status(400).json({ message: "Payment Out is required" });
         }
 
-        if (!date) {
-          return res.status(400).json({ message: "Date is required" });
-        }
-
+       
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
         // Fetch the current invoice number and increment it by 1 atomically

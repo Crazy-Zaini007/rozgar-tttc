@@ -415,12 +415,10 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
         }
 
         if (!cash_Out) {
-          return res.status(400).json({ message: "Cash Out is required" });
+          return res.status(400).json({ message: "Cash Return is required" });
         }
 
-        if (!date) {
-          return res.status(400).json({ message: "Date is required" });
-        }
+      
 
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
@@ -1701,9 +1699,7 @@ const addAzadSupplierPaymentOut = async (req, res) => {
           return res.status(400).json({ message: "Payment Out is required" });
         }
 
-        if (!date) {
-          return res.status(400).json({ message: "Date is required" });
-        }
+      
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
@@ -2072,12 +2068,9 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
         }
 
         if (!cash_Out) {
-          return res.status(400).json({ message: "Cash Out is required" });
+          return res.status(400).json({ message: "Cash Return is required" });
         }
 
-        if (!date) {
-          return res.status(400).json({ message: "Date is required" });
-        }
 
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);

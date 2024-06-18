@@ -210,7 +210,8 @@ export default function CandWisePaymentOutReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_Out</TableCell>
-                              <TableCell className='label border'>Remaining</TableCell>
+                              <TableCell className='label border'>Remining_Out</TableCell>
+                              <TableCell className='label border'>Remining_Out_Curr</TableCell>
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
@@ -233,6 +234,8 @@ export default function CandWisePaymentOutReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
+                                    <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.remaining}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
@@ -273,16 +276,6 @@ export default function CandWisePaymentOutReports() {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
                           </TableCell>
-                          <TableCell className='border data_td text-center bg-danger text-white'>
-                            
-                            { overAllPayments && overAllPayments.length > 0 &&
-                              overAllPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
-                                .reduce((total, entry) => {
-                                  return total + (entry.remaining || 0);
-                                }, 0)}
-                          </TableCell>
-
                             </TableRow>
                           </TableBody>
                         </Table>

@@ -68,10 +68,16 @@ export default function AVPP() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-      <div className="container-fluid py-2 mt-3 entry_setting">
-        <div className="row">
-        <div className="col-md-12 adding_form">
+      <div className="container-fluid entry_setting">
+        <div className="row ">
+        <div className="col-md-12 adding_form p-0 border-0 border-bottom">
+        <div className='py-3 mb-1 px-2'>
         <h5>Add new Employee</h5>
+                                
+                        
+                            </div>
+                            </div>
+          <div className="col-md-12 p-0 adding_form border-0 border-bottom">
         <form className='px-2 py-3 rounded' onSubmit={addEmployee}>
           <div className="row">
             <div className="col-lg-3 col-md-6 col-sm-12 mb-3">

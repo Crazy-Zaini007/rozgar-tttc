@@ -140,17 +140,15 @@ export default function AddVacation() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
-          <div className="col-md-12">
-              <Paper className='py-3 mb-1 px-2'>
+          <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-3 mb-1 px-2'>
                 <h4>Employee Vacations</h4>
-              </Paper>
+              </div>
             </div>
-          <div className="col-md-12 ">
-        {!option && <TableContainer component={Paper}>
+          <div className="col-md-12 p-0 border-0 border-bottom">
+        {!option && <TableContainer>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-             
-
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Vacation"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>

@@ -1726,19 +1726,13 @@ const filteredSalaryMonths = employees
       <div className={`${collapsed ?"collapsed":"main"}`}>
                 <div className="container-fluid py-2 payment_details">
                     <div className="row">
-                        <div className='col-md-12 '>
-                            <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
-                                <div className="left d-flex">
-                                    <h4>Employees Details</h4>
-                                </div>
-                            </Paper>
-                        </div>
+                      
                         {!option &&
                             <>
-                                <div className='col-md-12 '>
-                                    <Paper className='py-3 mb-2 px-2 d-flex justify-content-between'>
+                                <div className='col-md-12 p-0 border-0 border-bottom'>
+                                    <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                                         <div className="left d-flex">
-
+                                        <h4>Employees Details</h4>
                                         </div>
                                         <div className="right d-flex">
                                             {employees.length > 0 &&
@@ -1752,7 +1746,7 @@ const filteredSalaryMonths = employees
 
 
                                         </div>
-                                    </Paper>
+                                    </div>
                                 </div>
 
                                 {isLoading &&
@@ -1762,7 +1756,7 @@ const filteredSalaryMonths = employees
                                 }
 
                                 <div className="col-md-12 filters">
-                                    <Paper className='py-1 mb-2 px-3'>
+                                    <div className='py-1 mb-2'>
                                         <div className="row">
                                             <div className="col-auto px-1">
                                                 <label htmlFor="">Date:</label>
@@ -1783,13 +1777,13 @@ const filteredSalaryMonths = employees
                                                 </select>
                                             </div>
                                         </div>
-                                    </Paper>
+                                    </div>
                                 </div>
 
                                 {!isLoading &&
-                                    <div className='col-md-12'>
-                                        <Paper className='py-3 mb-1 px-2 detail_table'>
-                                            <TableContainer sx={{ maxHeight: 600 }}>
+                                    <div className='col-md-12 p-0'>
+                                        <div className='py-3 mb-1 px-1 detail_table'>
+                                            <TableContainer >
                                                 <Table stickyHeader>
                                                     <TableHead>
 
@@ -1813,7 +1807,7 @@ const filteredSalaryMonths = employees
                                                     </TableHead>
 
                                                     <TableBody>
-                                                        {filteredTotalEmployee.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
+                                                        {filteredTotalEmployee.map((entry, index) => (
 
                                                             <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'} >
                                                                 {editMode3 && editedRowIndex3 === index ?
@@ -1933,22 +1927,8 @@ const filteredSalaryMonths = employees
                                                     </TableBody>
                                                 </Table>
                                             </TableContainer>
-                                            <TablePagination
-                                                rowsPerPageOptions={rowsPerPageOptions}
-                                                component='div'
-                                                count={filteredTotalEmployee.length}
-                                                rowsPerPage={rowsPerPage}
-                                                page={page}
-                                                style={{
-                                                    color: 'blue',
-                                                    fontSize: '14px',
-                                                    fontWeight: '700',
-                                                    textTransform: 'capitalize',
-                                                }}
-                                                onPageChange={handleChangePage}
-                                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                            />
-                                        </Paper>
+                                           
+                                        </div>
                                     </div>
                                 }
                             </>
@@ -1958,16 +1938,15 @@ const filteredSalaryMonths = employees
                             <>
                                 {/* Display Table for selectedEmployee's payment details array */}
                                 <div className="col-md-12 my-2">
-                                    <div className="d-flex justify-content-between supplier_Name">
+                                    <div className="d-flex py-2 justify-content-between supplier_Name">
                                         <div className="left d-flex">
                                             <h4 className='d-inline '>Employee Name: <span>{selectedEmployee}</span></h4>
-
                                         </div>
                                         <div className="right">
                                             <button className='btn btn-sm show_btn mx-1' style={single===0 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}} onClick={()=>setSingle(0)}>Salary Sheet</button>
                                             <button className='btn btn-sm show_btn mx-1' style={single===1 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}}  onClick={()=>setSingle(1)}>Salary Months</button>
                                             <button className='btn btn-sm show_btn mx-1' style={single===2 ? {background:'var(--accent-stonger-blue)', color:'var(--white'}:{}}  onClick={()=>setSingle(2)}>Vacations</button>
-                                            {selectedEmployee && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
+                                            {selectedEmployee && <button className='btn detail_btn btn-sm' onClick={handleOption}><i className="fas fa-times"></i></button>}
                                         </div>
                                     </div>
                                 </div>
@@ -1975,9 +1954,9 @@ const filteredSalaryMonths = employees
                                    {single===0 &&
                                    <>
                                     <div className="col-md-12">
-                                        <div className="row border">
+                                        <div className="row ">
                                             <div className="col-md-12 filters">
-                                                <Paper className='py-1 mb-2 px-3'>
+                                                <div className='py-1 mb-2'>
                                                     <div className="row">
                                                     <div className="col-auto px-1">
                                                     <label htmlFor="">Serach Here:</label>
@@ -2018,7 +1997,7 @@ const filteredSalaryMonths = employees
                                                         </div>
 
                                                     </div>
-                                                </Paper>
+                                                </div>
                                             </div>
 
                                             <div className="col-md-12 detail_table my-2">
@@ -2032,7 +2011,7 @@ const filteredSalaryMonths = employees
                                                     </div>
                                                 </div>
                                                 <h6></h6>
-                                                <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                                                <TableContainer >
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
@@ -2210,9 +2189,9 @@ const filteredSalaryMonths = employees
                                     {single===2 &&
                                     <>
                                     <div className="col-md-12">
-                                        <div className="row border p-0">
+                                        <div className="row">
                                             <div className="col-md-12 filters">
-                                                <Paper className='py-1 mb-2 px-3'>
+                                                <div className='py-1 mb-2'> 
                                                     <div className="row">
 
                                                         <div className="col-auto px-1">
@@ -2256,7 +2235,7 @@ const filteredSalaryMonths = employees
                                                         </div>
 
                                                     </div>
-                                                </Paper>
+                                                </div>
                                             </div>
                                             <div className="col-md-12 detail_table my-2">
                                                 <div className="d-flex justify-content-between">
@@ -2268,7 +2247,7 @@ const filteredSalaryMonths = employees
                                                         <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printVacationsTable}>Print </button>
                                                     </div>
                                                 </div>
-                                                <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                                                <TableContainer>
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
@@ -2394,10 +2373,10 @@ const filteredSalaryMonths = employees
 
                                 {single===1 &&
                                     <>
-                                    <div className="col-md-12">
-                                        <div className="row border p-0">
+                                    <div className="col-md-12 ">
+                                        <div className="row">
                                             <div className="col-md-12 filters">
-                                                <Paper className='py-1 mb-2 px-3'>
+                                                <div className='py-1 mb-2 px-3'>
                                                     <div className="row">
 
                                                         <div className="col-auto px-1">
@@ -2416,7 +2395,7 @@ const filteredSalaryMonths = employees
                                                         
 
                                                     </div>
-                                                </Paper>
+                                                </div>
                                             </div>
                                             <div className="col-md-12 detail_table my-2">
                                                 <div className="d-flex justify-content-between">
@@ -2428,7 +2407,7 @@ const filteredSalaryMonths = employees
                                                         <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printSalaryMonthsTable}>Print </button>
                                                     </div>
                                                 </div>
-                                                <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                                                <TableContainer >
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>

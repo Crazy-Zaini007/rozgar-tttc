@@ -210,6 +210,8 @@ export default function CombinePaymentOutReports() {
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_Out</TableCell>
                               <TableCell className='label border'>Cash_Return</TableCell>
+                              <TableCell className='label border'>Remining_Out</TableCell>
+                              <TableCell className='label border'>Remining_Out_Curr</TableCell>
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
@@ -232,6 +234,8 @@ export default function CombinePaymentOutReports() {
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.remaining||0}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.remaining_Curr||0}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>

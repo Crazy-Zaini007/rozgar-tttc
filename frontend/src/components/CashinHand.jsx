@@ -1069,7 +1069,12 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                               <TableCell className='label border'style={{ width: '18.28%' }}>Slip_No</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_In</TableCell>
                               <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Out</TableCell>
-                              <TableCell className='label border'style={{ width: '18.28%' }}>Cash_Return</TableCell>
+                              <TableCell className='label border'>Cash_In_Return</TableCell>
+                            <TableCell className='label border'>Cash_Out_Return</TableCell>
+                            <TableCell className='label border'>Remining_In</TableCell>
+                            <TableCell className='label border'>Remining_In_Curr</TableCell>
+                            <TableCell className='label border'>Remining_Out</TableCell>
+                            <TableCell className='label border'>Remining_Out_Curr</TableCell>
                               {show && 
                               <>
                               <TableCell className='label border' style={{ width: '18.28%' }}>Curr_Rate</TableCell>
@@ -1098,9 +1103,14 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Type}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash?.slip_No}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash?.payment_In||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
                                        {show &&
                                        <>
                                         <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>

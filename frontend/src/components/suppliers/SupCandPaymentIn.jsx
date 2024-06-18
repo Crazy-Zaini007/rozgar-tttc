@@ -145,7 +145,7 @@ export default function SupCandPaymentIn() {
 
             <div className="col-md-12 p-0 border-0 border-bottom">
               <div className='py-3 mb-1 px-2'>
-                <h4>Cand-Vise Supplier Payment IN</h4>
+                <h4>Cand-Vise Supplier Payment In</h4>
                 <button className='btn btn-sm  m-1 entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn btn-sm  m-1   entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
                 {single === 1 && <label className="btn m-1  btn-sm upload_btn">
@@ -162,10 +162,9 @@ export default function SupCandPaymentIn() {
               <SupCandSinglePaymentIn></SupCandSinglePaymentIn>
             }
 
-            {/* Multiple  Entries */}
             {single === 1 &&
               <>
-                <div className="col-md-12 multiple_form p-0">
+                <div className="col-md-12 multiple_form p-0 border-0 border-bottom">
 
                   <div>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >

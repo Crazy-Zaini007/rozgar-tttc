@@ -2118,6 +2118,8 @@ const handleTicketCandForm = async (e) => {
                               <TableCell className='label border p-1'>Slip_No</TableCell>
                               <TableCell className='label border p-1'>Cash_Out</TableCell>
                               <TableCell className='label border  p-1'>Cash_Return</TableCell>
+                              <TableCell className='label border p-1'>Remining_Out</TableCell>
+                            <TableCell className='label border p-1'>Remining_Out_Curr</TableCell>
                              {show && <>
                               <TableCell className='label border  p-1'>Curr_Rate</TableCell>
                             <TableCell className='label border  p-1'>Curr_Amount</TableCell>
@@ -2145,6 +2147,9 @@ const handleTicketCandForm = async (e) => {
                                     <TableCell className='border data_td text-center p-1'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                     <TableCell className='border data_td text-center p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+                                    <TableCell className='border data_td text-center p-1'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
+                                      <TableCell className='border data_td text-center p-1'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
+                                    
                                    {show && <>
                                     <TableCell className='border data_td text-center  p-1'>{(cash?.curr_Rate||0).toFixed(2)}</TableCell>
                                       <TableCell className='border data_td text-center p-1 '>{(cash?.curr_Amount||0).toFixed(2)}</TableCell>

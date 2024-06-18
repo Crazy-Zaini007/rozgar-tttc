@@ -209,12 +209,11 @@ export default function Entry1() {
 
   return (
     <>
-      <div className="col-md-12 ">
-        {!option && <TableContainer component={Paper}>
+      <div className="col-md-12 p-0 border-0 border-bottom">
+        {!option && <TableContainer >
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
              
-
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
@@ -327,8 +326,8 @@ export default function Entry1() {
           {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
+          <div className="col-md-12 detail_table p-0">
+            <TableContainer>
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>

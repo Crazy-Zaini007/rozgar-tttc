@@ -146,9 +146,9 @@ export default function AssetsPaymentIn() {
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
-            <div className="col-md-12">
-              <Paper className='py-3 mb-1 px-2'>
-                <h4>Assets Payment IN</h4>
+            <div className="col-md-12 p-0 border-0 border-bottom">
+              <div className='py-3 mb-1 px-2'>
+                <h4>Assets Payment In</h4>
                 <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
                 {single === 1 && <label className="btn m-1  btn-sm upload_btn">
@@ -157,7 +157,7 @@ export default function AssetsPaymentIn() {
                 </label>}
                 <button className='btn m-1  btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
 
-              </Paper>
+              </div>
             </div>
             {/* Single payment Entry */}
             {single === 0 &&
@@ -167,9 +167,9 @@ export default function AssetsPaymentIn() {
             {/* Multiple  Entries */}
             {single === 1 &&
               <>
-                <div className="col-md-12 multiple_form">
+                <div className="col-md-12 multiple_form p-0 border-0 border-bottom">
 
-                  <Paper>
+                  <div>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
                       <button className='btn btn-sm submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
@@ -217,7 +217,7 @@ export default function AssetsPaymentIn() {
                       </div>
 
                     </form>
-                  </Paper>
+                  </div>
 
                 </div>
               </>

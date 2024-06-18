@@ -387,7 +387,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
   return (
     <TableContainer>
-      <div className="col-md-12 p-0">
+      <div className="col-md-12 p-0 border-0 border-bottom">
         {!option && (
           <>
             <form className="py-3 px-2" onSubmit={handleForm}>

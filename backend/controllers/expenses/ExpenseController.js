@@ -22,7 +22,8 @@ const addExpense = async (req, res) => {
             curr_Country,
             curr_Rate,
             curr_Amount,
-            date } = req.body
+            date 
+        } = req.body
 
         const userId = req.user._id
         const user = await User.findById(userId)
