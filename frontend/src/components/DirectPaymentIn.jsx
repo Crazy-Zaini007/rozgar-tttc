@@ -1960,9 +1960,6 @@ const handleAssetForm = async (e) => {
                               <TableCell className='label border p-1'>Slip_No</TableCell>
                               <TableCell className='label border p-1'>Cash_In</TableCell>
                               <TableCell className='label border p-1'>Cash_Return</TableCell>
-                              <TableCell className='label border p-1'>Remining_In</TableCell>
-                              <TableCell className='label border p-1'>Remining_In_Curr</TableCell>
-                             
                               {show && 
                               <>
                               <TableCell className='label border  p-1'>Curr_Rate</TableCell>
@@ -1992,8 +1989,7 @@ const handleAssetForm = async (e) => {
                                     <TableCell className='border text-center data_td p-1'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border text-center data_td p-1'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_In}</TableCell>
                                     <TableCell className='border text-center data_td p-1'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.cash_Out}</TableCell>
-                                    <TableCell className='border data_td text-center p-1'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
-                                    <TableCell className='border data_td text-center p-1'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
+                                    
                                     {show &&
                                        <>
                                         <TableCell className='border text-center data_td p-1'>{(cash?.curr_Rate||0).toFixed(2)}</TableCell>
@@ -2068,6 +2064,18 @@ const handleAssetForm = async (e) => {
                           </TableCell>
                          </>
                          }
+                          <TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In PKR= 
+  {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In Curr= 
+  {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
 
                             </TableRow>
                           </TableBody>

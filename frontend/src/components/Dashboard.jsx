@@ -1025,7 +1025,8 @@ const[option,setOption]=useState(false)
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">
             <Paper className="data px-3 py-0 rounded border m-0">
-            <div className="d-flex justify-content-between py-1 mt-2">
+          <Link to='/rozgar/reports/advance_payments'>
+          <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
               <Avatar   sx={{ width: 35, height: 35, bgcolor: green [500]  }}><ArrowDownwardIcon/></Avatar>
@@ -1039,6 +1040,7 @@ const[option,setOption]=useState(false)
                 <h6 className='ml-2'>Today Advance In</h6>
             </div>
           </div> 
+          </Link>
           
 
             </Paper>
@@ -1048,6 +1050,7 @@ const[option,setOption]=useState(false)
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">
            
             <Paper className="data px-3 py-0 rounded border m-0">
+            <Link to='/rozgar/reports/advance_payments'>
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -1062,12 +1065,13 @@ const[option,setOption]=useState(false)
 <h6 className='ml-2'>Today Advance Out</h6>
             
             </div>
-          </div> 
+          </div> </Link>
           
             </Paper>
             </div>
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">          
             <Paper className="data px-3 py-0 rounded border m-0">
+            <Link to='/rozgar/reports/advance_payments'>
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side">
@@ -1081,14 +1085,15 @@ const[option,setOption]=useState(false)
                 <h6 className='ml-2'>Total Advance In</h6>
             
             </div>
-          </div> 
+          </div> </Link>
           
             </Paper>
             </div>
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1 ">          
             <Paper className="data px-3 py-0 rounded border m-0">
-            <div className="d-flex justify-content-between py-1 mt-2">
+           <Link to='/rozgar/reports/advance_payments'>
+           <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side">
               <Avatar   sx={{ width: 35, height: 35, bgcolor: red [500]  }}><TrendingDownIcon/></Avatar>
@@ -1103,6 +1108,7 @@ const[option,setOption]=useState(false)
             
             </div>
           </div> 
+           </Link>
           
             </Paper>
             </div>
@@ -1212,10 +1218,7 @@ const[option,setOption]=useState(false)
                             <TableCell className='label border'>Cash_Out</TableCell>
                             <TableCell className='label border'>Cash_In_Return</TableCell>
                             <TableCell className='label border'>Cash_Out_Return</TableCell>
-                            <TableCell className='label border'>Remining_In</TableCell>
-                            <TableCell className='label border'>Remining_In_Curr</TableCell>
-                            <TableCell className='label border'>Remining_Out</TableCell>
-                            <TableCell className='label border'>Remining_Out_Curr</TableCell>
+                          
 
                            {show && 
                            <>
@@ -1251,10 +1254,7 @@ const[option,setOption]=useState(false)
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
+                                     
                                      {show &&
                                      <>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
@@ -1329,7 +1329,6 @@ const[option,setOption]=useState(false)
   }, 0)}
 </TableCell>
 
-
    
  {show &&
  <>
@@ -1346,9 +1345,32 @@ const[option,setOption]=useState(false)
   </TableCell>
  </>
  }
-                                  
-                                  
-                                </TableRow>
+ <TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In PKR= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In Curr= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining Out In PKR= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining Out In Curr= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
+
+                        </TableRow>
                         </TableBody>
                       </Table>
                     </TableContainer>

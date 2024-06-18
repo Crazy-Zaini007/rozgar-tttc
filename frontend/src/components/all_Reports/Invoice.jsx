@@ -259,6 +259,7 @@ export default function Invoice() {
   };
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
+  const [show, setShow] = useState(false)
 
 
   return (
@@ -281,6 +282,7 @@ export default function Invoice() {
                   
                       {option === 0 &&
                       <>
+                     <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                         <button className='btn excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
                         <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
                       </>
@@ -391,10 +393,13 @@ export default function Invoice() {
                             <TableCell className='label border'>Cash_Out</TableCell>
                             <TableCell className='label border'>Cash_In_Return</TableCell>
                             <TableCell className='label border'>Cash_Out_Return</TableCell>
-                            <TableCell className='label border'>Remining_In</TableCell>
-                            <TableCell className='label border'>Remining_In_Curr</TableCell>
-                            <TableCell className='label border'>Remining_Out</TableCell>
-                            <TableCell className='label border'>Remining_Out_Curr</TableCell>
+                            {show && 
+                           <>
+                            <TableCell className='label border'>Curr_Rate</TableCell>
+                            <TableCell className='label border'>Curr_Amount</TableCell>
+                            <TableCell className='label border'>Payment_In_Curr</TableCell>
+                           </>
+                           }
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
@@ -420,10 +425,13 @@ export default function Invoice() {
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
+                                      {show &&
+                                     <>
+                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
+                                     </>
+                                     }
                                         <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.slip_Pic ?<a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
@@ -443,25 +451,71 @@ export default function Invoice() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                           
-    <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.slice(0,rowsValue ? rowsValue : undefined).reduce((total, entry) => {
-      return total + (entry.payment_In || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-danger text-white'>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+  {/* Calculate the total sum of payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.payment_In || 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-danger text-white'>
+  {/* Calculate the total sum of payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.payment_Out || 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-warning text-white'>
+  {/* Calculate the total sum of cash_Out based on payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-warning text-white'>
+  {/* Calculate the total sum of cash_Out based on payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
+
+   
+ {show &&
+ <>
+  <TableCell className='border data_td text-center bg-info text-white'>
     {/* Calculate the total sum of payment_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.slice(0,rowsValue ? rowsValue : undefined).reduce((total, entry) => {
-      return total + (entry.payment_Out || 0); // Use proper conditional check
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (Math.round(entry.curr_Rate || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.slice(0,rowsValue ? rowsValue : undefined).reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
+    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+      return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
     }, 0)}
   </TableCell>
+ </>
+ }
+ <TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In PKR= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In Curr= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining Out In PKR= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining Out In Curr= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
                             
                           </TableRow>
                           

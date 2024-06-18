@@ -156,6 +156,7 @@ export default function CandWisePaymentOutReports() {
     XLSX.writeFile(wb, 'Candidate Wise Payments_Out Details.xlsx');
   }
 
+  const [show, setShow] = useState(false)
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
@@ -176,6 +177,7 @@ export default function CandWisePaymentOutReports() {
                      
                       {option===0 &&
                      <>
+                     <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenOutExcel}>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymenOutMainTable}>Print </button>
                      </>
@@ -210,8 +212,13 @@ export default function CandWisePaymentOutReports() {
                               <TableCell className='label border'>Payment_Type</TableCell>
                               <TableCell className='label border'>Slip_No</TableCell>
                               <TableCell className='label border'>Cash_Out</TableCell>
-                              <TableCell className='label border'>Remining_Out</TableCell>
-                              <TableCell className='label border'>Remining_Out_Curr</TableCell>
+                              {show && 
+                           <>
+                            <TableCell className='label border'>Curr_Rate</TableCell>
+                            <TableCell className='label border'>Curr_Amount</TableCell>
+                            <TableCell className='label border'>Payment_In_Curr</TableCell>
+                           </>
+                           }
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
@@ -234,9 +241,13 @@ export default function CandWisePaymentOutReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
-                                    <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
-                                    <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.remaining}</TableCell>
+                                    {show &&
+                                     <>
+                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
+                                     </>
+                                     }
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
@@ -276,6 +287,47 @@ export default function CandWisePaymentOutReports() {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
                           </TableCell>
+                          {show &&
+ <> 
+ <TableCell className='border data_td text-center bg-info text-white'>
+                            
+ { overAllPayments && overAllPayments.length > 0 &&
+   overAllPayments
+     .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+     .reduce((total, entry) => {
+       return total + (entry.curr_Rate || 0);
+     }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-info text-white'>
+                            
+ { overAllPayments && overAllPayments.length > 0 &&
+   overAllPayments
+     .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+     .reduce((total, entry) => {
+       return total + (entry.curr_Amount || 0);
+     }, 0)}
+</TableCell>
+ 
+ </>
+ }
+  <TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In PKR= 
+ { overAllPayments && overAllPayments.length > 0 &&
+   overAllPayments
+     .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+     .reduce((total, entry) => {
+       return total + (entry.remaining || 0);
+     }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In Curr= 
+ { overAllPayments && overAllPayments.length > 0 &&
+   overAllPayments
+     .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+     .reduce((total, entry) => {
+       return total + (entry.remaining_Curr || 0);
+     }, 0)}
+</TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>

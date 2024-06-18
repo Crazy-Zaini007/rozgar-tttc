@@ -765,10 +765,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                             <TableCell className='label border'>Cash_Out</TableCell>
                             <TableCell className='label border'>Cash_In_Return</TableCell>
                             <TableCell className='label border'>Cash_Out_Return</TableCell>
-                            <TableCell className='label border'>Remining_In</TableCell>
-                            <TableCell className='label border'>Remining_In_Curr</TableCell>
-                            <TableCell className='label border'>Remining_Out</TableCell>
-                            <TableCell className='label border'>Remining_Out_Curr</TableCell>
+                           
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Details</TableCell>
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Invoice</TableCell>
                               <TableCell className='label border text-center'style={{ width: '18.28%' }}>Slip_Pic</TableCell>
@@ -794,10 +791,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in'))?cash.remaining_Curr:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0|| cash.type.toLowerCase().includes('out'))?cash.remaining_Curr:0}</TableCell>
+                                     
                                         {show &&
                                        <>
                                         <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
@@ -847,11 +841,17 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredBanksPayments && filteredBanksPayments.length > 0 && filteredBanksPayments.reduce((total, entry) => {
-      return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
+  {/* Calculate the total sum of cash_Out based on payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-warning text-white'>
+  {/* Calculate the total sum of cash_Out based on payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
                             
                           </TableRow>
                           </TableBody>
@@ -1187,10 +1187,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                             <TableCell className='label border'>Cash_Out</TableCell>
                             <TableCell className='label border'>Cash_In_Return</TableCell>
                             <TableCell className='label border'>Cash_Out_Return</TableCell>
-                            <TableCell className='label border'>Remining_In</TableCell>
-                            <TableCell className='label border'>Remining_In_Curr</TableCell>
-                            <TableCell className='label border'>Remining_Out</TableCell>
-                            <TableCell className='label border'>Remining_Out_Curr</TableCell>
+                           
                               {show && 
                               <>
                               <TableCell className='label border' style={{ width: '18.28%' }}>Curr_Rate</TableCell>
@@ -1223,10 +1220,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0)?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_In || cash.payment_In>0)?cash.remaining_Curr:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0)?cash.remaining:0}</TableCell>
-                                      <TableCell className='border data_td text-center'>{(cash.payment_Out || cash.payment_Out>0)?cash.remaining_Curr:0}</TableCell>
+                                  
                                         {show &&
                                        <>
                                         <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
@@ -1266,11 +1260,17 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.cash_Out || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
+  {/* Calculate the total sum of cash_Out based on payment_In */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-warning text-white'>
+  {/* Calculate the total sum of cash_Out based on payment_Out */}
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
+  }, 0)}
+</TableCell>
   {show && 
   <>
   <TableCell className='border data_td text-center bg-info text-white'>
@@ -1287,6 +1287,30 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
   </TableCell>
   </>
   }
+   <TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In PKR= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining In Curr= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining Out In PKR= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
+  }, 0)}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+ Total Remaining Out In Curr= 
+  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
+  }, 0)}
+</TableCell>
                             
                           </TableRow>
                           </TableBody>
