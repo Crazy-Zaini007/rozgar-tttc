@@ -723,7 +723,7 @@ const sumPaymentIn = (data) => {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Curr Rate </label>
-                 <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(e.target.value)} />
+                 <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Currency </label>

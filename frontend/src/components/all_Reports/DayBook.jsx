@@ -1058,22 +1058,28 @@ body {
                                 }, 0)}
                           </TableCell>
                           <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In PKR= 
- { overAllPayments && overAllPayments.length > 0 &&
-   overAllPayments
-     .filter(entry =>(entry.payment_In||entry.payment_In>0|| entry.type.toLowerCase().includes('in')))
-     .reduce((total, entry) => {
-       return total + (entry.remaining || 0);
-     }, 0)}
+Remaining PKR= 
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In Curr= 
- { overAllPayments && overAllPayments.length > 0 &&
-   overAllPayments
-     .filter(entry => (entry.payment_In||entry.payment_In>0|| entry.type.toLowerCase().includes('in')))
-     .reduce((total, entry) => {
-       return total + (entry.remaining_Curr || 0);
-     }, 0)}
+Remaining Curr= 
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))}
 </TableCell>
 
 
@@ -1175,22 +1181,28 @@ body {
                                 }, 0)}
                           </TableCell>
                           <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In PKR= 
- { overAllPayments && overAllPayments.length > 0 &&
-   overAllPayments
-     .filter(entry =>(entry.payment_Out||entry.payment_Out>0|| entry.type.toLowerCase().includes('out')))
-     .reduce((total, entry) => {
-       return total + (entry.remaining || 0);
-     }, 0)}
+Remaining PKR= 
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In Curr= 
- { overAllPayments && overAllPayments.length > 0 &&
-   overAllPayments
-     .filter(entry => (entry.payment_Out||entry.payment_Out>0|| entry.type.toLowerCase().includes('out')))
-     .reduce((total, entry) => {
-       return total + (entry.remaining_Curr || 0);
-     }, 0)}
+Remaining Curr= 
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))}
 </TableCell>
                             </TableRow>
                           </TableBody>

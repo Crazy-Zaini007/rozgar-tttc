@@ -593,7 +593,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                  <>
                    <form className="py-3 px-2" onSubmit={handleForm}>
                      <div className="text-end ">
-                       <button className="btn submit_btn m-1" disabled={loading || !disableAddMore}>
+                       <button className="btn submit_btn m-1" disabled={loading || disableAddMore}>
                          {loading ? "Adding..." : "Add Payment"}
                        </button>
                      </div>
@@ -724,7 +724,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Curr Rate </label>
-                 <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(e.target.value)} />
+                 <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Currency </label>

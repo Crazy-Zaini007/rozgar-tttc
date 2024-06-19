@@ -126,7 +126,7 @@ const [payment_Out, setPayment_Out] = useState();
 const [slip_Pic, setSlip_Pic] = useState("");
 const [details, setDetails] = useState("");
 const [curr_Country, setCurr_Country] = useState("");
-const [curr_Rate, setCurr_Rate] = useState();
+const [curr_Rate, setCurr_Rate] = useState(0);
 const [cand_Name, setCand_Name] = useState("");
 const [date, setDate] = useState("");
 let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
@@ -2052,7 +2052,7 @@ const handleTicketCandForm = async (e) => {
                       type="number"
                       min="0"
                       value={curr_Rate}
-                      onChange={(e) => setCurr_Rate(e.target.value)}
+                      onChange={(e) => setCurr_Rate(parseFloat(e.target.value))}
                     />
                     </TableCell>
                     <TableCell className="border data_td p-1">
@@ -2221,17 +2221,29 @@ const handleTicketCandForm = async (e) => {
                           </TableCell>
                          </>
                          }
-                         <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In PKR= 
-  {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
-  }, 0)}
+                       <TableCell className='border data_td text-center bg-secondary text-white'>
+Remaining PKR= 
+{(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+  }, 0))+(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+  }, 0))-(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
+  }, 0))-(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In Curr= 
-  {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
+Remaining Curr= 
+{(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))+(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))}
 </TableCell>
 
                             </TableRow>
@@ -2243,42 +2255,7 @@ const handleTicketCandForm = async (e) => {
         
       </div>    
 
-         {/* <div className="col-md-12 mb-1 px-0  total_cash">
-        <h6 className="bg-dark text-white py-2 text-center my-0">Total Cash In hand</h6>
-        <h6 className="bg-success text-white py-2 text-center my-0">{(cashInHand.total_Cash?cashInHand.total_Cash:0)}</h6>
-        <div className="details">
-          <h6 className="text-center my-0 bg-info text-white py-2 my-0 ">Cash Details</h6>
-          <TableContainer className='detail_table' component={Paper} >
-  <Table stickyHeader>
-    <TableHead className="thead">
-      <TableRow>
-        <TableCell className='label border text-center' style={{ width: '50%' }}>Source</TableCell>
-        <TableCell className='label border text-center' style={{ width: '50%' }}>Payment</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-    <TableRow>
-          <TableCell className='border data_td text-center' style={{ width: '50%' }}>Cash</TableCell>
-          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{(cashInHand.total_Cash?cashInHand.total_Cash:0)-(total ? total :0)}</TableCell>
-        </TableRow>
-      {banks && banks.map((data, index) => (
-        <TableRow key={index}>
-          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.payment_Via}</TableCell>
-          <TableCell className='border data_td text-center' style={{ width: '50%' }}>{data.total_payment}</TableCell>
-        </TableRow>
-      ))}
-      <TableRow>
-        <TableCell className='border data_td text-center bg-dark text-white' style={{ width: '50%' }}>Total In Banks</TableCell>
-        <TableCell className='border data_td text-center bg-warning text-white' style={{ width: '50%' }}>{total && total}</TableCell>
-      </TableRow>
-
-      
-    </TableBody>
-  </Table>
-</TableContainer>
-
-        </div>
-      </div> */}
+       
     </>
   );
 }

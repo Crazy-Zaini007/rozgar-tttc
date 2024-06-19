@@ -1155,31 +1155,6 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
     return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
   }, 0)}
 </TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In PKR= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In Curr= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining Out In PKR= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining Out In Curr= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
-</TableCell>
-   
   {show && 
   <>
   <TableCell className='border data_td text-center bg-info text-white'>
@@ -1196,7 +1171,30 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
   </TableCell>
   </>
   }
-                            
+  <TableCell className='border data_td text-center bg-secondary text-white'>
+Remaining PKR= 
+{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))}
+</TableCell>
+<TableCell className='border data_td text-center bg-secondary text-white'>
+Remaining Curr= 
+{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))}
+</TableCell>                
                           </TableRow>
                           </TableBody>
                         </Table>

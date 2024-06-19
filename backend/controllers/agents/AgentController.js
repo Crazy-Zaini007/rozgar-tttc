@@ -3824,7 +3824,7 @@ const addCandVisePaymentIn=async(req,res)=>{
     await newNotification.save()
 
     await existingSupplier.save();
-    res.status(200).json({
+    res.status(200).json({ data:candPayments,
       message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
     })
 

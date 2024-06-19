@@ -226,9 +226,6 @@ overAllPayments.forEach(payment => {
 // Calculate the combined total
 const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
 
-
-
-
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   
   const flightsThisMonth = enteries ? enteries.filter(entry => {
@@ -677,7 +674,7 @@ const topButtons=[
   {text:'Add Expense',navigate:'/rozgar/expenses/add_new_expense'},
   {text:'Candidate Payment In',navigate:'/rozgar/candidates/payment_in'},
   {text:'Agent Payment In',navigate:'/rozgar/agents/payment_in'},
-  {text:'Agent Cand-Vise Payment Out',navigate:'/rozgar/agents/cand_vise_payment_out'},
+  {text:'Agent Cand-Vise Payment In',navigate:'/rozgar/agents/cand_vise_payment_in'},
   {text:'Supplier Payment Out',navigate:'/rozgar/suppliers/payment_out'},
   {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/suppliers/cand_vise_payment_out'},
 
@@ -687,7 +684,7 @@ const navigationButtons=[
   {text:'Direct Payment',navigate:'/rozgar/direct/payment_in_out'},
   {text:'Agent Payment Out',navigate:'/rozgar/agents/payment_out'},
   {text:'Agent Payment Return',navigate:'/rozgar/agents/payment_return'},
-  {text:'Agent Cand-Vise Payment In',navigate:'/rozgar/agents/cand_vise_payment_in'},
+  {text:'Agent Cand-Vise Payment Out',navigate:'/rozgar/agents/cand_vise_payment_out'},
   {text:'Supplier Payment In',navigate:'/rozgar/suppliers/payment_in'},
   {text:'Supplier Payment Return',navigate:'/rozgar/suppliers/payment_return'},
   {text:'Supplier Cand-Vise Payment In',navigate:'/rozgar/suppliers/cand_vise_payment_in'},
@@ -878,7 +875,7 @@ const[option,setOption]=useState(false)
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
             <Paper className="data px-3 py-0 rounded border m-0 ">
-            <Link to='/rozgar/enteries/reports_details'>
+            
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -886,11 +883,11 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? totalEmployeeExpense:0)+(expenses?totalExpense:0) }</h5> }
+            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? totalEmployeeExpense:0)+(expenses?totalExpense:0) }</h5> }
                 <h6 className='ml-2'>Total Expenses with Employess <br /> </h6>
             </div>
           </div> 
-            </Link>
+            
           
             </Paper>
            
@@ -898,7 +895,7 @@ const[option,setOption]=useState(false)
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
             <Paper className="data px-3 py-0 rounded border m-0 ">
-            <Link to='/rozgar/enteries/reports_details'>
+          
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -908,11 +905,11 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? currentMonthEmployeeExpense:0)+(expenses? currentMonthExpense:0) }</h5> }
+            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? currentMonthEmployeeExpense:0)+(expenses? currentMonthExpense:0) }</h5> }
                 <h6 className='ml-2'> Current Month Expenses with Employess<br /> </h6>
             </div>
           </div> 
-            </Link>
+            
           
             </Paper>
            
@@ -920,7 +917,7 @@ const[option,setOption]=useState(false)
 
             <div className="col-sm-6 col-sm-12 col-md-4 my-0 p-1  ">
             <Paper className="data px-3 py-0 rounded border m-0 ">
-            <Link to='/rozgar/enteries/reports_details'>
+          
             <div className="d-flex justify-content-between py-1 mt-2">
             <div className=" ">
               <div className="side ">
@@ -928,11 +925,11 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading5 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? threeMonthsEmployeeExpense:0)+(expenses ?threeMonthsExpense:0)}</h5> }
+            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? threeMonthsEmployeeExpense:0)+(expenses ?threeMonthsExpense:0)}</h5> }
                 <h6 className='ml-2'>Last 3 Month Expenses with Employess<br /> </h6>
             </div>
           </div> 
-            </Link>
+          
           
             </Paper>
            
@@ -1305,7 +1302,7 @@ const[option,setOption]=useState(false)
                                   <TableCell></TableCell>
                                   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                                   <TableCell className='border data_td text-center bg-success text-white'>
-  {/* Calculate the total sum of payment_In */}
+ 
   {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
     return total + (Math.round(entry.payment_In || 0)); 
   }, 0)}
@@ -1346,29 +1343,30 @@ const[option,setOption]=useState(false)
  </>
  }
  <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In PKR= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
-  }, 0)}
+Remaining PKR= 
+{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In Curr= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
+Remaining Curr= 
+{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))}
 </TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining Out In PKR= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining Out In Curr= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
-</TableCell>
+
 
                         </TableRow>
                         </TableBody>
