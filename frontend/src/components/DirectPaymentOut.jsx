@@ -126,7 +126,7 @@ const [payment_Out, setPayment_Out] = useState();
 const [slip_Pic, setSlip_Pic] = useState("");
 const [details, setDetails] = useState("");
 const [curr_Country, setCurr_Country] = useState("");
-const [curr_Rate, setCurr_Rate] = useState(0);
+const [curr_Rate, setCurr_Rate] = useState('');
 const [cand_Name, setCand_Name] = useState("");
 const [date, setDate] = useState("");
 let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
@@ -2049,8 +2049,8 @@ const handleTicketCandForm = async (e) => {
                     </TableCell>
                     <TableCell className="border data_td p-1">
                     <input className="p-0"
-                      type="number"
-                      min="0"
+                      type="text"
+                      
                       value={curr_Rate}
                       onChange={(e) => setCurr_Rate(parseFloat(e.target.value))}
                     />

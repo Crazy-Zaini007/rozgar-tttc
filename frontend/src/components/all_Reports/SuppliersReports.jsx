@@ -76,6 +76,9 @@ export default function SuppliersReports() {
   const [dateTo, setDateTo] = useState('')
   const [type, setType] = useState('')
   const [supplier, setSupplier] = useState('')
+  const [payment_Via, setPayment_Via] = useState('')
+  const [payment_Type, setPayment_Type] = useState('')
+  const [category, setCategory] = useState('')
   const [search1, setSearch1] = useState('')
 
   const filteredPayments = payments && payments.filter(paymentItem => {
@@ -89,10 +92,15 @@ export default function SuppliersReports() {
     return isDateInRange &&
     paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
     paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
+    paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+    paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+    paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
     (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.supplierName.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
 
@@ -274,6 +282,33 @@ export default function SuppliersReports() {
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Date To:</label>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Payment Via:</label>
+                      <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(payments.map(data => data.payment_Via))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Payment Type:</label>
+                      <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(payments.map(data => data.payment_Type))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Category:</label>
+                      <select value={category} onChange={(e) => setCategory(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(payments.map(data => data.category))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Supplier Name:</label>

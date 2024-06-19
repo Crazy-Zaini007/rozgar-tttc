@@ -106,8 +106,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   }
 
  
-  
-  
+
 
   const printPaymentInvoice = (paymentDetails) => {
     const formatDate = (date) => {

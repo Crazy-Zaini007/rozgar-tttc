@@ -105,122 +105,173 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   }
 
 
-  const printPersonsTable = (selectedPersonDetails) => {
+ 
+
+  const printPaymentInvoice = (paymentDetails) => {
     const formatDate = (date) => {
       const d = new Date(date);
       const day = String(d.getDate()).padStart(2, '0');
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
-    }
+    };
+  
     const formattedDate = formatDate(new Date());
+    const paymentDetailsString = paymentDetails.payments.map(payment => `
+      <tr>
+        <td>${String(payment.cand_Name)}</td>
+        <td>${String(payment?.pp_No,'')}</td>
+        <td>${String(payment?.entry_Mode,'')}</td>
+        <td>${String(payment?.company,'')}</td>
+        <td>${String(payment?.trade,'')}</td>
+        <td>${String(payment?.country,'')}</td>
+        <td>${String(payment?.final_Status,'')}</td>
+        <td>${String(payment?.flight_Date,'')}</td>
+        <td>${String(payment?.visa_Amount_PKR)}</td>
+        <td>${String(payment?.past_Paid_PKR)}</td>
+        <td>${String(payment?.past_Remain_PKR)}</td>
+        <td>${String(payment?.new_Payment)}</td>
+        <td>${String(payment?.new_Remain_PKR)}</td>
+        <td>${String(payment?.curr_Amount,0)}</td>
+        <td>${String(payment?.curr_Rate,0)}</td>
+      </tr>
+    `).join('');
   
     const printContentString = `
-    <div class="print-header">
-      <p class="invoice">Supplier: ${selectedSupplier}</p>
+      <div class="print-header">
+        <p class="invoice">Invoice No: ${paymentDetails.invoice}</p>
         <h1 class="title">ROZGAR TTTC</h1>
         <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title">Candidate Payments Details</h1>
+        <h1 class="title">Candidate Vise Payment Invoice</h1>
       </div>
       <hr/>
-    <table class='print-table'>
-      <thead>
-        <tr>
-        <th>Date</th>
-        <th>Name</th>
-        <th>PP#</th>
-        <th>Entry_Mode</th>
-        <th>Company</th>
-        <th>Trade</th>
-        <th>Country</th>
-        <th>Final Status</th>
-        <th>Flight Date</th>
-        <th>VPI PKR</th>
-        <th>Total In PKR</th>
-        <th>Remaining PKR</th>
-        <th>VPI Oth Curr</th>
-        <th>Remaining Curr</th>
-        
-        </tr>
-      </thead>
-      <tbody>
-     
+      <table class='print-table'>
+        <thead>
           <tr>
-            <td>${String(selectedPersonDetails?.entry_Date)}</td>
-            <td>${String(selectedPersonDetails?.name)}</td>
-            <td>${String(selectedPersonDetails?.pp_No)}</td>
-            <td>${String(selectedPersonDetails?.entry_Mode)}</td>
-            <td>${String(selectedPersonDetails?.company)}</td>
-            <td>${String(selectedPersonDetails?.trade)}</td>
-            <td>${String(selectedPersonDetails?.country)}</td>
-            <td>${String(selectedPersonDetails?.final_Status)}</td>
-            <td>${String(selectedPersonDetails?.flight_Date)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_In_PKR)}</td>
-            <td>${String(selectedPersonDetails?.total_In)}</td>
-            <td>${String(
-      (selectedPersonDetails?.visa_Price_In_PKR - selectedPersonDetails?.total_In) +
-      selectedPersonDetails?.cash_Out
-    )}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_In_Curr)}</td>
-            <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
-
+            <th>Date</th>
+            <th>Agent/Supp Name</th>
+            <th>Category</th>
+            <th>Payment Via</th>
+            <th>Payment Type</th>
+            <th>Slip No</th>
+            <th>Details</th>
+            <th>Payment In</th>
+            <th>Invoice</th>
+            <th>Candidates</th>
+            <th>Total Visa Price In PKR</th>
+            <th>Remaining PKR</th>
+            <th>CUR Amount</th>
+            <th>Payment In Curr</th>
           </tr>
-      
-    
-    </tbody>
-    </table>
-    <style>
-      /* Add your custom print styles here */
-      body {
-        background-color: #fff;
-      }
-      .print-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .title {
-        flex-grow: 1;
-        text-align: center;
-        margin: 0;
-        font-size: 24px;
-      }
-      .date {
-        flex-grow: 0;
-        text-align: right;
-        font-size: 20px;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      .print-table th {
-        background-color: #f2f2f2;
-      }
-    </style>
-  `;
-
+        </thead>
+        <tbody>
+          <tr>
+            <td>${String(paymentDetails?.date)}</td>
+            <td>${String(selectedSupplier)}</td>
+            <td>${String(paymentDetails?.category)}</td>
+            <td>${String(paymentDetails?.payment_Via)}</td>
+            <td>${String(paymentDetails?.payment_Type)}</td>
+            <td>${String(paymentDetails?.slip_No)}</td>
+            <td>${String(paymentDetails?.details)}</td>
+            <td>${String(paymentDetails?.payment_In)}</td>
+            <td>${String(paymentDetails?.invoice)}</td>
+            <td>${String(paymentDetails?.payments.length)}</td>
+            <td>${String(paymentDetails?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
+            <td>${String(paymentDetails?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0))}</td>
+            <td>${String(paymentDetails?.curr_Amount)}</td>
+            <td>${String(paymentDetails?.payment_In_Curr)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr/>
+      <h2 class="subtitle">Candidate Vise Details</h2>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>PP#</th>
+            <th>Entry Mode</th>
+            <th>Company</th>
+            <th>Trade</th>
+            <th>Country</th>
+            <th>Final Status</th>
+            <th>Flight Date</th>
+            <th>Visa Amount (PKR)</th>
+            <th>Past Paid (PKR)</th>
+            <th>Past Remaining (PKR)</th>
+            <th>New Payment In (PKR)</th>
+            <th>New Remaining (PKR)</th>
+            <th>Currency Amount</th>
+            <th>Currency Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${paymentDetailsString}
+        </tbody>
+      </table>
+      <style>
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .invoice {
+          flex-grow: 0;
+          text-align: left;
+          font-size: 20px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .subtitle {
+          margin: 20px 0;
+          text-align: center;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
     // Create a new window for printing
     const printWindow = window.open('', '_blank');
     if (printWindow) {
       // Write the print content to the new window
       printWindow.document.write(`
-      <html>
-        <head>
-          <title>${selectedPersonDetails.name} Details</title>
-        </head>
-        <body class='bg-dark'>${printContentString}</body>
-      </html>
-    `);
-
+        <html>
+          <head>
+            <title>${selectedSupplier} Payment In Details</title>
+          </head>
+          <body>${printContentString}</body>
+        </html>
+      `);
+  
       // Trigger print dialog
       printWindow.print();
       // Close the new window after printing
@@ -267,7 +318,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const[totalPayments,setTotalPayments]=useState(0)
-  const[totalCurrRate,setTotalCurrRate]=useState(0)
+  const[totalCurrRate,setTotalCurrRate]=useState('')
 let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
 
@@ -315,6 +366,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setLoading(false);
       }
       if (response.ok) {
+        printPaymentInvoice(json.data)
         setNewMessage(toast.success(json.message));
         getPaymentsIn();
         setLoading(false);
@@ -523,7 +575,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Curr Rate </label>
-                 <input type="number" min='0' value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
+                 <input type="text"  value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Currency </label>
@@ -900,11 +952,11 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                   </div>
                 </div>
       </form>
-      <div className="row p-0 m-0 mt-2 justify-content-center">
+      {/* <div className="row p-0 m-0 mt-2 justify-content-center">
                 <div className="col-md-2 col-sm-12">
                 <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
                 </div>
-              </div>
+              </div> */}
      </>
     )}
       <hr />

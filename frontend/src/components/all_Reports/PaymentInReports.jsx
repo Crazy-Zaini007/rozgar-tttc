@@ -32,6 +32,41 @@ export default function PaymentInReports() {
       }
     }
   }, []);
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+  const [type, setType] = useState('')
+  const [supplier, setSupplier] = useState('')
+  const [payment_Via, setPayment_Via] = useState('')
+  const [payment_Type, setPayment_Type] = useState('')
+  const [category, setCategory] = useState('')
+  const [search1, setSearch1] = useState('')
+
+  const filteredPayments = overAllPayments && overAllPayments.filter(paymentItem => {
+    let isDateInRange = true;
+    if (dateFrom && dateTo) {
+      const paymentDate = new Date(paymentItem.date);
+      const fromDate = new Date(dateFrom);
+      const toDate = new Date(dateTo);
+      isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
+    }
+    return isDateInRange &&
+    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
+    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
+    paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+    paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+    paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
+    (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.supplierName.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem?.pp_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
+
+  })
+
 
 
   const printPaymenInMainTable = () => {
@@ -56,7 +91,7 @@ export default function PaymentInReports() {
       </tr>
     </thead>
     <tbody>
-      ${overAllPayments && overAllPayments 
+      ${filteredPayments && filteredPayments 
         .filter(entry => (entry.payment_In || entry.payment_In>0||entry.type.toLowerCase().includes('in')) && (!entry.payments))
         .map((entry, index) => `
         <tr key="${entry?._id}">
@@ -125,7 +160,7 @@ export default function PaymentInReports() {
 
 
   const downloadPaymenInExcel = () => {
-    const filteredPaymentsIn = overAllPayments && overAllPayments.filter(payment => (payment.payment_In || payment.payment_In>0|| payment.type.toLowerCase().includes('in')) && (!payment.payments));
+    const filteredPaymentsIn = filteredPayments && filteredPayments.filter(payment => (payment.payment_In || payment.payment_In>0|| payment.type.toLowerCase().includes('in')) && (!payment.payments));
     const data = [];
     // Iterate over entries and push all fields
     filteredPaymentsIn.forEach((payments, index) => {
@@ -197,6 +232,70 @@ export default function PaymentInReports() {
           {!loading1 &&
               <>
                 {option === 0 &&
+                 <>
+                 <div className="col-md-12 filters">
+                <div className='py-1 mb-2 '>
+                  <div className="row">
+                  <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label>
+                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                </div>
+                  <div className="col-auto px-1">
+                      <label htmlFor="">Date From:</label>
+                      <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Date To:</label>
+                      <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Payment Via:</label>
+                      <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.payment_Via))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Payment Type:</label>
+                      <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.payment_Type))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Category:</label>
+                      <select value={category} onChange={(e) => setCategory(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.category))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Name:</label>
+                      <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.supplierName))].map(supplier => (
+                          <option key={supplier} value={supplier}>{supplier}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Type:</label>
+                      <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.type))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
                   <div className='col-md-12 p-0'>
                     <div className='py-3 mb-1 px-1 detail_table'>
                       <TableContainer sx={{ maxHeight: 600 }}>
@@ -226,9 +325,8 @@ export default function PaymentInReports() {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ?  overAllPayments.filter(cash => (cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in')) && (!cash.payments)).map((cash, outerIndex) => (
+                            {filteredPayments && filteredPayments.length > 0 ?  filteredPayments.filter(cash => (cash.payment_In || cash.payment_In>0|| cash.type.toLowerCase().includes('in')) && (!cash.payments)).map((cash, outerIndex) => (
                               // Map through the payment array
-
                               <>
                                 <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
                                   <>
@@ -279,8 +377,8 @@ export default function PaymentInReports() {
                               <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                               <TableCell className='border data_td text-center bg-success text-white'>
                             {/* Calculate the total sum of payment_In */}
-                            {overAllPayments &&  overAllPayments.length > 0 &&
-                              overAllPayments
+                            {filteredPayments &&  filteredPayments.length > 0 &&
+                              filteredPayments
                                 .filter(entry => (entry.payment_In || entry.payment_In>0|| entry.type.toLowerCase().includes('in')) && (!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_In || 0);
@@ -288,8 +386,8 @@ export default function PaymentInReports() {
                           </TableCell>
                           <TableCell className='border data_td text-center bg-warning text-white'>
                             {/* Calculate the total sum of cash_Out */}
-                            {overAllPayments && overAllPayments.length > 0 &&
-                              overAllPayments
+                            {filteredPayments && filteredPayments.length > 0 &&
+                              filteredPayments
                                 .filter(entry => (entry.payment_In || entry.payment_In>0 || entry.type.toLowerCase().includes('in')) && (!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + (entry.cash_Out || 0);
@@ -300,8 +398,8 @@ export default function PaymentInReports() {
  <> 
  <TableCell className='border data_td text-center bg-info text-white'>
                             
- { overAllPayments && overAllPayments.length > 0 &&
-   overAllPayments
+ { filteredPayments && filteredPayments.length > 0 &&
+   filteredPayments
      .filter(entry => (entry.payment_In||entry.payment_In>0 || entry.type.toLowerCase().includes('in')))
      .reduce((total, entry) => {
        return total + (entry.curr_Rate || 0);
@@ -309,8 +407,8 @@ export default function PaymentInReports() {
 </TableCell>
 <TableCell className='border data_td text-center bg-info text-white'>
                             
- { overAllPayments && overAllPayments.length > 0 &&
-   overAllPayments
+ { filteredPayments && filteredPayments.length > 0 &&
+   filteredPayments
      .filter(entry => (entry.payment_In||entry.payment_In>0 || entry.type.toLowerCase().includes('in')))
      .reduce((total, entry) => {
        return total + (entry.curr_Amount || 0);
@@ -349,6 +447,7 @@ Remaining Curr=
                       </TableContainer>
                     </div>
                   </div>
+                 </>
                 }
 
               </>

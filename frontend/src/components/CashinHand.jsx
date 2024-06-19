@@ -36,7 +36,6 @@ export default function CashinHand() {
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
-  
   const aggregatedPayments = {};
   let totalPaymentIn = 0;
   let totalCashOutIn = 0;
@@ -1094,7 +1093,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                       <>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}/{cash?.pp_N}</TableCell>
+                                        <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.supplierName}/{cash?.pp_No}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>{cash.payment_Via}</TableCell>
