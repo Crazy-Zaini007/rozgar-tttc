@@ -1,6 +1,6 @@
 import {useRef } from 'react';
 import { useAuthContext } from '../userHooks/UserAuthHook';
-import { getCrediterPurchaseParty } from '../../redux/reducers/settingSlice';
+import { getAllProtector } from '../../redux/reducers/settingSlice';
 import { useDispatch } from 'react-redux';
 
 export default function CPPHook() {
@@ -24,7 +24,7 @@ export default function CPPHook() {
 
       const json = await response.json();
       if (response.ok) {
-        dispatch(getCrediterPurchaseParty(json.data)); // Dispatch the action with received data
+        dispatch(getAllProtector(json.data)); // Dispatch the action with received data
       }
     } catch (error) {
       if (error.name === 'AbortError') {

@@ -7619,6 +7619,8 @@ const delEntry = async (req, res) => {
       const ticketAgents=await TicketAgents.find({})
       const visitSuppliers=await VisitSuppliers.find({})
       const visitAgents=await VisitAgents.find({})
+      const protectors=await Protector.find({})
+
 
       //  For Agents
 
@@ -7873,6 +7875,24 @@ const delEntry = async (req, res) => {
          }
         }
        }
+
+        //  For Protectors
+
+      
+         for (const agent of protectors){
+          if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
+           let allCandPayments=agent.payment_Out_Schema.candPayments
+           for (const payment of allCandPayments){
+            let allPayments=payment.payments
+            for (const candidatePayment of allPayments){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+                res.status(400).json({message:`You have made payments for this Candidate with Protector :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/protector/details'})
+                break;
+              }
+            }
+           }
+          }
+         }
 
 
       await Entries.findByIdAndDelete(entryId);
@@ -9092,7 +9112,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/suppliers/details'})
                 break;
               }
@@ -9279,7 +9299,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/suppliers/details'})
               break;
             }
@@ -9467,7 +9487,7 @@ let azadPicture
    for (const payment of allCandPayments){
     let allPayments=payment.payments
     for (const candidatePayment of allPayments){
-      if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+      if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
         res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/suppliers/details'})
         break;
       }
@@ -9615,7 +9635,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/agents/details'})
               break;
             }
@@ -9802,7 +9822,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/agents/details'})
               break;
             }
@@ -9992,7 +10012,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/agents/details'})
               break;
             }

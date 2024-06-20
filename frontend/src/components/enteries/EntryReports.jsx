@@ -243,7 +243,7 @@ const EntryDetails = () => {
   const companies = useSelector((state) => state.setting.companies);
   const trades = useSelector((state) => state.setting.trades);
   const protectors = useSelector((state) => state.setting.protectors);
-
+console.log('protectors',protectors)
   // const currCountries = useSelector((state) => state.setting.currCountries);
   const entryMode = useSelector((state) => state.setting.entryMode);
   const finalStatus = useSelector((state) => state.setting.finalStatus);
@@ -476,7 +476,7 @@ const EntryDetails = () => {
                   <div className="row">
                   <div className="col-auto px-1">
                       <label htmlFor="">Search by Name:</label>
-                     <input type="search"value={name} onChange={(e)=>setName(e.target.value)} />
+                     <input  type="search"value={name} onChange={(e)=>setName(e.target.value)} />
                     </div>
                   <div className="col-auto px-1">
                       <label htmlFor="">Date:</label>
@@ -493,11 +493,11 @@ const EntryDetails = () => {
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Date To:</label>
-                     <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
+                     <input  type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Trade:</label>
-                      <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
+                      <select  value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
                           <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
@@ -525,7 +525,7 @@ const EntryDetails = () => {
 
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Final Status:</label>
-                      <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
+                      <select  value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
                           <option key={final_StatusValue} value={final_StatusValue}>{final_StatusValue}</option>
@@ -534,7 +534,7 @@ const EntryDetails = () => {
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Flight Date:</label>
-                      <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
+                      <select  value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
                           <option key={flight_DateValue} value={flight_DateValue}>{flight_DateValue}</option>
@@ -552,7 +552,7 @@ const EntryDetails = () => {
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference Out Type:</label>
-                      <select value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
+                      <select  value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="agent">Agents</option>
                         <option value="supplier">Suppliers</option>
@@ -562,7 +562,7 @@ const EntryDetails = () => {
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference Out:</label>
-                      <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
+                      <select  value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
                           <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
@@ -571,7 +571,7 @@ const EntryDetails = () => {
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference In Type:</label>
-                      <select value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
+                      <select  value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="agent">Agents</option>
                         <option value="supplier">Suppliers</option>
@@ -580,7 +580,7 @@ const EntryDetails = () => {
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference In:</label>
-                      <select value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
+                      <select  value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
                           <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
@@ -600,7 +600,7 @@ const EntryDetails = () => {
                   <div className="d-flex justify-content-between">
                     <div className="d-flex left">
                     <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
-                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
+                  <select  name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
                     <option value="">All</option>
                     <option value="30">30</option>
                     <option value="50">50</option>
@@ -754,95 +754,103 @@ const EntryDetails = () => {
                             {editMode && editedRowIndex === index ? (
                               // Render input fields or editable elements when in edit mode for the specific row
                               <>
-                               <TableCell className='border data_td p-1 text-center'>
-                                <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
+                               <TableCell className='border data_td p-0 text-center'>
+                                <input className='p-0' type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
                               </TableCell>
-                               <TableCell className='border data_td p-1 '>
-                                <input type='text' value={index+1} readOnly />
+                               <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='text' value={index+1} readOnly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.entry_Date} readOnly />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='text' value={editedEntry.entry_Date} readOnly />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.name} onChange={(e) => handleInputChange(e, 'name')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='text' value={editedEntry.name} onChange={(e) => handleInputChange(e, 'name')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.pp_No} onChange={(e) => handleInputChange(e, 'pp_No')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='text' value={editedEntry.pp_No} onChange={(e) => handleInputChange(e, 'pp_No')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
 
-                                <select value={editedEntry.trade} onChange={(e) => handleInputChange(e, 'trade')} >
+                                <select className='p-0' value={editedEntry.trade} onChange={(e) => handleInputChange(e, 'trade')} >
                                   <option value={editedEntry.trade}>{editedEntry.trade}</option>
                                   {trades && trades.map((data) => (
                                     <option key={data._id} value={data.trade}>{data.trade}</option>
                                   ))}
                                 </select>
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select value={editedEntry.company} onChange={(e) => handleInputChange(e, 'company')} >
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' value={editedEntry.company} onChange={(e) => handleInputChange(e, 'company')} >
                                   <option value={editedEntry.company}>{editedEntry.company}</option>
                                   {companies && companies.map((data) => (
                                     <option key={data._id} value={data.company}>{data.company}</option>
                                   ))}
                                 </select>
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.remarks} onChange={(e) => handleInputChange(e, 'remarks')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='text' value={editedEntry.remarks} onChange={(e) => handleInputChange(e, 'remarks')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' min='0' value={editedEntry.contact} onChange={(e) => handleInputChange(e, 'contact')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.contact} onChange={(e) => handleInputChange(e, 'contact')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select value={editedEntry.final_Status} onChange={(e) => handleInputChange(e, 'final_Status')} >
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' value={editedEntry.final_Status} onChange={(e) => handleInputChange(e, 'final_Status')} >
                                   <option value={editedEntry.final_Status}>{editedEntry.final_Status}</option>
                                   {finalStatus && finalStatus.map((data) => (
                                     <option key={data._id} value={data.final_Status}>{data.final_Status}</option>
                                   ))}
                                 </select>
                               </TableCell>
-                              <TableCell className='border data_td p-1  '>
-                                <input type='date' onChange={(e) => handleInputChange(e, 'flight_Date')} />
+                              <TableCell className='border data_td p-0  '>
+                                <input className='p-0' type='date' onChange={(e) => handleInputChange(e, 'flight_Date')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select value={editedEntry.country} onChange={(e) => handleInputChange(e, 'country')} >
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' value={editedEntry.country} onChange={(e) => handleInputChange(e, 'country')} >
                                   <option value={editedEntry.country}>{editedEntry.country}</option>
                                   {countries && countries.map((data) => (
                                     <option key={data._id} value={data.country}>{data.country}</option>
                                   ))}
                                 </select>
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select value={editedEntry.entry_Mode} onChange={(e) => handleInputChange(e, 'entry_Mode')} >
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' value={editedEntry.entry_Mode} onChange={(e) => handleInputChange(e, 'entry_Mode')} >
                                   <option value={editedEntry.entry_Mode}>{editedEntry.entry_Mode}</option>
                                   {entryMode && entryMode.map((data) => (
                                     <option key={data._id} value={data.entry_Mode}>{data.entry_Mode}</option>
                                   ))}
                                 </select>
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' min='0' value={editedEntry.visa_Sales_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Sales_Rate_PKR')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Sales_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Sales_Rate_PKR')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' min='0' value={editedEntry.visa_Sale_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visa_Sale_Rate_Oth_Cur')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Sale_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visa_Sale_Rate_Oth_Cur')} />
                               </TableCell>
                              
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.reference_Out} onChange={(e) => handleInputChange(e, 'reference_Out')} >
-                                  {(editedEntry.reference_Out.toLowerCase().includes('candidate')||editedEntry.reference_Out.toLowerCase().includes('direct')) &&
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' required value={editedEntry.reference_Out} onChange={(e) => handleInputChange(e, 'reference_Out')} >
+                                {(editedEntry.reference_Out&&(editedEntry.reference_Out?.toLowerCase()===''||editedEntry.reference_Out?.toLowerCase()===null||editedEntry.reference_Out?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                  {(editedEntry.reference_Out?.toLowerCase().includes('candidate')||editedEntry.reference_Out?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.reference_Out.toLowerCase().includes('supplier')||editedEntry.reference_Out.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.reference_Out?.toLowerCase().includes('supplier')||editedEntry.reference_Out?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.reference_Out.toLowerCase().includes('agent')||editedEntry.reference_Out.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.reference_Out?.toLowerCase().includes('agent')||editedEntry.reference_Out?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -854,11 +862,11 @@ const EntryDetails = () => {
 
                               </TableCell>
 
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
                               
                                   
-                                  {(editedEntry.reference_Out.toLowerCase() === "candidate" || editedEntry.reference_Out.toLowerCase() === "candidates")  ? (
-                                  <input
+                                  {(editedEntry.reference_Out?.toLowerCase() === "candidate" || editedEntry.reference_Out?.toLowerCase() === "candidates")  ? (
+                                  <input className='p-0'
                                     type="text"
                                     placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                                     value={editedEntry.name}
@@ -866,7 +874,7 @@ const EntryDetails = () => {
                                     readOnly />
                                 ) : (
 
-                                  <select required value={editedEntry.reference_Out_Name} onChange={(e) => handleInputChange(e, 'reference_Out_Name')} >
+                                  <select className='p-0' required value={editedEntry.reference_Out_Name} onChange={(e) => handleInputChange(e, 'reference_Out_Name')} >
                                     {(editedEntry.reference_Out === "agent" || editedEntry.reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
@@ -971,23 +979,31 @@ const EntryDetails = () => {
                                 
                               </TableCell>
 
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.reference_In} onChange={(e) => handleInputChange(e, 'reference_In')} >
-                                {(editedEntry.reference_In.toLowerCase().includes('candidate')||editedEntry.reference_In.toLowerCase().includes('direct')) &&
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' required value={editedEntry.reference_In} onChange={(e) => handleInputChange(e, 'reference_In')} >
+                                {(editedEntry.reference_In&&(editedEntry.reference_In?.toLowerCase()===''||editedEntry.reference_In?.toLowerCase()===null||editedEntry.reference_In?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                {(editedEntry.reference_In?.toLowerCase().includes('candidate')||editedEntry.reference_In?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.reference_In.toLowerCase().includes('supplier')||editedEntry.reference_In.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.reference_In?.toLowerCase().includes('supplier')||editedEntry.reference_In?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.reference_In.toLowerCase().includes('agent')||editedEntry.reference_In.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.reference_In?.toLowerCase().includes('agent')||editedEntry.reference_In?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -997,10 +1013,10 @@ const EntryDetails = () => {
                                 </select>
 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
                             
                                     {(editedEntry.reference_In.toLowerCase() === "candidate" || editedEntry.reference_In.toLowerCase() === "candidates") ? (
-                <input
+                <input className='p-0'
                   type="text"
                   placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                   value={editedEntry.name}
@@ -1008,7 +1024,7 @@ const EntryDetails = () => {
                   readOnly
                 />
               ) : (
-                <select
+                <select className='p-0'
                   required
                   value={editedEntry.reference_In_Name}
                   onChange={(e) => handleInputChange(e, 'reference_In_Name')}
@@ -1062,14 +1078,14 @@ const EntryDetails = () => {
                                
                           
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' min='0' value={editedEntry.visa_Purchase_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Purchase_Rate_PKR')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Purchase_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Purchase_Rate_PKR')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='number' min='0' value={editedEntry.visa_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visa_Purchase_Rate_Oth_Cur')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visa_Purchase_Rate_Oth_Cur')} />
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'picture')} />
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'picture')} />
                               </TableCell>
 
                               {section1 &&
@@ -1078,32 +1094,39 @@ const EntryDetails = () => {
 
        
                                  
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.visit_Sales_PKR} onChange={(e) => handleInputChange(e, 'visit_Sales_PKR')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.visit_Sales_PKR} onChange={(e) => handleInputChange(e, 'visit_Sales_PKR')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                  <input type='number' value={editedEntry.visit_Sales_Rate_Oth_Curr} onChange={(e) => handleInputChange(e, 'visit_Sales_Rate_Oth_Curr')} />
+                                  <TableCell className='border data_td p-0 '>
+                                  <input className='p-0' type='number' value={editedEntry.visit_Sales_Rate_Oth_Curr} onChange={(e) => handleInputChange(e, 'visit_Sales_Rate_Oth_Curr')} />
 
                                   </TableCell>
                                  
-                                  <TableCell className='border data_td p-1 '>
-                                  <select required value={editedEntry.visit_Reference_Out} onChange={(e) => handleInputChange(e, 'visit_Reference_Out')} >
-                               
-                                  {(editedEntry.visit_Reference_Out.toLowerCase().includes('candidate')||editedEntry.visit_Reference_Out.toLowerCase().includes('direct')) &&
+                                  <TableCell className='border data_td p-0 '>
+                                  <select className='p-0' required value={editedEntry.visit_Reference_Out} onChange={(e) => handleInputChange(e, 'visit_Reference_Out')} >
+                                  {(editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out?.toLowerCase()===''||editedEntry.visit_Reference_Out?.toLowerCase()===null||editedEntry?.visit_Reference_Out.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                  {(editedEntry.visit_Reference_Out?.toLowerCase().includes('candidate')||editedEntry.visit_Reference_Out?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.visit_Reference_Out.toLowerCase().includes('supplier')||editedEntry.visit_Reference_Out.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.visit_Reference_Out?.toLowerCase().includes('supplier')||editedEntry.visit_Reference_Out?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.visit_Reference_Out.toLowerCase().includes('agent')||editedEntry.visit_Reference_Out.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.visit_Reference_Out?.toLowerCase().includes('agent')||editedEntry.visit_Reference_Out?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -1114,10 +1137,10 @@ const EntryDetails = () => {
                                   </TableCell>
 
 
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-0 '>
                              
                                   {editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out.toLowerCase() === "candidate" || editedEntry.visit_Reference_Out.toLowerCase() === "candidates")  ? (
-                                  <input
+                                  <input className='p-0'
                                     type="text"
                                     placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                                     value={editedEntry.name}
@@ -1125,7 +1148,7 @@ const EntryDetails = () => {
                                     readOnly />
                                 ) : (
 
-                                  <select required value={editedEntry.visit_Reference_Out_Name} onChange={(e) => handleInputChange(e, 'visit_Reference_Out_Name')} >
+                                  <select className='p-0' required value={editedEntry.visit_Reference_Out_Name} onChange={(e) => handleInputChange(e, 'visit_Reference_Out_Name')} >
                                     {editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out === "agent" || editedEntry.visit_Reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
@@ -1227,24 +1250,31 @@ const EntryDetails = () => {
                                 
                                 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.visit_Reference_In} onChange={(e) => handleInputChange(e, 'visit_Reference_In')} >
-                             
-                                {(editedEntry.visit_Reference_In.toLowerCase().includes('candidate')||editedEntry.visit_Reference_In.toLowerCase().includes('direct')) &&
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' required value={editedEntry.visit_Reference_In} onChange={(e) => handleInputChange(e, 'visit_Reference_In')} >
+                                {(editedEntry.visit_Reference_In&&(editedEntry.visit_Reference_In?.toLowerCase()===''||editedEntry.visit_Reference_In?.toLowerCase()===null||editedEntry.visit_Reference_In?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                {(editedEntry.visit_Reference_In?.toLowerCase().includes('candidate')||editedEntry.visit_Reference_In?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.visit_Reference_In.toLowerCase().includes('supplier')||editedEntry.visit_Reference_In.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.visit_Reference_In?.toLowerCase().includes('supplier')||editedEntry.visit_Reference_In?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.visit_Reference_In.toLowerCase().includes('agent')||editedEntry.visit_Reference_In.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.visit_Reference_In?.toLowerCase().includes('agent')||editedEntry.visit_Reference_In?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -1254,10 +1284,10 @@ const EntryDetails = () => {
                                 </select>
 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
            
                                     {editedEntry.visit_Reference_In &&(editedEntry.visit_Reference_In.toLowerCase() === "candidate" || editedEntry.visit_Reference_In.toLowerCase() === "candidates") ? (
-                <input
+                <input className='p-0'
                   type="text"
                   placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                   value={editedEntry.name}
@@ -1265,7 +1295,7 @@ const EntryDetails = () => {
                   readOnly
                 />
               ) : (
-                <select
+                <select className='p-0'
                   required
                   value={editedEntry.visit_Reference_In_Name}
                   onChange={(e) => handleInputChange(e, 'visit_Reference_In_Name')}
@@ -1319,15 +1349,15 @@ const EntryDetails = () => {
                              
                           
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.visit_Purchase_Rate_PKR} onChange={(e) => handleInputChange(e, 'visit_Purchase_Rate_PKR')} />
+                              <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.visit_Purchase_Rate_PKR} onChange={(e) => handleInputChange(e, 'visit_Purchase_Rate_PKR')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                  <input type='number' value={editedEntry.visit_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visit_Purchase_Rate_Oth_Cur')} />
+                                  <TableCell className='border data_td p-0 '>
+                                  <input className='p-0' type='number' value={editedEntry.visit_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visit_Purchase_Rate_Oth_Cur')} />
 
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'visit_Section_Picture')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'visit_Section_Picture')} />
                                   </TableCell>
                                 </>
                               }
@@ -1339,31 +1369,39 @@ const EntryDetails = () => {
                                   
                                   
 
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry.ticket_Sales_PKR} onChange={(e) => handleInputChange(e, 'ticket_Sales_PKR')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' min='0' value={editedEntry.ticket_Sales_PKR} onChange={(e) => handleInputChange(e, 'ticket_Sales_PKR')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                  <input type='number' value={editedEntry.ticket_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'ticket_Sales_Rate_Oth_Cur')} />
+                                  <TableCell className='border data_td p-0 '>
+                                  <input className='p-0' type='number' value={editedEntry.ticket_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'ticket_Sales_Rate_Oth_Cur')} />
 
                                   </TableCell>
                                   
-                                  <TableCell className='border data_td p-1 '>
-                                  <select required value={editedEntry.ticket_Reference_Out} onChange={(e) => handleInputChange(e, 'ticket_Reference_Out')} >
-                                  {(editedEntry.ticket_Reference_Out.toLowerCase().includes('candidate')||editedEntry.ticket_Reference_Out.toLowerCase().includes('direct')) &&
+                                  <TableCell className='border data_td p-0 '>
+                                  <select className='p-0' required value={editedEntry.ticket_Reference_Out} onChange={(e) => handleInputChange(e, 'ticket_Reference_Out')} >
+                                  {(editedEntry.ticket_Reference_Out&&(editedEntry.ticket_Reference_Out?.toLowerCase()===''||editedEntry.ticket_Reference_Out?.toLowerCase()===null||editedEntry.ticket_Reference_Out?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                  {(editedEntry.ticket_Reference_Out?.toLowerCase().includes('candidate')||editedEntry.ticket_Reference_Out?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.ticket_Reference_Out.toLowerCase().includes('supplier')||editedEntry.ticket_Reference_Out.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.ticket_Reference_Out?.toLowerCase().includes('supplier')||editedEntry.ticket_Reference_Out?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.ticket_Reference_Out.toLowerCase().includes('agent')||editedEntry.ticket_Reference_Out.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.ticket_Reference_Out?.toLowerCase().includes('agent')||editedEntry.ticket_Reference_Out?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -1374,10 +1412,10 @@ const EntryDetails = () => {
                                   </TableCell>
 
 
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-0 '>
                                
                                   {editedEntry.ticket_Reference_Out &&(editedEntry.ticket_Reference_Out.toLowerCase() === "candidate" || editedEntry.ticket_Reference_Out.toLowerCase() === "candidates")  ? (
-                                  <input
+                                  <input className='p-0'
                                     type="text"
                                     placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                                     value={editedEntry.name}
@@ -1385,7 +1423,7 @@ const EntryDetails = () => {
                                     readOnly />
                                 ) : (
 
-                                  <select required value={editedEntry.ticket_Reference_Out_Name} onChange={(e) => handleInputChange(e, 'ticket_Reference_Out_Name')} >
+                                  <select className='p-0' required value={editedEntry.ticket_Reference_Out_Name} onChange={(e) => handleInputChange(e, 'ticket_Reference_Out_Name')} >
                                     {editedEntry.ticket_Reference_Out &&(editedEntry.ticket_Reference_Out === "agent" || editedEntry.ticket_Reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
@@ -1487,24 +1525,31 @@ const EntryDetails = () => {
                                 
                                 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.ticket_Reference_In} onChange={(e) => handleInputChange(e, 'ticket_Reference_In')} >
-                                  
-                                {(editedEntry.ticket_Reference_In.toLowerCase().includes('candidate')||editedEntry.ticket_Reference_In.toLowerCase().includes('direct')) &&
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' required value={editedEntry.ticket_Reference_In} onChange={(e) => handleInputChange(e, 'ticket_Reference_In')} >
+                                {(editedEntry.ticket_Reference_In&&(editedEntry.ticket_Reference_In?.toLowerCase()===''||editedEntry.ticket_Reference_In?.toLowerCase()===null||editedEntry.ticket_Reference_In?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                {(editedEntry.ticket_Reference_In?.toLowerCase().includes('candidate')||editedEntry.ticket_Reference_In?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.ticket_Reference_In.toLowerCase().includes('supplier')||editedEntry.ticket_Reference_In.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.ticket_Reference_In?.toLowerCase().includes('supplier')||editedEntry.ticket_Reference_In?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.ticket_Reference_In.toLowerCase().includes('agent')||editedEntry.ticket_Reference_In.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.ticket_Reference_In?.toLowerCase().includes('agent')||editedEntry.ticket_Reference_In?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -1514,10 +1559,10 @@ const EntryDetails = () => {
                                 </select>
 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
                              
                                     {editedEntry.ticket_Reference_In &&(editedEntry.ticket_Reference_In.toLowerCase() === "candidate" || editedEntry.ticket_Reference_In.toLowerCase() === "candidates") ? (
-                <input
+                <input className='p-0'
                   type="text"
                   placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                   value={editedEntry.name}
@@ -1525,7 +1570,7 @@ const EntryDetails = () => {
                   readOnly
                 />
               ) : (
-                <select
+                <select className='p-0'
                   required
                   value={editedEntry.ticket_Reference_In_Name}
                   onChange={(e) => handleInputChange(e, 'ticket_Reference_In_Name')}
@@ -1579,16 +1624,16 @@ const EntryDetails = () => {
                               
                           
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.ticket_Purchase_PKR} onChange={(e) => handleInputChange(e, 'ticket_Purchase_PKR')} />
+                              <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.ticket_Purchase_PKR} onChange={(e) => handleInputChange(e, 'ticket_Purchase_PKR')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-0 '>
 
-                                  <input type='number' value={editedEntry.ticket_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'ticket_Purchase_Rate_Oth_Cur')} />
+                                  <input className='p-0' type='number' value={editedEntry.ticket_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'ticket_Purchase_Rate_Oth_Cur')} />
                                     
                                   </TableCell>
-                                   <TableCell className='border data_td p-1 '>
-                                    <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'ticket_Section_Picture')} />
+                                   <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'ticket_Section_Picture')} />
                                   </TableCell>
                                 </>
                               }
@@ -1597,33 +1642,41 @@ const EntryDetails = () => {
                                 <>
                                   {/* Azad Visa Sales Purchase Section Data */}
 
-                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.azad_Visa_Sales_PKR} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_PKR')} />
+                                   <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.azad_Visa_Sales_PKR} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_PKR')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-0 '>
 
-                                  <input type='number' value={editedEntry.azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_Rate_Oth_Cur')} />
+                                  <input className='p-0' type='number' value={editedEntry.azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_Rate_Oth_Cur')} />
 
                                   </TableCell>
 
                                  
-                                  <TableCell className='border data_td p-1 '>
-                                  <select required value={editedEntry.azad_Reference_Out} onChange={(e) => handleInputChange(e, 'azad_Reference_Out')} >
-                                  {(editedEntry.azad_Reference_Out.toLowerCase().includes('candidate')||editedEntry.azad_Reference_Out.toLowerCase().includes('direct')) &&
+                                  <TableCell className='border data_td p-0 '>
+                                  <select className='p-0' required value={editedEntry.azad_Reference_Out} onChange={(e) => handleInputChange(e, 'azad_Reference_Out')} >
+                                  {(editedEntry.azad_Reference_Out&&(editedEntry.azad_Reference_Out?.toLowerCase()===''||editedEntry.azad_Reference_Out?.toLowerCase()===null||editedEntry.azad_Reference_Out?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                  {(editedEntry.azad_Reference_Out?.toLowerCase().includes('candidate')||editedEntry.azad_Reference_Out?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.azad_Reference_Out.toLowerCase().includes('supplier')||editedEntry.azad_Reference_Out.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.azad_Reference_Out?.toLowerCase().includes('supplier')||editedEntry.azad_Reference_Out?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.azad_Reference_Out.toLowerCase().includes('agent')||editedEntry.azad_Reference_Out.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.azad_Reference_Out?.toLowerCase().includes('agent')||editedEntry.azad_Reference_Out?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -1634,10 +1687,10 @@ const EntryDetails = () => {
                                   </TableCell>
 
 
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-0 '>
                               
                                   {editedEntry.azad_Reference_Out &&(editedEntry.azad_Reference_Out.toLowerCase() === "candidate" || editedEntry.azad_Reference_Out.toLowerCase() === "candidates")  ? (
-                                  <input
+                                  <input className='p-0'
                                     type="text"
                                     placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                                     value={editedEntry.name}
@@ -1645,7 +1698,7 @@ const EntryDetails = () => {
                                     readOnly />
                                 ) : (
 
-                                  <select required value={editedEntry.azad_Reference_Out_Name} onChange={(e) => handleInputChange(e, 'azad_Reference_Out_Name')} >
+                                  <select className='p-0' required value={editedEntry.azad_Reference_Out_Name} onChange={(e) => handleInputChange(e, 'azad_Reference_Out_Name')} >
                                     {editedEntry.azad_Reference_Out &&(editedEntry.azad_Reference_Out === "agent" || editedEntry.azad_Reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
@@ -1747,23 +1800,31 @@ const EntryDetails = () => {
                                 
                                 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.azad_Reference_In} onChange={(e) => handleInputChange(e, 'azad_Reference_In')} >
-                                {(editedEntry.azad_Reference_In.toLowerCase().includes('candidate')||editedEntry.azad_Reference_In.toLowerCase().includes('direct')) &&
+                              <TableCell className='border data_td p-0 '>
+                                <select className='p-0' required value={editedEntry.azad_Reference_In} onChange={(e) => handleInputChange(e, 'azad_Reference_In')} >
+                                {(editedEntry.azad_Reference_In&&(editedEntry.azad_Reference_In?.toLowerCase()===''||editedEntry.azad_Reference_In?.toLowerCase()===null||editedEntry.azad_Reference_In?.toLowerCase()===undefined)) &&
+                                  <>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+                                  <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
+                                  <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  </>
+                                  }
+                                {(editedEntry.azad_Reference_In?.toLowerCase().includes('candidate')||editedEntry.azad_Reference_In?.toLowerCase().includes('direct')) &&
                                   <>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   </>
                                   }
-                                   {(editedEntry.azad_Reference_In.toLowerCase().includes('supplier')||editedEntry.azad_Reference_In.toLowerCase().includes('suplier')) &&
+                                   {(editedEntry.azad_Reference_In?.toLowerCase().includes('supplier')||editedEntry.azad_Reference_In?.toLowerCase().includes('suplier')) &&
                                   <>
-                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   </>
                                   }
-                                    {(editedEntry.azad_Reference_In.toLowerCase().includes('agent')||editedEntry.azad_Reference_In.toLowerCase().includes('agnet')) &&
+                                    {(editedEntry.azad_Reference_In?.toLowerCase().includes('agent')||editedEntry.azad_Reference_In?.toLowerCase().includes('agnet')) &&
                                   <>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
@@ -1773,10 +1834,10 @@ const EntryDetails = () => {
                                 </select>
 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
                              
                                     {editedEntry.azad_Reference_In &&(editedEntry.azad_Reference_In.toLowerCase() === "candidate" || editedEntry.azad_Reference_In.toLowerCase() === "candidates") ? (
-                <input
+                <input className='p-0'
                   type="text"
                   placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
                   value={editedEntry.name}
@@ -1784,7 +1845,7 @@ const EntryDetails = () => {
                   readOnly
                 />
               ) : (
-                <select
+                <select className='p-0'
                   required
                   value={editedEntry.azad_Reference_In_Name}
                   onChange={(e) => handleInputChange(e, 'azad_Reference_In_Name')}
@@ -1838,16 +1899,16 @@ const EntryDetails = () => {
                          
                           
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.azad_Visa_Purchase_PKR} onChange={(e) => handleInputChange(e, 'azad_Visa_Purchase_PKR')} />
+                              <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.azad_Visa_Purchase_PKR} onChange={(e) => handleInputChange(e, 'azad_Visa_Purchase_PKR')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
+                                  <TableCell className='border data_td p-0 '>
 
-                                  <input type='number' value={editedEntry.azad_Visa_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'azad_Visa_Purchase_Rate_Oth_Cur')} />
+                                  <input className='p-0' type='number' value={editedEntry.azad_Visa_Purchase_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'azad_Visa_Purchase_Rate_Oth_Cur')} />
 
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'azad_Visa_Section_Picture')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'azad_Visa_Section_Picture')} />
                                   </TableCell>
                                 </>
                               }
@@ -1855,28 +1916,27 @@ const EntryDetails = () => {
                               {section4 &&
                                 <>
                                   {/* Protector Section*/}
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.protector_Price_In} onChange={(e) => handleInputChange(e, 'protector_Price_In')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.protector_Price_In} onChange={(e) => handleInputChange(e, 'protector_Price_In')} />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.protector_Price_In_Oth_Cur} onChange={(e) => handleInputChange(e, 'protector_Price_In_Oth_Cur')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.protector_Price_In_Oth_Cur} onChange={(e) => handleInputChange(e, 'protector_Price_In_Oth_Cur')} />
                                   </TableCell>
 
-                                  <TableCell className='border data_td p-1 '>
-                                <select required value={editedEntry.protector_Reference_In} onChange={(e) => handleInputChange(e, 'protector_Reference_In')} >
+                                  <TableCell className='border data_td p-0 '>
+                                <select className='p-0' required value={editedEntry.protector_Reference_In} onChange={(e) => handleInputChange(e, 'protector_Reference_In')} >
                                   
                                   <option className="my-1 py-2" value="protector">Protector</option>
                                 
                                 </select>
 
                               </TableCell>
-                              <TableCell className='border data_td p-1 '>
+                              <TableCell className='border data_td p-0 '>
                               
-                                  <select required value={editedEntry.protector_Reference_In_Name} onChange={(e) => handleInputChange(e, 'protector_Reference_In_Name')} >
+                                  <select className='p-0' required value={editedEntry.protector_Reference_In_Name} onChange={(e) => handleInputChange(e, 'protector_Reference_In_Name')} >
                                
-                                  {editedEntry.protector_Reference_In &&(editedEntry.protector_Reference_In.toLowerCase()==="protector" || editedEntry.protector_Reference_In.toLowerCase()==="protectors") &&(
-                                    <>
-              
+                                 
+        
                                     <option value="">choose Protector</option>
                                     {protectors && protectors.map((data)=>(
                                      <option
@@ -1887,18 +1947,14 @@ const EntryDetails = () => {
                                      {data.supplierName}
                                    </option>
                                     ))}
-                                    </>
-                                  ) 
-              
-                                  }
-              
+                                  
                                 </select>
                              
                           
                               </TableCell>
                               
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry.protector_Price_Out} onChange={(e) => handleInputChange(e, 'protector_Price_Out')} />
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.protector_Price_Out} onChange={(e) => handleInputChange(e, 'protector_Price_Out')} />
                                   </TableCell>
                                 </>
                               }
@@ -1910,7 +1966,7 @@ const EntryDetails = () => {
                               // Render plain text or non-editable elements when not in edit mode or for other rows
                               <>
                               <TableCell className='border data_td px-1 py-0 text-center'>
-                                <input type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
+                                <input className='p-0' type='checkbox'  onChange={(e) => handleEntryId(entry._id, e.target.checked)} />
                               </TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{index+1}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.entry_Date}</TableCell>

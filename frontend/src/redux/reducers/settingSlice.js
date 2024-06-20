@@ -299,7 +299,7 @@ export const settingSlice = createSlice({
  // Protectors Suppliers
 
     // a- getting Currencies
-    getProtector: (state, action) => {
+    getAllProtector: (state, action) => {
       state.protectors = action.payload
     },
 
@@ -323,6 +323,6 @@ export const settingSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { getVisaSalesParty, addVisaSalesParty, getVisaPurchaseParty, addVisaPurchaseParty, getTicketSalesParty, addTicketSalesParty, getTicketPurchaseParty, addTicketPurchaseParty, getVisitSalesParty, addVisitSalesParty, getVisitPurchaseParty, addVisitPurchaseParty, getAzadVisaSalesParty, addAzadVisaSalesParty, getAzadVisaPurchaseParty, addAzadVisaPurchaseParty, getCrediterPurchaseParty, addCrediterPurchaseParty, getCompany, addCompany, getTrades, addTrade, getCurrCountry, addCurrCountry, getPaymentVia, addPaymentVia, getPaymentType, addPaymentType, getEntryMode, addEntryMode, getFinalStatus, addFinalStatus, getCountry, addCountry, getCategory, addCategory, getExpeCategory, addExpeCategory, getCurrency, addCurrency,getProtector,addProtector,getAssets,addAssets,getCrediterSupplierParty,addCrediterSupplierParty } = settingSlice.actions
+export const { getVisaSalesParty, addVisaSalesParty, getVisaPurchaseParty, addVisaPurchaseParty, getTicketSalesParty, addTicketSalesParty, getTicketPurchaseParty, addTicketPurchaseParty, getVisitSalesParty, addVisitSalesParty, getVisitPurchaseParty, addVisitPurchaseParty, getAzadVisaSalesParty, addAzadVisaSalesParty, getAzadVisaPurchaseParty, addAzadVisaPurchaseParty, getCrediterPurchaseParty, addCrediterPurchaseParty, getCompany, addCompany, getTrades, addTrade, getCurrCountry, addCurrCountry, getPaymentVia, addPaymentVia, getPaymentType, addPaymentType, getEntryMode, addEntryMode, getFinalStatus, addFinalStatus, getCountry, addCountry, getCategory, addCategory, getExpeCategory, addExpeCategory, getCurrency, addCurrency,getAllProtector,addProtector,getAssets,addAssets,getCrediterSupplierParty,addCrediterSupplierParty } = settingSlice.actions
 
 export default settingSlice.reducer
