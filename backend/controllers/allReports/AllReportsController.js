@@ -104,23 +104,7 @@ const getAllPayments = async (req, res) => {
       }
     }
 
-    // Iterate through CDWOC 
-    cdwocs.forEach((cdwoc) => {
-      // Check if payment_In_Schema exists and has the expected structure
-      if (cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment) {
-        const paymentInDetails = cdwoc.payment_In_Schema.payment.map(
-          (payment) => ({
-            supplierName: cdwoc.payment_In_Schema.supplierName,
-            type: "CDWOC_Payment",
-            remaining: cdwoc.payment_In_Schema.total_Payment_In-cdwoc.payment_In_Schema.total_Payment_Out,
-            remaining_Curr:0,
-            ...payment.toObject(),
-          })
-        );
-        mergedPayments = mergedPayments.concat(paymentInDetails);
-      }
-     
-    })
+ 
      // Iterate through Assets 
      assets.forEach((asset) => {
       // Check if payment_In_Schema exists and has the expected structure
@@ -914,7 +898,6 @@ const getTotalPayments = async (req, res) => {
     const employees = await Employees.find();
     const expenses = await Expenses.find();
     const cdwcs = await CDWC.find();
-    const cdwocs = await CDWOC.find();
     const assets = await Assets.find();
     // Initialize variables to store total payments
     let totalPaymentIn = 0;
@@ -954,18 +937,7 @@ const getTotalPayments = async (req, res) => {
       }
     }
 
-    for (const cdwoc of cdwocs) {
-      if (cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment) {
-        const payments = cdwoc.payment_In_Schema.payment;
-        if (payments) {
-          for (const payment of payments) {
-           
-              totalPaymentIn += payment.payment_In
-
-          }
-        }
-      }
-    }
+   
 
     for (const asset of assets) {
       if (asset.payment_In_Schema && asset.payment_In_Schema.payment) {
@@ -1113,7 +1085,7 @@ const getTotalAdvancePayments = async (req, res) => {
       { model: TicketCandidates, schemaType: "payment_In_Schema" },
       { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
+    
       { model: Assets, schemaType: "payment_In_Schema" },
 
     ];
@@ -1233,7 +1205,6 @@ const getTotalAdvancePayments = async (req, res) => {
       { model: VisitCandidates, schemaType: "payment_Out_Schema" },
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" }
     ];
 
@@ -1471,7 +1442,6 @@ const getAllPaymentsByDate = async (req, res) => {
       { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
     ];
 
@@ -1492,7 +1462,6 @@ const getAllPaymentsByDate = async (req, res) => {
       { model: CashInHand, schemaType: "CashInHandSchema" }, // Including CashInHand schema for payment_Out
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
 
     ]
@@ -1739,9 +1708,7 @@ const getAllBanksPayments = async (req, res) => {
       { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
-
     ];
 
     // Array of collections to query for payment_Out
@@ -1761,7 +1728,6 @@ const getAllBanksPayments = async (req, res) => {
       { model: CashInHand, schemaType: "CashInHandSchema" }, // Including CashInHand schema for payment_Out
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
     ];
 
@@ -1974,7 +1940,6 @@ const getTodayAllPayments = async (req, res) => {
       { model: VisitCandidates, schemaType: "payment_In_Schema" },
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
 
     ];
@@ -1996,7 +1961,6 @@ const getTodayAllPayments = async (req, res) => {
       { model: CashInHand, schemaType: "CashInHandSchema" },
       { model: Protector, schemaType: "payment_Out_Schema" },
       { model: CDWC, schemaType: "payment_In_Schema" },
-      { model: CDWOC, schemaType: "payment_In_Schema" },
       { model: Assets, schemaType: "payment_In_Schema" },
     ];
 
@@ -2604,8 +2568,6 @@ const getNormalPayments = async (req, res) => {
 
   const assets=await Assets.find({})
   const cdwcs=await CDWC.find({})
-  const cdwocs=await CDWOC.find({})
-
 
   for (const asset of assets){
     if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
@@ -2658,35 +2620,6 @@ const getNormalPayments = async (req, res) => {
             
           }
           mergedPayments.push(newPayment);
-        }
-      }
-    }
-  }
-  for (const cdwoc of cdwocs){
-    if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-      const payments=cdwoc.payment_In_Schema.payment
-      for (const payment of payments){
-        if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='normal'){
-          const newPayment={
-            category:payment.category,
-            payment_Via:payment.payment_Via,
-            payment_Type:payment.payment_Type,
-            slip_No:payment.slip_No,
-            payment_In:payment.payment_In,
-            payment_In_Curr:payment.payment_In_Curr,
-            slip_Pic:payment.slip_Pic,
-            details:payment.details,
-            date:payment.date,
-            curr_Rate:payment.curr_Rate,
-            curr_Amount:payment.curr_Amount,
-            invoice:payment.invoice,
-            name:cdwoc.payment_In_Schema.supplierName,
-            type:"CDWOC_Payment_In",
-           
-
-          }
-          mergedPayments.push(newPayment)
-
         }
       }
     }
@@ -2749,33 +2682,7 @@ const getNormalPayments = async (req, res) => {
       }
     }
   }
-  for (const cdwoc of cdwocs){
-    if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-      const payments=cdwoc.payment_In_Schema.payment
-      for (const payment of payments){
-        if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='normal'){
-          const newPayment = {
-            category:payment.category,
-            payment_Via:payment.payment_Via,
-            payment_Type:payment.payment_Type,
-            slip_No:payment.slip_No,
-            payment_Out:payment.payment_Out,
-            payment_In_Curr:payment.payment_In_Curr,
-            slip_Pic:payment.slip_Pic,
-            details:payment.details,
-            date:payment.date,
-            curr_Rate:payment.curr_Rate,
-            curr_Amount:payment.curr_Amount,
-            invoice:payment.invoice,
-            name: cdwoc.payment_In_Schema.supplierName,
-            type: "CDWOC_Payment_Out",
-          };
-          mergedPayments.push(newPayment);
 
-        }
-      }
-    }
-  }
   // Initialize total advance payment for payment_Out
 
   const expenses=await Expenses.find({})
@@ -3321,35 +3228,6 @@ const getAdvancePayments = async (req, res) => {
        }
      }
    }
-   for (const cdwoc of cdwocs){
-     if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-       const payments=cdwoc.payment_In_Schema.payment
-       for (const payment of payments){
-         if(payment.payment_In>0 && payment.payment_Out<1 && payment.payment_Type.toLowerCase()==='advance'){
-           const newPayment={
-             category:payment.category,
-             payment_Via:payment.payment_Via,
-             payment_Type:payment.payment_Type,
-             slip_No:payment.slip_No,
-             payment_In:payment.payment_In,
-             payment_In_Curr:payment.payment_In_Curr,
-             slip_Pic:payment.slip_Pic,
-             details:payment.details,
-             date:payment.date,
-             curr_Rate:payment.curr_Rate,
-             curr_Amount:payment.curr_Amount,
-             invoice:payment.invoice,
-             name:cdwoc.payment_In_Schema.supplierName,
-             type:"CDWOC_Payment_In",
-            
- 
-           }
-           mergedPayments.push(newPayment)
- 
-         }
-       }
-     }
-   }
    
    for (const asset of assets){
      if(asset.payment_In_Schema && asset.payment_In_Schema.payment){
@@ -3408,33 +3286,7 @@ const getAdvancePayments = async (req, res) => {
        }
      }
    }
-   for (const cdwoc of cdwocs){
-     if(cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment){
-       const payments=cdwoc.payment_In_Schema.payment
-       for (const payment of payments){
-         if(payment.payment_Out>0 && payment.payment_In<1 && payment.payment_Type.toLowerCase()==='advance'){
-           const newPayment = {
-             category:payment.category,
-             payment_Via:payment.payment_Via,
-             payment_Type:payment.payment_Type,
-             slip_No:payment.slip_No,
-             payment_Out:payment.payment_Out,
-             payment_In_Curr:payment.payment_In_Curr,
-             slip_Pic:payment.slip_Pic,
-             details:payment.details,
-             date:payment.date,
-             curr_Rate:payment.curr_Rate,
-             curr_Amount:payment.curr_Amount,
-             invoice:payment.invoice,
-             name: cdwoc.payment_In_Schema.supplierName,
-             type: "CDWOC_Payment_Out",
-           };
-           mergedPayments.push(newPayment);
- 
-         }
-       }
-     }
-   }
+   
    // Initialize total advance payment for payment_Out
  
    const expenses=await Expenses.find({})

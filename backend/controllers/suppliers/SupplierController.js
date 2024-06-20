@@ -3823,7 +3823,7 @@ const addCandVisePaymentIn=async(req,res)=>{
     await newNotification.save()
 
     await existingSupplier.save();
-    res.status(200).json({
+    res.status(200).json({ data:candPayments,
       message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Supplier: ${supplierName}'s Record`,
     })
 
@@ -4424,7 +4424,7 @@ const addCandVisePaymentOut=async(req,res)=>{
     await newNotification.save()
 
     await existingSupplier.save();
-    res.status(200).json({
+    res.status(200).json({ data:candPayments,
       message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Supplier: ${supplierName}'s Record`,
     })
 

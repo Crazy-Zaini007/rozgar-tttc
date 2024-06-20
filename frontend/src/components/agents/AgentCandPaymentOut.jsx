@@ -323,7 +323,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
 
   
   const[totalPayments,setTotalPayments]=useState(0)
-  const[totalCurrRate,setTotalCurrRate]=useState('')
+  const[totalCurrRate,setTotalCurrRate]=useState(0)
 let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
   // Submitting Form Data
   const [loading, setLoading] = useState(null);
@@ -341,6 +341,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
     setCurr_Country("");
     setDate("");
     setTotalCurrRate('')
+    setTotalPayments('')
     try {
       const response = await fetch(`${apiUrl}/auth/agents/add/cand_vise/payment_out`, {
         method: "POST",
@@ -383,6 +384,8 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setCurr_Country("");
         setDate("");
         setTotalCurrRate('')
+    setTotalPayments('')
+
       }
     } catch (error) {
 
@@ -779,7 +782,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Curr Rate </label>
-                 <input type="text"  value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
+                 <input type="number"  value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Currency </label>

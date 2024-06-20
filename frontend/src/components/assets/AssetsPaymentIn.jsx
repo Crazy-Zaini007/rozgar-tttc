@@ -169,7 +169,7 @@ export default function AssetsPaymentIn() {
               <>
                 <div className="col-md-12 multiple_form p-0 border-0 border-bottom">
 
-                  <div>
+                  <di>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
                       <button className='btn btn-sm submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
@@ -217,7 +217,7 @@ export default function AssetsPaymentIn() {
                       </div>
 
                     </form>
-                  </div>
+                  </di>
 
                 </div>
               </>

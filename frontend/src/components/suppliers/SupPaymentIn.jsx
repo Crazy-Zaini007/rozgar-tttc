@@ -146,7 +146,7 @@ export default function SupPaymentIn() {
           <div className="row">
 
             <div className="col-md-12 p-0 border-0 border-bottom">
-              <div className='py-3 mb-1 px-2'>
+              <di className='py-3 mb-1 px-2'>
                 <h4>Supplier Payment In</h4>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
@@ -156,7 +156,7 @@ export default function SupPaymentIn() {
                 </label>}
                 <button className='btn m-1 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
 
-              </div>
+              </di>
             </div>
 
            

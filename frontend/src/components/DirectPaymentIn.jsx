@@ -22,6 +22,8 @@ import TicketHook from '../hooks/ticketHooks/TicketHook';
 import VisitHook from '../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../hooks/settingHooks/CPPHook';
+
+import CreditorSupplierHook from '../hooks/settingHooks/CreditorSupplierHook';
 import CDWOCHook from '../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../hooks/settingHooks/NewAssetsHook';
 
@@ -55,40 +57,11 @@ const visitAgent_Payments_In = useSelector((state) => state.visits.visitAgent_Pa
 const visitSupplier_Payments_In = useSelector((state) => state.visits.visitSupplier_Payments_In);
 const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Payments_In);
 
-const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
-
-
-const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
-const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
-
 const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
+const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
 
-const[banks,setBanks]=useState('')
-const[total,setTotal]=useState()
 
 const apiUrl = process.env.REACT_APP_API_URL;
-const getBankCash = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
-
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
-    })
-
-    const json = await response.json();
-    if (response.ok) {
-     setBanks(json.data)
-     setTotal(json.bank_Cash)
-    }
-  }
-  catch (error) {
-    setNewMessage(toast.error('Server is not Responding...'));
-    setLoading(false);
-  }
-}
-
   const { getCurrCountryData } = CurrCountryHook();
   const { getCategoryData } = CategoryHook();
   const { getPaymentViaData } = PaymentViaHook();
@@ -104,9 +77,9 @@ const getBankCash = async () => {
   const { getCDWOCPaymentsIn } = CDWOCHook()
   const { getCPPData } = CPPHook()
   const { getAssetsData } = NewAssetsHook()
-  const { getOverAllPayments, overAllPayments,getCashInHandData } = CashInHandHook()
+  const { getOverAllPayments, overAllPayments } = CashInHandHook()
+  const { getCreditoSupplierData } = CreditorSupplierHook()
   
-
   const [option, setOption] = useState(false);
   // Form input States
   const [ref, setRef] = useState("");
@@ -132,9 +105,8 @@ const getBankCash = async () => {
   const { user } = useAuthContext();
   const fetchData = async () => {
     try {
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
       getCurrCountryData()
       getCategoryData()
       getPaymentViaData()
@@ -152,6 +124,7 @@ const getBankCash = async () => {
       getVisitCandPaymentsIn()
       getVisitSupplierPaymentsIn()
       getCPPData()
+      getCreditoSupplierData()
       getAssetsData()
       getCDWCPaymentsIn()
       getCDWOCPaymentsIn()
@@ -423,9 +396,9 @@ const handleAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -494,9 +467,9 @@ const handleCandidateForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
    
     }
 
@@ -566,9 +539,9 @@ const handleSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -639,9 +612,9 @@ const handleAzadAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -711,9 +684,9 @@ const handleAzadCandForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -784,9 +757,9 @@ const handleAzadSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -857,9 +830,9 @@ const handleTicketAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -930,9 +903,9 @@ const handleTicketCandForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1002,9 +975,9 @@ const handleTicketSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1075,9 +1048,9 @@ const handleVisitAgentForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1148,9 +1121,9 @@ const handleVisitCandForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1222,9 +1195,9 @@ const handleVisitSupplierForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1294,9 +1267,9 @@ const handleCDWCForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1366,9 +1339,9 @@ const handleCDWOCForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1437,9 +1410,9 @@ const handleAssetForm = async (e) => {
       setCurr_Country('');
       setCurr_Rate('');
       setDate('')
-      getCashInHandData()
+      
       getOverAllPayments()
-      getBankCash()
+      
     }
 
   } catch (error) {
@@ -1760,8 +1733,8 @@ const handleAssetForm = async (e) => {
                   {ref==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
+                  {crediterSuppliers &&
+                    crediterSuppliers.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1971,7 +1944,7 @@ const handleAssetForm = async (e) => {
                             </TableRow>
         </TableHead>
         <TableBody>
-                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_In || cash?.payment_In>0 ||cash?.type.toLowerCase().includes('in')) ).map((cash, outerIndex) => (
+                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_In || cash?.payment_In>0 ||cash?.type.toLowerCase().includes('in'))&&!cash.payments ).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -2028,14 +2001,14 @@ const handleAssetForm = async (e) => {
                               filteredPayments
                                 .filter(entry => entry?.payment_In>0)
                                 .reduce((total, entry) => {
-                                  return total + (Math.round(entry.payment_In || 0));
+                                  return total + (Math.round(entry.payment_In || 0&&!entry.payments));
                                 }, 0)}
                           </TableCell>
                           <TableCell className='border data_td text-center bg-warning text-white  p-1'>
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => (entry?.payment_In||entry?.type.toLowerCase().includes('in')))
+                                .filter(entry => (entry?.payment_In||entry?.type.toLowerCase().includes('in')&&!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.cash_Out || 0));
                                 }, 0)}
@@ -2046,7 +2019,7 @@ const handleAssetForm = async (e) => {
                             {/* Calculate the total sum of payment_Out */}
                              {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry?.payment_In)
+                                .filter(entry => (entry?.payment_In&&!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + ((entry.curr_Rate || 0).toFixed(2));
                                 }, 0)}
@@ -2055,7 +2028,7 @@ const handleAssetForm = async (e) => {
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry =>entry?.payment_In)
+                                .filter(entry =>(entry?.payment_In&&!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + ((entry.curr_Amount || 0).toFixed(2));
                                 }, 0)}

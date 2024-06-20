@@ -38,7 +38,7 @@ const Employees =require('../../database/employees/EmployeeSchema')
 const CashInHand=require('../../database/cashInHand/CashInHandSchema')
 const Assets =require('../../database/assets/AssetsSchema')
 const MyAssets =require('../../database/setting/MyAssetsModel')
-
+const CreditorSupplier=require('../../database/setting/CreditorSupplier_Schema')
 
 const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
 const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
@@ -18384,14 +18384,6 @@ const updateCPP = async (req, res) => {
                       await cdwc.save()
                     }
 
-                    const cdwoc=await CDWOC.findOne({
-                      "payment_In_Schema.supplierName": existingSupplier.supplierName,
-                    })
-                    if(cdwoc){
-                      cdwoc.payment_In_Schema.supplierName=supplierName
-                      await cdwoc.save()
-                    }
-
                     let uploadImage
                     if(picture && !picture.startsWith("https://res.cloudinary.com")){
                         // uploading picture to cloudinary
@@ -18497,8 +18489,208 @@ const getCPP = async (req, res) => {
     }
 }
 
-// 21- Protector Parties Controllers
 
+// 21- Creditor Supplier Controllers
+
+//Adding a New Creditor Supplier  
+
+const addCreditorSupplier = async (req, res) => {
+  try {
+      const { supplierName, supplierCompany, country, contact, address, picture } = req.body
+      if (!supplierName) {
+          return res.status(400).json({ message: "Supplier Name is required" })
+      }
+    
+      const userId = req.user._id
+      const user = await User.findById(userId)
+      if (!user) {
+          res.status(404).json({ message: "User not found" })
+      }
+
+      if (user) {
+          // Checking User Role 
+          if (user.role !== "Admin") {
+              res.status(404).json({ message: "Only Admin is allowed!" })
+          }
+
+
+          if (user.role === "Admin") {
+
+              // Check if a Supplier with the same name already exists
+
+              const existingSupplier = await CreditorSupplier.findOne({ supplierName });
+              if (existingSupplier) {
+                  return res.status(400).json({ message: "A Supplier with this Name already exists" });
+              }
+
+              if (!existingSupplier) {
+
+                let uploadImage 
+                if(picture){
+                   // uploading picture to cloudinary
+                  uploadImage = await cloudinary.uploader.upload(picture, {
+                    upload_preset: 'rozgar'
+                })
+                }
+
+                  const newSupplier = new CPP({
+                      supplierName,
+                      supplierCompany,
+                      country,
+                      contact,
+                      address,
+
+                      picture: uploadImage?.secure_url || ""
+                  })
+
+                  await newSupplier.save()
+                  res.status(200).json({ data: newSupplier, message: `${supplierName} added successfully` })
+              }
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message })
+  }
+}
+
+
+const updateCreditorSupplier = async (req, res) => {
+try {
+    const { supplierId,supplierName, supplierCompany, country, contact, address, picture } = req.body
+    if (!supplierId) {
+        return res.status(400).json({ message: "Supplier Id is required" })
+    }
+   
+    const userId = req.user._id
+    const user = await User.findById(userId)
+    if (!user) {
+        res.status(404).json({ message: "User not found" })
+    }
+
+    if (user) {
+        // Checking User Role 
+        if (user.role !== "Admin") {
+            res.status(404).json({ message: "Only Admin is allowed!" })
+        }
+
+        if (user.role === "Admin") {
+            // Check if a Supplier with the same name already exists
+
+            const existingSupplier = await CreditorSupplier.findById(supplierId);
+            if (!existingSupplier) {
+                return res.status(400).json({ message: "Supplier not found!" });
+            }
+            if (existingSupplier) {
+                
+                
+                  const cdwoc=await CDWOC.findOne({
+                    "payment_In_Schema.supplierName": existingSupplier.supplierName,
+                  })
+                  if(cdwoc){
+                    cdwoc.payment_In_Schema.supplierName=supplierName
+                    await cdwoc.save()
+                  }
+
+                  let uploadImage
+                  if(picture && !picture.startsWith("https://res.cloudinary.com")){
+                      // uploading picture to cloudinary
+                       uploadImage = await cloudinary.uploader.upload(picture, {
+                          upload_preset: 'rozgar'
+                      })
+                  }
+                  existingSupplier.supplierName=supplierName
+                  existingSupplier.supplierCompany=supplierCompany
+                  existingSupplier.country=country
+                  existingSupplier.contact=contact
+                  existingSupplier.address=address
+                  if (picture && uploadImage) {
+                      existingSupplier.picture = uploadImage.secure_url;
+                    }      
+
+                await existingSupplier.save()
+                res.status(200).json({  message: `Supplier updated successfully` })
+            }
+        }
+    }
+} catch (error) {
+    res.status(500).json({ message: error.message })
+}
+}
+
+
+const deleteCreditorSupplier = async (req, res) => {
+try {
+    const { supplierId } = req.body
+    if (!supplierId) {
+        return res.status(400).json({ message: "Supplier Id is required" })
+    }
+   
+    const userId = req.user._id
+    const user = await User.findById(userId)
+    if (!user) {
+        res.status(404).json({ message: "User not found" })
+    }
+
+    if (user) {
+        // Checking User Role 
+        if (user.role !== "Admin") {
+            res.status(404).json({ message: "Only Admin is allowed!" })
+        }
+
+        if (user.role === "Admin") {
+            // Check if a Supplier with the same name already exists
+
+            const existingSupplier = await CreditorSupplier.findById(supplierId);
+            if (!existingSupplier) {
+                return res.status(400).json({ message: "Supplier not found!" });
+            }
+            if (existingSupplier) {
+                 
+
+                  const cdwoc=await CDWOC.findOne({
+                    "payment_In_Schema.supplierName": existingSupplier.supplierName,
+                  })
+                  if(cdwoc){
+                    cdwoc.payment_In_Schema=null
+                    await cdwoc.save()
+                  }
+
+              const deleteSupplier=await CreditorSupplier.findByIdAndDelete(supplierId)
+
+                res.status(200).json({  message: `Supplier deleted successfully` })
+            }
+        }
+    }
+} catch (error) {
+    res.status(500).json({ message: error.message })
+}
+}
+
+// getting Crediter Purchase Parties
+
+const getCreditorSupplier = async (req, res) => {
+  try {
+      const userId = req.user._id
+
+      const user = await User.findById(userId)
+      if (!user) {
+          res.status(404).json({ message: "User not found" })
+      }
+
+      if (user) {
+
+          const crediterPurchaseParties = await CreditorSupplier.find({})
+          res.status(200).json({ data: crediterPurchaseParties })
+
+      }
+
+  } catch (error) {
+      res.status(500).json({ message: error.message })
+
+  }
+}
+
+// 22- Protector Parties Controllers
 //Adding a New Protector Party 
 
 const addProtector = async (req, res) => {
@@ -18948,5 +19140,4 @@ const getAssets = async (req, res) => {
   }
 }
 
-
-module.exports = {addVSP,updateVSP,deleteVSP, getVSP, addVPP,updateVPP,deleteVPP, getVPP, addTSP,updateTSP,deleteTSP, getTSP, addTPP,updateTPP,deleteTPP, getTPP, addAVSP,updateAVSP,deleteAVSP, getAVSP, addAVPP,updateAVPP,deleteAVPP, getAVPP, addVISP,updateVISP,deleteVISP, getVISP, addVIPP,updateVIPP,deleteVIPP, getVIPP, addCompany,updateCompany,deleteCompany, getCompany, addTrade,updateTrade,deleteTrade, getTrade, addCurrCountry,updateCurrCountry,deleteCurrCountry, getCurrCountry, addPaymentVia,updatePaymentVia,deletePaymentVia, getPaymentVia, addPaymentType,updatePaymentType,deletePaymentType, getPaymentType, addEntryMode,updateEntryMode,deleteEntryMode, getEntryMode, addFinalStatus,updateFinalStatus,deleteFinalStatus, getFinalStatus, addCountry,updateCountry,deleteCountry, getCountry, addCategory,updateCategory,deleteCategory, getCategory, addExpeCategory,updateExpenseCategory,deleteExpenseCategory, getExpeCategory, addCurrency,updateCurrency,deleteCurrency, getCurrency, addCPP,updateCPP,deleteCPP, getCPP,addProtector,updateProtector,deleteProtector,getProtector,addAssets,updateAssets,deleteAssets,getAssets }
+module.exports = {addVSP,updateVSP,deleteVSP, getVSP, addVPP,updateVPP,deleteVPP, getVPP, addTSP,updateTSP,deleteTSP, getTSP, addTPP,updateTPP,deleteTPP, getTPP, addAVSP,updateAVSP,deleteAVSP, getAVSP, addAVPP,updateAVPP,deleteAVPP, getAVPP, addVISP,updateVISP,deleteVISP, getVISP, addVIPP,updateVIPP,deleteVIPP, getVIPP, addCompany,updateCompany,deleteCompany, getCompany, addTrade,updateTrade,deleteTrade, getTrade, addCurrCountry,updateCurrCountry,deleteCurrCountry, getCurrCountry, addPaymentVia,updatePaymentVia,deletePaymentVia, getPaymentVia, addPaymentType,updatePaymentType,deletePaymentType, getPaymentType, addEntryMode,updateEntryMode,deleteEntryMode, getEntryMode, addFinalStatus,updateFinalStatus,deleteFinalStatus, getFinalStatus, addCountry,updateCountry,deleteCountry, getCountry, addCategory,updateCategory,deleteCategory, getCategory, addExpeCategory,updateExpenseCategory,deleteExpenseCategory, getExpeCategory, addCurrency,updateCurrency,deleteCurrency, getCurrency, addCPP,updateCPP,deleteCPP, getCPP,addProtector,updateProtector,deleteProtector,getProtector,addAssets,updateAssets,deleteAssets,getAssets,addCreditorSupplier,updateCreditorSupplier,deleteCreditorSupplier,getCreditorSupplier }

@@ -320,7 +320,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
 
   
   const[totalPayments,setTotalPayments]=useState(0)
-  const[totalCurrRate,setTotalCurrRate]=useState('')
+  const[totalCurrRate,setTotalCurrRate]=useState(0)
 let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
   
   // Submitting Form Data
@@ -330,15 +330,17 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
     e.preventDefault();
     setLoading(true);
     setSupplierName("");
-    setCategory("");
-    setPayment_Via("");
-    setPayment_Type("");
-    setSlip_No("");
-    setSlip_Pic("");
-    setDetails("");
-    setCurr_Country("");
-    setDate("");
-    setTotalCurrRate('')
+        setCategory("");
+        setPayment_Via("");
+        setPayment_Type("");
+        setSlip_No("");
+        setSlip_Pic("");
+        setDetails("");
+        setCurr_Country("");
+        setDate("");
+        setTotalCurrRate('')
+        setTotalPayments('')
+
     try {
       const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_out`, {
         method: "POST",
@@ -381,10 +383,12 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setCurr_Country("");
         setDate("");
         setTotalCurrRate('')
+        setTotalPayments('')
+
 
       }
     } catch (error) {
-
+alert(error)
       setNewMessage(toast.error("Server is not Responding..."));
       setLoading(false);
     }
@@ -775,7 +779,7 @@ const sumPaymentIn = (data) => {
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Curr Rate </label>
-                 <input type="text" value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
+                 <input type="number" value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total Currency </label>

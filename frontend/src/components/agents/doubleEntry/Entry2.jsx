@@ -23,6 +23,7 @@ import TicketHook from '../../../hooks/ticketHooks/TicketHook';
 import VisitHook from '../../../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../../../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHook';
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
 import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
@@ -56,6 +57,7 @@ export default function Entry2() {
 
   const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
   const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
+  const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
   const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const assets = useSelector((state) => state.setting.assets)
   const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
@@ -80,6 +82,7 @@ export default function Entry2() {
   const { getPayments } = AssetsHook()
   const { getPaymentsOut } = ProtectorHook()
   const { getExpenseCategoryData } = ExpeCategoryHook()
+  const { getCreditoSupplierData } = CreditorSupplierHook()
 
   // getting Data from DB
   const abortCont = useRef(new AbortController());
@@ -107,6 +110,7 @@ export default function Entry2() {
         getVisitCandPaymentsOut()
         getVisitSupplierPaymentsOut()
         getCPPData()
+        getCreditoSupplierData()
         getAssetsData()
         getPayments()
         getCDWCPaymentsOut()
@@ -141,7 +145,7 @@ export default function Entry2() {
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
-  const [curr_Rate, setCurr_Rate] = useState('')
+  const [curr_Rate, setCurr_Rate] = useState(0)
   const [date, setDate] = useState('')
 
   useEffect(() => {
@@ -1617,8 +1621,8 @@ const handleTicketCandForm = async (e) => {
                   {type==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
+                  {crediterSuppliers &&
+                    crediterSuppliers.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1727,7 +1731,7 @@ const handleTicketCandForm = async (e) => {
                 </div>
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >CUR Rate </label>
-                  <input type="text" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                  <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Currency Amount </label>

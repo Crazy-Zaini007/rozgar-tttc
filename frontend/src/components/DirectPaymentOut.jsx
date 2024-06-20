@@ -21,6 +21,7 @@ import TicketHook from '../hooks/ticketHooks/TicketHook';
 import VisitHook from '../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../hooks/settingHooks/CreditorSupplierHook';
 import CDWOCHook from '../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../hooks/settingHooks/NewAssetsHook';
 import AssetsHook from '../hooks/assetsHooks/AssetsHook'
@@ -55,43 +56,13 @@ const [show, setShow] = useState(false)
   const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupplier_Payments_Out)
   const protector_Payments_Out = useSelector((state) => state.protectors.protector_Payments_Out)
 
-  const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
-  const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
   const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
+const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
   const assets = useSelector((state) => state.setting.assets)
-  const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
   const expenseCategories = useSelector((state) => state.setting.expenseCategories);
-
-const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
-
-
-const[banks,setBanks]=useState('')
-const[total,setTotal]=useState()
 
 
 const apiUrl = process.env.REACT_APP_API_URL;
-const getBankCash = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/auth/reports/get/all/banks/payments`, {
-
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
-    })
-
-    const json = await response.json();
-    if (response.ok) {
-     setBanks(json.data)
-     setTotal(json.bank_Cash)
-    }
-  }
-  catch (error) {
-    setNewMessage(toast.error('Server is not Responding...'));
-    setLoading(false);
-  }
-}
-
 
 const { getCurrCountryData } = CurrCountryHook()
 const { getCategoryData } = CategoryHook()
@@ -106,12 +77,13 @@ const { getVisitAgentPaymentsOut,getVisitCandPaymentsOut,getVisitSupplierPayment
 const { getCDWCPaymentsOut } = CDWCHook()
 const { getCDWOCPaymentsOut } = CDWOCHook()
 const { getCPPData } = CPPHook()
+const { getCreditoSupplierData } = CreditorSupplierHook()
 const { getAssetsData } = NewAssetsHook()
 const { getPayments } = AssetsHook()
 const { getPaymentsOut } = ProtectorHook()
 const { getExpenseCategoryData } = ExpeCategoryHook()
 
-const { getCashInHandData,getOverAllPayments, overAllPayments } = CashInHandHook()
+const { getOverAllPayments, overAllPayments } = CashInHandHook()
 
 const [option, setOption] = useState(false);
 // Form input States
@@ -138,9 +110,8 @@ const [selectedPersonDetails, setSelectedPersonDetails] = useState({});
 const { user } = useAuthContext();
 const fetchData = async () => {
   try {
-    getCashInHandData()
+    
     getOverAllPayments()
-    getBankCash()
     getCurrCountryData()
     getCategoryData()
     getPaymentViaData()
@@ -160,6 +131,7 @@ const fetchData = async () => {
     getVisitCandPaymentsOut()
     getVisitSupplierPaymentsOut()
     getCPPData()
+    getCreditoSupplierData()
     getAssetsData()
     getPayments()
     getCDWCPaymentsOut()
@@ -440,9 +412,8 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
       getOverAllPayments()
-      getBankCash()
+      
       }
 
 
@@ -503,9 +474,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
 
       }
 
@@ -579,9 +550,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
 
       }
 
@@ -656,9 +627,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -728,9 +699,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -801,9 +772,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -874,9 +845,9 @@ useEffect(() => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -947,9 +918,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1019,9 +990,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1092,9 +1063,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1165,9 +1136,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1239,9 +1210,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1311,9 +1282,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1383,9 +1354,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
       }
 
     } catch (error) {
@@ -1456,9 +1427,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
         getOverAllPayments()
-        getBankCash()
+        
 
       }
 
@@ -1532,9 +1503,9 @@ const handleTicketCandForm = async (e) => {
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-        getCashInHandData()
+        
       getOverAllPayments()
-      getBankCash()
+      
 
       }
 
@@ -1603,9 +1574,9 @@ const handleTicketCandForm = async (e) => {
             setCurr_Country('');
             setCurr_Rate('');
             setDate('')
-            getCashInHandData()
+            
             getOverAllPayments()
-            getBankCash()
+            
         }
 
     } catch (error) {
@@ -1902,8 +1873,8 @@ const handleTicketCandForm = async (e) => {
                   {ref==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
+                  {crediterSuppliers &&
+                    crediterSuppliers.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -2130,7 +2101,7 @@ const handleTicketCandForm = async (e) => {
                             </TableRow>
         </TableHead>
         <TableBody>
-                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_Out || cash?.payment_Out>0 ||cash?.type.toLowerCase().includes('out'))).map((cash, outerIndex) => (
+                            {filteredPayments && filteredPayments.length > 0 ? filteredPayments.filter(cash => (cash?.payment_Out || cash?.payment_Out>0 ||cash?.type.toLowerCase().includes('out'))&&!cash.payments).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -2185,7 +2156,7 @@ const handleTicketCandForm = async (e) => {
                             {/* Calculate the total sum of payment_In */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry.payment_Out>0)
+                                .filter(entry => (entry.payment_Out>0&&!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.payment_Out || 0));
                                 }, 0)}
@@ -2194,7 +2165,7 @@ const handleTicketCandForm = async (e) => {
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => (entry?.payment_Out||entry?.type.toLowerCase().includes('out')))
+                                .filter(entry => (entry?.payment_Out||entry?.type.toLowerCase().includes('out'))&&!entry.payments)
                                 .reduce((total, entry) => {
                                   return total + (Math.round(entry.cash_Out || 0));
                                 }, 0)}
@@ -2205,7 +2176,7 @@ const handleTicketCandForm = async (e) => {
                             {/* Calculate the total sum of payment_Out */}
                              {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry?.payment_Out)
+                                .filter(entry => (entry?.payment_Out&&!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + ((entry.curr_Rate || 0).toFixed(2));
                                 }, 0)}
@@ -2214,7 +2185,7 @@ const handleTicketCandForm = async (e) => {
                             {/* Calculate the total sum of cash_Out */}
                             {filteredPayments && filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry?.payment_Out)
+                                .filter(entry => (entry?.payment_Out&&!entry.payments))
                                 .reduce((total, entry) => {
                                   return total + ((entry.curr_Amount || 0).toFixed(2));
                                 }, 0)}

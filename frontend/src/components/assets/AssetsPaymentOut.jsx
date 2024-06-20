@@ -79,7 +79,7 @@ export default function AssetsPaymentOut() {
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
-  const [curr_Rate, setCurr_Rate] = useState('')
+  const [curr_Rate, setCurr_Rate] = useState(0)
   const [date, setDate] = useState('');
   let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
 
@@ -507,7 +507,7 @@ export default function AssetsPaymentOut() {
                           </div>
                           <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                             <label >CUR Rate </label>
-                            <input type="text"  value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                            <input type="number"  value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                           </div>
                           <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                             <label >Currency Amount </label>

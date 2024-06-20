@@ -23,6 +23,7 @@ import TicketHook from '../../../hooks/ticketHooks/TicketHook';
 import VisitHook from '../../../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../../../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHook';
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
 import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
@@ -55,6 +56,7 @@ export default function Entry1() {
   const assets = useSelector((state) => state.setting.assets)
   const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
 
+  const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
   const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -74,6 +76,7 @@ export default function Entry1() {
   const { getCPPData } = CPPHook()
   const { getAssetsData } = NewAssetsHook()
   const { getPayments } = AssetsHook()
+  const { getCreditoSupplierData } = CreditorSupplierHook()
 
   // getting Data from DB
 
@@ -99,6 +102,7 @@ export default function Entry1() {
         getVisitCandPaymentsIn()
         getVisitSupplierPaymentsIn()
         getCPPData()
+        getCreditoSupplierData()
         getAssetsData()
         getPayments()
         getCDWCPaymentsIn()
@@ -131,7 +135,7 @@ export default function Entry1() {
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
-  const [curr_Rate, setCurr_Rate] = useState('')
+  const [curr_Rate, setCurr_Rate] = useState(0)
   const [date, setDate] = useState('')
   
   useEffect(() => {
@@ -1445,8 +1449,8 @@ const handleTicketCandForm = async (e) => {
                   {type==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
+                  {crediterSuppliers &&
+                    crediterSuppliers.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1541,7 +1545,7 @@ const handleTicketCandForm = async (e) => {
                 </div>
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >CUR Rate </label>
-                  <input type="text" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                  <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Currency Amount </label>

@@ -146,7 +146,7 @@ export default function CDWOCPaymentIn() {
         <div className="container-fluid payment_form">
           <div className="row">
             <div className="col-md-12 p-0 border-0 border-bottom">
-              <div className='py-3 mb-1 px-2'>
+              <d className='py-3 mb-1 px-2'>
                 <h4>Credits&Debits Payment In</h4>
                 <button className='btn btn-sm  m-1 entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn btn-sm  m-1  entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
@@ -156,7 +156,7 @@ export default function CDWOCPaymentIn() {
                 </label>}
                 <button className='btn btn-sm  m-1 m entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
 
-              </div>
+              </d>
             </div>
             {/* Single payment Entry */}
             {single === 0 &&

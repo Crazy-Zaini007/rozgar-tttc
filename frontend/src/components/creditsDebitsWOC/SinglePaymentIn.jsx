@@ -16,7 +16,8 @@ import PaymentViaHook from '../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import CDWOCHook from '../../hooks/creditsDebitsWOCHooks/CDWOCHook';
-import CPPHook from '../../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../../hooks/settingHooks/CreditorSupplierHook';
+
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function SinglePaymentIn() {
@@ -29,14 +30,14 @@ export default function SinglePaymentIn() {
   const categories = useSelector((state) => state.setting.categories);
   const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In)
   const [selectedSupplier, setSelectedSupplier] = useState('');
-  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties);
+  const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
   const { getPaymentsIn } = CDWOCHook()
-  const { getCPPData } = CPPHook()
+  const { getCreditoSupplierData } = CreditorSupplierHook()
 
   // getting Data from DB
   const { user } = useAuthContext()
@@ -50,7 +51,7 @@ export default function SinglePaymentIn() {
         getPaymentViaData(),
         getPaymentTypeData(),
         getPaymentsIn(),
-        getCPPData()
+        getCreditoSupplierData()
 
       ]);
 
@@ -76,7 +77,7 @@ export default function SinglePaymentIn() {
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
-  const [curr_Rate, setCurr_Rate] = useState('')
+  const [curr_Rate, setCurr_Rate] = useState(0)
   const [open, setOpen] = useState(true)
   const [close, setClose] = useState(false)
   const [date, setDate] = useState('')
@@ -236,8 +237,8 @@ export default function SinglePaymentIn() {
                   setSupplierName(e.target.value)
                 }}>
                   <option value="">Choose Supplier</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
+                  {crediterSuppliers &&
+                    crediterSuppliers.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -318,7 +319,7 @@ export default function SinglePaymentIn() {
                 </div>
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >CUR Rate </label>
-                  <input type="text" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                  <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Currency Amount </label>
