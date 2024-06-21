@@ -18533,7 +18533,7 @@ const addCreditorSupplier = async (req, res) => {
                 })
                 }
 
-                  const newSupplier = new CPP({
+                  const newSupplier = new CreditorSupplier({
                       supplierName,
                       supplierCompany,
                       country,
