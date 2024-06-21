@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Paper } from '@mui/material'
 import PaymentInDetails from './details/PaymentInDetails'
-import PaymentOutDetails from './details/PaymentOutDetails'
 import { useSelector } from 'react-redux';
 
 export default function CDWCDetails() {
@@ -19,9 +18,7 @@ export default function CDWCDetails() {
             {option === 0 &&
               <PaymentInDetails></PaymentInDetails>
             }
-            {option === 1 &&
-              <PaymentOutDetails></PaymentOutDetails>
-            }
+         
           </div>
         </div>
       </div>

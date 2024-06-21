@@ -10,7 +10,7 @@ import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function PaymentInDetails() {
   const [isLoading, setIsLoading] = useState(false)
@@ -877,9 +877,9 @@ const formattedDate = formatDate(new Date());
               </div>
             </div>
           </div>
-          {isLoading &&
+          {(isLoading && CDWOC_Payments_In.length<1) &&
             <div className='col-md-12 text-center my-4'>
-              <SyncLoader color="#2C64C3" className='mx-auto' />
+              <ClipLoader color="#2C64C3" className='mx-auto' />
             </div>
           }
           <div className="col-md-12 filters">
@@ -906,21 +906,21 @@ const formattedDate = formatDate(new Date());
               </div>
             </div>
           </div>
-         {!isLoading && 
+         {(!isLoading ||  CDWOC_Payments_In.length>0) && 
           <div className='col-md-12 p-0'>
           <div className='py-3 mb-1 px-1 detail_table'>
             <TableContainer sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
-                    <TableCell className='label border ' style={{ width: '18.28%' }}>SN</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Suppliers</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>TPI_PKR</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>TPO_PKR</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Balance</TableCell>
-                    {/* <TableCell className='label border' style={{ width: '18.28%' }}>Open</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Close</TableCell> */}
+                    <TableCell className='label border ' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Suppliers</TableCell>
+                    <TableCell className='label border' >TPI_PKR</TableCell>
+                    <TableCell className='label border' >TPO_PKR</TableCell>
+                    <TableCell className='label border' >Balance</TableCell>
+                    {/* <TableCell className='label border' >Open</TableCell>
+                    <TableCell className='label border' >Close</TableCell> */}
                     <TableCell align='left' className='edw_label border' colSpan={1}>
                         Actions
                       </TableCell>
@@ -930,29 +930,29 @@ const formattedDate = formatDate(new Date());
                 <TableBody>
                   {filteredTotalPaymentIn.map((entry, index) => (
                     <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                      <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
+                      <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                      <TableCell className='border data_td text-center'>
                         {entry.createdAt}
                       </TableCell>
-                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.supplierName)}>
+                      <TableCell className='border data_td text-center'  onClick={() => handleRowClick(entry.supplierName)}>
                         {entry.supplierName}
                       </TableCell>
-                      <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
-                        <i className="fa-solid fa-arrow-down me-2 text-success text-bold" style={{ width: '18.28%' }}></i>{entry.total_Payment_In}
+                      <TableCell className='border data_td text-center'>
+                        <i className="fa-solid fa-arrow-down me-2 text-success text-bold" ></i>{entry.total_Payment_In}
                       </TableCell>
-                      <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                      <TableCell className='border data_td text-center' >
                         <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Payment_Out}
                       </TableCell>
-                      <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
+                      <TableCell className='border data_td text-center'>
                         {entry.balance}
                       </TableCell>
-                      {/* <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
+                      {/* <TableCell className='border data_td text-center'>
                         <span>{entry.open === true ? "Opened" : "Not Opened"}</span>
                       </TableCell>
-                      <TableCell className='border data_td text-center'style={{ width: '18.28%' }}>
+                      <TableCell className='border data_td text-center'>
                         {entry.close === false ? "Not Closed" : "Closed"}
                       </TableCell> */}
-                       <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                       <TableCell className='border data_td text-center' >
                       <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                       <button onClick={() => printDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
                       <button onClick={() => downloadDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>

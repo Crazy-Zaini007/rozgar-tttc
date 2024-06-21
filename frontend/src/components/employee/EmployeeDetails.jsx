@@ -10,7 +10,7 @@ import CategoryHook from '../../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrencyHook from '../../hooks/settingHooks/CurrencyHook'
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import { useLocation } from 'react-router-dom'
 
 export default function EmployeeDetails() {
@@ -1749,9 +1749,9 @@ const filteredSalaryMonths = employees
                                     </div>
                                 </div>
 
-                                {isLoading &&
+                                {(isLoading && employees.length<1) &&
                                     <div className='col-md-12 text-center my-4'>
-                                        <SyncLoader color="#2C64C3" className='mx-auto' />
+                                        <ClipLoader color="#2C64C3" className='mx-auto' />
                                     </div>
                                 }
 
@@ -1780,7 +1780,7 @@ const filteredSalaryMonths = employees
                                     </div>
                                 </div>
 
-                                {!isLoading &&
+                                {(!isLoading || employees.length>1) &&
                                     <div className='col-md-12 p-0'>
                                         <div className='py-3 mb-1 px-1 detail_table'>
                                             <TableContainer >
@@ -1788,20 +1788,20 @@ const filteredSalaryMonths = employees
                                                     <TableHead>
 
                                                         <TableRow>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Employee</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Father_Name</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Email</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Phone</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Emergency_Phone</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>DOB</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>CNIC</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Salary_Type</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Remaining</TableCell>
-                                                            <TableCell className='label border' style={{ width: '18.28%' }}>Address</TableCell>
+                                                            <TableCell className='label border' >SN</TableCell>
+                                                            <TableCell className='label border' >Date</TableCell>
+                                                            <TableCell className='label border' >Employee</TableCell>
+                                                            <TableCell className='label border' >Father_Name</TableCell>
+                                                            <TableCell className='label border' >Email</TableCell>
+                                                            <TableCell className='label border' >Phone</TableCell>
+                                                            <TableCell className='label border' >Emergency_Phone</TableCell>
+                                                            <TableCell className='label border' >DOB</TableCell>
+                                                            <TableCell className='label border' >CNIC</TableCell>
+                                                            <TableCell className='label border' >Salary_Type</TableCell>
+                                                            <TableCell className='label border' >Remaining</TableCell>
+                                                            <TableCell className='label border' >Address</TableCell>
                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}> Actions</TableCell>
+                                                                <TableCell align='left' className='edw_label border'  colSpan={1}> Actions</TableCell>
                                                             }
                                                         </TableRow>
                                                     </TableHead>
@@ -1813,44 +1813,44 @@ const filteredSalaryMonths = employees
                                                                 {editMode3 && editedRowIndex3 === index ?
                                                                     (
                                                                         <>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='number' value={index} readonly />
 
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='date' value={editedEntry3.entry_Date} readonly />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.employeeName} onChange={(e) => handleEmployeeInputChange(e, 'employeeName')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.fatherName} onChange={(e) => handleEmployeeInputChange(e, 'fatherName')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='email' value={editedEntry3.email} onChange={(e) => handleEmployeeInputChange(e, 'email')} />
                                                                             </TableCell>
 
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.phone} onChange={(e) => handleEmployeeInputChange(e, 'phone')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.emergencyPhone} onChange={(e) => handleEmployeeInputChange(e, 'emergencyPhone')} />
 
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='date' value={editedEntry3.dob} onChange={(e) => handleEmployeeInputChange(e, 'dob')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.cnic} onChange={(e) => handleEmployeeInputChange(e, 'cnic')} />
 
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.salaryType} onChange={(e) => handleEmployeeInputChange(e, 'salaryType')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='number' value={editedEntry3.remaining} readonly onChange={(e) => handleEmployeeInputChange(e, 'remaining')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.address} onChange={(e) => handleEmployeeInputChange(e, 'address')} />
                                                                             </TableCell>
                                                                            
@@ -1867,39 +1867,39 @@ const filteredSalaryMonths = employees
                                                                         </>
                                                                     ) : (
                                                                         <>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.entry_Date}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }} onClick={() => handleRowClick(entry.employeeName)}>
+                                                                            <TableCell className='border data_td text-center'  onClick={() => handleRowClick(entry.employeeName)}>
                                                                                 {entry.employeeName}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.fatherName}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.email}
                                                                             </TableCell>
 
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.phone}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.emergencyPhone}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.dob}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.cnic}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.salaryType}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.remaining}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>
+                                                                            <TableCell className='border data_td text-center' >
                                                                                 {entry.address}
                                                                             </TableCell>
                                                                           
@@ -2015,19 +2015,19 @@ const filteredSalaryMonths = employees
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Slip_Pic</TableCell>
-                                                                {route !== "/rozgar/reports/payroll_reports" && <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
+                                                                <TableCell className='label border' >Date</TableCell>
+                                                                <TableCell className='label border' >Category</TableCell>
+                                                                <TableCell className='label border' >Payment_Via</TableCell>
+                                                                <TableCell className='label border' >Payment_Type</TableCell>
+                                                                <TableCell className='label border' >Slip_No</TableCell>
+                                                                <TableCell className='label border' >Details</TableCell>
+                                                                <TableCell className='label border' >Payment_Out</TableCell>
+                                                                <TableCell className='label border' >Invoice</TableCell>
+                                                                <TableCell className='label border' >Payment_In_Curr</TableCell>
+                                                                <TableCell className='label border' >CUR_Rate</TableCell>
+                                                                <TableCell className='label border' >CUR_Amount</TableCell>
+                                                                <TableCell className='label border' >Slip_Pic</TableCell>
+                                                                {route !== "/rozgar/reports/payroll_reports" && <TableCell align='left' className='edw_label border'  colSpan={1}>
                                                                     Actions
                                                                 </TableCell>}
 
@@ -2106,18 +2106,18 @@ const filteredSalaryMonths = employees
                                                                                     ) : (
                                                                                         <>
 
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Out_Curr}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                                                                                            <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
                                                                                         </>
                                                                                     )}
                                                                                     {/* Actions */}
@@ -2251,15 +2251,15 @@ const filteredSalaryMonths = employees
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Date_From</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Date_To</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Days</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Time_In</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Time_Out</TableCell>
+                                                                <TableCell className='label border' >SN</TableCell>
+                                                                <TableCell className='label border' >Date</TableCell>
+                                                                <TableCell className='label border' >Date_From</TableCell>
+                                                                <TableCell className='label border' >Date_To</TableCell>
+                                                                <TableCell className='label border' >Days</TableCell>
+                                                                <TableCell className='label border' >Time_In</TableCell>
+                                                                <TableCell className='label border' >Time_Out</TableCell>
                                                                 {route !== "/rozgar/reports/payroll_reports" &&
-                                                                    <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
+                                                                    <TableCell className='label border' >Action</TableCell>
                                                                 }
                                                             </TableRow>
                                                         </TableHead>
@@ -2271,25 +2271,25 @@ const filteredSalaryMonths = employees
                                                                         <TableRow key={vacation?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                                             {editMode2 && editedRowIndex2 === index ? (
                                                                                 <>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='text' value={index + 1} readonly />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='date' value={editedEntry2.date} onChange={(e) => handlePersonInputChange(e, 'date')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='date' value={editedEntry2.dateFrom} onChange={(e) => handlePersonInputChange(e, 'dateFrom')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='date' value={editedEntry2.dateTo} onChange={(e) => handlePersonInputChange(e, 'dateTo')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry2.days} onChange={(e) => handlePersonInputChange(e, 'days')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='time' value={editedEntry2.timeIn} onChange={(e) => handlePersonInputChange(e, 'timeIn')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='time' value={editedEntry2.timeOut} onChange={(e) => handlePersonInputChange(e, 'timeOut')} />
                                                                                     </TableCell>
 
@@ -2299,20 +2299,20 @@ const filteredSalaryMonths = employees
                                                                                 </>
                                                                             ) : (
                                                                                 <>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.date}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.dateFrom}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.dateTo}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }} >{vacation?.days}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }} >{vacation?.timeIn}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{vacation?.timeOut}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{vacation?.date}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{vacation?.dateFrom}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{vacation?.dateTo}</TableCell>
+                                                                                    <TableCell className='border data_td text-center'  >{vacation?.days}</TableCell>
+                                                                                    <TableCell className='border data_td text-center'  >{vacation?.timeIn}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{vacation?.timeOut}</TableCell>
 
 
 
                                                                                 </>
                                                                             )}
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                <TableCell className='border data_td p-1 text-center' style={{ width: '18.28%' }}>
+                                                                                <TableCell className='border data_td p-1 text-center' >
                                                                                     {editMode2 && editedRowIndex2 === index ? (
                                                                                         // Render Save button when in edit mode for the specific row
                                                                                         <>
@@ -2411,13 +2411,13 @@ const filteredSalaryMonths = employees
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Month</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Salary</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Paid</TableCell>
-                                                                <TableCell className='label border' style={{ width: '18.28%' }}>Remaining</TableCell>
+                                                                <TableCell className='label border' >SN</TableCell>
+                                                                <TableCell className='label border' >Month</TableCell>
+                                                                <TableCell className='label border' >Salary</TableCell>
+                                                                <TableCell className='label border' >Paid</TableCell>
+                                                                <TableCell className='label border' >Remaining</TableCell>
                                                                 {route !== "/rozgar/reports/payroll_reports" &&
-                                                                    <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
+                                                                    <TableCell className='label border' >Action</TableCell>
                                                                 }
                                                             </TableRow>
                                                         </TableHead>
@@ -2429,33 +2429,33 @@ const filteredSalaryMonths = employees
                                                                         <TableRow key={payment?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                                             {editMode4 && editedRowIndex4 === index ? (
                                                                                 <>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='text' value={index + 1} readonly />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='month' value={editedEntry4.month} onChange={(e) => handleSalaryMonthInputChange(e, 'month')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry4.salary} onChange={(e) => handleSalaryMonthInputChange(e, 'salary')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry4.salary-editedEntry4.remain} readonly />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' style={{ width: '18.28%' }}>
+                                                                                    <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry4.remain} readonly/>
                                                                                     </TableCell>
                                                                                 </>
                                                                             ) : (
                                                                                 <>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{payment?.month}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{payment?.salary}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{payment?.salary-payment?.remain}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{payment?.remain}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{payment?.month}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{payment?.salary}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{payment?.salary-payment?.remain}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{payment?.remain}</TableCell>
                                                                                 </>
                                                                             )}
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                <TableCell className='border data_td p-1 text-center' style={{ width: '18.28%' }}>
+                                                                                <TableCell className='border data_td p-1 text-center' >
                                                                                     {editMode4 && editedRowIndex4 === index ? (
                                                                                         // Render Save button when in edit mode for the specific row
                                                                                         <>

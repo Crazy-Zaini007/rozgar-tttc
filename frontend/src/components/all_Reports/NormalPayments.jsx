@@ -3,7 +3,7 @@ import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { useSelector, useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function NormalPayments() {
   const { user } = useAuthContext();
@@ -243,7 +243,7 @@ export default function NormalPayments() {
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
          {payments && payments.length > 0 &&

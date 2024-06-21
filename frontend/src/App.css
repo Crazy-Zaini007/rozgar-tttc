@@ -696,7 +696,7 @@ display: inline-block;
 .entry_details .filters select, .entry_details .filters input  {
   width: 100%;
   height: 30px;
-  border: 1px solid var(--grays-dm-white);
+  border: none;
   border-radius: 2px;
   font-size: 12px;
   padding-left: 15px;
@@ -706,9 +706,11 @@ display: inline-block;
   font-weight: 500;
   letter-spacing: 1px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
-  text-transform: capitalize;
+  text-transform: normal;
+background-color: #dad5d5;
 }
 .entry_details .filters select:focus,.entry_details .filters input:focus {
+  background-color: white;
   outline: none;
   border: 1px solid var(--accent-lighter-blue) !important;
 }
@@ -1272,7 +1274,7 @@ display: inline-block;
 .payment_details .filters select,.payment_details .filters input {
   width: 100%;
   height: 30px;
-  border: 1px solid var(--grays-dm-white);
+  border: none;
   border-radius: 2px;
   font-size: 12px;
   padding-left: 15px;
@@ -1282,47 +1284,43 @@ display: inline-block;
   font-weight: 500;
   letter-spacing: 1px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
-  text-transform: capitalize;
-
+  text-transform: normal;
+background-color: #dad5d5;
 }
 .payment_details .filters select:focus,.payment_details .filters input:focus {
+  background-color: white;
   outline: none;
   border: 1px solid var(--accent-lighter-blue) !important;
 }
 
-.payment_details input {
-  width: 100%;
+
+.payment_details .detail_table input[type='checkbox'] {
+  width: auto;
   height: 45px;
   border: 1px solid var(--grays-dm-white);
   border-radius: 4px;
   font-size: 12px;
-  padding-left: 15px;
-  padding-right: 4px;
+  padding-left: 4px;
+  padding-right: 0px;
   color: var(--accent-stong-blue);
   position: relative;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 500;
+  letter-spacing: 0px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
-}
-
-.payment_details input:focus {
-  outline: none;
-  border: 2px solid var(--accent-lighter-blue) !important;
 }
 .payment_details .detail_table input,
 .payment_details .detail_table select,
 .payment_details .detail_table textarea {
-  min-width: 170px;
-  height: 45px;
+  width: 100px;
+  height: 40px;
   border: 1px solid var(--grays-dm-white);
   border-radius: 4px;
   font-size: 12px;
-  padding-left: 15px;
-  padding-right: 4px;
+  padding-left: 4px;
+  padding-right: 0px;
   color: var(--accent-stong-blue);
-  position: relative;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 500;
+  letter-spacing: 0px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
 }
 

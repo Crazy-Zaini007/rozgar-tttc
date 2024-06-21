@@ -333,7 +333,7 @@ const deleteSupplier = async (data) => {
                   <TableCell className='data_td text-center'>{data.supplierCompany}</TableCell>
                   <TableCell className='data_td text-center'>{data.country}</TableCell>
                   <TableCell className='data_td text-center'>{data.address}</TableCell>
-                  <TableCell className='data_td text-center'><a href={data.picture} target="_blank" rel="noopener noreferrer"> <img src={data.picture} alt='Images' className='rounded' /></a> </TableCell>
+                  <TableCell className='data_td text-center'><a href={data.picture} target="_blank" rel="noopener noreferrer"> <img src={data.picture} alt='Picture' className='rounded' /></a> </TableCell>
                   <TableCell className='data_td text-center'>
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                     <button className='btn btn-sm  edit_btn p-1  shadow' onClick={() => handleEditClick(data,index)} ><EditIcon fontSize='small'></EditIcon></button>

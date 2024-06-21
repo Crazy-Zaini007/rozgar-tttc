@@ -21,13 +21,14 @@ import VISPHook from '../../hooks/settingHooks/VISPHook'
 import VPPHook from '../../hooks/settingHooks/VPPHook'
 import VSPHook from '../../hooks/settingHooks/VSPHook'
 import ProtectorHook from '../../hooks/settingHooks/ProtectorHook';
-
+import {useNavigate} from 'react-router-dom'
 import * as XLSX from 'xlsx';
-import SyncLoader from 'react-spinners/SyncLoader'
+
 
 const rowsPerPageOptions = [50, 75, 100,200];
 
 const EntryDetails = () => {
+  const navigate=useNavigate()
   const { getEntries } = EntryHook();
   const { user } = useAuthContext();
   const dispatch = useDispatch();
@@ -66,27 +67,24 @@ const EntryDetails = () => {
 
       // Set loading to false right after getEntries() is completed
       setLoading1(false);
-
       // Use Promise.all to execute other promises concurrently
-      await Promise.all([
-        getAVPPData(),
-        getAVSPData(),
-        getTPPData(),
-        getTSPData(),
-        getVIPPData(),
-        getVISPData(),
-        getVPPData(),
-        getVSPData(),
-        getComapnyData(),
-        getCountryData(),
-        getCurrCountryData(),
-        getCurrencyData(),
-        getEntryMoodData(),
-        getFinalStatusData(),
-        getTradeData(),
+        getAVPPData()
+        getAVSPData()
+        getTPPData()
+        getTSPData()
+        getVIPPData()
+        getVISPData()
+        getVPPData()
+        getVSPData()
+        getComapnyData()
+        getCountryData()
+        getCurrCountryData()
+        getCurrencyData()
+        getEntryMoodData()
+        getFinalStatusData()
+        getTradeData()
         getProtector()
 
-      ]);
     } catch (error) {
       setLoading1(false);
       // Handle errors if needed
@@ -133,9 +131,19 @@ const EntryDetails = () => {
         
         }
         if (!response.ok) {
-          
-          setDelLoading(false)
+          if(json.redirect){
+            if (window.confirm(json.message)){
+            
+              navigate(json.redirect)
+              setDelLoading(false)
+
+            }
+          }
+          else{
           setNewMessage(toast.error(json.message))
+          setDelLoading(false)
+
+          }
         }
       }
       catch (err) {
@@ -181,9 +189,18 @@ const EntryDetails = () => {
           setMultipleIds([])
         }
         if (!response.ok) {
-          
-          setDelLoading(false)
+          if(json.redirect){
+            if (window.confirm(json.message)){
+              navigate(json.redirect)
+             setDelLoading(false)
+
+            }
+          }
+          else{
           setNewMessage(toast.error(json.message))
+          setDelLoading(false)
+
+          }
         }
       }
       catch (err) {
@@ -243,7 +260,7 @@ const EntryDetails = () => {
   const companies = useSelector((state) => state.setting.companies);
   const trades = useSelector((state) => state.setting.trades);
   const protectors = useSelector((state) => state.setting.protectors);
-console.log('protectors',protectors)
+
   // const currCountries = useSelector((state) => state.setting.currCountries);
   const entryMode = useSelector((state) => state.setting.entryMode);
   const finalStatus = useSelector((state) => state.setting.finalStatus);
@@ -269,9 +286,17 @@ console.log('protectors',protectors)
       const json = await response.json()
 
       if (!response.ok) {
-        setNewMessage(toast.error(json.message));
+        if(json.redirect){
+          if (window.confirm(json.message)){
+            navigate(json.redirect)
+        setDelLoading(false)
 
-        setUpdateLoading(false)
+          }
+        }
+        else{
+        setNewMessage(toast.error(json.message))
+        setDelLoading(false)
+        }
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
@@ -463,11 +488,7 @@ console.log('protectors',protectors)
                 </div>
               </div>
             </div>
-            {loading1 &&
-              <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
-              </div>
-            }
+           
 
             {/* Filters */}
             {enteries && enteries.length > 0 &&
@@ -592,9 +613,7 @@ console.log('protectors',protectors)
                 </div>
               </div>
             }
-
-
-            {!loading1 &&
+            
               <div className='col-md-12 p-0'>
                 <div className='py-3 mb-1 detail_table'>
                   <div className="d-flex justify-content-between">
@@ -1935,8 +1954,6 @@ console.log('protectors',protectors)
                               
                                   <select className='p-0' required value={editedEntry.protector_Reference_In_Name} onChange={(e) => handleInputChange(e, 'protector_Reference_In_Name')} >
                                
-                                 
-        
                                     <option value="">choose Protector</option>
                                     {protectors && protectors.map((data)=>(
                                      <option
@@ -2096,7 +2113,7 @@ console.log('protectors',protectors)
                  
                 </div>
               </div>
-            }
+            
           </div>
         </div>
       </div>

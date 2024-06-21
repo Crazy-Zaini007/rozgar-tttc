@@ -2,7 +2,7 @@ import React, { useState, useEffect,useRef } from 'react';
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function AzadCandReports() {
   const { user } = useAuthContext();
@@ -262,7 +262,7 @@ export default function AzadCandReports() {
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
          {payments && payments.length > 0 &&

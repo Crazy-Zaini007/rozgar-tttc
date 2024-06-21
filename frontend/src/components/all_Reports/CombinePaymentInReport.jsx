@@ -1,7 +1,7 @@
 import { React, useState, useEffect,useRef } from 'react'
 import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import * as XLSX from 'xlsx';
 import { useSelector } from 'react-redux';
 
@@ -223,7 +223,7 @@ export default function CombinePaymentInReports() {
                 </div>
                 {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
 

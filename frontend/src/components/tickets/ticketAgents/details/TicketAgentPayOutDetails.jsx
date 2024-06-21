@@ -15,7 +15,7 @@ import FinalStatusHook from '../../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../../hooks/settingHooks/TradeHook'
 import CompanyHook from '../../../../hooks/settingHooks/CompanyHook'
 import CountryHook from '../../../../hooks/settingHooks/CountryHook'
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
 
 export default function AzadVisaAgentPayOutDetails() {
@@ -1364,9 +1364,9 @@ const changeStatus = async (myStatus) => {
                         </Paper>
                     </div>
 
-                    {isLoading &&
+                    {(isLoading && ticketAgent_Payments_Out.length<1) &&
                         <div className='col-md-12 text-center my-4'>
-                            <SyncLoader color="#2C64C3" className='mx-auto' />
+                            <ClipLoader color="#2C64C3" className='mx-auto' />
                         </div>
                     }
 
@@ -1404,7 +1404,7 @@ const changeStatus = async (myStatus) => {
                         </Paper>
                     </div>
 
-                    {!isLoading &&
+                    {(!isLoading ||ticketAgent_Payments_Out.length>0) &&
                         <div className='col-md-12'>
                             <Paper className='py-3 mb-1 px-2 detail_table'>
                                 <TableContainer sx={{ maxHeight: 600 }}>
@@ -1632,9 +1632,9 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>Cash_Out</TableCell>
                                         <TableCell className='label border'>Invoice</TableCell>
                                         {show2 &&  <>
-                                        <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out_Curr</TableCell>
-                                        <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
-                                        <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                                        <TableCell className='label border' >Payment_Out_Curr</TableCell>
+                                        <TableCell className='label border' >CUR_Rate</TableCell>
+                                        <TableCell className='label border' >CUR_Amount</TableCell>
                                         </>}
                                         <TableCell className='label border'>Slip_Pic</TableCell>
                                         <TableCell align='left' className='edw_label border' colSpan={1}>

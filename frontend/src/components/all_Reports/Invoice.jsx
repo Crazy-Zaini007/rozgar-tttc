@@ -5,7 +5,7 @@ import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import { useSelector } from 'react-redux';
 
 export default function Invoice() {
@@ -295,7 +295,7 @@ export default function Invoice() {
 
               {loading &&
             <div className='col-md-12 text-center my-4'>
-              <SyncLoader color="#2C64C3" className='mx-auto' />
+              <ClipLoader color="#2C64C3" className='mx-auto' />
             </div>
           }
               {option === 0 &&

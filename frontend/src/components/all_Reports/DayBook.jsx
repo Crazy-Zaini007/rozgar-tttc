@@ -3,7 +3,7 @@ import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import { useSelector } from 'react-redux';
 import CashInHandHook from '../../hooks/cashInHandHooks/CashInHandHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import * as XLSX from 'xlsx';
 import ExpenseHook from '../../hooks/expenseHooks/ExpenseHook'
 
@@ -964,7 +964,7 @@ body {
 
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
 
@@ -1234,7 +1234,7 @@ Remaining Curr=
             </div>
             {loading2 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
  <div className="col-md-12 filters">
@@ -1394,7 +1394,7 @@ Remaining Curr=
             </div>
             {loading3 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
 
@@ -1498,7 +1498,7 @@ Remaining Curr=
             </div>
             {loading4 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
 

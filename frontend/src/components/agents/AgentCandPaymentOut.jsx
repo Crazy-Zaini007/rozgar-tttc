@@ -651,7 +651,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                  <>
                    <form className="py-3 px-2" onSubmit={handleForm}>
                      <div className="text-end ">
-                       <button className="btn submit_btn m-1" disabled={loading || disableAddMore}>
+                       <button className="btn submit_btn m-1" disabled={loading || !disableAddMore}>
                          {loading ? "Adding..." : "Add Payment"}
                        </button>
                      </div>

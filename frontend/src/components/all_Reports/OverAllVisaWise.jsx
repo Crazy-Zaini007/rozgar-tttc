@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import * as XLSX from 'xlsx';
 import EntryHook from '../../hooks/entryHooks/EntryHook';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function OverAllVisaWise() {
   const { getEntries } = EntryHook();
@@ -217,7 +217,7 @@ export default function OverAllVisaWise() {
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
          {enteries && enteries.length > 0 &&

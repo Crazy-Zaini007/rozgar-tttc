@@ -14,7 +14,7 @@ import EntryMoodHook from '../../../hooks/settingHooks/EntryMoodHook'
 import FinalStatusHook from '../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function ProtectorPaymentOutDetails() {
   const [isLoading, setIsLoading] = useState(false)
@@ -1473,9 +1473,9 @@ export default function ProtectorPaymentOutDetails() {
               </div>
             </Paper>
           </div>
-          {isLoading &&
+          {(isLoading && protector_Payments_Out.length<1) &&
             <div className='col-md-12 text-center my-4'>
-              <SyncLoader color="#2C64C3" className='mx-auto' />
+              <ClipLoader color="#2C64C3" className='mx-auto' />
             </div>
           }
 
@@ -1513,7 +1513,7 @@ export default function ProtectorPaymentOutDetails() {
             </Paper>
           </div>
 
-          {!isLoading &&
+          {(!isLoading || protector_Payments_Out.length>0) &&
             <div className='col-md-12'>
               <Paper className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
@@ -1792,23 +1792,23 @@ export default function ProtectorPaymentOutDetails() {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Category</TableCell>
+                    <TableCell className='label border' >Payment_Via</TableCell>
+                    <TableCell className='label border' >Payment_Type</TableCell>
+                    <TableCell className='label border' >Slip_No</TableCell>
+                    <TableCell className='label border' >Details</TableCell>
+                    <TableCell className='label border' >Payment_Out</TableCell>
+                    <TableCell className='label border' >Cash_Out</TableCell>
+                    <TableCell className='label border' >Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out_Curr</TableCell>
-                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
-                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                      <TableCell className='label border' >Payment_Out_Curr</TableCell>
+                      <TableCell className='label border' >CUR_Rate</TableCell>
+                      <TableCell className='label border' >CUR_Amount</TableCell>
                     </>}
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_Pic</TableCell>
-                    <TableCell align='left' className='edw_label border' style={{ width: '18.28%' }} colSpan={1}>
+                    <TableCell className='label border' >Slip_Pic</TableCell>
+                    <TableCell align='left' className='edw_label border'  colSpan={1}>
                       Actions
                     </TableCell>
 
@@ -1888,22 +1888,22 @@ export default function ProtectorPaymentOutDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
                               {show2 && <>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Out_Curr}</TableCell>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
                               </>}
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
 
 
                             </>
@@ -2155,20 +2155,20 @@ export default function ProtectorPaymentOutDetails() {
               <Table>
                 <TableHead className="thead" stickyHeader>
                   <TableRow>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Name</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>PP#</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Entry_Mode</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Company</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Trade</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Country</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Final_Status</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Flight_Date</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>VPO_PKR</TableCell>
-                    {show === true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Status</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Action</TableCell>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Name</TableCell>
+                    <TableCell className='label border' >PP#</TableCell>
+                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Company</TableCell>
+                    <TableCell className='label border' >Trade</TableCell>
+                    <TableCell className='label border' >Country</TableCell>
+                    <TableCell className='label border' >Final_Status</TableCell>
+                    <TableCell className='label border' >Flight_Date</TableCell>
+                    <TableCell className='label border' >VPO_PKR</TableCell>
+                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border' >Status</TableCell>
+                    <TableCell className='label border' >Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -2251,19 +2251,19 @@ export default function ProtectorPaymentOutDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Date}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.name}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.flight_Date}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.protector_Out_PKR}</TableCell>
-                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.protector_Out_Curr}</TableCell>}
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.protector_Out_PKR}</TableCell>
+                              {show && <TableCell className='border data_td text-center' >{person?.protector_Out_Curr}</TableCell>}
+                              <TableCell className='border data_td text-center' >{person?.status}</TableCell>
                             </>
                           )}
                          <TableCell className='border data_td p-1 text-center'>
@@ -2342,21 +2342,21 @@ export default function ProtectorPaymentOutDetails() {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Select</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>SN</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Name</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>PP#</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Entry_Mode</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Company</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Trade</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Country</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Final_Status</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Flight_Date</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>VPI_PKR</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Total In</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Remaining_PKR</TableCell>
-                    {show === true && <TableCell className='label border' style={{ width: '18.28%' }}>VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border' >Select</TableCell>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Name</TableCell>
+                    <TableCell className='label border' >PP#</TableCell>
+                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Company</TableCell>
+                    <TableCell className='label border' >Trade</TableCell>
+                    <TableCell className='label border' >Country</TableCell>
+                    <TableCell className='label border' >Final_Status</TableCell>
+                    <TableCell className='label border' >Flight_Date</TableCell>
+                    <TableCell className='label border' >VPI_PKR</TableCell>
+                    <TableCell className='label border' >Total In</TableCell>
+                    <TableCell className='label border' >Remaining_PKR</TableCell>
+                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
                     
                   </TableRow>
@@ -2376,21 +2376,21 @@ export default function ProtectorPaymentOutDetails() {
                              <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
                                 <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
                               </TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Date}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.name}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.flight_Date}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.protector_Out_PKR}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.remaining_Price}</TableCell>
-                              {show && <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.protector_Out_Curr}</TableCell>}
-                              <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{person?.status}</TableCell>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.protector_Out_PKR}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.remaining_Price}</TableCell>
+                              {show && <TableCell className='border data_td text-center' >{person?.protector_Out_Curr}</TableCell>}
+                              <TableCell className='border data_td text-center' >{person?.status}</TableCell>
                             </>
                           )}
                          

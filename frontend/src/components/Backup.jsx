@@ -98,10 +98,10 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                     <Table stickyHeader>
                         <TableHead className="thead">
                             <TableRow>
-                                <TableCell className='label border text-center' style={{ width: '18.28%' }}>SN</TableCell>
-                                <TableCell className='label border text-center' style={{ width: '18.28%' }}>Date</TableCell>
-                                <TableCell className='label border text-center' style={{ width: '18.28%' }}>Backup</TableCell>
-                                <TableCell className='label border text-center' style={{ width: '18.28%' }}>Action</TableCell>
+                                <TableCell className='label border text-center' >SN</TableCell>
+                                <TableCell className='label border text-center' >Date</TableCell>
+                                <TableCell className='label border text-center' >Backup</TableCell>
+                                <TableCell className='label border text-center' >Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

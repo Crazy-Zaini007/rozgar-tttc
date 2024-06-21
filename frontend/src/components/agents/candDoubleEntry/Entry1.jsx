@@ -528,7 +528,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
           <>
             <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
               <div className="text-end ">
-                <button className="btn submit_btn btn-sm m-1" disabled={loading || disableAddMore}>
+                <button className="btn submit_btn btn-sm m-1" disabled={loading || !disableAddMore}>
                   {loading ? "Adding..." : "Add Payment"}
                 </button>
               </div>

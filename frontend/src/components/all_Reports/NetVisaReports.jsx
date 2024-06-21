@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
 import * as XLSX from 'xlsx';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { useSelector } from 'react-redux';
 
@@ -228,7 +228,7 @@ const[payments,setPayments]=useState('')
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
 

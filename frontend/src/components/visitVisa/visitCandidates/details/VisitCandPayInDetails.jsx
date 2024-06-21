@@ -15,7 +15,7 @@ import EntryMoodHook from '../../../../hooks/settingHooks/EntryMoodHook'
 import FinalStatusHook from '../../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
 
 
@@ -690,9 +690,9 @@ export default function VisitCandPaymentInDetails() {
               </div>
             </Paper>
           </div>
-          {isLoading &&
+          {(isLoading && visitCand_Payments_In.length<1) &&
             <div className='col-md-12 text-center my-4'>
-              <SyncLoader color="#2C64C3" className='mx-auto' />
+              <ClipLoader color="#2C64C3" className='mx-auto' />
             </div>
           }
 
@@ -793,7 +793,7 @@ export default function VisitCandPaymentInDetails() {
             </Paper>
           </div>
 
-          {!isLoading &&
+          {(!isLoading ||  visitCand_Payments_In.length>0) &&
             <div className='col-md-12'>
               <Paper className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
@@ -1154,9 +1154,9 @@ export default function VisitCandPaymentInDetails() {
                     <TableCell className='label border'>Cash_Out</TableCell>
                     <TableCell className='label border'>Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
-                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
-                      <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
+                      <TableCell className='label border' >Payment_In_Curr</TableCell>
+                      <TableCell className='label border' >CUR_Rate</TableCell>
+                      <TableCell className='label border' >CUR_Amount</TableCell>
                     </>}
                     <TableCell className='label border'>Slip_Pic</TableCell>
                     <TableCell align='left' className='edw_label border' colSpan={1}>
@@ -1250,9 +1250,9 @@ export default function VisitCandPaymentInDetails() {
                               <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
                               {show2 && <>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
-                                <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_In_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
                               </>}
                               <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
 
