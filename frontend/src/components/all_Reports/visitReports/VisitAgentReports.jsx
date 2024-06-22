@@ -3,11 +3,14 @@ import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import ClipLoader from 'react-spinners/ClipLoader'
+import { useSelector } from 'react-redux';
 
-export default function VisitAgentReports() {
+export default function VisitAgentsReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
+  const [show, setShow] = useState(false)
+
   const apiUrl = process.env.REACT_APP_API_URL;
   const getData = async () => {
 
@@ -54,6 +57,7 @@ export default function VisitAgentReports() {
           abortCont.current.abort(); 
         }
       }
+    
   }, []);
 
   
@@ -236,19 +240,23 @@ export default function VisitAgentReports() {
     XLSX.writeFile(wb, 'Agents Reports.xlsx');
   };
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-     
+    <div className={`${collapsed ?"collapsed":"main"}`}>
+        <div className="container-fluid payment_details mt-3">
+            <div className="row">
             <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Visit Agents Payments Reports</h4>
+                  <h4>Visit Agents Payment Reports</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
                     <>
-                     
+                      <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
 
@@ -264,22 +272,22 @@ export default function VisitAgentReports() {
             }
          {payments && payments.length > 0 &&
               <div className="col-md-12 filters">
-                <div className='py-1 mb-2'>
-                <div className="row">
+                <div className='py-1 mb-2 '>
+                  <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                   <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
+                      <label htmlFor="">Date From:</label><br/>
                       <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Date To:</label>
+                      <label htmlFor="">Date To:</label><br/>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Via:</label>
+                      <label htmlFor="">Payment Via:</label><br/>
                       <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.payment_Via))].map(typeValue => (
@@ -288,7 +296,7 @@ export default function VisitAgentReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Type:</label>
+                      <label htmlFor="">Payment Type:</label><br/>
                       <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.payment_Type))].map(typeValue => (
@@ -297,7 +305,7 @@ export default function VisitAgentReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Category:</label>
+                      <label htmlFor="">Category:</label><br/>
                       <select value={category} onChange={(e) => setCategory(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.category))].map(typeValue => (
@@ -306,7 +314,7 @@ export default function VisitAgentReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Agent Name:</label>
+                      <label htmlFor="">Agent Name:</label><br/>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.supplierName))].map(supplier => (
@@ -315,12 +323,11 @@ export default function VisitAgentReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Type:</label>
+                      <label htmlFor="">Payment:</label><br/>
                       <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.type))].map(typeValue => (
-                          <option key={typeValue} value={typeValue}>{typeValue}</option>
-                        ))}
+                        <option value="in">Payment In</option>
+                        <option value="out">Payment Out</option>
                       </select>
                     </div>
                   </div>
@@ -329,7 +336,7 @@ export default function VisitAgentReports() {
             }
 
             {!loading1 &&
-            <div className='col-md-12 p-0 border-0 border-bottom'>
+            <div className='col-md-12 p-0'>
               <div className='py-3 mb-1 px-1 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
@@ -340,12 +347,22 @@ export default function VisitAgentReports() {
                           <TableCell className='label border'>Agents</TableCell>
                           <TableCell className='label border'>Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border '>Cash_In</TableCell>
-                          <TableCell className='label border '>Cash_Out</TableCell>
-                          <TableCell className='label border '>Cash_Return</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
+                          <TableCell className='label border'>Slip No</TableCell>
+                          <TableCell className='label border '>Cash In</TableCell>
+                          <TableCell className='label border '>Cash Out</TableCell>
+                          <TableCell className='label border '>Cash In Return</TableCell>
+                          <TableCell className='label border '>Cash Out Return</TableCell>
+                          {show &&
+                            <>
+                              <TableCell className='label border'>Curr Rate</TableCell>
+                              <TableCell className='label border'>Curr Amount</TableCell>
+                              <TableCell className='label border'>Payment In Curr</TableCell>
+                            </>
+                          }
+                          <TableCell className='label border '>Candidates</TableCell>
+                          <TableCell className='label border '>Details</TableCell>
                           <TableCell className='label border '>Invoice</TableCell>
                         </TableRow>
                       </TableHead>
@@ -356,14 +373,27 @@ export default function VisitAgentReports() {
                                 <TableCell className='border data_td  '>{entry.date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
                                 <TableCell className='border data_td  '>{entry.type}</TableCell>
-                               
                                 <TableCell className='border data_td  '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
                                 <TableCell className='border data_td '>{entry.slip_No}</TableCell>
                                 <TableCell className='border data_td bg-success text-white'>{entry.payment_In}</TableCell>
                                 <TableCell className='border data_td bg-danger text-white'>{entry.payment_Out}</TableCell>
-                                <TableCell className='border data_td bg-warning text-white'>{entry.cash_Out}</TableCell>
+                                <TableCell className='border data_td bg-warning text-white'>{entry?.type.toLowerCase().includes('in') && entry?.cash_Out}</TableCell>
+                                <TableCell className='border data_td bg-warning text-white'>{entry?.type.toLowerCase().includes('out') && entry?.cash_Out}</TableCell>
+                                {show &&
+                              <>
+                                <TableCell className='border data_td text-center'>{Math.round(entry?.curr_Rate || 0)}</TableCell>
+                                <TableCell className='border data_td text-center'>{Math.round(entry?.curr_Amount || 0)}</TableCell>
+                                <TableCell className='border data_td text-center'>{entry?.payment_In_curr ? entry?.payment_In_curr : entry?.payment_Out_curr}</TableCell>
+                              </>
+                            }
+                                <TableCell className='border data_td text-center'>{entry?.payments&& entry.payments.map((data)=>(
+                                      <span>{data.cand_Name}<br/></span>
+                                    ))}
+                                </TableCell>
+                                <TableCell className='border data_td text-center'>{entry?.details}</TableCell>
+                                    
                                 <TableCell className='border data_td '>{entry.invoice}</TableCell>
                           
                           </TableRow>
@@ -392,7 +422,6 @@ export default function VisitAgentReports() {
   <TableCell></TableCell>        
   <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
     <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
     {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
       return total + (entry.payment_In || 0); // Use proper conditional check
     }, 0)}
@@ -404,11 +433,48 @@ export default function VisitAgentReports() {
     }, 0)}
   </TableCell>
   <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.type.toLowerCase().includes('in') && entry.cash_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white'>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.type.toLowerCase().includes('out') && entry.cash_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          {show &&
+                            <>
+                              <TableCell className='border data_td text-center bg-info text-white'>
+
+                                {filteredPayments && filteredPayments.length > 0 &&
+                                  (filteredPayments
+                                    .filter(entry => (entry.type.toLowerCase().includes('in')))
+                                    .reduce((total, entry) => {
+                                      return total + (entry.curr_Rate || 0);
+                                    }, 0)) - (filteredPayments
+                                      .filter(entry => (entry.type.toLowerCase().includes('out')))
+                                      .reduce((total, entry) => {
+                                        return total + (entry.curr_Rate || 0);
+                                      }, 0))}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-info text-white'>
+
+                                {filteredPayments && filteredPayments.length > 0 &&
+                                  (filteredPayments
+                                    .filter(entry => (entry.type.toLowerCase().includes('in')))
+                                    .reduce((total, entry) => {
+                                      return total + (entry.curr_Amount || 0);
+                                    }, 0)) - (filteredPayments
+                                      .filter(entry => (entry.type.toLowerCase().includes('out')))
+                                      .reduce((total, entry) => {
+                                        return total + (entry.curr_Amount || 0);
+                                      }, 0))}
+                              </TableCell>
+
+                            </>
+                          }
 </TableRow>
 
                       </TableBody>
@@ -418,7 +484,9 @@ export default function VisitAgentReports() {
               </div>
             </div>
             }
-            
+            </div>
+        </div>
+      </div>
     </>
   )
 }

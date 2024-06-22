@@ -694,15 +694,13 @@ display: inline-block;
 }
 
 .entry_details .filters select, .entry_details .filters input  {
-  width: 100%;
+  width:auto;
   height: 30px;
   border: none;
   border-radius: 2px;
   font-size: 12px;
-  padding-left: 15px;
-  padding-right: 4px;
+  padding-left: 5px;
   color: var(--accent-stong-blue);
-  position: relative;
   font-weight: 500;
   letter-spacing: 1px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
@@ -795,7 +793,7 @@ background-color: #dad5d5;
   font-size: 11px;
   font-weight: 500;
   text-transform: capitalize;
-  padding: 0;
+  padding: 4px 2px 4px 2px ;
 }
 
 .entry_details .detail_table .action {
@@ -826,8 +824,9 @@ background-color: #dad5d5;
 .entry_details .detail_table .data_td {
   font-size: 10px;
   font-weight: 600;
-  width: 100%;
+  width: auto;
   text-transform: capitalize;
+  padding: 4px 2px 4px 2px ;
 
 }
 .entry_details .detail_table p {
@@ -1272,7 +1271,7 @@ background-color: #dad5d5;
 }
 
 .payment_details .filters select,.payment_details .filters input {
-  width: 100%;
+  width:auto;
   height: 30px;
   border: none;
   border-radius: 2px;
@@ -1293,7 +1292,9 @@ background-color: #dad5d5;
   border: 1px solid var(--accent-lighter-blue) !important;
 }
 
-
+.payment_details .detail_table table{
+  width:100%;
+}
 .payment_details .detail_table input[type='checkbox'] {
   width: auto;
   height: 45px;
@@ -1387,8 +1388,8 @@ max-width: 17px;
   color: white;
   font-size: 9px;
   font-weight: 600;
-  display: inline-flexbox;
-  width: 18.28%;
+  padding:4px 2px 4px 2px;
+  text-align: center;
 }
 
 .payment_details .detail_table .action {
@@ -1423,8 +1424,9 @@ max-width: 17px;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 1px;
-  width: 18.28%;
   text-transform: capitalize;
+  padding:4px 2px 4px 2px;
+  text-align: center;
 }
 .payment_details .detail_table .profit {
   background-color: var(--cool-Green);

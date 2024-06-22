@@ -34,7 +34,6 @@ export default function PaymentInReports() {
   }, []);
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
-  const [type, setType] = useState('')
   const [supplier, setSupplier] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -50,8 +49,8 @@ export default function PaymentInReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
-    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
+   
+    paymentItem.type.toLowerCase().includes(supplier.toLowerCase()) &&
     paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
     paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
     paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
@@ -237,19 +236,19 @@ export default function PaymentInReports() {
                 <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                   <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
+                      <label htmlFor="">Date From:</label><br/>
                       <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Date To:</label>
+                      <label htmlFor="">Date To:</label><br/>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Via:</label>
+                      <label htmlFor="">Payment Via:</label><br/>
                       <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.payment_Via))].map(typeValue => (
@@ -258,7 +257,7 @@ export default function PaymentInReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Type:</label>
+                      <label htmlFor="">Payment Type:</label><br/>
                       <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.payment_Type))].map(typeValue => (
@@ -267,7 +266,7 @@ export default function PaymentInReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Category:</label>
+                      <label htmlFor="">Category:</label><br/>
                       <select value={category} onChange={(e) => setCategory(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.category))].map(typeValue => (
@@ -276,23 +275,15 @@ export default function PaymentInReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Name:</label>
+                      <label htmlFor="">Reference:</label><br/>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.supplierName))].map(supplier => (
-                          <option key={supplier} value={supplier}>{supplier}</option>
-                        ))}
+                       <option value="candidate">Candidates</option>
+                       <option value="agent">Agents</option>
+                       <option value="supplier">Suppliers</option>
                       </select>
                     </div>
-                    <div className="col-auto px-1 ">
-                      <label htmlFor="">Type:</label>
-                      <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('in' ) || data.payment_In ||data.payment_In>0)&&!data.payments).map(data => data.type))].map(typeValue => (
-                          <option key={typeValue} value={typeValue}>{typeValue}</option>
-                        ))}
-                      </select>
-                    </div>
+                 
                   </div>
                 </div>
               </div>
@@ -305,23 +296,28 @@ export default function PaymentInReports() {
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
                               <TableCell className='label border'>Name/PP#</TableCell>
-                              <TableCell className='label border'>Reference_Type</TableCell>
+                              <TableCell className='label border'>Company</TableCell>
+                              <TableCell className='label border'>Trade</TableCell>
+                              <TableCell className='label border'>Flight Date</TableCell>
+                              <TableCell className='label border'>Final Status</TableCell>
+                              <TableCell className='label border'>Entry Mode</TableCell>
+                              <TableCell className='label border'>Reference</TableCell>
                               <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
+                              <TableCell className='label border'>Payment Via</TableCell>
+                              <TableCell className='label border'>Payment Type</TableCell>
+                              <TableCell className='label border'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash In</TableCell>
+                              <TableCell className='label border'>Cash Return</TableCell>
                               {show && 
                            <>
-                            <TableCell className='label border'>Curr_Rate</TableCell>
-                            <TableCell className='label border'>Curr_Amount</TableCell>
-                            <TableCell className='label border'>Payment_In_Curr</TableCell>
+                            <TableCell className='label border'>Curr Rate</TableCell>
+                            <TableCell className='label border'>Curr Amount</TableCell>
+                            <TableCell className='label border'>Payment In Curr</TableCell>
                            </>
                            }
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border'>Slip Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -333,6 +329,11 @@ export default function PaymentInReports() {
                                     <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.date}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
@@ -373,7 +374,7 @@ export default function PaymentInReports() {
                             </TableRow>}
 
                             <TableRow>
-                              <TableCell colSpan={7}></TableCell>
+                              <TableCell colSpan={12}></TableCell>
                               <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                               <TableCell className='border data_td text-center bg-success text-white'>
                             {/* Calculate the total sum of payment_In */}

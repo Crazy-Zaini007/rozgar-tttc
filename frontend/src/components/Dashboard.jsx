@@ -298,139 +298,202 @@ const sortedPayments=filteredPayment&&filteredPayment.sort((a,b)=>new Date(b.dat
 
 const printPaymentInvoice = (paymentItem) => {
   // Function to format the date as dd-MM-yyyy
-const formatDate = (date) => {
-const d = new Date(date);
-const day = String(d.getDate()).padStart(2, '0');
-const month = String(d.getMonth() + 1).padStart(2, '0');
-const year = d.getFullYear();
-return `${day}-${month}-${year}`;
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+  const paymentDetailsString = paymentItem.payments?.map(payment => `
+    <tr>
+      <td>${String(payment.cand_Name)}</td>
+      <td>${String(payment?.pp_No || 'NIL')}</td>
+      <td>${String(payment?.entry_Mode || 'NIL')}</td>
+      <td>${String(payment?.company || 'NIL')}</td>
+      <td>${String(payment?.trade || 'NIL')}</td>
+      <td>${String(payment?.country || '')}</td>
+      <td>${String(payment?.final_Status || 'NIL')}</td>
+      <td>${String(payment?.flight_Date || 'NIL')}</td>
+      <td>${String(payment?.visa_Amount_PKR)}</td>
+      <td>${String(payment?.past_Paid_PKR)}</td>
+      <td>${String(payment?.past_Remain_PKR)}</td>
+      <td>${String(payment?.new_Payment)}</td>
+      <td>${String(payment?.new_Remain_PKR)}</td>
+      <td>${String(payment?.curr_Amount || 0)}</td>
+      <td>${String(payment?.curr_Rate || 0)}</td>
+    </tr>
+  `).join('') || '';
+
+  const candidateDetailsSection = paymentItem.payments && paymentItem.payments.length > 0 ? `
+    <hr/>
+    <h2 class="subtitle">Candidate Vise Details</h2>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>Visa Amount (PKR)</th>
+          <th>Past Paid (PKR)</th>
+          <th>Past Remaining (PKR)</th>
+          <th>New Payment In (PKR)</th>
+          <th>New Remaining (PKR)</th>
+          <th>Currency Amount</th>
+          <th>Currency Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${paymentDetailsString}
+      </tbody>
+    </table>
+  ` : '';
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+      <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Payment Invoice</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name/PP#</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Flight Date</th>
+          <th>Final Status</th>
+          <th>Entry Mode</th>
+          <th>Reference</th>
+          <th>Category</th>
+          <th>Payment Via</th>
+          <th>Payment Type</th>
+          <th>Slip No</th>
+          <th>Details</th>
+          <th>Cash In</th>
+          <th>Cash Out</th>
+          <th>Cash In Return</th>
+          <th>Cash Out Return</th>
+          <th>Remaining In</th>
+          <th>Remaining Out</th>
+          <th>Curr Rate</th>
+          <th>Curr Amount</th>
+          <th>Payment In Curr</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>${String(paymentItem?.date)}</td>
+          <td>${String(paymentItem.supplierName)}/${String(paymentItem?.pp_No)}</td>
+          <td>${String(paymentItem.company || "NIL")}</td>
+          <td>${String(paymentItem.trade || "NIL")}</td>
+          <td>${String(paymentItem.flight_Date || "NIL")}</td>
+          <td>${String(paymentItem.final_Status || "NIL")}</td>
+          <td>${String(paymentItem.entry_Mode || "NIL")}</td>
+          <td>${String(paymentItem.type)}</td>
+          <td>${String(paymentItem?.category)}</td>
+          <td>${String(paymentItem?.payment_Via)}</td>
+          <td>${String(paymentItem?.payment_Type)}</td>
+          <td>${String(paymentItem?.slip_No)}</td>
+          <td>${String(paymentItem?.details)}</td>
+          <td>${String(paymentItem?.payment_In || 0)}</td>
+          <td>${String(paymentItem?.payment_Out || 0)}</td>
+          <td>${String(paymentItem?.type.toLowerCase().includes('in') ? paymentItem?.cash_Out : 0)}</td>
+          <td>${String(paymentItem?.type.toLowerCase().includes('out') ? paymentItem?.cash_Out : 0)}</td>
+          <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.remaining : 0)}</td>
+          <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.remaining : 0)}</td>
+          <td>${String(paymentItem?.curr_Rate || 0)}</td>
+          <td>${String(paymentItem?.curr_Amount || 0)}</td>
+          <td>${String(paymentItem?.payment_In_curr ? paymentItem?.payment_In_curr : paymentItem?.payment_Out_curr || 'NIL')}</td>
+        </tr>
+      </tbody>
+    </table>
+    ${candidateDetailsSection}
+    <style>
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        max-width: 100px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .invoice {
+        flex-grow: 0;
+        text-align: left;
+        font-size: 20px;
+      }
+      .date{
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Invoice</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
 };
 
-const formattedDate = formatDate(new Date());
-// Convert JSX to HTML string
-const printContentString = `
-  <div class="print-header">
-  <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
-    <h1 class="title">ROZGAR TTTC</h1>
-  <p class="date">Date: ${formattedDate}</p>
-  </div>
-  <div class="print-header">
-    <h1 class="title">Payment Invoice</h1>
-  </div>
-  <hr/>
-  <table class='print-table'>
-    <thead>
-      <tr>
-        <th>SN</th>
-        <th>Date</th>
-        <th>Name/PP#</th>
-        <th>Reference</th>
-        <th>Category</th>
-        <th>Payment Via</th>
-        <th>Payment Type</th>
-        <th>Slip No</th>
-        <th>Details</th>
-         <th>Cash In</th>
-        <th>Cash Out</th>
-        <th>Cash In Return</th>
-        <th>Cash Out Return</th>
-        <th>Remaining In</th>
-        <th>Remaining Out</th>
-        <th>Curr Rate</th>
-        <th>Curr Amount</th>
-        <th>Payment In Curr</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>${String(paymentItem?.date)}</td>
-        <td>${String(paymentItem.supplierName)}/${String(paymentItem?.pp_No)}</td>
-        <td>${String(paymentItem.type)}</td>
-        <td>${String(paymentItem?.category)}</td>
-        <td>${String(paymentItem?.payment_Via)}</td>
-        <td>${String(paymentItem?.payment_Type)}</td>
-        <td>${String(paymentItem?.slip_No)}</td>
-        <td>${String(paymentItem?.details)}</td>
-        <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.cash_Out : 0)}</td>
-        <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.cash_Out : 0)}</td>
-        <td>${String(paymentItem?.payment_In || paymentItem?.payment_In > 0 ? paymentItem.remaining : 0)}</td>
-        <td>${String(paymentItem?.payment_Out || paymentItem?.payment_Out > 0 ? paymentItem.remaining : 0)}</td>
-        <td>${String(paymentItem?.curr_Rate||0)}</td>
-        <td>${String(paymentItem?.curr_Amount||0)}</td>
-        <td>${String(paymentItem?.payment_In_curr?paymentItem?.payment_In_curr:paymentItem?.payment_Out_curr||'NIL')}</td>
-      </tr>
-    </tbody>
-  </table>
-  <style>
-    body {
-      background-color: #fff;
-    }
-    .print-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo {
-      max-width: 100px;
-    }
-    .title {
-      flex-grow: 1;
-      text-align: center;
-      margin: 0;
-      font-size: 24px;
-    }
-    .invoice {
-      flex-grow: 0;
-      text-align: left;
-      font-size: 20px;
-    }
-    .date{
-      flex-grow: 0;
-      text-align: right;
-      font-size: 20px;
-    }
-    .print-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    .print-table th, .print-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-      text-transform: capitalize;
-    }
-    .print-table th {
-      background-color: #f2f2f2;
-    }
-  </style>
-`;
-
-// Create a new window for printing
-const printWindow = window.open('', '_blank');
-if (printWindow) {
-  // Write the print content to the new window
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>Print Invoice</title>
-      </head>
-      <body class='bg-dark'>${printContentString}</body>
-    </html>
-  `);
-
-  // Trigger print dialog
-  printWindow.print();
-  // Close the new window after printing
-  printWindow.onafterprint = function () {
-    printWindow.close();
-  };
-} else {
-  // Handle if the new window cannot be opened
-  alert('Could not open print window. Please check your browser settings.');
-}
-}
 
 
 const printPayments = () => {
@@ -1125,21 +1188,21 @@ const[option,setOption]=useState(false)
                       <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
-                            <label htmlFor="">Search Here:</label>
+                            <label htmlFor="">Search Here:</label><br/>
                            <input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
                           </div>
                           <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                           
                           <div className="col-auto px-1">
-                            <label htmlFor="">Supp/Agent/Cand:</label>
+                            <label htmlFor="">Name:</label><br/>
                             <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.supplierName))].map(dateValue => (
@@ -1148,7 +1211,7 @@ const[option,setOption]=useState(false)
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Reference Type:</label>
+                            <label htmlFor="">Reference Type:</label><br/>
                             <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.type))].map(dateValue => (
@@ -1158,7 +1221,7 @@ const[option,setOption]=useState(false)
                           </div>
 
                           <div className="col-auto px-1">
-                            <label htmlFor="">Category:</label>
+                            <label htmlFor="">Category:</label><br/>
                             <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.category))].map(dateValue => (
@@ -1167,7 +1230,7 @@ const[option,setOption]=useState(false)
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Via:</label>
+                            <label htmlFor="">Payment Via:</label><br/>
                             <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
@@ -1176,7 +1239,7 @@ const[option,setOption]=useState(false)
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Type:</label>
+                            <label htmlFor="">Payment Type:</label><br/>
                             <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Type))].map(dateValue => (
@@ -1206,6 +1269,11 @@ const[option,setOption]=useState(false)
                             <TableCell className='label border'>SN</TableCell>
                             <TableCell className='label border'>Date</TableCell>
                             <TableCell className='label border'>Name/PP#</TableCell>
+                            <TableCell className='label border'>Company</TableCell>
+                              <TableCell className='label border'>Trade</TableCell>
+                              <TableCell className='label border'>Flight Date</TableCell>
+                              <TableCell className='label border'>Final Status</TableCell>
+                              <TableCell className='label border'>Entry Mode</TableCell>
                             <TableCell className='label border'>Type</TableCell>
                             <TableCell className='label border'>Category</TableCell>
                             <TableCell className='label border'>Payment_Via</TableCell>
@@ -1224,6 +1292,7 @@ const[option,setOption]=useState(false)
                             <TableCell className='label border'>Payment_In_Curr</TableCell>
                            </>
                            }
+                            <TableCell className='label border'>Candidates</TableCell>
                             <TableCell className='label border'>Details</TableCell>
                             <TableCell className='label border'>Invoice</TableCell>
                             <TableCell className='label border'>Slip_Pic</TableCell>
@@ -1242,6 +1311,11 @@ const[option,setOption]=useState(false)
                                       <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.date}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
@@ -1259,6 +1333,9 @@ const[option,setOption]=useState(false)
                                       <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
                                      </>
                                      }
+                                     <TableCell className='border data_td text-center'>{cash?.payments&& cash.payments.map((data)=>(
+                                      <span>{data.cand_Name}<br/></span>
+                                    ))}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash.slip_Pic ? <a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
@@ -1293,6 +1370,11 @@ const[option,setOption]=useState(false)
                             </TableRow>}
 
                             <TableRow>
+                                  <TableCell></TableCell>
+                                  <TableCell></TableCell>
+                                  <TableCell></TableCell>
+                                  <TableCell></TableCell>
+                                  <TableCell></TableCell>
                                   <TableCell></TableCell>
                                   <TableCell></TableCell>
                                   <TableCell></TableCell>

@@ -82,11 +82,11 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
 <div className='py-1 mb-2 '>
 <div className="row">
         <div className="col-auto my-2 p-1">
-          <label htmlFor="">Date From:</label>
+          <label htmlFor="">Date From:</label><br/>
             <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
         </div>
         <div className="col-auto my-2 p-1">
-          <label htmlFor="">Date To:</label>
+          <label htmlFor="">Date To:</label><br/>
             <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
         </div>
 </div>
@@ -98,10 +98,10 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
                     <Table stickyHeader>
                         <TableHead className="thead">
                             <TableRow>
-                                <TableCell className='label border text-center' >SN</TableCell>
-                                <TableCell className='label border text-center' >Date</TableCell>
-                                <TableCell className='label border text-center' >Backup</TableCell>
-                                <TableCell className='label border text-center' >Action</TableCell>
+                                <TableCell className='label border text-center p-1' >SN</TableCell>
+                                <TableCell className='label border text-center p-1' >Date</TableCell>
+                                <TableCell className='label border text-center p-1' >Backup</TableCell>
+                                <TableCell className='label border text-center p-1' >Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

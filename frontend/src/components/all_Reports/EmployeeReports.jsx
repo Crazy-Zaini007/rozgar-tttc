@@ -260,19 +260,19 @@ export default function EmployeeReports() {
                 <div className='py-1 mb-2'>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                   <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
+                      <label htmlFor="">Date From:</label><br/>
                       <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Date To:</label>
+                      <label htmlFor="">Date To:</label><br/>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">EmployeeName:</label>
+                      <label htmlFor="">EmployeeName:</label><br/>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.employeeName))].map(supplier => (

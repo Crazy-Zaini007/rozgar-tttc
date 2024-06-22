@@ -23,7 +23,7 @@ export default function Invoice() {
       const json = await response.json()
       if (response.ok) {
         setPayments(json.data)
-      // Dispatch the action with received data
+      
       }
     } catch (error) {
      
@@ -85,24 +85,28 @@ export default function Invoice() {
   const [final_Status, setFinal_Status] = useState('')
   const [reference_Out, setReference_Out] = useState('')
   const[flight_Date,setFlight_Date]=useState('')
-  const filteredEntries =payments && payments.filter(entry => {
+  const filteredEntries = payments && payments.filter(entry => {
     return (
-      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
-      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
-      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-      entry.reference_Out?.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      ( entry.trade?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.company?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.pp_No?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.name?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.country?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.final_Status?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.flight_Date?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
-      entry.reference_Out?.toLowerCase().startsWith(search1.trim().toLowerCase()))
-    )
-  })
+      (trade ? entry.trade?.toLowerCase().includes(trade.toLowerCase()) : true) &&
+      (company ? entry.company?.toLowerCase().includes(company.toLowerCase()) : true) &&
+      (country ? entry.country?.toLowerCase().includes(country.toLowerCase()) : true) &&
+      (final_Status ? entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) : true) &&
+      (flight_Date ? entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) : true) &&
+      (reference_Out ? entry.reference_Out?.toLowerCase().includes(reference_Out.toLowerCase()) : true) &&
+      (
+        search1.trim() === '' ||
+        entry.trade?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.company?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.pp_No?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.name?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.country?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.final_Status?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.flight_Date?.toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        entry.reference_Out?.toLowerCase().startsWith(search1.trim().toLowerCase())
+      )
+    );
+  });
+  console.log('filteredEntries',payments)
 
   
   const printExpenseTable = () => {
@@ -219,7 +223,7 @@ export default function Invoice() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details mt-3">
+        <div className="container-fluid payment_details mt-3">
             <div className="row">
             <div className='col-md-12 p-0 border-0 border-bottom '>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
@@ -248,11 +252,11 @@ export default function Invoice() {
                 <div className='py-1 mb-2'>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                   <div className="col-auto px-1">
-                      <label htmlFor="">Name:</label>
+                      <label htmlFor="">Name:</label><br/>
                       <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.name))].map(tradeValue => (
@@ -261,7 +265,7 @@ export default function Invoice() {
                       </select>
                     </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">PP No:</label>
+                      <label htmlFor="">PP No:</label><br/>
                       <select value={pp_No} onChange={(e) => setPP_NO(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.pp_No))].map(tradeValue => (
@@ -270,7 +274,7 @@ export default function Invoice() {
                       </select>
                     </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Trade:</label>
+                      <label htmlFor="">Trade:</label><br/>
                       <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.trade))].map(tradeValue => (
@@ -279,7 +283,7 @@ export default function Invoice() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Company:</label>
+                      <label htmlFor="">Company:</label><br/>
                       <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.company))].map(companyValue => (
@@ -288,7 +292,7 @@ export default function Invoice() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Country:</label>
+                      <label htmlFor="">Country:</label><br/>
                       <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.country))].map(countryValue => (
@@ -298,7 +302,7 @@ export default function Invoice() {
                     </div>
 
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Final Status:</label>
+                      <label htmlFor="">Final Status:</label><br/>
                       <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.final_Status))].map(final_StatusValue => (
@@ -307,7 +311,7 @@ export default function Invoice() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Flight Date:</label>
+                      <label htmlFor="">Flight Date:</label><br/>
                       <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.flight_Date))].map(flight_DateValue => (
@@ -318,7 +322,7 @@ export default function Invoice() {
                  
                     
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference:</label>
+                      <label htmlFor="">Reference:</label><br/>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="Candidate">Direct/Candidate</option>
@@ -347,12 +351,16 @@ export default function Invoice() {
                           <TableCell className='label border'>Company</TableCell>
                           <TableCell className='label border'>Trade</TableCell>
                           <TableCell className='label border'>Fly</TableCell>
-                          <TableCell className='label border'>Reference_Type</TableCell>
-                          <TableCell className='label border'>Reference_Name</TableCell>
-                          <TableCell className='label border'>Rozgar_Visa_Price</TableCell>
-                          <TableCell className='label border'>Cash_In</TableCell>
-                          <TableCell className='label border '>Cash_Out</TableCell>
+                          <TableCell className='label border'>Reference Type</TableCell>
+                          <TableCell className='label border'>Reference Name</TableCell>
+                          <TableCell className='label border'>Rozgar Visa Price</TableCell>
+                          <TableCell className='label border'>Cash In</TableCell>
+                          <TableCell className='label border '>Cash Out</TableCell>
                           <TableCell className='label border '>Remaining</TableCell>
+                          <TableCell className='label border'>Rozgar Visa Price In Curr</TableCell>
+                          <TableCell className='label border'>Cash In Curr</TableCell>
+                          <TableCell className='label border '>Remaining In Curr</TableCell>
+
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -371,6 +379,10 @@ export default function Invoice() {
       <TableCell className='border data_td bg-success text-white'>{entry.total_In}</TableCell>
       <TableCell className='border data_td bg-danger text-white'>{entry.cash_Out}</TableCell>
       <TableCell className='border data_td bg-warning text-white'>{entry.visa_Price_In_PKR - entry.total_In + entry.cash_Out}</TableCell>
+      <TableCell className='border data_td'>{entry.visa_Price_In_Curr}</TableCell>
+      <TableCell className='border data_td bg-success text-white'>{entry.visa_Price_In_Curr-entry.remaining_Curr}</TableCell>
+      <TableCell className='border data_td bg-warning text-white'>{entry.remaining_Curr}</TableCell>
+
     </TableRow>
   ))}
   <TableRow>
@@ -405,6 +417,25 @@ export default function Invoice() {
       {/* Calculate the total sum of visa_Price_In_PKR */}
       {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
         return total + parseFloat(entry.visa_Price_In_PKR) - parseFloat(entry.total_In) +parseFloat(entry.cash_Out)
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-info text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_Curr);
+      }, 0)}
+    </TableCell>
+    <TableCell className='border data_td text-center bg-success text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.visa_Price_In_Curr) - parseFloat(entry.remaining_Curr) 
+      }, 0)}
+    </TableCell>
+    
+    <TableCell className='border data_td text-center bg-warning text-white'>
+      {/* Calculate the total sum of visa_Price_In_PKR */}
+      {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
+        return total + parseFloat(entry.remaining_Curr)
       }, 0)}
     </TableCell>
   </TableRow>

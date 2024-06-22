@@ -33,6 +33,9 @@ export default function CandWisePaymentOutReports() {
     }
   }, []);
 
+
+
+  // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
   const [type, setType] = useState('')
@@ -51,14 +54,15 @@ export default function CandWisePaymentOutReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
-    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
+    
+    paymentItem.type.trim().toLowerCase().includes(supplier.trim().toLowerCase()) &&
     paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
     paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
     paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
     (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.supplierName.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.supplierName?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.pp_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
@@ -66,8 +70,9 @@ export default function CandWisePaymentOutReports() {
     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
 
   })
-  
-  const printPaymenOutMainTable = () => {
+
+
+  const printPaymenInMainTable = () => {
     // Convert JSX to HTML string
     const printContentString = `
   <table class='print-table'>
@@ -75,7 +80,7 @@ export default function CandWisePaymentOutReports() {
       <tr>
         <th>SN</th>
         <th>Date</th>
-        <th>Supplier</th>
+        <th>Name/PP#</th>
         <th>Reference Type</th>
         <th>Category</th>
         <th>Payment Via</th>
@@ -91,12 +96,12 @@ export default function CandWisePaymentOutReports() {
     </thead>
     <tbody>
       ${filteredPayments && filteredPayments 
-        .filter(entry => entry.type.toLowerCase().includes('out')&&  entry.payments && entry.payments.length > 0)
+        .filter(entry =>  (entry.type.toLowerCase().includes('cand')&&entry.type.toLowerCase().includes('out')))
         .map((entry, index) => `
         <tr key="${entry?._id}">
           <td>${index + 1}</td>
           <td>${String(entry.date)}</td>       
-          <td>${String(entry.supplierName)}</td>
+          <td>${String(entry.supplierName)}${String(entry?.pp_No)}</td>
           <td>${String(entry.type)}</td>
           <td>${String(entry.category)}</td>
           <td>${String(entry.payment_Via)}</td>
@@ -139,7 +144,7 @@ export default function CandWisePaymentOutReports() {
       printWindow.document.write(`
     <html>
       <head>
-        <title>Candidate Wise Payment_Out Details</title>
+        <title>Candidate Wise Payment_In Details</title>
       </head>
       <body class='bg-dark'>${printContentString}</body>
     </html>
@@ -158,16 +163,16 @@ export default function CandWisePaymentOutReports() {
   };
 
 
-  const downloadPaymenOutExcel = () => {
-    const filteredPaymentsOut = filteredPayments && filteredPayments .filter(payment => payment.type.toLowerCase().includes('out')&&  payment.payments && payment.payments.length > 0);
-
+  const downloadPaymenInExcel = () => {
+    const filteredPaymentsIn = filteredPayments && filteredPayments.filter(payment => (payment.type.toLowerCase().includes('cand')&&payment.type.toLowerCase().includes('out')));
     const data = [];
     // Iterate over entries and push all fields
-    filteredPaymentsOut.forEach((payments, index) => {
+    filteredPaymentsIn.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
         Date: payments.date,
         Supplier: payments.supplierName,
+        PP_No: payments?.pp_No,
         Reference_Type: payments.type,
         Category: payments.category,
         Payment_Via: payments.payment_Via,
@@ -186,7 +191,7 @@ export default function CandWisePaymentOutReports() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Candidate Wise Payments_Out Details.xlsx');
+    XLSX.writeFile(wb, 'Candidate Wise Payments_In Details.xlsx');
   }
 
   const [show, setShow] = useState(false)
@@ -196,7 +201,6 @@ export default function CandWisePaymentOutReports() {
   return (
     <div>
          <div className={`${collapsed ?"collapsed":"main"}`}>
-
         <div className="container-fluid payment_details mt-3">
             <div className="row">
                 <div className="col-md-12 p-0 border-0 border-bottom">
@@ -207,94 +211,87 @@ export default function CandWisePaymentOutReports() {
                 <div className="right d-flex">
                   {overAllPayments && overAllPayments.length > 0 &&
                     <>
-                     
-                      {option===0 &&
+                   
+                     {option===0 &&
                      <>
                      <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
-                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenOutExcel}>Download </button>
-                      <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymenOutMainTable}>Print </button>
+                      <button className='btn excel_btn m-1 btn-sm' onClick={downloadPaymenInExcel}>Download </button>
+                      <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymenInMainTable}>Print </button>
                      </>
                      }
+                   
                     </>
                   }
 
                 </div>
               </div>
                 </div>
-                {loading1 &&
+                {(loading1 && overAllPayments.length<1) &&
               <div className='col-md-12 text-center my-4'>
                 <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
 
-{!loading1 &&
+{(!loading1 || overAllPayments.length>0) &&
               <>
                 {option === 0 &&
-                  <>
-                   <div className="col-md-12 filters">
+                <>
+                <div className="col-md-12 filters">
                 <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                   <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
+                      <label htmlFor="">Date From:</label><br/>
                       <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Date To:</label>
+                      <label htmlFor="">Date To:</label><br/>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Via:</label>
+                      <label htmlFor="">Payment Via:</label><br/>
                       <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('out')&&data.payments)).map(data => data.payment_Via))].map(typeValue => (
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('out'))).map(data => data.payment_Via))].map(typeValue => (
                           <option key={typeValue} value={typeValue}>{typeValue}</option>
                         ))}
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Type:</label>
+                      <label htmlFor="">Payment Type:</label><br/>
                       <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('out')&&data.payments)).map(data => data.payment_Type))].map(typeValue => (
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('out'))).map(data => data.payment_Type))].map(typeValue => (
                           <option key={typeValue} value={typeValue}>{typeValue}</option>
                         ))}
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Category:</label>
+                      <label htmlFor="">Category:</label><br/>
                       <select value={category} onChange={(e) => setCategory(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('out')&&data.payments)).map(data => data.category))].map(typeValue => (
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('out'))).map(data => data.category))].map(typeValue => (
                           <option key={typeValue} value={typeValue}>{typeValue}</option>
                         ))}
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Agent Name:</label>
+                      <label htmlFor="">Reference:</label><br/>
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('out')&&data.payments)).map(data => data.supplierName))].map(supplier => (
-                          <option key={supplier} value={supplier}>{supplier}</option>
-                        ))}
+                       <option value="candidate_payment_out">Candidates</option>
+                       <option value="agent_cand_wise_payment_out">Agents</option>
+                       <option value="supplier_cand_wise_payment_out">Suppliers</option>
                       </select>
                     </div>
-                    <div className="col-auto px-1 ">
-                      <label htmlFor="">Type:</label>
-                      <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('out')&&data.payments)).map(data => data.type))].map(typeValue => (
-                          <option key={typeValue} value={typeValue}>{typeValue}</option>
-                        ))}
-                      </select>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
-                  <div className='col-md-12 p-0'>
+              <div className='col-md-12 p-0'>
                     <div className='py-3 mb-1 px-1 detail_table'>
                       <TableContainer sx={{ maxHeight: 600 }}>
                         <Table stickyHeader >
@@ -302,28 +299,33 @@ export default function CandWisePaymentOutReports() {
                             <TableRow>
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Name</TableCell>
-                              <TableCell className='label border'>Reference_Type</TableCell>
+                              <TableCell className='label border'>Name/PP#</TableCell>
+                              <TableCell className='label border'>Company</TableCell>
+                              <TableCell className='label border'>Trade</TableCell>
+                              <TableCell className='label border'>Flight Date</TableCell>
+                              <TableCell className='label border'>Final Status</TableCell>
+                              <TableCell className='label border'>Entry Mode</TableCell>
+                              <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_Out</TableCell>
+                              <TableCell className='label border'>Payment Via</TableCell>
+                              <TableCell className='label border'>Payment Type</TableCell>
+                              <TableCell className='label border'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash Out</TableCell>
                               {show && 
-                           <>
-                            <TableCell className='label border'>Curr_Rate</TableCell>
-                            <TableCell className='label border'>Curr_Amount</TableCell>
-                            <TableCell className='label border'>Payment_In_Curr</TableCell>
-                           </>
-                           }
+                              <>
+                              <TableCell className='label border' >Curr Rate</TableCell>
+                            <TableCell className='label border' >Curr Amount</TableCell>
+                            <TableCell className='label border' >Payment In Curr</TableCell>
+                              </>
+                              }
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Candidates</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border'>Slip Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {overAllPayments && overAllPayments.length > 0 ? overAllPayments.filter(cash => cash.type.toLowerCase().includes('out')&& cash.payments && cash.payments.length > 0).map((cash, outerIndex) => (
+                            {filteredPayments && filteredPayments.length > 0 ?  filteredPayments.filter(cash => (cash.type.toLowerCase().includes('cand')&&cash.type.toLowerCase().includes('out'))).map((cash, outerIndex) => (
                               // Map through the payment array
 
                               <>
@@ -331,24 +333,31 @@ export default function CandWisePaymentOutReports() {
                                   <>
                                     <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.supplierName}/{cash.pp_No}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                       <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_Out}</TableCell>
                                     {show &&
-                                     <>
+                                       <>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
                                       <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
-                                     </>
-                                     }
+                                       </>
+                                       }
                                     <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash?.payments.length}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash?.payments&& cash.payments.map((data)=>(
+                                      <span>{data.cand_Name}<br/></span>
+                                    ))}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ?<a href={cash.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={cash.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                   </>
 
                                 </TableRow>
@@ -372,14 +381,13 @@ export default function CandWisePaymentOutReports() {
                             </TableRow>}
 
                             <TableRow>
-                              <TableCell colSpan={7}></TableCell>
+                              <TableCell colSpan={12}></TableCell>
                               <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-
-                              <TableCell className='border data_td text-center bg-danger text-white'>
-                            
-                            { filteredPayments && filteredPayments.length > 0 &&
+                              <TableCell className='border data_td text-center bg-success text-white'>
+                            {/* Calculate the total sum of payment_Out */}
+                            {filteredPayments &&  filteredPayments.length > 0 &&
                               filteredPayments
-                                .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+                                .filter(entry => (entry.type.toLowerCase().includes('cand')&&entry.type.toLowerCase().includes('out')))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
                                 }, 0)}
@@ -390,7 +398,7 @@ export default function CandWisePaymentOutReports() {
                             
  { filteredPayments && filteredPayments.length > 0 &&
    filteredPayments
-     .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+     .filter(entry => (entry.type.toLowerCase().includes('cand')&&entry.type.toLowerCase().includes('out')))
      .reduce((total, entry) => {
        return total + (entry.curr_Rate || 0);
      }, 0)}
@@ -399,7 +407,7 @@ export default function CandWisePaymentOutReports() {
                             
  { filteredPayments && filteredPayments.length > 0 &&
    filteredPayments
-     .filter(entry => entry.type.toLowerCase().includes('out')&& entry.payments && entry.payments.length > 0)
+     .filter(entry =>(entry.type.toLowerCase().includes('cand')&&entry.type.toLowerCase().includes('out')))
      .reduce((total, entry) => {
        return total + (entry.curr_Amount || 0);
      }, 0)}
@@ -407,12 +415,12 @@ export default function CandWisePaymentOutReports() {
  
  </>
  }
- <TableCell className='border data_td text-center bg-secondary text-white'>
+  <TableCell className='border data_td text-center bg-secondary text-white'>
 Remaining PKR= 
 {(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
   }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
   }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
   }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
@@ -422,23 +430,28 @@ Remaining PKR=
 <TableCell className='border data_td text-center bg-secondary text-white'>
 Remaining Curr= 
 {(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
   }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
   }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
   }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
   }, 0))}
 </TableCell>
+
+
+                  
                             </TableRow>
                           </TableBody>
                         </Table>
                       </TableContainer>
                     </div>
                   </div>
-                  </>
+                </>
+                  
                 }
+
               </>
             }
 

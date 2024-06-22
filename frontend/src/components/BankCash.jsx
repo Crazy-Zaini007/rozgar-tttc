@@ -866,26 +866,31 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                             <TableRow>
                               <TableCell className='label border text-center' >SN</TableCell>
                               <TableCell className='label border text-center'>Date</TableCell>
-                              <TableCell className='label border text-center'>Name</TableCell>
+                              <TableCell className='label border text-center'>Name/PP#</TableCell>
+                              <TableCell className='label border'>Company</TableCell>
+                              <TableCell className='label border'>Trade</TableCell>
+                              <TableCell className='label border'>Flight Date</TableCell>
+                              <TableCell className='label border'>Final Status</TableCell>
+                              <TableCell className='label border'>Entry Mode</TableCell>
                               <TableCell className='label border text-center'>Type</TableCell>
                               <TableCell className='label border text-center'>Category</TableCell>
-                              <TableCell className='label border text-center'>Payment_Via</TableCell>
-                              <TableCell className='label border text-center'>Payment_Type</TableCell>
-                              <TableCell className='label border text-center'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                            <TableCell className='label border'>Cash_Out</TableCell>
-                            <TableCell className='label border'>Cash_In_Return</TableCell>
-                            <TableCell className='label border'>Cash_Out_Return</TableCell>
+                              <TableCell className='label border text-center'>Payment Via</TableCell>
+                              <TableCell className='label border text-center'>Payment Type</TableCell>
+                              <TableCell className='label border text-center'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash In</TableCell>
+                            <TableCell className='label border'>Cash Out</TableCell>
+                            <TableCell className='label border'>Cash In_Return</TableCell>
+                            <TableCell className='label border'>Cash Out Return</TableCell>
                             {show1 && 
                            <>
-                            <TableCell className='label border'>Curr_Rate</TableCell>
-                            <TableCell className='label border'>Curr_Amount</TableCell>
-                            <TableCell className='label border'>Payment_In_Curr</TableCell>
+                            <TableCell className='label border'>Curr Rate</TableCell>
+                            <TableCell className='label border'>Curr Amount</TableCell>
+                            <TableCell className='label border'>Payment In Curr</TableCell>
                            </>
                            }
                               <TableCell className='label border text-center'>Details</TableCell>
                               <TableCell className='label border text-center'>Invoice</TableCell>
-                              <TableCell className='label border text-center'>Slip_Pic</TableCell>
+                              <TableCell className='label border text-center'>Slip Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -898,7 +903,12 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                       <>
                                         <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.supplierName}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.supplierName}/{cash.pp_No}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
@@ -927,6 +937,11 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                 </React.Fragment>
                               ))}
                               <TableRow>
+                              <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
@@ -1061,22 +1076,22 @@ Remaining Curr=
                       <div className='py-1 mb-2 '>
                         <div className="row">
                         <div className="col-auto px-1">
-                            <label htmlFor="">Search Here:</label>
+                            <label htmlFor="">Search Here:</label><br/>
                            <input type="search" value={slip} onChange={(e)=>setSlip(e.target.value)} />
                           </div>
                         <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                          
 
                           <div className="col-auto px-1">
-                            <label htmlFor="">Category:</label>
+                            <label htmlFor="">Category:</label><br/>
                             <select value={category1} onChange={(e) => setCategory1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment &&  cashInHand.payment.map(data => data.category))].map(dateValue => (
@@ -1085,7 +1100,7 @@ Remaining Curr=
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Via:</label>
+                            <label htmlFor="">Payment Via:</label><br/>
                             <select value={payment_Via1} onChange={(e) => setPayment_Via1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.payment_Via))]
@@ -1097,7 +1112,7 @@ Remaining Curr=
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Type:</label>
+                            <label htmlFor="">Payment Type:</label><br/>
                             <select value={payment_Type1} onChange={(e) => setPayment_Type1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.payment_Type))].map(dateValue => (
@@ -1119,14 +1134,14 @@ Remaining Curr=
                               <TableCell className='label border' >SN</TableCell>
                               <TableCell className='label border' >Date</TableCell>
                               <TableCell className='label border' >Category</TableCell>
-                              <TableCell className='label border' >Payment_Via</TableCell>
-                              <TableCell className='label border' >Payment_Type</TableCell>
-                              <TableCell className='label border' >Slip_No</TableCell>
-                              <TableCell className='label border' >Cash_In</TableCell>
-                              <TableCell className='label border' >Cash_Out</TableCell>
+                              <TableCell className='label border' >Payment Via</TableCell>
+                              <TableCell className='label border' >Payment Type</TableCell>
+                              <TableCell className='label border' >Slip No</TableCell>
+                              <TableCell className='label border' >Cash In</TableCell>
+                              <TableCell className='label border' >Cash Out</TableCell>
                               <TableCell className='label border' >Details</TableCell>
                               <TableCell className='label border' >Invoice</TableCell>
-                              <TableCell className='label border' >Slip_Pic</TableCell>
+                              <TableCell className='label border' >Slip Pic</TableCell>
                               <TableCell align='left' className='edw_label border'  colSpan={1}>
                                 Actions
                               </TableCell>
@@ -1260,21 +1275,21 @@ Remaining Curr=
                       <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
-                            <label htmlFor="">Search Here:</label>
+                            <label htmlFor="">Search Here:</label><br/>
                            <input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
                           </div>
                         <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                           
                           <div className="col-auto px-1">
-                            <label htmlFor="">Supp/Agent/Cand:</label>
+                            <label htmlFor="">Name:</label><br/>
                             <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.supplierName))].map(dateValue => (
@@ -1283,7 +1298,7 @@ Remaining Curr=
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Reference Type:</label>
+                            <label htmlFor="">Reference Type:</label><br/>
                             <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.type))].map(dateValue => (
@@ -1293,7 +1308,7 @@ Remaining Curr=
                           </div>
 
                           <div className="col-auto px-1">
-                            <label htmlFor="">Category:</label>
+                            <label htmlFor="">Category:</label><br/>
                             <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.category))].map(dateValue => (
@@ -1302,7 +1317,7 @@ Remaining Curr=
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Via:</label>
+                            <label htmlFor="">Payment Via:</label><br/>
                             <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
@@ -1311,7 +1326,7 @@ Remaining Curr=
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Type:</label>
+                            <label htmlFor="">Payment Type:</label><br/>
                             <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Type))].map(dateValue => (
@@ -1330,27 +1345,32 @@ Remaining Curr=
                         <Table stickyHeader>
                           <TableHead className="thead">
                             <TableRow>
-                              <TableCell className='label border' >SN</TableCell>
-                              <TableCell className='label border'>Date</TableCell>
-                              <TableCell className='label border'>Name/PP#</TableCell>
+                              <TableCell className='label border ' >SN</TableCell>
+                              <TableCell className='label border '>Date</TableCell>
+                              <TableCell className='label border '>Name/PP#</TableCell>
+                              <TableCell className='label border'>Company</TableCell>
+                              <TableCell className='label border'>Trade</TableCell>
+                              <TableCell className='label border'>Flight Date</TableCell>
+                              <TableCell className='label border'>Final Status</TableCell>
+                              <TableCell className='label border'>Entry Mode</TableCell>
                               <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                            <TableCell className='label border'>Cash_Out</TableCell>
-                            <TableCell className='label border'>Cash_In_Return</TableCell>
-                            <TableCell className='label border'>Cash_Out_Return</TableCell>
+                              <TableCell className='label border'>Payment Via</TableCell>
+                              <TableCell className='label border'>Payment Type</TableCell>
+                              <TableCell className='label border'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash In</TableCell>
+                            <TableCell className='label border'>Cash Out</TableCell>
+                            <TableCell className='label border'>Cash In Return</TableCell>
+                            <TableCell className='label border '>Cash Out Return</TableCell>
                            
                               {show && 
                               <>
-                              <TableCell className='label border' >Curr_Rate</TableCell>
-                            <TableCell className='label border' >Curr_Amount</TableCell>
-                            <TableCell className='label border' >Payment_In_Curr</TableCell>
+                              <TableCell className='label border ' >Curr Rate</TableCell>
+                            <TableCell className='label border ' >Curr Amount</TableCell>
+                            <TableCell className='label border' >Payment In Curr</TableCell>
                               </>
                               }
-                              <TableCell className='label border'>Details</TableCell>
+                              <TableCell className='label border '>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Slip_Pic</TableCell>
                             </TableRow>
@@ -1366,6 +1386,11 @@ Remaining Curr=
                                         <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.date}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
@@ -1394,6 +1419,12 @@ Remaining Curr=
                                 </React.Fragment>
                               ))}
                               <TableRow>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
@@ -1506,11 +1537,11 @@ Remaining Curr=
 
                     <div className="row p-0 m-0 my-1">
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Date </label>
+                        <label >Date </label><br/>
                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Category </label>
+                        <label >Category </label><br/>
                         <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                           <option value="">Choose</option>
                           {categories && categories.map((data) => (
@@ -1519,7 +1550,7 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Via </label>
+                        <label >Payment Via </label><br/>
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
@@ -1530,7 +1561,7 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Type </label>
+                        <label >Payment Type </label><br/>
                         <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentType && paymentType.map((data) => (
@@ -1539,23 +1570,23 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Slip No </label>
+                        <label >Slip No </label><br/>
                         <input type="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Cash In </label>
+                        <label >Cash In </label><br/>
                         <input type="number" min="0" value={payment_In} onChange={(e) => setPayment_In(e.target.value)} required />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Upload Slip </label>
+                        <label >Upload Slip </label><br/>
                         <input type="file" accept='image/*' onChange={handleImage} />
                       </div>
 
 
                       <div className="col-xl-6 col-12   p-1 my-1">
-                        <label >Details </label>
+                        <label >Details </label><br/>
                         <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
                       </div>
                     </div>
@@ -1596,11 +1627,11 @@ Remaining Curr=
 
                     <div className="row p-0 m-0 my-1">
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Date </label>
+                        <label >Date </label><br/>
                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Category </label>
+                        <label >Category </label><br/>
                         <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                           <option value="">Choose</option>
                           {categories && categories.map((data) => (
@@ -1609,7 +1640,7 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Via </label>
+                        <label >Payment Via </label><br/>
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
@@ -1620,7 +1651,7 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Type </label>
+                        <label >Payment Type </label><br/>
                         <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentType && paymentType.map((data) => (
@@ -1629,23 +1660,23 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Slip No </label>
+                        <label >Slip No </label><br/>
                         <input type="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Cash Out </label>
+                        <label >Cash Out </label><br/>
                         <input type="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Upload Slip </label>
+                        <label >Upload Slip </label><br/>
                         <input type="file" accept='image/*' onChange={handleImage} />
                       </div>
 
 
                       <div className="col-xl-6 col-12   p-1 my-1">
-                        <label >Details </label>
+                        <label >Details </label><br/>
                         <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
                       </div>
                     </div>

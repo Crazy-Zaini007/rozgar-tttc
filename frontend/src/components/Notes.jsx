@@ -234,15 +234,15 @@ const addNote=async(e)=>{
 <div className='py-1 mb-2 '>
 <div className="row">
 <div className="col-auto my-2 p-1">
-<label htmlFor="">Search here:</label>
+<label htmlFor="">Search here:</label><br/>
            <input type="search" value={myTitle} onChange={(e)=>setMyTitle(e.target.value)} />
         </div>
         <div className="col-auto my-2 p-1">
-          <label htmlFor="">Date From:</label>
+          <label htmlFor="">Date From:</label><br/>
             <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
         </div>
         <div className="col-auto my-2 p-1">
-          <label htmlFor="">Date To:</label>
+          <label htmlFor="">Date To:</label><br/>
             <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
         </div>
 </div>

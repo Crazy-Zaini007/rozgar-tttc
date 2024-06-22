@@ -215,7 +215,7 @@ export default function AdvancePayments() {
   return (
     <>
          <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details mt-3">
+        <div className="container-fluid payment_details mt-3">
             <div className="row">
             <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
@@ -244,11 +244,11 @@ export default function AdvancePayments() {
                 <div className='py-1 mb-2'>
                   <div className="row">
                   <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
+                      <label htmlFor="">Date From:</label><br/>
                       <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Date To:</label>
+                      <label htmlFor="">Date To:</label><br/>
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
 
@@ -267,14 +267,14 @@ export default function AdvancePayments() {
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
                           <TableCell className='label border'>Name</TableCell>
-                          <TableCell className='label border'>Reference_Type</TableCell>
+                          <TableCell className='label border'>Reference Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border '>Cash_In</TableCell>
-                          <TableCell className='label border '>Cash_Out</TableCell>
-                          <TableCell className='label border '>Cash_Return</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
+                          <TableCell className='label border'>Slip No</TableCell>
+                          <TableCell className='label border '>Cash In</TableCell>
+                          <TableCell className='label border '>Cash Out</TableCell>
+                          <TableCell className='label border '>Cash Return</TableCell>
                           <TableCell className='label border '>Invoice</TableCell>
                         </TableRow>
                       </TableHead>

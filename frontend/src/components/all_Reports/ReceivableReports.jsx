@@ -385,7 +385,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
 return (
   <>
   <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details mt-3">
+        <div className="container-fluid payment_details mt-3">
             <div className="row">
             <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
@@ -430,11 +430,11 @@ return (
                 <div className='py-1 mb-2'>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Trade:</label>
+                      <label htmlFor="">Trade:</label><br/>
                       <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.trade))].map(tradeValue => (
@@ -443,7 +443,7 @@ return (
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Company:</label>
+                      <label htmlFor="">Company:</label><br/>
                       <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.company))].map(companyValue => (
@@ -452,7 +452,7 @@ return (
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Country:</label>
+                      <label htmlFor="">Country:</label><br/>
                       <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.country))].map(countryValue => (
@@ -462,7 +462,7 @@ return (
                     </div>
 
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Final Status:</label>
+                      <label htmlFor="">Final Status:</label><br/>
                       <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.final_Status))].map(final_StatusValue => (
@@ -471,7 +471,7 @@ return (
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Flight Date:</label>
+                      <label htmlFor="">Flight Date:</label><br/>
                       <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.flight_Date))].map(flight_DateValue => (
@@ -482,7 +482,7 @@ return (
                  
                     
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference:</label>
+                      <label htmlFor="">Reference:</label><br/>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="Candidate">Direct/Candidate</option>
@@ -593,12 +593,12 @@ return (
                 <Paper className='py-1 mb-2 px-3'>
                   <div className="row">
                     <div className="col-auto px-1">
-                      <label htmlFor="">Search By Name:</label>
+                      <label htmlFor="">Search By Name:</label><br/>
                       <input type="search" value={supplierName} onChange={(e) => setSupplierName(e.target.value)}/>
                       
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference:</label>
+                      <label htmlFor="">Reference:</label><br/>
                       <select value={ref} onChange={(e) => setRef(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(receivable && receivable.map(data => data.type))].map(type => (

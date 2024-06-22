@@ -246,7 +246,7 @@ export default function SummerizeProfitLose() {
               <div className='py-1 mb-2 '>
                 <div className="row">
                   <div className="col-auto px-1">
-                    <label htmlFor="">Date:</label>
+                    <label htmlFor="">Date:</label><br/>
                     <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(data && data.map(data => data.date))].map(dateValue => (
@@ -255,7 +255,7 @@ export default function SummerizeProfitLose() {
                     </select>
                   </div>
                   {/* <div className="col-auto px-1">
-                    <label htmlFor="">To Date:</label>
+                    <label htmlFor="">To Date:</label><br/>
                     <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(data && data.map(data => data.date))].map(dateValue => (

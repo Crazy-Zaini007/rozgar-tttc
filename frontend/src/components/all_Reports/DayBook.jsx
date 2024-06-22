@@ -982,15 +982,15 @@ body {
                               <TableCell className='label border'>Name/PP#</TableCell>
                               <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
+                              <TableCell className='label border'>Payment Via</TableCell>
+                              <TableCell className='label border'>Payment Type</TableCell>
+                              <TableCell className='label border'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash In</TableCell>
+                              <TableCell className='label border'>Cash Return</TableCell>
                          
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border'>Slip Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -1104,15 +1104,15 @@ Remaining Curr=
                               <TableCell className='label border'>Name/PP#</TableCell>
                               <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_Out</TableCell>
-                              <TableCell className='label border'>Cash_Return</TableCell>
+                              <TableCell className='label border'>Payment Via</TableCell>
+                              <TableCell className='label border'>Payment Type</TableCell>
+                              <TableCell className='label border'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash Out</TableCell>
+                              <TableCell className='label border'>Cash Return</TableCell>
                               
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border'>Slip Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -1242,7 +1242,7 @@ Remaining Curr=
                 <div className="row">
                 
                 <div className="col-auto px-1">
-                    <label htmlFor="">Name:</label>
+                    <label htmlFor="">Name:</label><br/>
                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(todayExpenses && todayExpenses.map(data => data.name))].map(name => (
@@ -1252,7 +1252,7 @@ Remaining Curr=
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Expense Category:</label>
+                    <label htmlFor="">Expense Category:</label><br/>
                     <select value={expe_Category} onChange={(e) => setExpe_Category(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(todayExpenses && todayExpenses.map(data => data.expCategory))].map(expCategory => (
@@ -1262,7 +1262,7 @@ Remaining Curr=
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Payment Via:</label>
+                    <label htmlFor="">Payment Via:</label><br/>
                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(todayExpenses && todayExpenses.map(data => data.payment_Via))].map(payment_Via => (
@@ -1272,7 +1272,7 @@ Remaining Curr=
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Payment Type:</label>
+                    <label htmlFor="">Payment Type:</label><br/>
                     <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(todayExpenses && todayExpenses.map(data => data.payment_Type))].map(payment_Type => (
@@ -1282,7 +1282,7 @@ Remaining Curr=
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Cash Type:</label>
+                    <label htmlFor="">Cash Type:</label><br/>
                     <select value={cash_Type} onChange={(e) => setCash_Type(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       <option value="cash">Cash</option>
@@ -1302,17 +1302,17 @@ Remaining Curr=
                           <TableCell className='label border'>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
                           <TableCell className='label border'>Person</TableCell>
-                          <TableCell className='label border'>E_Category</TableCell>
-                          <TableCell className='label border'>E_Amount</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
+                          <TableCell className='label border'>Eexpense Category</TableCell>
+                          <TableCell className='label border'>Expense Amount</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
+                          <TableCell className='label border'>Slip No</TableCell>
                           <TableCell className='label border'>Details</TableCell>
                           <TableCell className='label border'>Invoice</TableCell>
-                          <TableCell className='label border'>CUR_Country</TableCell>
-                          <TableCell className='label border'>CUR_Rate</TableCell>
-                          <TableCell className='label border'>CUR_Amount</TableCell>
-                          <TableCell className='label border'>Slip_Pic</TableCell>
+                          <TableCell className='label border'>CUR Country</TableCell>
+                          <TableCell className='label border'>CUR Rate</TableCell>
+                          <TableCell className='label border'>CUR Amount</TableCell>
+                          <TableCell className='label border'>Slip Pic</TableCell>
 
                         </TableRow>
                       </TableHead>
@@ -1409,13 +1409,13 @@ Remaining Curr=
                           <TableCell className='label border'>Date</TableCell>
                           <TableCell className='label border'>Protector</TableCell>
                           <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border'>Cash_Out</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
+                          <TableCell className='label border'>Slip No</TableCell>
+                          <TableCell className='label border'>Cash Out</TableCell>
                           <TableCell className='label border'>Details</TableCell>
                           <TableCell className='label border'>Invoice</TableCell>
-                          <TableCell className='label border'>Slip_Pic</TableCell>
+                          <TableCell className='label border'>Slip Pic</TableCell>
 
                         </TableRow>
                       </TableHead>
@@ -1511,18 +1511,18 @@ Remaining Curr=
                         <TableRow>
                           <TableCell className='label border'>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Employee_Name</TableCell>
+                          <TableCell className='label border'>Employee Name</TableCell>
                           <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
+                          <TableCell className='label border'>Slip No</TableCell>
                           <TableCell className='label border'>Details</TableCell>
-                          <TableCell className='label border'>Cash_Out</TableCell>
+                          <TableCell className='label border'>Cash Out</TableCell>
                           <TableCell className='label border'>Invoice</TableCell>
-                          <TableCell className='label border'>Payment_In_Curr</TableCell>
-                          <TableCell className='label border'>CUR_Rate</TableCell>
-                          <TableCell className='label border'>CUR_Amount</TableCell>
-                          <TableCell className='label border'>Slip_Pic</TableCell>
+                          <TableCell className='label border'>Payment In Curr</TableCell>
+                          <TableCell className='label border'>CUR Rate</TableCell>
+                          <TableCell className='label border'>CUR Amount</TableCell>
+                          <TableCell className='label border'>Slip Pic</TableCell>
 
                         </TableRow>
                       </TableHead>

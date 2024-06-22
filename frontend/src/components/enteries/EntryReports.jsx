@@ -498,11 +498,11 @@ const EntryReports = () => {
                 <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
-                      <label htmlFor="">Search by Name:</label>
+                      <label htmlFor="">Search by Name:</label><br/>
                      <input  type="search"value={name} onChange={(e)=>setName(e.target.value)} />
                     </div>
                   <div className="col-auto px-1">
-                      <label htmlFor="">Date:</label>
+                      <label htmlFor="">Date:</label><br/>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
@@ -511,15 +511,15 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
+                      <label htmlFor="">Date From:</label><br/>
                      <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Date To:</label>
+                      <label htmlFor="">Date To:</label><br/>
                      <input  type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Trade:</label>
+                      <label htmlFor="">Trade:</label><br/>
                       <select  value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
@@ -528,7 +528,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Company:</label>
+                      <label htmlFor="">Company:</label><br/>
                       <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.company))].map(companyValue => (
@@ -537,7 +537,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Country:</label>
+                      <label htmlFor="">Country:</label><br/>
                       <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.country))].map(countryValue => (
@@ -547,7 +547,7 @@ const EntryReports = () => {
                     </div>
 
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Final Status:</label>
+                      <label htmlFor="">Final Status:</label><br/>
                       <select  value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
@@ -556,7 +556,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Flight Date:</label>
+                      <label htmlFor="">Flight Date:</label><br/>
                       <select  value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
@@ -565,7 +565,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Entry Mode:</label>
+                      <label htmlFor="">Entry Mode:</label><br/>
                       <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
@@ -574,7 +574,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference Out Type:</label>
+                      <label htmlFor="">Reference Out Type:</label><br/>
                       <select  value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="agent">Agents</option>
@@ -584,7 +584,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference Out:</label>
+                      <label htmlFor="">Reference Out:</label><br/>
                       <select  value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
@@ -593,7 +593,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference In Type:</label>
+                      <label htmlFor="">Reference In Type:</label><br/>
                       <select  value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="agent">Agents</option>
@@ -602,7 +602,7 @@ const EntryReports = () => {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference In:</label>
+                      <label htmlFor="">Reference In:</label><br/>
                       <select  value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
@@ -620,7 +620,7 @@ const EntryReports = () => {
                 <div className='py-3 mb-1 detail_table'>
                   <div className="d-flex justify-content-between">
                     <div className="d-flex left">
-                    <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
+                    <label htmlFor="" className='my-2 mx-1'>Show Entries: </label><br/>
                   <select  name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
                     <option value="">All</option>
                     <option value="30">30</option>

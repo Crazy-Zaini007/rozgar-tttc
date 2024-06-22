@@ -2054,11 +2054,11 @@ const handleTicketCandForm = async (e) => {
                 <div className='py-1 mb-2'>
                 <div className="row">
                   <div className="col-auto px-1">
-                      <label htmlFor="">Search:</label>
+                      <label htmlFor="">Search:</label><br/>
                       <input type="search"  value={mySearch} onChange={(e)=>setMySearch(e.target.value)}/>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Agent/Supp/Cand:</label>
+                      <label htmlFor="">Name:</label><br/>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(todayPayments.filter(entry => entry.type.toLowerCase().includes('in')))].map(name => (

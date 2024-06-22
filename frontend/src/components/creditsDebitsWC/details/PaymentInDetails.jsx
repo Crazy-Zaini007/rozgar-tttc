@@ -880,7 +880,7 @@ const formattedDate = formatDate(new Date());
             <div className='py-1 mb-2 '>
               <div className="row">
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date:</label>
+                  <label htmlFor="">Date:</label><br/>
                   <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(CDWC_Payments_In.map(data => data.createdAt))].map(dateValue => (
@@ -889,7 +889,7 @@ const formattedDate = formatDate(new Date());
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Suppliers:</label>
+                  <label htmlFor="">Suppliers:</label><br/>
                   <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {CDWC_Payments_In && CDWC_Payments_In.map((data) => (
@@ -1018,20 +1018,20 @@ const formattedDate = formatDate(new Date());
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
               <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
               <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Payment Via:</label>
+                  <label htmlFor="">Payment Via:</label><br/>
                   <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(CDWC_Payments_In
@@ -1045,7 +1045,7 @@ const formattedDate = formatDate(new Date());
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Payment Type:</label>
+                  <label htmlFor="">Payment Type:</label><br/>
                   <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(CDWC_Payments_In
@@ -1218,7 +1218,7 @@ const formattedDate = formatDate(new Date());
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-warning text-white'>
+                            <TableCell className='border data_td text-center bg-success text-white'>
           {/* Calculate the total sum of payment_In */}
           {filteredIndividualPayments.reduce((total, filteredData) => {
             return total + filteredData.payment.reduce((sum, paymentItem) => {
@@ -1227,7 +1227,7 @@ const formattedDate = formatDate(new Date());
             }, 0);
           }, 0)}
         </TableCell>
-        <TableCell className='border data_td text-center bg-info text-white'>
+        <TableCell className='border data_td text-center bg-danger text-white'>
           {/* Calculate the total sum of cash_Out */}
           {filteredIndividualPayments.reduce((total, filteredData) => {
             return total + filteredData.payment.reduce((sum, paymentItem) => {
@@ -1266,8 +1266,22 @@ const formattedDate = formatDate(new Date());
                         }, 0);
                       }, 0)}
                     </TableCell>
+                    
                     </>}
-                            
+                    <TableCell className='border data_td text-center bg-secondary text-white'>
+                    Remaining PKR=
+                    {(filteredIndividualPayments.reduce((total, filteredData) => {
+            return total + filteredData.payment.reduce((sum, paymentItem) => {
+              const paymentIn = parseFloat(paymentItem.payment_In);
+              return isNaN(paymentIn) ? sum : sum + paymentIn;
+            }, 0);
+          }, 0))-(filteredIndividualPayments.reduce((total, filteredData) => {
+            return total + filteredData.payment.reduce((sum, paymentItem) => {
+              const cashOut = parseFloat(paymentItem.payment_Out);
+              return isNaN(cashOut) ? sum : sum + cashOut;
+            }, 0);
+          }, 0))}
+                    </TableCell>
                           </TableRow>
                 </TableBody>
               </Table>

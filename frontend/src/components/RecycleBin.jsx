@@ -2,7 +2,7 @@ import React, { useState, useEffect,useRef } from 'react';
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import SyncLoader from 'react-spinners/SyncLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
@@ -248,7 +248,7 @@ export default function AgnetsReports() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details mt-3">
+        <div className="container-fluid payment_details mt-3">
             <div className="row">
             <div className='col-md-12 p-0 border-bottom border-0'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
@@ -270,12 +270,12 @@ export default function AgnetsReports() {
             </div>
             {loading1 &&
               <div className='col-md-12 text-center my-4'>
-                <SyncLoader color="#2C64C3" className='mx-auto' />
+                <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
          {payments && payments.length > 0 &&
               <div className="col-md-12 filters">
-                <Paper className='py-1 mb-2 px-3'>
+                <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
                       <label htmlFor="">Date From:</label>
@@ -304,7 +304,7 @@ export default function AgnetsReports() {
                       </select>
                     </div>
                   </div>
-                </Paper>
+                </div>
               </div>
             }
 
@@ -315,18 +315,18 @@ export default function AgnetsReports() {
                   <Table stickyHeader>
                   <TableHead>
                         <TableRow>
-                          <TableCell className='label border '>SN</TableCell>
-                          <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Name</TableCell>
-                          <TableCell className='label border'>Type</TableCell>
-                          <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border '>Cash_In</TableCell>
-                          <TableCell className='label border '>Cash_Out</TableCell>
-                          <TableCell className='label border '>Cash_Return</TableCell>
-                         {show &&  <TableCell className='label border '>Payment_In_Currency</TableCell>}
+                          <TableCell className='label border p-1'>SN</TableCell>
+                          <TableCell className='label border p-1'>Date</TableCell>
+                          <TableCell className='label border p-1'>Name</TableCell>
+                          <TableCell className='label border p-1'>Type</TableCell>
+                          <TableCell className='label border p-1'>Category</TableCell>
+                          <TableCell className='label border p-1'>Payment Via</TableCell>
+                          <TableCell className='label border p-1'>Payment Type</TableCell>
+                          <TableCell className='label border p-1'>Slip No</TableCell>
+                          <TableCell className='label border p-1'>Cash Inn</TableCell>
+                          <TableCell className='label border p-1'>Cash Out</TableCell>
+                          <TableCell className='label border p-1'>Cash Return</TableCell>
+                         {show &&  <TableCell className='label border '>Payment In Currency</TableCell>}
                           <TableCell className='label border '>Invoice</TableCell>
                           <TableCell className='label border '>Action</TableCell>
                         </TableRow>
@@ -334,11 +334,11 @@ export default function AgnetsReports() {
                       <TableBody>
                         {filteredPayments && filteredPayments.length>0 ? filteredPayments.map((entry,index)=>(
                           <TableRow>
-                                <TableCell className='border data_td  '>{index+1}</TableCell>
-                                <TableCell className='border data_td  '>{entry.date}</TableCell>
-                                <TableCell className='border data_td  '>{entry.name}</TableCell>
-                                <TableCell className='border data_td  '>{entry.type}</TableCell>
-                                <TableCell className='border data_td  '>{entry.category}</TableCell>
+                                <TableCell className='border data_td '>{index+1}</TableCell>
+                                <TableCell className='border data_td '>{entry.date}</TableCell>
+                                <TableCell className='border data_td '>{entry.name}</TableCell>
+                                <TableCell className='border data_td '>{entry.type}</TableCell>
+                                <TableCell className='border data_td '>{entry.category}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
                                 <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
                                 <TableCell className='border data_td '>{entry.slip_No}</TableCell>
@@ -365,33 +365,39 @@ export default function AgnetsReports() {
                             <TableCell></TableCell>
                         </TableRow>
                         }
-                        <TableRow>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>        
-  <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-    <TableCell className='border data_td text-center bg-success text-white'>
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.payment_In || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-danger text-white'>
-    {/* Calculate the total sum of payment_Out */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.payment_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-</TableRow>
+                       
+                          <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>        
+                          <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.payment_In || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-danger text-white'>
+                            {/* Calculate the total sum of payment_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.payment_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white'>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.cash_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                        
+                      
 
                       </TableBody>
                   </Table>

@@ -172,7 +172,7 @@ export default function OverAllVisaWise() {
       printWindow.document.write(`
       <html>
         <head>
-          <title>Overall Visa Wise Report</title>
+          <title>Overall Visa Profit Report</title>
         </head>
         <body class='bg-dark'>${printContentString}</body>
       </html>
@@ -195,12 +195,12 @@ export default function OverAllVisaWise() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid entry_details mt-3">
+        <div className="container-fluid payment_details mt-3">
             <div className="row">
-            <div className='col-md-12 p-0 border border-bottom'>
+            <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Overall Visa Vise</h4>
+                  <h4>Overall Visa Profit</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredEntries.length > 0 &&
@@ -215,7 +215,7 @@ export default function OverAllVisaWise() {
                 </div>
               </div>
             </div>
-            {loading1 &&
+            {(loading1&& enteries.length<1) &&
               <div className='col-md-12 text-center my-4'>
                 <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
@@ -225,11 +225,11 @@ export default function OverAllVisaWise() {
                 <div className='py-1 mb-2'>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Trade:</label>
+                      <label htmlFor="">Trade:</label><br/>
                       <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
@@ -238,7 +238,7 @@ export default function OverAllVisaWise() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Company:</label>
+                      <label htmlFor="">Company:</label><br/>
                       <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.company))].map(companyValue => (
@@ -247,7 +247,7 @@ export default function OverAllVisaWise() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Country:</label>
+                      <label htmlFor="">Country:</label><br/>
                       <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.country))].map(countryValue => (
@@ -257,7 +257,7 @@ export default function OverAllVisaWise() {
                     </div>
 
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Final Status:</label>
+                      <label htmlFor="">Final Status:</label><br/>
                       <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
@@ -266,7 +266,7 @@ export default function OverAllVisaWise() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Flight Date:</label>
+                      <label htmlFor="">Flight Date:</label><br/>
                       <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
@@ -277,7 +277,7 @@ export default function OverAllVisaWise() {
                  
                     
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference:</label>
+                      <label htmlFor="">Reference:</label><br/>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="Candidate">Direct/Candidate</option>
@@ -292,7 +292,7 @@ export default function OverAllVisaWise() {
               </div>
             }
 
-            {!loading1 &&
+            {(!loading1 || enteries.length>0)  &&
             <div className='col-md-12 p-0'>
               <div className='py-3 mb-1 px-1 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
@@ -306,11 +306,11 @@ export default function OverAllVisaWise() {
                           <TableCell className='label border'>Company</TableCell>
                           <TableCell className='label border'>Trade</TableCell>
                           <TableCell className='label border'>Fly</TableCell>
-                          <TableCell className='label border'>Reference_Type</TableCell>
-                          <TableCell className='label border'>Reference_Name</TableCell>
-                          <TableCell className='label border'>Rozgar_Visa_Price</TableCell>
-                          {show &&<TableCell className='label border'>Agency_Visa_Price</TableCell>}
-                         {show &&  <TableCell className='label border'>Visa_Profit</TableCell>}
+                          <TableCell className='label border'>Reference Type</TableCell>
+                          <TableCell className='label border'>Reference Name</TableCell>
+                          <TableCell className='label border'>Rozgar Visa Price</TableCell>
+                          {show &&<TableCell className='label border'>Agency Visa Price</TableCell>}
+                         {show &&  <TableCell className='label border'>Visa Profit</TableCell>}
 
                         </TableRow>
                       </TableHead>

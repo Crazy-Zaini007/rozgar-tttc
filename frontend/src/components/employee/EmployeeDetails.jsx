@@ -1759,7 +1759,7 @@ const filteredSalaryMonths = employees
                                     <div className='py-1 mb-2'>
                                         <div className="row">
                                             <div className="col-auto px-1">
-                                                <label htmlFor="">Date:</label>
+                                                <label htmlFor="">Date:</label><br/>
                                                 <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                                                     <option value="">All</option>
                                                     {[...new Set(employees.map(data => data.entry_Date))].map(dateValue => (
@@ -1768,7 +1768,7 @@ const filteredSalaryMonths = employees
                                                 </select>
                                             </div>
                                             <div className="col-auto px-1">
-                                                <label htmlFor="">Employee:</label>
+                                                <label htmlFor="">Employee:</label><br/>
                                                 <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                                                     <option value="">All</option>
                                                     {employees && employees.map((data) => (
@@ -1959,20 +1959,20 @@ const filteredSalaryMonths = employees
                                                 <div className='py-1 mb-2'>
                                                     <div className="row">
                                                     <div className="col-auto px-1">
-                                                    <label htmlFor="">Serach Here:</label>
+                                                    <label htmlFor="">Serach Here:</label><br/>
                                                     <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                                                     </div>
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Date From:</label>
+                                                            <label htmlFor="">Date From:</label><br/>
                                                             <input type="date" value={newDateFrom} onChange={(e) => setNewDateFrom(e.target.value)} className='m-0 p-1' />
                                                         </div>
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Date To:</label>
+                                                            <label htmlFor="">Date To:</label><br/>
                                                             <input type="date" value={newDateTo} onChange={(e) => setNewDateTo(e.target.value)} className='m-0 p-1' />
 
                                                         </div>
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Payment Via:</label>
+                                                            <label htmlFor="">Payment Via:</label><br/>
                                                             <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
                                                                 {[...new Set(filteredIndividualPayments
@@ -1984,7 +1984,7 @@ const filteredSalaryMonths = employees
                                                             </select>
                                                         </div>
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Payment Type:</label>
+                                                            <label htmlFor="">Payment Type:</label><br/>
                                                             <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
                                                                 {[...new Set(filteredIndividualPayments
@@ -2195,7 +2195,7 @@ const filteredSalaryMonths = employees
                                                     <div className="row">
 
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Date:</label>
+                                                            <label htmlFor="">Date:</label><br/>
                                                             <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
                                                                 {[...new Set(employees
@@ -2208,7 +2208,7 @@ const filteredSalaryMonths = employees
                                                             </select>
                                                         </div>
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Date From:</label>
+                                                            <label htmlFor="">Date From:</label><br/>
                                                             <select value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
                                                                 {[...new Set(employees
@@ -2221,7 +2221,7 @@ const filteredSalaryMonths = employees
                                                             </select>
                                                         </div>
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Date To:</label>
+                                                            <label htmlFor="">Date To:</label><br/>
                                                             <select value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
                                                                 {[...new Set(employees
@@ -2380,7 +2380,7 @@ const filteredSalaryMonths = employees
                                                     <div className="row">
 
                                                         <div className="col-auto px-1">
-                                                            <label htmlFor="">Select Month:</label>
+                                                            <label htmlFor="">Select Month:</label><br/>
                                                             <select value={month} onChange={(e) => setMonth(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
                                                                 {[...new Set(employees

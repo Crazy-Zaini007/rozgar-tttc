@@ -180,12 +180,12 @@ const[show,setShow]=useState(false)
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className='container-fluid entry_details mt-3'>
+        <div className='container-fluid payment_details mt-3'>
           <div className='row'>
             <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Overall Visa Profit Reports</h4>
+                  <h4>Overall Visa Profit Report</h4>
                 </div>
                 <div className="right d-flex">
                   {enteries.length > 0 &&
@@ -209,7 +209,7 @@ const[show,setShow]=useState(false)
                 </div>
               </div>
             </div>
-            {loading1 &&
+            {(loading1&& enteries.length<1) &&
               <div className='col-md-12 text-center my-4'>
                 <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
@@ -222,11 +222,11 @@ const[show,setShow]=useState(false)
                 <div className='py-1 mb-2'>
                   <div className="row">
                   <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Date:</label>
+                      <label htmlFor="">Date:</label><br/>
                       <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
@@ -235,7 +235,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1">
-                      <label htmlFor="">Trade:</label>
+                      <label htmlFor="">Trade:</label><br/>
                       <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
@@ -244,7 +244,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Company:</label>
+                      <label htmlFor="">Company:</label><br/>
                       <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.company))].map(companyValue => (
@@ -253,7 +253,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Country:</label>
+                      <label htmlFor="">Country:</label><br/>
                       <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.country))].map(countryValue => (
@@ -263,7 +263,7 @@ const[show,setShow]=useState(false)
                     </div>
 
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Final Status:</label>
+                      <label htmlFor="">Final Status:</label><br/>
                       <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
@@ -272,7 +272,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Flight Date:</label>
+                      <label htmlFor="">Flight Date:</label><br/>
                       <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
@@ -281,7 +281,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Entry Mode:</label>
+                      <label htmlFor="">Entry Mode:</label><br/>
                       <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
@@ -290,7 +290,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference Out:</label>
+                      <label htmlFor="">Reference Out:</label><br/>
                       <select value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
@@ -299,7 +299,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference In:</label>
+                      <label htmlFor="">Reference In:</label><br/>
                       <select value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
@@ -308,7 +308,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference In Type:</label>
+                      <label htmlFor="">Reference In Type:</label><br/>
                       <select value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="agent">Agents</option>
@@ -317,7 +317,7 @@ const[show,setShow]=useState(false)
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Reference Out Type:</label>
+                      <label htmlFor="">Reference Out Type:</label><br/>
                       <select value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         <option value="agent">Agents</option>
@@ -334,7 +334,7 @@ const[show,setShow]=useState(false)
               </div>
             }
 
-            {!loading1 &&
+            {(!loading1 || enteries.length>0) &&
               <div className='col-md-12 p-0'>
                 <div className='py-3 mb-1 px-1 detail_table'>
                   <TableContainer sx={{ maxHeight: 1000 }}>
@@ -373,7 +373,7 @@ const[show,setShow]=useState(false)
                            
                         </TableRow>
                         <TableRow>
-                          <TableCell className='label border'>SN</TableCell>
+                        <TableCell className='label border'>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
                           <TableCell className='label border'>Name</TableCell>
                           <TableCell className='label border'>PP#</TableCell>
@@ -381,23 +381,25 @@ const[show,setShow]=useState(false)
                           <TableCell className='label border'>Company</TableCell>
                           <TableCell className='label border'>Remarks</TableCell>
                           <TableCell className='label border'>Contact</TableCell>
-                          <TableCell className='label border'>FS</TableCell>
-                          <TableCell className='label border'>FD</TableCell>
+                          <TableCell className='label border'>Final Status</TableCell>
+                          <TableCell className='label border'>Flight Date</TableCell>
                           <TableCell className='label border'>Country</TableCell>
-                          <TableCell className='label border'>EM</TableCell>
-                          <TableCell className='label border'>VSR_PKR</TableCell>
-                          <TableCell className='label border'>VSR_Oth_Curr</TableCell>
-                          <TableCell className='label border'>VPR_PKR</TableCell>
-                          <TableCell className='label border'>VPR_Oth_Curr</TableCell>
-                          <TableCell className='label border'>RO</TableCell>
-                          <TableCell className='label border'>RO_Name</TableCell>
-                          <TableCell className='label border'>RI</TableCell>
-                          <TableCell className='label border'>RI_Name</TableCell>
+                          <TableCell className='label border'>Entry Mode</TableCell>
+                          <TableCell className='label border'>Reference Out</TableCell>
+                          <TableCell className='label border'>Reference Out Name</TableCell>
+                          <TableCell className='label border'>Visa Sales Rate PKR</TableCell>
+                          <TableCell className='label border'>Visa Sales Rate Curr</TableCell>
+                          
+                          <TableCell className='label border'>Reference In</TableCell>
+                          <TableCell className='label border'>Reference In Name</TableCell>
+                          <TableCell className='label border'>Visa Purchase Rate PKR</TableCell>
+                          <TableCell className='label border'>Visa Purchase Rate Curr</TableCell>
+                          
                           <TableCell className='label border'>Picture</TableCell>
                          
                           {show &&
                            <>
-                          <TableCell className='label border'>Visa_Profit</TableCell>
+                          <TableCell className='label border'>Visa Profit</TableCell>
                          
                            </>
                            }
@@ -405,16 +407,16 @@ const[show,setShow]=useState(false)
                           {section1 &&
                             <>
                               {/* Visit Sales Purchase Parties Section*/}
-                              <TableCell className='label border'>VSR_PKR</TableCell>
-                              <TableCell className='label border'>VSR_Cur</TableCell>
-                              <TableCell className='label border'>VPR_PKR</TableCell>
-                              <TableCell className='label border'>VPR_Curr</TableCell>
-                              <TableCell className='label border'>RO</TableCell>
-                              <TableCell className='label border'>RO_Name</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
+                              <TableCell className='label border'>Reference Out</TableCell>
+                              <TableCell className='label border'>Reference Out Name</TableCell>
+                              <TableCell className='label border'>Visit Sales Rate PKR</TableCell>
+                              <TableCell className='label border'>Visit Sales Rate Cur</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Visit Purchase Rate PKR</TableCell>
+                              <TableCell className='label border'>Visit Purchase Rate Curr</TableCell>
                               <TableCell className='label border'>Picture</TableCell>
-                            <TableCell className='label border'>Visit_Visa_Profit</TableCell>
+                            <TableCell className='label border'>Visit Visa Profit</TableCell>
 
                             </>
                           }
@@ -423,16 +425,16 @@ const[show,setShow]=useState(false)
                             <>
                               {/* Ticket Sales Purchase Parties Section*/}
 
-                              <TableCell className='label border'>TSR_PKR</TableCell>
-                              <TableCell className='label border'>TSR_Curr</TableCell>
-                              <TableCell className='label border'>TPR_PKR</TableCell>
-                              <TableCell className='label border'>TPR_Curr</TableCell>
-                              <TableCell className='label border'>RO</TableCell>
-                              <TableCell className='label border'>RO_Name</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
+                              <TableCell className='label border'>Reference Out</TableCell>
+                              <TableCell className='label border'>Reference Out Name</TableCell>
+                              <TableCell className='label border'>Ticket Sales Rate PKR</TableCell>
+                              <TableCell className='label border'>Ticket Sales Rate Curr</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Ticket Purchase Rate PKR</TableCell>
+                              <TableCell className='label border'>Ticket Purchase Rate Curr</TableCell>
                               <TableCell className='label border'>Picture</TableCell>
-                            <TableCell className='label border'>Ticket_Visa_Profit</TableCell>
+                            <TableCell className='label border'>Ticket Profit</TableCell>
 
 
                             </>
@@ -441,16 +443,16 @@ const[show,setShow]=useState(false)
                           {section3 &&
                             <>
                               {/* Azad Visa Sales Purchase Parties Section*/}
-                              <TableCell className='label border'>AVSR_PKR</TableCell>
-                              <TableCell className='label border'>AVSR_Curr</TableCell>
-                              <TableCell className='label border'>AVPR_PKR</TableCell>
-                              <TableCell className='label border'>AVPR_Curr</TableCell>
-                              <TableCell className='label border'>RO</TableCell>
-                              <TableCell className='label border'>RO_Name</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
+                              <TableCell className='label border'>Reference Out</TableCell>
+                              <TableCell className='label border'>Reference Out Name</TableCell>
+                              <TableCell className='label border'>Azad Visa Sales Rate PKR</TableCell>
+                              <TableCell className='label border'>Azad Visa Sales Rate Curr</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Azad Visa Purchase Rate PKR</TableCell>
+                              <TableCell className='label border'>Azad Visa Purchase Rate Curr</TableCell>
                               <TableCell className='label border'>Picture</TableCell>
-                            <TableCell className='label border'>Azad_Visa_Profit</TableCell>
+                            <TableCell className='label border'>Azad Visa Profit</TableCell>
 
 
                             </>
@@ -460,18 +462,18 @@ const[show,setShow]=useState(false)
                           {section4 &&
                             <>
                               {/* Protector Section*/}
-                              <TableCell className='label border'>PP_In</TableCell>
-                              <TableCell className='label border'>PP_In_Curr</TableCell>
-                              <TableCell className='label border'>RI</TableCell>
-                              <TableCell className='label border'>RI_Name</TableCell>
-                              <TableCell className='label border'>PP_Out</TableCell>
-                            <TableCell className='label border'>Protector_Profit</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Protector Price In PKR</TableCell>
+                              <TableCell className='label border'>Protector Price In Curr</TableCell>
+                              <TableCell className='label border'>Protector Price Out</TableCell>
+                            <TableCell className='label border'>Protector Profit</TableCell>
 
 
 
                             </>
                           }
-                            <TableCell className='label border bg-warning text-white'>Total_Profit</TableCell>
+                            <TableCell className='label border bg-warning text-white'>Total Profit</TableCell>
 
                           
                         </TableRow>
@@ -481,7 +483,7 @@ const[show,setShow]=useState(false)
                       <TableBody>
                         {filteredEntries && filteredEntries.length > 0 ? filteredEntries.map((entry, index) => (
                           <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                                <TableCell className='border data_td  '>{index+1}</TableCell>
+                                 <TableCell className='border data_td  '>{index+1}</TableCell>
                                 <TableCell className='border data_td  '>{entry.entry_Date}</TableCell>
                                 <TableCell className='border data_td  '>{entry.name}</TableCell>
                                 <TableCell className='border data_td '>{entry.pp_No}</TableCell>
@@ -493,15 +495,16 @@ const[show,setShow]=useState(false)
                                 <TableCell className='border data_td  '>{entry.flight_Date}</TableCell>
                                 <TableCell className='border data_td '>{entry.country}</TableCell>
                                 <TableCell className='border data_td '>{entry.entry_Mode}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Sales_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Sale_Rate_Oth_Cur}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_Oth_Cur}</TableCell>
                                 <TableCell className='border data_td '>{entry.reference_Out}</TableCell>
                                 <TableCell className='border data_td '>{entry.reference_Out_Name}</TableCell>
+                                <TableCell className='border data_td '>{entry.visa_Sales_Rate_PKR}</TableCell>
+                                <TableCell className='border data_td '>{entry.visa_Sale_Rate_Oth_Cur}</TableCell>
                                 <TableCell className='border data_td  '>{entry.reference_In}</TableCell>
                                 <TableCell className='border data_td  '>{entry.reference_In_Name}</TableCell>
-                                <TableCell className='border data_td text-center'>{entry.picture ? <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /> : "No Picture"}</TableCell>     
+                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_PKR}</TableCell>
+                                <TableCell className='border data_td '>{entry.visa_Purchase_Rate_Oth_Cur}</TableCell>
+                                <TableCell className='border data_td text-center'>{entry.picture ? <img src={entry.picture} alt='Images' className='rounded text-center mx-auto' /> : "No Picture"}</TableCell>
+                                
                                 {show &&
                                 <>
                                  <TableCell className='border data_td bg-success text-white'>{entry.visa_Sales_Rate_PKR-entry.visa_Purchase_Rate_PKR}</TableCell>
@@ -511,14 +514,14 @@ const[show,setShow]=useState(false)
                                  
                                 {section1 &&
                                   <>
+                                    <TableCell className='border data_td'>{entry.visit_Reference_Out}</TableCell>
+                                   <TableCell className='border data_td'>{entry.visit_Reference_Out_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Sales_PKR}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Sales_Rate_Oth_Curr}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Purchase_Rate_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Purchase_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Reference_Out}</TableCell>
-                                    <TableCell className='border data_td'>{entry.visit_Reference_Out_Name}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td'>{entry.visit_Purchase_Rate_PKR}</TableCell>
+                                    <TableCell className='border data_td'>{entry.visit_Purchase_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.visit_Section_Picture ? <img src={entry.visit_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                     <TableCell className='border data_td bg-success text-white'>{entry.visit_Sales_PKR-entry.visit_Purchase_Rate_PKR}</TableCell>
                                   </>
@@ -528,31 +531,29 @@ const[show,setShow]=useState(false)
                                   <>
                                     {/* Ticket Sales Purchase Section Data */}
                                    
-                                    <TableCell className='border data_td'>{entry.ticket_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Sales_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Purchase_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.ticket_Purchase_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_Out}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td'>{entry.ticket_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td'>{entry.ticket_Sales_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td'>{entry.ticket_Purchase_PKR}</TableCell>
+                                    <TableCell className='border data_td'>{entry.ticket_Purchase_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Section_Picture ? <img src={entry.ticket_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
-                                    <TableCell className='border data_td bg-success text-white'>{entry.ticket_Sales_PKR-entry.ticket_Purchase_PKR}</TableCell>
                                   </>
                                 }
 
                                 {section3 &&
                                   <>
                                     {/* Azad Visa Sales Purchase Section Data */}
-                                  
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Sales_Rate_Oth_Cur}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Purchase_PKR}</TableCell>
-                                    <TableCell className='border data_td'>{entry.azad_Visa_Purchase_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_Out}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td'>{entry.azad_Visa_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td'>{entry.azad_Visa_Sales_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td'>{entry.azad_Visa_Purchase_PKR}</TableCell>
+                                    <TableCell className='border data_td'>{entry.azad_Visa_Purchase_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.azad_Visa_Section_Picture ? <img src={entry.azad_Visa_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                     <TableCell className='border data_td bg-success text-white'>{entry.azad_Visa_Sales_PKR-entry.azad_Visa_Purchase_PKR}</TableCell>
 
@@ -563,10 +564,10 @@ const[show,setShow]=useState(false)
                                 {section4 &&
                                   <>
                                     {/* Protector Section Data */}
-                                    <TableCell className='border data_td'>{entry.protector_Price_In}</TableCell>
-                                    <TableCell className='border data_td'>{entry.protector_Price_In_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.protector_Reference_In}</TableCell>
                                     <TableCell className='border data_td'>{entry.protector_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td'>{entry.protector_Price_In}</TableCell>
+                                    <TableCell className='border data_td'>{entry.protector_Price_In_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.protector_Price_Out}</TableCell>
                                     <TableCell className='border data_td bg-success text-white'>{entry.protector_Price_In-entry.protector_Price_Out}</TableCell>
                                   </>

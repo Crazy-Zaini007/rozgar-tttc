@@ -1,15 +1,18 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
 import * as XLSX from 'xlsx';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import ClipLoader from 'react-spinners/ClipLoader'
+import { useSelector } from 'react-redux';
 
 export default function VisitCandReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
-  const[payments,setPayments]=useState('')
+  const [payments, setPayments] = useState('')
+  const [show, setShow] = useState(false)
+
   const apiUrl = process.env.REACT_APP_API_URL;
-  
+
   const getData = async () => {
 
     try {
@@ -22,10 +25,10 @@ export default function VisitCandReports() {
       const json = await response.json();
       if (response.ok) {
         setPayments(json.data)
-      // Dispatch the action with received data
+        // Dispatch the action with received data
       }
     } catch (error) {
-     
+
     }
   }
 
@@ -38,27 +41,26 @@ export default function VisitCandReports() {
       await getData();
       // Set loading to false right after getEntries() is completed
       setLoading1(false);
-  
+
     } catch (error) {
       setLoading1(false);
       // Handle errors if needed
     }
   };
-  
+
   const abortCont = useRef(new AbortController());
 
   useEffect(() => {
 
-      fetchData()
-      return () => {
-        if (abortCont.current) {
-          abortCont.current.abort(); 
-        }
+    fetchData()
+    return () => {
+      if (abortCont.current) {
+        abortCont.current.abort();
       }
-    
+    }
   }, []);
 
-  
+
   const rowsPerPageOptions = [10, 15, 30];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
@@ -91,31 +93,57 @@ export default function VisitCandReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.type.toLowerCase().includes(type.toLowerCase())&&
-    paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
-    paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
-    paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
-    paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
-    (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.supplierName.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-    paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
+      paymentItem.type.toLowerCase().includes(type.toLowerCase()) &&
+      paymentItem.supplierName.toLowerCase().includes(supplier.toLowerCase()) &&
+      paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+      paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
+      (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.pp_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.supplierName.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
 
   })
 
   const printExpenseTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    const formattedDate = formatDate(new Date());
     // Convert JSX to HTML string
+
     const printContentString = `
+      <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Candidate Payment Details</h1>
+      </div>
+      <hr/>
     <table class='print-table'>
       <thead>
         <tr>
         <th>SN</th>
         <th>Date</th>
         <th>Candidates</th>
+        <th>PP#</th>
+        <th>Company</th>
+        <th>Trade</th>
+        <th>Flight Date</th>
+        <th>Final Status</th>
+        <th>Entry Mode</th>
         <th>Type</th>
         <th>Category</th>
         <th>Payment Via</th>
@@ -134,6 +162,12 @@ export default function VisitCandReports() {
     <td>${index + 1}</td>
     <td>${String(entry?.date)}</td>
     <td>${String(entry?.supplierName)}</td>
+    <td>${String(entry?.pp_No)}</td>
+    <td>${String(entry?.company)}</td>
+    <td>${String(entry?.trade)}</td>
+    <td>${String(entry?.flight_Date)}</td>
+    <td>${String(entry?.final_Status)}</td>
+    <td>${String(entry?.entry_Mode)}</td>
     <td>${String(entry?.type)}</td>
     <td>${String(entry?.category)}</td>
     <td>${String(entry?.payment_Via)}</td>
@@ -149,6 +183,12 @@ export default function VisitCandReports() {
 
       
       <tr>
+       <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -170,6 +210,23 @@ export default function VisitCandReports() {
       body {
         background-color: #fff;
       }
+         .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
       .print-table {
         width: 100%;
         border-collapse: collapse;
@@ -214,22 +271,22 @@ export default function VisitCandReports() {
     const data = [];
     // Iterate over entries and push all fields
     filteredPayments.forEach((payments, index) => {
-        const rowData = {
-            SN: index + 1,
-            Date: payments.date,
-            Candidates: payments.supplierName,
-            Type: payments.type,
-            Category: payments.category,
-            Payment_Via: payments.payment_Via,
-            Payment_Type: payments.payment_Type,
-            Slip_No: payments.slip_No,
-            Details: payments.details,
-            Cash_In: payments.payment_In || 0,
-            Cash_Out: payments.payment_Out || 0,
-            Cash_Return: payments.cash_Out || 0,
-            Invoice: payments.Invoice,
-        };
-        
+      const rowData = {
+        SN: index + 1,
+        Date: payments.date,
+        Candidates: payments.supplierName,
+        Type: payments.type,
+        Category: payments.category,
+        Payment_Via: payments.payment_Via,
+        Payment_Type: payments.payment_Type,
+        Slip_No: payments.slip_No,
+        Details: payments.details,
+        Cash_In: payments.payment_In || 0,
+        Cash_Out: payments.payment_Out || 0,
+        Cash_Return: payments.cash_Out || 0,
+        Invoice: payments.Invoice,
+      };
+
 
       data.push(rowData);
     });
@@ -240,19 +297,23 @@ export default function VisitCandReports() {
     XLSX.writeFile(wb, 'Candidates Reports.xlsx');
   };
 
+  const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
   return (
     <>
-     
+      <div className={`${collapsed ? "collapsed" : "main"}`}>
+        <div className="container-fluid payment_details mt-3">
+          <div className="row">
             <div className='col-md-12 p-0 border-0 border-bottom'>
               <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
-                  <h4>Visit Candidates Payments Reports</h4>
+                  <h4>Visit Candidates Payment Reports</h4>
                 </div>
                 <div className="right d-flex">
                   {filteredPayments.length > 0 &&
                     <>
-                     
+                      <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}><i className="fa-solid fa-file-excel me-1"></i>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
 
@@ -266,24 +327,24 @@ export default function VisitCandReports() {
                 <ClipLoader color="#2C64C3" className='mx-auto' />
               </div>
             }
-         {payments && payments.length > 0 &&
+            {payments && payments.length > 0 &&
               <div className="col-md-12 filters">
-                <div className='py-1 mb-2'>
-                <div className="row">
-                  <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
-                  <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
-                </div>
-                  <div className="col-auto px-1">
-                      <label htmlFor="">Date From:</label>
-                      <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
+                <div className='py-1 mb-2 '>
+                  <div className="row">
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Serach Here:</label><br />
+                      <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
+                    </div>
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Date From:</label><br />
+                      <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Date To:</label>
-                      <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
+                      <label htmlFor="">Date To:</label><br />
+                      <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Via:</label>
+                      <label htmlFor="">Payment Via:</label><br />
                       <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.payment_Via))].map(typeValue => (
@@ -292,7 +353,7 @@ export default function VisitCandReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Type:</label>
+                      <label htmlFor="">Payment Type:</label><br />
                       <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.payment_Type))].map(typeValue => (
@@ -301,7 +362,7 @@ export default function VisitCandReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Category:</label>
+                      <label htmlFor="">Category:</label><br />
                       <select value={category} onChange={(e) => setCategory(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.category))].map(typeValue => (
@@ -310,7 +371,7 @@ export default function VisitCandReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Agent Name:</label>
+                      <label htmlFor="">Candidate Name:</label><br />
                       <select value={supplier} onChange={(e) => setSupplier(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
                         {[...new Set(payments.map(data => data.supplierName))].map(supplier => (
@@ -319,12 +380,11 @@ export default function VisitCandReports() {
                       </select>
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Type:</label>
+                      <label htmlFor="">Payment:</label><br />
                       <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(payments.map(data => data.type))].map(typeValue => (
-                          <option key={typeValue} value={typeValue}>{typeValue}</option>
-                        ))}
+                     <option value="in">Payment In</option>
+                     <option value="out">Payment Out</option>
                       </select>
                     </div>
                   </div>
@@ -333,46 +393,73 @@ export default function VisitCandReports() {
             }
 
             {!loading1 &&
-            <div className='col-md-12 p-0 border-0 border-bottom'>
-              <div className='py-3 mb-1 px-1 detail_table'>
-                <TableContainer sx={{ maxHeight: 600 }}>
-                  <Table stickyHeader>
-                  <TableHead>
+              <div className='col-md-12 p-0'>
+                <div className='py-3 mb-1 px-1 detail_table'>
+                  <TableContainer sx={{ maxHeight: 600 }}>
+                    <Table stickyHeader>
+                      <TableHead>
                         <TableRow>
                           <TableCell className='label border '>SN</TableCell>
                           <TableCell className='label border'>Date</TableCell>
-                          <TableCell className='label border'>Candidates</TableCell>
+                          <TableCell className='label border'>Candidate/PP#</TableCell>
+                          <TableCell className='label border'>Company</TableCell>
+                          <TableCell className='label border'>Trade</TableCell>
+                          <TableCell className='label border'>Flight Date</TableCell>
+                          <TableCell className='label border'>Final Status</TableCell>
+                          <TableCell className='label border'>Entry Mode</TableCell>
                           <TableCell className='label border'>Type</TableCell>
                           <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
-                          <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border '>Cash_In</TableCell>
-                          <TableCell className='label border '>Cash_Out</TableCell>
-                          <TableCell className='label border '>Cash_Return</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
+                          <TableCell className='label border'>Slip No</TableCell>
+                          <TableCell className='label border '>Cash In</TableCell>
+                          <TableCell className='label border '>Cash Out</TableCell>
+                          <TableCell className='label border '>Cash In Return</TableCell>
+                          <TableCell className='label border '>Cash Out Return</TableCell>
+                          {show &&
+                            <>
+                              <TableCell className='label border'>Curr Rate</TableCell>
+                              <TableCell className='label border'>Curr Amount</TableCell>
+                              <TableCell className='label border'>Payment In Curr</TableCell>
+                            </>
+                          }
+                          <TableCell className='label border '>Details</TableCell>
                           <TableCell className='label border '>Invoice</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {filteredPayments && filteredPayments.length>0 ? filteredPayments.map((entry,index)=>(
+                        {filteredPayments && filteredPayments.length > 0 ? filteredPayments.map((entry, index) => (
                           <TableRow>
-                                <TableCell className='border data_td  '>{index+1}</TableCell>
-                                <TableCell className='border data_td  '>{entry.date}</TableCell>
-                                <TableCell className='border data_td  '>{entry.supplierName}</TableCell>
-                                <TableCell className='border data_td  '>{entry.type}</TableCell>
-                                
-                                <TableCell className='border data_td  '>{entry.category}</TableCell>
-                                <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
-                                <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
-                                <TableCell className='border data_td '>{entry.slip_No}</TableCell>
-                                <TableCell className='border data_td bg-success text-white'>{entry.payment_In}</TableCell>
-                                <TableCell className='border data_td bg-danger text-white'>{entry.payment_Out}</TableCell>
-                                <TableCell className='border data_td bg-warning text-white'>{entry.cash_Out}</TableCell>
-                                <TableCell className='border data_td '>{entry.invoice}</TableCell>
-                          
+                            <TableCell className='border data_td  '>{index + 1}</TableCell>
+                            <TableCell className='border data_td  '>{entry.date}</TableCell>
+                            <TableCell className='border data_td  '>{entry.supplierName}/{entry?.pp_No}</TableCell>
+                            <TableCell className='border data_td text-center'>{entry.company}</TableCell>
+                            <TableCell className='border data_td text-center'>{entry.trade}</TableCell>
+                            <TableCell className='border data_td text-center'>{entry.flight_Date}</TableCell>
+                            <TableCell className='border data_td text-center'>{entry.final_Status}</TableCell>
+                            <TableCell className='border data_td text-center'>{entry.entry_Mode}</TableCell>
+                            <TableCell className='border data_td  '>{entry.type}</TableCell>
+                            <TableCell className='border data_td  '>{entry.category}</TableCell>
+                            <TableCell className='border data_td '>{entry.payment_Via}</TableCell>
+                            <TableCell className='border data_td '>{entry.payment_Type}</TableCell>
+                            <TableCell className='border data_td '>{entry.slip_No}</TableCell>
+                            <TableCell className='border data_td bg-success text-white'>{entry.payment_In}</TableCell>
+                            <TableCell className='border data_td bg-danger text-white'>{entry.payment_Out}</TableCell>
+                            <TableCell className='border data_td bg-warning text-white'>{entry?.type.toLowerCase().includes('in') && entry?.cash_Out}</TableCell>
+                            <TableCell className='border data_td bg-warning text-white'>{entry?.type.toLowerCase().includes('out') && entry?.cash_Out}</TableCell>
+                            {show &&
+                              <>
+                                <TableCell className='border data_td text-center'>{Math.round(entry?.curr_Rate || 0)}</TableCell>
+                                <TableCell className='border data_td text-center'>{Math.round(entry?.curr_Amount || 0)}</TableCell>
+                                <TableCell className='border data_td text-center'>{entry?.payment_In_curr ? entry?.payment_In_curr : entry?.payment_Out_curr}</TableCell>
+                              </>
+                            }
+                            <TableCell className='border data_td '>{entry.details}</TableCell>
+                            <TableCell className='border data_td '>{entry.invoice}</TableCell>
+
                           </TableRow>
-                        )):
-                        <TableRow>
+                        )) :
+                          <TableRow>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
@@ -384,45 +471,89 @@ export default function VisitCandReports() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
-                        </TableRow>
+                          </TableRow>
                         }
                         <TableRow>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>
-  <TableCell></TableCell>        
-  <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-    <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.payment_In || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-danger text-white'>
-    {/* Calculate the total sum of payment_Out */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.payment_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
-      return total + (entry.cash_Out || 0); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-</TableRow>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
+                          <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                          <TableCell className='border data_td text-center bg-success text-white'>
+                            {/* Calculate the total sum of payment_In */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.payment_In || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-danger text-white'>
+                            {/* Calculate the total sum of payment_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.payment_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white'>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.type.toLowerCase().includes('in') && entry.cash_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white'>
+                            {/* Calculate the total sum of cash_Out */}
+                            {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+                              return total + (entry.type.toLowerCase().includes('out') && entry.cash_Out || 0); // Use proper conditional check
+                            }, 0)}
+                          </TableCell>
+                          {show &&
+                            <>
+                              <TableCell className='border data_td text-center bg-info text-white'>
+
+                                {filteredPayments && filteredPayments.length > 0 &&
+                                  (filteredPayments
+                                    .filter(entry => (entry.type.toLowerCase().includes('in')))
+                                    .reduce((total, entry) => {
+                                      return total + (entry.curr_Rate || 0);
+                                    }, 0)) - (filteredPayments
+                                      .filter(entry => (entry.type.toLowerCase().includes('out')))
+                                      .reduce((total, entry) => {
+                                        return total + (entry.curr_Rate || 0);
+                                      }, 0))}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-info text-white'>
+
+                                {filteredPayments && filteredPayments.length > 0 &&
+                                  (filteredPayments
+                                    .filter(entry => (entry.type.toLowerCase().includes('in')))
+                                    .reduce((total, entry) => {
+                                      return total + (entry.curr_Amount || 0);
+                                    }, 0)) - (filteredPayments
+                                      .filter(entry => (entry.type.toLowerCase().includes('out')))
+                                      .reduce((total, entry) => {
+                                        return total + (entry.curr_Amount || 0);
+                                      }, 0))}
+                              </TableCell>
+
+                            </>
+                          }
+                        </TableRow>
 
                       </TableBody>
-                  </Table>
-                </TableContainer>
-                
+                    </Table>
+                  </TableContainer>
+
+                </div>
               </div>
-            </div>
             }
-            
+          </div>
+        </div>
+      </div>
     </>
   )
 }

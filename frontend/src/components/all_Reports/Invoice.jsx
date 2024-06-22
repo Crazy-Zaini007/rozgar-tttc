@@ -61,11 +61,7 @@ export default function Invoice() {
 
   const [option, setOption] = useState(0)
   const [current, setCurrent] = useState(0)
-
-
-
   const[rowsValue,setRowsValue]=useState("")
-
   const [date2, setDate2] = useState('')
   const [date3, setDate3] = useState('')
   const [mySeacrh, setMySeacrh] = useState('')
@@ -135,6 +131,11 @@ export default function Invoice() {
         <th>SN</th>
         <th>Date</th>
         <th>Name/PP#</th>
+        <th>Company</th>
+        <th>Trade</th>
+        <th>Flight Date</th>
+        <th>Final Status</th>
+        <th>Entry Mode</th>
         <th>Type</th>
         <th>Category</th>
         <th>Payment_Via</th>
@@ -153,6 +154,11 @@ export default function Invoice() {
             <td>${index + 1}</td>
             <td>${String(entry?.date)}</td>
             <td>${String(entry?.supplierName)}/${String(entry?.pp_No)}</td>
+            <td>${String(entry?.company)}</td>
+            <td>${String(entry?.trade)}</td>
+            <td>${String(entry?.flight_Date)}</td>
+            <td>${String(entry?.final_Status)}</td>
+            <td>${String(entry?.entry_Mode)}</td>
             <td>${String(entry?.type)}</td>
             <td>${String(entry?.category)}</td>
             <td>${String(entry?.payment_Via)}</td>
@@ -305,21 +311,21 @@ export default function Invoice() {
                       <div className='py-1 mb-2'>
                         <div className="row">
                         <div className="col-auto px-1">
-                            <label htmlFor="">Seacrh Here:</label>
+                            <label htmlFor="">Seacrh Here:</label><br/>
                            <input type="search"  value={mySeacrh} onChange={(e)=>setMySeacrh(e.target.value)}/>
                           </div>
                           <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                           
                           <div className="col-auto px-1">
-                            <label htmlFor="">Supp/Agent/Cand:</label>
+                            <label htmlFor="">Name:</label><br/>
                             <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.supplierName))].map(dateValue => (
@@ -329,7 +335,7 @@ export default function Invoice() {
                           </div>
 
                           <div className="col-auto px-1">
-                            <label htmlFor="">Category:</label>
+                            <label htmlFor="">Category:</label><br/>
                             <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.category))].map(dateValue => (
@@ -338,7 +344,7 @@ export default function Invoice() {
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Via:</label>
+                            <label htmlFor="">Payment Via:</label><br/>
                             <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
@@ -347,7 +353,7 @@ export default function Invoice() {
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Type:</label>
+                            <label htmlFor="">Payment Type:</label><br/>
                             <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Type))].map(dateValue => (
@@ -356,8 +362,8 @@ export default function Invoice() {
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                          <label htmlFor="" >Show Entries: </label>
-                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="">
+                          <label htmlFor="" >Show Entries: </label><br/>
+                  <select name="" className='' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="">
                     <option value="">All</option>
                     <option value="30">30</option>
                     <option value="50">50</option>
@@ -384,25 +390,30 @@ export default function Invoice() {
                               <TableCell className='label border'>SN</TableCell>
                               <TableCell className='label border'>Date</TableCell>
                               <TableCell className='label border'>Name/PP#</TableCell>
+                              <TableCell className='label border'>Company</TableCell>
+                              <TableCell className='label border'>Trade</TableCell>
+                              <TableCell className='label border'>Flight Date</TableCell>
+                              <TableCell className='label border'>Final Status</TableCell>
+                              <TableCell className='label border'>Entry Mode</TableCell>
                               <TableCell className='label border'>Type</TableCell>
                               <TableCell className='label border'>Category</TableCell>
-                              <TableCell className='label border'>Payment_Via</TableCell>
-                              <TableCell className='label border'>Payment_Type</TableCell>
-                              <TableCell className='label border'>Slip_No</TableCell>
-                              <TableCell className='label border'>Cash_In</TableCell>
-                            <TableCell className='label border'>Cash_Out</TableCell>
-                            <TableCell className='label border'>Cash_In_Return</TableCell>
-                            <TableCell className='label border'>Cash_Out_Return</TableCell>
+                              <TableCell className='label border'>Payment Via</TableCell>
+                              <TableCell className='label border'>Payment Type</TableCell>
+                              <TableCell className='label border'>Slip No</TableCell>
+                              <TableCell className='label border'>Cash In</TableCell>
+                            <TableCell className='label border'>Cash Out</TableCell>
+                            <TableCell className='label border'>Cash In Return</TableCell>
+                            <TableCell className='label border'>Cash Out Return</TableCell>
                             {show && 
                            <>
-                            <TableCell className='label border'>Curr_Rate</TableCell>
-                            <TableCell className='label border'>Curr_Amount</TableCell>
-                            <TableCell className='label border'>Payment_In_Curr</TableCell>
+                            <TableCell className='label border'>Curr Rate</TableCell>
+                            <TableCell className='label border'>Curr Amount</TableCell>
+                            <TableCell className='label border'>Payment In Curr</TableCell>
                            </>
                            }
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
-                              <TableCell className='label border'>Slip_Pic</TableCell>
+                              <TableCell className='label border'>Slip Pic</TableCell>
                             </TableRow>
                           </TableHead>
                           <TableBody>
@@ -416,6 +427,11 @@ export default function Invoice() {
                                         <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.date}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                        <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.type}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.category}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
@@ -443,6 +459,12 @@ export default function Invoice() {
                                 </React.Fragment>
                               ))}
                                <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
@@ -492,29 +514,29 @@ export default function Invoice() {
   </TableCell>
  </>
  }
- <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In PKR= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining || 0 : 0)); 
-  }, 0)}
+      <TableCell className='border data_td text-center bg-secondary text-white'>
+Remaining PKR= 
+{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
+  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining In Curr= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining Out In PKR= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
- Total Remaining Out In Curr= 
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.remaining_Curr || 0 : 0)); 
-  }, 0)}
+Remaining Curr= 
+{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
+  }, 0))}
 </TableCell>
                             
                           </TableRow>

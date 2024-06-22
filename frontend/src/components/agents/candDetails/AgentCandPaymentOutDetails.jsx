@@ -1688,7 +1688,7 @@ const[rowsValue1,setRowsValue1]=useState("")
             <div className='py-1 mb-2'>
               <div className="row">
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date:</label>
+                  <label htmlFor="">Date:</label><br/>
                   <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out.map(data => data.createdAt))].map(dateValue => (
@@ -1697,7 +1697,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Agents:</label>
+                  <label htmlFor="">Agents:</label><br/>
                   <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {agent_Payments_Out && agent_Payments_Out.map((data) => (
@@ -1706,7 +1706,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Khata:</label>
+                  <label htmlFor="">Khata:</label><br/>
                   <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
                     <option value="" >All</option>
                     <option value="Open" >Open</option>
@@ -1958,20 +1958,20 @@ const[rowsValue1,setRowsValue1]=useState("")
             <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1' />
 
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Payment Via:</label>
+                  <label htmlFor="">Payment Via:</label><br/>
                   <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -1985,7 +1985,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Payment Type:</label>
+                  <label htmlFor="">Payment Type:</label><br/>
                   <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2007,7 +2007,7 @@ const[rowsValue1,setRowsValue1]=useState("")
               <h6>Payment Out Details</h6>
               </div>
               <div className="right d-flex">
-              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label>
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label><br/>
                   <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
                     <option value="">All</option>
                     <option value="30">30</option>
@@ -2220,11 +2220,11 @@ const[rowsValue1,setRowsValue1]=useState("")
             <div className='py-1 mb-2'>
               <div className="row">
               <div className="col-auto px-1">
-                  <label htmlFor="">Search Here:</label>
+                  <label htmlFor="">Search Here:</label><br/>
                   <input type="search" value={search2} onChange={(e)=>setSearch2(e.target.value)} />
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Khata:</label>
+                  <label htmlFor="">Khata:</label><br/>
                   <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
                     <option value="" >All</option>
                     <option value="Open" >Open</option>
@@ -2232,7 +2232,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Entry Date:</label>
+                  <label htmlFor="">Entry Date:</label><br/>
                   <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2246,7 +2246,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                 </div>
                 
                 <div className="col-auto px-1">
-                  <label htmlFor="">PP#:</label>
+                  <label htmlFor="">PP#:</label><br/>
                   <select value={pp_No} onChange={(e) => setPP_NO(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2259,7 +2259,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Entry Mode:</label>
+                  <label htmlFor="">Entry Mode:</label><br/>
                   <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2272,7 +2272,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Comapny:</label>
+                  <label htmlFor="">Comapny:</label><br/>
                   <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2285,7 +2285,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Country:</label>
+                  <label htmlFor="">Country:</label><br/>
                   <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2298,7 +2298,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Trade:</label>
+                  <label htmlFor="">Trade:</label><br/>
                   <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2311,7 +2311,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Final Status:</label>
+                  <label htmlFor="">Final Status:</label><br/>
                   <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2324,7 +2324,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Flight Date:</label>
+                  <label htmlFor="">Flight Date:</label><br/>
                   <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(agent_Payments_Out
@@ -2345,7 +2345,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
-              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label>
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label><br/>
                   <select name="" className='my-2 mx-1' value={rowsValue1} onChange={(e)=>setRowsValue1(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
                     <option value="">All</option>
                     <option value="30">30</option>

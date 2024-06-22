@@ -1374,7 +1374,7 @@ const changeStatus = async (myStatus) => {
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Date:</label>
+                                    <label htmlFor="">Date:</label><br/>
                                     <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out.map(data => data.createdAt))].map(dateValue => (
@@ -1383,7 +1383,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Agents:</label>
+                                    <label htmlFor="">Agents:</label><br/>
                                     <select value={supplier1} onChange={(e) => setSupplier1(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {ticketAgent_Payments_Out && ticketAgent_Payments_Out.map((data) => (
@@ -1392,7 +1392,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                  <label htmlFor="">Khata:</label>
+                  <label htmlFor="">Khata:</label><br/>
                   <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
                     <option value="" >All</option>
                     <option value="Open" >Open</option>
@@ -1576,16 +1576,16 @@ const changeStatus = async (myStatus) => {
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                             <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Payment Via:</label>
+                                    <label htmlFor="">Payment Via:</label><br/>
                                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1599,7 +1599,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Payment Type:</label>
+                                    <label htmlFor="">Payment Type:</label><br/>
                                     <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1839,7 +1839,7 @@ const changeStatus = async (myStatus) => {
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                             <div className="col-auto px-1">
-                                <label htmlFor="">Khata:</label>
+                                <label htmlFor="">Khata:</label><br/>
                                 <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
                                     <option value="" >All</option>
                                     <option value="Open" >Open</option>
@@ -1847,7 +1847,7 @@ const changeStatus = async (myStatus) => {
                                 </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Entry Date:</label>
+                                    <label htmlFor="">Entry Date:</label><br/>
                                     <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1860,7 +1860,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Name:</label>
+                                    <label htmlFor="">Name:</label><br/>
                                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1873,7 +1873,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">PP#:</label>
+                                    <label htmlFor="">PP#:</label><br/>
                                     <select value={pp_No} onChange={(e) => setPP_NO(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1886,7 +1886,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Entry Mode:</label>
+                                    <label htmlFor="">Entry Mode:</label><br/>
                                     <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1899,7 +1899,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Comapny:</label>
+                                    <label htmlFor="">Comapny:</label><br/>
                                     <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1912,7 +1912,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Country:</label>
+                                    <label htmlFor="">Country:</label><br/>
                                     <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1925,7 +1925,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Trade:</label>
+                                    <label htmlFor="">Trade:</label><br/>
                                     <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1938,7 +1938,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Final Status:</label>
+                                    <label htmlFor="">Final Status:</label><br/>
                                     <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out
@@ -1951,7 +1951,7 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                    <label htmlFor="">Flight Date:</label>
+                                    <label htmlFor="">Flight Date:</label><br/>
                                     <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                                         <option value="">All</option>
                                         {[...new Set(ticketAgent_Payments_Out

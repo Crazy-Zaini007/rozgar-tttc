@@ -548,20 +548,20 @@ export default function ExpenseDetails() {
               <div className='py-1 mb-2'>
                 <div className="row">
                 <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label>
+                  <label htmlFor="">Serach Here:</label><br/>
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label>
+                  <label htmlFor="">Date From:</label><br/>
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label>
+                  <label htmlFor="">Date To:</label><br/>
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
                  
                 </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Name:</label>
+                    <label htmlFor="">Name:</label><br/>
                     <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(expenses && expenses.map(data => data.name))].map(name => (
@@ -571,7 +571,7 @@ export default function ExpenseDetails() {
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Expense Category:</label>
+                    <label htmlFor="">Expense Category:</label><br/>
                     <select value={expe_Category} onChange={(e) => setExpe_Category(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(expenses && expenses.map(data => data.expCategory))].map(expCategory => (
@@ -581,7 +581,7 @@ export default function ExpenseDetails() {
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Payment Via:</label>
+                    <label htmlFor="">Payment Via:</label><br/>
                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(expenses && expenses.map(data => data.payment_Via))].map(payment_Via => (
@@ -591,7 +591,7 @@ export default function ExpenseDetails() {
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Payment Type:</label>
+                    <label htmlFor="">Payment Type:</label><br/>
                     <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       {[...new Set(expenses && expenses.map(data => data.payment_Type))].map(payment_Type => (
@@ -601,7 +601,7 @@ export default function ExpenseDetails() {
                     </select>
                   </div>
                   <div className="col-auto px-1">
-                    <label htmlFor="">Cash Type:</label>
+                    <label htmlFor="">Cash Type:</label><br/>
                     <select value={cash_Type} onChange={(e) => setCash_Type(e.target.value)} className='m-0 p-1'>
                       <option value="">All</option>
                       <option value="cash">Cash</option>
