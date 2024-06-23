@@ -294,7 +294,6 @@ if(monthToUpdate.month=== month){
 };
 
 
-
 //adding salary to an employee
 const addSalary = async (req, res) => {
 
@@ -309,7 +308,6 @@ const addSalary = async (req, res) => {
     if (user) {
       const {
         employeeId,
-        month,
         category,
         payment_Via,
         payment_Type,
@@ -331,8 +329,6 @@ const addSalary = async (req, res) => {
       if (employee) {
         const parsedPaymentOut = Number(payment_Out);
         
-
-
     // Find the payment object corresponding to the provided month
     const paymentObject = employee.payments.find(payment => payment.month.toLowerCase() === month.toLowerCase());
 
@@ -760,7 +756,6 @@ const addVacation = async (req, res) => {
         timeIn,
         timeOut,
         date
-      
       } = req.body
       const employee = await Employees.findById(employeeId)
 

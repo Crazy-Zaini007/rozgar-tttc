@@ -24,6 +24,7 @@ import ProtectorHook from '../../hooks/settingHooks/ProtectorHook';
 import {useNavigate} from 'react-router-dom'
 import * as XLSX from 'xlsx';
 
+
 const rowsPerPageOptions = [50, 75, 100,200];
 
 const EntryReports = () => {
@@ -66,27 +67,24 @@ const EntryReports = () => {
 
       // Set loading to false right after getEntries() is completed
       setLoading1(false);
-
       // Use Promise.all to execute other promises concurrently
-      await Promise.all([
-        getAVPPData(),
-        getAVSPData(),
-        getTPPData(),
-        getTSPData(),
-        getVIPPData(),
-        getVISPData(),
-        getVPPData(),
-        getVSPData(),
-        getComapnyData(),
-        getCountryData(),
-        getCurrCountryData(),
-        getCurrencyData(),
-        getEntryMoodData(),
-        getFinalStatusData(),
-        getTradeData(),
+        getAVPPData()
+        getAVSPData()
+        getTPPData()
+        getTSPData()
+        getVIPPData()
+        getVISPData()
+        getVPPData()
+        getVSPData()
+        getComapnyData()
+        getCountryData()
+        getCurrCountryData()
+        getCurrencyData()
+        getEntryMoodData()
+        getFinalStatusData()
+        getTradeData()
         getProtector()
 
-      ]);
     } catch (error) {
       setLoading1(false);
       // Handle errors if needed
@@ -291,13 +289,13 @@ const EntryReports = () => {
         if(json.redirect){
           if (window.confirm(json.message)){
             navigate(json.redirect)
-        setDelLoading(false)
+            setUpdateLoading(false)
 
           }
         }
         else{
         setNewMessage(toast.error(json.message))
-        setDelLoading(false)
+        setUpdateLoading(false)
         }
       }
       if (response.ok) {
@@ -498,7 +496,7 @@ const EntryReports = () => {
                 <div className='py-1 mb-2 '>
                   <div className="row">
                   <div className="col-auto px-1">
-                      <label htmlFor="">Search by Name:</label><br/>
+                      <label htmlFor="">Search:</label><br/>
                      <input  type="search"value={name} onChange={(e)=>setName(e.target.value)} />
                     </div>
                   <div className="col-auto px-1">
@@ -620,7 +618,7 @@ const EntryReports = () => {
                 <div className='py-3 mb-1 detail_table'>
                   <div className="d-flex justify-content-between">
                     <div className="d-flex left">
-                    <label htmlFor="" className='my-2 mx-1'>Show Entries: </label><br/>
+                    <label htmlFor="" className='my-2 mx-1'>Show Entries: </label>
                   <select  name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'25px',zIndex:'999'}}>
                     <option value="">All</option>
                     <option value="30">30</option>
@@ -675,40 +673,42 @@ const EntryReports = () => {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell className='label border text-center px-1'>Select</TableCell>
-                          <TableCell className='label border text-center px-1'>SN</TableCell>
-                          <TableCell className='label border text-center px-1'>Date</TableCell>
-                          <TableCell className='label border text-center px-1'>Name</TableCell>
-                          <TableCell className='label border text-center px-1'>PP#</TableCell>
-                          <TableCell className='label border text-center px-1'>Trade</TableCell>
-                          <TableCell className='label border text-center px-1'>Company</TableCell>
-                          <TableCell className='label border text-center px-1'>Remarks</TableCell>
-                          <TableCell className='label border text-center px-1'>Contact</TableCell>
-                          <TableCell className='label border text-center px-1'>FS</TableCell>
-                          <TableCell className='label border text-center px-1'>FD</TableCell>
-                          <TableCell className='label border text-center px-1'>Country</TableCell>
-                          <TableCell className='label border text-center px-1'>EM</TableCell>
-                          <TableCell className='label border text-center px-1'>VSR_PKR</TableCell>
-                          <TableCell className='label border text-center px-1'>VSR_Oth_Curr</TableCell>
-                          <TableCell className='label border text-center px-1'>RO</TableCell>
-                          <TableCell className='label border text-center px-1'>RO_Name</TableCell>
-                          <TableCell className='label border text-center px-1'>RI</TableCell>
-                          <TableCell className='label border text-center px-1'>RI_Name</TableCell>
-                          <TableCell className='label border text-center px-1'>VPR_PKR</TableCell>
-                          <TableCell className='label border text-center px-1'>VPR_Oth_Curr</TableCell>
-                          <TableCell className='label border text-center px-1'>Picture</TableCell>
+                          <TableCell className='label border text-center'>Select</TableCell>
+                          <TableCell className='label border text-center'>SN</TableCell>
+                          <TableCell className='label border text-center'>Date</TableCell>
+                          <TableCell className='label border text-center'>Name</TableCell>
+                          <TableCell className='label border text-center'>PP#</TableCell>
+                          <TableCell className='label border text-center'>Trade</TableCell>
+                          <TableCell className='label border text-center'>Company</TableCell>
+                          <TableCell className='label border text-center'>Remarks</TableCell>
+                          <TableCell className='label border text-center'>Contact</TableCell>
+                          <TableCell className='label border text-center'>Final Status</TableCell>
+                          <TableCell className='label border text-center'>Flight Date</TableCell>
+                          <TableCell className='label border text-center'>Country</TableCell>
+                          <TableCell className='label border text-center'>Entry Mode</TableCell>
+                          <TableCell className='label border'>Reference Out</TableCell>
+                          <TableCell className='label border'>Reference Out Name</TableCell>
+                          <TableCell className='label border'>Visa Sales Rate PKR</TableCell>
+                          <TableCell className='label border'>Visa Sales Rate Curr</TableCell>
+                          
+                          <TableCell className='label border'>Reference In</TableCell>
+                          <TableCell className='label border'>Reference In Name</TableCell>
+                          <TableCell className='label border'>Visa Purchase Rate PKR</TableCell>
+                          <TableCell className='label border'>Visa Purchase Rate Curr</TableCell>
+                          
+                          <TableCell className='label border'>Picture</TableCell>
                           {section1 &&
                             <>
                               {/* Visit Sales Purchase Parties Section*/}
-                              <TableCell className='label border text-center px-1'>VSR_PKR</TableCell>
-                              <TableCell className='label border text-center px-1'>VSR_Cur</TableCell>
-                              <TableCell className='label border text-center px-1'>RO</TableCell>
-                              <TableCell className='label border text-center px-1'>RO_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>RI</TableCell>
-                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>VPR_PKR</TableCell>
-                              <TableCell className='label border text-center px-1'>VPR_Curr</TableCell>
-                              <TableCell className='label border text-center px-1'>Picture</TableCell>
+                              <TableCell className='label border'>Reference Out</TableCell>
+                              <TableCell className='label border'>Reference Out Name</TableCell>
+                              <TableCell className='label border'>Visit Sales Rate PKR</TableCell>
+                              <TableCell className='label border'>Visit Sales Rate Cur</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Visit Purchase Rate PKR</TableCell>
+                              <TableCell className='label border'>Visit Purchase Rate Curr</TableCell>
+                              <TableCell className='label border'>Picture</TableCell>
                             </>
                           }
 
@@ -716,16 +716,15 @@ const EntryReports = () => {
                             <>
                               {/* Ticket Sales Purchase Parties Section*/}
 
-                              <TableCell className='label border text-center px-1'>TSR_PKR</TableCell>
-                              <TableCell className='label border text-center px-1'>TSR_Curr</TableCell>
-                           
-                              <TableCell className='label border text-center px-1'>RO</TableCell>
-                              <TableCell className='label border text-center px-1'>RO_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>RI</TableCell>
-                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>TPR_PKR</TableCell>
-                              <TableCell className='label border text-center px-1'>TPR_Curr</TableCell>
-                              <TableCell className='label border text-center px-1'>Picture</TableCell>
+                              <TableCell className='label border'>Reference Out</TableCell>
+                              <TableCell className='label border'>Reference Out Name</TableCell>
+                              <TableCell className='label border'>Ticket Sales Rate PKR</TableCell>
+                              <TableCell className='label border'>Ticket Sales Rate Curr</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Ticket Purchase Rate PKR</TableCell>
+                              <TableCell className='label border'>Ticket Purchase Rate Curr</TableCell>
+                              <TableCell className='label border'>Picture</TableCell>
 
                             </>
                           }
@@ -733,16 +732,15 @@ const EntryReports = () => {
                           {section3 &&
                             <>
                               {/* Azad Visa Sales Purchase Parties Section*/}
-                              <TableCell className='label border text-center px-1'>AVSR_PKR</TableCell>
-                              <TableCell className='label border text-center px-1'>AVSR_Curr</TableCell>
-                             
-                              <TableCell className='label border text-center px-1'>RO</TableCell>
-                              <TableCell className='label border text-center px-1'>RO_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>RI</TableCell>
-                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>AVPR_PKR</TableCell>
-                              <TableCell className='label border text-center px-1'>AVPR_Curr</TableCell>
-                              <TableCell className='label border text-center px-1'>Picture</TableCell>
+                              <TableCell className='label border'>Reference Out</TableCell>
+                              <TableCell className='label border'>Reference Out Name</TableCell>
+                              <TableCell className='label border'>Azad Visa Sales Rate PKR</TableCell>
+                              <TableCell className='label border'>Azad Visa Sales Rate Curr</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Azad Visa Purchase Rate PKR</TableCell>
+                              <TableCell className='label border'>Azad Visa Purchase Rate Curr</TableCell>
+                              <TableCell className='label border'>Picture</TableCell>
 
                             </>
                           }
@@ -751,18 +749,18 @@ const EntryReports = () => {
                           {section4 &&
                             <>
                               {/* Protector Section*/}
-                              <TableCell className='label border text-center px-1'>PP_In</TableCell>
-                              <TableCell className='label border text-center px-1'>PP_In_Curr</TableCell>
-                              <TableCell className='label border text-center px-1'>RI</TableCell>
-                              <TableCell className='label border text-center px-1'>RI_Name</TableCell>
-                              <TableCell className='label border text-center px-1'>PP_Out</TableCell>
+                              <TableCell className='label border'>Reference In</TableCell>
+                              <TableCell className='label border'>Reference In Name</TableCell>
+                              <TableCell className='label border'>Protector Price In PKR</TableCell>
+                              <TableCell className='label border'>Protector Price In Curr</TableCell>
+                              <TableCell className='label border'>Protector Price Out</TableCell>
 
                             </>
                           }
 
 
                           {/* Add more table header cells for other fields */}
-                          <TableCell align='left' className='edw_label border text-center px-1' colSpan={1}>
+                          <TableCell align='left' className='edw_label border text-center' colSpan={1}>
                             Actions
                           </TableCell>
                         </TableRow>
@@ -840,16 +838,11 @@ const EntryReports = () => {
                                   ))}
                                 </select>
                               </TableCell>
-                              <TableCell className='border data_td p-0 '>
-                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Sales_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Sales_Rate_PKR')} />
-                              </TableCell>
-                              <TableCell className='border data_td p-0 '>
-                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Sale_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visa_Sale_Rate_Oth_Cur')} />
-                              </TableCell>
+                              
                              
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.reference_Out} onChange={(e) => handleInputChange(e, 'reference_Out')} >
-                                {(editedEntry.reference_Out&&(editedEntry.reference_Out?.toLowerCase()===''||editedEntry.reference_Out?.toLowerCase()===null||editedEntry.reference_Out?.toLowerCase()===undefined)) &&
+                                {(editedEntry.reference_Out?.toLowerCase()===''||editedEntry.reference_Out?.toLowerCase()===null||editedEntry.reference_Out?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -999,10 +992,16 @@ const EntryReports = () => {
                                 }
                                 
                               </TableCell>
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Sales_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Sales_Rate_PKR')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-0 '>
+                                <input className='p-0' type='number' min='0' value={editedEntry.visa_Sale_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'visa_Sale_Rate_Oth_Cur')} />
+                              </TableCell>
 
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.reference_In} onChange={(e) => handleInputChange(e, 'reference_In')} >
-                                {(editedEntry.reference_In&&(editedEntry.reference_In?.toLowerCase()===''||editedEntry.reference_In?.toLowerCase()===null||editedEntry.reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.reference_In?.toLowerCase()===''||editedEntry.reference_In?.toLowerCase()===null||editedEntry.reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1097,7 +1096,6 @@ const EntryReports = () => {
                 </select>
               )}
                                
-                          
                               </TableCell>
                               <TableCell className='border data_td p-0 '>
                                 <input className='p-0' type='number' min='0' value={editedEntry.visa_Purchase_Rate_PKR} onChange={(e) => handleInputChange(e, 'visa_Purchase_Rate_PKR')} />
@@ -1113,19 +1111,9 @@ const EntryReports = () => {
                                 <>
                                   {/* Visit Section */}
 
-       
-                                 
-                                  <TableCell className='border data_td p-0 '>
-                                    <input className='p-0' type='number' value={editedEntry.visit_Sales_PKR} onChange={(e) => handleInputChange(e, 'visit_Sales_PKR')} />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-0 '>
-                                  <input className='p-0' type='number' value={editedEntry.visit_Sales_Rate_Oth_Curr} onChange={(e) => handleInputChange(e, 'visit_Sales_Rate_Oth_Curr')} />
-
-                                  </TableCell>
-                                 
                                   <TableCell className='border data_td p-0 '>
                                   <select className='p-0' required value={editedEntry.visit_Reference_Out} onChange={(e) => handleInputChange(e, 'visit_Reference_Out')} >
-                                  {(editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out?.toLowerCase()===''||editedEntry.visit_Reference_Out?.toLowerCase()===null||editedEntry?.visit_Reference_Out.toLowerCase()===undefined)) &&
+                                  {(editedEntry.visit_Reference_Out?.toLowerCase()===''||editedEntry.visit_Reference_Out?.toLowerCase()===null||editedEntry?.visit_Reference_Out.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1272,8 +1260,15 @@ const EntryReports = () => {
                                 
                               </TableCell>
                               <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.visit_Sales_PKR} onChange={(e) => handleInputChange(e, 'visit_Sales_PKR')} />
+                                  </TableCell>
+                                  <TableCell className='border data_td p-0 '>
+                                  <input className='p-0' type='number' value={editedEntry.visit_Sales_Rate_Oth_Curr} onChange={(e) => handleInputChange(e, 'visit_Sales_Rate_Oth_Curr')} />
+
+                                  </TableCell>
+                              <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.visit_Reference_In} onChange={(e) => handleInputChange(e, 'visit_Reference_In')} >
-                                {(editedEntry.visit_Reference_In&&(editedEntry.visit_Reference_In?.toLowerCase()===''||editedEntry.visit_Reference_In?.toLowerCase()===null||editedEntry.visit_Reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.visit_Reference_In?.toLowerCase()===''||editedEntry.visit_Reference_In?.toLowerCase()===null||editedEntry.visit_Reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1390,17 +1385,11 @@ const EntryReports = () => {
                                   
                                   
 
-                                  <TableCell className='border data_td p-0 '>
-                                    <input className='p-0' type='number' min='0' value={editedEntry.ticket_Sales_PKR} onChange={(e) => handleInputChange(e, 'ticket_Sales_PKR')} />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-0 '>
-                                  <input className='p-0' type='number' value={editedEntry.ticket_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'ticket_Sales_Rate_Oth_Cur')} />
-
-                                  </TableCell>
+        
                                   
                                   <TableCell className='border data_td p-0 '>
                                   <select className='p-0' required value={editedEntry.ticket_Reference_Out} onChange={(e) => handleInputChange(e, 'ticket_Reference_Out')} >
-                                  {(editedEntry.ticket_Reference_Out&&(editedEntry.ticket_Reference_Out?.toLowerCase()===''||editedEntry.ticket_Reference_Out?.toLowerCase()===null||editedEntry.ticket_Reference_Out?.toLowerCase()===undefined)) &&
+                                  {(editedEntry.ticket_Reference_Out?.toLowerCase()===''||editedEntry.ticket_Reference_Out?.toLowerCase()===null||editedEntry.ticket_Reference_Out?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1547,8 +1536,15 @@ const EntryReports = () => {
                                 
                               </TableCell>
                               <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' min='0' value={editedEntry.ticket_Sales_PKR} onChange={(e) => handleInputChange(e, 'ticket_Sales_PKR')} />
+                                  </TableCell>
+                                  <TableCell className='border data_td p-0 '>
+                                  <input className='p-0' type='number' value={editedEntry.ticket_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'ticket_Sales_Rate_Oth_Cur')} />
+
+                                  </TableCell>
+                              <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.ticket_Reference_In} onChange={(e) => handleInputChange(e, 'ticket_Reference_In')} >
-                                {(editedEntry.ticket_Reference_In&&(editedEntry.ticket_Reference_In?.toLowerCase()===''||editedEntry.ticket_Reference_In?.toLowerCase()===null||editedEntry.ticket_Reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.ticket_Reference_In?.toLowerCase()===''||editedEntry.ticket_Reference_In?.toLowerCase()===null||editedEntry.ticket_Reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1662,20 +1658,10 @@ const EntryReports = () => {
                               {section3 &&
                                 <>
                                   {/* Azad Visa Sales Purchase Section Data */}
-
-                                   <TableCell className='border data_td p-0 '>
-                                    <input className='p-0' type='number' value={editedEntry.azad_Visa_Sales_PKR} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_PKR')} />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-0 '>
-
-                                  <input className='p-0' type='number' value={editedEntry.azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_Rate_Oth_Cur')} />
-
-                                  </TableCell>
-
-                                 
+  
                                   <TableCell className='border data_td p-0 '>
                                   <select className='p-0' required value={editedEntry.azad_Reference_Out} onChange={(e) => handleInputChange(e, 'azad_Reference_Out')} >
-                                  {(editedEntry.azad_Reference_Out&&(editedEntry.azad_Reference_Out?.toLowerCase()===''||editedEntry.azad_Reference_Out?.toLowerCase()===null||editedEntry.azad_Reference_Out?.toLowerCase()===undefined)) &&
+                                  {(editedEntry.azad_Reference_Out?.toLowerCase()===''||editedEntry.azad_Reference_Out?.toLowerCase()===null||editedEntry.azad_Reference_Out?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1822,8 +1808,16 @@ const EntryReports = () => {
                                 
                               </TableCell>
                               <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.azad_Visa_Sales_PKR} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_PKR')} />
+                                  </TableCell>
+                                  <TableCell className='border data_td p-0 '>
+
+                                  <input className='p-0' type='number' value={editedEntry.azad_Visa_Sales_Rate_Oth_Cur} onChange={(e) => handleInputChange(e, 'azad_Visa_Sales_Rate_Oth_Cur')} />
+
+                                  </TableCell>
+                              <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.azad_Reference_In} onChange={(e) => handleInputChange(e, 'azad_Reference_In')} >
-                                {(editedEntry.azad_Reference_In&&(editedEntry.azad_Reference_In?.toLowerCase()===''||editedEntry.azad_Reference_In?.toLowerCase()===null||editedEntry.azad_Reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.azad_Reference_In?.toLowerCase()===''||editedEntry.azad_Reference_In?.toLowerCase()===null||editedEntry.azad_Reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1937,13 +1931,7 @@ const EntryReports = () => {
                               {section4 &&
                                 <>
                                   {/* Protector Section*/}
-                                  <TableCell className='border data_td p-0 '>
-                                    <input className='p-0' type='number' value={editedEntry.protector_Price_In} onChange={(e) => handleInputChange(e, 'protector_Price_In')} />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-0 '>
-                                    <input className='p-0' type='number' value={editedEntry.protector_Price_In_Oth_Cur} onChange={(e) => handleInputChange(e, 'protector_Price_In_Oth_Cur')} />
-                                  </TableCell>
-
+                                 
                                   <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.protector_Reference_In} onChange={(e) => handleInputChange(e, 'protector_Reference_In')} >
                                   
@@ -1971,6 +1959,12 @@ const EntryReports = () => {
                              
                           
                               </TableCell>
+                              <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.protector_Price_In} onChange={(e) => handleInputChange(e, 'protector_Price_In')} />
+                                  </TableCell>
+                                  <TableCell className='border data_td p-0 '>
+                                    <input className='p-0' type='number' value={editedEntry.protector_Price_In_Oth_Cur} onChange={(e) => handleInputChange(e, 'protector_Price_In_Oth_Cur')} />
+                                  </TableCell>
                               
                                   <TableCell className='border data_td p-0 '>
                                     <input className='p-0' type='number' value={editedEntry.protector_Price_Out} onChange={(e) => handleInputChange(e, 'protector_Price_Out')} />
@@ -1999,11 +1993,10 @@ const EntryReports = () => {
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.flight_Date}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.country}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.entry_Mode}</TableCell>
-                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Sales_Rate_PKR}</TableCell>
-                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Sale_Rate_Oth_Cur}</TableCell>
-                              
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_Out}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_Out_Name}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Sales_Rate_PKR}</TableCell>
+                                <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Sale_Rate_Oth_Cur}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_In}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.reference_In_Name}</TableCell>
                                 <TableCell className='border data_td px-1 py-0 text-center'>{entry.visa_Purchase_Rate_PKR}</TableCell>
@@ -2015,11 +2008,10 @@ const EntryReports = () => {
 
                                     {/* Visit Sales Purchase Section Data */}
                                    
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Sales_Rate_Oth_Curr}</TableCell>
-                                   
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_Out}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Sales_Rate_Oth_Curr}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_In}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.visit_Purchase_Rate_PKR}</TableCell>
@@ -2033,11 +2025,10 @@ const EntryReports = () => {
                                   <>
                                     {/* Ticket Sales Purchase Section Data */}
                                    
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Sales_Rate_Oth_Cur}</TableCell>
-                                   
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_Out}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Sales_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_In}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.ticket_Purchase_PKR}</TableCell>
@@ -2051,11 +2042,10 @@ const EntryReports = () => {
                                   <>
                                     {/* Azad Visa Sales Purchase Section Data */}
                                   
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Sales_PKR}</TableCell>
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Sales_Rate_Oth_Cur}</TableCell>
-                                  
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_Out}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_Out_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Sales_PKR}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Sales_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_In}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Reference_In_Name}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.azad_Visa_Purchase_PKR}</TableCell>
@@ -2068,10 +2058,10 @@ const EntryReports = () => {
                                 {section4 &&
                                   <>
                                     {/* Protector Section Data */}
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_In}</TableCell>
-                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_In_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Reference_In}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Reference_In_Name}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_In}</TableCell>
+                                    <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_In_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td px-1 py-0 text-center'>{entry.protector_Price_Out}</TableCell>
                                   </>
                                 }

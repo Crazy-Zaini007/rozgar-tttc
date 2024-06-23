@@ -4129,6 +4129,7 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
     }
     const {
       supplierName,
+      cand_Name,
       paymentId,
       myPaymentId,
       new_Payment,
@@ -4144,7 +4145,6 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
       });
       return;
     }
-
 
     const paymentToFind=existingSupplier.payment_In_Schema.candPayments.find(p=>p._id.toString()===paymentId.toString())
 
@@ -4164,19 +4164,49 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
         });
       }
       if(candPayment){
+
         const newPaymentIn = parseInt(new_Payment, 10);
         const newCurrAmount = parseInt(new_Curr_Payment, 10);
         const updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
-      const updateCurr_Amount = candPayment.new_Curr_Payment - newCurrAmount;
+       const updateCurr_Amount = candPayment.new_Curr_Payment - newCurrAmount;
+if(candPayment.cand_Name.toLowerCase()!==cand_Name.toLowerCase()){
+  const existingPaymentPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === candPayment.cand_Name.toLowerCase())
+  if(existingPaymentPerson){
+    existingPaymentPerson.remaining_Price+=candPayment.new_Payment
+    existingPaymentPerson.total_In-=candPayment.new_Payment
+    existingPaymentPerson.remaining_Curr+=candPayment.visa_Curr_Amount
+  const existingNewPaymentPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
+if(existingNewPaymentPerson){
+  existPerson.remaining_Price -= new_Payment
+  existPerson.total_In += newPaymentIn
+  existPerson.remaining_Curr -= new_Curr_Payment
+  candPayment.new_Remain_PKR+=newPaymentIn
+  candPayment.new_Payment+=-newPaymentIn
+  candPayment.new_Remain_Curr+=new_Curr_Payment
+  candPayment.new_Curr_Payment+=-new_Curr_Payment
+  candPayment.curr_Rate=newPaymentIn/new_Curr_Payment
+  }
 
+  paymentToFind.payment_In+=-updatedPaymentIn
+  paymentToFind.curr_Amount+=-updateCurr_Amount
+
+  await existingSupplier.updateOne({
+    $inc: {
+      "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
+      "payment_In_Schema.remaining_Balance": updatedPaymentIn,
+      "payment_In_Schema.total_Payment_In_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
+      "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
+    },
+  })
+}
+}
 // Updating The Cand payment
 
-candPayment.new_Remain_PKR+=updatedPaymentIn
-candPayment.new_Payment+=-updatedPaymentIn
-candPayment.new_Remain_Curr+=updateCurr_Amount
-candPayment.new_Curr_Payment+=-updateCurr_Amount
-candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
-
+      candPayment.new_Remain_PKR+=updatedPaymentIn
+      candPayment.new_Payment+=-updatedPaymentIn
+      candPayment.new_Remain_Curr+=updateCurr_Amount
+      candPayment.new_Curr_Payment+=-updateCurr_Amount
+      candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
 
 // updating Person total_In and remainig pkr and curr as well
         const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
@@ -4231,8 +4261,6 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
         });
       }
     }
-   
-
   }
   catch(error){
     res.status(500).json({message:error.message})

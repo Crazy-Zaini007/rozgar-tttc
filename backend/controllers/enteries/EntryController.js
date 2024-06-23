@@ -96,45 +96,54 @@ const addEntry = async (req, res) => {
         section3,
       } = req.body;
 
+    
       // Ensure flight_Date is set to "No Fly" when it's an empty string or undefined
       flight_Date =
         flight_Date !== undefined && flight_Date !== ""
           ? flight_Date
           : "No Fly";
 
-      if (reference_Out_Name === "") {
+      if (reference_Out && reference_Out_Name === "") {
         reference_Out_Name = name;
       }
-      if (reference_In_Name === "") {
+      if (reference_In && reference_In_Name === "") {
         reference_In_Name = name;
       }
       if (section1 === 1) {
-        if (visit_Reference_In_Name === "") {
+        if (visit_Reference_In && visit_Reference_In_Name === "") {
           visit_Reference_In_Name = name;
         }
-        if (visit_Reference_Out_Name === "") {
+        if (visit_Reference_Out && visit_Reference_Out_Name === "") {
           visit_Reference_Out_Name = name;
         }
       }
       if (section2 === 1) {
-        if (ticket_Reference_In_Name === "") {
+        if (ticket_Reference_In && ticket_Reference_In_Name === "") {
           ticket_Reference_In_Name = name;
         }
-        if (ticket_Reference_Out_Name === "") {
+        if (ticket_Reference_Out && ticket_Reference_Out_Name === "") {
           ticket_Reference_Out_Name = name;
         }
       }
       if (section3 === 1) {
-        if (azad_Visa_Reference_In_Name === "") {
+        if (azad_Visa_Reference_In && azad_Visa_Reference_In_Name === "") {
           azad_Visa_Reference_In_Name = name;
         }
-        if (azad_Visa_Reference_Out_Name === "") {
+        if (azad_Visa_Reference_Out && azad_Visa_Reference_Out_Name === "") {
           azad_Visa_Reference_Out_Name = name;
         }
       }
 
       let sendResponse = true;
-      const existingPPNO = await Entries.findOne({ pp_No, entry_Mode });
+      const existingPPNO = await Entries.aggregate([
+        {
+          $match: {
+            pp_No: { $eq: pp_No.toLowerCase() },
+            entry_Mode: { $eq: entry_Mode.toLowerCase() },
+          
+          }
+        }
+      ]);
 
       if (existingPPNO) {
         res
@@ -3571,15 +3580,50 @@ const addMultipleEnteries = async (req, res) => {
           entryData.flight_Date !== undefined && entryData.flight_Date !== ""
             ? entryData.flight_Date
             : "No Fly";
+            if (entryData.reference_Out && entryData.reference_Out_Name === "") {
+              entryData.reference_Out_Name = entryData.name;
+            }
+            if (entryData.reference_In && entryData.reference_In_Name === "") {
+              entryData.reference_In_Name = entryData.name;
+            }
+            if (section1 === 1) {
+              if (entryData.visit_Reference_In && entryData.visit_Reference_In_Name === "") {
+                entryData.visit_Reference_In_Name = entryData.name;
+              }
+              if (entryData.visit_Reference_Out && entryData.visit_Reference_Out_Name === "") {
+                entryData.visit_Reference_Out_Name = entryData.name;
+              }
+            }
+            if (section2 === 1) {
+              if (entryData.ticket_Reference_In && entryData.ticket_Reference_In_Name === "") {
+                entryData.ticket_Reference_In_Name = entryData.name;
+              }
+              if (entryData.ticket_Reference_Out && entryData.ticket_Reference_Out_Name === "") {
+                entryData.ticket_Reference_Out_Name = entryData.name;
+              }
+            }
+            if (section3 === 1) {
+              if (entryData.azad_Visa_Reference_In && entryData.azad_Visa_Reference_In_Name === "") {
+                entryData.azad_Visa_Reference_In_Name = entryData.name;
+              }
+              if (entryData.azad_Visa_Reference_Out && entryData.azad_Visa_Reference_Out_Name === "") {
+                entryData.azad_Visa_Reference_Out_Name = entryData.name;
+              }
+            }
         if (!entryData.entry_Date) {
           entryData.entry_Date = new Date().toISOString().split("T")[0]
         }
         let sendResponse = true;
 
-        const existingPPNO = await Entries.findOne({
-          pp_No: entryData.pp_No,
-          entry_Mode: entryData.entry_Mode,
-        });
+        const existingPPNO = await Entries.aggregate([
+          {
+            $match: {
+              pp_No: { $eq: entryData.pp_No.toLowerCase() },
+              entry_Mode: { $eq: entryData.entry_Mode.toLowerCase() },
+              
+            }
+          }
+        ]);
 
         // if (existingPPNO) {
         //   res.status(400).json({

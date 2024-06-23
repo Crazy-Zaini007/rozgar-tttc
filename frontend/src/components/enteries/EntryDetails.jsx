@@ -842,7 +842,7 @@ const EntryDetails = () => {
                              
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.reference_Out} onChange={(e) => handleInputChange(e, 'reference_Out')} >
-                                {(editedEntry.reference_Out&&(editedEntry.reference_Out?.toLowerCase()===''||editedEntry.reference_Out?.toLowerCase()===null||editedEntry.reference_Out?.toLowerCase()===undefined)) &&
+                                {(editedEntry.reference_Out?.toLowerCase()===''||editedEntry.reference_Out?.toLowerCase()===null||editedEntry.reference_Out?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1001,7 +1001,7 @@ const EntryDetails = () => {
 
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.reference_In} onChange={(e) => handleInputChange(e, 'reference_In')} >
-                                {(editedEntry.reference_In&&(editedEntry.reference_In?.toLowerCase()===''||editedEntry.reference_In?.toLowerCase()===null||editedEntry.reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.reference_In?.toLowerCase()===''||editedEntry.reference_In?.toLowerCase()===null||editedEntry.reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1113,7 +1113,7 @@ const EntryDetails = () => {
 
                                   <TableCell className='border data_td p-0 '>
                                   <select className='p-0' required value={editedEntry.visit_Reference_Out} onChange={(e) => handleInputChange(e, 'visit_Reference_Out')} >
-                                  {(editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out?.toLowerCase()===''||editedEntry.visit_Reference_Out?.toLowerCase()===null||editedEntry?.visit_Reference_Out.toLowerCase()===undefined)) &&
+                                  {(editedEntry.visit_Reference_Out?.toLowerCase()===''||editedEntry.visit_Reference_Out?.toLowerCase()===null||editedEntry?.visit_Reference_Out.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1268,7 +1268,7 @@ const EntryDetails = () => {
                                   </TableCell>
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.visit_Reference_In} onChange={(e) => handleInputChange(e, 'visit_Reference_In')} >
-                                {(editedEntry.visit_Reference_In&&(editedEntry.visit_Reference_In?.toLowerCase()===''||editedEntry.visit_Reference_In?.toLowerCase()===null||editedEntry.visit_Reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.visit_Reference_In?.toLowerCase()===''||editedEntry.visit_Reference_In?.toLowerCase()===null||editedEntry.visit_Reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1389,7 +1389,7 @@ const EntryDetails = () => {
                                   
                                   <TableCell className='border data_td p-0 '>
                                   <select className='p-0' required value={editedEntry.ticket_Reference_Out} onChange={(e) => handleInputChange(e, 'ticket_Reference_Out')} >
-                                  {(editedEntry.ticket_Reference_Out&&(editedEntry.ticket_Reference_Out?.toLowerCase()===''||editedEntry.ticket_Reference_Out?.toLowerCase()===null||editedEntry.ticket_Reference_Out?.toLowerCase()===undefined)) &&
+                                  {(editedEntry.ticket_Reference_Out?.toLowerCase()===''||editedEntry.ticket_Reference_Out?.toLowerCase()===null||editedEntry.ticket_Reference_Out?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1544,7 +1544,7 @@ const EntryDetails = () => {
                                   </TableCell>
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.ticket_Reference_In} onChange={(e) => handleInputChange(e, 'ticket_Reference_In')} >
-                                {(editedEntry.ticket_Reference_In&&(editedEntry.ticket_Reference_In?.toLowerCase()===''||editedEntry.ticket_Reference_In?.toLowerCase()===null||editedEntry.ticket_Reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.ticket_Reference_In?.toLowerCase()===''||editedEntry.ticket_Reference_In?.toLowerCase()===null||editedEntry.ticket_Reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1661,7 +1661,7 @@ const EntryDetails = () => {
   
                                   <TableCell className='border data_td p-0 '>
                                   <select className='p-0' required value={editedEntry.azad_Reference_Out} onChange={(e) => handleInputChange(e, 'azad_Reference_Out')} >
-                                  {(editedEntry.azad_Reference_Out&&(editedEntry.azad_Reference_Out?.toLowerCase()===''||editedEntry.azad_Reference_Out?.toLowerCase()===null||editedEntry.azad_Reference_Out?.toLowerCase()===undefined)) &&
+                                  {(editedEntry.azad_Reference_Out?.toLowerCase()===''||editedEntry.azad_Reference_Out?.toLowerCase()===null||editedEntry.azad_Reference_Out?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
@@ -1817,7 +1817,7 @@ const EntryDetails = () => {
                                   </TableCell>
                               <TableCell className='border data_td p-0 '>
                                 <select className='p-0' required value={editedEntry.azad_Reference_In} onChange={(e) => handleInputChange(e, 'azad_Reference_In')} >
-                                {(editedEntry.azad_Reference_In&&(editedEntry.azad_Reference_In?.toLowerCase()===''||editedEntry.azad_Reference_In?.toLowerCase()===null||editedEntry.azad_Reference_In?.toLowerCase()===undefined)) &&
+                                {(editedEntry.azad_Reference_In?.toLowerCase()===''||editedEntry.azad_Reference_In?.toLowerCase()===null||editedEntry.azad_Reference_In?.toLowerCase()===undefined) &&
                                   <>
                                   <option className="my-1 py-2" value="">Choose Reference</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
