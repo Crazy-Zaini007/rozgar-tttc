@@ -11,7 +11,6 @@ const createToken = (_id) =>{
 //User Registration Controller
 
 const signupUser = async (req,res) => {
-    
     try {
         const { userName, role,companyCode, password } = req.body
   let emptyFields = []
@@ -64,8 +63,6 @@ const signupUser = async (req,res) => {
                 role,
                 originalPassword:password,
                 password: hashedPasword,
-                
-    
             })
             await newUser.save()
               // creating a token

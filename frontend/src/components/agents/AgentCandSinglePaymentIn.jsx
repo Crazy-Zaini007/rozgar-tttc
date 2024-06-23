@@ -768,7 +768,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         <>
          <div key={index} className="py-3 px-2">
             <div className="row p-0 m-0 my-1">
-            <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+            <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor="" className="text-sm text-muted  mb-1">Candidate</label>
         <select
           value={cand.cand_Name}
@@ -783,7 +783,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
           ))}
         </select>
       </div>
-              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor="" className="text-sm text-muted  mb-1">Payment In</label>
                 {/* Payment_In */}
                 <input
@@ -796,7 +796,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                 />
               </div>
            
-              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
               <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
                 <input
                   type="number"
@@ -821,7 +821,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
      <>
       <form>
        <div className="row p-0 m-0 mt-2">
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Candidate Name</label>
                     <input disabled
                       type="text"
@@ -829,7 +829,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>PP#</label>
                     <input disabled
                       type="text"
@@ -837,7 +837,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Entry Mode</label>
                     <input disabled
                       type="text"
@@ -845,7 +845,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Country</label>
                     <input disabled
                       type="text"
@@ -853,7 +853,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Final Status</label>
                     <input disabled
                       type="text"
@@ -861,7 +861,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Flight Date</label>
                     <input disabled
                       type="text"
@@ -869,7 +869,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Company</label>
                     <input disabled
                       type="text"
@@ -877,7 +877,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Visa Price In PKR</label>
                     <input disabled
                       type="text"
@@ -885,18 +885,18 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label >Total In PKR</label>
                   <input type="text" disabled value={selectedPersonDetails[index].total_In} readOnly />
                 </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label >New Total In PKR</label>
                   <input type="text" disabled   value={
                 parseFloat(selectedPersonDetails[index]?.total_In || 0) +
                 parseFloat(cand.payment_In || 0)
               } readOnly />
                 </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Remaining PKR</label>
                     <input 
                     disabled
@@ -905,7 +905,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>New Remaining PKR</label>
                     <input
                     disabled
@@ -914,7 +914,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Visa Price In Curr</label>
                     <input
                     disabled
@@ -923,7 +923,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Total Paid Curr</label>
                     <input
                     disabled
@@ -932,7 +932,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>New Total Paid Curr</label>
                     <input
                     disabled
@@ -941,7 +941,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>Remaining Curr</label>
                     <input
                     disabled
@@ -950,7 +950,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       readOnly
                     />
                   </div>
-                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                     <label>New Remaining Curr</label>
                     <input
                     disabled
@@ -979,31 +979,31 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 <h4 className="text-center">Payment Summary</h4>
 <form className="py-3 px-2" >
   <div className="row  p-0 m-0 my-1">
-  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total Candidates </label>
+  <div className="col-xl-1 col-lg-1 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Candidates </label>
                   <input type="text" value={candData.length} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Visa Amount PKR </label>
                   <input type="text" value={totalVisaPriceInPKR} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Past Paid PKR </label>
                   <input type="text" value={totalPastPaidPKR} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Past Remaining PKR </label>
                   <input type="text" value={totalPastRemainingPKR} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total New Payment PKR </label>
                   <input type="text" value={totalPayments} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>New Payment In Curr </label>
                   <input type="text" value={totalCurrency} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total New Remaining PKR </label>
                   <input type="text" value={totalPastRemainingPKR-totalPayments} disabled/>
                 </div>

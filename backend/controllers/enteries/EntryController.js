@@ -9099,6 +9099,7 @@ if (existingAgentPaymentIn) {
     res.status(500).json({ message: error.message });
   }
 }
+
 // Updating a single Entry
 const updateEntry = async (req, res) => {
   try {
@@ -9365,7 +9366,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = mainPicture?mainPicture.secure_url:supplierInPersonIndex.picture;
 
 
             // Calculate the differences
@@ -9475,7 +9476,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -9529,7 +9530,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -9662,7 +9663,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -9716,7 +9717,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -9833,7 +9834,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
                 ? visa_Purchase_Rate_PKR
                 : 0,
@@ -9889,7 +9890,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = mainPicture?mainPicture.secure_url:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const visa_Purchase_Rate_PKR_Diff = entryToUpdate.visa_Purchase_Rate_PKR - visa_Purchase_Rate_PKR
@@ -9998,7 +9999,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10052,7 +10053,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -10185,7 +10186,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10239,7 +10240,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -10357,7 +10358,7 @@ let azadPicture
           const newPaymentOutCandidate = new Candidate({
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               supplierName: name,
               total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
                 ? visa_Purchase_Rate_PKR
@@ -10406,7 +10407,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                mainPicture?mainPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                mainPicture?mainPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -10483,7 +10484,7 @@ let azadPicture
                 {
                   name,
                   pp_No,
-                  picture: mainPicture?mainPicture:picture,
+                  picture: mainPicture?mainPicture.secure_url:picture,
                   entry_Mode,
                   contact,
                   trade,
@@ -10536,7 +10537,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture: mainPicture?mainPicture:picture,
+              picture: mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -10626,7 +10627,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture: mainPicture?mainPicture:picture,
+                  picture: mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10680,7 +10681,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture: mainPicture?mainPicture:picture,
+              picture: mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -10754,7 +10755,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = mainPicture?mainPicture.secure_url:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const visa_Sale_Rate_PKR_Diff = entryToUpdate.visa_Sales_Rate_PKR - visa_Sales_Rate_PKR
@@ -10858,7 +10859,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -10912,7 +10913,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -11045,7 +11046,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -11099,7 +11100,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -11214,7 +11215,7 @@ let azadPicture
           const newPaymentInCandidate = new Candidate({
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               supplierName: name,
               total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
                 ? visa_Sales_Rate_PKR
@@ -11274,7 +11275,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = mainPicture?mainPicture.secure_url:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const visa_Sale_Rate_PKR_Diff = entryToUpdate.visa_Sales_Rate_PKR - visa_Sales_Rate_PKR
@@ -11379,7 +11380,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -11433,7 +11434,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -11566,7 +11567,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -11620,7 +11621,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -11735,7 +11736,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
                 ? visa_Sales_Rate_PKR
                 : 0,
@@ -11781,7 +11782,7 @@ let azadPicture
 
         if (existingPaymentInCandidate) {
           existingPaymentInCandidate.payment_In_Schema.supplierName = name,
-          existingPaymentInCandidate.payment_In_Schema.picture = mainPicture?mainPicture:existingPaymentInCandidate.payment_In_Schema.picture,
+          existingPaymentInCandidate.payment_In_Schema.picture = mainPicture?mainPicture.secure_url:existingPaymentInCandidate.payment_In_Schema.picture,
             existingPaymentInCandidate.payment_In_Schema.pp_No = pp_No,
             existingPaymentInCandidate.payment_In_Schema.entry_Mode =
             entry_Mode,
@@ -11856,7 +11857,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -11910,7 +11911,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -11998,7 +11999,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -12052,7 +12053,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentInSupplier.payment_In_Schema.persons.push({
               name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               contact,
@@ -12125,7 +12126,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = azadPicture?azadPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -12265,7 +12266,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12319,7 +12320,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -12456,7 +12457,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12510,7 +12511,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -12626,7 +12627,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+              picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -12685,7 +12686,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = azadPicture?azadPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -12824,7 +12825,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -12878,7 +12879,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : mainPicture?mainPicture:picture,
+                picture : mainPicture?mainPicture.secure_url:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13015,7 +13016,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13069,7 +13070,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : mainPicture?mainPicture:picture,
+                picture : mainPicture?mainPicture.secure_url:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13185,7 +13186,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -13232,7 +13233,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                azadPicture?azadPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                azadPicture?azadPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -13314,7 +13315,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13368,7 +13369,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13459,7 +13460,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13513,7 +13514,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13583,7 +13584,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = azadPicture?azadPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -13722,7 +13723,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13776,7 +13777,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -13912,7 +13913,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -13966,7 +13967,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14083,7 +14084,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+              picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -14142,7 +14143,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = azadPicture?azadPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = azadPicture?azadPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -14284,7 +14285,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14338,7 +14339,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : mainPicture?mainPicture:picture,
+                picture : mainPicture?mainPicture.secure_url:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14474,7 +14475,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : mainPicture?mainPicture:picture,
+                  picture : mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14528,7 +14529,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : mainPicture?mainPicture:picture,
+                picture : mainPicture?mainPicture.secure_url:picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14646,7 +14647,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : mainPicture?mainPicture:picture,
+              picture : mainPicture?mainPicture.secure_url:picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -14693,7 +14694,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                azadPicture?azadPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                azadPicture?azadPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_In_Schema.trade = trade),
             (existingPaymentInCandidate.payment_In_Schema.country = country),
             (existingPaymentInCandidate.payment_In_Schema.contact = contact),
@@ -14775,7 +14776,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14829,7 +14830,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -14920,7 +14921,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                  picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -14974,7 +14975,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : azadPicture?azadPicture:azad_Visa_Section_Picture,
+                picture : azadPicture?azadPicture.secure_url:azad_Visa_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15045,7 +15046,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -15184,7 +15185,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15238,7 +15239,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15375,7 +15376,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15429,7 +15430,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15545,7 +15546,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+              picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -15604,7 +15605,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -15743,7 +15744,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15797,7 +15798,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -15934,7 +15935,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -15988,7 +15989,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16105,7 +16106,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+              picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -16152,7 +16153,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                ticketPicture?ticketPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                ticketPicture?ticketPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -16234,7 +16235,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16288,7 +16289,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16379,7 +16380,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16433,7 +16434,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16503,7 +16504,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -16642,7 +16643,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16696,7 +16697,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -16832,7 +16833,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -16886,7 +16887,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17002,7 +17003,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+              picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -17061,7 +17062,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture.secure_url:supplierInPersonIndex.picture;
 
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
@@ -17202,7 +17203,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17256,7 +17257,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17392,7 +17393,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17446,7 +17447,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17562,7 +17563,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+              picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -17609,7 +17610,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                ticketPicture?ticketPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                ticketPicture?ticketPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_In_Schema.trade = trade),
             (existingPaymentInCandidate.payment_In_Schema.country = country),
             (existingPaymentInCandidate.payment_In_Schema.contact = contact),
@@ -17691,7 +17692,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17745,7 +17746,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17836,7 +17837,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                  picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -17890,7 +17891,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : ticketPicture?ticketPicture:ticket_Section_Picture,
+                picture : ticketPicture?ticketPicture.secure_url:ticket_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -17960,7 +17961,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = ticketPicture?ticketPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = ticketPicture?ticketPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -18100,7 +18101,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
 
                   pp_No,
                   entry_Mode,
@@ -18155,7 +18156,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18291,7 +18292,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18345,7 +18346,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18461,7 +18462,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : visitPicture?visitPicture:visit_Section_Picture,
+              picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -18520,7 +18521,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = visitPicture?visitPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = visitPicture?visitPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_Out_PKR -=
               entryToUpdate?.azad_Visa_Purchase_PKR ??
@@ -18659,7 +18660,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18713,7 +18714,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -18849,7 +18850,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -18903,7 +18904,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19019,7 +19020,7 @@ let azadPicture
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : visitPicture?visitPicture:visit_Section_Picture,
+              picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
               total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
                 ? azad_Visa_Purchase_PKR
                 : 0,
@@ -19066,7 +19067,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                visitPicture?visitPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                visitPicture?visitPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_Out_Schema.trade = trade),
             (existingPaymentInCandidate.payment_Out_Schema.country = country),
             (existingPaymentInCandidate.payment_Out_Schema.contact = contact),
@@ -19148,7 +19149,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -19202,7 +19203,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19293,7 +19294,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -19347,7 +19348,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19417,7 +19418,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = visitPicture?visitPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = visitPicture?visitPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -19556,7 +19557,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -19610,7 +19611,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19746,7 +19747,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
 
                   pp_No,
                   entry_Mode,
@@ -19801,7 +19802,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -19917,7 +19918,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : visitPicture?visitPicture:visit_Section_Picture,
+              picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -19976,7 +19977,7 @@ let azadPicture
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
             supplierInPersonIndex.contact = contact;
-            supplierInPersonIndex.picture = visitPicture?visitPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = visitPicture?visitPicture.secure_url:supplierInPersonIndex.picture;
 
             supplierInPersonIndex.azad_Visa_Price_In_PKR -=
               entryToUpdate?.azad_Visa_Sales_PKR ??
@@ -20115,7 +20116,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -20169,7 +20170,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -20306,7 +20307,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -20360,7 +20361,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -20477,7 +20478,7 @@ let azadPicture
             payment_In_Schema: {
               supplier_Id: entryToUpdate._id,
               supplierName: name,
-              picture : visitPicture?visitPicture:visit_Section_Picture,
+              picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
               total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
                 ? azad_Visa_Sales_PKR
                 : 0,
@@ -20524,7 +20525,7 @@ let azadPicture
             (existingPaymentInCandidate.payment_Out_Schema.entry_Mode =
               entry_Mode),
               (existingPaymentInCandidate.payment_Out_Schema.picture =
-                visitPicture?visitPicture:existingPaymentInCandidate.payment_Out_Schema.picture),
+                visitPicture?visitPicture.secure_url:existingPaymentInCandidate.payment_Out_Schema.picture),
             (existingPaymentInCandidate.payment_In_Schema.trade = trade),
             (existingPaymentInCandidate.payment_In_Schema.country = country),
             (existingPaymentInCandidate.payment_In_Schema.contact = contact),
@@ -20606,7 +20607,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -20660,7 +20661,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -20751,7 +20752,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture : visitPicture?visitPicture:visit_Section_Picture,
+                  picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                   pp_No,
                   entry_Mode,
                   trade,
@@ -20805,7 +20806,7 @@ let azadPicture
             existingPaymentOutAzadSupplier.payment_In_Schema.persons.push(
               {
                 name,
-                picture : visitPicture?visitPicture:visit_Section_Picture,
+                picture : visitPicture?visitPicture.secure_url:visit_Section_Picture,
                 pp_No,
                 entry_Mode,
                 trade,
@@ -20873,7 +20874,7 @@ let azadPicture
             supplierInPersonIndex.entry_Mode = entry_Mode;
             supplierInPersonIndex.trade = trade;
             supplierInPersonIndex.country = country;
-            supplierInPersonIndex.picture = mainPicture?mainPicture:supplierInPersonIndex.picture;
+            supplierInPersonIndex.picture = mainPicture?mainPicture.secure_url:supplierInPersonIndex.picture;
 
             // Calculate the differences
             const protector_Price_In_Diff = entryToUpdate.protector_Price_In - protector_Price_In
@@ -20977,7 +20978,7 @@ let azadPicture
               persons: [
                 {
                   name,
-                  picture: mainPicture?mainPicture:picture,
+                  picture: mainPicture?mainPicture.secure_url:picture,
                   pp_No,
                   entry_Mode,
                   contact,
@@ -21026,7 +21027,7 @@ let azadPicture
             // If the person does not exist, add them to the persons array
             existingPaymentOutSupplier.payment_Out_Schema.persons.push({
               name,
-              picture: mainPicture?mainPicture:picture,
+              picture: mainPicture?mainPicture.secure_url:picture,
               pp_No,
               entry_Mode,
               trade,
@@ -21146,7 +21147,6 @@ let azadPicture
     res.status(500).json({ message: error.message });
   }
 }
-
 module.exports = {
   addEntry,
   getEntry,

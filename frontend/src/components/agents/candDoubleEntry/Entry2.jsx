@@ -1075,31 +1075,31 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 <h4 className="text-center">Payment Summary</h4>
 <form className="py-3 px-2" >
   <div className="row  p-0 m-0 my-1">
-  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total Candidates </label>
+  <div className="col-xl-1 col-lg-1col-md-6 col-sm-12 p-1 my-1">
+                  <label>Candidates </label>
                   <input type="text" value={candData.length} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Visa Amount PKR </label>
                   <input type="text" value={totalVisaPriceInPKR} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Past Paid PKR </label>
                   <input type="text" value={totalPastPaidPKR} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Past Remaining PKR </label>
                   <input type="text" value={totalPastRemainingPKR} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total New Payment PKR </label>
                   <input type="text" value={totalPayments} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>New Payment In Curr </label>
                   <input type="text" value={totalCurrency} disabled/>
                 </div>
-                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total New Remaining PKR </label>
                   <input type="text" value={totalPastRemainingPKR-totalPayments} disabled/>
                 </div>

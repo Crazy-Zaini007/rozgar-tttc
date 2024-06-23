@@ -289,13 +289,13 @@ const EntryDetails = () => {
         if(json.redirect){
           if (window.confirm(json.message)){
             navigate(json.redirect)
-        setDelLoading(false)
+            setUpdateLoading(false)
 
           }
         }
         else{
         setNewMessage(toast.error(json.message))
-        setDelLoading(false)
+        setUpdateLoading(false)
         }
       }
       if (response.ok) {
