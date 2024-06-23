@@ -687,21 +687,7 @@ export default function SingleEntry() {
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
 
                         ))}
-                        {ticketSalesParties && ticketSalesParties.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
-                        {visitSalesParties && visitSalesParties.map((data, index) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
-                        {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
+                       
                       </>
                     )
                     }
@@ -711,15 +697,7 @@ export default function SingleEntry() {
                         {visaPurchaseParty && visaPurchaseParty.map((data) => (
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                         ))}
-                        {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
-                        {visitPurchaseParties && visitPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
-                        {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
+                        
                       </>
                     )}
 
@@ -797,26 +775,7 @@ export default function SingleEntry() {
                         <>
                            <option value="">Choose Agents</option>
                         {/* Options for Agents */}
-                        {visaSalesParty &&
-                          visaSalesParty.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {ticketSalesParties &&
-                          ticketSalesParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                      
                         {visitSalesParties &&
                           visitSalesParties.map((data, index) => (
                             <option
@@ -827,42 +786,14 @@ export default function SingleEntry() {
                               {data.supplierName}
                             </option>
                           ))}
-                        {azadVisaSalesParties &&
-                          azadVisaSalesParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                       
                         </>
                       )
                       }
                       {visit_Reference_Out === "Suppliers" && (
                         <>
                         <option value="">Choose Suppliers</option>
-                        {visaPurchaseParty &&
-                          visaPurchaseParty.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {ticketPurchaseParties &&
-                          ticketPurchaseParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                        
                         {visitPurchaseParties &&
                           visitPurchaseParties.map((data) => (
                             <option
@@ -873,16 +804,7 @@ export default function SingleEntry() {
                               {data.supplierName}
                             </option>
                           ))}
-                        {azadVisaPurchaseParties &&
-                          azadVisaPurchaseParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                       
                         </>
                       )
                       }
@@ -937,44 +859,24 @@ export default function SingleEntry() {
                       {visit_Reference_In === "Agents" && (
                         <>
                           <option value="">Choose Agents</option>
-                        {visaSalesParty && visaSalesParty.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
-                        {ticketSalesParties && ticketSalesParties.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
+                        
                         {visitSalesParties && visitSalesParties.map((data, index) => (
 
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
 
                         ))}
-                        {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
+                       
                         </>
                       )
                       }
                       {visit_Reference_In === "Suppliers" && (
                         <>
                          <option value="">Choose Suppliers</option>
-                        {visaPurchaseParty && visaPurchaseParty.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
-                        {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
+                        
                         {visitPurchaseParties && visitPurchaseParties.map((data) => (
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                         ))}
-                        {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
+                        
                         </>
                       )
                       }
@@ -1054,16 +956,7 @@ export default function SingleEntry() {
                           <>
                               <option value="">Choose Agents</option>
                         {/* Options for Agents */}
-                        {visaSalesParty &&
-                          visaSalesParty.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                        
                         {ticketSalesParties &&
                           ticketSalesParties.map((data) => (
                             <option
@@ -1074,80 +967,32 @@ export default function SingleEntry() {
                               {data.supplierName}
                             </option>
                           ))}
-                        {visitSalesParties &&
-                          visitSalesParties.map((data, index) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {azadVisaSalesParties &&
-                          azadVisaSalesParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                        
                           </>
                         )
                         }
                         {ticket_Reference_Out === "Suppliers" && (
                           <>
                             <option value="">Choose Suppliers</option>
+                                                          
+                              {ticketPurchaseParties &&
+                                ticketPurchaseParties.map((data) => (
+                                  <option
+                                    className="my-1 py-2"
+                                    key={data._id}
+                                    value={data.supplierName}
+                                  >
+                                    {data.supplierName}
+                                  </option>
+                                ))}
+                             
+                                                        </>
+                                                      )
+                                                      }
 
-{visaPurchaseParty &&
-  visaPurchaseParty.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-{ticketPurchaseParties &&
-  ticketPurchaseParties.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-{visitPurchaseParties &&
-  visitPurchaseParties.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-{azadVisaPurchaseParties &&
-  azadVisaPurchaseParties.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-                          </>
-                        )
-                        }
-
-                      </>
-                      )
-                    </select>
+                                                    </>
+                                                    )
+                                                  </select>
 
                   }
                 </div>
@@ -1199,44 +1044,24 @@ export default function SingleEntry() {
                         {ticket_Reference_In === "Agents" && (
                           <>
                            <option value="">Choose Agents</option>
-                        {visaSalesParty && visaSalesParty.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
+                        
                         {ticketSalesParties && ticketSalesParties.map((data) => (
 
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
 
                         ))}
-                        {visitSalesParties && visitSalesParties.map((data, index) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
-                        {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
+                        
                           </>
                         )
                         }
                         {ticket_Reference_In === "Suppliers" && (
                           <>
                              <option value="">Choose Suppliers</option>
-                        {visaPurchaseParty && visaPurchaseParty.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
+                       
                         {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                         ))}
-                        {visitPurchaseParties && visitPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
-                        {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
+                       
                           </>
                         )
                         }
@@ -1321,36 +1146,7 @@ export default function SingleEntry() {
                           <>
                             <option value="">Choose Agents</option>
                         {/* Options for Agents */}
-                        {visaSalesParty &&
-                          visaSalesParty.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {ticketSalesParties &&
-                          ticketSalesParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {visitSalesParties &&
-                          visitSalesParties.map((data, index) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                        
                         {azadVisaSalesParties &&
                           azadVisaSalesParties.map((data) => (
                             <option
@@ -1368,46 +1164,17 @@ export default function SingleEntry() {
                           <>
                             <option value="">Choose Suppliers</option>
 
-{visaPurchaseParty &&
-  visaPurchaseParty.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-{ticketPurchaseParties &&
-  ticketPurchaseParties.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-{visitPurchaseParties &&
-  visitPurchaseParties.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
-{azadVisaPurchaseParties &&
-  azadVisaPurchaseParties.map((data) => (
-    <option
-      className="my-1 py-2"
-      key={data._id}
-      value={data.supplierName}
-    >
-      {data.supplierName}
-    </option>
-  ))}
+
+                            {azadVisaPurchaseParties &&
+                              azadVisaPurchaseParties.map((data) => (
+                                <option
+                                  className="my-1 py-2"
+                                  key={data._id}
+                                  value={data.supplierName}
+                                >
+                                  {data.supplierName}
+                                </option>
+                              ))}
                           </>
                         )
                         }
@@ -1465,21 +1232,7 @@ export default function SingleEntry() {
                         {azad_Visa_Reference_In === "Agents" && (
                           <>
                           <option value="">Choose Agents</option>
-                        {visaSalesParty && visaSalesParty.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
-                        {ticketSalesParties && ticketSalesParties.map((data) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
-                        {visitSalesParties && visitSalesParties.map((data, index) => (
-
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                        ))}
+                        
                         {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
 
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
@@ -1491,15 +1244,7 @@ export default function SingleEntry() {
                         {azad_Visa_Reference_In === "Suppliers" && (
                           <>
                              <option value="">Choose Suppliers</option>
-                        {visaPurchaseParty && visaPurchaseParty.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
-                        {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
-                        {visitPurchaseParties && visitPurchaseParties.map((data) => (
-                          <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                        ))}
+                        
                         {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
                           <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                         ))}

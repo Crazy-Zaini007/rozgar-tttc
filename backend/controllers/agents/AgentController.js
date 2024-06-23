@@ -4177,10 +4177,13 @@ if(candPayment.cand_Name.toLowerCase()!==cand_Name.toLowerCase()){
     existingPaymentPerson.remaining_Curr+=candPayment.visa_Curr_Amount
   const existingNewPaymentPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
 if(existingNewPaymentPerson){
-  existPerson.remaining_Price -= new_Payment
-  existPerson.total_In += newPaymentIn
-  existPerson.remaining_Curr -= new_Curr_Payment
-  candPayment.new_Remain_PKR+=newPaymentIn
+  existingNewPaymentPerson.remaining_Price -= new_Payment
+  existingNewPaymentPerson.total_In += newPaymentIn
+  existingNewPaymentPerson.remaining_Curr -= new_Curr_Payment
+
+
+
+  candPayment.new_Remain_PKR+=existingNewPaymentPerson.remaining_Price-new_Payment
   candPayment.new_Payment+=-newPaymentIn
   candPayment.new_Remain_Curr+=new_Curr_Payment
   candPayment.new_Curr_Payment+=-new_Curr_Payment
@@ -4198,67 +4201,102 @@ if(existingNewPaymentPerson){
       "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
     },
   })
+  const cashInHandDoc = await CashInHand.findOne({});
+  if (!cashInHandDoc) {
+    const newCashInHandDoc = new CashInHand();
+    await newCashInHandDoc.save();
+  }
+
+  const cashInHandUpdate = {
+    $inc: {},
+  };
+  if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
+    cashInHandUpdate.$inc.cash = -updatedPaymentIn;
+    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
+  }
+  else{
+    cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
+    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
+  }
+  
+  await CashInHand.updateOne({}, cashInHandUpdate);
+  const newNotification=new Notifications({
+    type:"Agent Cand-Wise Payment In Updated",
+    content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${cand_Name} of Agent:${supplierName}'s Record`,
+    date: new Date().toISOString().split("T")[0]
+
+  })
+  await newNotification.save()
+  await existingSupplier.save()
+
+  res.status(200).json({
+    message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${cand_Name} of Agent: ${supplierName}'s Record`,
+  });
+
 }
-}
+else{
 // Updating The Cand payment
 
-      candPayment.new_Remain_PKR+=updatedPaymentIn
-      candPayment.new_Payment+=-updatedPaymentIn
-      candPayment.new_Remain_Curr+=updateCurr_Amount
-      candPayment.new_Curr_Payment+=-updateCurr_Amount
-      candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
+candPayment.new_Remain_PKR+=updatedPaymentIn
+candPayment.new_Payment+=-updatedPaymentIn
+candPayment.new_Remain_Curr+=updateCurr_Amount
+candPayment.new_Curr_Payment+=-updateCurr_Amount
+candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
 
 // updating Person total_In and remainig pkr and curr as well
-        const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
-        if(personToUpdate){
-          personToUpdate.total_In+=-updatedPaymentIn
-          personToUpdate.remaining_Price+=-updatedPaymentIn
-          personToUpdate.remaining_Curr+=-newCurrAmount
-        }
+  const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
+  if(personToUpdate){
+    personToUpdate.total_In+=-updatedPaymentIn
+    personToUpdate.remaining_Price+=-updatedPaymentIn
+    personToUpdate.remaining_Curr+=-newCurrAmount
+  }
 
-        // uodating parent payment
-        paymentToFind.payment_In+=-updatedPaymentIn
-        paymentToFind.curr_Amount+=-updateCurr_Amount
-        await existingSupplier.updateOne({
-          $inc: {
-            "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
-            "payment_In_Schema.remaining_Balance": updatedPaymentIn,
-            "payment_In_Schema.total_Payment_In_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
-            "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
-          },
-        })
+  // uodating parent payment
+  paymentToFind.payment_In+=-updatedPaymentIn
+  paymentToFind.curr_Amount+=-updateCurr_Amount
+  await existingSupplier.updateOne({
+    $inc: {
+      "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
+      "payment_In_Schema.remaining_Balance": updatedPaymentIn,
+      "payment_In_Schema.total_Payment_In_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
+      "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
+    },
+  })
 
-        const cashInHandDoc = await CashInHand.findOne({});
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
+  const cashInHandDoc = await CashInHand.findOne({});
+  if (!cashInHandDoc) {
+    const newCashInHandDoc = new CashInHand();
+    await newCashInHandDoc.save();
+  }
+
+  const cashInHandUpdate = {
+    $inc: {},
+  };
+  if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
+    cashInHandUpdate.$inc.cash = -updatedPaymentIn;
+    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
+  }
+  else{
+    cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
+    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
+  }
   
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-        if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = -updatedPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-        }
-        
-        await CashInHand.updateOne({}, cashInHandUpdate);
-        const newNotification=new Notifications({
-          type:"Agent Cand-Wise Payment In Updated",
-          content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
-          date: new Date().toISOString().split("T")[0]
-  
-        })
-        await newNotification.save()
-        await existingSupplier.save()
+  await CashInHand.updateOne({}, cashInHandUpdate);
+  const newNotification=new Notifications({
+    type:"Agent Cand-Wise Payment In Updated",
+    content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
+    date: new Date().toISOString().split("T")[0]
 
-        res.status(200).json({
-          message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent: ${supplierName}'s Record`,
-        });
+  })
+  await newNotification.save()
+  await existingSupplier.save()
+
+  res.status(200).json({
+    message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent: ${supplierName}'s Record`,
+  });
+}
+}
+
       }
     }
   }
