@@ -855,6 +855,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.reference_Out?.toLowerCase().includes('supplier')||editedEntry.reference_Out?.toLowerCase().includes('suplier')) &&
@@ -862,6 +864,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.reference_Out?.toLowerCase().includes('agent')||editedEntry.reference_Out?.toLowerCase().includes('agnet')) &&
@@ -869,6 +873,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                  
@@ -903,36 +909,7 @@ const EntryDetails = () => {
                                               {data.supplierName}
                                             </option>
                                           ))}
-                                        {ticketSalesParties &&
-                                          ticketSalesParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {visitSalesParties &&
-                                          visitSalesParties.map((data, index) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {azadVisaSalesParties &&
-                                          azadVisaSalesParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                       
                                       </>
                                     )}
                                     {(editedEntry.reference_Out.toLowerCase() === "supplier" || editedEntry.reference_Out.toLowerCase() === "suppliers") && (
@@ -950,36 +927,7 @@ const EntryDetails = () => {
                                               {data.supplierName}
                                             </option>
                                           ))}
-                                        {ticketPurchaseParties &&
-                                          ticketPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {visitPurchaseParties &&
-                                          visitPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {azadVisaPurchaseParties &&
-                                          azadVisaPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                       </>
                                     )}
 
@@ -1014,6 +962,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.reference_In?.toLowerCase().includes('supplier')||editedEntry.reference_In?.toLowerCase().includes('suplier')) &&
@@ -1021,6 +971,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.reference_In?.toLowerCase().includes('agent')||editedEntry.reference_In?.toLowerCase().includes('agnet')) &&
@@ -1028,6 +980,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                 </select>
@@ -1057,21 +1011,7 @@ const EntryDetails = () => {
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
 
                       ))}
-                      {ticketSalesParties && ticketSalesParties.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
-                      {visitSalesParties && visitSalesParties.map((data, index) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
-                      {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
+                     
                     </>
                   )
                   }
@@ -1081,15 +1021,7 @@ const EntryDetails = () => {
                       {visaPurchaseParty && visaPurchaseParty.map((data) => (
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                       ))}
-                      {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
-                      {visitPurchaseParties && visitPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
-                      {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
+                     
                     </>
                   )}
 
@@ -1126,6 +1058,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.visit_Reference_Out?.toLowerCase().includes('supplier')||editedEntry.visit_Reference_Out?.toLowerCase().includes('suplier')) &&
@@ -1133,6 +1067,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.visit_Reference_Out?.toLowerCase().includes('agent')||editedEntry.visit_Reference_Out?.toLowerCase().includes('agnet')) &&
@@ -1140,6 +1076,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                   </select>
@@ -1161,27 +1099,7 @@ const EntryDetails = () => {
                                     {editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out === "agent" || editedEntry.visit_Reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
-                                        {/* Options for Agents */}
-                                        {visaSalesParty &&
-                                          visaSalesParty.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {ticketSalesParties &&
-                                          ticketSalesParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                       
                                         {visitSalesParties &&
                                           visitSalesParties.map((data, index) => (
                                             <option
@@ -1192,16 +1110,7 @@ const EntryDetails = () => {
                                               {data.supplierName}
                                             </option>
                                           ))}
-                                        {azadVisaSalesParties &&
-                                          azadVisaSalesParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                       
                                       </>
                                     )}
                                     {editedEntry.visit_Reference_Out &&(editedEntry.visit_Reference_Out.toLowerCase() === "supplier" || editedEntry.visit_Reference_Out.toLowerCase() === "suppliers") && (
@@ -1209,26 +1118,7 @@ const EntryDetails = () => {
                                         <option value="">Choose Supplier</option>
 
                                         {/* Options for Suppliers */}
-                                        {visaPurchaseParty &&
-                                          visaPurchaseParty.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {ticketPurchaseParties &&
-                                          ticketPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                       
                                         {visitPurchaseParties &&
                                           visitPurchaseParties.map((data) => (
                                             <option
@@ -1239,16 +1129,7 @@ const EntryDetails = () => {
                                               {data.supplierName}
                                             </option>
                                           ))}
-                                        {azadVisaPurchaseParties &&
-                                          azadVisaPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                       </>
                                     )}
 
@@ -1281,6 +1162,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.visit_Reference_In?.toLowerCase().includes('supplier')||editedEntry.visit_Reference_In?.toLowerCase().includes('suplier')) &&
@@ -1288,6 +1171,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.visit_Reference_In?.toLowerCase().includes('agent')||editedEntry.visit_Reference_In?.toLowerCase().includes('agnet')) &&
@@ -1295,6 +1180,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                 </select>
@@ -1319,44 +1206,24 @@ const EntryDetails = () => {
                   {editedEntry.visit_Reference_In &&(editedEntry.visit_Reference_In.toLowerCase() === "agent" || editedEntry.visit_Reference_In.toLowerCase() === "agents") && (
                     <>
                       <option value="">Choose Agent</option>
-                      {visaSalesParty && visaSalesParty.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
-                      {ticketSalesParties && ticketSalesParties.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
+                      
                       {visitSalesParties && visitSalesParties.map((data, index) => (
 
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
 
                       ))}
-                      {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
+                     
                     </>
                   )
                   }
                   {editedEntry.visit_Reference_In &&(editedEntry.visit_Reference_In.toLowerCase() === "supplier" || editedEntry.visit_Reference_In.toLowerCase() === "suppliers") && (
                     <>
                       <option value="">Choose Supplier</option>
-                      {visaPurchaseParty && visaPurchaseParty.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
-                      {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
+                     
                       {visitPurchaseParties && visitPurchaseParties.map((data) => (
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                       ))}
-                      {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
+                      
                     </>
                   )}
 
@@ -1402,6 +1269,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.ticket_Reference_Out?.toLowerCase().includes('supplier')||editedEntry.ticket_Reference_Out?.toLowerCase().includes('suplier')) &&
@@ -1409,6 +1278,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.ticket_Reference_Out?.toLowerCase().includes('agent')||editedEntry.ticket_Reference_Out?.toLowerCase().includes('agnet')) &&
@@ -1416,6 +1287,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                   </select>
@@ -1437,17 +1310,7 @@ const EntryDetails = () => {
                                     {editedEntry.ticket_Reference_Out &&(editedEntry.ticket_Reference_Out === "agent" || editedEntry.ticket_Reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
-                                        {/* Options for Agents */}
-                                        {visaSalesParty &&
-                                          visaSalesParty.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                         {ticketSalesParties &&
                                           ticketSalesParties.map((data) => (
                                             <option
@@ -1458,43 +1321,14 @@ const EntryDetails = () => {
                                               {data.supplierName}
                                             </option>
                                           ))}
-                                        {visitSalesParties &&
-                                          visitSalesParties.map((data, index) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {azadVisaSalesParties &&
-                                          azadVisaSalesParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                       </>
                                     )}
                                     {editedEntry.ticket_Reference_Out &&(editedEntry.ticket_Reference_Out.toLowerCase() === "supplier" || editedEntry.ticket_Reference_Out.toLowerCase() === "suppliers") && (
                                       <>
                                         <option value="">Choose Supplier</option>
 
-                                        {/* Options for Suppliers */}
-                                        {visaPurchaseParty &&
-                                          visaPurchaseParty.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                         {ticketPurchaseParties &&
                                           ticketPurchaseParties.map((data) => (
                                             <option
@@ -1505,26 +1339,7 @@ const EntryDetails = () => {
                                               {data.supplierName}
                                             </option>
                                           ))}
-                                        {visitPurchaseParties &&
-                                          visitPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {azadVisaPurchaseParties &&
-                                          azadVisaPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                       </>
                                     )}
 
@@ -1557,6 +1372,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.ticket_Reference_In?.toLowerCase().includes('supplier')||editedEntry.ticket_Reference_In?.toLowerCase().includes('suplier')) &&
@@ -1564,6 +1381,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.ticket_Reference_In?.toLowerCase().includes('agent')||editedEntry.ticket_Reference_In?.toLowerCase().includes('agnet')) &&
@@ -1571,6 +1390,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                 </select>
@@ -1595,44 +1416,24 @@ const EntryDetails = () => {
                   {editedEntry.ticket_Reference_In &&(editedEntry.ticket_Reference_In.toLowerCase() === "agent" || editedEntry.ticket_Reference_In.toLowerCase() === "agents") && (
                     <>
                       <option value="">Choose Agent</option>
-                      {visaSalesParty && visaSalesParty.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
+                      
                       {ticketSalesParties && ticketSalesParties.map((data) => (
 
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
 
                       ))}
-                      {visitSalesParties && visitSalesParties.map((data, index) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
-                      {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
+                     
                     </>
                   )
                   }
                   {editedEntry.ticket_Reference_In &&(editedEntry.ticket_Reference_In.toLowerCase() === "supplier" || editedEntry.ticket_Reference_In.toLowerCase() === "suppliers") && (
                     <>
                       <option value="">Choose Supplier</option>
-                      {visaPurchaseParty && visaPurchaseParty.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
+                     
                       {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                       ))}
-                      {visitPurchaseParties && visitPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
-                      {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
+                     
                     </>
                   )}
 
@@ -1674,6 +1475,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.azad_Reference_Out?.toLowerCase().includes('supplier')||editedEntry.azad_Reference_Out?.toLowerCase().includes('suplier')) &&
@@ -1681,6 +1484,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.azad_Reference_Out?.toLowerCase().includes('agent')||editedEntry.azad_Reference_Out?.toLowerCase().includes('agnet')) &&
@@ -1688,6 +1493,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                   </select>
@@ -1709,37 +1516,7 @@ const EntryDetails = () => {
                                     {editedEntry.azad_Reference_Out &&(editedEntry.azad_Reference_Out === "agent" || editedEntry.azad_Reference_Out === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
-                                        {/* Options for Agents */}
-                                        {visaSalesParty &&
-                                          visaSalesParty.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {ticketSalesParties &&
-                                          ticketSalesParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {visitSalesParties &&
-                                          visitSalesParties.map((data, index) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                        
                                         {azadVisaSalesParties &&
                                           azadVisaSalesParties.map((data) => (
                                             <option
@@ -1757,36 +1534,7 @@ const EntryDetails = () => {
                                         <option value="">Choose Supplier</option>
 
                                         {/* Options for Suppliers */}
-                                        {visaPurchaseParty &&
-                                          visaPurchaseParty.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {ticketPurchaseParties &&
-                                          ticketPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
-                                        {visitPurchaseParties &&
-                                          visitPurchaseParties.map((data) => (
-                                            <option
-                                              className="my-1 py-2"
-                                              key={data._id}
-                                              value={data.supplierName}
-                                            >
-                                              {data.supplierName}
-                                            </option>
-                                          ))}
+                                       
                                         {azadVisaPurchaseParties &&
                                           azadVisaPurchaseParties.map((data) => (
                                             <option
@@ -1830,6 +1578,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                    {(editedEntry.azad_Reference_In?.toLowerCase().includes('supplier')||editedEntry.azad_Reference_In?.toLowerCase().includes('suplier')) &&
@@ -1837,6 +1587,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                     {(editedEntry.azad_Reference_In?.toLowerCase().includes('agent')||editedEntry.azad_Reference_In?.toLowerCase().includes('agnet')) &&
@@ -1844,6 +1596,8 @@ const EntryDetails = () => {
                                   <option className="my-1 py-2" value="agent">Agents</option>
                                   <option className="my-1 py-2" value="supplier">Suppliers</option>
                                   <option className="my-1 py-2" value="candidate">Candidate</option>
+                                  <option className="my-1 py-2" value="">Choose Reference</option>
+
                                   </>
                                   }
                                 </select>
@@ -1868,21 +1622,7 @@ const EntryDetails = () => {
                   {editedEntry.azad_Reference_In &&(editedEntry.azad_Reference_In.toLowerCase() === "agent" || editedEntry.azad_Reference_In.toLowerCase() === "agents") && (
                     <>
                       <option value="">Choose Agent</option>
-                      {visaSalesParty && visaSalesParty.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
-                      {ticketSalesParties && ticketSalesParties.map((data) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
-                      {visitSalesParties && visitSalesParties.map((data, index) => (
-
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-
-                      ))}
+                     
                       {azadVisaSalesParties && azadVisaSalesParties.map((data) => (
 
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
@@ -1894,15 +1634,6 @@ const EntryDetails = () => {
                   {editedEntry.azad_Reference_In &&(editedEntry.azad_Reference_In.toLowerCase() === "supplier" || editedEntry.azad_Reference_In.toLowerCase() === "suppliers") && (
                     <>
                       <option value="">Choose Supplier</option>
-                      {visaPurchaseParty && visaPurchaseParty.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
-                      {ticketPurchaseParties && ticketPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
-                      {visitPurchaseParties && visitPurchaseParties.map((data) => (
-                        <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
-                      ))}
                       {azadVisaPurchaseParties && azadVisaPurchaseParties.map((data) => (
                         <option className="my-1 py-2" key={data._id} value={data.supplierName}>{data.supplierName}</option>
                       ))}
