@@ -1,4 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react'
+
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -23,11 +24,12 @@ import TicketHook from '../../../hooks/ticketHooks/TicketHook';
 import VisitHook from '../../../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../../../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHook';
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
 import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
-
+import Entry1 from '../candDoubleEntry/Entry1'
 export default function SupplierEntry1() {
   const dispatch = useDispatch();
   // getting data from redux store 
@@ -54,6 +56,7 @@ export default function SupplierEntry1() {
   const assets = useSelector((state) => state.setting.assets)
   const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
 
+  const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
   const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const [selectedSupplier, setSelectedSupplier] = useState('');
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -73,6 +76,7 @@ export default function SupplierEntry1() {
   const { getCPPData } = CPPHook()
   const { getAssetsData } = NewAssetsHook()
   const { getPayments } = AssetsHook()
+  const { getCreditoSupplierData } = CreditorSupplierHook()
 
   // getting Data from DB
 
@@ -98,6 +102,7 @@ export default function SupplierEntry1() {
         getVisitCandPaymentsIn()
         getVisitSupplierPaymentsIn()
         getCPPData()
+        getCreditoSupplierData()
         getAssetsData()
         getPayments()
         getCDWCPaymentsIn()
@@ -1241,12 +1246,26 @@ const handleTicketCandForm = async (e) => {
     }
   };
 
+  const [paymentOption, setPaymentOption] = useState('Direct');
 
 
   return (
     <>
-      <div className="col-md-12 p-0 border-0 border-bottom">
-        {!option && <TableContainer >
+     <div className='justify-content-between d-flex'>
+                <div className="left">
+                  <label htmlFor="">Choose Payment Option</label>
+                  <select name="" id="" value={paymentOption} onChange={(e)=>setPaymentOption(e.target.value)}>
+                  <option value="Direct">Direct In</option>
+                    <option value="Candidate_Vise">Candiadte Vise In</option>
+
+                  </select>
+                </div>
+               
+              </div>
+      {paymentOption==='Direct' &&
+      <>
+      <div className="col-md-12 ">
+        {!option && <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"&& handleAssetForm)}>
             <div className="text-end ">
              
@@ -1444,8 +1463,8 @@ const handleTicketCandForm = async (e) => {
                   {type==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
-                  {crediterPurchaseParties &&
-                    crediterPurchaseParties.map((data) => (
+                  {crediterSuppliers &&
+                    crediterSuppliers.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1558,23 +1577,23 @@ const handleTicketCandForm = async (e) => {
           {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
-          <div className="col-md-12 detail_table p-0">
-            <TableContainer>
+          <div className="col-md-12 detail_table">
+            <TableContainer component={Paper}>
               <Table aria-label="customized table">
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' >Date</TableCell>
-                    <TableCell className='label border' >Category</TableCell>
-                    <TableCell className='label border' >Payment_Via</TableCell>
-                    <TableCell className='label border' >Payment_Type</TableCell>
-                    <TableCell className='label border' >Slip_No</TableCell>
-                    <TableCell className='label border' >Details</TableCell>
-                    <TableCell className='label border' >Payment_In</TableCell>
-                    <TableCell className='label border' >Cash_Out</TableCell>
-                    <TableCell className='label border' >Invoice</TableCell>
-                    <TableCell className='label border' >Payment_In_Curr</TableCell>
-                    <TableCell className='label border' >CUR_Rate</TableCell>
-                    <TableCell className='label border' >CUR_Amount</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Date</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Category</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Via</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1585,18 +1604,18 @@ const handleTicketCandForm = async (e) => {
                       <>
                         {filteredData.payment && filteredData.payment?.map((paymentItem, index) => (
                           <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
-                            <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
-                            <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.payment_In_Curr}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
-                            <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
 
                           </TableRow>
                         ))}
@@ -1608,11 +1627,11 @@ const handleTicketCandForm = async (e) => {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border' >Total_Payment_In</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_In</TableCell>
                           <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' >Total_Payment_In_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
@@ -1622,11 +1641,11 @@ const handleTicketCandForm = async (e) => {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border' >Total_Visa_Price_In_PKR</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_PKR</TableCell>
                           <TableCell className=' data_td text-center  bg-info text-white text-bold'>{(type === "Agent" ||type === "Supplier"||type === "Candidate"||type === "Azad Candidate"||type === "Ticket Candidate"||type === "Visit Candidate")?filteredData.total_Visa_Price_In_PKR:(type === "Credit/Debit WC" ||type === "Credit/Debit WOC")?filteredData.total_Visa_Price_In_PKR:filteredData.total_Azad_Visa_Price_In_PKR}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' >Total_Visa_Price_In_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
@@ -1635,11 +1654,11 @@ const handleTicketCandForm = async (e) => {
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' >Remaining PKR</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Remaining PKR</TableCell>
                           <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' >Remaining Total_Payment_In_Curr</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Remaining Total_Payment_In_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow> */}
                       </>
@@ -1650,8 +1669,14 @@ const handleTicketCandForm = async (e) => {
             </TableContainer>
           </div>
         )}
+
       </div>
-      
+      </>
+      }
+      {paymentOption==='Candidate_Vise' &&
+      <Entry1></Entry1> 
+      }
+    
     </>
   )
 }

@@ -18,6 +18,7 @@ import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../hooks/agentHooks/AgentHook';
 import * as XLSX from 'xlsx';
 import Entry1 from './candDoubleEntry/Entry1'
+import Entry2 from './candDoubleEntry/Entry2'
 export default function AgentCandPaymentOut() {
   const dispatch = useDispatch();
 
@@ -1209,7 +1210,9 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
            </TableContainer>
             }
             
-
+            {single===2 && 
+            <Entry2></Entry2>
+            }
              {single===2 && 
             <Entry1></Entry1>
             }

@@ -17,7 +17,8 @@ import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import CandidateHook from '../../hooks/candidateHooks/CandidateHook';
 import * as XLSX from 'xlsx';
-import Entry1 from './doubleEntry/Entry1'
+import SupplierEntry2 from './doubleEntry/SupplierEntry2'
+import SupplierEntry1 from './doubleEntry/SupplierEntry1'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -678,9 +679,11 @@ export default function CandPaymentOut() {
               </>
             }
              {/* Double Entries */}
-
-             {single===2 && 
-            <Entry1></Entry1>
+             {single === 2 &&
+              <SupplierEntry2></SupplierEntry2>
+            }
+            {single === 2 &&
+              <SupplierEntry1></SupplierEntry1>
             }
           </div>
         </div>

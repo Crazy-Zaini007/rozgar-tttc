@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from 'react'
+import React, { useState, useEffect,useRef } from "react";
 import { useLocation } from 'react-router-dom'
 import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
@@ -16,22 +16,20 @@ import PaymentTypeHook from "../../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../../hooks/settingHooks/CurrCountryHook";
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
-import SupplierEntry1 from '../doubleEntry/SupplierEntry1'
-import Entry2 from './Entry2'
 
-export default function Entry1() {
+export default function Entry2() {
   const dispatch = useDispatch();
   const location = useLocation();
   const route=location.pathname
-  // getting data from redux store
+
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const agent_Payments_In = useSelector(
-    (state) => state.agents.agent_Payments_In
+  const agent_Payments_Out = useSelector(
+    (state) => state.agents.agent_Payments_Out
   );
-  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In)
+  const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
 
   const abortCont = useRef(new AbortController());
 
@@ -39,20 +37,21 @@ export default function Entry1() {
   const { getCategoryData } = CategoryHook();
   const { getPaymentViaData } = PaymentViaHook();
   const { getPaymentTypeData } = PaymentTypeHook();
-  const { getAgentPaymentsIn } = AgentHook();
-  const { getSupplierPaymentsIn } = SupplierHook()
+  const { getPaymentsOut } = AgentHook();
+  const { getSupplierPaymentsOut } = SupplierHook()
 
   // getting Data from DB
   const { user } = useAuthContext();
   const fetchData = async () => {
     try {
+      // Use Promise.all to execute all promises concurrently
         getCurrCountryData()
         getCategoryData()
         getPaymentViaData()
         getPaymentTypeData()
-        getAgentPaymentsIn()
-        getSupplierPaymentsIn()
-      
+        getPaymentsOut()
+        getSupplierPaymentsOut()
+    
     } catch (error) { }
   };
 
@@ -64,10 +63,6 @@ export default function Entry1() {
       }
     }
   }, [user, dispatch,route]);
-
-
-  const [paymentOption, setPaymentOption] = useState('Candidate_Vise');
-
 
   const [option, setOption] = useState(false);
   // Form input States
@@ -85,16 +80,14 @@ export default function Entry1() {
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [supplierNames, setSupplierNames] = useState([]);
 
+  useEffect(() => {
 
-useEffect(() => {
+  }, [type])
 
-}, [type])
-
-  
   const [candData, setCandData] = useState([]);
   const [selectedPersonDetails, setSelectedPersonDetails] = useState([]);
   let totalVisaPriceInPKR = selectedPersonDetails.reduce((total, person) => {
-    return total + person?.visa_Price_In_PKR;
+    return total + person?.visa_Price_Out_PKR;
 }, 0);
 
 let totalPastPaidPKR = selectedPersonDetails.reduce((total, person) => {
@@ -104,10 +97,9 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   return total + person?.remaining_Price;
 }, 0);
 
-  
   // Function to handle the "Add More" button click
   const handleAddMore = () => {
-    setCandData([...candData, { cand_Name: "", payment_In: 0, curr_Amount: 0,curr_Rate:0 }]);
+    setCandData([...candData, { cand_Name: "", payment_Out: 0, curr_Amount: 0,curr_Rate:0 }]);
     setSelectedPersonDetails([...selectedPersonDetails, {}]);
   };
 
@@ -129,8 +121,6 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
       return newDetails;
     });
   }
-
- 
 
   const printPaymentInvoice = (paymentDetails) => {
     const formatDate = (date) => {
@@ -206,7 +196,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
             <td>${String(paymentDetails?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
             <td>${String(paymentDetails?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0))}</td>
             <td>${String(paymentDetails?.curr_Amount)}</td>
-            <td>${String(paymentDetails?.payment_In_Curr)}</td>
+            <td>${String(paymentDetails?.payment_Out_Curr)}</td>
           </tr>
         </tbody>
       </table>
@@ -308,6 +298,7 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
       alert('Could not open print window. Please check your browser settings.');
     }
   }
+
   const handleOpen = () => {
     setOption(!option);
   };
@@ -341,8 +332,10 @@ let totalPastRemainingPKR = selectedPersonDetails.reduce((total, person) => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  
   const[totalPayments,setTotalPayments]=useState(0)
-  const[totalCurrRate,setTotalCurrRate]=useState(0)
+  const[totalCurrRate,setTotalCurrRate]=useState('')
 let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
   // Submitting Form Data
@@ -352,7 +345,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
 
   const handlePersonChange = (selectedPersonName, index) => {
-    const selectedSupplierData =(type==="Agent" ?agent_Payments_In:type==="Supplier"&&supp_Payments_In).find(
+    const selectedSupplierData = (type==="Agent" ?agent_Payments_Out:type==="Supplier"&&supp_Payments_Out).find(
       (data) => data.supplierName === selectedSupplier
     );
   
@@ -375,9 +368,11 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
       });
     }
   };
+  
+
 
   const sumPaymentIn = (data) => {
-    return data.reduce((acc, curr) => acc + Number(curr.payment_In), 0);
+    return data.reduce((acc, curr) => acc + Number(curr.payment_Out), 0);
   };
   const sumCurrency = (data) => {
     return data.reduce((acc, curr) => acc + Number(curr.curr_Rate), 0);
@@ -387,7 +382,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
   const handleChangePaymentIn = (index, value) => {
     const newCandData = [...candData];
-    newCandData[index].payment_In = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_In);
+    newCandData[index].payment_Out = Math.min(value, totalPayments - sumPaymentIn(newCandData) + newCandData[index].payment_Out);
     setCandData(newCandData);
   };
   const handleChangeCurrency = (index, value) => {
@@ -401,16 +396,17 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
     e.preventDefault();
     setLoading(true);
     setSupplierName("");
-        setCategory("");
-        setPayment_Via("");
-        setPayment_Type("");
-        setSlip_No("");
-        setSlip_Pic("");
-        setDetails("");
-        setCurr_Country("");
-        setDate("");
+    setCategory("");
+    setPayment_Via("");
+    setPayment_Type("");
+    setSlip_No("");
+    setSlip_Pic("");
+    setDetails("");
+    setCurr_Country("");
+    setDate("");
+    setTotalCurrRate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/agents/add/cand_vise/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/agents/add/cand_vise/payment_out`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -437,9 +433,9 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setLoading(false);
       }
       if (response.ok) {
-        setNewMessage(toast.success(json.message));
         printPaymentInvoice(json.data)
-        getAgentPaymentsIn();
+        setNewMessage(toast.success(json.message));
+        getPaymentsOut();
         setLoading(false);
         setSupplierName("");
         setCategory("");
@@ -450,16 +446,16 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setDetails("");
         setCurr_Country("");
         setDate("");
+        setTotalCurrRate('')
+
       }
     } catch (error) {
-     
+    
       setNewMessage(toast.error("Server is not Responding..."));
       setLoading(false);
     }
   };
 
-
-  
   const handleSupplierForm = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -473,9 +469,8 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
     setCurr_Country("");
     setDate("");
     setTotalCurrRate('')
-    setTotalPayments('')
     try {
-      const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_in`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/cand_vise/payment_out`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -502,9 +497,9 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setLoading(false);
       }
       if (response.ok) {
-        setNewMessage(toast.success(json.message));
         printPaymentInvoice(json.data)
-        getSupplierPaymentsIn();
+        setNewMessage(toast.success(json.message));
+        getSupplierPaymentsOut();
         setLoading(false);
         setSupplierName("");
         setCategory("");
@@ -516,43 +511,28 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         setCurr_Country("");
         setDate("");
         setTotalCurrRate('')
-    setTotalPayments('')
-
       }
     } catch (error) {
-   
+    
       setNewMessage(toast.error("Server is not Responding..."));
       setLoading(false);
     }
   };
 
-
   return (
    <>
-   
-     <div className='justify-content-between d-flex'>
-                <div className="left">
-                  <label htmlFor="">Choose Payment Option</label>
-                  <select name="" id="" value={paymentOption} onChange={(e)=>setPaymentOption(e.target.value)}>
-                    <option value="Candidate_Vise">Candiadte Vise In</option>
-                    <option value="Direct">Direct In</option>
-
-                  </select>
-                </div>
-               
-              </div>
-    {paymentOption==='Candidate_Vise' &&
-    <TableContainer  className="mb-1">
-    <div className="col-md-12 ">
+  
+ 
+    <TableContainer  className="mt-1">
+    <div className="col-md-12 p-0 border-0 border-bottom border-top">
       {!option && (
         <>
           <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
-              <div className="text-end ">
-              <button className="btn submit_btn btn-sm m-1" disabled={loading || !disableAddMore}>
-                {loading ? "Adding..." : "Add Payment In"}
+            <div className="text-end ">
+              <button className="btn btn-sm submit_btn m-1" disabled={loading || !disableAddMore}>
+                {loading ? "Adding..." : "Add Payment Out"}
               </button>
             </div>
-           
             
             <div className="row p-0 m-0 my-1">
             <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -567,6 +547,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                  <option value="Supplier">Supplier</option>
                 </select>
               </div>
+
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label>Name</label>
                 <select
@@ -586,7 +567,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       setSupplierName(selectedSupplierValue);
 
                       // Filter supp_Payments_Out based on the selected supplier
-                      const selectedSupplierData = (type==="Agent"?agent_Payments_In :type==="Supplier"&&supp_Payments_In).find(
+                      const selectedSupplierData = (type==="Agent"?agent_Payments_Out :type==="Supplier"&&supp_Payments_Out).find(
                         (data) => data.supplierName === selectedSupplierValue
                       );
 
@@ -602,8 +583,8 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                   {type==="Agent" &&
                   <>
                    <option value="">Choose Agent</option>
-                  {agent_Payments_In &&
-                    agent_Payments_In.map((data) => (
+                  {agent_Payments_Out &&
+                    agent_Payments_Out.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -613,15 +594,14 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     {type==="Supplier" &&
                   <>
                    <option value="">Choose Supplier</option>
-                  {supp_Payments_In &&
-                    supp_Payments_In.map((data) => (
+                  {supp_Payments_Out &&
+                    supp_Payments_Out.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
                     ))}
                   </>
                   }
-                 
                 </select>
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -709,7 +689,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Curr Rate </label>
-               <input type="number"  value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
+               <input type="text" value={totalCurrRate} onChange={(e)=>setTotalCurrRate(e.target.value)} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Total Currency </label>
@@ -748,7 +728,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
           </div>
           <div className="right">
          {!option && 
-          <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+          <button  disabled={disableAddMore } onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
           <i className="fas fa-plus"></i> 
         </button>
          }
@@ -778,7 +758,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(type === "Agent" ? agent_Payments_In : type === "Supplier"&& supp_Payments_In: [])
+                {(type === "Agent" ? agent_Payments_Out : type === "Supplier"&& supp_Payments_Out: [])
                   .filter((data) => data.supplierName === selectedSupplier)
                   .map((filteredData) => (
                     // Map through the payment array
@@ -816,7 +796,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                               </TableCell>
                               <TableCell className="border data_td text-center">
                                 <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>
-                                {paymentItem?.payment_In}
+                                {paymentItem?.payment_Out}
                               </TableCell>
                               <TableCell className="border data_td text-center">
                                 <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>
@@ -826,7 +806,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                                 {paymentItem?.invoice}
                               </TableCell>
                               <TableCell className="border data_td text-center">
-                                {paymentItem?.payment_In_Curr}
+                                {paymentItem?.payment_Out_Curr}
                               </TableCell>
                               <TableCell className="border data_td text-center">
                                 {paymentItem?.curr_Rate}
@@ -839,46 +819,46 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                       {/* Move these cells inside the innermost map loop */}
 
                       <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-
-                        <TableCell className='label border'>Total_Payment_In</TableCell>
-                        <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
-                        <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-
-                        <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
-                        <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
-                        <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_visa_Price_In_Curr}</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='label border'>Remaining PKR</TableCell>
-                        <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
-                        <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
-                      </TableRow>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+     
+                               <TableCell className='label border'>Total_Payment_In</TableCell>
+                               <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_Out}</TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
+                               <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_Out_Curr}</TableCell>
+                             </TableRow>
+                             <TableRow>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+     
+                               <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
+                               <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_Out_PKR}</TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
+                               <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr}</TableCell>
+                             </TableRow>
+                             <TableRow>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell className='label border'>Remaining PKR</TableCell>
+                               <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_Out_PKR-filteredData.total_Payment_Out+filteredData.total_Cash_Out}</TableCell>
+                               <TableCell></TableCell>
+                               <TableCell></TableCell>
+                               <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
+                               <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr-filteredData.total_Payment_Out_Curr}</TableCell>
+                             </TableRow>
                     </>
                   ))}
               </TableBody>
@@ -892,7 +872,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
       <>
        <div key={index} className="py-3 px-2">
           <div className="row p-0 m-0 my-1">
-          <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+          <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
             <label htmlFor="" className="text-sm text-muted  mb-1">Candidate</label>
       <select
         value={cand.cand_Name}
@@ -907,29 +887,29 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
         ))}
       </select>
     </div>
-            <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-            <label htmlFor="" className="text-sm text-muted  mb-1">Payment In</label>
+            <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+            <label htmlFor="" className="text-sm text-muted mb-1">Payment Out</label>
               {/* Payment_In */}
               <input
                 type="number"
                 required
                 min="1"
-                value={cand.payment_In}
+                value={cand.payment_Out}
                 onChange={(e) => handleChangePaymentIn(index, e.target.value)}
-                placeholder="Payment In"
+                placeholder="Payment Out"
               />
             </div>
-           
-            <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+            <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
             <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
               <input
                 type="number"
                 min="0"
                 disabled
-                value={(cand.payment_In/totalCurrRate).toFixed(2)}
+                value={(cand.payment_Out/totalCurrRate).toFixed(2)}
                 placeholder="Currency Amount"
               />
             </div>
+           
             {/* Button to remove this additional form */}
             <div className="col-md-12 text-end">
             <button onClick={() => handleRemove(index)} className={`btn shadow btn-sm text-white text-bold ms-1 bg-danger`}>
@@ -945,7 +925,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
    <>
     <form>
      <div className="row p-0 m-0 mt-2">
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Candidate Name</label>
                   <input disabled
                     type="text"
@@ -953,7 +933,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>PP#</label>
                   <input disabled
                     type="text"
@@ -961,7 +941,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Entry Mode</label>
                   <input disabled
                     type="text"
@@ -969,7 +949,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Country</label>
                   <input disabled
                     type="text"
@@ -977,7 +957,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Final Status</label>
                   <input disabled
                     type="text"
@@ -985,7 +965,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Flight Date</label>
                   <input disabled
                     type="text"
@@ -993,7 +973,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Company</label>
                   <input disabled
                     type="text"
@@ -1001,26 +981,23 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Visa Price In PKR</label>
                   <input disabled
                     type="text"
-                    value={selectedPersonDetails[index].visa_Price_In_PKR}
+                    value={selectedPersonDetails[index].visa_Price_Out_PKR}
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Total In PKR</label>
                 <input type="text" disabled value={selectedPersonDetails[index].total_In} readOnly />
               </div>
-              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >New Total In PKR</label>
-                <input type="text" disabled   value={
-              parseFloat(selectedPersonDetails[index]?.total_In || 0) +
-              parseFloat(cand.payment_In || 0)
-            } readOnly />
+                <input type="text" disabled  value={parseFloat(selectedPersonDetails[index].total_In) + parseFloat(candData[candData.length - 1].payment_Out)}  readOnly />
               </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Remaining PKR</label>
                   <input 
                   disabled
@@ -1029,43 +1006,43 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>New Remaining PKR</label>
                   <input
                   disabled
                     type="text"
-                    value={parseFloat(selectedPersonDetails[index].remaining_Price) - parseFloat(candData[candData.length - 1].payment_In)}
+                    value={parseFloat(selectedPersonDetails[index].remaining_Price) - parseFloat(candData[candData.length - 1].payment_Out)}
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Visa Price In Curr</label>
                   <input
                   disabled
                     type="text"
-                    value={selectedPersonDetails[index].visa_Price_In_Curr}
+                    value={selectedPersonDetails[index].visa_Price_Out_PKR}
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Total Paid Curr</label>
                   <input
                   disabled
                     type="text"
-                    value={(parseFloat(selectedPersonDetails[index].visa_Price_In_Curr) - parseFloat(selectedPersonDetails[index].remaining_Curr)).toFixed(2)}
+                    value={(parseFloat(selectedPersonDetails[index].visa_Price_Out_PKR) - parseFloat(selectedPersonDetails[index].remaining_Curr)).toFixed(2)}
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>New Total Paid Curr</label>
                   <input
                   disabled
                     type="text"
-                    value={parseFloat(selectedPersonDetails[index].visa_Price_In_Curr -selectedPersonDetails[index].remaining_Curr) + parseFloat(candData[candData.length - 1].curr_Amount)}
+                    value={parseFloat(selectedPersonDetails[index].visa_Price_Out_PKR -selectedPersonDetails[index].remaining_Curr) + parseFloat(candData[candData.length - 1].curr_Amount)}
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>Remaining Curr</label>
                   <input
                   disabled
@@ -1074,7 +1051,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                     readOnly
                   />
                 </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label>New Remaining Curr</label>
                   <input
                   disabled
@@ -1085,7 +1062,11 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
                 </div>
               </div>
     </form>
-  
+    {/* <div className="row p-0 m-0 mt-2 justify-content-center">
+              <div className="col-md-2 col-sm-12">
+              <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(selectedPersonDetails[index])}>Print</button>
+              </div>
+            </div> */}
    </>
   )}
     <hr />
@@ -1099,7 +1080,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 <h4 className="text-center">Payment Summary</h4>
 <form className="py-3 px-2" >
 <div className="row  p-0 m-0 my-1">
-<div className="col-xl-1 col-lg-1 col-md-6 col-sm-12 p-1 my-1">
+<div className="col-xl-1 col-lg-1col-md-6 col-sm-12 p-1 my-1">
                 <label>Candidates </label>
                 <input type="text" value={candData.length} disabled/>
               </div>
@@ -1130,14 +1111,9 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 </div>
 </form>
 </div>
-<hr/>
-
   </TableContainer>
-    }
-
-    {paymentOption==='Direct' &&
-    <SupplierEntry1></SupplierEntry1>
-    }
+    
+   
 
    </>
   )

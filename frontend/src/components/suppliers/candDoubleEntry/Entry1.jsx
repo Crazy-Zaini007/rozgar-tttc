@@ -1,4 +1,5 @@
 import React, { useEffect, useState,useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -20,6 +21,8 @@ import Entry2 from './Entry2'
 
 export default function Entry1() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const route=location.pathname
   // getting data from redux store
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
@@ -60,7 +63,7 @@ export default function Entry1() {
         abortCont.current.abort(); 
       }
     }
-  }, [user, dispatch]);
+  }, [user, dispatch,route]);
 
 
   const [paymentOption, setPaymentOption] = useState('Candidate_Vise');
@@ -524,11 +527,9 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
   };
 
 
-  const [paymentDetails,setPaymentDetail]=useState()
-  const [newInvoice,setNewInvoice]=useState(0)
-
   return (
    <>
+   
      <div className='justify-content-between d-flex'>
                 <div className="left">
                   <label htmlFor="">Choose Payment Option</label>
@@ -1138,7 +1139,6 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
     <SupplierEntry1></SupplierEntry1>
     }
 
-<Entry2></Entry2>
    </>
   )
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Paper from '@mui/material/Paper';
 import SinglePaymentIn from './SinglePaymentIn';
-import SupplierEntry1 from './doubleEntry/SupplierEntry1'
+import SupplierEntry1 from './newDoubleEntry/SupplierEntry1'
+import SupplierEntry2 from './newDoubleEntry/SupplierEntry2'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
@@ -225,6 +226,9 @@ export default function AgentPaymentIn() {
 
             {single === 2 &&
               <SupplierEntry1></SupplierEntry1>
+            }
+            {single === 2 &&
+              <SupplierEntry2></SupplierEntry2>
             }
           </div>
 

@@ -27,7 +27,7 @@ import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHo
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
 import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
-import ProtectorHook from '../../../hooks/protectorHooks/ProtectorHook';
+import ProtectorHook from '../../../hooks/protectorHooks//ProtectorHook';
 import ExpeCategoryHook from '../../../hooks/settingHooks/ExpeCategoryHook'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';

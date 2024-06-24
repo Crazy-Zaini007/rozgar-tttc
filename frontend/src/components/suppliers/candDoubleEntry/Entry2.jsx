@@ -1,4 +1,5 @@
 import React, { useState, useEffect,useRef } from "react";
+import { useLocation } from 'react-router-dom'
 import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -19,6 +20,8 @@ import SupplierEntry2 from '../doubleEntry/SupplierEntry2'
 
 export default function Entry2() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const route=location.pathname
 
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
@@ -60,7 +63,7 @@ export default function Entry2() {
         abortCont.current.abort(); 
       }
     }
-  }, [user, dispatch]);
+  }, [user, dispatch,route]);
 
   const [paymentOption, setPaymentOption] = useState('Candidate_Vise');
   const [option, setOption] = useState(false);

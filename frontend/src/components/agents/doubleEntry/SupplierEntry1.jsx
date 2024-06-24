@@ -27,7 +27,6 @@ import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHo
 import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
 import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
 import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
-import SupplierEntry2 from './SupplierEntry2'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function SupplierEntry1() {
@@ -1657,7 +1656,7 @@ const handleTicketCandForm = async (e) => {
         )}
 
       </div>
-      <SupplierEntry2></SupplierEntry2>
+    
     </>
   )
 }
