@@ -1934,7 +1934,7 @@ const[rowsValue1,setRowsValue1]=useState("")
               <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
               {selectedSupplier && <button className='btn detail_btn btn-sm' onClick={handleOption}><i className="fas fa-times"></i></button>}
               </>}
-              {details && <button className='btn detail_btn btn-sm' onClick={()=>setDetails('')}><i className="fas fa-times"></i></button>}
+              {details && <button className='btn detail_btn btn-sm' onClick={() =>{setDetails('');setEditMode(false);}}><i className="fas fa-times"></i></button>}
 
 
             </div>

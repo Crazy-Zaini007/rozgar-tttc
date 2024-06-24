@@ -4135,7 +4135,12 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
       new_Curr_Payment,
       curr_Rate
     } = req.body;
-    new_Curr_Payment=new_Payment/curr_Rate
+
+    let newPaymentIn = parseInt(new_Payment, 10);
+    let newCurrAmount = parseInt(new_Curr_Payment, 10);
+    let newCurrRate=parseInt(curr_Rate,10)
+    newCurrAmount=newPaymentIn/newCurrRate
+
     const existingSupplier = await Suppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
     })
@@ -4165,22 +4170,21 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
         });
       }
       if(candPayment){
+        let updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
+        let updateCurr_Amount = candPayment.new_Curr_Payment?candPayment.new_Curr_Payment:0- newCurrAmount;
 
-        const newPaymentIn = parseInt(new_Payment, 10);
-        const newCurrAmount = parseInt(new_Curr_Payment, 10);
-        const updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
-       const updateCurr_Amount = candPayment.new_Curr_Payment - newCurrAmount;
+
 if(candPayment.cand_Name.toLowerCase()!==cand_Name.toLowerCase()){
   const existingPaymentPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === candPayment.cand_Name.toLowerCase())
   if(existingPaymentPerson){
-    existingPaymentPerson.remaining_Price+=candPayment.new_Payment
-    existingPaymentPerson.total_In-=candPayment.new_Payment
-    existingPaymentPerson.remaining_Curr+=candPayment.visa_Curr_Amount
+    existingPaymentPerson.remaining_Price+=candPayment?.new_Payment||0
+    existingPaymentPerson.total_In-=candPayment?.new_Payment||0
+    existingPaymentPerson.remaining_Curr+=candPayment?.visa_Curr_Amount||0
   const existingNewPaymentPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
 if(existingNewPaymentPerson){
-  existingNewPaymentPerson.remaining_Price -= new_Payment
+  existingNewPaymentPerson.remaining_Price -= newPaymentIn
   existingNewPaymentPerson.total_In += newPaymentIn
-  existingNewPaymentPerson.remaining_Curr -= new_Curr_Payment
+  existingNewPaymentPerson.remaining_Curr -= newCurrAmount
 
   candPayment.cand_Name=existingNewPaymentPerson.name
   candPayment.pp_No=existingNewPaymentPerson.pp_No
@@ -4193,18 +4197,18 @@ if(existingNewPaymentPerson){
   candPayment.visa_Amount_PKR=existingNewPaymentPerson.visa_Price_In_PKR
   candPayment.past_Paid_PKR=existingNewPaymentPerson.total_In
   candPayment.past_Remain_PKR=existingNewPaymentPerson.visa_Price_In_PKR-existingNewPaymentPerson.total_In
-  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_In_PKR-existingNewPaymentPerson.total_In-new_Payment
+  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_In_PKR-existingNewPaymentPerson.total_In-newPaymentIn
   candPayment.visa_Curr_Amount=existingNewPaymentPerson.visa_Price_In_Curr
-  candPayment.past_Paid_Curr=existingNewPaymentPerson.visa_Price_In_Curr-existingNewPaymentPerson.remaining_Curr
-  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_In_Curr-new_Curr_Payment
-  candPayment.new_Payment=existingNewPaymentPerson.new_Payment
-  candPayment.new_Curr_Payment=new_Payment/curr_Rate
-  candPayment.curr_Rate=curr_Rate
+  candPayment.past_Paid_Curr=existingNewPaymentPerson.visa_Price_In_Curr-existingNewPaymentPerson.remaining_Curr?existingNewPaymentPerson.remaining_Curr:0
+  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_In_Curr-newCurrAmount
+  candPayment.new_Payment=newPaymentIn
+  candPayment.new_Curr_Payment=newPaymentIn/newCurrRate
+  candPayment.curr_Rate=newCurrRate
   }
 
   paymentToFind.payment_In+=-updatedPaymentIn
-  paymentToFind.curr_Amount+=-updatedPaymentIn/curr_Rate
-  paymentToFind.curr_Rate+=-curr_Rate
+  paymentToFind.curr_Amount+=- newCurrRate>0 ?updatedPaymentIn/newCurrRate:0
+  paymentToFind.curr_Rate+=-newCurrRate
 
 
   await existingSupplier.updateOne({
@@ -4236,7 +4240,7 @@ if(existingNewPaymentPerson){
   await CashInHand.updateOne({}, cashInHandUpdate);
   const newNotification=new Notifications({
     type:"Supplier Cand-Wise Payment In Updated",
-    content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${cand_Name} of Supplier:${supplierName}'s Record`,
+    content:`${user.userName} updated Cand-Wise Payment_In ${newPaymentIn} of Candidate ${cand_Name} of Supplier:${supplierName}'s Record`,
     date: new Date().toISOString().split("T")[0]
 
   })
@@ -4244,7 +4248,7 @@ if(existingNewPaymentPerson){
   await existingSupplier.save()
 
   res.status(200).json({
-    message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${cand_Name} of Supplier: ${supplierName}'s Record`,
+    message: `Successfuly, updated Cand-Wise Payment_In ${newPaymentIn} of Candidate ${cand_Name} of Supplier: ${supplierName}'s Record`,
   });
 
 }
@@ -4267,7 +4271,7 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
 
   // uodating parent payment
   paymentToFind.payment_In+=-updatedPaymentIn
-  paymentToFind.curr_Amount+=-updatedPaymentIn/curr_Rate
+  paymentToFind.curr_Amount+=-updateCurr_Amount
   await existingSupplier.updateOne({
     $inc: {
       "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
@@ -4310,17 +4314,14 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
   });
 }
 }
-
       }
     }
   }
   catch(error){
+    console.log(error)
     res.status(500).json({message:error.message})
   }
 }
-
-
-
 
 
 // Candidate Wise Payments Out
@@ -4733,10 +4734,11 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
         }
         paymentToFind.payment_Out-=candPayment.new_Payment
         paymentToFind.curr_Amount-=candPayment.new_Curr_Payment
+        console.log('candPayment.new_Payment',candPayment.new_Payment)
         await existingSupplier.updateOne({
           $inc: {
             "payment_Out_Schema.total_Payment_Out": -candPayment.new_Payment,
-            "payment_Out_Schema.remaining_Balance": candPayment.new_Payment,
+            "payment_Out_Schema.remaining_Balance": parseInt(candPayment.new_Payment,10),
             "payment_Out_Schema.total_Payment_Out_Curr": candPayment.new_Curr_Payment ? -candPayment.new_Curr_Payment : 0,
             "payment_Out_Schema.remaining_Curr": candPayment.new_Curr_Payment ? candPayment.new_Curr_Payment : 0,
           },
@@ -4794,6 +4796,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
 
   }
   catch(error){
+    console.log(error)
     res.status(500).json({message:error.message})
   }
 }
@@ -4819,7 +4822,12 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
       new_Curr_Payment,
       curr_Rate
     } = req.body;
-    new_Curr_Payment=new_Payment/curr_Rate
+
+    let newPaymentIn = parseInt(new_Payment, 10);
+    let newCurrAmount = parseInt(new_Curr_Payment, 10);
+    let newCurrRate=parseInt(curr_Rate,10)
+    newCurrAmount=newPaymentIn/newCurrRate
+
     const existingSupplier = await Suppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
     })
@@ -4849,22 +4857,21 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
         });
       }
       if(candPayment){
+        let updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
+        let updateCurr_Amount = candPayment.new_Curr_Payment?candPayment.new_Curr_Payment:0- newCurrAmount;
 
-        const newPaymentIn = parseInt(new_Payment, 10);
-        const newCurrAmount = parseInt(new_Curr_Payment, 10);
-        const updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
-       const updateCurr_Amount = candPayment.new_Curr_Payment - newCurrAmount;
+
 if(candPayment.cand_Name.toLowerCase()!==cand_Name.toLowerCase()){
   const existingPaymentPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === candPayment.cand_Name.toLowerCase())
   if(existingPaymentPerson){
-    existingPaymentPerson.remaining_Price+=candPayment.new_Payment
-    existingPaymentPerson.total_In-=candPayment.new_Payment
-    existingPaymentPerson.remaining_Curr+=candPayment.visa_Curr_Amount
+    existingPaymentPerson.remaining_Price+=candPayment?.new_Payment||0
+    existingPaymentPerson.total_In-=candPayment?.new_Payment||0
+    existingPaymentPerson.remaining_Curr+=candPayment?.visa_Curr_Amount||0
   const existingNewPaymentPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
 if(existingNewPaymentPerson){
-  existingNewPaymentPerson.remaining_Price -= new_Payment
+  existingNewPaymentPerson.remaining_Price -= newPaymentIn
   existingNewPaymentPerson.total_In += newPaymentIn
-  existingNewPaymentPerson.remaining_Curr -= new_Curr_Payment
+  existingNewPaymentPerson.remaining_Curr -= newCurrAmount
 
   candPayment.cand_Name=existingNewPaymentPerson.name
   candPayment.pp_No=existingNewPaymentPerson.pp_No
@@ -4877,18 +4884,18 @@ if(existingNewPaymentPerson){
   candPayment.visa_Amount_PKR=existingNewPaymentPerson.visa_Price_Out_PKR
   candPayment.past_Paid_PKR=existingNewPaymentPerson.total_In
   candPayment.past_Remain_PKR=existingNewPaymentPerson.visa_Price_Out_PKR-existingNewPaymentPerson.total_In
-  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_Out_PKR-existingNewPaymentPerson.total_In-new_Payment
+  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_Out_PKR-existingNewPaymentPerson.total_In-newPaymentIn
   candPayment.visa_Curr_Amount=existingNewPaymentPerson.visa_Price_Out_Curr
-  candPayment.past_Paid_Curr=existingNewPaymentPerson.visa_Price_Out_Curr-existingNewPaymentPerson.remaining_Curr
-  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_Out_Curr-new_Curr_Payment
-  candPayment.new_Payment=existingNewPaymentPerson.new_Payment
-  candPayment.new_Curr_Payment=new_Payment/curr_Rate
-  candPayment.curr_Rate=curr_Rate
+  candPayment.past_Paid_Curr=existingNewPaymentPerson.visa_Price_Out_Curr-existingNewPaymentPerson.remaining_Curr?existingNewPaymentPerson.remaining_Curr:0
+  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_Out_Curr-newCurrAmount
+  candPayment.new_Payment=newPaymentIn
+  candPayment.new_Curr_Payment=newPaymentIn/newCurrRate
+  candPayment.curr_Rate=newCurrRate
   }
 
-  paymentToFind.payment_In+=-updatedPaymentIn
-  paymentToFind.curr_Amount+=-updatedPaymentIn/curr_Rate
-  paymentToFind.curr_Rate+=-curr_Rate
+  paymentToFind.payment_Out+=-updatedPaymentIn
+  paymentToFind.curr_Amount+=- newCurrRate>0 ?updatedPaymentIn/newCurrRate:0
+  paymentToFind.curr_Rate+=-newCurrRate
 
 
   await existingSupplier.updateOne({
@@ -4920,7 +4927,7 @@ if(existingNewPaymentPerson){
   await CashInHand.updateOne({}, cashInHandUpdate);
   const newNotification=new Notifications({
     type:"Supplier Cand-Wise Payment Out Updated",
-    content:`${user.userName} updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${cand_Name} of Supplier:${supplierName}'s Record`,
+    content:`${user.userName} updated Cand-Wise Payment_Out ${newPaymentIn} of Candidate ${cand_Name} of Supplier:${supplierName}'s Record`,
     date: new Date().toISOString().split("T")[0]
 
   })
@@ -4928,7 +4935,7 @@ if(existingNewPaymentPerson){
   await existingSupplier.save()
 
   res.status(200).json({
-    message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${cand_Name} of Supplier: ${supplierName}'s Record`,
+    message: `Successfuly, updated Cand-Wise Payment_Out ${newPaymentIn} of Candidate ${cand_Name} of Supplier: ${supplierName}'s Record`,
   });
 
 }
@@ -4950,8 +4957,8 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
   }
 
   // uodating parent payment
-  paymentToFind.payment_In+=-updatedPaymentIn
-  paymentToFind.curr_Amount+=-updatedPaymentIn/curr_Rate
+  paymentToFind.payment_Out+=-updatedPaymentIn
+  paymentToFind.curr_Amount+=-updateCurr_Amount
   await existingSupplier.updateOne({
     $inc: {
       "payment_Out_Schema.total_Payment_Out": -updatedPaymentIn,
@@ -4998,6 +5005,7 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
     }
   }
   catch(error){
+    console.log(error)
     res.status(500).json({message:error.message})
   }
 }
