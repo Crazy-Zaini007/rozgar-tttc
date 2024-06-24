@@ -922,7 +922,13 @@ background-color: #dad5d5;
 }
 
 
-
+label {
+  font-size: 11px;
+  color: var(--black);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
  .payment_form form label {
   font-size: 11px;
   color: var(--black);

@@ -56,6 +56,15 @@ const Payment_OutSchema = new mongoose.Schema({
                 type: String
 
             },
+            trade:{
+                type: String,
+                default:''
+            },
+            country: {
+                type: String,
+                default:''
+            },
+            
             entry_Mode: {
                 type: String
 

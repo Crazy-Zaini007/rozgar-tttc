@@ -548,36 +548,7 @@ export default function SingleEntry() {
                               {data.supplierName}
                             </option>
                           ))}
-                        {ticketSalesParties &&
-                          ticketSalesParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {visitSalesParties &&
-                          visitSalesParties.map((data, index) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {azadVisaSalesParties &&
-                          azadVisaSalesParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                        
                       </>
                     )}
                     {reference_Out === "Suppliers" && (
@@ -594,36 +565,7 @@ export default function SingleEntry() {
                               {data.supplierName}
                             </option>
                           ))}
-                        {ticketPurchaseParties &&
-                          ticketPurchaseParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {visitPurchaseParties &&
-                          visitPurchaseParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
-                        {azadVisaPurchaseParties &&
-                          azadVisaPurchaseParties.map((data) => (
-                            <option
-                              className="my-1 py-2"
-                              key={data._id}
-                              value={data.supplierName}
-                            >
-                              {data.supplierName}
-                            </option>
-                          ))}
+                        
                       </>
                     )}
 

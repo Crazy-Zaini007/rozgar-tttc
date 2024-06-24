@@ -341,7 +341,7 @@ export default function SupCandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, myPaymentId: editedEntry._id,new_Payment: editedEntry.new_Payment,new_Curr_Payment: editedEntry.new_Curr_Payment })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, myPaymentId: editedEntry._id,new_Payment: editedEntry.new_Payment,new_Curr_Payment: editedEntry.new_Curr_Payment,curr_Rate: editedEntry.curr_Rate,cand_Name: editedEntry.cand_Name })
       })
 
       const json = await response.json()
@@ -2039,6 +2039,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                     {show2 && <>
                       <TableCell className='label border' >Payment_In_Curr</TableCell>
                       <TableCell className='label border' >CUR_Amount</TableCell>
+                      <TableCell className='label border' >CUR_Rate</TableCell>
                     </>}
                     <TableCell className='label border' >Slip_Pic</TableCell>
                     <TableCell align='left' className='edw_label border'  colSpan={1}>
@@ -2118,6 +2119,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                                 <TableCell className='border data_td p-1 '>
                                   <input type='number' value={editedEntry3.curr_Amount} onChange={(e) => handleInputChange3(e, 'curr_Amount')} />
                                 </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry3.curr_Rate} onChange={(e) => handleInputChange3(e, 'curr_Rate')} disabled/>
+                                </TableCell>
                               </>}
                               <TableCell className='border data_td p-1 '>
                                 <input type='file' accept='image/*' onChange={(e) => handleImageChange3(e, 'slip_Pic')} />
@@ -2147,6 +2151,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                               {show2 && <>
                                 <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
                                 <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
                               </>}
                               <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
                               <TableCell className='border data_td p-1 '>
@@ -2638,7 +2643,16 @@ const[rowsValue1,setRowsValue1]=useState("")
                                 <input type='text' value={index + 1} readonly />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.cand_Name} readonly />
+                              <select value={editedEntry.cand_Name} onChange={(e) => handleInputChange(e, 'cand_Name')} required>
+                                {supp_Payments_Out
+                                  .filter(payment => payment.supplierName === selectedSupplier)
+                                  .flatMap(payment => payment.persons)
+                                  .map((person, index) => (
+                                    <option key={index} value={person.name}>
+                                      {person.name}
+                                    </option>
+                                  ))}
+                              </select>
                               </TableCell>
                                <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry.pp_No} readonly />
@@ -2695,7 +2709,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                                 <input type='text' value={editedEntry.new_Curr_Payment} onChange={(e) => handleInputChange(e, 'new_Curr_Payment')} required/>
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.curr_Rate}  disabled/>
+                                <input type='text' value={editedEntry.curr_Rate}  onChange={(e) => handleInputChange(e, 'curr_Rate')}/>
                               </TableCell>
                               </>
                               }

@@ -883,8 +883,6 @@ const EntryDetails = () => {
                               </TableCell>
 
                               <TableCell className='border data_td p-0 '>
-                              
-                                  
                                   {(editedEntry.reference_Out?.toLowerCase() === "candidate" || editedEntry.reference_Out?.toLowerCase() === "candidates")  ? (
                                   <input className='p-0'
                                     type="text"
@@ -895,10 +893,10 @@ const EntryDetails = () => {
                                 ) : (
 
                                   <select className='p-0' required value={editedEntry.reference_Out_Name} onChange={(e) => handleInputChange(e, 'reference_Out_Name')} >
-                                    {(editedEntry.reference_Out === "agent" || editedEntry.reference_Out === "agents") && (
+                                    {(editedEntry.reference_Out.toLowerCase() === "agent" || editedEntry.reference_Out.toLowerCase() === "agents") && (
                                       <>
                                         <option value="">Choose Agents</option>
-                                        {/* Options for Agents */}
+                                       
                                         {visaSalesParty &&
                                           visaSalesParty.map((data) => (
                                             <option

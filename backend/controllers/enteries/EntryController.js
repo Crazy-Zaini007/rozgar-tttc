@@ -135,17 +135,13 @@ const addEntry = async (req, res) => {
       }
 
       let sendResponse = true;
-      const existingPPNO = await Entries.aggregate([
-        {
-          $match: {
-            pp_No: { $eq: pp_No.toLowerCase() },
-            entry_Mode: { $eq: entry_Mode.toLowerCase() },
-          
-          }
-        }
-      ]);
+      const existingPPNO = await Entries.findOne({
+        pp_No: new RegExp(`^${pp_No}$`, 'i'),
+        entry_Mode: new RegExp(`^${entry_Mode}$`, 'i'),
+      });
 
       if (existingPPNO) {
+    
         res
           .status(404)
           .json({
@@ -3615,15 +3611,10 @@ const addMultipleEnteries = async (req, res) => {
         }
         let sendResponse = true;
 
-        const existingPPNO = await Entries.aggregate([
-          {
-            $match: {
-              pp_No: { $eq: entryData.pp_No.toLowerCase() },
-              entry_Mode: { $eq: entryData.entry_Mode.toLowerCase() },
-              
-            }
-          }
-        ]);
+        const existingPPNO = await Entries.findOne({
+          pp_No: new RegExp(`^${pp_No}$`, 'i'),
+          entry_Mode: new RegExp(`^${entry_Mode}$`, 'i'),
+        });
 
         // if (existingPPNO) {
         //   res.status(400).json({
@@ -9166,7 +9157,7 @@ const updateEntry = async (req, res) => {
       return res.status(404).json({ message: "Entry not found" });
     }
     if (entryToUpdate) {
-      const {
+      let {
         reference_Out,
         reference_In,
         name,
@@ -9228,6 +9219,40 @@ const updateEntry = async (req, res) => {
         azad_Visa_Purchase_Rate_Oth_Cur,
       } = req.body;
       
+      if(reference_Out && reference_Out.toLowerCase()==='candidate'){
+        reference_Out_Name=name
+      }
+      if(reference_In && reference_In.toLowerCase()==='candidate'){
+        reference_In_Name=name
+      }
+
+      if(visit_Reference_Out && visit_Reference_Out.toLowerCase()==='candidate'){
+        visit_Reference_Out_Name=name
+      }
+
+      if(visit_Reference_In && visit_Reference_In.toLowerCase()==='candidate'){
+        visit_Reference_In_Name=name
+      }
+
+      if(ticket_Reference_Out && ticket_Reference_Out.toLowerCase()==='candidate'){
+        ticket_Reference_Out_Name=name
+      }
+
+      if(ticket_Reference_In && ticket_Reference_In.toLowerCase()==='candidate'){
+        ticket_Reference_In_Name=name
+      }
+      if(azad_Visa_Reference_Out && azad_Visa_Reference_Out.toLowerCase()==='candidate'){
+        azad_Visa_Reference_Out_Name=name
+      }
+
+      if(azad_Visa_Reference_In && azad_Visa_Reference_In.toLowerCase()==='candidate'){
+        azad_Visa_Reference_In_Name=name
+      }
+
+      console.log('reference_In',reference_In)
+      console.log('reference_In_Name',reference_In_Name)
+      console.log('reference_Out',reference_Out)
+      console.log('reference_Out_Name',reference_Out_Name)
       const agents=await Agents.find({})
       const suppliers=await Suppliers.find({})
       const azadSuppliers=await AzadSupplier.find({})
@@ -10827,7 +10852,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return  res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/supplier/cand_vise_payment_details'})
                 break;
               }
@@ -11013,7 +11038,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return  res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/supplier/cand_vise_payment_details'})
                 break;
               }
@@ -11200,7 +11225,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/supplier/cand_vise_payment_details'})
                 break;
               }
@@ -11348,7 +11373,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/agents/cand_vise_payment_details'})
                 break;
               }
@@ -11534,7 +11559,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/agents/cand_vise_payment_details'})
                 break;
               }
@@ -11720,7 +11745,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return  res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/agents/cand_vise_payment_details'})
                 break;
               }
@@ -12226,7 +12251,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Azad Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -12416,7 +12441,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Azad Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -12607,7 +12632,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               return  res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Azad Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
               break;
             }
@@ -12786,7 +12811,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Azad Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -12975,7 +13000,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Azad Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -13166,7 +13191,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Azad Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
               break;
             }
@@ -13684,7 +13709,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Azad Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -13873,7 +13898,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Azad Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -14064,7 +14089,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Azad Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -14246,7 +14271,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Azad Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -14434,7 +14459,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Azad Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -14626,7 +14651,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Azad Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/azad/cand_vise_payment_details'})
                 break;
               }
@@ -15146,7 +15171,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Ticket Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -15336,7 +15361,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Ticket Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -15526,7 +15551,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Ticket Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -15705,7 +15730,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Ticket Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
               break;
             }
@@ -15895,7 +15920,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Ticket Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
               break;
             }
@@ -16086,7 +16111,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Ticket Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -16604,7 +16629,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Ticket Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -16793,7 +16818,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Ticket Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -16983,7 +17008,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Ticket Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -17164,7 +17189,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Ticket Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -17353,7 +17378,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Ticket Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -17543,7 +17568,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Ticket Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/tickets/cand_vise_payment_details'})
                 break;
               }
@@ -18062,7 +18087,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Visit Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -18252,7 +18277,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Visit Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -18442,7 +18467,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Visit Supplier :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -18621,7 +18646,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Visit Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -18810,7 +18835,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Visit Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -19000,7 +19025,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentOut Visit Agent :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -19518,7 +19543,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Visit Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -19707,7 +19732,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Visit Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -19898,7 +19923,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Visit Supplier :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -20077,7 +20102,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Visit Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -20267,7 +20292,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Visit Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
                 break;
               }
@@ -20458,7 +20483,7 @@ let azadPicture
          for (const payment of allCandPayments){
           let allPayments=payment.payments
           for (const candidatePayment of allPayments){
-            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+            if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
               return res.status(400).json({message:`You have made payments for this Candidate with PaymentIn Visit Agent :${agent.payment_In_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/visits/cand_vise_payment_details'})
               break;
             }
@@ -20946,7 +20971,7 @@ let azadPicture
            for (const payment of allCandPayments){
             let allPayments=payment.payments
             for (const candidatePayment of allPayments){
-              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToDelete.name.trim().toLowerCase()){
+              if(candidatePayment.cand_Name.trim().toLowerCase()===entryToUpdate.name.trim().toLowerCase()){
                 return res.status(400).json({message:`You have made payments for this Candidate with Protector :${agent.payment_Out_Schema.supplierName} having Invoice NO:${payment.invoice}`,redirect:'/rozgar/protector/details'})
                 break;
               }

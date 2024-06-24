@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Paper from '@mui/material/Paper';
 import SinglePaymentIn from './SinglePaymentIn';
-import Entry1 from './doubleEntry/Entry1'
+import SupplierEntry1 from './doubleEntry/SupplierEntry1'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
@@ -224,7 +224,7 @@ export default function SupPaymentIn() {
             {/* Double Entries */}
 
             {single === 2 &&
-              <Entry1></Entry1>
+              <SupplierEntry1></SupplierEntry1>
             }
           </div>
 

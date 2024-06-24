@@ -17,7 +17,7 @@ import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../hooks/agentHooks/AgentHook';
 import * as XLSX from 'xlsx';
-import Entry1 from './doubleEntry/Entry1'
+import SupplierEntry1 from './doubleEntry/SupplierEntry1'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -630,10 +630,9 @@ export default function SupPaymentOut() {
               </>
             }
             
-            {/* Double Entries */}
-
+           
             {single === 2 &&
-              <Entry1></Entry1>
+              <SupplierEntry1></SupplierEntry1>
             }
           </div>
         </div>

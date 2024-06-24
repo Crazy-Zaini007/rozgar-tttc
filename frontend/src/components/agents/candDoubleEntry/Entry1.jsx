@@ -15,8 +15,7 @@ import PaymentTypeHook from "../../../hooks/settingHooks/PaymentTypeHook";
 import CurrCountryHook from "../../../hooks/settingHooks/CurrCountryHook";
 import AgentHook from '../../../hooks/agentHooks/AgentHook';
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
-        
-
+import SupplierEntry1 from '../doubleEntry/SupplierEntry1'
 import Entry2 from './Entry2'
 
 export default function Entry1() {
@@ -62,6 +61,10 @@ export default function Entry1() {
       }
     }
   }, [user, dispatch]);
+
+
+  const [paymentOption, setPaymentOption] = useState('Candidate_Vise');
+
 
   const [option, setOption] = useState(false);
   // Form input States
@@ -526,594 +529,614 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 
   return (
    <>
-    <TableContainer component={Paper} className="mb-1">
-      <div className="col-md-12 ">
-        {!option && (
-          <>
-            <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
-              <div className="text-end ">
-                <button className="btn submit_btn btn-sm m-1" disabled={loading || !disableAddMore}>
-                  {loading ? "Adding..." : "Add Payment"}
-                </button>
-              </div>
-              <div className="row p-0 m-0 my-1">
-              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Reference</label>
-                  <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    required
-                  >
-                    <option value="">Choose</option>
-                   <option value="Agent">Agent</option>
-                   <option value="Supplier">Supplier</option>
+     <div className='justify-content-between d-flex'>
+                <div className="left">
+                  <label htmlFor="">Choose Payment Option</label>
+                  <select name="" id="" value={paymentOption} onChange={(e)=>setPaymentOption(e.target.value)}>
+                    <option value="Candidate_Vise">Candiadte Vise In</option>
+                    <option value="Direct">Direct In</option>
+
                   </select>
                 </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Name</label>
-                  <select
-                    required
-                    value={supplierName}
-                    onChange={(e) => {
-                      const selectedSupplierValue = e.target.value;
-
-                      if (selectedSupplierValue === "") {
-                        // User selected "Choose Supplier", reset both values
-                        setSelectedSupplier("");
-                        setSupplierName("");
-                        setSupplierNames([]); // Reset the names of persons array
-                      } else {
-                        // User selected an actual supplier
-                        setSelectedSupplier(selectedSupplierValue);
-                        setSupplierName(selectedSupplierValue);
-
-                        // Filter supp_Payments_Out based on the selected supplier
-                        const selectedSupplierData = (type==="Agent"?agent_Payments_In :type==="Supplier"&&supp_Payments_In).find(
-                          (data) => data.supplierName === selectedSupplierValue
-                        );
-
-                        // Update the supplierNames state with the names of persons array of the selected supplier
-                        if (selectedSupplierData) {
-                          const namesOfPersons =
-                            selectedSupplierData.persons || [];
-                          setSupplierNames(namesOfPersons);
-                        }
-                      }
-                    }}
-                  >
-                    {type==="Agent" &&
-                    <>
-                     <option value="">Choose Agent</option>
-                    {agent_Payments_In &&
-                      agent_Payments_In.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                    </>
-                    }
-                      {type==="Supplier" &&
-                    <>
-                     <option value="">Choose Supplier</option>
-                    {supp_Payments_In &&
-                      supp_Payments_In.map((data) => (
-                        <option key={data._id} value={data.supplierName}>
-                          {data.supplierName}
-                        </option>
-                      ))}
-                    </>
-                    }
-                   
-                  </select>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Category </label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
-                  >
-                    <option value="">Choose</option>
-                    {categories &&
-                      categories.map((data) => (
-                        <option key={data._id} value={data.category}>
-                          {data.category}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Payment Via </label>
-                  <select
-                    value={payment_Via}
-                    onChange={(e) => setPayment_Via(e.target.value)}
-                    required
-                  >
-                    <option value="">Choose</option>
-                    {paymentVia &&
-                      paymentVia.map((data) => (
-                        <option key={data._id} value={data.payment_Via}>
-                          {data.payment_Via}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Payment Type </label>
-                  <select
-                    value={payment_Type}
-                    onChange={(e) => setPayment_Type(e.target.value)}
-                    required
-                  >
-                    <option value="">Choose</option>
-                    {paymentType &&
-                      paymentType.map((data) => (
-                        <option key={data._id} value={data.payment_Type}>
-                          {data.payment_Type}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Slip No </label>
-                  <input
-                    type="text"
-                    value={slip_No}
-                    onChange={(e) => setSlip_No(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Upload Slip </label>
-                  <input type="file" accept="image/*" onChange={handleImage} />
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Date </label>
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    
-                  />
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Curr Country </label>
-                  <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
-                    <option value="">choose</option>
-                    {currCountries && currCountries.map((data) => (
-                      <option key={data._id} value={data.currCountry}>{data.currCountry}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Total Payments </label>
-                 <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Curr Rate </label>
-                 <input type="number"  value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Total Currency </label>
-                 <input type="number" min='0' value={totalCurrency} disabled />
-                </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Details </label>
-                  <textarea
-                    className="pt-2"
-                    value={details}
-                    onChange={(e) => setDetails(e.target.value)}
-                  />
-                </div>
-                {slip_Pic && (
-                  <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
-                    <div className="image">
-                      <img src={slip_Pic} alt="" className="rounded" />
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-            </form>
-          </>
-        )}
-      </div>     
-      <div className="row payment_details mt-0">
-        <div className="col-md-12 my-2">
-          <div className="justify-content-between d-flex">
-          <div className="left">
-            {selectedSupplier && (
-            <button className="btn detail_btn" onClick={handleOpen}>
-              {option ? "Hide Details" : "Show Details"}
-            </button>
-          )}
-            </div>
-            <div className="right">
-           {!option && 
-            <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
-            <i className="fas fa-plus"></i> 
-          </button>
-           }
-            </div>
-          </div>
-        </div>
-        {option && (
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
-              <Table aria-label="customized table">
-                <TableHead className="thead">
-                  <TableRow>
-                    <TableCell className="label border">Date</TableCell>
-                    <TableCell className="label border">Category</TableCell>
-                    <TableCell className="label border">Payment_Via</TableCell>
-                    <TableCell className="label border">Payment_Type</TableCell>
-                    <TableCell className="label border">Slip_No</TableCell>
-                    <TableCell className="label border">Details</TableCell>
-                    <TableCell className="label border">Payment_In</TableCell>
-                    <TableCell className="label border">Cash_Out</TableCell>
-                    <TableCell className="label border">Invoice</TableCell>
-                    <TableCell className="label border">
-                      Payment_In_Curr
-                    </TableCell>
-                    <TableCell className="label border">CUR_Rate</TableCell>
-                    <TableCell className="label border">CUR_Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(type === "Agent" ? agent_Payments_In : type === "Supplier"&& supp_Payments_In: [])
-                    .filter((data) => data.supplierName === selectedSupplier)
-                    .map((filteredData) => (
-                      // Map through the payment array
-                      <>
-                        {filteredData.candPayments &&
-                          filteredData.candPayments
-                            .filter(
-                              (paymentItem) =>
-                                paymentItem.cand_Name !== undefined
-                            )
-                            .map((paymentItem, index) => (
-                              <TableRow
-                                key={paymentItem?._id}
-                                className={
-                                  index % 2 === 0 ? "bg_white" : "bg_dark"
-                                }
-                              >
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.date}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.category}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.payment_Via}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.payment_Type}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.slip_No}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.details}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>
-                                  {paymentItem?.payment_In}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>
-                                  {paymentItem?.cash_Out}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.invoice}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.payment_In_Curr}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.curr_Rate}
-                                </TableCell>
-                                <TableCell className="border data_td text-center">
-                                  {paymentItem?.curr_Amount}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                        {/* Move these cells inside the innermost map loop */}
-
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-
-                          <TableCell className='label border'>Total_Payment_In</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-
-                          <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_visa_Price_In_Curr}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
-                        </TableRow>
-                      </>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        )}
-      </div>
-      <hr />
-      {candData && candData.map((cand, index) => (
-        <>
-         <div key={index} className="py-3 px-2">
-            <div className="row p-0 m-0 my-1">
-            <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-              <label htmlFor="" className="text-sm text-muted  mb-1">Candidate</label>
-        <select
-          value={cand.cand_Name}
-          onChange={(e) => handlePersonChange(e.target.value, index)}
-          required
-        >
-          <option value="">Choose Candidate</option>
-          {supplierNames.map((person) => (
-            <option key={person.name} value={person.name}>
-              {person.name}
-            </option>
-          ))}
-        </select>
-      </div>
-              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-              <label htmlFor="" className="text-sm text-muted  mb-1">Payment In</label>
-                {/* Payment_In */}
-                <input
-                  type="number"
-                  required
-                  min="1"
-                  value={cand.payment_In}
-                  onChange={(e) => handleChangePaymentIn(index, e.target.value)}
-                  placeholder="Payment In"
-                />
-              </div>
-             
-              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-              <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
-                <input
-                  type="number"
-                  min="0"
-                  disabled
-                  value={(cand.payment_In/totalCurrRate).toFixed(2)}
-                  placeholder="Currency Amount"
-                />
-              </div>
-              {/* Button to remove this additional form */}
-              <div className="col-md-12 text-end">
-              <button onClick={() => handleRemove(index)} className={`btn shadow btn-sm text-white text-bold ms-1 bg-danger`}>
-                <i className="fas fa-trash"></i> 
-              </button>
                
               </div>
+    {paymentOption==='Candidate_Vise' &&
+    <TableContainer  className="mb-1">
+    <div className="col-md-12 ">
+      {!option && (
+        <>
+          <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>
+              <div className="text-end ">
+              <button className="btn submit_btn btn-sm m-1" disabled={loading || !disableAddMore}>
+                {loading ? "Adding..." : "Add Payment In"}
+              </button>
             </div>
-          
+           
+            
+            <div className="row p-0 m-0 my-1">
+            <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Reference</label>
+                <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  required
+                >
+                  <option value="">Choose</option>
+                 <option value="Agent">Agent</option>
+                 <option value="Supplier">Supplier</option>
+                </select>
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Name</label>
+                <select
+                  required
+                  value={supplierName}
+                  onChange={(e) => {
+                    const selectedSupplierValue = e.target.value;
+
+                    if (selectedSupplierValue === "") {
+                      // User selected "Choose Supplier", reset both values
+                      setSelectedSupplier("");
+                      setSupplierName("");
+                      setSupplierNames([]); // Reset the names of persons array
+                    } else {
+                      // User selected an actual supplier
+                      setSelectedSupplier(selectedSupplierValue);
+                      setSupplierName(selectedSupplierValue);
+
+                      // Filter supp_Payments_Out based on the selected supplier
+                      const selectedSupplierData = (type==="Agent"?agent_Payments_In :type==="Supplier"&&supp_Payments_In).find(
+                        (data) => data.supplierName === selectedSupplierValue
+                      );
+
+                      // Update the supplierNames state with the names of persons array of the selected supplier
+                      if (selectedSupplierData) {
+                        const namesOfPersons =
+                          selectedSupplierData.persons || [];
+                        setSupplierNames(namesOfPersons);
+                      }
+                    }
+                  }}
+                >
+                  {type==="Agent" &&
+                  <>
+                   <option value="">Choose Agent</option>
+                  {agent_Payments_In &&
+                    agent_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))}
+                  </>
+                  }
+                    {type==="Supplier" &&
+                  <>
+                   <option value="">Choose Supplier</option>
+                  {supp_Payments_In &&
+                    supp_Payments_In.map((data) => (
+                      <option key={data._id} value={data.supplierName}>
+                        {data.supplierName}
+                      </option>
+                    ))}
+                  </>
+                  }
+                 
+                </select>
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Category </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  required
+                >
+                  <option value="">Choose</option>
+                  {categories &&
+                    categories.map((data) => (
+                      <option key={data._id} value={data.category}>
+                        {data.category}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Payment Via </label>
+                <select
+                  value={payment_Via}
+                  onChange={(e) => setPayment_Via(e.target.value)}
+                  required
+                >
+                  <option value="">Choose</option>
+                  {paymentVia &&
+                    paymentVia.map((data) => (
+                      <option key={data._id} value={data.payment_Via}>
+                        {data.payment_Via}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Payment Type </label>
+                <select
+                  value={payment_Type}
+                  onChange={(e) => setPayment_Type(e.target.value)}
+                  required
+                >
+                  <option value="">Choose</option>
+                  {paymentType &&
+                    paymentType.map((data) => (
+                      <option key={data._id} value={data.payment_Type}>
+                        {data.payment_Type}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Slip No </label>
+                <input
+                  type="text"
+                  value={slip_No}
+                  onChange={(e) => setSlip_No(e.target.value)}
+                />
+              </div>
+
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Upload Slip </label>
+                <input type="file" accept="image/*" onChange={handleImage} />
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label>Date </label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  
+                />
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >Curr Country </label>
+                <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
+                  <option value="">choose</option>
+                  {currCountries && currCountries.map((data) => (
+                    <option key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >Total Payments </label>
+               <input type="number" min='0' value={totalPayments} onChange={(e)=>setTotalPayments(e.target.value)} />
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >Curr Rate </label>
+               <input type="number"  value={totalCurrRate} onChange={(e)=>setTotalCurrRate(parseFloat(e.target.value))} />
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >Total Currency </label>
+               <input type="number" min='0' value={totalCurrency} disabled />
+              </div>
+              <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                <label>Details </label>
+                <textarea
+                  className="pt-2"
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                />
+              </div>
+              {slip_Pic && (
+                <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
+                  <div className="image">
+                    <img src={slip_Pic} alt="" className="rounded" />
+                  </div>
+                </div>
+              )}
+            </div>
+            
+          </form>
+        </>
+      )}
+    </div>     
+    <div className="row payment_details mt-0">
+      <div className="col-md-12 my-2">
+        <div className="justify-content-between d-flex">
+        <div className="left">
+          {selectedSupplier && (
+          <button className="btn detail_btn" onClick={handleOpen}>
+            {option ? "Hide Details" : "Show Details"}
+          </button>
+        )}
+          </div>
+          <div className="right">
+         {!option && 
+          <button disabled={disableAddMore} onClick={() => handleAddMore()} className={`btn shadow btn-sm text-white text-bold ms-1 bg-success`}>
+          <i className="fas fa-plus"></i> 
+        </button>
+         }
+          </div>
         </div>
-          {/* Render details for the selected candidate */}
-    {selectedPersonDetails[index] && (
-     <>
-      <form>
-       <div className="row p-0 m-0 mt-2">
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Candidate Name</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].name}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>PP#</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].pp_No}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Entry Mode</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].entry_Mode}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Country</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].country}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Final Status</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].final_Status}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Flight Date</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].flight_Date}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Company</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].company}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Visa Price In PKR</label>
-                    <input disabled
-                      type="text"
-                      value={selectedPersonDetails[index].visa_Price_In_PKR}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Total In PKR</label>
-                  <input type="text" disabled value={selectedPersonDetails[index].total_In} readOnly />
+      </div>
+      {option && (
+        <div className="col-md-12 detail_table">
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableHead className="thead">
+                <TableRow>
+                  <TableCell className="label border">Date</TableCell>
+                  <TableCell className="label border">Category</TableCell>
+                  <TableCell className="label border">Payment_Via</TableCell>
+                  <TableCell className="label border">Payment_Type</TableCell>
+                  <TableCell className="label border">Slip_No</TableCell>
+                  <TableCell className="label border">Details</TableCell>
+                  <TableCell className="label border">Payment_In</TableCell>
+                  <TableCell className="label border">Cash_Out</TableCell>
+                  <TableCell className="label border">Invoice</TableCell>
+                  <TableCell className="label border">
+                    Payment_In_Curr
+                  </TableCell>
+                  <TableCell className="label border">CUR_Rate</TableCell>
+                  <TableCell className="label border">CUR_Amount</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(type === "Agent" ? agent_Payments_In : type === "Supplier"&& supp_Payments_In: [])
+                  .filter((data) => data.supplierName === selectedSupplier)
+                  .map((filteredData) => (
+                    // Map through the payment array
+                    <>
+                      {filteredData.candPayments &&
+                        filteredData.candPayments
+                          .filter(
+                            (paymentItem) =>
+                              paymentItem.cand_Name !== undefined
+                          )
+                          .map((paymentItem, index) => (
+                            <TableRow
+                              key={paymentItem?._id}
+                              className={
+                                index % 2 === 0 ? "bg_white" : "bg_dark"
+                              }
+                            >
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.date}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.category}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.payment_Via}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.payment_Type}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.slip_No}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.details}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>
+                                {paymentItem?.payment_In}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>
+                                {paymentItem?.cash_Out}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.invoice}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.payment_In_Curr}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.curr_Rate}
+                              </TableCell>
+                              <TableCell className="border data_td text-center">
+                                {paymentItem?.curr_Amount}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      {/* Move these cells inside the innermost map loop */}
+
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+
+                        <TableCell className='label border'>Total_Payment_In</TableCell>
+                        <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
+                        <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+
+                        <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
+                        <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
+                        <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_visa_Price_In_Curr}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='label border'>Remaining PKR</TableCell>
+                        <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
+                        <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      )}
+    </div>
+    <hr />
+    {candData && candData.map((cand, index) => (
+      <>
+       <div key={index} className="py-3 px-2">
+          <div className="row p-0 m-0 my-1">
+          <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+            <label htmlFor="" className="text-sm text-muted  mb-1">Candidate</label>
+      <select
+        value={cand.cand_Name}
+        onChange={(e) => handlePersonChange(e.target.value, index)}
+        required
+      >
+        <option value="">Choose Candidate</option>
+        {supplierNames.map((person) => (
+          <option key={person.name} value={person.name}>
+            {person.name}
+          </option>
+        ))}
+      </select>
+    </div>
+            <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+            <label htmlFor="" className="text-sm text-muted  mb-1">Payment In</label>
+              {/* Payment_In */}
+              <input
+                type="number"
+                required
+                min="1"
+                value={cand.payment_In}
+                onChange={(e) => handleChangePaymentIn(index, e.target.value)}
+                placeholder="Payment In"
+              />
+            </div>
+           
+            <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+            <label htmlFor=""  className="text-sm text-muted mb-1">Currency Amount</label>
+              <input
+                type="number"
+                min="0"
+                disabled
+                value={(cand.payment_In/totalCurrRate).toFixed(2)}
+                placeholder="Currency Amount"
+              />
+            </div>
+            {/* Button to remove this additional form */}
+            <div className="col-md-12 text-end">
+            <button onClick={() => handleRemove(index)} className={`btn shadow btn-sm text-white text-bold ms-1 bg-danger`}>
+              <i className="fas fa-trash"></i> 
+            </button>
+             
+            </div>
+          </div>
+        
+      </div>
+        {/* Render details for the selected candidate */}
+  {selectedPersonDetails[index] && (
+   <>
+    <form>
+     <div className="row p-0 m-0 mt-2">
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Candidate Name</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].name}
+                    readOnly
+                  />
                 </div>
                 <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label >New Total In PKR</label>
-                  <input type="text" disabled   value={
-                parseFloat(selectedPersonDetails[index]?.total_In || 0) +
-                parseFloat(cand.payment_In || 0)
-              } readOnly />
+                  <label>PP#</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].pp_No}
+                    readOnly
+                  />
                 </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Remaining PKR</label>
-                    <input 
-                    disabled
-                      type="text"
-                      value={selectedPersonDetails[index].remaining_Price}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>New Remaining PKR</label>
-                    <input
-                    disabled
-                      type="text"
-                      value={parseFloat(selectedPersonDetails[index].remaining_Price) - parseFloat(candData[candData.length - 1].payment_In)}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Visa Price In Curr</label>
-                    <input
-                    disabled
-                      type="text"
-                      value={selectedPersonDetails[index].visa_Price_In_Curr}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Total Paid Curr</label>
-                    <input
-                    disabled
-                      type="text"
-                      value={(parseFloat(selectedPersonDetails[index].visa_Price_In_Curr) - parseFloat(selectedPersonDetails[index].remaining_Curr)).toFixed(2)}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>New Total Paid Curr</label>
-                    <input
-                    disabled
-                      type="text"
-                      value={parseFloat(selectedPersonDetails[index].visa_Price_In_Curr -selectedPersonDetails[index].remaining_Curr) + parseFloat(candData[candData.length - 1].curr_Amount)}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>Remaining Curr</label>
-                    <input
-                    disabled
-                      type="text"
-                      value={selectedPersonDetails[index].remaining_Curr}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                    <label>New Remaining Curr</label>
-                    <input
-                    disabled
-                      type="text"
-                      value={parseFloat(selectedPersonDetails[index].remaining_Curr) - parseFloat(candData[candData.length - 1].curr_Amount)}
-                      readOnly
-                    />
-                  </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Entry Mode</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].entry_Mode}
+                    readOnly
+                  />
                 </div>
-      </form>
-    
-     </>
-    )}
-      <hr />
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Country</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].country}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Final Status</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].final_Status}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Flight Date</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].flight_Date}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Company</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].company}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Visa Price In PKR</label>
+                  <input disabled
+                    type="text"
+                    value={selectedPersonDetails[index].visa_Price_In_PKR}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label >Total In PKR</label>
+                <input type="text" disabled value={selectedPersonDetails[index].total_In} readOnly />
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label >New Total In PKR</label>
+                <input type="text" disabled   value={
+              parseFloat(selectedPersonDetails[index]?.total_In || 0) +
+              parseFloat(cand.payment_In || 0)
+            } readOnly />
+              </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Remaining PKR</label>
+                  <input 
+                  disabled
+                    type="text"
+                    value={selectedPersonDetails[index].remaining_Price}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>New Remaining PKR</label>
+                  <input
+                  disabled
+                    type="text"
+                    value={parseFloat(selectedPersonDetails[index].remaining_Price) - parseFloat(candData[candData.length - 1].payment_In)}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Visa Price In Curr</label>
+                  <input
+                  disabled
+                    type="text"
+                    value={selectedPersonDetails[index].visa_Price_In_Curr}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Total Paid Curr</label>
+                  <input
+                  disabled
+                    type="text"
+                    value={(parseFloat(selectedPersonDetails[index].visa_Price_In_Curr) - parseFloat(selectedPersonDetails[index].remaining_Curr)).toFixed(2)}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>New Total Paid Curr</label>
+                  <input
+                  disabled
+                    type="text"
+                    value={parseFloat(selectedPersonDetails[index].visa_Price_In_Curr -selectedPersonDetails[index].remaining_Curr) + parseFloat(candData[candData.length - 1].curr_Amount)}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>Remaining Curr</label>
+                  <input
+                  disabled
+                    type="text"
+                    value={selectedPersonDetails[index].remaining_Curr}
+                    readOnly
+                  />
+                </div>
+                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                  <label>New Remaining Curr</label>
+                  <input
+                  disabled
+                    type="text"
+                    value={parseFloat(selectedPersonDetails[index].remaining_Curr) - parseFloat(candData[candData.length - 1].curr_Amount)}
+                    readOnly
+                  />
+                </div>
+              </div>
+    </form>
+  
+   </>
+  )}
+    <hr />
 
 
-        </>
-      ))}
+      </>
+    ))}
 
 <hr/>
 <div className="col-md-12">
 <h4 className="text-center">Payment Summary</h4>
 <form className="py-3 px-2" >
-  <div className="row  p-0 m-0 my-1">
-  <div className="col-xl-1 col-lg-1 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Candidates </label>
-                  <input type="text" value={candData.length} disabled/>
-                </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total Visa Amount PKR </label>
-                  <input type="text" value={totalVisaPriceInPKR} disabled/>
-                </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total Past Paid PKR </label>
-                  <input type="text" value={totalPastPaidPKR} disabled/>
-                </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total Past Remaining PKR </label>
-                  <input type="text" value={totalPastRemainingPKR} disabled/>
-                </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total New Payment PKR </label>
-                  <input type="text" value={totalPayments} disabled/>
-                </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label>New Payment In Curr </label>
-                  <input type="text" value={totalCurrency} disabled/>
-                </div>
-                <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
-                  <label>Total New Remaining PKR </label>
-                  <input type="text" value={totalPastRemainingPKR-totalPayments} disabled/>
-                </div>
-  </div>
+<div className="row  p-0 m-0 my-1">
+<div className="col-xl-1 col-lg-1 col-md-6 col-sm-12 p-1 my-1">
+                <label>Candidates </label>
+                <input type="text" value={candData.length} disabled/>
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label>Total Visa Amount PKR </label>
+                <input type="text" value={totalVisaPriceInPKR} disabled/>
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label>Total Past Paid PKR </label>
+                <input type="text" value={totalPastPaidPKR} disabled/>
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label>Total Past Remaining PKR </label>
+                <input type="text" value={totalPastRemainingPKR} disabled/>
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label>Total New Payment PKR </label>
+                <input type="text" value={totalPayments} disabled/>
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label>New Payment In Curr </label>
+                <input type="text" value={totalCurrency} disabled/>
+              </div>
+              <div className="col-xl-2 col-lg-2 col-md-6 col-sm-12 p-1 my-1">
+                <label>Total New Remaining PKR </label>
+                <input type="text" value={totalPastRemainingPKR-totalPayments} disabled/>
+              </div>
+</div>
 </form>
 </div>
+<hr/>
 
-    </TableContainer>
+  </TableContainer>
+    }
+
+    {paymentOption==='Direct' &&
+    <SupplierEntry1></SupplierEntry1>
+    }
 
 <Entry2></Entry2>
    </>
