@@ -179,6 +179,7 @@ export default function SupPaymentIn() {
                         <table className='table table-borderless table-striped'>
                           <thead >
                             <tr >
+                              <th >Date</th>
                               <th >Name</th>
                               <th >Category</th>
                               <th >Payment_Via </th>

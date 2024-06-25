@@ -1025,7 +1025,7 @@ label {
 }
 
 .multiple_form form .table input {
-  max-width: 120px;
+  max-width: 140px;
   min-width:100px;
   color: var(--accent-stong-blue);
   padding-left: 10px;
@@ -1034,6 +1034,8 @@ label {
   background-color: transparent;
   border: 0.5px solid var(--grays-dm-white);
   height: 30px;
+  font-size:12px;
+  text-transform: capitalize;
 }
 
  .payment_details ::-webkit-scrollbar {
@@ -1730,7 +1732,7 @@ color:white;
       display: flex;
       overflow-x: auto; 
   }
-  .flex-grow-1 {
+  .direct_payment .flex-grow-1 {
     flex-grow: 1;
     padding: 0;
     margin: 0;
@@ -1834,4 +1836,22 @@ color:white;
   font-weight: 500;
   display: inline-flexbox;
   width: auto;
+}
+
+
+/* Modal for closing the status of supplier/agent */
+/*  */
+#exampleModal .direct_payment{
+  display: flex;
+  flex-wrap: wrap; /* Ensure that the elements wrap if they don't fit in one row */
+}
+#exampleModal  .direct_payment .payment_form {
+  display:flexbox;
+  overflow-x: auto; 
+}
+#exampleModal  .direct_payment .flex-grow-1 {
+flex-grow: 1;
+padding: 0;
+margin: 0;
+min-width: 200px;
 }

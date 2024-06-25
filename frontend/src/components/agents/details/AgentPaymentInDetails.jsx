@@ -29,6 +29,10 @@ export default function AgentPaymentInDetails() {
   const [show1, setShow1] = useState(false)
   const [show2, setShow2] = useState(false)
 
+
+
+
+  const[newStatus,setNewStatus]=useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
 
@@ -172,7 +176,7 @@ export default function AgentPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount, cand_Name: payment.cand_Name })
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount, cand_Name: payment.cand_Name,newStatus })
         })
 
         const json = await response.json()
@@ -208,7 +212,7 @@ export default function AgentPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr })
+          body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr,newStatus })
         })
 
         const json = await response.json()
@@ -263,7 +267,7 @@ export default function AgentPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status,newStatus })
       })
 
       const json = await response.json()
@@ -297,7 +301,7 @@ export default function AgentPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date, cand_Name: editedEntry.cand_Name })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date, cand_Name: editedEntry.cand_Name,newStatus })
       })
 
       const json = await response.json()
@@ -350,7 +354,7 @@ export default function AgentPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: editedEntry1.supplierName, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close })
+        body: JSON.stringify({ supplierName: editedEntry1.supplierName,newStatus, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close })
       })
 
       const json = await response.json()
@@ -409,6 +413,8 @@ export default function AgentPaymentInDetails() {
   }
 
 
+
+  
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
   const [status, setStatus] = useState('')
@@ -673,7 +679,6 @@ export default function AgentPaymentInDetails() {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
       let newStatus = myStatus
-
       try {
         const response = await fetch(`${apiUrl}/auth/agents/update/payment_in/status`, {
           method: 'PATCH',
@@ -1601,7 +1606,7 @@ const printPerson = (person) => {
                                   <TableCell className='border data_td text-center' >
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'  onClick={() => handleRowClick(entry.supplierName)}>
+                                  <TableCell className='border data_td text-center'  onClick={() => {handleRowClick(entry.supplierName); setNewStatus(entry.status)}}>
                                     {entry.supplierName}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
@@ -2355,7 +2360,10 @@ const printPerson = (person) => {
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
       <div className="modal-body detail_table">
-      <TableContainer component={Paper} >
+        <div className="d-flex payment_form p-0 m-0">
+        <div className="d-flex overflow-x-auto">
+                <div className="   p-0 m-0">
+                <TableContainer component={Paper} >
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
@@ -2459,6 +2467,89 @@ const printPerson = (person) => {
 
               </Table>
             </TableContainer>
+                </div>
+                <div className="flex-grow-1 p-0 m-0">
+                <TableContainer sx={{ maxHeight: 600 }}>
+              <Table stickyHeader>
+                <TableHead className="thead">
+                  <TableRow>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Name</TableCell>
+                    <TableCell className='label border' >PP#</TableCell>
+                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Company</TableCell>
+                    <TableCell className='label border' >Trade</TableCell>
+                    <TableCell className='label border' >Country</TableCell>
+                    <TableCell className='label border' >Final_Status</TableCell>
+                    <TableCell className='label border' >Flight_Date</TableCell>
+                    <TableCell className='label border' >VPI_PKR</TableCell>
+                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border'>Status</TableCell>
+                   
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredPersons.map((filteredData) => (
+                    <>
+                      {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
+
+                        <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode2 && editedRowIndex2 === index ? (
+                            <>
+                            
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR}</TableCell>
+                              {show && <TableCell className='border data_td text-center' >{person?.visa_Price_In_Curr}</TableCell>}
+                              <TableCell className='border data_td text-center' >{person?.status}</TableCell>
+                            </>
+                          )}
+                        
+                        </TableRow>
+                      ))}
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                        <TableCell className='border data_td text-center bg-warning text-white'>
+                          
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+                </div>
+            </div>
+        </div>
+      
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
