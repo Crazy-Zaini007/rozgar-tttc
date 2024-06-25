@@ -121,84 +121,7 @@ export default function SinglePaymentIn() {
   };
 
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-  // Submitting Form Data
-  const [loading, setLoading] = useState(null)
-  const [, setNewMessage] = useState('')
-  const handleForm = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSupplierName('')
-    setCategory('');
-    setPayment_Via('');
-    setPayment_Type('');
-    setSlip_No('');
-    setPayment_In('');
-    setSlip_Pic('');
-    setDetails('');
-    setCurr_Country('');
-    setCurr_Rate('');
-    setDate('')
-    try {
-      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_in`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No,
-          payment_In,
-          slip_Pic,
-          details,
-          curr_Country,
-          curr_Rate,
-          curr_Amount,
-          // open,
-          close,
-          date
-        }),
-      });
-
-      const json = await response.json();
-      if (!response.ok) {
-
-        setNewMessage(toast.error(json.message));
-        setLoading(false)
-
-      }
-      if (response.ok) {
-        getPaymentsIn();
-        setNewMessage(toast.success(json.message));
-        setLoading(false);
-        setSupplierName('')
-        setCategory('');
-        setPayment_Via('');
-        setPayment_Type('');
-        setSlip_No('');
-        setPayment_In('');
-        setSlip_Pic('');
-        setDetails('');
-        setCurr_Country('');
-        setSelectedSupplier('')
-        setCurr_Rate('');
-        // setOpen(true)
-        setClose(false);
-        setDate('')
-      }
-
-    } catch (error) {
-
-      setNewMessage(toast.error('Server is not Responding...'));
-      setLoading(false);
-    }
-  };
-
-
+  
   const printPersonsTable = (selectedPersonDetails) => {
     // Convert JSX to HTML string
     const formatDate = (date) => {
@@ -223,8 +146,7 @@ export default function SinglePaymentIn() {
     <table class='print-table'>
       <thead>
         <tr>
-        <th>Date</th>
-        <th>Name</th>
+        <th>Candidate</th>
         <th>PP#</th>
         <th>Entry Mode</th>
         <th>Company</th>
@@ -240,9 +162,7 @@ export default function SinglePaymentIn() {
         </tr>
       </thead>
       <tbody>
-     
           <tr>
-            <td>${String(selectedPersonDetails?.createdAt)}</td>
             <td>${String(selectedPersonDetails?.supplierName)}</td>
             <td>${String(selectedPersonDetails?.pp_No)}</td>
             <td>${String(selectedPersonDetails?.entry_Mode)}</td>
@@ -326,6 +246,86 @@ export default function SinglePaymentIn() {
       alert('Could not open print window. Please check your browser settings.');
     }
   }
+
+  const apiUrl = process.env.REACT_APP_API_URL;
+  // Submitting Form Data
+  const [loading, setLoading] = useState(null)
+  const [, setNewMessage] = useState('')
+  const handleForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          // open,
+          close,
+          date
+        }),
+      });
+
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+
+      }
+      if (response.ok) {
+        getPaymentsIn();
+        setNewMessage(toast.success(json.message));
+        printPersonsTable(json.data)
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setSelectedSupplier('')
+        setCurr_Rate('');
+        // setOpen(true)
+        setClose(false);
+        setDate('')
+      }
+
+    } catch (error) {
+
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+
 
   return (
     <>
@@ -671,7 +671,7 @@ export default function SinglePaymentIn() {
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >New Total In PKR</label>
                   <input type="text" disabled   value={
-                    Math.round(person.total_Payment_In+payment_In)
+                    person.total_Payment_In+parseInt(payment_In,10)
               } readOnly />
                 </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -739,11 +739,11 @@ export default function SinglePaymentIn() {
                   </div>
                 </div>
       </form>
-      <div className="row p-0 m-0 mt-2 justify-content-center">
+      {/* <div className="row p-0 m-0 mt-2 justify-content-center">
                 <div className="col-md-2 col-sm-12">
                 <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(person)}>Print</button>
                 </div>
-              </div>
+              </div> */}
 
 
      </>

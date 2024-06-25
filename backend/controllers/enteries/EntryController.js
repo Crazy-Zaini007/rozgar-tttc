@@ -3582,38 +3582,39 @@ const addMultipleEnteries = async (req, res) => {
             if (entryData.reference_In && entryData.reference_In_Name === "") {
               entryData.reference_In_Name = entryData.name;
             }
-            if (section1 === 1) {
+            
               if (entryData.visit_Reference_In && entryData.visit_Reference_In_Name === "") {
                 entryData.visit_Reference_In_Name = entryData.name;
-              }
+              
               if (entryData.visit_Reference_Out && entryData.visit_Reference_Out_Name === "") {
                 entryData.visit_Reference_Out_Name = entryData.name;
               }
             }
-            if (section2 === 1) {
+            
+
               if (entryData.ticket_Reference_In && entryData.ticket_Reference_In_Name === "") {
                 entryData.ticket_Reference_In_Name = entryData.name;
               }
               if (entryData.ticket_Reference_Out && entryData.ticket_Reference_Out_Name === "") {
                 entryData.ticket_Reference_Out_Name = entryData.name;
               }
-            }
-            if (section3 === 1) {
+            
+       
               if (entryData.azad_Visa_Reference_In && entryData.azad_Visa_Reference_In_Name === "") {
                 entryData.azad_Visa_Reference_In_Name = entryData.name;
               }
               if (entryData.azad_Visa_Reference_Out && entryData.azad_Visa_Reference_Out_Name === "") {
                 entryData.azad_Visa_Reference_Out_Name = entryData.name;
               }
-            }
+            
         if (!entryData.entry_Date) {
           entryData.entry_Date = new Date().toISOString().split("T")[0]
         }
         let sendResponse = true;
 
         const existingPPNO = await Entries.findOne({
-          pp_No: new RegExp(`^${pp_No}$`, 'i'),
-          entry_Mode: new RegExp(`^${entry_Mode}$`, 'i'),
+          pp_No: new RegExp(`^${entryData.pp_No}$`, 'i'),
+          entry_Mode: new RegExp(`^${entryData.entry_Mode}$`, 'i'),
         });
 
         // if (existingPPNO) {

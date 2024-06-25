@@ -389,6 +389,8 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
           setNewMessage(toast.success(json.message));
           fetchData()
           setLoading(false);
+    setEditMode(!editMode);
+
   
         }
       }

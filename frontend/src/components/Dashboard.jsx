@@ -738,8 +738,8 @@ const topButtons=[
   {text:'Candidate Payment In',navigate:'/rozgar/candidates/payment_in'},
   {text:'Agent Payment In',navigate:'/rozgar/agents/payment_in'},
   {text:'Agent Cand-Vise Payment In',navigate:'/rozgar/agents/cand_vise_payment_in'},
-  {text:'Supplier Payment Out',navigate:'/rozgar/suppliers/payment_out'},
-  {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/suppliers/cand_vise_payment_out'},
+  {text:'Supplier Payment Out',navigate:'/rozgar/supplier/payment_out'},
+  {text:'Supplier Cand-Vise Payment Out',navigate:'/rozgar/supplier/cand_vise_payment_out'},
 
 
 ]
@@ -748,9 +748,9 @@ const navigationButtons=[
   {text:'Agent Payment Out',navigate:'/rozgar/agents/payment_out'},
   {text:'Agent Payment Return',navigate:'/rozgar/agents/payment_return'},
   {text:'Agent Cand-Vise Payment Out',navigate:'/rozgar/agents/cand_vise_payment_out'},
-  {text:'Supplier Payment In',navigate:'/rozgar/suppliers/payment_in'},
-  {text:'Supplier Payment Return',navigate:'/rozgar/suppliers/payment_return'},
-  {text:'Supplier Cand-Vise Payment In',navigate:'/rozgar/suppliers/cand_vise_payment_in'},
+  {text:'Supplier Payment In',navigate:'/rozgar/supplier/payment_in'},
+  {text:'Supplier Payment Return',navigate:'/rozgar/supplier/payment_return'},
+  {text:'Supplier Cand-Vise Payment In',navigate:'/rozgar/supplier/cand_vise_payment_in'},
   {text:'Candidate Payment Out',navigate:'/rozgar/candidates/payment_out'},
   {text:'Candidate Payment Return',navigate:'/rozgar/candidates/payment_return'},
   {text:'Protector Payment Out',navigate:'/rozgar/protector/payment_out'},

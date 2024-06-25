@@ -163,6 +163,7 @@ const addPaymentIn = async (req, res) => {
 
                     await CashInHand.updateOne({}, cashInHandUpdate);
 
+                
                     const newBackup=new Backup({
                         name: supplierName,
                         category:category,
@@ -183,9 +184,28 @@ const addPaymentIn = async (req, res) => {
                             type:"Candidate Payment In",
                             content:`${user.userName} added Payment_In: ${payment_In} of Candidate: ${supplierName}`,
                             date: new Date().toISOString().split("T")[0]
-                  
                           })
                           await newNotification.save()
+
+
+
+                          // Sending Payment Invoice details for auto print 
+                          let printInvoice={
+                            name:existingSupplier.supplierName,
+                            pp_No:existingSupplier.pp_No,
+                            entry_Mode:existingSupplier.entry_Mode,
+                            company:existingSupplier.company,
+                            trade:existingSupplier.trade,
+                            country:existingSupplier.country,
+                            final_Status:existingSupplier.final_Status,
+                            flight_Date:existingSupplier.flight_Date,
+                            visa_Price_PKR:existingSupplier.total_Visa_Price_In_PKR,
+                            total_In:existingSupplier.total_Payment_In,
+                            remaining_PKR:existingSupplier.total_Visa_Price_In_PKR-existingSupplier.total_Payment_In+existingSupplier.total_Cash_Out,
+                            new_Total_In:existingSupplier.total_Payment_In+payment_In,
+                            new_Remaining_PKR:existingSupplier.total_Visa_Price_In_PKR-existingSupplier.total_Payment_In+existingSupplier.total_Cash_Out,
+                          }
+
                           await existingSupplier.save()
 
                     res.status(200).json({ message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record` });
