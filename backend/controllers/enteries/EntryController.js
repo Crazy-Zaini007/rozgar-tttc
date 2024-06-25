@@ -97,39 +97,41 @@ const addEntry = async (req, res) => {
       } = req.body;
 
     
+    
+
       // Ensure flight_Date is set to "No Fly" when it's an empty string or undefined
       flight_Date =
         flight_Date !== undefined && flight_Date !== ""
           ? flight_Date
           : "No Fly";
 
-      if (reference_Out && reference_Out_Name === "") {
+      if (reference_Out &&reference_Out.trim().toLowerCase().includes('candidate')&& reference_Out_Name === "") {
         reference_Out_Name = name;
       }
-      if (reference_In && reference_In_Name === "") {
+      if (reference_In &&reference_In.trim().toLowerCase().includes('candidate')&& reference_In_Name === "") {
         reference_In_Name = name;
       }
       if (section1 === 1) {
-        if (visit_Reference_In && visit_Reference_In_Name === "") {
+        if (visit_Reference_In &&visit_Reference_In.trim().toLowerCase().includes('candidate')&& visit_Reference_In_Name === "") {
           visit_Reference_In_Name = name;
         }
-        if (visit_Reference_Out && visit_Reference_Out_Name === "") {
+        if (visit_Reference_Out&&visit_Reference_Out.trim().toLowerCase().includes('candidate') && visit_Reference_Out_Name === "") {
           visit_Reference_Out_Name = name;
         }
       }
       if (section2 === 1) {
-        if (ticket_Reference_In && ticket_Reference_In_Name === "") {
+        if (ticket_Reference_In&&ticket_Reference_In.trim().toLowerCase().includes('candidate') && ticket_Reference_In_Name === "") {
           ticket_Reference_In_Name = name;
         }
-        if (ticket_Reference_Out && ticket_Reference_Out_Name === "") {
+        if (ticket_Reference_Out&&ticket_Reference_Out.trim().toLowerCase().includes('candidate') && ticket_Reference_Out_Name === "") {
           ticket_Reference_Out_Name = name;
         }
       }
       if (section3 === 1) {
-        if (azad_Visa_Reference_In && azad_Visa_Reference_In_Name === "") {
+        if (azad_Visa_Reference_In &&azad_Visa_Reference_In.trim().toLowerCase().includes('candidate') &&  azad_Visa_Reference_In_Name === "") {
           azad_Visa_Reference_In_Name = name;
         }
-        if (azad_Visa_Reference_Out && azad_Visa_Reference_Out_Name === "") {
+        if (azad_Visa_Reference_Out &&azad_Visa_Reference_Out.trim().toLowerCase().includes('candidate')&& azad_Visa_Reference_Out_Name === "") {
           azad_Visa_Reference_Out_Name = name;
         }
       }
@@ -3572,40 +3574,43 @@ const addMultipleEnteries = async (req, res) => {
         let final_Status = entryData.final_Status
         let name=entryData.name
         
+     
         entryData.flight_Date =
           entryData.flight_Date !== undefined && entryData.flight_Date !== ""
             ? entryData.flight_Date
             : "No Fly";
-            if (entryData.reference_Out && entryData.reference_Out_Name === "") {
+            if (entryData.reference_Out &&entryData.reference_Out.trim().toLowerCase().includes('candidate')) {
               entryData.reference_Out_Name = entryData.name;
             }
-            if (entryData.reference_In && entryData.reference_In_Name === "") {
+            if (entryData.reference_In&&entryData.reference_In.trim().toLowerCase().includes('candidate') ) {
               entryData.reference_In_Name = entryData.name;
             }
             
-              if (entryData.visit_Reference_In && entryData.visit_Reference_In_Name === "") {
+              if (entryData.visit_Reference_In&&entryData.visit_Reference_In.trim().toLowerCase().includes('candidate')) {
                 entryData.visit_Reference_In_Name = entryData.name;
               
-              if (entryData.visit_Reference_Out && entryData.visit_Reference_Out_Name === "") {
+              if (entryData.visit_Reference_Out&&entryData.visit_Reference_Out.trim().toLowerCase().includes('candidate')) {
                 entryData.visit_Reference_Out_Name = entryData.name;
               }
             }
             
 
-              if (entryData.ticket_Reference_In && entryData.ticket_Reference_In_Name === "") {
+              if (entryData.ticket_Reference_In&&entryData.ticket_Reference_In.trim().toLowerCase().includes('candidate')) {
                 entryData.ticket_Reference_In_Name = entryData.name;
               }
-              if (entryData.ticket_Reference_Out && entryData.ticket_Reference_Out_Name === "") {
+              if (entryData.ticket_Reference_Out&&entryData.ticket_Reference_Out.trim().toLowerCase().includes('candidate')) {
                 entryData.ticket_Reference_Out_Name = entryData.name;
               }
             
        
-              if (entryData.azad_Visa_Reference_In && entryData.azad_Visa_Reference_In_Name === "") {
+              if (entryData.azad_Visa_Reference_In&&entryData.azad_Visa_Reference_In.trim().toLowerCase().includes('candidate')) {
                 entryData.azad_Visa_Reference_In_Name = entryData.name;
               }
-              if (entryData.azad_Visa_Reference_Out && entryData.azad_Visa_Reference_Out_Name === "") {
+              if (entryData.azad_Visa_Reference_Out&&entryData.azad_Visa_Reference_Out.trim().toLowerCase().includes('candidate') ) {
                 entryData.azad_Visa_Reference_Out_Name = entryData.name;
               }
+
+            
             
         if (!entryData.entry_Date) {
           entryData.entry_Date = new Date().toISOString().split("T")[0]
@@ -3715,7 +3720,7 @@ const addMultipleEnteries = async (req, res) => {
                   entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                   remaining_Curr: entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                   curr_Country: entryData.cur_Country_One,
-                  opening:entryData?.visa_Sales_Rate_PKR,
+                  opening:entryData?.visa_Sales_Rate_PKR??0,
                   closing:0,
                   persons: [
                     {
@@ -3797,11 +3802,9 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     "payment_In_Schema.remaining_Curr":
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInSupplier.payment_In_Schema.closing + entryData?.visa_Sales_Rate_PKR) : entryData?.visa_Sales_Rate_PKR
+                     
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  }
+                 
                 });
               }
 

@@ -21,16 +21,76 @@ const allKeys = [
   'azad_Visa_Purchase_PKR', 'azad_Visa_Purchase_Rate_Oth_Cur', 'azad_Visa_Purchase_Cur', 'protector_Price_In', 
   'protector_Price_In_Oth_Cur', 'protector_Price_Out', 'protector_Reference_In', 'protector_Reference_In_Name'
 ];
+const defaultValues = {
+  'name': '',
+  'pp_No': '',
+  'trade': '',
+  'company': '',
+  'contact': '',
+  'country': '',
+  'flight_Date': '',
+  'final_Status': '',
+  'remarks': '',
+  'entry_Mode': '',
+  'reference_Out': '',
+  'reference_Out_Name': '',
+  'visa_Sales_Rate_PKR': 0,
+  'visa_Sale_Rate_Oth_Cur': 0,
+  'cur_Country_One': '',
+  'reference_In': '',
+  'reference_In_Name': '',
+  'visa_Purchase_Rate_PKR': 0,
+  'visa_Purchase_Rate_Oth_Cur': 0,
+  'cur_Country_Two': '',
+  'visit_Reference_Out': '',
+  'visit_Reference_Out_Name': '',
+  'visit_Sales_PKR': 0,
+  'visit_Sales_Rate_Oth_Curr': 0,
+  'visit_Sales_Cur': '',
+  'visit_Reference_In': '',
+  'visit_Reference_In_Name': '',
+  'visit_Purchase_Rate_PKR': 0,
+  'visit_Purchase_Rate_Oth_Cur': 0,
+  'visit_Purchase_Cur': '',
+  'ticket_Reference_Out': '',
+  'ticket_Reference_Out_Name': '',
+  'ticket_Sales_PKR': 0,
+  'ticket_Sales_Rate_Oth_Cur': 0,
+  'ticket_Sales_Cur': '',
+  'ticket_Reference_In': '',
+  'ticket_Reference_In_Name': '',
+  'ticket_Purchase_PKR': 0,
+  'ticket_Purchase_Rate_Oth_Cur': 0,
+  'ticket_Purchase_Cur': '',
+  'azad_Visa_Reference_Out': '',
+  'azad_Visa_Reference_Out_Name': '',
+  'azad_Visa_Sales_PKR': 0,
+  'azad_Visa_Sales_Rate_Oth_Cur': 0,
+  'azad_Visa_Sales_Cur': '',
+  'azad_Visa_Reference_In': '',
+  'azad_Visa_Reference_In_Name': '',
+  'azad_Visa_Purchase_PKR': 0,
+  'azad_Visa_Purchase_Rate_Oth_Cur': 0,
+  'azad_Visa_Purchase_Cur': '',
+  'protector_Price_In': 0,
+  'protector_Price_In_Oth_Cur': 0,
+  'protector_Price_Out': 0,
+  'protector_Reference_In': '',
+  'protector_Reference_In_Name': ''
+};
 
 const initializeMissingFields = (entry) => {
   const initializedEntry = { ...entry };
   allKeys.forEach(key => {
     if (!initializedEntry.hasOwnProperty(key)) {
-      initializedEntry[key] = ''; // Initialize missing fields with empty strings
+      initializedEntry[key] = defaultValues[key]; // Initialize missing fields with default values
+    } else if (typeof defaultValues[key] === 'number') {
+      initializedEntry[key] = parseFloat(initializedEntry[key]); // Ensure numeric values are parsed as numbers
     }
   });
   return initializedEntry;
 };
+
 
 export default function NewEntry() {
   const dispatch = useDispatch();
@@ -111,10 +171,14 @@ export default function NewEntry() {
 
   const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...entries];
-    updatedData[rowIndex][key] = value;
+    if (typeof defaultValues[key] === 'number') {
+      const parsedValue = parseFloat(value);
+      updatedData[rowIndex][key] = isNaN(parsedValue) ? defaultValues[key] : parsedValue;
+    } else {
+      updatedData[rowIndex][key] = value;
+    }
     setEntries(updatedData);
   };
-
 
   useEffect(() => {
     if (triggerEffect) {
