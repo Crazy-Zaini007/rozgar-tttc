@@ -1025,13 +1025,15 @@ label {
 }
 
 .multiple_form form .table input {
-  width: auto !important;
+  max-width: 120px;
+  min-width:100px;
   color: var(--accent-stong-blue);
-  padding-left: 15px;
+  padding-left: 10px;
   margin: 0px;
   border-radius: 0;
   background-color: transparent;
   border: 0.5px solid var(--grays-dm-white);
+  height: 30px;
 }
 
  .payment_details ::-webkit-scrollbar {

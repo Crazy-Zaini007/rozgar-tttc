@@ -123,6 +123,33 @@ const addPaymentIn = async (req, res) => {
                     invoice: nextInvoiceNumber,
                 };
 
+
+                
+
+                let printInvoice={
+                  name:existingSupplier.payment_In_Schema.supplierName,
+                  pp_No:existingSupplier.payment_In_Schema.pp_No,
+                  entry_Mode:existingSupplier.payment_In_Schema.entry_Mode,
+                  company:existingSupplier.payment_In_Schema.company,
+                  trade:existingSupplier.payment_In_Schema.trade,
+                  country:existingSupplier.payment_In_Schema.country,
+                  final_Status:existingSupplier.payment_In_Schema.final_Status,
+                  flight_Date:existingSupplier.payment_In_Schema.flight_Date,
+                  visa_Price_PKR:existingSupplier.payment_In_Schema.total_Visa_Price_In_PKR,
+                  total_In:existingSupplier.payment_In_Schema.total_Payment_In,
+                  remaining_PKR:existingSupplier.payment_In_Schema.total_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out,
+                  new_Total_In:existingSupplier.payment_In_Schema.total_Payment_In+newPaymentIn,
+                  new_Remaining_PKR:existingSupplier.payment_In_Schema.remaining_Balance-newPaymentIn,
+                  visa_Price_Curr:existingSupplier.payment_In_Schema.total_Visa_Price_In_Curr,
+                  total_In_Curr:existingSupplier.payment_In_Schema.total_Payment_In_Curr||0,
+                  remaining_Curr:existingSupplier.payment_In_Schema.total_Visa_Price_In_Curr-existingSupplier.payment_In_Schema.total_Payment_In_Curr,
+                  new_Total_In_Curr:existingSupplier.total_Payment_In_Curr+curr_Amount?curr_Amount:0,
+                  new_Remaining_Curr:existingSupplier.payment_In_Schema.total_Visa_Price_In_Curr-existingSupplier.payment_In_Schema.total_Payment_In_Curr-curr_Amount?curr_Amount:0,
+                  slip_No:slip_No,
+                  invoice:nextInvoiceNumber
+                }
+
+
                 try {
 
                     // Update total_Visa_Price_In_PKR and other fields using $inc
@@ -190,25 +217,11 @@ const addPaymentIn = async (req, res) => {
 
 
                           // Sending Payment Invoice details for auto print 
-                          let printInvoice={
-                            name:existingSupplier.supplierName,
-                            pp_No:existingSupplier.pp_No,
-                            entry_Mode:existingSupplier.entry_Mode,
-                            company:existingSupplier.company,
-                            trade:existingSupplier.trade,
-                            country:existingSupplier.country,
-                            final_Status:existingSupplier.final_Status,
-                            flight_Date:existingSupplier.flight_Date,
-                            visa_Price_PKR:existingSupplier.total_Visa_Price_In_PKR,
-                            total_In:existingSupplier.total_Payment_In,
-                            remaining_PKR:existingSupplier.total_Visa_Price_In_PKR-existingSupplier.total_Payment_In+existingSupplier.total_Cash_Out,
-                            new_Total_In:existingSupplier.total_Payment_In+payment_In,
-                            new_Remaining_PKR:existingSupplier.total_Visa_Price_In_PKR-existingSupplier.total_Payment_In+existingSupplier.total_Cash_Out,
-                          }
+                       
 
                           await existingSupplier.save()
 
-                    res.status(200).json({ message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record` });
+                    res.status(200).json({data:printInvoice, message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record` });
 
                 } catch (error) {
                     

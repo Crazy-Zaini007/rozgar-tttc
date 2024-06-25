@@ -140,7 +140,7 @@ export default function SinglePaymentIn() {
         <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title"> Candidate Details</h1>
+        <h1 class="title">Candidate Details</h1>
       </div>
       <hr/>
     <table class='print-table'>
@@ -154,16 +154,24 @@ export default function SinglePaymentIn() {
         <th>Country</th>
         <th>Final Status</th>
         <th>Flight Date</th>
-        <th>VPI PKR</th>
+        <th>Visa Price PKR</th>
         <th>Total In PKR</th>
         <th>Remaining PKR</th>
+        <th>New Total In PKR</th>
+        <th>New Remaining PKR</th>
         <th>VPI Oth Curr</th>
+        <th>Total In Curr</th>
         <th>Remaining Curr</th>
+         <th>New Total In Curr</th>
+        <th>New Remaining Curr</th>
+        <th>Slip No</th>
+        <th>Invoice</th>
+
         </tr>
       </thead>
       <tbody>
           <tr>
-            <td>${String(selectedPersonDetails?.supplierName)}</td>
+            <td>${String(selectedPersonDetails?.name)}</td>
             <td>${String(selectedPersonDetails?.pp_No)}</td>
             <td>${String(selectedPersonDetails?.entry_Mode)}</td>
             <td>${String(selectedPersonDetails?.company)}</td>
@@ -171,14 +179,18 @@ export default function SinglePaymentIn() {
             <td>${String(selectedPersonDetails?.country)}</td>
             <td>${String(selectedPersonDetails?.final_Status)}</td>
             <td>${String(selectedPersonDetails?.flight_Date)}</td>
-            <td>${String(selectedPersonDetails?.total_Visa_Price_In_PKR)}</td>
-            <td>${String(selectedPersonDetails?.total_Payment_In)}</td>
-            <td>${String(
-      (selectedPersonDetails?.total_Visa_Price_In_PKR - selectedPersonDetails?.total_Payment_In) +
-      selectedPersonDetails?.total_Cash_Out
-    )}</td>
-            <td>${String(selectedPersonDetails?.total_Visa_Price_In_Curr)}</td>
-            <td>${String(selectedPersonDetails?.remaining_Curr)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_PKR)}</td>
+            <td>${String(selectedPersonDetails?.total_In)}</td>
+            <td>${String(selectedPersonDetails?.remaining_PKR)}</td>
+            <td>${String(selectedPersonDetails?.new_Total_In)}</td>
+            <td>${String(selectedPersonDetails?.new_Remaining_PKR||0)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_Curr||0)}</td>
+            <td>${String(selectedPersonDetails?.total_In_Curr||0)}</td>
+            <td>${String(selectedPersonDetails?.remaining_Curr||0)}</td>
+            <td>${String(selectedPersonDetails?.new_Total_In_Curr||0)}</td>
+            <td>${String(selectedPersonDetails?.new_Remaining_Curr||0)}</td>
+            <td>${String(selectedPersonDetails?.slip_No)}</td>
+            <td>${String(selectedPersonDetails?.invoice)}</td>
 
           </tr>
       

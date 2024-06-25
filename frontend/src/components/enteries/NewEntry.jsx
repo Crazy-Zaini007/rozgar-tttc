@@ -7,6 +7,31 @@ import { addMulEnteries } from '../../redux/reducers/entrySlice'
 import { useDispatch,useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+
+const allKeys = [
+  'name', 'pp_No', 'trade', 'company', 'contact', 'country', 'flight_Date', 'final_Status', 'remarks', 'entry_Mode', 
+  'reference_Out', 'reference_Out_Name', 'visa_Sales_Rate_PKR', 'visa_Sale_Rate_Oth_Cur', 'cur_Country_One', 
+  'reference_In', 'reference_In_Name', 'visa_Purchase_Rate_PKR', 'visa_Purchase_Rate_Oth_Cur', 'cur_Country_Two', 
+  'visit_Reference_Out', 'visit_Reference_Out_Name', 'visit_Sales_PKR', 'visit_Sales_Rate_Oth_Curr', 'visit_Sales_Cur', 
+  'visit_Reference_In', 'visit_Reference_In_Name', 'visit_Purchase_Rate_PKR', 'visit_Purchase_Rate_Oth_Cur', 
+  'visit_Purchase_Cur', 'ticket_Reference_Out', 'ticket_Reference_Out_Name', 'ticket_Sales_PKR', 'ticket_Sales_Rate_Oth_Cur', 
+  'ticket_Sales_Cur', 'ticket_Reference_In', 'ticket_Reference_In_Name', 'ticket_Purchase_PKR', 'ticket_Purchase_Rate_Oth_Cur', 
+  'ticket_Purchase_Cur', 'azad_Visa_Reference_Out', 'azad_Visa_Reference_Out_Name', 'azad_Visa_Sales_PKR', 
+  'azad_Visa_Sales_Rate_Oth_Cur', 'azad_Visa_Sales_Cur', 'azad_Visa_Reference_In', 'azad_Visa_Reference_In_Name', 
+  'azad_Visa_Purchase_PKR', 'azad_Visa_Purchase_Rate_Oth_Cur', 'azad_Visa_Purchase_Cur', 'protector_Price_In', 
+  'protector_Price_In_Oth_Cur', 'protector_Price_Out', 'protector_Reference_In', 'protector_Reference_In_Name'
+];
+
+const initializeMissingFields = (entry) => {
+  const initializedEntry = { ...entry };
+  allKeys.forEach(key => {
+    if (!initializedEntry.hasOwnProperty(key)) {
+      initializedEntry[key] = ''; // Initialize missing fields with empty strings
+    }
+  });
+  return initializedEntry;
+};
+
 export default function NewEntry() {
   const dispatch = useDispatch();
   const { user } = useAuthContext();
@@ -17,7 +42,7 @@ export default function NewEntry() {
     setSingle(index)
   }
 
-  const [entries, setEntries] = useState([{ name: '', pp_No: '', trade: '', company: '', contact: '', country: '', flight_Date: '', final_Status: '', remarks: '', entry_Mode: '', reference_Out: '', reference_Out_Name: '', visa_Sales_Rate_PKR: '', visa_Sale_Rate_Oth_Cur: '', cur_Country_One: '', reference_In: '', reference_In_Name: '', visa_Purchase_Rate_PKR: '', visa_Purchase_Rate_Oth_Cur: '', cur_Country_Two: '', visit_Reference_Out: '', visit_Reference_Out_Name: '', visit_Sales_PKR: '', visit_Sales_Rate_Oth_Curr: '', visit_Sales_Cur: '', visit_Reference_In: '', visit_Reference_In_Name: '', visit_Purchase_Rate_PKR: '', visit_Purchase_Rate_Oth_Cur: '', visit_Purchase_Cur: '', ticket_Reference_Out: '', ticket_Reference_Out_Name: '', ticket_Sales_PKR: '', ticket_Sales_Rate_Oth_Cur: '', ticket_Sales_Cur: '', ticket_Reference_In: '', ticket_Reference_In_Name: '', ticket_Purchase_PKR: '', ticket_Purchase_Rate_Oth_Cur: '', ticket_Purchase_Cur: '', azad_Visa_Reference_Out: '', azad_Visa_Reference_Out_Name: '', azad_Visa_Sales_PKR: '', azad_Visa_Sales_Rate_Oth_Cur: '', azad_Visa_Sales_Cur: '', azad_Visa_Reference_In: '', azad_Visa_Reference_In_Name: '', azad_Visa_Purchase_PKR: '', azad_Visa_Purchase_Rate_Oth_Cur: '', azad_Visa_Purchase_Cur: '', protector_Price_In: '',protector_Price_In_Oth_Cur:'', protector_Price_Out: '',protector_Reference_In:'',protector_Reference_In_Name:''  }])
+  const [entries, setEntries] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
 
   const handleFileChange = (e) => {
@@ -27,7 +52,6 @@ export default function NewEntry() {
       return;
     }
 
-    // Check if the file type is either Excel or CSV
     if (
       file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
       file.type !== 'text/csv'
@@ -46,7 +70,6 @@ export default function NewEntry() {
     };
 
     fileReader.readAsBinaryString(file);
-    // Clear the file input value
     e.target.value = null;
   };
 
@@ -55,42 +78,36 @@ export default function NewEntry() {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-  
-    // Modify the dataArray to ensure missing fields are initialized with undefined
+
     const updatedDataArray = dataArray.map((entry, rowIndex) => {
-      // Map over each entry and replace empty strings with undefined
-      return Object.fromEntries(
-        Object.entries(entry).map(([key, value]) => {
-          const trimmedValue = typeof value === 'string' ? value.trim() : value; // Check if the value is a string before trimming
-  
-          // Convert the flight_Date value if the key is 'flight_Date'
-          if (key === 'flight_Date') {
-            if (!isNaN(trimmedValue) && trimmedValue !== '') {
-              // Parse the numeric value as a date without time component
-              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000); // Adjust for timezone offset
-  
-              if (!isNaN(dateValue.getTime())) {
-                return [key, dateValue.toISOString().split('T')[0]]; // Format the date as 'YYYY-MM-DD' if the date is valid
-              } else {
-                console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
-                return [key, undefined];
+      return initializeMissingFields(
+        Object.fromEntries(
+          Object.entries(entry).map(([key, value]) => {
+            const trimmedValue = typeof value === 'string' ? value.trim() : value;
+
+            if (key === 'flight_Date') {
+              if (!isNaN(trimmedValue) && trimmedValue !== '') {
+                const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
+
+                if (!isNaN(dateValue.getTime())) {
+                  return [key, dateValue.toISOString().split('T')[0]];
+                } else {
+                  console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
+                  return [key, undefined];
+                }
+              } else if (['Not Fly', 'Fly'].includes(trimmedValue)) {
+                return [key, trimmedValue];
               }
-            } else if (['Not Fly', 'Fly'].includes(trimmedValue)) {
-              return [key, trimmedValue]; // Keep special strings as they are
             }
-          }
-  
-          return [key, trimmedValue === '' ? undefined : trimmedValue];
-        })
+
+            return [key, trimmedValue === '' ? undefined : trimmedValue];
+          })
+        )
       );
     });
-  
+
     return updatedDataArray;
   };
-  
-  
-
-  
 
   const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...entries];
@@ -109,8 +126,8 @@ export default function NewEntry() {
   const apiUrl = process.env.REACT_APP_API_URL;
 
   //Adding Multiple entries 
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const addMultipleentries = async (e) => {
+
+  const addMultipleEntries = async (e) => {
     setLoading(true)
     e.preventDefault()
     try {
@@ -120,6 +137,7 @@ export default function NewEntry() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.token}`,
         },
+        
         body: JSON.stringify({ entries })
       });
 
@@ -172,9 +190,9 @@ export default function NewEntry() {
               <div className="col-md-12 multiple_form p-0">
 
                 <div>
-                  <form className='py-0 px-2' onSubmit={addMultipleentries} >
+                  <form className='py-0 px-2' onSubmit={addMultipleEntries} >
                     <div className="text-end">
-                      {entries && <button className='btn submit_btn m-1 btn-sm' disabled={loading}>{loading ? "Uploading..." : "Add Entries"}{uploadProgress>0 && uploadProgress}</button>}
+                      {entries && <button className='btn submit_btn m-1 btn-sm' disabled={loading}>{loading ? "Uploading..." : "Add Entries"}</button>}
                     </div>
                     <div className="table-responsive">
                       <table className='table table-borderless table-striped'>
@@ -248,22 +266,21 @@ export default function NewEntry() {
 
                           </tr>
                         </thead>
-                        <tbody className='p-0 m-0'>
-                          {entries && entries.map((rowData, rowIndex) => (
-                            <tr key={rowIndex} className='p-0 m-0'>
-                              {Object.entries(rowData).map(([key, value], colIndex) => (
-                                <td key={colIndex} className='p-0 m-0'>
-                                  <input
-                                    type="text"
-                                    className='m-0'
-                                    value={value || ""}
-                                    onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
-                                  />
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
+                        <tbody>
+          {entries && entries.map((rowData, rowIndex) => (
+            <tr key={rowIndex}>
+              {allKeys.map((key, colIndex) => (
+                <td key={colIndex}>
+                  <input className='p-1'
+                    type="text"
+                    value={rowData[key] || ""}
+                    onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
+                  />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
 
                       </table>
                     </div>
