@@ -17,8 +17,8 @@ import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import AgentHook from '../../hooks/agentHooks/AgentHook';
 import * as XLSX from 'xlsx';
-import Entry1 from './candDoubleEntry/Entry1'
-import Entry2 from './candDoubleEntry/Entry2'
+import Entry1 from '../candDoubleEntry/Entry1'
+import Entry2 from '../candDoubleEntry/Entry2'
 export default function AgentCandPaymentOut() {
   const dispatch = useDispatch();
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react'
-import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
+import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,25 +11,24 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
-import CategoryHook from '../../../hooks/settingHooks/CategoryHook'
-import PaymentViaHook from '../../../hooks/settingHooks/PaymentViaHook'
-import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
-import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
-import AgentHook from '../../../hooks/agentHooks/AgentHook';
-import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
-import CandidateHook from '../../../hooks/candidateHooks/CandidateHook';
-import AzadVisaHook from '../../../hooks/azadVisaHooks/AzadVisaHooks';
-import TicketHook from '../../../hooks/ticketHooks/TicketHook';
-import VisitHook from '../../../hooks/visitsHooks/VisitHook';
-import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
-import CPPHook from '../../../hooks/settingHooks/CPPHook';
-import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHook';
-import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
-import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
-import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
-import ProtectorHook from '../../../hooks/protectorHooks//ProtectorHook';
-import ExpeCategoryHook from '../../../hooks/settingHooks/ExpeCategoryHook'
-import Entry2 from '../newCandDoubleEntry/Entry2'
+import CategoryHook from '../../hooks/settingHooks/CategoryHook'
+import PaymentViaHook from '../../hooks/settingHooks/PaymentViaHook'
+import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
+import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
+import AgentHook from '../../hooks/agentHooks/AgentHook';
+import SupplierHook from '../../hooks/supplierHooks/SupplierHook';
+import CandidateHook from '../../hooks/candidateHooks/CandidateHook';
+import AzadVisaHook from '../../hooks/azadVisaHooks/AzadVisaHooks';
+import TicketHook from '../../hooks/ticketHooks/TicketHook';
+import VisitHook from '../../hooks/visitsHooks/VisitHook';
+import CDWCHook from '../../hooks/creditsDebitsWCHooks/CDWCHook'
+import CPPHook from '../../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../../hooks/settingHooks/CreditorSupplierHook';
+import CDWOCHook from '../../hooks/creditsDebitsWOCHooks/CDWOCHook'
+import NewAssetsHook from '../../hooks/settingHooks/NewAssetsHook';
+import AssetsHook from '../../hooks/assetsHooks/AssetsHook'
+import ProtectorHook from '../../hooks/protectorHooks//ProtectorHook';
+import ExpeCategoryHook from '../../hooks/settingHooks/ExpeCategoryHook'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -133,11 +132,12 @@ export default function SupplierEntry2() {
   const [option, setOption] = useState(false)
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const [type, setType] = useState(false)
+  const [outType, setOutType] = useState(false)
 
   // Form input States
 
   const [supplierName, setSupplierName] = useState('')
+  const [pp_No, setPPNo] = useState('');
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -150,7 +150,7 @@ export default function SupplierEntry2() {
   const [date, setDate] = useState('')
 
   useEffect(() => {
-  }, [type,supplierName,selectedSupplier])
+  }, [outType,supplierName,selectedSupplier])
 
   let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
 
@@ -339,6 +339,7 @@ export default function SupplierEntry2() {
     e.preventDefault();
     setLoading(true);
     setSupplierName('')
+    setPPNo('')
     setCategory('');
     setPayment_Via('');
     setPayment_Type('');
@@ -358,6 +359,7 @@ export default function SupplierEntry2() {
         },
         body: JSON.stringify({
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -368,7 +370,6 @@ export default function SupplierEntry2() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          
           date
         }),
       });
@@ -386,6 +387,7 @@ export default function SupplierEntry2() {
         getPaymentsOut();
         setLoading(false);
         setSupplierName('')
+        setPPNo('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
@@ -1405,27 +1407,19 @@ const handleTicketCandForm = async (e) => {
 };
 
 
-const [paymentOption, setPaymentOption] = useState('Direct');
-
+const handleInputChange = (e) => {
+  const selectedValue = e.target.value;
+  const [supplierNamePart, ppNoPart] = selectedValue.split('/').map(part => part.trim());
+  setSupplierName(supplierNamePart);
+  setSelectedSupplier(supplierNamePart)
+  setPPNo(ppNoPart);
+};
 
   return (
     <>
-     <div className='justify-content-between d-flex'>
-                <div className="left">
-                  <label htmlFor="">Choose Payment Option</label>
-                  <select name="" id="" value={paymentOption} onChange={(e)=>setPaymentOption(e.target.value)}>
-                  <option value="Direct">Direct Out</option>
-                    <option value="Candidate_Vise">Candiadte Vise Out</option>
-
-                  </select>
-                </div>
-               
-              </div>
-     {paymentOption==="Direct" &&
-     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"? handleAssetForm:type === "Protector"? handleProtectorForm:type === "Expense"&& handleExpenseForm)}>
+          <form className='py-3 px-2' onSubmit={(outType==='Agent'?handleAgentForm:outType==="Supplier"?handleSupplierForm:outType==="Candidate"?handleCandidateForm: outType === "Azad Agent" ? handleAzadAgentForm: outType === "Azad Supplier" ? handleAzadSupplierForm: outType === "Azad Candidate" ? handleAzadCandForm: outType === "Ticket Agent" ? handleTicketAgentForm: outType === "Ticket Supplier" ? handleTicketSupplierForm: outType === "Ticket Candidate" ? handleTicketCandForm: outType === "Visit Agent" ? handleVisitAgentForm: outType === "Visit Supplier" ? handleVisitSupplierForm: outType === "Visit Candidate" ? handleVisitCandForm: outType === "Credit/Debit WC" ? handleCDWCForm: outType === "Credit/Debit WOC" ? handleCDWOCForm:outType === "Assets"? handleAssetForm:outType === "Protector"? handleProtectorForm:outType === "Expense"&& handleExpenseForm)}>
             <div className="text-end ">
              
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment Out"}</button>
@@ -1434,7 +1428,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
             <div className="row p-0 m-0 my-1">
             <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Choose Type </label>
-                <select value={type} onChange={(e) => setType(e.target.value)} required>
+                <select value={outType} onChange={(e) => setOutType(e.target.value)} required>
                   <option value="">Choose</option>
                   <option value="Agent">Agent</option>
                  <option value="Supplier">Supplier</option>
@@ -1460,13 +1454,32 @@ const [paymentOption, setPaymentOption] = useState('Direct');
               
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Name</label>
-                {(type!=='Expense' || type==='')  ?
+                {outType==='Candidate' ?
+                  <>
+                 <input 
+        list="outName" 
+        required 
+        value={supplierName} 
+        onChange={handleInputChange} 
+      />
+      <datalist id="outName">
+        {candidate_Payments_Out && 
+          candidate_Payments_Out.map((data) => (
+            <option key={data._id} value={`${data.supplierName}/${data.pp_No}`}>
+              {`${data.supplierName}/${data.pp_No}`}
+            </option>
+          ))
+        }
+      </datalist>
+                </>:
+                <>
+                  {(outType!=='Expense' || outType==='')  ?
                 <select required value={supplierName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
                   
-                 {type==="Agent" &&
+                 {outType==="Agent" &&
                  <>
                  <option value="">Choose Agent</option>
                   {agent_Payments_Out &&
@@ -1478,7 +1491,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Supplier" &&
+                  {outType==="Supplier" &&
                  <>
                  <option value="">Choose Supplier</option>
                   {supp_Payments_Out &&
@@ -1490,7 +1503,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Candidate" &&
+                  {outType==="Candidate" &&
                  <>
                  <option value="">Choose Candidate</option>
                   {candidate_Payments_Out &&
@@ -1502,7 +1515,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                   {type==="Protector" &&
+                   {outType==="Protector" &&
                  <>
                  <option value="">Choose Protector</option>
                   {protector_Payments_Out &&
@@ -1514,7 +1527,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                 {type==="Azad Agent" &&
+                 {outType==="Azad Agent" &&
                  <>
                  <option value="">Choose Azad Agent</option>
                   {azadAgent_Payments_Out &&
@@ -1526,7 +1539,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Azad Supplier" &&
+                  {outType==="Azad Supplier" &&
                  <>
                  <option value="">Choose Azad Supplier</option>
                   {azadSupplier_Payments_Out &&
@@ -1538,7 +1551,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Azad Candidate" &&
+                  {outType==="Azad Candidate" &&
                  <>
                  <option value="">Choose Azad Candidate</option>
                   {azadCand_Payments_Out &&
@@ -1551,7 +1564,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                  </>
                  }
 
-                {type==="Ticket Agent" &&
+                {outType==="Ticket Agent" &&
                  <>
                  <option value="">Choose Ticket Agent</option>
                   {ticketAgent_Payments_Out &&
@@ -1563,7 +1576,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Ticket Supplier" &&
+                  {outType==="Ticket Supplier" &&
                  <>
                  <option value="">Choose Ticket Supplier</option>
                   {ticketSupplier_Payments_Out &&
@@ -1575,7 +1588,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Ticket Candidate" &&
+                  {outType==="Ticket Candidate" &&
                  <>
                  <option value="">Choose Ticket Candidate</option>
                   {ticketCand_Payments_Out &&
@@ -1588,7 +1601,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                  </>
                  }
 
-               {type==="Visit Agent" &&
+               {outType==="Visit Agent" &&
                  <>
                  <option value="">Choose Visit Agent</option>
                   {visitAgent_Payments_Out &&
@@ -1600,7 +1613,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Visit Supplier" &&
+                  {outType==="Visit Supplier" &&
                  <>
                  <option value="">Choose Visit Supplier</option>
                   {visitSupplier_Payments_Out &&
@@ -1612,7 +1625,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Visit Candidate" &&
+                  {outType==="Visit Candidate" &&
                  <>
                  <option value="">Choose Visit Candidate</option>
                   {visitCand_Payments_Out &&
@@ -1625,7 +1638,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                  </>
                  }
 
-                  {type==="Credit/Debit WC" &&
+                  {outType==="Credit/Debit WC" &&
                  <>
                  <option value="">Choose Credit/Debit WC</option>
                   {crediterPurchaseParties &&
@@ -1637,7 +1650,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Credit/Debit WOC" &&
+                  {outType==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
                   {crediterSuppliers &&
@@ -1649,7 +1662,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Assets" &&
+                  {outType==="Assets" &&
                  <>
                  <option value="">Choose Asset</option>
                   {assets &&
@@ -1662,23 +1675,30 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                  </>
                  }
                 </select>:
-                <input type="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
+                <input outType="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
                 }
-
+                </>
+                }
               </div>
+              {outType==="Candidate" &&
+               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+               <label >PP# </label>
+               <input outType="text" value={pp_No} disabled />
+             </div>
+              }
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label>{type==="Expense"&&"Expense"} Category </label>
+                <label>{outType==="Expense"&&"Expense"} Category </label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                   <option value="">Choose</option>
-                 {type !=="Expense" &&
+                 {outType !=="Expense" &&
                  <>
                   {categories && categories.map((data) => (
                     <option key={data._id} value={data.category}>{data.category}</option>
                   ))}
                  </>
                  }
-                  {type ==="Expense" &&
+                  {outType ==="Expense" &&
                  <>
                   {expenseCategories && expenseCategories.map((data) => (
                     <option key={data._id} value={data.category}>{data.category}</option>
@@ -1707,21 +1727,21 @@ const [paymentOption, setPaymentOption] = useState('Direct');
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Slip No </label>
-                <input type="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
+                <input outType="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Payment Out </label>
-                <input type="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
+                <input outType="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Upload Slip </label>
-                <input type="file" accept='image/*' onChange={handleImage} />
+                <input outType="file" accept='image/*' onChange={handleImage} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                <input outType="date" value={date} onChange={(e) => setDate(e.target.value)} />
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
@@ -1750,11 +1770,11 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                 </div>
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >CUR Rate </label>
-                  <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                  <input outType="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Currency Amount </label>
-                  <input type="number" value={curr_Amount} readOnly />
+                  <input outType="number" value={curr_Amount} readOnly />
                 </div>
               </div>}
           </form>
@@ -1790,8 +1810,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {(type === "Agent" ? agent_Payments_Out : type === "Supplier" ? supp_Payments_Out : type === "Candidate" ? candidate_Payments_Out: type === "Azad Agent" ? azadAgent_Payments_Out: type === "Azad Supplier" ? azadSupplier_Payments_Out: type === "Azad Candidate" ? azadCand_Payments_Out: type === "Ticket Agent" ? ticketAgent_Payments_Out: type === "Ticket Supplier" ? ticketSupplier_Payments_Out: type === "Ticket Candidate" ? ticketCand_Payments_Out: type === "Visit Agent" ? visitAgent_Payments_Out: type === "Visit Supplier" ? visitSupplier_Payments_Out: type === "Visit Candidate" ? visitCand_Payments_Out: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In:type === "Assets" ? assetsPayments:type === "Protector" ? protector_Payments_Out: [])
-                    .filter((data) => type === "Assets"? data.assetName:data.supplierName === selectedSupplier)
+                {(outType === "Agent" ? agent_Payments_Out : outType === "Supplier" ? supp_Payments_Out : outType === "Candidate" ? candidate_Payments_Out: outType === "Azad Agent" ? azadAgent_Payments_Out: outType === "Azad Supplier" ? azadSupplier_Payments_Out: outType === "Azad Candidate" ? azadCand_Payments_Out: outType === "Ticket Agent" ? ticketAgent_Payments_Out: outType === "Ticket Supplier" ? ticketSupplier_Payments_Out: outType === "Ticket Candidate" ? ticketCand_Payments_Out: outType === "Visit Agent" ? visitAgent_Payments_Out: outType === "Visit Supplier" ? visitSupplier_Payments_Out: outType === "Visit Candidate" ? visitCand_Payments_Out: outType === "Credit/Debit WC" ? CDWC_Payments_In: outType === "Credit/Debit WOC" ? CDWOC_Payments_In:outType === "Assets" ? assetsPayments:outType === "Protector" ? protector_Payments_Out: [])
+                    .filter((data) => outType === "Assets"? data.assetName:data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>
@@ -1865,11 +1885,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
         )}
 
       </div>
-     </>
-     }
-{paymentOption==='Candidate_Vise' &&
-<Entry2/>
-}
+
 
     </>
   )

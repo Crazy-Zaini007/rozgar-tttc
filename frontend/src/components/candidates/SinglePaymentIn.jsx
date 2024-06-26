@@ -64,6 +64,7 @@ export default function SinglePaymentIn() {
 
   // Form input States
   const [supplierName, setSupplierName] = useState('')
+  const [pp_No, setPPNo] = useState('');
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -121,7 +122,7 @@ export default function SinglePaymentIn() {
   };
 
 
-  
+
   const printPersonsTable = (selectedPersonDetails) => {
     // Convert JSX to HTML string
     const formatDate = (date) => {
@@ -132,7 +133,7 @@ export default function SinglePaymentIn() {
       return `${day}-${month}-${year}`;
     }
     const formattedDate = formatDate(new Date());
-  
+
     const printContentString = `
     <div class="print-header">
       <p class="invoice">Candidate: ${selectedSupplier}</p>
@@ -183,12 +184,12 @@ export default function SinglePaymentIn() {
             <td>${String(selectedPersonDetails?.total_In)}</td>
             <td>${String(selectedPersonDetails?.remaining_PKR)}</td>
             <td>${String(selectedPersonDetails?.new_Total_In)}</td>
-            <td>${String(selectedPersonDetails?.new_Remaining_PKR||0)}</td>
-            <td>${String(selectedPersonDetails?.visa_Price_Curr||0)}</td>
-            <td>${String(selectedPersonDetails?.total_In_Curr||0)}</td>
-            <td>${String(selectedPersonDetails?.remaining_Curr||0)}</td>
-            <td>${String(selectedPersonDetails?.new_Total_In_Curr||0)}</td>
-            <td>${String(selectedPersonDetails?.new_Remaining_Curr||0)}</td>
+            <td>${String(selectedPersonDetails?.new_Remaining_PKR || 0)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.total_In_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.remaining_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.new_Total_In_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.new_Remaining_Curr || 0)}</td>
             <td>${String(selectedPersonDetails?.slip_No)}</td>
             <td>${String(selectedPersonDetails?.invoice)}</td>
 
@@ -267,6 +268,7 @@ export default function SinglePaymentIn() {
     e.preventDefault();
     setLoading(true);
     setSupplierName('')
+    setPPNo('')
     setCategory('');
     setPayment_Via('');
     setPayment_Type('');
@@ -286,6 +288,7 @@ export default function SinglePaymentIn() {
         },
         body: JSON.stringify({
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -315,6 +318,7 @@ export default function SinglePaymentIn() {
         printPersonsTable(json.data)
         setLoading(false);
         setSupplierName('')
+        setPPNo('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
@@ -325,7 +329,6 @@ export default function SinglePaymentIn() {
         setCurr_Country('');
         setSelectedSupplier('')
         setCurr_Rate('');
-        // setOpen(true)
         setClose(false);
         setDate('')
       }
@@ -336,8 +339,14 @@ export default function SinglePaymentIn() {
       setLoading(false);
     }
   };
-
-
+  
+  const handleInputChange = (e) => {
+    const selectedValue = e.target.value;
+    const [supplierNamePart, ppNoPart] = selectedValue.split('/').map(part => part.trim());
+    setSupplierName(supplierNamePart);
+    setSelectedSupplier(supplierNamePart)
+    setPPNo(ppNoPart);
+  };
 
   return (
     <>
@@ -345,34 +354,39 @@ export default function SinglePaymentIn() {
         {!option && <TableContainer component={Paper}>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-           
-                <label htmlFor="">
-                  Close
-                  <input type="checkbox" value={close} onClick={() => setClose(!close)} />
-                </label>
-              
+
+              <label htmlFor="">
+                Close
+                <input type="checkbox" value={close} onClick={() => setClose(!close)} />
+              </label>
+
 
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
-
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label >Name</label>
-                <select required value={supplierName} onChange={(e) => {
-                  setSelectedSupplier(e.target.value);
-                  setSupplierName(e.target.value)
-                }}>
-                  <option value="">Choose Candidate</option>
-                  {candidate_Payments_In &&
-                    candidate_Payments_In.map((data) => (
-                      <option key={data._id} value={data.supplierName}>
-                        {data.supplierName}
-                      </option>
-                    ))
-                  }
-                </select>
-
+              <label>Name</label>
+              <input 
+        list="name" 
+        required 
+        value={supplierName} 
+        onChange={handleInputChange} 
+      />
+      <datalist id="name">
+        {candidate_Payments_In && 
+          candidate_Payments_In.map((data) => (
+            <option key={data._id} value={`${data.supplierName}/${data.pp_No}`}>
+              {`${data.supplierName}/${data.pp_No}`}
+            </option>
+          ))
+        }
+      </datalist>
+      
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >PP# </label>
+                <input type="text" value={pp_No} disabled />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Category </label>
@@ -417,7 +431,7 @@ export default function SinglePaymentIn() {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)}  />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
@@ -464,154 +478,154 @@ export default function SinglePaymentIn() {
           {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
-         <>
-          <div className="col-md-12 detail_table">
-            <TableContainer component={Paper}>
-              <Table aria-label="customized table">
-                <TableHead className="thead">
-                  <TableRow>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
-                    <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_In</TableCell>
-                    <TableCell className='label border'>Cash_Out</TableCell>
-                    <TableCell className='label border'>Invoice</TableCell>
-                    <TableCell className='label border'>Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+          <>
+            <div className="col-md-12 detail_table">
+              <TableContainer component={Paper}>
+                <Table aria-label="customized table">
+                  <TableHead className="thead">
+                    <TableRow>
+                      <TableCell className='label border'>Date</TableCell>
+                      <TableCell className='label border'>Category</TableCell>
+                      <TableCell className='label border'>Payment_Via</TableCell>
+                      <TableCell className='label border'>Payment_Type</TableCell>
+                      <TableCell className='label border'>Slip_No</TableCell>
+                      <TableCell className='label border'>Details</TableCell>
+                      <TableCell className='label border'>Payment_In</TableCell>
+                      <TableCell className='label border'>Cash_Out</TableCell>
+                      <TableCell className='label border'>Invoice</TableCell>
+                      <TableCell className='label border'>Payment_In_Curr</TableCell>
+                      <TableCell className='label border'>CUR_Rate</TableCell>
+                      <TableCell className='label border'>CUR_Amount</TableCell>
 
 
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {candidate_Payments_In
-                    .filter((data) => data.supplierName === selectedSupplier)
-                    .map((filteredData) => (
-                      // Map through the payment array
-                      <>
-                        {filteredData.payment && filteredData.payment?.map((paymentItem, index) => (
-                          <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                            <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
-                            <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                            <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {candidate_Payments_In
+                      .filter((data) => data.supplierName === selectedSupplier)
+                      .map((filteredData) => (
+                        // Map through the payment array
+                        <>
+                          {filteredData.payment && filteredData.payment?.map((paymentItem, index) => (
+                            <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                              <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.payment_In_Curr}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
 
+                            </TableRow>
+                          ))}
+                          {/* Move these cells inside the innermost map loop */}
+
+                          <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+
+                            <TableCell className='label border'>Total_Payment_In</TableCell>
+                            <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
+                            <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
                           </TableRow>
-                        ))}
-                        {/* Move these cells inside the innermost map loop */}
+                          <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
 
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
+                            <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
+                            <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
+                            <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr}</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='label border'>Remaining PKR</TableCell>
+                            <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.remaining_Balance}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
+                            <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.remaining_Curr}</TableCell>
+                          </TableRow>
+                        </>
+                      ))}
 
-                          <TableCell className='label border'>Total_Payment_In</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Payment_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+
+            <div className="col-md-12 detail_table my-2">
+              <h6>Persons Details</h6>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead className="thead">
+                    <TableRow>
+                      <TableCell className='label border'>SN</TableCell>
+                      <TableCell className='label border'>Date</TableCell>
+                      <TableCell className='label border'>Name</TableCell>
+                      <TableCell className='label border'>PP#</TableCell>
+                      <TableCell className='label border'>Entry_Mode</TableCell>
+                      <TableCell className='label border'>Company</TableCell>
+                      <TableCell className='label border'>Final_Status</TableCell>
+                      <TableCell className='label border'>Flight_Date</TableCell>
+                      <TableCell className='label border'>VPI_PKR</TableCell>
+                      <TableCell className='label border'>VPI_Oth_Curr</TableCell>
+
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {candidate_Payments_In
+                      .filter(data => data.supplierName === selectedSupplier)
+                      .map((person, index) => (
+                        <TableRow key={person._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          <TableCell className='border data_td text-center'>{index + 1}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.createdAt}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.supplierName}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.pp_No}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.entry_Mode}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.company}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.total_Visa_Price_In_PKR}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.total_Visa_Price_In_Curr}</TableCell>
                         </TableRow>
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
+                      ))}
+                  </TableBody>
 
-                          <TableCell className='label border'>Total_Visa_Price_In_PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_In_PKR}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Total_Visa_Price_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.remaining_Balance}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className='label border'>Remaining Total_Payment_In_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.remaining_Curr}</TableCell>
-                        </TableRow>
-                      </>
-                    ))}
+                </Table>
+              </TableContainer>
+              <hr className='my-2 ' />
 
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-          
-          <div className="col-md-12 detail_table my-2">
-            <h6>Persons Details</h6>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead className="thead">
-                  <TableRow>
-                    <TableCell className='label border'>SN</TableCell>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Name</TableCell>
-                    <TableCell className='label border'>PP#</TableCell>
-                    <TableCell className='label border'>Entry_Mode</TableCell>
-                    <TableCell className='label border'>Company</TableCell>
-                    <TableCell className='label border'>Final_Status</TableCell>
-                    <TableCell className='label border'>Flight_Date</TableCell>
-                    <TableCell className='label border'>VPI_PKR</TableCell>
-                    <TableCell className='label border'>VPI_Oth_Curr</TableCell>
-                    
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-          {candidate_Payments_In
-            .filter(data => data.supplierName === selectedSupplier)
-            .map((person, index) => (
-              <TableRow key={person._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.createdAt}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.supplierName}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.pp_No}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.entry_Mode}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.company}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.total_Visa_Price_In_PKR}</TableCell>
-                <TableCell className='border data_td text-center'>{person?.total_Visa_Price_In_Curr}</TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
+            </div>
 
-              </Table>
-            </TableContainer>
-          <hr className='my-2 '/>
-
-          </div>
-         
-         </>
+          </>
         )}
- {candidate_Payments_In 
+        {candidate_Payments_In
           .filter(data => data.supplierName === selectedSupplier)
-          .map((person,index)=>(
-<>
-      <form>
-       <div className="row p-0 m-0 mt-2">
+          .map((person, index) => (
+            <>
+              <form>
+                <div className="row p-0 m-0 mt-2">
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Candidate Name</label>
                     <input disabled
@@ -677,19 +691,19 @@ export default function SinglePaymentIn() {
                     />
                   </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >Total In PKR</label>
-                  <input type="text" disabled value={Math.round(person.total_Payment_In)} readOnly />
-                </div>
-                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >New Total In PKR</label>
-                  <input type="text" disabled   value={
-                    person.total_Payment_In+parseInt(payment_In,10)
-              } readOnly />
-                </div>
+                    <label >Total In PKR</label>
+                    <input type="text" disabled value={Math.round(person.total_Payment_In)} readOnly />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label >New Total In PKR</label>
+                    <input type="text" disabled value={
+                      person.total_Payment_In + parseInt(payment_In, 10)
+                    } readOnly />
+                  </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Remaining PKR</label>
-                    <input 
-                    disabled
+                    <input
+                      disabled
                       type="text"
                       value={Math.round(person.remaining_Balance)}
                       readOnly
@@ -698,16 +712,16 @@ export default function SinglePaymentIn() {
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>New Remaining PKR</label>
                     <input
-                    disabled
+                      disabled
                       type="text"
-                      value={Math.round(person.remaining_Balance-payment_In)}
+                      value={Math.round(person.remaining_Balance - payment_In)}
                       readOnly
                     />
                   </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Visa Price In Curr</label>
                     <input
-                    disabled
+                      disabled
                       type="text"
                       value={Math.round(person.total_Visa_Price_In_Curr)}
                       readOnly
@@ -716,7 +730,7 @@ export default function SinglePaymentIn() {
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Total Paid Curr</label>
                     <input
-                    disabled
+                      disabled
                       type="text"
                       value={Math.round(person.total_Payment_In_Curr)}
                       readOnly
@@ -725,16 +739,16 @@ export default function SinglePaymentIn() {
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>New Total Paid Curr</label>
                     <input
-                    disabled
+                      disabled
                       type="text"
-                      value={Math.round(person.total_Payment_In_Curr +curr_Amount)}
+                      value={Math.round(person.total_Payment_In_Curr + curr_Amount)}
                       readOnly
                     />
                   </div>
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>Remaining Curr</label>
                     <input
-                    disabled
+                      disabled
                       type="text"
                       value={person.remaining_Curr}
                       readOnly
@@ -743,22 +757,22 @@ export default function SinglePaymentIn() {
                   <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                     <label>New Remaining Curr</label>
                     <input
-                    disabled
+                      disabled
                       type="text"
-                      value={Math.round(person.remaining_Curr-curr_Amount)}
+                      value={Math.round(person.remaining_Curr - curr_Amount)}
                       readOnly
                     />
                   </div>
                 </div>
-      </form>
-      {/* <div className="row p-0 m-0 mt-2 justify-content-center">
+              </form>
+              {/* <div className="row p-0 m-0 mt-2 justify-content-center">
                 <div className="col-md-2 col-sm-12">
                 <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(person)}>Print</button>
                 </div>
               </div> */}
 
 
-     </>
+            </>
           ))}
       </div>
     </>

@@ -17,8 +17,8 @@ import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
 import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
 import CandidateHook from '../../hooks/candidateHooks/CandidateHook';
 import * as XLSX from 'xlsx';
-import SupplierEntry2 from './doubleEntry/SupplierEntry2'
-import SupplierEntry1 from './doubleEntry/SupplierEntry1'
+import SupplierEntry2 from '../doubleEntry/SupplierEntry2'
+import SupplierEntry1 from '../doubleEntry/SupplierEntry1'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -69,6 +69,7 @@ export default function CandPaymentOut() {
   // Form input States
 
   const [supplierName, setSupplierName] = useState('')
+  const [pp_No, setPPNo] = useState('');
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -136,6 +137,7 @@ export default function CandPaymentOut() {
     e.preventDefault();
     setLoading(true);
     setSupplierName('')
+    setPPNo('')
     setCategory('');
     setPayment_Via('');
     setPayment_Type('');
@@ -155,6 +157,7 @@ export default function CandPaymentOut() {
         },
         body: JSON.stringify({
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -184,6 +187,7 @@ export default function CandPaymentOut() {
         getPaymentsOut();
         setLoading(false);
         setSupplierName('')
+        setPPNo('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
@@ -214,7 +218,7 @@ export default function CandPaymentOut() {
     setSingle(index)
   }
 
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '',pp_No:'', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
 
   const [triggerEffect, setTriggerEffect] = useState(false);
 
@@ -332,7 +336,16 @@ export default function CandPaymentOut() {
   }, [triggerEffect, multiplePayment]);
 
 
+  const handlePaymentInputChange = (e) => {
+    const selectedValue = e.target.value;
+    const [supplierNamePart, ppNoPart] = selectedValue.split('/').map(part => part.trim());
+    setSupplierName(supplierNamePart);
+    setSelectedSupplier(supplierNamePart)
+    setPPNo(ppNoPart);
+  };
+
   const collapsed = useSelector((state) => state.collapsed.collapsed);
+
 
 
   return (
@@ -369,6 +382,7 @@ export default function CandPaymentOut() {
                             <tr >
                               <th >Date</th>
                               <th >Name</th>
+                              <th >PP#</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
                               <th >Payment_Type</th>
@@ -428,23 +442,29 @@ export default function CandPaymentOut() {
                     </div>
                     <div className="row p-0 m-0 my-1">
 
-                      <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                        <label >Name</label>
-                        <select required value={supplierName} onChange={(e) => {
-                          setSelectedSupplier(e.target.value);
-                          setSupplierName(e.target.value)
-                        }}>
-                          <option value="">Choose Candidate</option>
-                          {candidate_Payments_Out &&
-                            candidate_Payments_Out.map((data) => (
-                              <option key={data._id} value={data.supplierName}>
-                                {data.supplierName}
-                              </option>
-                            ))
-                          }
-                        </select>
-
-                      </div>
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                      <label>Name</label>
+                      <input 
+                      list="name" 
+                      required 
+                      value={supplierName} 
+                      onChange={handlePaymentInputChange} 
+                    />
+                    <datalist id="name">
+                      {candidate_Payments_Out && 
+                        candidate_Payments_Out.map((data) => (
+                          <option key={data._id} value={`${data.supplierName}/${data.pp_No}`}>
+                            {`${data.supplierName}/${data.pp_No}`}
+                          </option>
+                        ))
+                      }
+                    </datalist>
+      
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >PP# </label>
+                <input type="text" value={pp_No} disabled />
+              </div>
                       <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                         <label >Category </label>
                         <select value={category} onChange={(e) => setCategory(e.target.value)} required>

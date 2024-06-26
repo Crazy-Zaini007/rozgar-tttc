@@ -1,6 +1,6 @@
 import React, { useEffect, useState,useRef } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useAuthContext } from "../../../hooks/userHooks/UserAuthHook";
+import { useAuthContext } from "../../hooks/userHooks/UserAuthHook";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -10,14 +10,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import CategoryHook from "../../../hooks/settingHooks/CategoryHook";
-import PaymentViaHook from "../../../hooks/settingHooks/PaymentViaHook";
-import PaymentTypeHook from "../../../hooks/settingHooks/PaymentTypeHook";
-import CurrCountryHook from "../../../hooks/settingHooks/CurrCountryHook";
-import AgentHook from '../../../hooks/agentHooks/AgentHook';
-import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
-import SupplierEntry1 from '../doubleEntry/SupplierEntry1'
-import Entry2 from './Entry2'
+import CategoryHook from "../../hooks/settingHooks/CategoryHook";
+import PaymentViaHook from "../../hooks/settingHooks/PaymentViaHook";
+import PaymentTypeHook from "../../hooks/settingHooks/PaymentTypeHook";
+import CurrCountryHook from "../../hooks/settingHooks/CurrCountryHook";
+import AgentHook from '../../hooks/agentHooks/AgentHook';
+import SupplierHook from '../../hooks/supplierHooks/SupplierHook';
 
 export default function Entry1() {
   const dispatch = useDispatch();
@@ -64,9 +62,6 @@ export default function Entry1() {
       }
     }
   }, [user, dispatch,route]);
-
-
-  const [paymentOption, setPaymentOption] = useState('Candidate_Vise');
 
 
   const [option, setOption] = useState(false);
@@ -530,18 +525,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
   return (
    <>
    
-     <div className='justify-content-between d-flex'>
-                <div className="left">
-                  <label htmlFor="">Choose Payment Option</label>
-                  <select name="" id="" value={paymentOption} onChange={(e)=>setPaymentOption(e.target.value)}>
-                    <option value="Candidate_Vise">Candiadte Vise In</option>
-                    <option value="Direct">Direct In</option>
-
-                  </select>
-                </div>
-               
-              </div>
-    {paymentOption==='Candidate_Vise' &&
+  
     <TableContainer  className="mb-1">
     <div className="col-md-12 ">
       {!option && (
@@ -1133,11 +1117,7 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
 <hr/>
 
   </TableContainer>
-    }
-
-    {paymentOption==='Direct' &&
-    <SupplierEntry1></SupplierEntry1>
-    }
+   
 
    </>
   )

@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useRef } from 'react'
-import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook'
+
+import { useAuthContext } from '../../hooks/userHooks/UserAuthHook'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,111 +12,102 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
-import CategoryHook from '../../../hooks/settingHooks/CategoryHook'
-import PaymentViaHook from '../../../hooks/settingHooks/PaymentViaHook'
-import PaymentTypeHook from '../../../hooks/settingHooks/PaymentTypeHook'
-import CurrCountryHook from '../../../hooks/settingHooks/CurrCountryHook'
-import AgentHook from '../../../hooks/agentHooks/AgentHook';
-import SupplierHook from '../../../hooks/supplierHooks/SupplierHook';
-import CandidateHook from '../../../hooks/candidateHooks/CandidateHook';
-import AzadVisaHook from '../../../hooks/azadVisaHooks/AzadVisaHooks';
-import TicketHook from '../../../hooks/ticketHooks/TicketHook';
-import VisitHook from '../../../hooks/visitsHooks/VisitHook';
-import CDWCHook from '../../../hooks/creditsDebitsWCHooks/CDWCHook'
-import CPPHook from '../../../hooks/settingHooks/CPPHook';
-import CreditorSupplierHook from '../../../hooks/settingHooks/CreditorSupplierHook';
-import CDWOCHook from '../../../hooks/creditsDebitsWOCHooks/CDWOCHook'
-import NewAssetsHook from '../../../hooks/settingHooks/NewAssetsHook';
-import AssetsHook from '../../../hooks/assetsHooks/AssetsHook'
-import ProtectorHook from '../../../hooks/protectorHooks//ProtectorHook';
-import ExpeCategoryHook from '../../../hooks/settingHooks/ExpeCategoryHook'
-import Entry2 from '../newCandDoubleEntry/Entry2'
-
+import CategoryHook from '../../hooks/settingHooks/CategoryHook'
+import PaymentViaHook from '../../hooks/settingHooks/PaymentViaHook'
+import PaymentTypeHook from '../../hooks/settingHooks/PaymentTypeHook'
+import CurrCountryHook from '../../hooks/settingHooks/CurrCountryHook'
+import AgentHook from '../../hooks/agentHooks/AgentHook';
+import SupplierHook from '../../hooks/supplierHooks/SupplierHook';
+import CandidateHook from '../../hooks/candidateHooks/CandidateHook';
+import AzadVisaHook from '../../hooks/azadVisaHooks/AzadVisaHooks';
+import TicketHook from '../../hooks/ticketHooks/TicketHook';
+import VisitHook from '../../hooks/visitsHooks/VisitHook';
+import CDWCHook from '../../hooks/creditsDebitsWCHooks/CDWCHook'
+import CPPHook from '../../hooks/settingHooks/CPPHook';
+import CreditorSupplierHook from '../../hooks/settingHooks/CreditorSupplierHook';
+import CDWOCHook from '../../hooks/creditsDebitsWOCHooks/CDWOCHook'
+import NewAssetsHook from '../../hooks/settingHooks/NewAssetsHook';
+import AssetsHook from '../../hooks/assetsHooks/AssetsHook'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
-
-export default function SupplierEntry2() {
+import Entry1 from '../newCandDoubleEntry/Entry1'
+export default function SupplierEntry1() {
   const dispatch = useDispatch();
   // getting data from redux store 
-
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const agent_Payments_Out = useSelector((state) => state.agents.agent_Payments_Out)
-  const candidate_Payments_Out = useSelector((state) => state.candidates.candidate_Payments_Out)
-  const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
+  const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In)
+  const candidate_Payments_In = useSelector((state) => state.candidates.candidate_Payments_In)
+  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In)
+  const azadAgent_Payments_In = useSelector((state) => state.azadVisa.azadAgent_Payments_In)
+  const azadCand_Payments_In = useSelector((state) => state.azadVisa.azadCand_Payments_In)
+  const azadSupplier_Payments_In = useSelector((state) => state.azadVisa.azadSupplier_Payments_In)
+  const ticketAgent_Payments_In = useSelector((state) => state.tickets.ticketAgent_Payments_In)
+  const ticketCand_Payments_In = useSelector((state) => state.tickets.ticketCand_Payments_In)
+  const ticketSupplier_Payments_In = useSelector((state) => state.tickets.ticketSupplier_Payments_In)
+  const visitAgent_Payments_In = useSelector((state) => state.visits.visitAgent_Payments_In)
+  const visitCand_Payments_In = useSelector((state) => state.visits.visitCand_Payments_In)
+  const visitSupplier_Payments_In = useSelector((state) => state.visits.visitSupplier_Payments_In)
 
-  const azadAgent_Payments_Out = useSelector((state) => state.azadVisa.azadAgent_Payments_Out)
-  const azadCand_Payments_Out = useSelector((state) => state.azadVisa.azadCand_Payments_Out)
-  const azadSupplier_Payments_Out = useSelector((state) => state.azadVisa.azadSupplier_Payments_Out)
-  const ticketAgent_Payments_Out = useSelector((state) => state.tickets.ticketAgent_Payments_Out)
-  const ticketCand_Payments_Out = useSelector((state) => state.tickets.ticketCand_Payments_Out)
-  const ticketSupplier_Payments_Out = useSelector((state) => state.tickets.ticketSupplier_Payments_Out)
-  const visitAgent_Payments_Out = useSelector((state) => state.visits.visitAgent_Payments_Out)
-  const visitCand_Payments_Out = useSelector((state) => state.visits.visitCand_Payments_Out)
-  const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupplier_Payments_Out)
-  const protector_Payments_Out = useSelector((state) => state.protectors.protector_Payments_Out)
 
   const CDWC_Payments_In = useSelector((state) => state.creditsDebitsWC.CDWC_Payments_In);
   const CDWOC_Payments_In = useSelector((state) => state.creditsDebitsWOC.CDWOC_Payments_In);
-  const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
-  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const assets = useSelector((state) => state.setting.assets)
   const assetsPayments = useSelector((state) => state.assetsPayments.assetsPayments);
-  const expenseCategories = useSelector((state) => state.setting.expenseCategories);
 
+  const crediterSuppliers = useSelector((state) => state.setting.crediterSuppliers);
+  const crediterPurchaseParties = useSelector((state) => state.setting.crediterPurchaseParties)
   const [selectedSupplier, setSelectedSupplier] = useState('');
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
-  const { getAgentPaymentsOut } = AgentHook()
-  const { getSupplierPaymentsOut } = SupplierHook()
-  const { getCandPaymentsOut } = CandidateHook()
-  const { getAzadAgentPaymentsOut,getAzadCandPaymentsOut,getAzadSupplierPaymentsOut } = AzadVisaHook()
-  const { getTicketAgentPaymentsOut,getTicketCandPaymentsOut,getTicketSupplierPaymentsOut } = TicketHook()
-  const { getVisitAgentPaymentsOut,getVisitCandPaymentsOut,getVisitSupplierPaymentsOut } = VisitHook()
-  const { getCDWCPaymentsOut } = CDWCHook()
-  const { getCDWOCPaymentsOut } = CDWOCHook()
+  const { getPaymentsIn } = AgentHook()
+  const { getSupplierPaymentsIn } = SupplierHook()
+  const { getCandPaymentsIn } = CandidateHook()
+  const { getAzadAgentPaymentsIn,getAzadCandPaymentsIn,getAzadSupplierPaymentsIn } = AzadVisaHook()
+  const { getTicketAgentPaymentsIn,getTicketCandPaymentsIn,getTicketSupplierPaymentsIn } = TicketHook()
+  const { getVisitAgentPaymentsIn,getVisitCandPaymentsIn,getVisitSupplierPaymentsIn } = VisitHook()
+  const { getCDWCPaymentsIn } = CDWCHook()
+  const { getCDWOCPaymentsIn } = CDWOCHook()
   const { getCPPData } = CPPHook()
   const { getAssetsData } = NewAssetsHook()
   const { getPayments } = AssetsHook()
-  const { getPaymentsOut } = ProtectorHook()
-  const { getExpenseCategoryData } = ExpeCategoryHook()
   const { getCreditoSupplierData } = CreditorSupplierHook()
 
   // getting Data from DB
+
   const abortCont = useRef(new AbortController());
 
   const { user } = useAuthContext()
   const fetchData = async () => {
     try {
-      // Use Promise.all to execute all promises concurrently
-      getCurrCountryData()
+        getCurrCountryData()
         getCategoryData()
         getPaymentViaData()
         getPaymentTypeData()
-        getExpenseCategoryData()
-        getAgentPaymentsOut()
-        getPaymentsOut()
-        getSupplierPaymentsOut()
-        getCandPaymentsOut()
-        getAzadAgentPaymentsOut()
-        getAzadCandPaymentsOut()
-        getAzadSupplierPaymentsOut()
-        getTicketAgentPaymentsOut()
-        getTicketCandPaymentsOut()
-        getTicketSupplierPaymentsOut()
-        getVisitAgentPaymentsOut()
-        getVisitCandPaymentsOut()
-        getVisitSupplierPaymentsOut()
+        getPaymentsIn()
+        getSupplierPaymentsIn()
+        getCandPaymentsIn()
+        getAzadAgentPaymentsIn()
+        getAzadCandPaymentsIn()
+        getAzadSupplierPaymentsIn()
+        getTicketAgentPaymentsIn()
+        getTicketCandPaymentsIn()
+        getTicketSupplierPaymentsIn()
+        getVisitAgentPaymentsIn()
+        getVisitCandPaymentsIn()
+        getVisitSupplierPaymentsIn()
         getCPPData()
         getCreditoSupplierData()
         getAssetsData()
         getPayments()
-        getCDWCPaymentsOut()
-        getCDWOCPaymentsOut()
+        getCDWCPaymentsIn()
+        getCDWOCPaymentsIn()
+
     } catch (error) {
     }
   };
@@ -131,30 +123,27 @@ export default function SupplierEntry2() {
 
 
   const [option, setOption] = useState(false)
-  const apiUrl = process.env.REACT_APP_API_URL;
-
   const [type, setType] = useState(false)
 
   // Form input States
-
   const [supplierName, setSupplierName] = useState('')
+  const [pp_No, setPPNo] = useState('');
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
   const [slip_No, setSlip_No] = useState('')
-  const [payment_Out, setPayment_Out] = useState()
+  const [payment_In, setPayment_In] = useState()
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [curr_Country, setCurr_Country] = useState('')
   const [curr_Rate, setCurr_Rate] = useState(0)
   const [date, setDate] = useState('')
-
+  
   useEffect(() => {
   }, [type,supplierName,selectedSupplier])
 
-  let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
-
-
+  
+  let curr_Amount = (payment_In / curr_Rate).toFixed(2)
   const handleOpen = () => {
     setOption(!option)
   }
@@ -166,6 +155,7 @@ export default function SupplierEntry2() {
     setSection(!section)
     setCurr_Country('')
     setCurr_Rate('')
+
   }
 
   // handle Picture 
@@ -198,6 +188,146 @@ export default function SupplierEntry2() {
   };
 
 
+
+  const printPersonsTable = (selectedPersonDetails) => {
+    // Convert JSX to HTML string
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    const formattedDate = formatDate(new Date());
+
+    const printContentString = `
+    <div class="print-header">
+      <p class="invoice">Candidate: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Candidate Details</h1>
+      </div>
+      <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+        <th>Candidate</th>
+        <th>PP#</th>
+        <th>Entry Mode</th>
+        <th>Company</th>
+        <th>Trade</th>
+        <th>Country</th>
+        <th>Final Status</th>
+        <th>Flight Date</th>
+        <th>Visa Price PKR</th>
+        <th>Total In PKR</th>
+        <th>Remaining PKR</th>
+        <th>New Total In PKR</th>
+        <th>New Remaining PKR</th>
+        <th>VPI Oth Curr</th>
+        <th>Total In Curr</th>
+        <th>Remaining Curr</th>
+         <th>New Total In Curr</th>
+        <th>New Remaining Curr</th>
+        <th>Slip No</th>
+        <th>Invoice</th>
+
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td>${String(selectedPersonDetails?.name)}</td>
+            <td>${String(selectedPersonDetails?.pp_No)}</td>
+            <td>${String(selectedPersonDetails?.entry_Mode)}</td>
+            <td>${String(selectedPersonDetails?.company)}</td>
+            <td>${String(selectedPersonDetails?.trade)}</td>
+            <td>${String(selectedPersonDetails?.country)}</td>
+            <td>${String(selectedPersonDetails?.final_Status)}</td>
+            <td>${String(selectedPersonDetails?.flight_Date)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_PKR)}</td>
+            <td>${String(selectedPersonDetails?.total_In)}</td>
+            <td>${String(selectedPersonDetails?.remaining_PKR)}</td>
+            <td>${String(selectedPersonDetails?.new_Total_In)}</td>
+            <td>${String(selectedPersonDetails?.new_Remaining_PKR || 0)}</td>
+            <td>${String(selectedPersonDetails?.visa_Price_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.total_In_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.remaining_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.new_Total_In_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.new_Remaining_Curr || 0)}</td>
+            <td>${String(selectedPersonDetails?.slip_No)}</td>
+            <td>${String(selectedPersonDetails?.invoice)}</td>
+
+          </tr>
+      
+    
+    </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedPersonDetails.supplierName} Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
+
+
+
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
   const [, setNewMessage] = useState('')
@@ -210,14 +340,14 @@ export default function SupplierEntry2() {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/agents/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -229,7 +359,7 @@ export default function SupplierEntry2() {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -239,6 +369,76 @@ export default function SupplierEntry2() {
         }),
       });
 
+      const json = await response.json();
+      if (!response.ok) {
+
+        setNewMessage(toast.error(json.message));
+        setLoading(false)
+      }
+      if (response.ok) {
+        setNewMessage(toast.success(json.message));
+        getPaymentsIn();
+        setLoading(false);
+        setSupplierName('')
+        setCategory('');
+        setPayment_Via('');
+        setPayment_Type('');
+        setSlip_No('');
+        setPayment_In('');
+        setSlip_Pic('');
+        setDetails('');
+        setCurr_Country('');
+        setCurr_Rate('');
+        setDate('')
+        // setOpen(true)
+        // setClose(false);
+      }
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setNewMessage(toast.error('Server is not Responding...'));
+      setLoading(false);
+    }
+  };
+
+  const handleCandidateForm = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSupplierName('')
+    setPPNo('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_In('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
+    try {
+      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          supplierName,
+          pp_No,
+          category,
+          payment_Via,
+          payment_Type,
+          slip_No,
+          payment_In,
+          slip_Pic,
+          details,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
+          date
+        }),
+      });
 
       const json = await response.json();
       if (!response.ok) {
@@ -249,21 +449,23 @@ export default function SupplierEntry2() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsOut();
+        printPersonsTable(json.data)
+        getPaymentsIn();
         setLoading(false);
         setSupplierName('')
+        setPPNo('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
+     
       }
-
 
     } catch (error) {
       console.error('Fetch error:', error);
@@ -275,82 +477,19 @@ export default function SupplierEntry2() {
   const handleSupplierForm = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_out`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No,
-          payment_Out,
-          slip_Pic,
-          details,
-          curr_Country,
-          curr_Rate,
-          curr_Amount,
-          
-          date
-        }),
-      });
-
-
-      const json = await response.json();
-      if (!response.ok) {
-
-        setNewMessage(toast.error(json.message));
-        setLoading(false)
-
-      }
-      if (response.ok) {
-        setNewMessage(toast.success(json.message));
-        getPaymentsOut();
-        setLoading(false);
-        setSupplierName('')
-        setCategory('');
-        setPayment_Via('');
-        setPayment_Type('');
-        setSlip_No('');
-        setPayment_Out('');
-        setSlip_Pic('');
-        setDetails('');
-        setCurr_Country('');
-        setCurr_Rate('');
-        setDate('')
-      
-
-      }
-
-
-    } catch (error) {
-      console.error('Fetch error:', error);
-      setNewMessage(toast.error('Server is not Responding...'));
-      setLoading(false);
-    }
-  }
-
-
-  const handleCandidateForm = async (e) => {
-    e.preventDefault();
-    setLoading(true);
     setSupplierName('')
     setCategory('');
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/candidates/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -362,17 +501,15 @@ export default function SupplierEntry2() {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
           curr_Rate,
           curr_Amount,
-          
           date
         }),
       });
-
 
       const json = await response.json();
       if (!response.ok) {
@@ -383,23 +520,21 @@ export default function SupplierEntry2() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsOut();
+        getPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
       
-
       }
-
 
     } catch (error) {
       console.error('Fetch error:', error);
@@ -408,8 +543,6 @@ export default function SupplierEntry2() {
     }
   }
 
-
-  
   const handleAzadAgentForm = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -418,14 +551,14 @@ export default function SupplierEntry2() {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -437,7 +570,7 @@ export default function SupplierEntry2() {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -458,14 +591,14 @@ export default function SupplierEntry2() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getAzadAgentPaymentsOut();
+        getAzadAgentPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -491,14 +624,14 @@ export default function SupplierEntry2() {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -510,7 +643,7 @@ export default function SupplierEntry2() {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -529,14 +662,14 @@ export default function SupplierEntry2() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getAzadCandPaymentsOut();
+        getAzadCandPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -561,14 +694,14 @@ export default function SupplierEntry2() {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -580,7 +713,7 @@ export default function SupplierEntry2() {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -600,14 +733,14 @@ export default function SupplierEntry2() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getAzadSupplierPaymentsOut();
+        getAzadSupplierPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -632,14 +765,14 @@ export default function SupplierEntry2() {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/ticket/agents/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/ticket/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -651,7 +784,7 @@ export default function SupplierEntry2() {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -671,14 +804,14 @@ export default function SupplierEntry2() {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getTicketAgentPaymentsOut();
+        getTicketAgentPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -703,14 +836,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/ticket/candidates/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -722,7 +855,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -742,14 +875,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getTicketCandPaymentsOut();
+        getTicketCandPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -774,14 +907,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/ticket/suppliers/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/ticket/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -793,7 +926,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -812,14 +945,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getTicketSupplierPaymentsOut();
+        getTicketSupplierPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -844,14 +977,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/visit/agents/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/visit/agents/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -863,7 +996,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -883,14 +1016,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getVisitAgentPaymentsOut();
+        getVisitAgentPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -915,14 +1048,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/visit/candidates/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/visit/candidates/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -934,7 +1067,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -954,14 +1087,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getVisitCandPaymentsOut();
+        getVisitCandPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -987,14 +1120,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/visit/suppliers/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/visit/suppliers/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1006,7 +1139,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -1026,14 +1159,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getVisitSupplierPaymentsOut();
+        getVisitSupplierPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -1057,14 +1190,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1076,7 +1209,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -1096,14 +1229,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsOut();
+        getPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -1127,14 +1260,14 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
     setCurr_Rate('');
     setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/add/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/add/payment_in`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1146,7 +1279,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -1166,14 +1299,14 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPaymentsOut();
+        getPaymentsIn();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
@@ -1189,7 +1322,7 @@ const handleTicketCandForm = async (e) => {
     }
   };
 
-  
+
   const handleAssetForm = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -1198,7 +1331,7 @@ const handleTicketCandForm = async (e) => {
     setPayment_Via('');
     setPayment_Type('');
     setSlip_No('');
-    setPayment_Out('');
+    setPayment_In('');
     setSlip_Pic('');
     setDetails('');
     setCurr_Country('');
@@ -1217,7 +1350,7 @@ const handleTicketCandForm = async (e) => {
           payment_Via,
           payment_Type,
           slip_No,
-          payment_Out,
+          payment_In,
           slip_Pic,
           details,
           curr_Country,
@@ -1226,7 +1359,6 @@ const handleTicketCandForm = async (e) => {
           date
         }),
       });
-
 
       const json = await response.json();
       if (!response.ok) {
@@ -1237,175 +1369,41 @@ const handleTicketCandForm = async (e) => {
       }
       if (response.ok) {
         setNewMessage(toast.success(json.message));
-        getPayments();
         setLoading(false);
         setSupplierName('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
         setSlip_No('');
-        setPayment_Out('');
+        setPayment_In('');
         setSlip_Pic('');
         setDetails('');
         setCurr_Country('');
         setCurr_Rate('');
         setDate('')
-       
-
+      
       }
-
 
     } catch (error) {
       console.error('Fetch error:', error);
       setNewMessage(toast.error('Server is not Responding...'));
       setLoading(false);
     }
-  }
+  };
 
-  const handleProtectorForm = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSupplierName('')
-    setCategory('');
-    setPayment_Via('');
-    setPayment_Type('');
-    setSlip_No('');
-    setPayment_Out('');
-    setSlip_Pic('');
-    setDetails('');
-    setCurr_Country('');
-    setCurr_Rate('');
-    setDate('')
-    try {
-      const response = await fetch(`${apiUrl}/auth/protectors/add/payment_out`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No,
-          payment_Out,
-          slip_Pic,
-          details,
-          curr_Country,
-          curr_Rate,
-          curr_Amount,
-          // open,
-          // close,
-          date
-        }),
-      });
+  
+
+  const handleInputChange = (e) => {
+    const selectedValue = e.target.value;
+    const [supplierNamePart, ppNoPart] = selectedValue.split('/').map(part => part.trim());
+    setSupplierName(supplierNamePart);
+    setSelectedSupplier(supplierNamePart)
+    setPPNo(ppNoPart);
+  };
 
 
-      const json = await response.json();
-      if (!response.ok) {
 
-        setNewMessage(toast.error(json.message));
-        setLoading(false)
-
-      }
-      if (response.ok) {
-        setNewMessage(toast.success(json.message));
-        getPaymentsOut();
-        setLoading(false);
-        setSupplierName('')
-        setCategory('');
-        setPayment_Via('');
-        setPayment_Type('');
-        setSlip_No('');
-        setPayment_Out('');
-        setSlip_Pic('');
-        setDetails('');
-        setCurr_Country('');
-        setCurr_Rate('');
-        setDate('')
-        // setOpen(true)
-        // setClose(false);
-
-      }
-
-
-    } catch (error) {
-      console.error('Fetch error:', error);
-      setNewMessage(toast.error('Server is not Responding...'));
-      setLoading(false);
-    }
-  }
-  const handleExpenseForm = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSupplierName('')
-        setCategory('');
-        setPayment_Via('');
-        setPayment_Type('');
-        setSlip_No('');
-        setPayment_Out('');
-        setSlip_Pic('');
-        setDetails('');
-        setCurr_Country('');
-        setCurr_Rate('');
-        setDate('')
-    try {
-        const response = await fetch(`${apiUrl}/auth/expenses/add/expense`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.token}`,
-            },
-            body: JSON.stringify({
-                name:supplierName,
-                expCategory:category,
-                payment_Out,
-                payment_Via,
-                payment_Type,
-                slip_No,
-                slip_Pic,
-                details,
-                curr_Country,
-                curr_Rate,
-                curr_Amount,
-                date
-            }),
-        });
-
-        const json = await response.json();
-        if (!response.ok) {
-
-            setNewMessage(toast.error(json.message));
-            setLoading(false)
-
-        }
-        if (response.ok) {
-            setNewMessage(toast.success(json.message));
-            setLoading(false);
-            setSupplierName('')
-            setCategory('');
-            setPayment_Via('');
-            setPayment_Type('');
-            setSlip_No('');
-            setPayment_Out('');
-            setSlip_Pic('');
-            setDetails('');
-            setCurr_Country('');
-            setCurr_Rate('');
-            setDate('')
-
-        }
-
-    } catch (error) {
-
-        setNewMessage(toast.error('Server is not Responding...'));
-        setLoading(false);
-    }
-};
-
-
-const [paymentOption, setPaymentOption] = useState('Direct');
+  const [paymentOption, setPaymentOption] = useState('Direct');
 
 
   return (
@@ -1414,21 +1412,21 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                 <div className="left">
                   <label htmlFor="">Choose Payment Option</label>
                   <select name="" id="" value={paymentOption} onChange={(e)=>setPaymentOption(e.target.value)}>
-                  <option value="Direct">Direct Out</option>
-                    <option value="Candidate_Vise">Candiadte Vise Out</option>
+                  <option value="Direct">Direct In</option>
+                    <option value="Candidate_Vise">Candiadte Vise In</option>
 
                   </select>
                 </div>
                
               </div>
-     {paymentOption==="Direct" &&
-     <>
+      {paymentOption==='Direct' &&
+      <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"? handleAssetForm:type === "Protector"? handleProtectorForm:type === "Expense"&& handleExpenseForm)}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"&& handleAssetForm)}>
             <div className="text-end ">
              
-              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment Out"}</button>
+              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment In"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
@@ -1436,10 +1434,9 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                 <label >Choose Type </label>
                 <select value={type} onChange={(e) => setType(e.target.value)} required>
                   <option value="">Choose</option>
-                  <option value="Agent">Agent</option>
+                 <option value="Agent">Agent</option>
                  <option value="Supplier">Supplier</option>
                  <option value="Candidate">Candidate</option>
-                 <option value="Protector">Protector</option>
                  <option value="Azad Agent">Azad Agent</option>
                  <option value="Azad Supplier">Azad Supplier</option>
                  <option value="Azad Candidate">Azad Candidate</option>
@@ -1452,16 +1449,30 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                  <option value="Credit/Debit WC">Credit/Debit WC</option>
                  <option value="Credit/Debit WOC">Credit/Debit WOC</option>
                  <option value="Assets">Assets</option>
-                 <option value="Expense">Expense</option>
-
-
                 </select>
               </div>
-              
-              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Name</label>
-                {(type!=='Expense' || type==='')  ?
-                <select required value={supplierName} onChange={(e) => {
+                {type==='Candidate' ?
+                <>
+                 <input 
+        list="name" 
+        required 
+        value={supplierName} 
+        onChange={handleInputChange} 
+      />
+      <datalist id="name">
+        {candidate_Payments_In && 
+          candidate_Payments_In.map((data) => (
+            <option key={data._id} value={`${data.supplierName}/${data.pp_No}`}>
+              {`${data.supplierName}/${data.pp_No}`}
+            </option>
+          ))
+        }
+      </datalist>
+                </>:
+               
+<select required value={supplierName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
@@ -1469,8 +1480,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                  {type==="Agent" &&
                  <>
                  <option value="">Choose Agent</option>
-                  {agent_Payments_Out &&
-                    agent_Payments_Out.map((data) => (
+                  {agent_Payments_In &&
+                    agent_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1481,8 +1492,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Supplier" &&
                  <>
                  <option value="">Choose Supplier</option>
-                  {supp_Payments_Out &&
-                    supp_Payments_Out.map((data) => (
+                  {supp_Payments_In &&
+                    supp_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1490,35 +1501,12 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Candidate" &&
-                 <>
-                 <option value="">Choose Candidate</option>
-                  {candidate_Payments_Out &&
-                    candidate_Payments_Out.map((data) => (
-                      <option key={data._id} value={data.supplierName}>
-                        {data.supplierName}
-                      </option>
-                    ))
-                  }
-                 </>
-                 }
-                   {type==="Protector" &&
-                 <>
-                 <option value="">Choose Protector</option>
-                  {protector_Payments_Out &&
-                    protector_Payments_Out.map((data) => (
-                      <option key={data._id} value={data.supplierName}>
-                        {data.supplierName}
-                      </option>
-                    ))
-                  }
-                 </>
-                 }
+                  
                  {type==="Azad Agent" &&
                  <>
                  <option value="">Choose Azad Agent</option>
-                  {azadAgent_Payments_Out &&
-                    azadAgent_Payments_Out.map((data) => (
+                  {azadAgent_Payments_In &&
+                    azadAgent_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1529,8 +1517,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Azad Supplier" &&
                  <>
                  <option value="">Choose Azad Supplier</option>
-                  {azadSupplier_Payments_Out &&
-                    azadSupplier_Payments_Out.map((data) => (
+                  {azadSupplier_Payments_In &&
+                    azadSupplier_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1541,8 +1529,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Azad Candidate" &&
                  <>
                  <option value="">Choose Azad Candidate</option>
-                  {azadCand_Payments_Out &&
-                    azadCand_Payments_Out.map((data) => (
+                  {azadCand_Payments_In &&
+                    azadCand_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1554,8 +1542,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                 {type==="Ticket Agent" &&
                  <>
                  <option value="">Choose Ticket Agent</option>
-                  {ticketAgent_Payments_Out &&
-                    ticketAgent_Payments_Out.map((data) => (
+                  {ticketAgent_Payments_In &&
+                    ticketAgent_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1566,8 +1554,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Ticket Supplier" &&
                  <>
                  <option value="">Choose Ticket Supplier</option>
-                  {ticketSupplier_Payments_Out &&
-                    ticketSupplier_Payments_Out.map((data) => (
+                  {ticketSupplier_Payments_In &&
+                    ticketSupplier_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1578,8 +1566,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Ticket Candidate" &&
                  <>
                  <option value="">Choose Ticket Candidate</option>
-                  {ticketCand_Payments_Out &&
-                    ticketCand_Payments_Out.map((data) => (
+                  {ticketCand_Payments_In &&
+                    ticketCand_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1591,8 +1579,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                {type==="Visit Agent" &&
                  <>
                  <option value="">Choose Visit Agent</option>
-                  {visitAgent_Payments_Out &&
-                    visitAgent_Payments_Out.map((data) => (
+                  {visitAgent_Payments_In &&
+                    visitAgent_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1603,8 +1591,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Visit Supplier" &&
                  <>
                  <option value="">Choose Visit Supplier</option>
-                  {visitSupplier_Payments_Out &&
-                    visitSupplier_Payments_Out.map((data) => (
+                  {visitSupplier_Payments_In &&
+                    visitSupplier_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1615,8 +1603,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   {type==="Visit Candidate" &&
                  <>
                  <option value="">Choose Visit Candidate</option>
-                  {visitCand_Payments_Out &&
-                    visitCand_Payments_Out.map((data) => (
+                  {visitCand_Payments_In &&
+                    visitCand_Payments_In.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -1649,7 +1637,7 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                  {type==="Assets" &&
+                 {type==="Assets" &&
                  <>
                  <option value="">Choose Asset</option>
                   {assets &&
@@ -1661,30 +1649,24 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                   }
                  </>
                  }
-                </select>:
-                <input type="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
+                </select>
+
+           
                 }
-
               </div>
-
+              {type==="Candidate" &&
+               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+               <label >PP# </label>
+               <input type="text" value={pp_No} disabled />
+             </div>
+              }
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label>{type==="Expense"&&"Expense"} Category </label>
+                <label >Category </label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                   <option value="">Choose</option>
-                 {type !=="Expense" &&
-                 <>
                   {categories && categories.map((data) => (
                     <option key={data._id} value={data.category}>{data.category}</option>
                   ))}
-                 </>
-                 }
-                  {type ==="Expense" &&
-                 <>
-                  {expenseCategories && expenseCategories.map((data) => (
-                    <option key={data._id} value={data.category}>{data.category}</option>
-                  ))}
-                 </>
-                 }
                 </select>
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -1711,8 +1693,8 @@ const [paymentOption, setPaymentOption] = useState('Direct');
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label >Payment Out </label>
-                <input type="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
+                <label >Payment In </label>
+                <input type="number" min="0" value={payment_In} onChange={(e) => setPayment_In(e.target.value)} required />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -1779,40 +1761,37 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                     <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Type</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Slip_No</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Details</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Cash_Out</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>Invoice</TableCell>
-                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_Out_Curr</TableCell>
+                    <TableCell className='label border' style={{ width: '18.28%' }}>Payment_In_Curr</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Rate</TableCell>
                     <TableCell className='label border' style={{ width: '18.28%' }}>CUR_Amount</TableCell>
-
-
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {(type === "Agent" ? agent_Payments_Out : type === "Supplier" ? supp_Payments_Out : type === "Candidate" ? candidate_Payments_Out: type === "Azad Agent" ? azadAgent_Payments_Out: type === "Azad Supplier" ? azadSupplier_Payments_Out: type === "Azad Candidate" ? azadCand_Payments_Out: type === "Ticket Agent" ? ticketAgent_Payments_Out: type === "Ticket Supplier" ? ticketSupplier_Payments_Out: type === "Ticket Candidate" ? ticketCand_Payments_Out: type === "Visit Agent" ? visitAgent_Payments_Out: type === "Visit Supplier" ? visitSupplier_Payments_Out: type === "Visit Candidate" ? visitCand_Payments_Out: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In:type === "Assets" ? assetsPayments:type === "Protector" ? protector_Payments_Out: [])
-                    .filter((data) => type === "Assets"? data.assetName:data.supplierName === selectedSupplier)
+                  {(type === "Agent" ? agent_Payments_In : type === "Supplier" ? supp_Payments_In : type === "Candidate" ? candidate_Payments_In: type === "Azad Agent" ? azadAgent_Payments_In: type === "Azad Supplier" ? azadSupplier_Payments_In: type === "Azad Candidate" ? azadCand_Payments_In: type === "Ticket Agent" ? ticketAgent_Payments_In: type === "Ticket Supplier" ? ticketSupplier_Payments_In: type === "Ticket Candidate" ? ticketCand_Payments_In: type === "Visit Agent" ? visitAgent_Payments_In: type === "Visit Supplier" ? visitSupplier_Payments_In: type === "Visit Candidate" ? visitCand_Payments_In: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In:type === "Assets" ? assetsPayments: [])
+                    .filter((data) =>type === "Assets"? data.assetName:data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>
-                        {filteredData.payment.map((paymentItem, index) => (
-                          <TableRow key={paymentItem._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.date}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.category}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.payment_Via}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.payment_Type}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.slip_No}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.details}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                        {filteredData.payment && filteredData.payment?.map((paymentItem, index) => (
+                          <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.date}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.category}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Via}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_Type}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.slip_No}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.details}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                             <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.invoice}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.payment_Out_Curr}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.curr_Rate}</TableCell>
-                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem.curr_Amount}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.payment_In_Curr}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Rate}</TableCell>
+                            <TableCell className='border data_td text-center' style={{ width: '18.28%' }}>{paymentItem?.curr_Amount}</TableCell>
 
                           </TableRow>
                         ))}
-                        {/* Move these cells inside the innermost map loop */}
 
                         {/* <TableRow>
                           <TableCell></TableCell>
@@ -1821,12 +1800,12 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_Out</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_Out}</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_In</TableCell>
+                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Payment_In}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_Out_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_Out_Curr}</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Payment_In_Curr</TableCell>
+                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell></TableCell>
@@ -1835,12 +1814,12 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 
-                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_Out_PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{filteredData.total_Visa_Price_Out_PKR}</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_PKR</TableCell>
+                          <TableCell className=' data_td text-center  bg-info text-white text-bold'>{(type === "Agent" ||type === "Supplier"||type === "Candidate"||type === "Azad Candidate"||type === "Ticket Candidate"||type === "Visit Candidate")?filteredData.total_Visa_Price_In_PKR:(type === "Credit/Debit WC" ||type === "Credit/Debit WOC")?filteredData.total_Visa_Price_In_PKR:filteredData.total_Azad_Visa_Price_In_PKR}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_Out_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr}</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Total_Visa_Price_In_Curr</TableCell>
+                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell></TableCell>
@@ -1849,11 +1828,11 @@ const [paymentOption, setPaymentOption] = useState('Direct');
                           <TableCell></TableCell>
                           <TableCell></TableCell>
                           <TableCell className='label border' style={{ width: '18.28%' }}>Remaining PKR</TableCell>
-                          <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_Out_PKR-filteredData.total_Payment_Out+filteredData.total_Cash_Out}</TableCell>
+                          <TableCell className=' data_td text-center  bg-success text-white text-bold'>{filteredData.total_Visa_Price_In_PKR-filteredData.total_Payment_In+filteredData.total_Cash_Out}</TableCell>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
-                          <TableCell className='label border' style={{ width: '18.28%' }}>Remaining Total_Payment_Out_Curr</TableCell>
-                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr-filteredData.total_Payment_Out_Curr}</TableCell>
+                          <TableCell className='label border' style={{ width: '18.28%' }}>Remaining Total_Payment_In_Curr</TableCell>
+                          <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_In_Curr-filteredData.total_Payment_In_Curr}</TableCell>
                         </TableRow> */}
                       </>
                     ))}
@@ -1865,12 +1844,12 @@ const [paymentOption, setPaymentOption] = useState('Direct');
         )}
 
       </div>
-     </>
-     }
-{paymentOption==='Candidate_Vise' &&
-<Entry2/>
-}
-
+      </>
+      }
+      {paymentOption==='Candidate_Vise' &&
+      <Entry1></Entry1> 
+      }
+    
     </>
   )
 }

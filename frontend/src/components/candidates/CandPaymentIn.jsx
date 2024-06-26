@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Paper from '@mui/material/Paper';
 import SinglePaymentIn from './SinglePaymentIn';
-import SupplierEntry1 from './doubleEntry/SupplierEntry1'
-import SupplierEntry2 from './doubleEntry/SupplierEntry2'
+import SupplierEntry1 from '../doubleEntry/SupplierEntry1'
+import SupplierEntry2 from '../doubleEntry/SupplierEntry2'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
@@ -18,7 +18,7 @@ export default function SupPaymentIn() {
 
   }
 
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_In: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '',pp_No:'', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_In: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
   const [triggerEffect, setTriggerEffect] = useState(false);
 
   const handleFileChange = (e) => {
@@ -182,6 +182,7 @@ export default function SupPaymentIn() {
                             <tr >
                               <th >Date</th>
                               <th >Name</th>
+                              <th >PP#</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
                               <th >Payment_Type</th>

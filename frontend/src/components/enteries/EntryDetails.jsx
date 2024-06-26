@@ -131,18 +131,16 @@ const EntryDetails = () => {
         
         }
         if (!response.ok) {
+          setDelLoading(false)
           if(json.redirect){
             if (window.confirm(json.message)){
             
               navigate(json.redirect)
-              setDelLoading(false)
 
             }
           }
           else{
           setNewMessage(toast.error(json.message))
-          setDelLoading(false)
-
           }
         }
       }
@@ -286,16 +284,15 @@ const EntryDetails = () => {
       const json = await response.json()
 
       if (!response.ok) {
+        setUpdateLoading(false)
         if(json.redirect){
           if (window.confirm(json.message)){
             navigate(json.redirect)
-            setUpdateLoading(false)
 
           }
         }
         else{
         setNewMessage(toast.error(json.message))
-        setUpdateLoading(false)
         }
       }
       if (response.ok) {

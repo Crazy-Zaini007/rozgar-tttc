@@ -4050,6 +4050,8 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
         }
         paymentToFind.payment_In-=candPayment.new_Payment
         paymentToFind.curr_Amount-=candPayment.new_Curr_Payment
+       
+
         await existingSupplier.updateOne({
           $inc: {
             "payment_In_Schema.total_Payment_In": -candPayment.new_Payment,
@@ -4111,6 +4113,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
 
   }
   catch(error){
+    console.log(error)
     res.status(500).json({message:error.message})
   }
 }

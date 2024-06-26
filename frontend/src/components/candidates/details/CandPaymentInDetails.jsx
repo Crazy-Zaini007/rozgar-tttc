@@ -25,11 +25,11 @@ export default function CandPaymentInDetails() {
   const [loading5, setLoading5] = useState(false)
   const [show, setShow] = useState(false)
   const [show2, setShow2] = useState(false)
-
+  const [pp_No, setPP_No] = useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [, setNewMessage] = useState('')
-
+  
   const { getCurrencyData } = CurrencyHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
@@ -165,7 +165,7 @@ export default function CandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier,pp_No, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
         })
 
         const json = await response.json()
@@ -201,7 +201,7 @@ export default function CandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier,pp_No, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
       })
 
       const json = await response.json()
@@ -286,7 +286,7 @@ export default function CandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: person.supplierName })
+          body: JSON.stringify({ supplierName: person.supplierName,pp_No })
         })
 
         const json = await response.json()
@@ -313,7 +313,7 @@ export default function CandPaymentInDetails() {
 
   const [date1, setDate1] = useState('')
   const [name, setName] = useState('')
-  const [pp_No, setPP_NO] = useState('')
+  const [searchPP_No, setSearchPP_NO] = useState('')
   const [entry_Mode, setEntry_Mode] = useState('')
   const [company, setCompany] = useState('')
   const [country, setCountry] = useState('')
@@ -328,7 +328,7 @@ export default function CandPaymentInDetails() {
     if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
         payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-        payment.pp_No.toLowerCase().includes(pp_No.toLowerCase()) &&
+        payment.pp_No.toLowerCase().includes(searchPP_No.toLowerCase()) &&
         payment.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
         payment.company.toLowerCase().includes(company.toLowerCase()) &&
         payment.country.toLowerCase().includes(country.toLowerCase()) &&
@@ -403,7 +403,7 @@ export default function CandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier, newStatus })
+          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,pp_No })
         })
 
         const json = await response.json()
@@ -1292,7 +1292,7 @@ export default function CandPaymentInDetails() {
 
                 <div className="col-auto px-1">
                   <label htmlFor="">PP#:</label><br/>
-                  <select value={pp_No} onChange={(e) => setPP_NO(e.target.value)} className='m-0 p-1'>
+                  <select value={searchPP_No} onChange={(e) => setSearchPP_NO(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_In && candidate_Payments_In.map((data) => (
                       <option value={data.pp_No} key={data._id}>{data.pp_No} </option>
@@ -1515,7 +1515,7 @@ export default function CandPaymentInDetails() {
                                   <TableCell className='border data_td text-center'>
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center' onClick={() => { handleRowClick(entry.supplierName); handleCandidate(entry) }}>
+                                  <TableCell className='border data_td text-center' onClick={() => { handleRowClick(entry.supplierName); handleCandidate(entry);setPP_No(entry.pp_No) }}>
                                     {entry.supplierName}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>

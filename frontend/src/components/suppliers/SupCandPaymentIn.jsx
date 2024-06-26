@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Paper from '@mui/material/Paper';
 import SupCandSinglePaymentIn from './SupCandSinglePaymentIn';
-import Entry1 from './candDoubleEntry/Entry1'
-import Entry2 from './candDoubleEntry/Entry2'
+import Entry1 from '../candDoubleEntry/Entry1'
+import Entry2 from '../candDoubleEntry/Entry2'
 import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
