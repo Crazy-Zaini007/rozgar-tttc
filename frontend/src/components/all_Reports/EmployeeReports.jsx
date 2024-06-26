@@ -9,7 +9,6 @@ export default function EmployeeReports() {
   const { user } = useAuthContext();
   const [loading1, setLoading1] = useState(false)
   const[payments,setPayments]=useState('')
-  console.log('payments',payments)
   const apiUrl = process.env.REACT_APP_API_URL;
   const getData = async () => {
     try {
@@ -111,10 +110,8 @@ export default function EmployeeReports() {
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Details</th>
-        <th>Cash Out</th>
-        <th>Salary Month</th>
-        <th>Salary</th>
-        <th>Remaining</th>
+        <th>Payment Out</th>
+        <th>Cash Return</th>
         <th>Invoice</th>
         </tr>
       </thead>
@@ -130,9 +127,8 @@ export default function EmployeeReports() {
     <td>${String(entry.slip_No)}</td>
     <td>${String(entry.details)}</td>
     <td>${String(entry.payment_Out || 0)}</td>
-    <td>${String(entry.month)}</td>
-    <td>${String(entry.salary)}</td>
-    <td>${String(entry.remain)}</td>
+    <td>${String(entry.cash_Out)}</td>
+    
     <td>${String(entry.invoice)}</td>
   </tr>
 `).join('')}
@@ -146,6 +142,7 @@ export default function EmployeeReports() {
       <td></td>
       <td>Total</td>
       <td>${String(filteredPayments.reduce((total, entry) => total + (entry.payment_Out || 0), 0))}</td>
+      <td>${String(filteredPayments.reduce((total, entry) => total + (entry.cash_Out || 0), 0))}</td>
       </tr>
       
     </tbody>
@@ -208,7 +205,8 @@ export default function EmployeeReports() {
             Payment_Type: payments.payment_Type,
             Slip_No: payments.slip_No,
             Details: payments.details,
-            Cash_Out: payments.payment_Out || 0,
+            Payment_Out: payments.payment_Out || 0,
+            Cash_Return: payments.cash_Out || 0,
             Salary_Month: payments.month,
             Salary: payments.salary,
             Remaining: payments.remain,
@@ -297,14 +295,13 @@ export default function EmployeeReports() {
                           <TableCell className='label border'>Date</TableCell>
                           <TableCell className='label border'>Employees</TableCell>
                           <TableCell className='label border'>Category</TableCell>
-                          <TableCell className='label border'>Payment_Via</TableCell>
-                          <TableCell className='label border'>Payment_Type</TableCell>
+                          <TableCell className='label border'>Payment Via</TableCell>
+                          <TableCell className='label border'>Payment Type</TableCell>
                           <TableCell className='label border'>Details</TableCell>
                           <TableCell className='label border'>Slip_No</TableCell>
-                          <TableCell className='label border '>Cash_Out</TableCell>
-                          <TableCell className='label border '>Salary_Month</TableCell>
-                          <TableCell className='label border '>Salary</TableCell>
-                          <TableCell className='label border '>Remain</TableCell>
+                          <TableCell className='label border '>Paymen Out</TableCell>
+                          <TableCell className='label border '>Cash Return</TableCell>
+                        
                           <TableCell className='label border '>Invoice</TableCell>
                         </TableRow>
                       </TableHead>
@@ -320,9 +317,7 @@ export default function EmployeeReports() {
                                 <TableCell className='border data_td '>{entry.details}</TableCell>
                                 <TableCell className='border data_td '>{entry.slip_No}</TableCell>
                                 <TableCell className='border data_td bg-danger text-white'>{entry.payment_Out}</TableCell>
-                                <TableCell className='border data_td '>{entry.month}</TableCell>
-                                <TableCell className='border data_td '>{entry.salary}</TableCell>
-                                <TableCell className='border data_td '>{entry.remain}</TableCell>
+                                <TableCell className='border data_td bg-success text-white'>{entry.payment_Out}</TableCell>
                                 <TableCell className='border data_td '>{entry.invoice}</TableCell>
                           
                           </TableRow>
@@ -347,11 +342,21 @@ export default function EmployeeReports() {
   <TableCell></TableCell>
   <TableCell></TableCell>
   <TableCell></TableCell>        
-  <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+  <TableCell className='border data_td text-center bg-secondary text-white'>Balance= {(filteredPayments  && filteredPayments.reduce((total, entry) => {
+      return total + (entry.payment_Out || 0); // Use proper conditional check
+    }, 0))-(filteredPayments && filteredPayments.reduce((total, entry) => {
+      return total + (entry.cash_Out || 0); // Use proper conditional check
+    }, 0))}</TableCell>
   <TableCell className='border data_td text-center bg-danger text-white'>
     {/* Calculate the total sum of payment_Out */}
     {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
       return total + (entry.payment_Out || 0); // Use proper conditional check
+    }, 0)}
+  </TableCell>
+  <TableCell className='border data_td text-center bg-success text-white'>
+    {/* Calculate the total sum of payment_Out */}
+    {filteredPayments && filteredPayments.length > 0 && filteredPayments.reduce((total, entry) => {
+      return total + (entry.cash_Out || 0); // Use proper conditional check
     }, 0)}
   </TableCell>
 </TableRow>

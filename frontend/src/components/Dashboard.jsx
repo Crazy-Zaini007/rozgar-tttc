@@ -54,25 +54,27 @@ let threeMonthsEmployeeExpense = 0;
 
 // Iterate over all employees
 employees && employees.forEach(employee => {
-  if (employee.payments) {
-    employee.payments.forEach(month => {
-      if (month.payment && month.payment.length > 0) {
-        month.payment.forEach(payment => {
-          const paymentDate = new Date(payment.date); // Assuming payment.date is the date of the payment
+  if (employee.employeePayments) {
+    
+          employee.employeePayments.forEach(payment => {
+          const paymentDate = new Date(payment.date); 
           totalEmployeeExpense += payment.payment_Out;
+          totalEmployeeExpense -= payment.cash_Out;
 
           // Check if the payment is within the current month
           if (paymentDate >= currentMonthStart && paymentDate <= today) {
             currentMonthEmployeeExpense += payment.payment_Out;
+            currentMonthEmployeeExpense -= payment.cash_Out;
+
           }
 
           // Check if the payment is within the last three months
           if (paymentDate >= lastThreeMonthsAgo && paymentDate <= today) {
             threeMonthsEmployeeExpense += payment.payment_Out;
+            threeMonthsEmployeeExpense -= payment.cash_Out;
+
           }
         });
-      }
-    });
   }
 });
 
@@ -86,7 +88,8 @@ let threeMonthsExpense = 0;
 // Iterate over all expenses
 expenses && expenses.forEach(expense => {
   const expenseDate = new Date(expense.date); // Assuming expense.date is the date of the expense
-  totalExpense += expense.payment_Out; // Assuming the amount of the expense is stored in expense.amount
+  totalExpense += expense.payment_Out;
+  
 
   // Check if the expense is within the current month
   if (expenseDate >= currentMonthStart && expenseDate <= today) {
@@ -1323,8 +1326,8 @@ const[option,setOption]=useState(false)
                                       <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash?.payment_In||0}</TableCell>
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{(cash.type.toLowerCase().includes('in')||cash.payment_In<1)&&cash.cash_Out||0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{(cash.type.toLowerCase().includes('out')||cash.payment_Out<1)&&cash.cash_Out||0}</TableCell>
                                      
                                      {show &&
                                      <>
@@ -1398,13 +1401,13 @@ const[option,setOption]=useState(false)
 <TableCell className='border data_td text-center bg-warning text-white'>
   {/* Calculate the total sum of cash_Out based on payment_In */}
   {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0)); 
+    return total + (Math.round((entry.type.toLowerCase().includes('in')||entry.payment_In<1) ? entry.cash_Out || 0 : 0)); 
   }, 0)}
 </TableCell>
 <TableCell className='border data_td text-center bg-warning text-white'>
   {/* Calculate the total sum of cash_Out based on payment_Out */}
   {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
+    return total + (Math.round((entry.type.toLowerCase().includes('out')||entry.payment_Out<1) ? entry.cash_Out || 0 : 0)); 
   }, 0)}
 </TableCell>
 
@@ -1429,11 +1432,11 @@ Remaining PKR=
 {(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
   }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
+    return total + (Math.round((entry.type.toLowerCase().includes('in')||entry.payment_In<1) ? entry.cash_Out || 0 : 0)); 
   }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
   }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+    return total + (Math.round((entry.type.toLowerCase().includes('out')||entry.payment_Out<1) ? entry.cash_Out || 0 : 0)) 
   }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>

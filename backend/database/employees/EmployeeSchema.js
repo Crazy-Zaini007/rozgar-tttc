@@ -1,42 +1,6 @@
 const mongoose = require("mongoose");
 
 
-const PaymentSchema = new mongoose.Schema({
-  category: {
-    type: String,
-  },
-  payment_Via: {
-    type: String,
-  },
-  payment_Type: {
-    type: String,
-  },
-  slip_No: {
-    type: String,
-  },
-  payment_Out: {
-    type: Number,
-  },
-  payment_Out_Curr: {
-    type: String,
-  },
-  slip_Pic: {
-    type: String,
-  },
-  date: {
-    type: String,
-  },
-  curr_Rate: {
-    type: Number,
-  },
-  curr_Amount: {
-    type: Number,
-  },
-  invoice: {
-    type: Number,
-  },
-});
-
 const EmployeeSchema = new mongoose.Schema(
   {
     employeeName: {
@@ -87,7 +51,8 @@ const EmployeeSchema = new mongoose.Schema(
     vacation: [
       {
         date: {
-          type:String
+          type:String,
+          default: new Date().toISOString().split("T")[0],
         },
         dateFrom:  {
           type:String
@@ -119,48 +84,51 @@ const EmployeeSchema = new mongoose.Schema(
       },
       
     }],
-    employeePayments:[
-      {
-        category: {
-          type: String,
+    employeePayments: {
+      type: [
+        {
+          category: {
+            type: String,
+          },
+          payment_Via: {
+            type: String,
+          },
+          payment_Type: {
+            type: String,
+          },
+          slip_No: {
+            type: String,
+          },
+          payment_Out: {
+            type: Number,
+            default: 0,
+          },
+          cash_Out: {
+            type: Number,
+            default: 0,
+          },
+          payment_Out_Curr: {
+            type: String,
+          },
+          slip_Pic: {
+            type: String,
+          },
+          date: {
+            type: String,
+          },
+          curr_Rate: {
+            type: Number,
+          },
+          curr_Amount: {
+            type: Number,
+          },
+          invoice: {
+            type: Number,
+          },
         },
-        payment_Via: {
-          type: String,
-        },
-        payment_Type: {
-          type: String,
-        },
-        slip_No: {
-          type: String,
-        },
-        payment_Out: {
-          type: Number,
-          default:0
-        },
-        cash_Out:{
-          type: Number,
-          default:0
-        },
-        payment_Out_Curr: {
-          type: String,
-        },
-        slip_Pic: {
-          type: String,
-        },
-        date: {
-          type: String,
-        },
-        curr_Rate: {
-          type: Number,
-        },
-        curr_Amount: {
-          type: Number,
-        },
-        invoice: {
-          type: Number,
-        },
-      }
-    ]
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

@@ -286,7 +286,7 @@ let sr_No=0;
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ paymentId, employeeId, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
+                body: JSON.stringify({ paymentId, employeeId, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out,cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
             })
 
             const json = await response.json()
@@ -533,7 +533,7 @@ let sr_No=0;
             <th>DOB</th>
             <th>CNIC</th>
             <th>Salary Type</th>
-            <th>Remaining</th>
+       
             <th>Address</th>
           </tr>
         </thead>
@@ -550,16 +550,10 @@ let sr_No=0;
               <td>${String(entry.dob)}</td>
               <td>${String(entry.cnic)}</td>
               <td>${String(entry.salaryType)}</td>
-              <td>${String(entry.remaining)}</td>
               <td>${String(entry.address)}</td>      
             </tr>
           `).join('')}
-          <tr>
-          <td colspan="9"></td>
-          <td>Total</td>
-          <td>${String(filteredTotalEmployee.reduce((total, entry) => total + entry.remaining, 0))}</td>          
-          <td></td>
-        </tr>
+        
         </tbody>
       </table>
       <style>
@@ -754,38 +748,31 @@ let sr_No=0;
     const [payment_Type, setPayment_Type] = useState('')
     
     const filteredIndividualPayments = employees
-        .filter((data) => data.employeeName === selectedEmployee)
-        .map((filteredData) => ({
-            ...filteredData,
-            payments: filteredData.payments.map((paymentItem) => ({
-                ...paymentItem,
-                payment: paymentItem.payment.filter((payment) => {
-                    let isDateInRange = true;
-                    // Check if the payment item's date is within the selected date range
-                    if (newDateFrom && newDateTo) {
-                        isDateInRange =
-                            payment.date >= newDateFrom && payment.date <= newDateTo;
-                    }
-                    // Check if the payment object exists and has the expected structure
-                    if (payment && payment.payment_Via && payment.payment_Type) {
-                        return (
-                            isDateInRange &&
-                            payment.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-                            payment.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
-                            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-                             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-                             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-                             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
-                        )
-                        );
-                    } else {
-                        return false;
-                    }
-                })
-            }))
-        }));
+    .filter((data) => data.employeeName === selectedEmployee)
+    .map((filteredData) => ({
+      ...filteredData,
+      payment: filteredData.employeePayments
+        .filter((paymentItem) => {
+          let isDateInRange = true;
 
+          // Check if the payment item's date is within the selected date range
+          if (newDateFrom && newDateTo) {
+            isDateInRange =
+              paymentItem.date >= newDateFrom && paymentItem.date <= newDateTo;
+          }
 
+          return (
+            isDateInRange &&
+            paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+        )
+          );
+        }),
+    }))
         const printPaymentsTable = () => {
             const formatDate = (date) => {
                 const d = new Date(date);
@@ -818,12 +805,13 @@ let sr_No=0;
                         <th>Slip_No</th>
                         <th>Details</th>
                         <th>Paid Payment</th>
+                        <th>Return Payment</th>
                         <th>Invoice</th>
                     </tr>
                   </thead>
                   <tbody>
                     ${filteredIndividualPayments.map((entry, index) =>
-                        entry.payments.map((paymentData, paymentIndex) =>
+                        entry.employeePayments.map((paymentData, paymentIndex) =>
                             paymentData.payment.map((paymentItem, innerIndex) => `
                                 <tr key="${entry?._id}-${paymentIndex}-${innerIndex}">
                                     <td>${index * entry.payments.length * paymentData.payment.length + paymentIndex * paymentData.payment.length + innerIndex + 1}</td>
@@ -834,6 +822,7 @@ let sr_No=0;
                                     <td>${String(paymentItem?.slip_No)}</td>
                                     <td>${String(paymentItem?.details,"")}</td>
                                     <td>${String(paymentItem?.payment_Out)}</td>
+                                    <td>${String(paymentItem?.cash_Out)}</td>
                                     <td>${String(paymentItem?.invoice)}</td>
                                 </tr>
                             `).join('')
@@ -847,7 +836,9 @@ let sr_No=0;
                         <td></td>
                         <td></td>
                         <td>Total</td>
-                        <td>${filteredIndividualPayments.reduce((total, entry) => total + entry.payments.reduce((acc, paymentData) => acc + paymentData.payment.reduce((innerAcc, paymentItem) => innerAcc + parseFloat(paymentItem.payment_Out), 0), 0), 0)}</td>
+                       <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.employeePayments.reduce((acc, paymentItem) => acc + paymentItem.payment_Out, 0), 0))}</td>
+                      <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.employeePayments.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
+
                         <td></td>
                     </tr>
                   </tbody>
@@ -952,6 +943,7 @@ let sr_No=0;
                         <th>Slip_No</th>
                         <th>Details</th>
                         <th>Paid Payment</th>
+                        <th>Return Payment</th>
                         <th>Invoice</th>
                     </tr>
                   </thead>
@@ -966,6 +958,7 @@ let sr_No=0;
                                     <td>${String(paymentItem?.slip_No)}</td>
                                     <td>${String(paymentItem?.details,"")}</td>
                                     <td>${String(paymentItem?.payment_Out)}</td>
+                                    <td>${String(paymentItem?.cash_Out)}</td>
                                     <td>${String(paymentItem?.invoice)}</td>
                                 </tr>
                   </tbody>
@@ -1343,8 +1336,7 @@ const filteredSalaryMonths = employees
                             <th>SN</th>
                             <th>Month</th>
                             <th>Salary</th>
-                            <th>Paid</th>
-                            <th>Remaining</th>
+                          
                         </tr>
                     </thead>
                     <tbody>
@@ -1354,18 +1346,12 @@ const filteredSalaryMonths = employees
                                     <td>${index+1}</td>
                                     <td>${String(payment?.month)}</td>
                                     <td>${String(payment?.salary)}</td>
-                                    <td>${payment?.salary-payment?.remain}</td>
-                                    <td>${String(payment?.remain)}</td>
+                                   
                                    
                                 </tr>
                             `).join('')
                         )}
-                        <tr>
-                            <td colspan="3"></td>
-                            <td>Total: ${totalPaid}</td>
-                            <td>Total: ${totalRemain}</td>
-                            
-                        </tr>
+                      
                     </tbody>
                 </table>
                 <style>
@@ -1564,7 +1550,6 @@ const filteredSalaryMonths = employees
                 Dob: payments.dob,
                 Cnic: payments.cnic,
                 SalaryType: payments.salaryType,
-                Remaining: payments.remaining,
                 Address: payments.address,
             }
 
@@ -1591,7 +1576,6 @@ const filteredSalaryMonths = employees
                 Dob: payments.dob,
                 Cnic: payments.cnic,
                 SalaryType: payments.salaryType,
-                Remaining: payments.remaining,
                 Address: payments.address,
             }
 
@@ -1798,7 +1782,6 @@ const filteredSalaryMonths = employees
                                                             <TableCell className='label border' >DOB</TableCell>
                                                             <TableCell className='label border' >CNIC</TableCell>
                                                             <TableCell className='label border' >Salary_Type</TableCell>
-                                                            <TableCell className='label border' >Remaining</TableCell>
                                                             <TableCell className='label border' >Address</TableCell>
                                                             {route !== "/rozgar/reports/payroll_reports" &&
                                                                 <TableCell align='left' className='edw_label border'  colSpan={1}> Actions</TableCell>
@@ -1847,9 +1830,7 @@ const filteredSalaryMonths = employees
                                                                             <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.salaryType} onChange={(e) => handleEmployeeInputChange(e, 'salaryType')} />
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' >
-                                                                                <input type='number' value={editedEntry3.remaining} readonly onChange={(e) => handleEmployeeInputChange(e, 'remaining')} />
-                                                                            </TableCell>
+                                                                           
                                                                             <TableCell className='border data_td text-center' >
                                                                                 <input type='text' value={editedEntry3.address} onChange={(e) => handleEmployeeInputChange(e, 'address')} />
                                                                             </TableCell>
@@ -1896,9 +1877,7 @@ const filteredSalaryMonths = employees
                                                                             <TableCell className='border data_td text-center' >
                                                                                 {entry.salaryType}
                                                                             </TableCell>
-                                                                            <TableCell className='border data_td text-center' >
-                                                                                {entry.remaining}
-                                                                            </TableCell>
+                                                                           
                                                                             <TableCell className='border data_td text-center' >
                                                                                 {entry.address}
                                                                             </TableCell>
@@ -2015,6 +1994,7 @@ const filteredSalaryMonths = employees
                                                     <Table stickyHeader>
                                                         <TableHead className="thead">
                                                             <TableRow>
+                                                            <TableCell className='label border' >SN</TableCell>
                                                                 <TableCell className='label border' >Date</TableCell>
                                                                 <TableCell className='label border' >Category</TableCell>
                                                                 <TableCell className='label border' >Payment_Via</TableCell>
@@ -2022,10 +2002,13 @@ const filteredSalaryMonths = employees
                                                                 <TableCell className='label border' >Slip_No</TableCell>
                                                                 <TableCell className='label border' >Details</TableCell>
                                                                 <TableCell className='label border' >Payment_Out</TableCell>
+                                                                <TableCell className='label border' >Cash_Return</TableCell>
                                                                 <TableCell className='label border' >Invoice</TableCell>
+                                                           
                                                                 <TableCell className='label border' >Payment_In_Curr</TableCell>
                                                                 <TableCell className='label border' >CUR_Rate</TableCell>
                                                                 <TableCell className='label border' >CUR_Amount</TableCell>
+                                                                
                                                                 <TableCell className='label border' >Slip_Pic</TableCell>
                                                                 {route !== "/rozgar/reports/payroll_reports" && <TableCell align='left' className='edw_label border'  colSpan={1}>
                                                                     Actions
@@ -2034,151 +2017,194 @@ const filteredSalaryMonths = employees
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
-                                                            {filteredIndividualPayments.map((filteredData) => (
-                                                                <React.Fragment key={filteredData._id}>
-                                                                    {filteredData.payments && filteredData.payments.map((paymentData, paymentIndex) => (
-                                                                        <React.Fragment key={paymentIndex}>
-                                                                            {paymentData.payment && paymentData.payment.map((paymentItem, index) => (
-                                                                                <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                                                                                 
-                                                                                    {editMode && editedRowIndex === paymentItem._id ? (
-                                                                                        <>
-                                                                                          
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
-                                                                                                    <option value="">Choose</option>
-                                                                                                    {categories && categories.map((data) => (
-                                                                                                        <option key={data._id} value={data.category}>{data.category}</option>
-                                                                                                    ))}
-                                                                                                </select>
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
-                                                                                                    <option value="">Choose</option>
-                                                                                                    {paymentVia && paymentVia.map((data) => (
-                                                                                                        <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                                                                                                    ))}
-                                                                                                </select>
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <select value={editedEntry.payment_Type} onChange={(e) => handleInputChange(e, 'payment_Type')} required>
-                                                                                                    <option value="">Choose</option>
-                                                                                                    {paymentType && paymentType.map((data) => (
-                                                                                                        <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
-                                                                                                    ))}
-                                                                                                </select>
-
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='text' value={editedEntry.slip_No} onChange={(e) => handleInputChange(e, 'slip_No')} />
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='text' value={editedEntry.details} onChange={(e) => handleInputChange(e, 'details')} />
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='text' value={editedEntry.payment_Out} onChange={(e) => handleInputChange(e, 'payment_Out')} />
-                                                                                            </TableCell>
-
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='text' value={editedEntry.invoice} readonly />
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
-                                                                                                    <option className="my-1 py-2" value="">choose</option>
-                                                                                                    {currencies && currencies.map((data) => (
-                                                                                                        <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
-                                                                                                    ))}
-                                                                                                </select>
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='text' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
-                                                                                            </TableCell>
-                                                                                            <TableCell className='border data_td p-1 '>
-                                                                                                <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
-                                                                                            </TableCell>
-                                                                                        </>
-                                                                                    ) : (
-                                                                                        <>
-
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
-                                                                                            <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
-                                                                                        </>
-                                                                                    )}
-                                                                                    {/* Actions */}
-                                                                                    {route !== "/rozgar/reports/payroll_reports" &&
-                                                                                        <TableCell className='border data_td p-1 text-center'>
-                                                                                            {editMode && editedRowIndex === paymentItem._id ? (
-                                                                                                // Render Save button when in edit mode for the specific row
-                                                                                                <>
-                                                                                                    <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                        <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
-                                                                                                        <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
-
-                                                                                                    </div>
-
-                                                                                                </>
-
-                                                                                            ) : (
-                                                                                                
-                                                                                                <>
-                                                                                                    <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                                                        <button onClick={() => handleEditClick(paymentItem, paymentItem._id)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
-                                                                                                        <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
-                                                                                                        <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
-                                                                                                        <button className='btn delete_btn btn-sm' onClick={() => deletePaymentOut(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
-                                                                                                    </div>
-                                                                                                   
-                                                                                                </>
-                                                                                            )}
-                                                                                        </TableCell>
-                                                                                    }
-                                                                                </TableRow>
-                                                                            ))}
-                                                                        </React.Fragment>
-                                                                    ))}
-                                                                </React.Fragment>
-                                                            ))}
-
-                                                            <TableRow>
-                                                                <TableCell></TableCell>
-                                                                <TableCell></TableCell>
-                                                                <TableCell></TableCell>
-                                                                <TableCell></TableCell>
-                                                                <TableCell></TableCell>
-                                                                
-                                                                <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                                                                <TableCell className='border data_td text-center bg-danger text-white'>
-                                                                    {/* Calculate the total sum of payment_Out */}
-                                                                    {filteredIndividualPayments.reduce((total, filteredData) => {
-                                                                        return total + filteredData.payments.reduce((sum, paymentItem) => {
-                                                                            return sum + paymentItem.payment.reduce((paymentSum, payment) => {
-                                                                                const paymentOut = parseFloat(payment.payment_Out);
-                                                                                return isNaN(paymentOut) ? paymentSum : paymentSum + paymentOut;
-                                                                            }, 0);
-                                                                        }, 0);
-                                                                    }, 0)}
-                                                                </TableCell>
+                  {filteredIndividualPayments.map((filteredData) => (
+                    <>
+                      {filteredData.employeePayments.map((paymentItem, index) => (
+                        <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode && editedRowIndex === index ? (
+                            <>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
+                                  <option value="">Choose</option>
+                                  {categories && categories.map((data) => (
+                                    <option key={data._id} value={data.category}>{data.category}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
+                                  <option value="">Choose</option>
+                                  {paymentVia && paymentVia.map((data) => (
+                                    <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Type} onChange={(e) => handleInputChange(e, 'payment_Type')} required>
+                                  <option value="">Choose</option>
+                                  {paymentType && paymentType.map((data) => (
+                                    <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.slip_No} onChange={(e) => handleInputChange(e, 'slip_No')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.details} onChange={(e) => handleInputChange(e, 'details')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.payment_Out} onChange={(e) => handleInputChange(e, 'payment_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.cash_Out} onChange={(e) => handleInputChange(e, 'cash_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.invoice} readonly />
+                              </TableCell>
+                              
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
+                              
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                             
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ?<a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
 
 
+                            </>
+                          )}
+                          {route !== "/rozgar/reports/payroll_reports" &&
+                          <TableCell className='border data_td p-1 text-center'>
+                          {editMode && editedRowIndex === index ? (
+                            // Render Save button when in edit mode for the specific row
+                            <>
+                              <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
 
-                                                            </TableRow>
-                                                        </TableBody>
+                              </div>
+
+                            </>
+
+                          ) : (
+                            // Render Edit button when not in edit mode or for other rows
+                            <>
+                              <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                              <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                <button className='btn bg-danger text-white btn-sm' onClick={() => deletePaymentOut(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
+                              </div>
+                             
+                            </>
+                          )}
+                        </TableCell>
+                          }
+                          
+                        </TableRow>
+                      ))}
+                    </>
+                  ))}
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                    <TableCell className='border data_td text-center bg-danger text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.employeePayments.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_Out);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.employeePayments.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.cash_Out);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                        Balance={(filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.employeePayments.reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_Out);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0))-(filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.employeePayments.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.cash_Out);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0))} </TableCell>
+                    <TableCell></TableCell>
+                   
+                      
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.employeePayments.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Rate);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.employeePayments.reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    
+                    
+                  </TableRow>
+                </TableBody>
                                                     </Table>
                                                 </TableContainer>
                                             </div>
@@ -2292,10 +2318,6 @@ const filteredSalaryMonths = employees
                                                                                     <TableCell className='border data_td p-1 ' >
                                                                                         <input type='time' value={editedEntry2.timeOut} onChange={(e) => handlePersonInputChange(e, 'timeOut')} />
                                                                                     </TableCell>
-
-
-
-
                                                                                 </>
                                                                             ) : (
                                                                                 <>
@@ -2348,7 +2370,7 @@ const filteredSalaryMonths = employees
                                                                         <TableCell className='border data_td text-center bg-warning text-white'>
                                                                             {/* Calculate the total sum of vacation days */}
                                                                             {filteredVacations.reduce((total, filteredData) => {
-                                                                                return total + filteredData.vacation.reduce((sum, vacation) => {
+                                                                                return total + filteredData.vacation.filter(data=>data.timeOut).reduce((sum, vacation) => {
                                                                                     const totalDays = parseFloat(vacation.days);
                                                                                     return isNaN(totalDays) ? sum : sum + totalDays;
                                                                                 }, 0);
@@ -2369,7 +2391,6 @@ const filteredSalaryMonths = employees
                                     </div>
                                     </>
                                     }
-
 
                                 {single===1 &&
                                     <>
@@ -2414,8 +2435,8 @@ const filteredSalaryMonths = employees
                                                                 <TableCell className='label border' >SN</TableCell>
                                                                 <TableCell className='label border' >Month</TableCell>
                                                                 <TableCell className='label border' >Salary</TableCell>
-                                                                <TableCell className='label border' >Paid</TableCell>
-                                                                <TableCell className='label border' >Remaining</TableCell>
+                                                                {/* <TableCell className='label border' >Paid</TableCell>
+                                                                <TableCell className='label border' >Remaining</TableCell> */}
                                                                 {route !== "/rozgar/reports/payroll_reports" &&
                                                                     <TableCell className='label border' >Action</TableCell>
                                                                 }
@@ -2438,20 +2459,20 @@ const filteredSalaryMonths = employees
                                                                                     <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry4.salary} onChange={(e) => handleSalaryMonthInputChange(e, 'salary')} />
                                                                                     </TableCell>
-                                                                                    <TableCell className='border data_td p-1 ' >
+                                                                                    {/* <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry4.salary-editedEntry4.remain} readonly />
                                                                                     </TableCell>
                                                                                     <TableCell className='border data_td p-1 ' >
                                                                                         <input type='number' min='0' value={editedEntry4.remain} readonly/>
-                                                                                    </TableCell>
+                                                                                    </TableCell> */}
                                                                                 </>
                                                                             ) : (
                                                                                 <>
                                                                                     <TableCell className='border data_td text-center' >{index + 1}</TableCell>
                                                                                     <TableCell className='border data_td text-center' >{payment?.month}</TableCell>
                                                                                     <TableCell className='border data_td text-center' >{payment?.salary}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' >{payment?.salary-payment?.remain}</TableCell>
-                                                                                    <TableCell className='border data_td text-center' >{payment?.remain}</TableCell>
+                                                                                    {/* <TableCell className='border data_td text-center' >{payment?.salary-payment?.remain}</TableCell>
+                                                                                    <TableCell className='border data_td text-center' >{payment?.remain}</TableCell> */}
                                                                                 </>
                                                                             )}
                                                                             {route !== "/rozgar/reports/payroll_reports" &&
@@ -2483,33 +2504,7 @@ const filteredSalaryMonths = employees
 
                                                                         </TableRow>
                                                                     ))}
-                                                                    <TableRow>
-                                                                        <TableCell></TableCell>
-                                                                        <TableCell></TableCell>
-                                                                        <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                                                                        <TableCell className='border data_td text-center bg-success text-white'>
-                                                                            {/* Calculate the total sum of vacation days */}
-                                                                            {filteredSalaryMonths.reduce((total, filteredData) => {
-                                                                                return total + filteredData.payments.reduce((sum, payment) => {
-                                                                                    const totalRemaining = parseFloat(payment.salary-payment.remain);
-                                                                                    return isNaN(totalRemaining) ? sum : sum + totalRemaining;
-                                                                                }, 0);
-                                                                            }, 0)}
-                                                                        </TableCell>
-                                                                        <TableCell className='border data_td text-center bg-danger text-white'>
-                                                                            {/* Calculate the total sum of vacation days */}
-                                                                            {filteredSalaryMonths.reduce((total, filteredData) => {
-                                                                                return total + filteredData.payments.reduce((sum, payment) => {
-                                                                                    const totalRemaining = parseFloat(payment.remain);
-                                                                                    return isNaN(totalRemaining) ? sum : sum + totalRemaining;
-                                                                                }, 0);
-                                                                            }, 0)}
-                                                                        </TableCell>
-
-
-
-
-                                                                    </TableRow>
+                                                                    
                                                                 </>
                                                             ))}
                                                         </TableBody>

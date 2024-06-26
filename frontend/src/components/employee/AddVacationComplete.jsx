@@ -11,9 +11,8 @@ import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
 import EmployeeHook from '../../hooks/employeeHooks/EmployeeHook';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import AddVacationComplete from './AddVacationComplete';
 
-export default function AddVacation() {
+export default function AddVacationComplete() {
   const dispatch = useDispatch();
   // getting data from redux store 
 
@@ -82,7 +81,7 @@ export default function AddVacation() {
      
         setDate('')
     try {
-      const response = await fetch(`${apiUrl}/auth/employees/add/employee/vacation`, {
+      const response = await fetch(`${apiUrl}/auth/employees/add/employee/vacation/finish`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,34 +123,15 @@ export default function AddVacation() {
   };
 
 
-  const [single, setSingle] = useState(0)
-
-  const setEntry = (index) => {
-    setSingle(index)
-  }
-
-
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-    <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid payment_form">
-          <div className="row">
-          <div className="col-md-12 p-0 border-0 border-bottom">
-              <div className='py-3 mb-1 px-2'>
-                <h4>Employee Vacations</h4>
-                <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Grant Vacation</button>
-                <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Vacation Finish</button>
-               
-              </div>
-            </div>
-         {single===0&&
-         <>
+   
           <div className="col-md-12 p-0 border-0 border-bottom">
         {!option && <TableContainer>
           <form className='py-3 px-2' onSubmit={handleForm}>
             <div className="text-end ">
-              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Vacation"}</button>
+              <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Complete Vacation"}</button>
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
@@ -244,16 +224,7 @@ export default function AddVacation() {
         )}
 
       </div>
-         </>
-         }
-         {single===1 &&
-         <AddVacationComplete></AddVacationComplete>
-         }
-
-          </div>
-        </div>
-      </div>
-   
+          
     </>
   )
 }

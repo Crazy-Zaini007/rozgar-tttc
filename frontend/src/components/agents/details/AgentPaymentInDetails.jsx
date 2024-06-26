@@ -1993,16 +1993,7 @@ const printPerson = (person) => {
                     </TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
-                    {show2 && <>
-                      <TableCell className='border data_td text-center bg-warning text-white'>
-                      
-                      {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
-                          const paymentIn = parseFloat(paymentItem.payment_In_Curr);
-                          return isNaN(paymentIn) ? sum : sum + paymentIn;
-                        }, 0);
-                      }, 0)}
-                    </TableCell>
+                    {show2 && <> 
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {

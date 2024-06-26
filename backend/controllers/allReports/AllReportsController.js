@@ -83,25 +83,20 @@ const getAllPayments = async (req, res) => {
     })
     
     for (const employee of employees) {
-      if (employee.payments) {
-        const allMonths = employee.payments;
-        for (const month of allMonths) {
-          if (month.payment && month.payment.length > 0) {
-            const paymentDetails=month.payment.map(
-              (payment)=>({
-                supplierName:employee.employeeName,
-                remaining:employee.remaining,
-                remaining_Curr:0,
-                type:'Employee Payment',
-                ...payment.toObject(),
-
-              })
-            )
-        mergedPayments = mergedPayments.concat(paymentDetails);
-
-          }
-        }
+      if (employee.employeePayments) {
+        
+        const paymentInDetails = employee.employeePayments.map(
+          (payment) => ({
+            supplierName: employee.employeeName,
+            remaining:0,
+             remaining_Curr:0,
+            type: `Employee Payment ${payment.payment_Out>0?'Out':'Out Return'}`,
+            ...payment.toObject(),
+          })
+        )
+        mergedPayments = mergedPayments.concat(paymentInDetails);
       }
+      
     }
 
  
@@ -115,7 +110,7 @@ const getAllPayments = async (req, res) => {
             remaining: asset.payment_In_Schema.total_Payment_In-asset.payment_In_Schema.total_Payment_Out,
         remaining_Curr:0,
 
-            type: "Asset_Payment",
+            type: "Asset_Payment In/Out",
             ...payment.toObject(),
           })
         );
@@ -132,7 +127,7 @@ const getAllPayments = async (req, res) => {
         supplierName: cdwc.payment_In_Schema.supplierName,
         remaining: cdwc.payment_In_Schema.total_Payment_In-cdwc.payment_In_Schema.total_Payment_Out,
         remaining_Curr:0,
-        type: "CDWC_Payment",
+        type: "CDWC_Payment In/Out",
         ...payment.toObject(),
       })
     );
@@ -642,10 +637,10 @@ const getAllPayments = async (req, res) => {
     // CashIn Hand Today Payments
  for (const myCashInHand of cashInHand){
   let allPayments=myCashInHand.payment && myCashInHand.payment.map((myPayment)=>({
-    supplierName:'Direct Cash',
+    supplierName:'Direct Cash ',
     remaining: 0,
     remaining_Curr: 0,
-    type:"Direct Cash",
+    type:"Direct Cash In/Out",
     ...myPayment.toObject()
   }))
   mergedPayments = mergedPayments.concat(allPayments);
@@ -728,17 +723,14 @@ const getEmployeesPayments = async (req, res) => {
     let mergedPayments = [];
 
     employees.forEach((employee) => {
-      if (employee.payments && employee.payments.length > 0) {
+      if (employee.employeePayments && employee.employeePayments.length > 0) {
         // Flatten payments array and include employee name in each payment object
-        const employeePayments = employee.payments.flatMap((paymentEntry) =>
-          paymentEntry.payment.map((payment) => ({
+        const employeePayments = employee.employeePayments.map(
+          (payment) => ({
             employeeName: employee.employeeName,
-            month: paymentEntry.month,
-            salary: paymentEntry.salary,
-            remain: paymentEntry.remain,
             ...payment.toObject(),
-          }))
-        );
+          })
+        )
         mergedPayments = mergedPayments.concat(employeePayments);
       }
     })
