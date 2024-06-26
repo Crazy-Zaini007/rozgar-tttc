@@ -117,8 +117,50 @@ const EmployeeSchema = new mongoose.Schema(
       remain:{
         type:Number
       },
-      payment: [PaymentSchema],
+      
     }],
+    employeePayments:[
+      {
+        category: {
+          type: String,
+        },
+        payment_Via: {
+          type: String,
+        },
+        payment_Type: {
+          type: String,
+        },
+        slip_No: {
+          type: String,
+        },
+        payment_Out: {
+          type: Number,
+          default:0
+        },
+        cash_Out:{
+          type: Number,
+          default:0
+        },
+        payment_Out_Curr: {
+          type: String,
+        },
+        slip_Pic: {
+          type: String,
+        },
+        date: {
+          type: String,
+        },
+        curr_Rate: {
+          type: Number,
+        },
+        curr_Amount: {
+          type: Number,
+        },
+        invoice: {
+          type: Number,
+        },
+      }
+    ]
   },
   { timestamps: true }
 );

@@ -429,7 +429,6 @@ const addMultipleSalaries = async (req, res) => {
       for (const payment of multiplePayments){
         const {
           employeeName,
-          month,
           category,
           payment_Via,
           payment_Type,
@@ -440,7 +439,6 @@ const addMultipleSalaries = async (req, res) => {
           date,
           curr_Rate,
           curr_Amount,
-         
         } = payment
         const employee = await Employees.findOne({employeeName:employeeName.toLowerCase()})
 
@@ -450,14 +448,8 @@ const addMultipleSalaries = async (req, res) => {
       if (employee) {
         const parsedPaymentOut = Number(payment_Out);
         
-
-
     // Find the payment object corresponding to the provided month
-    const paymentObject = employee.payments.find(payment => payment.month.toLowerCase() === month.toLowerCase());
 
-    if (!paymentObject) {
-      return res.status(404).json({ message: "Salary Month for the provided month not found" });
-    }
         let nextInvoiceNumber = 0;
             // Check if InvoiceNumber document exists
             const currentInvoiceNumber = await InvoiceNumber.findOne({});
@@ -514,11 +506,7 @@ const addMultipleSalaries = async (req, res) => {
         }
         await CashInHand.updateOne({}, cashInHandUpdate);
 
-        paymentObject.payment.push(payment)
-        paymentObject.remain-=payment_Out
-        employee.open=open,
-        employee.close=close
-        employee.remaining-=payment_Out
+        employee.employeePayments.push(payment)
         await employee.save()
       }
       res.status(200).json({ message: `Salaries done for ${multiplePayments.length} Employees!` })
@@ -568,16 +556,14 @@ const delSalary = async (req, res) => {
         res.status(404).json({ message: "Employee not found" })
       }
       if (employee) {
-        // Find the payment object corresponding to the provided month
-        let allMonths = employee.payments;
-
+        // Find the payment object corresponding to the provided mont
         for (const month of allMonths){
           let allPayments=month.payment
          let paymentFind=allPayments.find(p=>p._id.toString()===paymentId.toString())
          if(paymentFind){
-          console.log('paymentFind 1',paymentFind)
+         
           month.payment =allPayments.filter(p=>p._id.toString() !==paymentId.toString())
-          console.log('paymentFind 2',paymentFind)
+          
          const cashInHandDoc = await CashInHand.findOne({});
          if (!cashInHandDoc) {
            const newCashInHandDoc = new CashInHand();

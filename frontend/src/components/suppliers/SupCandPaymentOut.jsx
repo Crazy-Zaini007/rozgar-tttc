@@ -974,7 +974,7 @@ const sumPaymentIn = (data) => {
                  <option value="">Choose Candidate</option>
                  {supplierNames.map((person) => (
                    <option key={person.name} value={person.name}>
-                     {person.name}
+                     {person.name}/{person.pp_No}
                    </option>
                  ))}
                </select>

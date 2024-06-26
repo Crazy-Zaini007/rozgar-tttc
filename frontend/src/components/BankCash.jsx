@@ -42,49 +42,59 @@ const [show1, setShow1] = useState(false)
   const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
 
   const aggregatedPayments = {};
-  let totalBankPaymentIn = 0;
-  let totalBankCashOutIn = 0;
-  let totalBankPaymentOut = 0;
-  let totalBankCashOutOut = 0;
-  
-  // Iterate through all payments
-  overAllPayments.forEach(payment => {
-    const paymentVia = payment.payment_Via;
-  
-    // Initialize the entry for this payment_Via if it doesn't exist
-    if (!aggregatedPayments[paymentVia]) {
-      aggregatedPayments[paymentVia] = {
-       
-        totalBankPaymentIn: 0,
-        totalBankCashOutIn: 0,
-        totalBankPaymentOut: 0,
-        totalBankCashOutOut: 0,
-      };
-    }
-    if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) ) {
-      aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
-      aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
-  
-      totalBankPaymentIn += payment.payment_In || 0;
-      totalBankCashOutIn += payment.cash_Out || 0;
-    }
-  
-  
-    if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out'))) {
-      aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
-      aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
-  
-      totalBankPaymentOut += payment.payment_Out || 0;
-      totalBankCashOutOut += payment.cash_Out || 0;
-    }
-  });
-  
-  // Calculate the combined total for each payment_Via
+let totalBankPaymentIn = 0;
+let totalBankCashOutIn = 0;
+let totalBankPaymentOut = 0;
+let totalBankCashOutOut = 0;
+
+// Iterate through all payments
+overAllPayments.forEach(payment => {
+  const paymentVia = payment.payment_Via.toLowerCase();
+
+  // Initialize the entry for this payment_Via if it doesn't exist
+  if (!aggregatedPayments[paymentVia]) {
+    aggregatedPayments[paymentVia] = {
+      totalBankPaymentIn: 0,
+      totalBankCashOutIn: 0,
+      totalBankPaymentOut: 0,
+      totalBankCashOutOut: 0,
+    };
+  }
+
+  // Update the sums based on payment type
+  if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in'))) {
+    aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
+    aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
+
+    totalBankPaymentIn += payment.payment_In || 0;
+    totalBankCashOutIn += payment.cash_Out || 0;
+  }
+
+  if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out'))) {
+    aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
+    aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
+
+    totalBankPaymentOut += payment.payment_Out || 0;
+    totalBankCashOutOut += payment.cash_Out || 0;
+  }
+});
+
+// Calculate the combined total for each payment_Via
 const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, totals]) => {
   return {
     paymentVia,
     total: (totals.totalBankPaymentIn + totals.totalBankCashOutIn) - (totals.totalBankPaymentOut + totals.totalBankCashOutOut),
   };
+});
+
+// Output the results
+console.log(aggregatedPayments);
+console.log(paymentViaTotals);
+console.log({
+  totalBankPaymentIn,
+  totalBankCashOutIn,
+  totalBankPaymentOut,
+  totalBankCashOutOut,
 });
 
   const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
