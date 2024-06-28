@@ -2512,7 +2512,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                               <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell> <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
                               {show && <>
                                 <TableCell className='border data_td text-center' >{person?.visa_Price_In_Curr}</TableCell>

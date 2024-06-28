@@ -1624,10 +1624,10 @@ height: 60%;
   font-weight: 600;
 }
 .notes .filters label{
-  font-size: 14px;
+  font-size: 12px;
 }
 .notes .filters select,.notes .filters input{
-  width: 100%;
+  width: auto;
   height: 30px;
   border: 1px solid var(--grays-dm-white);
   border-radius: 2px;
@@ -1638,6 +1638,7 @@ height: 60%;
   position: relative;
   font-weight: 500;
   letter-spacing: 1px;
+background-color: #dad5d5;
   box-shadow: 10px 10px 10px 10px solid var(--black);
   text-transform: capitalize;
 }
@@ -1841,6 +1842,9 @@ color:white;
 
 /* Modal for closing the status of supplier/agent */
 /*  */
+#exampleModal .modal-body{
+  overflow: scroll;
+}
 #exampleModal .direct_payment{
   display: flex;
   flex-wrap: wrap; /* Ensure that the elements wrap if they don't fit in one row */
@@ -1854,4 +1858,5 @@ flex-grow: 1;
 padding: 0;
 margin: 0;
 min-width: 200px;
+border-right: 1px solid var(--darkgrey);
 }

@@ -91,7 +91,7 @@ const getAllPayments = async (req, res) => {
             remaining:0,
              remaining_Curr:0,
             type: `Employee Payment ${payment.payment_Out>0?'Out':'Out Return'}`,
-            ...payment.toObject(),
+            ...payment.toObject(), 
           })
         )
         mergedPayments = mergedPayments.concat(paymentInDetails);

@@ -10235,22 +10235,19 @@ const updateCurrCountry = async (req, res) => {
           }
         }
        
-    for(const employee of employees){
-      if(employee.payments){
-        const allMonths=employee.payments
-        for (const month of allMonths){
-          if(month.payment && month.payment.length>0){
-            const payments= month.payment
-            for (const payment of payments){
-              if(payment.payment_In_Curr===existingSupplier.currCountry){
-                payment.payment_In_Curr=currCountry
-              }
-            }
+
+        for(const employee of employees){
+          if(employee.payments){
+            const payments=employee.employeePayments
+                for (const payment of payments){
+                  if(payment.payment_Out_Curr===existingSupplier.currCountry){
+                    payment.payment_Out_Curr=currCountry
+                  }
+                }
+            await employee.save()
           }
         }
-        await employee.save()
-      }
-    }
+    
 
         for(const expense of expenses){
           if (expense.curr_Country===existingSupplier.currCountry){
@@ -10608,22 +10605,19 @@ const deleteCurrCountry = async (req, res) => {
           }
         }
 
+
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
+            const payments=employee.employeePayments
                 for (const payment of payments){
                   if(payment.payment_Out_Curr===existingSupplier.currCountry){
                     payment.payment_Out_Curr=""
                   }
                 }
-              }
-            }
             await employee.save()
           }
         }
+        
        
 
         for(const expense of expenses){
@@ -11070,20 +11064,16 @@ const updatePaymentVia = async (req, res) => {
        
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
+            const payments=employee.employeePayments
                 for (const payment of payments){
                   if(payment.payment_Via===existingSupplier.payment_Via){
                     payment.payment_Via=payment_Via
                   }
                 }
-              }
-            }
             await employee.save()
           }
         }
+       
 
         for(const expense of expenses){
           if (expense.payment_Via===existingSupplier.payment_Via){
@@ -11586,23 +11576,18 @@ const deletePaymentVia = async (req, res) => {
           }
         }
       
-
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
+            const payments=employee.employeePayments
                 for (const payment of payments){
                   if(payment.payment_Via===existingSupplier.payment_Via){
                     payment.payment_Via=""
                   }
                 }
-              }
-            }
             await employee.save()
           }
         }
+       
 
         for(const expense of expenses){
           if (expense.payment_Via===existingSupplier.payment_Via){
@@ -12199,22 +12184,19 @@ const updatePaymentType= async (req, res) => {
           }
         }
 
+
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
+            const payments=employee.employeePayments
                 for (const payment of payments){
                   if(payment.payment_Type===existingSupplier.payment_Type){
                     payment.payment_Type=payment_Type
                   }
                 }
-              }
-            }
             await employee.save()
           }
         }
+       
        
 
         for(const expense of expenses){
@@ -12747,24 +12729,19 @@ const deletePaymentType = async (req, res) => {
           }
         }
 
+
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
+            const payments=employee.employeePayments
                 for (const payment of payments){
                   if(payment.payment_Type===existingSupplier.payment_Type){
                     payment.payment_Type=""
                   }
                 }
-              }
-            }
             await employee.save()
           }
         }
        
-
         for(const expense of expenses){
           if (expense.payment_Type===existingSupplier.payment_Type){
             expense.payment_Type=""
@@ -16062,15 +16039,13 @@ const updateCategory = async (req, res) => {
 
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
-                for (const payment of payments){
+            const allPayments=employee.employePayments
+            for (const payment of allPayments){
+              if(payment){ 
                   if(payment.category===existingSupplier.category){
                 payment.category=category
               }
-                }
+                
               }
             }
             await employee.save()
@@ -16591,17 +16566,12 @@ const deleteCategory = async (req, res) => {
      
         for(const employee of employees){
           if(employee.payments){
-            const allMonths=employee.payments
-            for (const month of allMonths){
-              if(month.payment && month.payment.length>0){
-                const payments= month.payment
+            const payments=employee.employeePayments
                 for (const payment of payments){
                   if(payment.category===existingSupplier.category){
                     payment.category=""
                   }
                 }
-              }
-            }
             await employee.save()
           }
         }
