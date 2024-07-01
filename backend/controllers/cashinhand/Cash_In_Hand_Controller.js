@@ -50,8 +50,21 @@ const addCash = async (req, res) => {
       slip_Pic,
       details,
       date,
+      curr_Country,
+      curr_Rate,
+      curr_Amount,
 
     } = req.body;
+
+    if (!category) {
+      return res.status(400).json({ message: "Category is required" });
+    }
+    if (!payment_Via) {
+      return res.status(400).json({ message: "Payment Via is required" });
+    }
+    if (!payment_Type) {
+      return res.status(400).json({ message: "Payment Type is required" });
+    }
 
     let uploadImage;
     if (slip_Pic) {
@@ -59,6 +72,9 @@ const addCash = async (req, res) => {
         upload_preset: "rozgar",
       });
     }
+
+    const newCurrAmount = parseInt(curr_Amount, 10);
+
     // Create a new payment object
     const newPayment = {
       category,
@@ -69,6 +85,9 @@ const addCash = async (req, res) => {
       payment_Out: payment_Out ? payment_Out : 0,
       slip_Pic: uploadImage?.secure_url || '',
       details,
+      payment_In_Curr: curr_Country ? curr_Country : '',
+      curr_Rate: curr_Rate ? curr_Rate : 0,
+      curr_Amount: newCurrAmount ? newCurrAmount : 0,
       date:date?date:new Date().toISOString().split("T")[0],
       invoice: nextInvoiceNumber
     };
@@ -190,7 +209,8 @@ const updateCash = async (req, res) => {
 
     }
     if (user && user.role === "Admin") {
-      const { cashId, name, category, payment_Via, payment_Type, payment_In, payment_Out, slip_No, slip_Pic, details, date } = req.body
+      const { cashId, category, payment_Via, payment_Type, payment_In, payment_Out, slip_No, slip_Pic, details, date,curr_Country,curr_Rate} = req.body
+    let newCurrRate=parseInt(curr_Rate, 10)
 
       if (!mongoose.Types.ObjectId.isValid(cashId)) {
         return res.status(400).json({ message: 'Invalid cashId' });
@@ -211,6 +231,7 @@ const updateCash = async (req, res) => {
 
         const newCashIn = payment_In ? payment_In - cashToUpdate.payment_In : 0;
         const newCashOut = payment_Out ? payment_Out - cashToUpdate.payment_Out : 0;
+
         let uploadImage;
         if (slip_Pic) {
           uploadImage = await cloudinary.uploader.upload(slip_Pic, {
@@ -229,12 +250,17 @@ const updateCash = async (req, res) => {
           { new: true }
         );
 
+        let updatedCurrAmount=payment_In>0?payment_In:payment_Out/newCurrRate
         // Update Expense fields
         cashToUpdate.category = category
         cashToUpdate.payment_Via = payment_Via
         cashToUpdate.payment_Type = payment_Type
         cashToUpdate.payment_In = payment_In
         cashToUpdate.payment_Out = payment_Out
+        cashToUpdate.payment_In_Curr = curr_Country
+        cashToUpdate.curr_Amount= updatedCurrAmount
+        cashToUpdate.curr_Rate= curr_Rate
+
         if (slip_No) {
           cashToUpdate.slip_No = slip_No
 

@@ -1845,6 +1845,19 @@ color:white;
 #exampleModal .modal-body{
   overflow: scroll;
 }
+#exampleModal .modal-content span{
+  font-size: 13px;
+  color: var(--cool-Green);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+#exampleModal .modal-footer select{
+width: 80px;
+border: 1px solid black;
+color: black;
+height: 25px;
+font-size: 12px;
+}
 #exampleModal .direct_payment{
   display: flex;
   flex-wrap: wrap; /* Ensure that the elements wrap if they don't fit in one row */

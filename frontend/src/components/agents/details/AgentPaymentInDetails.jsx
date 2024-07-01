@@ -1476,8 +1476,7 @@ const printPerson = (person) => {
 
 
 
-
-
+  const [convert,setConvert]=useState('No')
   return (
     <>
       {!option &&
@@ -2366,7 +2365,13 @@ const printPerson = (person) => {
   <div className="modal-dialog modal-fullscreen">
     <div className="modal-content">
       <div className="modal-header">
-        <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details</h4>
+        <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
+       <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} |</span>
+       <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)} |</span>
+
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
       <div className="modal-body detail_table">
@@ -2612,8 +2617,9 @@ const printPerson = (person) => {
                 </div>
                 <div className="flex-grow-1 p-0 mx-1">
                 <div className="text-end">
-                  <div className="dropdown dropstart">
-                  <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
+                <div className="dropdown dropstart">
+                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print All</button>
   <button class="btn dropdown-toggle btn-sm m-1 d-inline" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -2824,6 +2830,11 @@ const printPerson = (person) => {
       
       </div>
       <div className="modal-footer">
+        <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <label htmlFor="">Convert Remaining Balance to New Khata?</label>
         <button className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
         <button className="btn btn-success btn-sm shadow" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
       </div>

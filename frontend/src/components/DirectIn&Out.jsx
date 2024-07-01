@@ -40,8 +40,7 @@ const {getOverAllPayments,overAllPayments}=CashInHandHook()
   let totalCashOutOut = 0;
     // Iterate through all payments
   overAllPayments.forEach(payment => {
-    const paymentVia = payment.payment_Via;
-  
+  const paymentVia = payment.payment_Via.toLowerCase();
     // Initialize the entry for this payment_Via if it doesn't exist
     if (!aggregatedPayments[paymentVia]) {
       aggregatedPayments[paymentVia] = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
@@ -6,6 +6,7 @@ import CategoryHook from '../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../hooks/settingHooks/PaymentTypeHook'
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
+import CurrCountryHook from '../hooks/settingHooks/CurrCountryHook'
 
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
@@ -14,8 +15,9 @@ import * as XLSX from 'xlsx';
 export default function CashinHand() {
   const dispatch = useDispatch();
   const apiUrl = process.env.REACT_APP_API_URL;
-  const[total,setTotal]=useState()
+  const [total, setTotal] = useState()
   const [show, setShow] = useState(false)
+  const [show2, setShow2] = useState(false)
 
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
@@ -26,16 +28,26 @@ export default function CashinHand() {
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [date, setDate] = useState('')
+  const [curr_Country, setCurr_Country] = useState('')
+  const [curr_Rate, setCurr_Rate] = useState(0)
+
+  let curr_Amount = (payment_In / curr_Rate).toFixed(2)
 
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
+  const currCountries = useSelector((state) => state.setting.currCountries);
+
+
+  const { getCurrCountryData } = CurrCountryHook()
 
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
-  const {getCashInHandData,getOverAllPayments,overAllPayments}=CashInHandHook()
+  const { getCashInHandData, getOverAllPayments, overAllPayments } = CashInHandHook()
+
+
   const aggregatedPayments = {};
   let totalPaymentIn = 0;
   let totalCashOutIn = 0;
@@ -49,11 +61,11 @@ export default function CashinHand() {
   let totalBankCashOutIn = 0;
   let totalBankPaymentOut = 0;
   let totalBankCashOutOut = 0;
-  
+
   // Iterate through all payments
   overAllPayments.forEach(payment => {
     const paymentVia = payment.payment_Via;
-  
+
     // Initialize the entry for this payment_Via if it doesn't exist
     if (!aggregatedPayments[paymentVia]) {
       aggregatedPayments[paymentVia] = {
@@ -71,70 +83,70 @@ export default function CashinHand() {
         totalBankCashOutOut: 0,
       };
     }
-  
+
     // Update the sums based on payment type
     if (payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) {
       aggregatedPayments[paymentVia].totalPaymentIn += payment.payment_In || 0;
       aggregatedPayments[paymentVia].totalCashOutIn += payment.cash_Out || 0;
-  
+
       totalPaymentIn += payment.payment_In || 0;
       totalCashOutIn += payment.cash_Out || 0;
     }
-  
+
     if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) && payment.payment_Via.toLowerCase() === 'cash') {
       aggregatedPayments[paymentVia].totalCashPaymentIn += payment.payment_In || 0;
       aggregatedPayments[paymentVia].totalCashCashOutIn += payment.cash_Out || 0;
-  
+
       totalCashPaymentIn += payment.payment_In || 0;
       totalCashCashOutIn += payment.cash_Out || 0;
     }
-  
+
     if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in')) && payment.payment_Via.toLowerCase() !== 'cash') {
       aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
       aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
-  
+
       totalBankPaymentIn += payment.payment_In || 0;
       totalBankCashOutIn += payment.cash_Out || 0;
     }
-  
+
     if (payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) {
       aggregatedPayments[paymentVia].totalPaymentOut += payment.payment_Out || 0;
       aggregatedPayments[paymentVia].totalCashOutOut += payment.cash_Out || 0;
-  
+
       totalPaymentOut += payment.payment_Out || 0;
       totalCashOutOut += payment.cash_Out || 0;
     }
-  
+
     if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) && payment.payment_Via.toLowerCase() === 'cash') {
       aggregatedPayments[paymentVia].totalCashPaymentOut += payment.payment_Out || 0;
       aggregatedPayments[paymentVia].totalCashCashOutOut += payment.cash_Out || 0;
-  
+
       totalCashPaymentOut += payment.payment_Out || 0;
       totalCashCashOutOut += payment.cash_Out || 0;
     }
-  
+
     if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out')) && payment.payment_Via.toLowerCase() !== 'cash') {
       aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
       aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
-  
+
       totalBankPaymentOut += payment.payment_Out || 0;
       totalBankCashOutOut += payment.cash_Out || 0;
     }
   });
-  
+
   // Calculate the combined total for each payment_Via
-const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, totals]) => {
-  return {
-    paymentVia,
-    total: (totals.totalPaymentIn + totals.totalCashOutIn) - (totals.totalPaymentOut + totals.totalCashOutOut),
-  };
-});
+  const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, totals]) => {
+    return {
+      paymentVia,
+      total: (totals.totalPaymentIn + totals.totalCashOutIn) - (totals.totalPaymentOut + totals.totalCashOutOut),
+    };
+  });
 
   // Calculate the combined total
   const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
   const combinedTotalCash = (totalCashPaymentIn + totalCashCashOutIn) - (totalCashPaymentOut + totalCashCashOutOut);
   const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
-  
+
   // getting Data from DB
 
 
@@ -144,8 +156,8 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
 
 
   const fetchData = async () => {
-    try {
-
+    try {  
+      await getCurrCountryData()
       await getCashInHandData();
       await getOverAllPayments()
       await getCategoryData()
@@ -161,7 +173,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
     fetchData()
     return () => {
       if (abortCont.current) {
-        abortCont.current.abort(); 
+        abortCont.current.abort();
       }
     }
   }, [])
@@ -237,7 +249,10 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
           payment_Out,
           slip_Pic,
           details,
-          date
+          date,
+          curr_Country,
+          curr_Rate,
+          curr_Amount,
         }),
       })
 
@@ -260,6 +275,8 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
         setSlip_Pic('');
         setDetails('');
         setDate('');
+        setCurr_Country('');
+        setCurr_Rate('');
       }
     }
     catch (error) {
@@ -334,7 +351,10 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
           payment_Out: editedEntry.payment_Out,
           slip_Pic: editedEntry.slip_Pic,
           details: editedEntry.details,
-          date: editedEntry.date
+          date: editedEntry.date,
+          curr_Country: editedEntry.payment_In_Curr,
+          curr_Amount: editedEntry.curr_Amount,
+          curr_Rate: editedEntry.curr_Rate
         }),
       })
 
@@ -348,7 +368,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
         setNewMessage(toast.success(json.message));
         fetchData()
         setLoading1(false);
-    setEditMode(!editMode);
+        setEditMode(!editMode);
 
 
       }
@@ -362,7 +382,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
 
   //Deleting Cash In/Out
   const deleteCash = async (cash) => {
-    if (window.confirm('Are you sure you want to delete this record?')){
+    if (window.confirm('Are you sure you want to delete this record?')) {
       setLoading(true)
       try {
         const response = await fetch(`${apiUrl}/auth/cash_in_hand/delete/cash`, {
@@ -373,26 +393,26 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
           },
           body: JSON.stringify({
             cashId: cash._id,
-            payment_In:cash.payment_In,
-            payment_Out:cash.payment_Out,
-            payment_Via:cash.payment_Via,
-  
-  
+            payment_In: cash.payment_In,
+            payment_Out: cash.payment_Out,
+            payment_Via: cash.payment_Via,
+
+
           }),
         })
-  
+
         const json = await response.json();
         if (!response.ok) {
           setLoading(false)
           setNewMessage(toast.error(json.message));
-  
+
         }
         if (response.ok) {
           setNewMessage(toast.success(json.message));
           fetchData()
           setLoading(false);
 
-  
+
         }
       }
       catch (error) {
@@ -401,7 +421,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
         setLoading(false);
       }
     }
-    
+
   }
 
   const [dateFrom, setDateFrom] = useState('')
@@ -410,9 +430,9 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
   const [category1, setCategory1] = useState('')
   const [payment_Via1, setPayment_Via1] = useState('')
   const [payment_Type1, setPayment_Type1] = useState('')
-  
+
   const filteredCash = cashInHand.payment
-  ? cashInHand.payment.filter((paymentItem) => {
+    ? cashInHand.payment.filter((paymentItem) => {
       let isDateInRange = true;
 
       // Check if the payment item's date is within the selected date range
@@ -425,14 +445,14 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
         paymentItem.category?.toLowerCase().includes(category1.toLowerCase()) &&
         isDateInRange &&
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via1.toLowerCase()) &&
-        paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase())&&
-       (paymentItem.slip_No?.trim().toLowerCase().startsWith(slip.trim().toLowerCase()) ||
-       paymentItem.payment_Via?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())||
-       paymentItem.payment_Type?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())
-      )
+        paymentItem.payment_Type?.toLowerCase().includes(payment_Type1.toLowerCase()) &&
+        (paymentItem.slip_No?.trim().toLowerCase().startsWith(slip.trim().toLowerCase()) ||
+          paymentItem.payment_Via?.trim().toLowerCase().startsWith(slip.trim().toLowerCase()) ||
+          paymentItem.payment_Type?.trim().toLowerCase().startsWith(slip.trim().toLowerCase())
+        )
       );
     })
-  : []
+    : []
 
 
 
@@ -535,15 +555,15 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
     filteredCash.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        Date:payments.date,
-        Category:payments.category,
-        Payment_Via:payments.payment_Via,
-        Payment_Type:payments.payment_Type,
-        Slip_No:payments.slip_No,
-        Details:payments.details,
-        Payment_In:payments.payment_In,
-        Payment_Out:payments.payment_Out,
-        Invoice:payments.invoice,
+        Date: payments.date,
+        Category: payments.category,
+        Payment_Via: payments.payment_Via,
+        Payment_Type: payments.payment_Type,
+        Slip_No: payments.slip_No,
+        Details: payments.details,
+        Payment_In: payments.payment_In,
+        Payment_Out: payments.payment_Out,
+        Invoice: payments.invoice,
 
 
       };
@@ -567,7 +587,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
   const [search, setSearch] = useState('')
 
   const filteredPayment = overAllPayments
-  ? overAllPayments.filter((paymentItem) => {
+    ? overAllPayments.filter((paymentItem) => {
       let isDateInRange = true;
 
       // Check if the payment item's date is within the selected date range
@@ -584,14 +604,14 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via2.toLowerCase()) &&
         paymentItem.payment_Type?.toLowerCase().includes(payment_Type2.toLowerCase()) &&
         (paymentItem.supplierName?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
-       paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
-       paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
-        paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase())||
-       paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
-      )
+          paymentItem.type?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.payment_Via?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.slip_No?.trim().toLowerCase().startsWith(search.trim().toLowerCase()) ||
+          paymentItem.payment_Type?.trim().toLowerCase().startsWith(search.trim().toLowerCase())
+        )
       );
     })
-  : [];
+    : [];
 
   const printOverAllCashTable = () => {
     // Convert JSX to HTML string
@@ -700,18 +720,18 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
     filteredPayment.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        Date:payments.date,
-        SupplierName:payments.supplierName,
-        Reference:payments.type,
-        Category:payments.category,
-        Payment_Via:payments.payment_Via,
-        Payment_Type:payments.payment_Type,
-        Slip_No:payments.slip_No,
-        Details:payments.details,
-        Payment_In:payments.payment_In,
-        Payment_Out:payments.payment_Out,
-        Cash_Out:payments.cash_Out,
-        Invoice:payments.invoice       
+        Date: payments.date,
+        SupplierName: payments.supplierName,
+        Reference: payments.type,
+        Category: payments.category,
+        Payment_Via: payments.payment_Via,
+        Payment_Type: payments.payment_Type,
+        Slip_No: payments.slip_No,
+        Details: payments.details,
+        Payment_In: payments.payment_In,
+        Payment_Out: payments.payment_Out,
+        Cash_Out: payments.cash_Out,
+        Invoice: payments.invoice
       };
 
       data.push(rowData);
@@ -727,7 +747,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
-    <div className={`${collapsed ?"collapsed":"main"}`}>
+      <div className={`${collapsed ? "collapsed" : "main"}`}>
         <div className="container-fluid py-2 cash_in_hand">
           {current === 0 &&
             <div className="row justify-content-center mt-3">
@@ -736,18 +756,18 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                   <h4 className='text-center'>Account Details</h4>
                 </div>
                 <div className="account-text mt-md-4 mt-3">
-                 
-                 <div className="middle text-center">
-                 <h6 className='my-2'>{Math.round(combinedTotalCash?combinedTotalCash:0)}</h6>
-                  <h5 className='my-2'>Cash</h5>
-                  <h6 className='my-2'>{Math.round(combinedTotalBankCash ? combinedTotalBankCash :0)}</h6>
-                  <h5 className='my-2'>Banks Cash</h5>
-                 <h6 className='my-2' onClick={() => setCurrent(1)}>{Math.round(combinedTotal?combinedTotal:0)}</h6>
-                  <h5 className='my-2'>Total Cash In Hand</h5>
-                  <Link className="cash_in_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
-                  <Link className="cash_out_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
-                 </div>
-                 
+
+                  <div className="middle text-center">
+                    <h6 className='my-2'>{Math.round(combinedTotalCash ? combinedTotalCash : 0)}</h6>
+                    <h5 className='my-2'>Cash</h5>
+                    <h6 className='my-2'>{Math.round(combinedTotalBankCash ? combinedTotalBankCash : 0)}</h6>
+                    <h5 className='my-2'>Banks Cash</h5>
+                    <h6 className='my-2' onClick={() => setCurrent(1)}>{Math.round(combinedTotal ? combinedTotal : 0)}</h6>
+                    <h5 className='my-2'>Total Cash In Hand</h5>
+                    <Link className="cash_in_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashinModal">Cash In</Link>
+                    <Link className="cash_out_btn m-1 btn btn-sm  shadow " data-bs-toggle="modal" data-bs-target="#cashoutModal">Cash Out</Link>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -762,71 +782,72 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
               <div className='col-md-12 payment_details p-0 border-0 border-bottom'>
                 <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
                   <div className="left d-flex">
-                    <button className= 'btn btn-sm  m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
-                    <button className= 'btn btn-sm  m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
+                    <button className='btn btn-sm  m-1 show_btn' style={option === 0 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(0)}>Direct IN/OUT</button>
+                    <button className='btn btn-sm  m-1 show_btn' style={option === 1 ? { background: 'var(--accent-stonger-blue)', color: 'var(--white' } : {}} onClick={() => setOption(1)}>Overall Payments</button>
 
                   </div>
                   <div className="right">
                     {option === 0 &&
                       <>
-                        <button className= 'btn btn-sm  excel_btn m-1 btn btn-sm -sm' onClick={downloadExcel}>Download </button>
-                        <button className= 'btn btn-sm  excel_btn m-1 btn btn-sm -sm bg-success border-0' onClick={printCashTable}>Print </button>
+                        <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                        <button className='btn btn-sm  excel_btn m-1 btn btn-sm -sm' onClick={downloadExcel}>Download </button>
+                        <button className='btn btn-sm  excel_btn m-1 btn btn-sm -sm bg-success border-0' onClick={printCashTable}>Print </button>
                       </>
                     }
-                      {option === 1 &&
+                    {option === 1 &&
                       <>
-                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
-                        <button className= 'btn  excel_btn m-1 btn-sm border-0 ' onClick={downloadOverAllExcel}>Download </button>
-                        <button className= 'btn  excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
+                        <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                        <button className='btn  excel_btn m-1 btn-sm border-0 ' onClick={downloadOverAllExcel}>Download </button>
+                        <button className='btn  excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
                       </>
                     }
-                    <button className= 'btn btn-sm  detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
+                    <button className='btn btn-sm  detail_btn' onClick={() => setCurrent(0)}><i className="fas fa-times"></i></button>
 
                   </div>
                 </div>
               </div>
 
-              {option === 0  &&
+              {option === 0 &&
                 <div className="col-md-12 payment_details">
                   <div className="row">
                     <div className="col-md-12 filters">
                       <div className='py-1 mb-2'>
                         <div className="row">
-                        <div className="col-auto px-1">
-                            <label htmlFor="">Search Here:</label><br/>
-                           <input type="search" value={slip} onChange={(e)=>setSlip(e.target.value)} />
-                          </div>
-                        <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label><br/>
-                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
-                </div>
-                <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label><br/>
-                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
-                 
-                </div>
-                        
                           <div className="col-auto px-1">
-                            <label htmlFor="">Category:</label><br/>
+                            <label htmlFor="">Search Here:</label><br />
+                            <input type="search" value={slip} onChange={(e) => setSlip(e.target.value)} />
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Date From:</label><br />
+                            <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Date To:</label><br />
+                            <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1' />
+
+                          </div>
+
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Category:</label><br />
                             <select value={category1} onChange={(e) => setCategory1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
-                              {[...new Set(cashInHand.payment &&  cashInHand.payment.map(data => data.category))].map(dateValue => (
+                              {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.category))].map(dateValue => (
                                 <option value={dateValue} key={dateValue}>{dateValue}</option>
                               ))}
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Via:</label><br/>
+                            <label htmlFor="">Payment Via:</label><br />
                             <select value={payment_Via1} onChange={(e) => setPayment_Via1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.payment_Via))]
-                                    .map(dateValue => (
-                                        <option value={dateValue} key={dateValue}>{dateValue}</option>
-                                    ))}
+                                .map(dateValue => (
+                                  <option value={dateValue} key={dateValue}>{dateValue}</option>
+                                ))}
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Type:</label><br/>
+                            <label htmlFor="">Payment Type:</label><br />
                             <select value={payment_Type1} onChange={(e) => setPayment_Type1(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(cashInHand.payment && cashInHand.payment.map(data => data.payment_Type))].map(dateValue => (
@@ -834,14 +855,14 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                               ))}
                             </select>
                           </div>
-                         
+
                         </div>
                       </div>
                     </div>
 
                     <div className="col-md-12 detail_table my-2 p-0">
 
-                      <TableContainer   sx={{ maxHeight: 600 }}>
+                      <TableContainer sx={{ maxHeight: 600 }}>
                         <Table stickyHeader>
                           <TableHead className="thead">
                             <TableRow>
@@ -855,8 +876,13 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                               <TableCell className='label border' >Cash Out</TableCell>
                               <TableCell className='label border' >Details</TableCell>
                               <TableCell className='label border' >Invoice</TableCell>
+                              {show2 && <>
+                              <TableCell className='label border' >Payment_In_Curr</TableCell>
+                              <TableCell className='label border' >CUR_Rate</TableCell>
+                              <TableCell className='label border' >CUR_Amount</TableCell>
+                            </>}
                               <TableCell className='label border' >Slip Pic</TableCell>
-                              <TableCell align='left' className='edw_label border'  colSpan={1}>
+                              <TableCell align='left' className='edw_label border' colSpan={1}>
                                 Actions
                               </TableCell>
 
@@ -879,7 +905,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                         </TableCell>
 
                                         <TableCell className='border data_td p-1 '>
-                                          <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'expCategory')} required>
+                                          <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
                                             <option value="">Choose</option>
                                             {categories && categories.map((data) => (
                                               <option key={data._id} value={data.category}>{data.category}</option>
@@ -890,10 +916,10 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                           <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
                                             <option value="">Choose</option>
                                             {paymentVia && paymentVia.map((data) => (
-                            data.payment_Via.toLowerCase() === 'cash' && (
-                                <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                            )
-                            ))}
+
+                                              <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+
+                                            ))}
                                           </select>
                                         </TableCell>
                                         <TableCell className='border data_td p-1 '>
@@ -920,13 +946,30 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                           <input type='text' value={editedEntry.invoice} readonly />
                                         </TableCell>
 
+                                        {show2 && <>
+                                        <TableCell className='border data_td p-1 '>
+                                          <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
+                                            <option className="my-1 py-2" value="">choose</option>
+                                            {currCountries && currCountries.map((data) => (
+                                              <option className="my-1 py-2" key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                                            ))}
+                                          </select>
+                                        </TableCell>
+                                        <TableCell className='border data_td p-1 '>
+                                          <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                        </TableCell>
+                                        <TableCell className='border data_td p-1 '>
+                                          <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                        </TableCell>
+                                      </>}
+
                                         <TableCell className='border data_td p-1 '>
                                           <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                                         </TableCell>
                                         <TableCell className='border data_td p-1 '>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => setEditMode(!editMode)} className= 'btn btn-sm  delete_btn'><i className="fa-solid fa-xmark"></i></button>
-                                            <button onClick={() => handleUpdate()} className= 'btn btn-sm  save_btn' disabled={loading1}><i className="fa-solid fa-check"></i></button>
+                                            <button onClick={() => setEditMode(!editMode)} className='btn btn-sm  delete_btn'><i className="fa-solid fa-xmark"></i></button>
+                                            <button onClick={() => handleUpdate()} className='btn btn-sm  save_btn' disabled={loading1}><i className="fa-solid fa-check"></i></button>
 
                                           </div>
                                         </TableCell>
@@ -944,13 +987,18 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                         <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
+                                        {show2 && <>
+                                        <TableCell className='border data_td text-center' >{cash?.payment_In_Curr}</TableCell>
+                                        <TableCell className='border data_td text-center' >{cash?.curr_Rate}</TableCell>
+                                        <TableCell className='border data_td text-center' >{cash?.curr_Amount}</TableCell>
+                                      </>}
                                         <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                         <TableCell className='border data_td text-center'>
                                           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                            <button onClick={() => handleEditClick(cash, outerIndex)} className= 'btn btn-sm edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
-                                            <button className= 'btn btn-sm  delete_btn' onClick={() => deleteCash(cash)} disabled={loading}><i className="fa-solid fa-trash-can"></i></button>
+                                            <button onClick={() => handleEditClick(cash, outerIndex)} className='btn btn-sm edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
+                                            <button className='btn btn-sm  delete_btn' onClick={() => deleteCash(cash)} disabled={loading}><i className="fa-solid fa-trash-can"></i></button>
                                           </div>
-                                         
+
                                         </TableCell>
                                       </>
                                     )}
@@ -958,27 +1006,40 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
 
                                 </React.Fragment>
                               ))}
-                               <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>
-      {/* Calculate the total sum of payment_In */}
-      {filteredCash.reduce((total, cash) => total + cash.payment_In, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-danger text-white'>
-      {/* Calculate the total sum of payment_Out */}
-      {filteredCash.reduce((total, cash) => total + cash.payment_Out, 0)}
-    </TableCell>
+                            <TableRow>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                              <TableCell className='border data_td text-center bg-success text-white'>
+                                {/* Calculate the total sum of payment_In */}
+                                {filteredCash.reduce((total, cash) => total + cash.payment_In, 0)}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-danger text-white'>
+                                {/* Calculate the total sum of payment_Out */}
+                                {filteredCash.reduce((total, cash) => total + cash.payment_Out, 0)}
+                              </TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center bg-success text-white'>
+                                {/* Calculate the total sum of payment_In */}
+                                {filteredCash.reduce((total, cash) => total + cash.curr_Rate, 0)}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-success text-white'>
+                                {/* Calculate the total sum of payment_In */}
+                                {filteredCash.reduce((total, cash) => total + cash.curr_Amount, 0)}
+                              </TableCell>
                             
-                          </TableRow>
+                              </>}
+                            </TableRow>
                           </TableBody>
                         </Table>
                       </TableContainer>
-                      
+
                     </div>
 
                   </div>
@@ -987,25 +1048,25 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
               {option === 1 &&
                 <div className="col-md-12 payment_details">
                   <div className='row'>
-                  <div className="col-md-12 filters">
+                    <div className="col-md-12 filters">
                       <div className='py-1 mb-2'>
                         <div className="row">
-                        <div className="col-auto px-1">
-                            <label htmlFor="">Search Here:</label><br/>
-                           <input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} />
-                          </div>
-                        <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label><br/>
-                  <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1'/>
-                </div>
-                <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label><br/>
-                  <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'/>
-                 
-                </div>
-                          
                           <div className="col-auto px-1">
-                            <label htmlFor="">Name:</label><br/>
+                            <label htmlFor="">Search Here:</label><br />
+                            <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} />
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Date From:</label><br />
+                            <input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className='m-0 p-1' />
+                          </div>
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Date To:</label><br />
+                            <input type="date" value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1' />
+
+                          </div>
+
+                          <div className="col-auto px-1">
+                            <label htmlFor="">Name:</label><br />
                             <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.supplierName))].map(dateValue => (
@@ -1014,7 +1075,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Reference Type:</label><br/>
+                            <label htmlFor="">Reference Type:</label><br />
                             <select value={type} onChange={(e) => setType(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.type))].map(dateValue => (
@@ -1024,7 +1085,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                           </div>
 
                           <div className="col-auto px-1">
-                            <label htmlFor="">Category:</label><br/>
+                            <label htmlFor="">Category:</label><br />
                             <select value={category2} onChange={(e) => setCategory2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.category))].map(dateValue => (
@@ -1033,7 +1094,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Via:</label><br/>
+                            <label htmlFor="">Payment Via:</label><br />
                             <select value={payment_Via2} onChange={(e) => setPayment_Via2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Via))].map(dateValue => (
@@ -1042,7 +1103,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                             </select>
                           </div>
                           <div className="col-auto px-1">
-                            <label htmlFor="">Payment Type:</label><br/>
+                            <label htmlFor="">Payment Type:</label><br />
                             <select value={payment_Type2} onChange={(e) => setPayment_Type2(e.target.value)} className='m-0 p-1'>
                               <option value="">All</option>
                               {[...new Set(overAllPayments && overAllPayments.map(data => data.payment_Type))].map(dateValue => (
@@ -1077,14 +1138,14 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                               <TableCell className='label border'>Cash In</TableCell>
                               <TableCell className='label border'>Cash Out</TableCell>
                               <TableCell className='label border'>Cash In Return</TableCell>
-                            <TableCell className='label border'>Cash Out Return</TableCell>
-                           
-                              {show && 
-                              <>
-                              <TableCell className='label border' >Curr Rate</TableCell>
-                            <TableCell className='label border' >Curr Amount</TableCell>
-                            <TableCell className='label border' >Payment In Curr</TableCell>
-                              </>
+                              <TableCell className='label border'>Cash Out Return</TableCell>
+
+                              {show &&
+                                <>
+                                  <TableCell className='label border' >Curr Rate</TableCell>
+                                  <TableCell className='label border' >Curr Amount</TableCell>
+                                  <TableCell className='label border' >Payment In Curr</TableCell>
+                                </>
                               }
                               <TableCell className='label border'>Details</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
@@ -1097,127 +1158,127 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                                 // Map through the payment array
                                 <React.Fragment key={outerIndex}>
                                   <TableRow key={cash?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
-                                   
-                                      <>
-                                        <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.date}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.company}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
-                                      
-                                        <TableCell className='border data_td text-center'>{cash.type}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.category}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
-                                        <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash?.payment_In||0}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in')&&cash.cash_Out||0}</TableCell>
-                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out')&&cash.cash_Out||0}</TableCell>
-                                      
-                                       {show &&
-                                       <>
-                                        <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
-                                      <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount||0)}</TableCell>
-                                      <TableCell className='border data_td text-center'>{cash?.payment_In_curr?cash?.payment_In_curr:cash?.payment_Out_curr}</TableCell>
-                                       </>
-                                       }
-                                        <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
-                                        <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
-                                       
-                                      </>
-                                  
+
+                                    <>
+                                      <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.date}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.supplierName}/{cash?.pp_No}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.company}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.trade}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.flight_Date}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.final_Status}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.entry_Mode}</TableCell>
+
+                                      <TableCell className='border data_td text-center'>{cash.type}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.category}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.payment_Via}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash?.payment_In || 0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash?.payment_Out || 0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('in') && cash.cash_Out || 0}</TableCell>
+                                      <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up text-warning text-bold"></i><i className="fa-solid fa-arrow-down me-2 text-warning text-bold"></i>{cash.type.toLowerCase().includes('out') && cash.cash_Out || 0}</TableCell>
+
+                                      {show &&
+                                        <>
+                                          <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate || 0)}</TableCell>
+                                          <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Amount || 0)}</TableCell>
+                                          <TableCell className='border data_td text-center'>{cash?.payment_In_curr ? cash?.payment_In_curr : cash?.payment_Out_curr}</TableCell>
+                                        </>
+                                      }
+                                      <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
+                                      <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+
+                                    </>
+
                                   </TableRow>
 
                                 </React.Fragment>
                               ))}
-                              <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>
-    {/* Calculate the total sum of payment_In */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.payment_In || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-danger text-white'>
-    {/* Calculate the total sum of payment_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-  {/* Calculate the total sum of cash_Out based on payment_In */}
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0)); 
-  }, 0)}
-</TableCell>
-<TableCell className='border data_td text-center bg-warning text-white'>
-  {/* Calculate the total sum of cash_Out based on payment_Out */}
-  {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0)); 
-  }, 0)}
-</TableCell>
-  {show && 
-  <>
-  <TableCell className='border data_td text-center bg-info text-white'>
-    {/* Calculate the total sum of payment_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.curr_Rate || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  <TableCell className='border data_td text-center bg-warning text-white'>
-    {/* Calculate the total sum of cash_Out */}
-    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-      return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
-    }, 0)}
-  </TableCell>
-  </>
-  }
-  <TableCell className='border data_td text-center bg-secondary text-white'>
-Remaining PKR= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
-  }, 0))}
-</TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
-Remaining Curr= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
-  }, 0))}
-</TableCell>                
-                          </TableRow>
+                            <TableRow>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell></TableCell>
+                              <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                              <TableCell className='border data_td text-center bg-success text-white'>
+                                {/* Calculate the total sum of payment_In */}
+                                {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round(entry.payment_In || 0)); // Use proper conditional check
+                                }, 0)}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-danger text-white'>
+                                {/* Calculate the total sum of payment_Out */}
+                                {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round(entry.payment_Out || 0)); // Use proper conditional check
+                                }, 0)}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-warning text-white'>
+                                {/* Calculate the total sum of cash_Out based on payment_In */}
+                                {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round(entry.type.toLowerCase().includes('in') ? entry.cash_Out || 0 : 0));
+                                }, 0)}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-warning text-white'>
+                                {/* Calculate the total sum of cash_Out based on payment_Out */}
+                                {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round(entry.type.toLowerCase().includes('out') ? entry.cash_Out || 0 : 0));
+                                }, 0)}
+                              </TableCell>
+                              {show &&
+                                <>
+                                  <TableCell className='border data_td text-center bg-info text-white'>
+                                    {/* Calculate the total sum of payment_Out */}
+                                    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                      return total + (Math.round(entry.curr_Rate || 0)); // Use proper conditional check
+                                    }, 0)}
+                                  </TableCell>
+                                  <TableCell className='border data_td text-center bg-warning text-white'>
+                                    {/* Calculate the total sum of cash_Out */}
+                                    {filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                      return total + (Math.round(entry.curr_Amount || 0)); // Use proper conditional check
+                                    }, 0)}
+                                  </TableCell>
+                                </>
+                              }
+                              <TableCell className='border data_td text-center bg-secondary text-white'>
+                                Remaining PKR=
+                                {(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_In || entry.payment_In > 0 || entry.type.toLowerCase().includes('in') ? entry.payment_In : 0) || 0));
+                                }, 0)) + (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_In || entry.payment_In < 1 || entry.type.toLowerCase().includes('in') ? entry.cash_Out : 0) || 0));
+                                }, 0)) - (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_Out || entry.payment_Out > 0 || entry.type.toLowerCase().includes('out') ? entry.payment_Out : 0) || 0));
+                                }, 0)) - (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_Out || entry.payment_Out < 1 || entry.type.toLowerCase().includes('out') ? entry.cash_Out : 0) || 0));
+                                }, 0))}
+                              </TableCell>
+                              <TableCell className='border data_td text-center bg-secondary text-white'>
+                                Remaining Curr=
+                                {(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_In || entry.payment_In > 0 || entry.type.toLowerCase().includes('in') ? entry.curr_Amount : 0) || 0));
+                                }, 0)) + (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_In || entry.payment_In < 1 || entry.type.toLowerCase().includes('in') ? entry.curr_Amount : 0) || 0));
+                                }, 0)) - (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_Out || entry.payment_Out > 0 || entry.type.toLowerCase().includes('out') ? entry.curr_Amount : 0) || 0));
+                                }, 0)) - (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+                                  return total + (Math.round((entry.payment_Out || entry.payment_Out < 1 || entry.type.toLowerCase().includes('out') ? entry.curr_Amount : 0) || 0));
+                                }, 0))}
+                              </TableCell>
+                            </TableRow>
                           </TableBody>
                         </Table>
                       </TableContainer>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -1250,11 +1311,11 @@ Remaining Curr=
 
                     <div className="row p-0 m-0 my-1">
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Date </label><br/>
+                        <label >Date </label><br />
                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Category </label><br/>
+                        <label >Category </label><br />
                         <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                           <option value="">Choose</option>
                           {categories && categories.map((data) => (
@@ -1263,18 +1324,18 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Via </label><br/>
+                        <label >Payment Via </label><br />
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
-                            data.payment_Via.toLowerCase() === 'cash' && (
-                                <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                            )
-                            ))}
+
+                            <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+
+                          ))}
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Type </label><br/>
+                        <label >Payment Type </label><br />
                         <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentType && paymentType.map((data) => (
@@ -1283,23 +1344,46 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Slip No </label><br/>
+                        <label >Slip No </label><br />
                         <input type="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Cash In </label><br/>
+                        <label >Cash In </label><br />
                         <input type="number" min="0" value={payment_In} onChange={(e) => setPayment_In(e.target.value)} required />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Upload Slip </label><br/>
+                        <label >Upload Slip </label><br />
                         <input type="file" accept='image/*' onChange={handleImage} />
                       </div>
 
 
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Country </label>
+                  <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
+                    <option value="">choose</option>
+                    {currCountries && currCountries.map((data) => (
+                      <option key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                    ))}
+                  </select>
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Rate </label>
+                      <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >Currency Amount </label>
+                      <input type="number" value={curr_Amount} readOnly />
+                      </div>
+
                       <div className="col-xl-6 col-12   p-1 my-1">
-                        <label >Details </label><br/>
+                        <label >Details </label><br />
+                        <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
+                      </div>
+
+                      <div className="col-xl-6 col-12   p-1 my-1">
+                        <label >Details </label><br />
                         <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
                       </div>
                     </div>
@@ -1340,11 +1424,11 @@ Remaining Curr=
 
                     <div className="row p-0 m-0 my-1">
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Date </label><br/>
+                        <label >Date </label><br />
                         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Category </label><br/>
+                        <label >Category </label><br />
                         <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                           <option value="">Choose</option>
                           {categories && categories.map((data) => (
@@ -1353,18 +1437,18 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Via </label><br/>
+                        <label >Payment Via </label><br />
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
-                            data.payment_Via.toLowerCase() === 'cash' && (
-                                <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                            )
-                            ))}
+
+                            <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+
+                          ))}
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Payment Type </label><br/>
+                        <label >Payment Type </label><br />
                         <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentType && paymentType.map((data) => (
@@ -1373,25 +1457,43 @@ Remaining Curr=
                         </select>
                       </div>
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Slip No </label><br/>
+                        <label >Slip No </label><br />
                         <input type="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Cash Out </label><br/>
+                        <label >Cash Out </label><br />
                         <input type="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
                       </div>
 
                       <div className="col-xl-6  col-12 p-1 my-1">
-                        <label >Upload Slip </label><br/>
+                        <label >Upload Slip </label><br />
                         <input type="file" accept='image/*' onChange={handleImage} />
                       </div>
 
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Country </label>
+                  <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
+                    <option value="">choose</option>
+                    {currCountries && currCountries.map((data) => (
+                      <option key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                    ))}
+                  </select>
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Rate </label>
+                      <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >Currency Amount </label>
+                      <input type="number" value={curr_Amount} readOnly />
+                      </div>
 
                       <div className="col-xl-6 col-12   p-1 my-1">
-                        <label >Details </label><br/>
+                        <label >Details </label><br />
                         <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
                       </div>
+                     
                     </div>
                     <div className="text-center">
 

@@ -396,7 +396,7 @@ const addEntry = async (req, res) => {
             // Check if the supplier with the given name exists
             for(const supplier of suppliers){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInSupplier=supplier
                   break
                 }
@@ -528,11 +528,9 @@ const addEntry = async (req, res) => {
                     "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
                       ? visa_Sale_Rate_Oth_Cur
                       : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInSupplier.payment_In_Schema.closing + visa_Sales_Rate_PKR) : visa_Sales_Rate_PKR
+                     
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+                  
                 })
               }
 
@@ -543,7 +541,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Suppliers Payment Out Section if reference_In==="Supplier"
@@ -558,7 +556,7 @@ const addEntry = async (req, res) => {
           try {
             let existingPaymentOutSupplier;
             for(const supplier of suppliers){
-              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                 existingPaymentOutSupplier=supplier
                 break
               }
@@ -690,12 +688,9 @@ const addEntry = async (req, res) => {
                       visa_Purchase_Rate_Oth_Cur
                         ? visa_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutSupplier.payment_Out_Schema.closing + visa_Purchase_Rate_PKR) : visa_Purchase_Rate_PKR
-
+                     
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  },
+                 
                 });
               }
 
@@ -707,7 +702,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -725,7 +720,7 @@ const addEntry = async (req, res) => {
           try {
             let existingPaymentInAgent;
             for(const agent of agents){
-              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()){
+              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()&& agent.payment_In_Schema.status.toLowerCase()==='open'){
                 existingPaymentInAgent=agent
                 break
               }
@@ -854,12 +849,8 @@ const addEntry = async (req, res) => {
                     "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
                       ? visa_Sale_Rate_Oth_Cur
                       : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAgent.payment_In_Schema.closing + visa_Sales_Rate_PKR) : visa_Sales_Rate_PKR
-
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+              
                 });
               }
 
@@ -870,7 +861,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Agents Payment Out Section if reference_In==="Agents"
@@ -885,7 +876,7 @@ const addEntry = async (req, res) => {
           try {
             let existingPaymentOutAgent
             for(const agent of agents){
-              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()){
+              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()&& agent.payment_Out_Schema.status.toLowerCase()==='open'){
                 existingPaymentOutAgent=agent
                 break
               }
@@ -1015,12 +1006,10 @@ const addEntry = async (req, res) => {
                       visa_Purchase_Rate_Oth_Cur
                         ? visa_Purchase_Rate_Oth_Cur
                         : 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAgent.payment_Out_Schema.closing + visa_Purchase_Rate_PKR) : visa_Purchase_Rate_PKR
+                        
 
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  },
+                
                  
                 });
               }
@@ -1032,7 +1021,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1096,7 +1085,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1157,7 +1146,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1178,7 +1167,7 @@ const addEntry = async (req, res) => {
             let existingPaymentInAzadSupplier
             for (const supplier of azadSuppliers){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema && supplier.payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema && supplier.payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInAzadSupplier = supplier;
                   break
                 }
@@ -1302,11 +1291,9 @@ const addEntry = async (req, res) => {
                       azad_Visa_Sales_Rate_Oth_Cur
                         ? azad_Visa_Sales_Rate_Oth_Cur
                         : 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadSupplier.payment_In_Schema.closing + azad_Visa_Sales_PKR) : azad_Visa_Sales_PKR
+                        
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+                 
                 });
               }
 
@@ -1318,7 +1305,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1335,7 +1322,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutAzadSupplier
             for (const supplier of azadSuppliers){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutAzadSupplier = supplier;
                   break
                 }
@@ -1460,11 +1447,9 @@ const addEntry = async (req, res) => {
                       azad_Visa_Purchase_Rate_Oth_Cur
                         ? azad_Visa_Purchase_Rate_Oth_Cur
                         : 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadSupplier.payment_Out_Schema.closing + azad_Visa_Purchase_PKR) : azad_Visa_Purchase_PKR
+                       
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  },
+                  
                 });
               }
 
@@ -1476,7 +1461,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1493,7 +1478,7 @@ const addEntry = async (req, res) => {
             let existingPaymentInAzadAgent
             for (const supplier of azadAgents){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentInAzadAgent = supplier;
                   break
                 }
@@ -1617,11 +1602,9 @@ const addEntry = async (req, res) => {
                       azad_Visa_Sales_Rate_Oth_Cur
                         ? azad_Visa_Sales_Rate_Oth_Cur
                         : 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadAgent.payment_In_Schema.closing + azad_Visa_Sales_PKR) : azad_Visa_Sales_PKR
+                       
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+                  
                 });
               }
 
@@ -1633,7 +1616,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1650,7 +1633,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutAzadAgent
             for (const supplier of azadAgents){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutAzadAgent = supplier;
                   break
                 }
@@ -1775,11 +1758,9 @@ const addEntry = async (req, res) => {
                       azad_Visa_Purchase_Rate_Oth_Cur
                         ? azad_Visa_Purchase_Rate_Oth_Cur
                         : 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadAgent.payment_Out_Schema.closing + azad_Visa_Purchase_PKR) : azad_Visa_Purchase_PKR
+                        
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  },
+                 
                 });
               }
 
@@ -1791,7 +1772,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1855,7 +1836,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1919,7 +1900,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -1940,7 +1921,7 @@ const addEntry = async (req, res) => {
             let existingPaymentInTicketSupplier
             for (const supplier of ticketSuppliers){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInTicketSupplier = supplier;
                   break
                 }
@@ -2055,11 +2036,9 @@ const addEntry = async (req, res) => {
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr":
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketSupplier.payment_In_Schema.closing + ticket_Sales_PKR) : ticket_Sales_PKR
+                      
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+                 
                  
                 });
               }
@@ -2072,7 +2051,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -2088,7 +2067,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutTicketSupplier
             for (const supplier of ticketSuppliers){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutTicketSupplier = supplier;
                   break
                 }
@@ -2214,11 +2193,9 @@ const addEntry = async (req, res) => {
                       ticket_Purchase_Rate_Oth_Cur
                         ? ticket_Purchase_Rate_Oth_Cur
                         : 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketSupplier.payment_Out_Schema.closing + ticket_Purchase_PKR) : ticket_Purchase_PKR
+                        
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  },
+                 
                   
                 });
               }
@@ -2231,7 +2208,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
@@ -2247,7 +2224,7 @@ const addEntry = async (req, res) => {
             let existingPaymentInTicketAgent
             for (const supplier of ticketAgents){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInTicketAgent = supplier;
                   break
                 }
@@ -2361,12 +2338,9 @@ const addEntry = async (req, res) => {
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
                     "payment_In_Schema.remaining_Curr":
                       ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketAgent.payment_In_Schema.closing + ticket_Sales_PKR) : ticket_Sales_PKR
-
+                     
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+                 
                  
                 });
               }
@@ -2379,7 +2353,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -2396,7 +2370,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutTicketAgent
             for (const supplier of ticketAgents){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutTicketAgent = supplier;
                   break
                 }
@@ -2521,11 +2495,9 @@ const addEntry = async (req, res) => {
                       ticket_Purchase_Rate_Oth_Cur
                         ? ticket_Purchase_Rate_Oth_Cur
                         : 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketAgent.payment_Out_Schema.closing + ticket_Purchase_PKR) : ticket_Purchase_PKR
+                       
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  },
+                  
                 });
               }
 
@@ -2537,7 +2509,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
@@ -2600,7 +2572,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -2663,7 +2635,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -2684,7 +2656,7 @@ const addEntry = async (req, res) => {
             let existingPaymentInVisitSupplier
             for (const supplier of visitSuppliers){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInVisitSupplier = supplier;
                   break
                 }
@@ -2798,11 +2770,9 @@ const addEntry = async (req, res) => {
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
                     "payment_In_Schema.remaining_Curr":
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitSupplier.payment_In_Schema.closing + visit_Sales_PKR) : visit_Sales_PKR
+                     
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  },
+                 
                 });
               }
 
@@ -2814,7 +2784,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -2831,7 +2801,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutVisitSupplier
             for (const supplier of visitSuppliers){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutVisitSupplier = supplier;
                   break
                 }
@@ -2951,11 +2921,9 @@ const addEntry = async (req, res) => {
                       visit_Purchase_Rate_Oth_Cur
                         ? visit_Purchase_Rate_Oth_Cur
                         : 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitSupplier.payment_Out_Schema.closing + visit_Purchase_Rate_PKR) : visit_Purchase_Rate_PKR
+                        
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  }
+                 
                 });
               }
 
@@ -2967,7 +2935,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
@@ -2984,7 +2952,7 @@ const addEntry = async (req, res) => {
             let existingPaymentInVisitAgent
             for (const supplier of visitAgents){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInVisitAgent = supplier;
                   break
                 }
@@ -3097,11 +3065,9 @@ const addEntry = async (req, res) => {
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
                     "payment_In_Schema.remaining_Curr":
                       visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitAgent.payment_In_Schema.closing + visit_Sales_PKR) : visit_Sales_PKR
+                      
                   },
-                  $set:{
-                    "payment_In_Schema.status":newStatus
-                  }
+                 
                 });
               }
 
@@ -3113,7 +3079,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -3130,7 +3096,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutVisitAgent
             for (const supplier of visitAgents){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutVisitAgent = supplier;
                   break
                 }
@@ -3249,11 +3215,9 @@ const addEntry = async (req, res) => {
                       visit_Purchase_Rate_Oth_Cur
                         ? visit_Purchase_Rate_Oth_Cur
                         : 0,
-                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitAgent.payment_Out_Schema.closing + visit_Purchase_Rate_PKR) : visit_Purchase_Rate_PKR
+                      
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  }
+                
                 });
               }
 
@@ -3265,7 +3229,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
         //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
@@ -3328,7 +3292,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -3391,7 +3355,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -3408,7 +3372,7 @@ const addEntry = async (req, res) => {
             let existingPaymentOutProtector
             for(const protector of protectors){
               if(protector.payment_Out_Schema){
-                if(protector.payment_Out_Schema.supplierName.toLowerCase()===protector_Reference_In_Name.toLowerCase()){
+                if(protector.payment_Out_Schema.supplierName.toLowerCase()===protector_Reference_In_Name.toLowerCase()&& protector.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutProtector=protector
                 }
               }
@@ -3534,7 +3498,7 @@ const addEntry = async (req, res) => {
             console.error(saveError);
             res
               .status(500)
-              .json({ message: "Error Saving the Entry to the Database" });
+              .json({ message:saveError });
           }
         }
 
@@ -3700,7 +3664,7 @@ const addMultipleEnteries = async (req, res) => {
             // Check if the supplier with the given name exists
             for(const supplier of suppliers){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInSupplier=supplier
                   break
                 }
@@ -3823,7 +3787,7 @@ const addMultipleEnteries = async (req, res) => {
           ) {
             let existingPaymentOutSupplier;
             for(const supplier of suppliers){
-              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()){
+              if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                 existingPaymentOutSupplier=supplier
                 break
               }
@@ -3927,11 +3891,9 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
                     "payment_Out_Schema.remaining_Curr":
                       entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutSupplier.payment_Out_Schema.closing + entryData?.visa_Purchase_Rate_PKR) : entryData?.visa_Purchase_Rate_PKR
+                      
                   },
-                  $set:{
-                    "payment_Out_Schema.status":newStatus
-                  }
+                 
                 });
               }
 
@@ -3955,7 +3917,7 @@ const addMultipleEnteries = async (req, res) => {
               // Check if the supplier with the given name exists
               let existingPaymentInAgent;
             for(const agent of agents){
-              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===entryData.reference_Out_Name.toLowerCase()){
+              if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===entryData.reference_Out_Name.toLowerCase()&& agent.payment_In_Schema.status.toLowerCase()==='open'){
                 existingPaymentInAgent=agent
                 break
               }
@@ -4057,12 +4019,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.visa_Sale_Rate_Oth_Cur ?? 0,           
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAgent.payment_In_Schema.closing + entryData?.visa_Sales_Rate_PKR) : entryData?.visa_Sales_Rate_PKR
+                      
 
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -4073,7 +4033,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Agents Payment Out Section if reference_In==="Agents"
@@ -4089,7 +4049,7 @@ const addMultipleEnteries = async (req, res) => {
               // Check if the supplier with the given name exists
               let existingPaymentOutAgent
             for(const agent of agents){
-              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()){
+              if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()&& agent.payment_Out_Schema.status.toLowerCase()==='open'){
                 existingPaymentOutAgent=agent
                 break
               }
@@ -4194,12 +4154,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAgent.payment_Out_Schema.closing + entryData?.visa_Purchase_Rate_PKR) :entryData?.visa_Purchase_Rate_PKR
+                        
                     },
-                    $set:{
-                    "payment_Out_Schema.status":newStatus
-                      
-                    }
+                   
                   });
                 }
 
@@ -4210,7 +4167,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -4273,7 +4230,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -4333,7 +4290,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -4356,7 +4313,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInAzadSupplier
               for (const supplier of azadSuppliers){
                 if(supplier.payment_In_Schema){
-                  if(supplier.payment_In_Schema && supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_Out_Name.toLowerCase()){
+                  if(supplier.payment_In_Schema && supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                     existingPaymentInAzadSupplier = supplier;
                     break
                   }
@@ -4460,11 +4417,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadSupplier.payment_In_Schema.closing + entryData?.azad_Visa_Sales_PKR) : entryData?.azad_Visa_Sales_PKR
+                        
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -4476,7 +4431,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -4493,7 +4448,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutAzadSupplier
             for (const supplier of azadSuppliers){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutAzadSupplier = supplier;
                   break
                 }
@@ -4598,12 +4553,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadSupplier.payment_Out_Schema.closing + entryData?.azad_Visa_Purchase_PKR) : entryData?.azad_Visa_Purchase_PKR
+                        
                     
                     },
-                    $set:{
-                      "payment_Out_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -4615,7 +4568,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
@@ -4632,7 +4585,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInAzadAgent
             for (const supplier of azadAgents){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInAzadAgent = supplier;
                   break
                 }
@@ -4737,11 +4690,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInAzadAgent.payment_In_Schema.closing + entryData?.azad_Visa_Sales_PKR) : entryData?.azad_Visa_Sales_PKR
+                       
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -4753,7 +4704,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -4770,7 +4721,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutAzadAgent
             for (const supplier of azadAgents){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.azad_Visa_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutAzadAgent = supplier;
                   break
                 }
@@ -4875,11 +4826,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutAzadAgent.payment_Out_Schema.closing + entryData?.azad_Visa_Purchase_PKR) : entryData?.azad_Visa_Purchase_PKR
+                       
                     },
-                    $set:{
-                      "payment_Out_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -4891,7 +4840,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
@@ -4957,7 +4906,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -5022,7 +4971,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -5045,7 +4994,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInTicketSupplier
               for (const supplier of ticketSuppliers){
                 if(supplier.payment_In_Schema){
-                  if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_Out_Name.toLowerCase()){
+                  if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                     existingPaymentInTicketSupplier = supplier;
                     break
                   }
@@ -5148,11 +5097,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketSupplier.payment_In_Schema.closing + entryData?.ticket_Sales_PKR) : entryData?.ticket_Sales_PKR
+                      
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -5164,7 +5111,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -5181,7 +5128,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutTicketSupplier
               for (const supplier of ticketSuppliers){
                 if(supplier.payment_Out_Schema){
-                  if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_In_Name.toLowerCase()){
+                  if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                     existingPaymentOutTicketSupplier = supplier;
                     break
                   }
@@ -5286,11 +5233,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketSupplier.payment_Out_Schema.closing + entryData?.ticket_Purchase_PKR) : entryData?.ticket_Purchase_PKR
+                        
                     },
-                    $set:{
-                      "payment_Out_Schema.status":newStatus
-                    }
+                 
                   });
                 }
 
@@ -5302,7 +5247,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
@@ -5319,7 +5264,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInTicketAgent
               for (const supplier of ticketAgents){
                 if(supplier.payment_In_Schema){
-                  if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_Out_Name.toLowerCase()){
+                  if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                     existingPaymentInTicketAgent = supplier;
                     break
                   }
@@ -5422,11 +5367,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInTicketAgent.payment_In_Schema.closing + entryData?.ticket_Sales_PKR) : entryData?.ticket_Sales_PKR
+                        
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                 
                   });
                 }
 
@@ -5438,7 +5381,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -5455,7 +5398,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutTicketAgent
             for (const supplier of ticketAgents){
               if(supplier.payment_Out_Schema){
-                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_In_Name.toLowerCase()){
+                if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.ticket_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutTicketAgent = supplier;
                   break
                 }
@@ -5559,11 +5502,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutTicketAgent.payment_Out_Schema.closing + entryData?.ticket_Purchase_PKR) : entryData?.ticket_Purchase_PKR
+                        
                     },
-                    $set:{
-                      "payment_Out_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -5575,7 +5516,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
@@ -5639,7 +5580,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -5703,7 +5644,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -5725,7 +5666,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInVisitSupplier
               for (const supplier of visitSuppliers){
                 if(supplier.payment_In_Schema){
-                  if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.visit_Reference_Out_Name.toLowerCase()){
+                  if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.visit_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                     existingPaymentInVisitSupplier = supplier;
                     break
                   }
@@ -5827,11 +5768,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
                       "payment_In_Schema.remaining_Curr":
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
-                        "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitSupplier.payment_In_Schema.closing + entryData?.visit_Sales_PKR) : entryData?.visit_Sales_PKR
+                        
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -5843,7 +5782,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -5860,7 +5799,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutVisitSupplier
               for (const supplier of visitSuppliers){
                 if(supplier.payment_Out_Schema){
-                  if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.visit_Reference_In_Name.toLowerCase()){
+                  if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.visit_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                     existingPaymentOutVisitSupplier = supplier;
                     break
                   }
@@ -5963,11 +5902,9 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
-                        "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitSupplier.payment_Out_Schema.closing + entryData?.visit_Purchase_Rate_PKR) : entryData?.visit_Purchase_Rate_PKR
+                       
                     },
-                    $set:{
-                      "payment_Out_Schema.status":newStatus
-                    }
+                    
                   });
                 }
 
@@ -5979,7 +5916,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
@@ -5996,7 +5933,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentInVisitAgent
             for (const supplier of visitAgents){
               if(supplier.payment_In_Schema){
-                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.visit_Reference_Out_Name.toLowerCase()){
+                if(supplier.payment_In_Schema.supplierName.toLowerCase()===entryData.visit_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
                   existingPaymentInVisitAgent = supplier;
                   break
                 }
@@ -6094,12 +6031,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
                       "payment_In_Schema.remaining_Balance":
                         entryData?.visit_Sales_PKR ?? 0,
-                      "payment_In_Schema.opening": isStatusClosed ? (existingPaymentInVisitAgent.payment_In_Schema.closing + entryData?.visit_Sales_PKR) : entryData?.visit_Sales_PKR
+                     
                       
                     },
-                    $set:{
-                      "payment_In_Schema.status":newStatus
-                    }
+                  
                   });
                 }
 
@@ -6111,7 +6046,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
@@ -6128,7 +6063,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutVisitAgent
               for (const supplier of visitAgents){
                 if(supplier.payment_Out_Schema){
-                  if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.visit_Reference_In_Name.toLowerCase()){
+                  if(supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.visit_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                     existingPaymentOutVisitAgent = supplier;
                     break
                   }
@@ -6231,12 +6166,10 @@ const addMultipleEnteries = async (req, res) => {
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                       "payment_Out_Schema.remaining_Curr":
                         entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
-                      "payment_Out_Schema.opening":isStatusClosed ? (existingPaymentOutVisitAgent.payment_Out_Schema.closing +  entryData?.visit_Purchase_Rate_PKR) :  entryData?.visit_Purchase_Rate_PKR
+                      
                       
                     },
-                    $set:{
-                      "payment_Out_Schema.status":newStatus
-                    }
+                   
                   });
                 }
 
@@ -6248,7 +6181,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
           //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
@@ -6312,7 +6245,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -6375,7 +6308,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 
@@ -6396,7 +6329,7 @@ const addMultipleEnteries = async (req, res) => {
               let existingPaymentOutProtector
             for(const protector of protectors){
               if(protector.payment_Out_Schema){
-                if(protector.payment_Out_Schema.supplierName.toLowerCase()===entryData.protector_Reference_In_Name.toLowerCase()){
+                if(protector.payment_Out_Schema.supplierName.toLowerCase()===entryData.protector_Reference_In_Name.toLowerCase()&& protector.payment_Out_Schema.status.toLowerCase()==='open'){
                   existingPaymentOutProtector=protector
                 }
               }
@@ -6502,7 +6435,7 @@ const addMultipleEnteries = async (req, res) => {
               console.error(saveError);
               res
                 .status(500)
-                .json({ message: "Error Saving the Entry to the Database" });
+                .json({ message:saveError });
             }
           }
 

@@ -6,6 +6,8 @@ import CategoryHook from '../hooks/settingHooks/CategoryHook'
 import PaymentViaHook from '../hooks/settingHooks/PaymentViaHook'
 import PaymentTypeHook from '../hooks/settingHooks/PaymentTypeHook'
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
+import CurrCountryHook from '../hooks/settingHooks/CurrCountryHook'
+
 import { useAuthContext } from '../hooks/userHooks/UserAuthHook'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import * as XLSX from 'xlsx';
@@ -18,6 +20,7 @@ export default function BankCash() {
 const apiUrl = process.env.REACT_APP_API_URL;
 const [show, setShow] = useState(false)
 const [show1, setShow1] = useState(false)
+const [show2, setShow2] = useState(false)
 
 
   const [category, setCategory] = useState('')
@@ -29,13 +32,21 @@ const [show1, setShow1] = useState(false)
   const [slip_Pic, setSlip_Pic] = useState('')
   const [details, setDetails] = useState('')
   const [date, setDate] = useState('')
+  const [curr_Country, setCurr_Country] = useState('')
+  const [curr_Rate, setCurr_Rate] = useState(0)
+
+  let curr_Amount = (payment_In / curr_Rate).toFixed(2)
+
 
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
+  const currCountries = useSelector((state) => state.setting.currCountries);
+
   const[loading2,setLoading2]=useState(false)
 
+  const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
   const { getPaymentTypeData } = PaymentTypeHook()
@@ -88,14 +99,6 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
 });
 
 // Output the results
-console.log(aggregatedPayments);
-console.log(paymentViaTotals);
-console.log({
-  totalBankPaymentIn,
-  totalBankCashOutIn,
-  totalBankPaymentOut,
-  totalBankCashOutOut,
-});
 
   const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
   // getting Data from DB
@@ -108,8 +111,10 @@ console.log({
 
   const fetchData = async () => {
     try {
-    await getPaymentViaData()
       setLoading2(true)
+       
+      await getCurrCountryData()
+    await getPaymentViaData()
       await getCashInHandData();
       await getOverAllPayments()
       setLoading2(false)
@@ -176,6 +181,8 @@ console.log({
     setSlip_Pic('');
     setDetails('');
     setDate('');
+    setCurr_Country('');
+    setCurr_Rate('');
     try {
       const response = await fetch(`${apiUrl}/auth/cash_in_hand/add/cash`, {
         method: "POST",
@@ -192,7 +199,10 @@ console.log({
           payment_Out,
           slip_Pic,
           details,
-          date
+          date,
+          curr_Country,
+          curr_Rate,
+          curr_Amount
         }),
       })
 
@@ -215,6 +225,8 @@ console.log({
         setSlip_Pic('');
         setDetails('');
         setDate('');
+        setCurr_Country('');
+        setCurr_Rate('');
       }
     }
     catch (error) {
@@ -286,7 +298,10 @@ console.log({
           payment_Out: editedEntry.payment_Out,
           slip_Pic: editedEntry.slip_Pic,
           details: editedEntry.details,
-          date: editedEntry.date
+          date: editedEntry.date,
+          curr_Country: editedEntry.payment_In_Curr,
+          curr_Amount: editedEntry.curr_Amount,
+          curr_Rate: editedEntry.curr_Rate
         }),
       })
 
@@ -354,8 +369,6 @@ console.log({
     
   }
 
-
-
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
   const [slip, setSlip] = useState('')
@@ -374,7 +387,6 @@ console.log({
       }
     
       return (
-        paymentItem.payment_Via?.trim().toLowerCase()!=="cash" &&
         paymentItem.category?.toLowerCase().includes(category1.toLowerCase()) &&
         isDateInRange &&
         paymentItem.payment_Via?.toLowerCase().includes(payment_Via1.toLowerCase()) &&
@@ -1062,13 +1074,14 @@ Remaining Curr=
                 <div className="right">
                   {option === 0 &&
                     <>
+                  <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                       <button className= 'btn btn-sm  excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                       <button className= 'btn btn-sm  excel_btn m-1 btn-sm bg-success border-0' onClick={printCashTable}>Print </button>
                     </>
                   }
                     {option === 1 &&
                     <>
-                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                  <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className= 'btn btn-sm  excel_btn m-1 btn-sm' onClick={downloadOverAllExcel}>Download </button>
                       <button className= 'btn btn-sm  excel_btn m-1 btn-sm bg-success border-0' onClick={printOverAllCashTable}>Print </button>
                     </>
@@ -1152,6 +1165,11 @@ Remaining Curr=
                               <TableCell className='label border' >Cash Out</TableCell>
                               <TableCell className='label border' >Details</TableCell>
                               <TableCell className='label border' >Invoice</TableCell>
+                              {show2 && <>
+                              <TableCell className='label border' >Payment_In_Curr</TableCell>
+                              <TableCell className='label border' >CUR_Rate</TableCell>
+                              <TableCell className='label border' >CUR_Amount</TableCell>
+                            </>}
                               <TableCell className='label border' >Slip Pic</TableCell>
                               <TableCell align='left' className='edw_label border'  colSpan={1}>
                                 Actions
@@ -1176,7 +1194,7 @@ Remaining Curr=
                                         </TableCell>
 
                                         <TableCell className='border data_td p-1 '>
-                                          <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'expCategory')} required>
+                                          <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
                                             <option value="">Choose</option>
                                             {categories && categories.map((data) => (
                                               <option key={data._id} value={data.category}>{data.category}</option>
@@ -1214,7 +1232,22 @@ Remaining Curr=
                                         <TableCell className='border data_td p-1 '>
                                           <input type='text' value={editedEntry.invoice} readonly />
                                         </TableCell>
-
+                                        {show2 && <>
+                                        <TableCell className='border data_td p-1 '>
+                                          <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
+                                            <option className="my-1 py-2" value="">choose</option>
+                                            {currCountries && currCountries.map((data) => (
+                                              <option className="my-1 py-2" key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                                            ))}
+                                          </select>
+                                        </TableCell>
+                                        <TableCell className='border data_td p-1 '>
+                                          <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                        </TableCell>
+                                        <TableCell className='border data_td p-1 '>
+                                          <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                        </TableCell>
+                                      </>}
                                         <TableCell className='border data_td p-1 '>
                                           <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
                                         </TableCell>
@@ -1239,6 +1272,11 @@ Remaining Curr=
                                         <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{cash.payment_Out}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.details}</TableCell>
                                         <TableCell className='border data_td text-center'>{cash?.invoice}</TableCell>
+                                        {show2 && <>
+                                        <TableCell className='border data_td text-center' >{cash?.payment_In_Curr}</TableCell>
+                                        <TableCell className='border data_td text-center' >{cash?.curr_Rate}</TableCell>
+                                        <TableCell className='border data_td text-center' >{cash?.curr_Amount}</TableCell>
+                                      </>}
                                         <TableCell className='border data_td text-center'>{cash.slip_Pic ? <img src={cash.slip_Pic} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
                                         <TableCell className='border data_td text-center'>
                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -1261,13 +1299,27 @@ Remaining Curr=
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
-      {/* Calculate the total sum of payment_In */}
-      {filteredCash.reduce((total, cash) => total + cash.payment_In, 0)}
-    </TableCell>
-    <TableCell className='border data_td text-center bg-danger text-white'>
-      {/* Calculate the total sum of payment_Out */}
-      {filteredCash.reduce((total, cash) => total + cash.payment_Out, 0)}
-    </TableCell>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredCash.reduce((total, cash) => total + cash.payment_In, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-danger text-white'>
+                      {/* Calculate the total sum of payment_Out */}
+                      {filteredCash.reduce((total, cash) => total + cash.payment_Out, 0)}
+                    </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    {show2 && <>
+                      <TableCell className='border data_td text-center bg-success text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredCash.reduce((total, cash) => total + cash.curr_Rate, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredCash.reduce((total, cash) => total + cash.curr_Amount, 0)}
+                    </TableCell>
+                  
+                    </>}
                             
                           </TableRow>
                           </TableBody>
@@ -1565,9 +1617,9 @@ Remaining Curr=
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
-                            data.payment_Via.toLowerCase() !== 'cash' && (
+                            
                                 <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                            )
+                            
                             ))}
                         </select>
                       </div>
@@ -1593,6 +1645,29 @@ Remaining Curr=
                       <div className="col-xl-6  col-12 p-1 my-1">
                         <label >Upload Slip </label><br/>
                         <input type="file" accept='image/*' onChange={handleImage} />
+                      </div>
+
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Country </label>
+                  <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
+                    <option value="">choose</option>
+                    {currCountries && currCountries.map((data) => (
+                      <option key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                    ))}
+                  </select>
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Rate </label>
+                      <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >Currency Amount </label>
+                      <input type="number" value={curr_Amount} readOnly />
+                      </div>
+
+                      <div className="col-xl-6 col-12   p-1 my-1">
+                        <label >Details </label><br />
+                        <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
                       </div>
 
 
@@ -1655,9 +1730,9 @@ Remaining Curr=
                         <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} required>
                           <option value="">Choose</option>
                           {paymentVia && paymentVia.map((data) => (
-                            data.payment_Via.toLowerCase() !== 'cash' && (
+                          
                                 <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                            )
+                            
                             ))}
                         </select>
                       </div>
@@ -1685,6 +1760,29 @@ Remaining Curr=
                         <input type="file" accept='image/*' onChange={handleImage} />
                       </div>
 
+
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Country </label>
+                  <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
+                    <option value="">choose</option>
+                    {currCountries && currCountries.map((data) => (
+                      <option key={data._id} value={data.currCountry}>{data.currCountry}</option>
+                    ))}
+                  </select>
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >CUR Rate </label>
+                      <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                      </div>
+                      <div className="col-xl-6 col-12 p-1 my-1">
+                      <label >Currency Amount </label>
+                      <input type="number" value={curr_Amount} readOnly />
+                      </div>
+
+                      <div className="col-xl-6 col-12   p-1 my-1">
+                        <label >Details </label><br />
+                        <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
+                      </div>
 
                       <div className="col-xl-6 col-12   p-1 my-1">
                         <label >Details </label><br/>

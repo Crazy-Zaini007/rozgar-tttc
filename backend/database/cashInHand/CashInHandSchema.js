@@ -39,17 +39,33 @@ const CashInHandSchema = new mongoose.Schema({
             type: Number,
             default: 0,
           },
+          payment_In_Curr: {
+            type: String,
+            default:''
+          },
           slip_Pic: {
+            type: String,
             
           },
           details: {
             type: String,
           
           },
-          date: {},
+          date: {
+            type: String,
+          },
           invoice: {
             type: Number,
-          }
+          },
+          curr_Rate: {
+            type: Number,
+            default: 0,
+          },
+          curr_Amount: {
+            type: Number,
+            default: 0,
+          },
+          
         },
       ],
 }, { timestamps: true })
