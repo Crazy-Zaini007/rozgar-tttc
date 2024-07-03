@@ -386,6 +386,7 @@ const updateExpense = async (req, res) => {
                     expenseToUpdate.expCategory = expCategory
                     expenseToUpdate.payment_Out = payment_Out
                     expenseToUpdate.payment_Via = payment_Via
+                    expenseToUpdate.payment_Type = payment_Type
                     if(slip_No){
                         expenseToUpdate.slip_No = slip_No
 

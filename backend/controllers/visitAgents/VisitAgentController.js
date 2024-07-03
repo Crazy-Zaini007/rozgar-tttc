@@ -657,7 +657,7 @@ const deleteSingleAgentPaymentIn = async (req, res) => {
         date: new Date().toISOString().split("T")[0],
       });
       await newNotification.save();
-      // const updatedSupplier = await VisitAgents.findById(existingSupplier._id);
+      
       res
         .status(200)
         .json({
@@ -794,13 +794,12 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
       });
       await newNotification.save();
 
-      const updatedSupplier = await VisitAgents.findById(existingSupplier._id);
-      console.log(updatedSupplier);
+     
       res
         .status(200)
         .json({
           message: "Payment In details updated successfully",
-          data: updatedSupplier,
+        
         });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -930,7 +929,7 @@ const deleteAzadAgentPaymentInPerson = async (req, res) => {
       });
       await newNotification.save();
 
-      // const updatedSupplier = await VisitAgents.findById(existingSupplier._id);
+     
       res
         .status(200)
         .json({
@@ -2319,7 +2318,7 @@ const deleteAzadAgentSinglePaymentOut = async (req, res) => {
       });
       await newNotification.save();
 
-      const updatedSupplier = await VisitAgents.findById(existingSupplier._id);
+      
       res
         .status(200)
         .json({
@@ -2453,7 +2452,7 @@ const updateAzadAgentSinglePaymentOut = async (req, res) => {
       // Save the updated supplier
       await existingSupplier.save();
 
-      const updatedSupplier = await VisitAgents.findById(existingSupplier._id);
+     
       const newNotification = new Notifications({
         type: "Visit Agent Payment Out Updated",
         content: `${user.userName} updated Payment_Out: ${payment_Out} of Visit Agent: ${supplierName}`,
@@ -2465,7 +2464,7 @@ const updateAzadAgentSinglePaymentOut = async (req, res) => {
         .status(200)
         .json({
           message: "Payment Out details updated successfully",
-          data: updatedSupplier,
+          
         });
     } catch (error) {
       console.error("Error updating payment details:", error);

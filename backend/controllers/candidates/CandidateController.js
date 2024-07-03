@@ -961,10 +961,10 @@ const deleteAgentPaymentInSchema = async (req, res) => {
         // Save the updated supplier without payment_In_Schema
         await existingSupplier.save();
 
-        const updatedSupplier = await Candidate.findById(existingSupplier._id);
+       
         res.status(200).json({
             message: `${supplierName} deleted successfully`,
-            data: updatedSupplier,
+           
         });
     } catch (error) {
         console.error("Error deleting payment_In_Schema:", error);
@@ -2264,10 +2264,10 @@ const updateSinglePaymentOut = async (req, res) => {
         
               })
               await newNotification.save()
-            const updatedSupplier = await Candidate.findById(existingSupplier._id);
+          
 
 
-            res.status(200).json({ message: "Payment Out details updated successfully", data: updatedSupplier });
+            res.status(200).json({ message: "Payment Out details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: `Error updating payment details ${error}` });
@@ -3071,10 +3071,10 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
         // Save the updated supplier without payment_In_Schema
         await existingSupplier.save();
 
-        const updatedSupplier = await Candidate.findById(existingSupplier._id);
+        
         res.status(200).json({
             message: `${supplierName} deleted successfully`,
-            data: updatedSupplier,
+        
         });
     } catch (error) {
         console.error("Error deleting payment_Out_Schema:", error);

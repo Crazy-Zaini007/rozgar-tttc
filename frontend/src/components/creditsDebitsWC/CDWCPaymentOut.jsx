@@ -297,8 +297,9 @@ export default function CDWCPaymentOut() {
   const handleUploadList =async (e) => {
     setLoading(true)
     e.preventDefault()
+    debugger
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/multiple/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/with_cash_in_hand/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +321,7 @@ export default function CDWCPaymentOut() {
       }
     } catch (error) {
       setLoading(false)
-      setNewMessage(toast.error("Server is not Reponding..."))
+      setNewMessage(toast.error(error))
 
 
     }

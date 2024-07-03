@@ -4195,25 +4195,25 @@ const getNetVisaReports=async(req,res)=>{
               }
             }
           }
-          if (agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
-            const persons=agent.payment_Out_Schema.persons
-            for (const person of persons){
-              if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
-                const newEntry = {
-                  ...entry.toObject(),
-                  type:"AGENT_OUT",
-                  cash_In: person.total_In,
-                  cash_Out:person.cash_Out,
-                  total_In:person.total_In-person.cash_Out,
-                  remaining:person.remaining_Price,
-                  total_Curr_In:person.visa_Price_Out_Curr-person.remaining_Curr,
-                  remain_Curr:person.remaining_Curr,
-                };
+          // if (agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
+          //   const persons=agent.payment_Out_Schema.persons
+          //   for (const person of persons){
+          //     if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+          //       const newEntry = {
+          //         ...entry.toObject(),
+          //         type:"AGENT_OUT",
+          //         cash_In: person.total_In,
+          //         cash_Out:person.cash_Out,
+          //         total_In:person.total_In-person.cash_Out,
+          //         remaining:person.remaining_Price,
+          //         total_Curr_In:person.visa_Price_Out_Curr-person.remaining_Curr,
+          //         remain_Curr:person.remaining_Curr,
+          //       };
                 
-                allEntries.push(newEntry);
-              }
-            }
-          }
+          //       allEntries.push(newEntry);
+          //     }
+          //   }
+          // }
         }
 
         // in Suppliers
@@ -4238,25 +4238,25 @@ const getNetVisaReports=async(req,res)=>{
               }
             }
           }
-          if (supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
-            const persons=supplier.payment_Out_Schema.persons
-            for (const person of persons){
-              if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
-                const newEntry = {
-                  ...entry.toObject(),
-                  type:"SUPPLIER_OUT",
-                  cash_In: person.total_In,
-                  cash_Out:person.cash_Out,
-                  total_In:person.total_In-person.cash_Out,
-                  remaining:person.remaining_Price,
-                  total_Curr_In:person.visa_Price_Out_Curr-person.remaining_Curr,
-                  remain_Curr:person.remaining_Curr,
-                };
+          // if (supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
+          //   const persons=supplier.payment_Out_Schema.persons
+          //   for (const person of persons){
+          //     if(person?.name?.toLowerCase()===entry?.name?.toLowerCase() && person?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && person?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+          //       const newEntry = {
+          //         ...entry.toObject(),
+          //         type:"SUPPLIER_OUT",
+          //         cash_In: person.total_In,
+          //         cash_Out:person.cash_Out,
+          //         total_In:person.total_In-person.cash_Out,
+          //         remaining:person.remaining_Price,
+          //         total_Curr_In:person.visa_Price_Out_Curr-person.remaining_Curr,
+          //         remain_Curr:person.remaining_Curr,
+          //       };
               
-                allEntries.push(newEntry);
-              }
-            }
-          }
+          //       allEntries.push(newEntry);
+          //     }
+          //   }
+          // }
         }
 
         // For Candidates
@@ -4281,25 +4281,25 @@ const getNetVisaReports=async(req,res)=>{
               }
             
           }
-          if (candidate.payment_Out_Schema ){
+          // if (candidate.payment_Out_Schema ){
             
            
-              if(candidate.payment_Out_Schema?.supplierName?.toLowerCase()===entry?.name?.toLowerCase() && candidate.payment_Out_Schema?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && candidate.payment_Out_Schema?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
-                const newEntry = {
-                  ...entry.toObject(),
-                  type:"CANDIDATE_OUT",
-                  cash_In: candidate.payment_Out_Schema.total_Payment_Out,
-                  cash_Out:candidate.payment_Out_Schema.total_Cash_Out,
-                  total_In:candidate.payment_Out_Schema.total_Payment_Out-candidate.payment_Out_Schema.total_Cash_Out,
-                  remaining:candidate.payment_Out_Schema.remaining_Balance,
-                  total_Curr_In:candidate.payment_Out_Schema.total_Payment_Out_Curr-candidate.payment_Out_Schema.remaining_Curr,
-                  remain_Curr:candidate.payment_Out_Schema.remaining_Curr,
-                };
+          //     if(candidate.payment_Out_Schema?.supplierName?.toLowerCase()===entry?.name?.toLowerCase() && candidate.payment_Out_Schema?.pp_No?.toLowerCase()===entry?.pp_No?.toLowerCase() && candidate.payment_Out_Schema?.entry_Mode?.toLowerCase()===entry?.entry_Mode?.toLowerCase()){
+          //       const newEntry = {
+          //         ...entry.toObject(),
+          //         type:"CANDIDATE_OUT",
+          //         cash_In: candidate.payment_Out_Schema.total_Payment_Out,
+          //         cash_Out:candidate.payment_Out_Schema.total_Cash_Out,
+          //         total_In:candidate.payment_Out_Schema.total_Payment_Out-candidate.payment_Out_Schema.total_Cash_Out,
+          //         remaining:candidate.payment_Out_Schema.remaining_Balance,
+          //         total_Curr_In:candidate.payment_Out_Schema.total_Payment_Out_Curr-candidate.payment_Out_Schema.remaining_Curr,
+          //         remain_Curr:candidate.payment_Out_Schema.remaining_Curr,
+          //       };
                 
-                allEntries.push(newEntry);
-              }
+          //       allEntries.push(newEntry);
+          //     }
             
-          }
+          // }
         }
       }
       res.status(200).json({data:allEntries})

@@ -343,10 +343,16 @@ const EntryDetails = () => {
       isDateInRange &&
       (entry.name && entry.name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.pp_No && entry.pp_No.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
-      entry.pp_No && entry.company.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
-      entry.pp_No && entry.country.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
-      entry.pp_No && entry.trade.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
-      entry.pp_No && entry.final_Status.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.company && entry.company.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.country && entry.country.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.trade && entry.trade.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.final_Status && entry.final_Status.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.flight_Date && entry.flight_Date.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.reference_Out_Name && entry.reference_Out_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.reference_In_Name && entry.reference_In_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.reference_Out && entry.reference_Out.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.reference_In && entry.reference_In.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.contact && entry.contact.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.pp_No && entry.entry_Mode.trim().toLowerCase().startsWith(name.trim().toLowerCase())
 
     )&&

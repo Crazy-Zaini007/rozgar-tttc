@@ -421,7 +421,7 @@ const[payments,setPayments]=useState('')
                            </>
                            }
                             <TableCell className='label border'>Cash In</TableCell>
-                          <TableCell className='label border'>Cash_Out</TableCell>
+                          <TableCell className='label border'>Cash Return</TableCell>
                           <TableCell className='label border'>Total In</TableCell>
                           <TableCell className='label border'>Remaining</TableCell>
                           <TableCell className='label border'>Total Payment In_Curr</TableCell>

@@ -1411,19 +1411,21 @@ const changeStatus = async (myStatus) => {
                                         <TableHead>
 
                                             <TableRow>
-                                                <TableCell className='label border'>SN</TableCell>
-                                                <TableCell className='label border'>Date</TableCell>
-                                                <TableCell className='label border'>Suppliers</TableCell>
-                                                <TableCell className='label border'>TAVPriceOut_PKR</TableCell>
-                                                <TableCell className='label border'>TAVPayOut_PKR</TableCell>
-                                                <TableCell className='label border'>Total_Cash_Out</TableCell>
-                                                <TableCell className='label border'>RPayOut_PKR</TableCell>
-                                                {show1 && <>
-                                                <TableCell className='label border'>TAVPriceOut_Oth_Curr</TableCell>
-                                                <TableCell className='label border'>TPO_Curr</TableCell>
-                                                <TableCell className='label border'>RPO_Curr</TableCell>
-                                               </>}
-                                                <TableCell className='label border'>Status</TableCell>
+                                            <TableCell className='label border' >SN</TableCell>
+                                            <TableCell className='label border' >Date</TableCell>
+                                            <TableCell className='label border' >Suppliers</TableCell>
+                                            <TableCell className='label border' >Total Azad Visa Price In PKR</TableCell>
+                                            <TableCell className='label border' >Total Payment In PKR</TableCell>
+                                            <TableCell className='label border' >Total Cash Return</TableCell>
+                                            <TableCell className='label border' >Remaining PKR</TableCell>
+                                            {show1 && <>
+                                              <TableCell className='label border' >Total Azad Visa Price In Curr</TableCell>
+                                              <TableCell className='label border' >Total Payment In Curr</TableCell>
+                                              <TableCell className='label border' >Remaining Curr</TableCell>
+                                            </>}
+                                            <TableCell className='label border' >Status</TableCell>
+                                            <TableCell className='label border ' >Opening</TableCell>
+                                            <TableCell className='label border ' >Closing</TableCell>
                                                 
                                                 {/* <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell> */}
                                             </TableRow>
@@ -1466,14 +1468,13 @@ const changeStatus = async (myStatus) => {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.status}
                                                     </TableCell>
-                                                    {/* <TableCell className='border data_td p-1 '>
-                                                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                            <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
-                                                            <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
-                                                        </div>
-                                                        
-                                                    </TableCell> */}
-
+                                                  
+                                                    <TableCell className='border data_td text-center' >
+                                                    <span>{entry.opening}</span>
+                                                  </TableCell>
+                                                  <TableCell className='border data_td text-center' >
+                                                    <span>{entry.closing}</span>
+                                                  </TableCell>
 
                                                 </TableRow>
                                             ))}
@@ -1621,19 +1622,19 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>SN</TableCell>
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Category</TableCell>
-                                        <TableCell className='label border'>Payment_Via</TableCell>
-                                        <TableCell className='label border'>Payment_Type</TableCell>
-                                        <TableCell className='label border'>Slip_No</TableCell>
+                                        <TableCell className='label border'>Payment Via</TableCell>
+                                        <TableCell className='label border'>Payment Type</TableCell>
+                                        <TableCell className='label border'>Slip No</TableCell>
                                         <TableCell className='label border'>Details</TableCell>
-                                        <TableCell className='label border'>Payment_Out</TableCell>
-                                        <TableCell className='label border'>Cash_Out</TableCell>
+                                        <TableCell className='label border'>Payment Out</TableCell>
+                                        <TableCell className='label border'>Cash Return</TableCell>
                                         <TableCell className='label border'>Invoice</TableCell>
                                         {show2 &&  <>
-                                        <TableCell className='label border' >Payment_Out_Curr</TableCell>
-                                        <TableCell className='label border' >CUR_Rate</TableCell>
-                                        <TableCell className='label border' >CUR_Amount</TableCell>
+                                        <TableCell className='label border' >Payment OutCurr</TableCell>
+                                        <TableCell className='label border' >Curr Rate</TableCell>
+                                        <TableCell className='label border' >Curr Amount</TableCell>
                                         </>}
-                                        <TableCell className='label border'>Slip_Pic</TableCell>
+                                        <TableCell className='label border'>Slip Pic</TableCell>
                                         <TableCell align='left' className='edw_label border' colSpan={1}>
                                             Actions
                                         </TableCell>
@@ -1983,14 +1984,14 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Name</TableCell>
                                         <TableCell className='label border'>PP#</TableCell>
-                                        <TableCell className='label border'>Entry_Mode</TableCell>
+                                        <TableCell className='label border'>Entry Mode</TableCell>
                                         <TableCell className='label border'>Company</TableCell>
                                         <TableCell className='label border'>Trade</TableCell>
                                         <TableCell className='label border'>Country</TableCell>
-                                        <TableCell className='label border'>Final_Status</TableCell>
-                                        <TableCell className='label border'>Flight_Date</TableCell>
-                                        <TableCell className='label border'>AVPI_PKR</TableCell>
-                                        {show && <TableCell className='label border'>AVPI_Oth_Curr</TableCell>}
+                                        <TableCell className='label border'>Final Status</TableCell>
+                                        <TableCell className='label border'>Flight Date</TableCell>
+                                        <TableCell className='label border'>Azad Visa Price In PKR</TableCell>
+                                        {show && <TableCell className='label border'>Azad Visa Price In Oth Curr</TableCell>}
                                         <TableCell className='label border'>Status</TableCell>
                                         <TableCell className='label border'>Action</TableCell>
                                     </TableRow>

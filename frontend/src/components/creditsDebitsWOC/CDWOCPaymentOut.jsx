@@ -300,7 +300,7 @@ export default function CDWOCPaymentOut() {
     setLoading(true)
     e.preventDefault()
     try {
-      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/add/multiple/payment_out`, {
+      const response = await fetch(`${apiUrl}/auth/credits&debits/without_cash_in_hand/add/multiple/payment_in`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

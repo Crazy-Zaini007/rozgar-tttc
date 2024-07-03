@@ -1409,19 +1409,21 @@ const changeStatus = async (myStatus) => {
                                         <TableHead>
 
                                             <TableRow>
-                                                <TableCell className='label border'>SN</TableCell>
-                                                <TableCell className='label border'>Date</TableCell>
-                                                <TableCell className='label border'>Agents</TableCell>
-                                                <TableCell className='label border'>TAVPriceOut_PKR</TableCell>
-                                                <TableCell className='label border'>TAVPayOut_PKR</TableCell>
-                                                <TableCell className='label border'>Total_Cash_Out</TableCell>
-                                                <TableCell className='label border'>RPayOut_PKR</TableCell>
-                                               {show1 && <>
-                                                <TableCell className='label border'>TAVPriceOut_Oth_Curr</TableCell>
-                                                <TableCell className='label border'>TPO_Curr</TableCell>
-                                                <TableCell className='label border'>RPO_Curr</TableCell>
-                                               </>}
-                                                <TableCell className='label border'>Status</TableCell>
+                                            <TableCell className='label border' >SN</TableCell>
+                                            <TableCell className='label border' >Date</TableCell>
+                                            <TableCell className='label border' >Agents</TableCell>
+                                            <TableCell className='label border' >Total Azad Visa Price PKR</TableCell>
+                                            <TableCell className='label border' >Total Payment In PKR</TableCell>
+                                            <TableCell className='label border' >Total Cash Return</TableCell>
+                                            <TableCell className='label border' >Remaining PKR</TableCell>
+                                            {show1 && <>
+                                              <TableCell className='label border' >Total Azad Visa Price In Curr</TableCell>
+                                              <TableCell className='label border' >Total Payment In Curr</TableCell>
+                                              <TableCell className='label border' >Remaining Curr</TableCell>
+                                            </>}
+                                            <TableCell className='label border' >Status</TableCell>
+                                            <TableCell className='label border ' >Opening</TableCell>
+                                            <TableCell className='label border ' >Closing</TableCell>
                                                
                                                 {/* <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell> */}
                                             </TableRow>
@@ -1464,7 +1466,12 @@ const changeStatus = async (myStatus) => {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.status}
                                                     </TableCell>
-                                                   
+                                                    <TableCell className='border data_td text-center' >
+                                                    <span>{entry.opening}</span>
+                                                  </TableCell>
+                                                  <TableCell className='border data_td text-center' >
+                                                    <span>{entry.closing}</span>
+                                                  </TableCell>
                                                     {/* <TableCell className='border data_td p-1 '>
                                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                                             <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>

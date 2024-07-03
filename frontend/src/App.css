@@ -1846,7 +1846,7 @@ color:white;
   overflow: scroll;
 }
 #exampleModal .modal-content span{
-  font-size: 13px;
+  font-size: 11px;
   color: var(--cool-Green);
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -1873,3 +1873,13 @@ margin: 0;
 min-width: 200px;
 border-right: 1px solid var(--darkgrey);
 }
+#exampleModal .modal-content .modal-footer .cancel_btn{
+background-color: var(--b-Red);
+font-size: 11px;
+color: white;
+}
+#exampleModal .modal-content .modal-footer .save_btn{
+  background-color: var(--cool-Green);
+  font-size: 11px;
+  color: white;
+  }

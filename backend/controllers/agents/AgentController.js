@@ -174,9 +174,9 @@ const addPaymentIn = async (req, res) => {
 
         })
         await newNotification.save()
-        const updatedSupplier = await Agents.findById(existingSupplier._id);
+       
         res.status(200).json({
-          message: `Payment In: ${payment_In} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
+          message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record`,
         })
       
 
@@ -577,11 +577,11 @@ const addPaymentInReturn = async (req, res) => {
                 await newNotification.save()
             await existingSupplier.save();
 
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
+        
 
             res.status(200).json({
-              data: updatedSupplier,
-              message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
+             
+              message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             })
 
           }
@@ -647,12 +647,10 @@ const addPaymentInReturn = async (req, res) => {
                 await newNotification.save()
             await existingSupplier.save();
 
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
-         
-
+          
             res.status(200).json({
-              data: updatedSupplier,
-              message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_In_Schema.supplierName}'s Record`,
+              
+              message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             })
           }
 
@@ -770,7 +768,7 @@ const deleteSinglePaymentIn = async (req, res) => {
 
         })
         await newNotification.save()
-        const updatedSupplier = await Agents.findById(existingSupplier._id);
+     
         res.status(200).json({
           message: `Payment In with ID ${paymentId} deleted successfully from ${supplierName}`,
         });
@@ -905,7 +903,7 @@ const updateSinglePaymentIn = async (req, res) => {
   
         await existingSupplier.save();
   
-        const updatedSupplier = await Agents.findById(existingSupplier._id);
+       
         const newNotification=new Notifications({
           type:"Agent Payment In Updated",
           content:`${user.userName} updated Payment_In: ${payment_In} of Agent:${supplierName}`,
@@ -915,7 +913,7 @@ const updateSinglePaymentIn = async (req, res) => {
         await newNotification.save()
         res.status(200).json({
           message: "Payment In details updated successfully",
-          data: updatedSupplier,
+         
         });
       
       
@@ -1004,11 +1002,10 @@ const updateAgentTotalPaymentIn = async (req, res) => {
       // Save the updated supplier
       await existingSupplier.save();
 
-      const updatedSupplier = await Agents.findById(existingSupplier._id);
-      console.log(updatedSupplier);
+      
       res.status(200).json({
         message: "Payment In details updated successfully",
-        data: updatedSupplier,
+       
       });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -1072,10 +1069,10 @@ const deleteAgentPaymentInSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-    const updatedSupplier = await Agents.findById(existingSupplier._id);
+  
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
-      data: updatedSupplier,
+      
     });
   } catch (error) {
     console.error("Error deleting payment_In_Schema:", error);
@@ -1140,7 +1137,7 @@ const deletePaymentInPerson = async (req, res) => {
 
       })
       await newNotification.save()
-      const updatedSupplier = await Agents.findById(existingSupplier._id)
+    
       res.status(200).json({
         message: `Person with ID ${personId} deleted successfully from ${supplierName}`,
       });
@@ -1968,7 +1965,7 @@ const addPaymentOut = async (req, res) => {
             await CashInHand.updateOne({}, cashInHandUpdate);
 
             await existingSupplier.save();
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
+          
             const newBackup=new Backup({
               name: supplierName,
               category:category,
@@ -1993,8 +1990,8 @@ const addPaymentOut = async (req, res) => {
                 })
                 await newNotification.save()
               res.status(200).json({
-              data: updatedSupplier,
-              message: `Payment Out: ${payment_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
+             
+              message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record`,
             });
           
         }
@@ -2028,7 +2025,7 @@ const addMultiplePaymentsOut = async (req, res) => {
     }
 
     const multiplePaymentOut = req.body;
-    console.log('multiplePaymentOut',multiplePaymentOut)
+    
     if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
@@ -2193,10 +2190,6 @@ const addMultiplePaymentsOut = async (req, res) => {
     
             })
             await newNotification.save()
-            const updatedSupplier = await Agents.findById(existingSupplier._id);
-
-
-          
 
         }
         catch (error) {
@@ -2394,7 +2387,7 @@ const addPaymentOutReturn = async (req, res) => {
               await newBackup.save()
           await existingSupplier.save();
 
-          const updatedSupplier = await Agents.findById(existingSupplier._id);
+       
 
           const newNotification=new Notifications({
             type:"Agent Payment Out Return",
@@ -2404,8 +2397,8 @@ const addPaymentOutReturn = async (req, res) => {
           })
           await newNotification.save()
           res.status(200).json({
-            data: updatedSupplier,
-            message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
+            
+            message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
           });
 
           }
@@ -2473,7 +2466,7 @@ const addPaymentOutReturn = async (req, res) => {
           await newNotification.save()
           res.status(200).json({
            
-            message: `Cash Out: ${cash_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
+            message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
           });
           }
 
@@ -2592,7 +2585,7 @@ const deleteSinglePaymentOut = async (req, res) => {
 
       })
       await newNotification.save()
-      const updatedSupplier = await Agents.findById(existingSupplier._id);
+      
       res.status(200).json({
         message: `Payment Out deleted sucessfully from ${supplierName}`,
       });
@@ -2892,11 +2885,9 @@ const updateAgentTotalPaymentOut = async (req, res) => {
 
       await existingSupplier.save();
 
-      const updatedSupplier = await Agents.findById(existingSupplier._id);
-      console.log(updatedSupplier);
       res.status(200).json({
         message: "Payment In details updated successfully",
-        data: updatedSupplier,
+      
       });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -2963,10 +2954,10 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-    const updatedSupplier = await Agents.findById(existingSupplier._id);
+    
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
-      data: updatedSupplier,
+      
     });
   } catch (error) {
     console.error("Error deleting payment_Out_Schema:", error);

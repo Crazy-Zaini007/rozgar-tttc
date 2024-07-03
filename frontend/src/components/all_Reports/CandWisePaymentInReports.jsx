@@ -38,7 +38,12 @@ export default function CandWisePaymentInReports() {
   // Filtering the Enteries
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
-  const [type, setType] = useState('')
+  const [trade, setTrade] = useState('')
+  const [company, setCompany] = useState('')
+  const [flight_Date, setFlight_Date] = useState('')
+  const [final_Status, setFinal_Status] = useState('')
+  const [entry_Mode, setEntry_Mode] = useState('')
+
   const [supplier, setSupplier] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -54,10 +59,16 @@ export default function CandWisePaymentInReports() {
       isDateInRange = paymentDate >= fromDate && paymentDate <= toDate;
     }
     return isDateInRange &&
-    paymentItem.type.toLowerCase().includes(supplier.toLowerCase()) &&
-    paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+    paymentItem.type?.toLowerCase().includes(supplier.toLowerCase()) &&
+    paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
     paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase()) &&
-    paymentItem.category.toLowerCase().includes(category.toLowerCase()) &&
+    paymentItem.category?.toLowerCase().includes(category.toLowerCase()) &&
+    paymentItem.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+    paymentItem.company?.toLowerCase().includes(company.toLowerCase()) &&
+    paymentItem.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+    paymentItem.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+    paymentItem.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+
     (paymentItem.type.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.supplierName?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
@@ -66,6 +77,11 @@ export default function CandWisePaymentInReports() {
     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.trade?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.company?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.flight_Date?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.final_Status?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+    paymentItem.entry_Mode?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
     paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
 
   })
@@ -250,14 +266,51 @@ export default function CandWisePaymentInReports() {
                       <input type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
                     </div>
                     <div className="col-auto px-1 ">
-                      <label htmlFor="">Payment Via:</label><br/>
-                      <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
+                      <label htmlFor="">Trade:</label><br/>
+                      <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                         <option value="">All</option>
-                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('in'))).map(data => data.payment_Via))].map(typeValue => (
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('in'))).map(data => data.trade))].map(typeValue => (
                           <option key={typeValue} value={typeValue}>{typeValue}</option>
                         ))}
                       </select>
                     </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Company:</label><br/>
+                      <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('in'))).map(data => data.company))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Flight Date:</label><br/>
+                      <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('in'))).map(data => data.flight_Date))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Final Status:</label><br/>
+                      <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('in'))).map(data => data.final_Status))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Entry Mode:</label><br/>
+                      <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
+                        <option value="">All</option>
+                        {[...new Set(overAllPayments&&overAllPayments.filter(data=>(data.type.toLowerCase().includes('cand')&&data.type.toLowerCase().includes('in'))).map(data => data.entry_Mode))].map(typeValue => (
+                          <option key={typeValue} value={typeValue}>{typeValue}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Payment Type:</label><br/>
                       <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>

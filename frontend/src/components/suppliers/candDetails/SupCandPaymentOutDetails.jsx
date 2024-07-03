@@ -1727,17 +1727,17 @@ const[rowsValue1,setRowsValue1]=useState("")
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <TableCell className='label border' >SN</TableCell>
+                      <TableCell className='label border' >SN</TableCell>
                         <TableCell className='label border' >Date</TableCell>
                         <TableCell className='label border' >Suppliers</TableCell>
-                        <TableCell className='label border' >TVPI_PKR</TableCell>
-                        <TableCell className='label border' >TPI_PKR</TableCell>
-                        <TableCell className='label border' >Total_Cash_Out</TableCell>
-                        <TableCell className='label border' >RPI_PKR</TableCell>
+                        <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                        <TableCell className='label border' >Total Payment In PKR</TableCell>
+                        <TableCell className='label border' >Total Cash Return</TableCell>
+                        <TableCell className='label border' >Remaining PKR</TableCell>
                         {show1 && <>
-                          <TableCell className='label border' >TVPI_Oth_Curr</TableCell>
-                          <TableCell className='label border' >TPI_Curr</TableCell>
-                          <TableCell className='label border' >RPI_Curr</TableCell>
+                          <TableCell className='label border' >Total Visa Price Oth Curr</TableCell>
+                          <TableCell className='label border' >Total Payment In Curr</TableCell>
+                          <TableCell className='label border' >Remaining Curr</TableCell>
                         </>}
                         <TableCell className='label border' >Status</TableCell>
                         <TableCell className='label border ' >Opening</TableCell>
@@ -2024,24 +2024,24 @@ const[rowsValue1,setRowsValue1]=useState("")
             <Table stickyHeader>
               <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' >SN</TableCell>
+                  <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Category</TableCell>
-                    <TableCell className='label border' >Payment_Via</TableCell>
-                    <TableCell className='label border' >Payment_Type</TableCell>
-                    <TableCell className='label border' >Slip_No</TableCell>
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    <TableCell className='label border' >Slip No</TableCell>
                     <TableCell className='label border' >Details</TableCell>
-                    <TableCell className='label border' >Payment_Out</TableCell>
+                    <TableCell className='label border' >Payment Out</TableCell>
                     <TableCell className='label border' >Candidates</TableCell>
-                    <TableCell className='label border' >Total_Visa_Price_PKR</TableCell>
-                    <TableCell className='label border' >Total_Remaining_Price_PKR</TableCell>
+                    <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                    <TableCell className='label border' >Total Remaining Price PKR</TableCell>
                     <TableCell className='label border' >Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' >Payment_In_Curr</TableCell>
-                      <TableCell className='label border' >CUR_Amount</TableCell>
-                      <TableCell className='label border' >CUR_Rate</TableCell>
+                      <TableCell className='label border' >Payment Out Curr</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
                     </>}
-                    <TableCell className='label border' >Slip_Pic</TableCell>
+                    <TableCell className='label border' >Slip Pic</TableCell>
                     <TableCell align='left' className='edw_label border'  colSpan={1}>
                       Actions
                     </TableCell>
@@ -2371,23 +2371,23 @@ const[rowsValue1,setRowsValue1]=useState("")
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' >SN</TableCell>
+                  <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
                     <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Entry Mode</TableCell>
                     <TableCell className='label border' >Company</TableCell>
                     <TableCell className='label border' >Trade</TableCell>
                     <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final_Status</TableCell>
-                    <TableCell className='label border' >Flight_Date</TableCell>
-                    <TableCell className='label border' >VPI_PKR</TableCell>
-                    <TableCell className='label border' >Total_In_PKR</TableCell>
-                    <TableCell className='label border' >Total_Cash_Out</TableCell>
+                    <TableCell className='label border' >Final Status</TableCell>
+                    <TableCell className='label border' >Flight Date</TableCell>
+                    <TableCell className='label border' >Visa Price PKR</TableCell>
+                    <TableCell className='label border' >Total Out PKR</TableCell>
+                    <TableCell className='label border' >Total Cash Return</TableCell>
                     <TableCell className='label border' >Remaining</TableCell>
                     {show === true && <>
-                      <TableCell className='label border' >VPI_Oth_Curr</TableCell>
-                      <TableCell className='label border' >Remaining_Oth_Curr</TableCell>
+                      <TableCell className='label border' >Visa Price In Curr</TableCell>
+                      <TableCell className='label border' >Remaining In Curr</TableCell>
                     </>}
                     <TableCell className='label border' >Status</TableCell>
                     <TableCell className='label border' >Action</TableCell>
@@ -2601,28 +2601,28 @@ const[rowsValue1,setRowsValue1]=useState("")
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>SN</TableCell>
+                  <TableCell className='label border'>SN</TableCell>
                     <TableCell className='label border'>Candidate</TableCell>
                     <TableCell className='label border'>PP_NO</TableCell>
-                    <TableCell className='label border'>Entry_Mode</TableCell>
+                    <TableCell className='label border'>Entry Mode</TableCell>
                     <TableCell className='label border'>Company</TableCell>
                     <TableCell className='label border'>Trade</TableCell>
                     <TableCell className='label border'>Country</TableCell>
-                    <TableCell className='label border'>Final_Status</TableCell>
-                    <TableCell className='label border'>Flight_Date</TableCell>
-                    <TableCell className='label border'>Visa_Amount_PKR</TableCell>
-                    <TableCell className='label border'>Past_Paid_PKR</TableCell>
-                    <TableCell className='label border'>Past_Remaining_PKR</TableCell>
-                    <TableCell className='label border'>New_Remaining_PKR</TableCell>
-                    <TableCell className='label border'>New_Payment_In_PKR</TableCell>
+                    <TableCell className='label border'>Final Status</TableCell>
+                    <TableCell className='label border'>Flight Date</TableCell>
+                    <TableCell className='label border'>Visa Amount PKR</TableCell>
+                    <TableCell className='label border'>Past Paid PKR</TableCell>
+                    <TableCell className='label border'>Past Remaining PKR</TableCell>
+                    <TableCell className='label border'>New Remaining PKR</TableCell>
+                    <TableCell className='label border'>New Payment Out PKR</TableCell>
                     {show2 && 
                        <>
-                    <TableCell className='label border'>Visa_Amount_Curr</TableCell>
-                    <TableCell className='label border'>Past_Paid_Curr</TableCell>
-                    <TableCell className='label border'>Past_Remaining_Curr</TableCell>
-                    <TableCell className='label border'>New_Remaining_Curr</TableCell>
-                    <TableCell className='label border'>New_Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>Curr_Rate</TableCell>
+                    <TableCell className='label border'>Visa Amount Curr</TableCell>
+                    <TableCell className='label border'>Past Paid Curr</TableCell>
+                    <TableCell className='label border'>Past Remaining Curr</TableCell>
+                    <TableCell className='label border'>New Remaining Curr</TableCell>
+                    <TableCell className='label border'>New Payment Out Curr</TableCell>
+                    <TableCell className='label border'>Curr Rate</TableCell>
                     </>
                     }
                  
@@ -2870,126 +2870,7 @@ const[rowsValue1,setRowsValue1]=useState("")
 }
 {/* Modal for closing the status of  persons*/}
 
-<div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-xl">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h4 className="modal-title" id="exampleModalLabel">Select Persons to closed</h4>
-        <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
-      </div>
-      <div className="modal-body detail_table">
-      <TableContainer component={Paper}>
-              <Table stickyHeader>
-                <TableHead className="thead">
-                  <TableRow>
-                    <TableCell className='label border' >Select</TableCell>
-                    <TableCell className='label border' >SN</TableCell>
-                    <TableCell className='label border' >Date</TableCell>
-                    <TableCell className='label border' >Name</TableCell>
-                    <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry_Mode</TableCell>
-                    <TableCell className='label border' >Company</TableCell>
-                    <TableCell className='label border' >Trade</TableCell>
-                    <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final_Status</TableCell>
-                    <TableCell className='label border' >Flight_Date</TableCell>
-                    <TableCell className='label border' >VPI_PKR</TableCell>
-                    <TableCell className='label border' >Total In</TableCell>
-                    <TableCell className='label border' >Remaining_PKR</TableCell>
-                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
-                    <TableCell className='label border'>Status</TableCell>
-                    
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredPersons.map((filteredData) => (
-                    <>
-                      {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
 
-                        <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                          {editMode2 && editedRowIndex2 === index ? (
-                            <>
-                             
-                            </>
-                          ) : (
-                            <>
-                             <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
-                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
-                              </TableCell>
-                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.name}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.visa_Price_Out_PKR}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.remaining_Price}</TableCell>
-                              {show && <TableCell className='border data_td text-center' >{person?.visa_Price_Out_Curr}</TableCell>}
-                              <TableCell className='border data_td text-center' >{person?.status}</TableCell>
-                            </>
-                          )}
-                         
-
-                        </TableRow>
-                      ))}
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                        <TableCell className='border data_td text-center bg-warning text-white'>
-                          
-                          {filteredPersons.reduce((total, filteredData) => {
-                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
-                              const paymentIn = parseFloat(paymentItem.visa_Price_Out_PKR);
-                              return isNaN(paymentIn) ? sum : sum + paymentIn;
-                            }, 0);
-                          }, 0)}
-                        </TableCell>
-                        <TableCell className='border data_td text-center bg-success text-white'>
-                          
-                          {filteredPersons.reduce((total, filteredData) => {
-                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
-                              const paymentIn = parseFloat(paymentItem.total_In);
-                              return isNaN(paymentIn) ? sum : sum + paymentIn;
-                            }, 0);
-                          }, 0)}
-                        </TableCell>
-                        <TableCell className='border data_td text-center bg-danger text-white'>
-                          
-                          {filteredPersons.reduce((total, filteredData) => {
-                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
-                              const paymentIn = parseFloat(paymentItem.remaining_Price);
-                              return isNaN(paymentIn) ? sum : sum + paymentIn;
-                            }, 0);
-                          }, 0)}
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  ))}
-                </TableBody>
-
-              </Table>
-            </TableContainer>
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
-        <button type="button" className="btn btn-success btn-sm shadow" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
-      </div>
-    </div>
-  </div>
-</div>
     </>
   )
 }

@@ -171,9 +171,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
       });
       await newNotification.save();
 
-      const updatedSupplier = await AzadSuppliers.findById(
-        existingSupplier._id
-      );
+    
 
       res.status(200).json({
         message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record`,
@@ -538,9 +536,7 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
             date: new Date().toISOString().split("T")[0],
           });
           await newNotification.save();
-          const updatedSupplier = await AzadSuppliers.findById(
-            existingSupplier._id
-          );
+         
 
           res
             .status(200)
@@ -661,9 +657,7 @@ const deleteSingleAzadSupplierPaymentIn = async (req, res) => {
         date: new Date().toISOString().split("T")[0],
       });
       await newNotification.save();
-      const updatedSupplier = await AzadSuppliers.findById(
-        existingSupplier._id
-      );
+     
       res
         .status(200)
         .json({
@@ -800,15 +794,12 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
       });
       await newNotification.save();
 
-      const updatedSupplier = await AzadSuppliers.findById(
-        existingSupplier._id
-      );
-      console.log(updatedSupplier);
+     
       res
         .status(200)
         .json({
           message: "Payment In details updated successfully",
-          data: updatedSupplier,
+          
         });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -2194,9 +2185,7 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
             date: new Date().toISOString().split("T")[0],
           });
           await newNotification.save();
-          const updatedSupplier = await AzadSuppliers.findById(
-            existingSupplier._id
-          );
+         
 
           res
             .status(200)
@@ -2527,7 +2516,7 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
         date: new Date().toISOString().split("T")[0],
       });
       await newNotification.save();
-      // const updatedSupplier = await AzadSuppliers.findById(existingSupplier._id);
+      
       res
         .status(200)
         .json({

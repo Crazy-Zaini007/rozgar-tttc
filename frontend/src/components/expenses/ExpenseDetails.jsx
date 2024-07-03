@@ -621,19 +621,19 @@ export default function ExpenseDetails() {
                       <TableCell className='label border'>SN</TableCell>
                       <TableCell className='label border'>Date</TableCell>
                       <TableCell className='label border'>Person</TableCell>
-                      <TableCell className='label border'>E_Category</TableCell>
-                      <TableCell className='label border'>E_Amount</TableCell>
-                      <TableCell className='label border'>Payment_Via</TableCell>
-                      <TableCell className='label border'>Payment_Type</TableCell>
-                      <TableCell className='label border'>Slip_No</TableCell>
+                      <TableCell className='label border'>Expense Category</TableCell>
+                      <TableCell className='label border'>Expense Amount</TableCell>
+                      <TableCell className='label border'>Payment Via</TableCell>
+                      <TableCell className='label border'>Payment Type</TableCell>
+                      <TableCell className='label border'>Slip No</TableCell>
                       <TableCell className='label border'>Details</TableCell>
                       <TableCell className='label border'>Invoice</TableCell>
                     {show && <>
-                      <TableCell className='label border'>CUR_Country</TableCell>
-                      <TableCell className='label border'>CUR_Rate</TableCell>
-                      <TableCell className='label border'>CUR_Amount</TableCell>
+                      <TableCell className='label border'>Curr Country</TableCell>
+                      <TableCell className='label border'>Curr Rate</TableCell>
+                      <TableCell className='label border'>Curr Amount</TableCell>
                     </>}
-                      <TableCell className='label border'>Slip_Pic</TableCell>
+                      <TableCell className='label border'>Slip Pic</TableCell>
                       <TableCell align='left' className='edw_label border' colSpan={1}>
                         Actions
                       </TableCell>

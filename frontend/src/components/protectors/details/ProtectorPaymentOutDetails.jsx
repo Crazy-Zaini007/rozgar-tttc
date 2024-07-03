@@ -1524,13 +1524,13 @@ export default function ProtectorPaymentOutDetails() {
                         <TableCell className='label border'>SN</TableCell>
                         <TableCell className='label border'>Date</TableCell>
                         <TableCell className='label border'>Protectors</TableCell>
-                        <TableCell className='label border'>TPPI_PKR</TableCell>
-                        <TableCell className='label border'>TPI_PKR</TableCell>
-                        <TableCell className='label border'>RPI_PKR</TableCell>
+                        <TableCell className='label border'>Total Protector Price PKR</TableCell>
+                        <TableCell className='label border'>Total Payment In PKR</TableCell>
+                        <TableCell className='label border'>Remaining PKR</TableCell>
                        {show1 && <>
-                        <TableCell className='label border'>TPPI_Oth_Curr</TableCell>
-                        <TableCell className='label border'>TPI_Curr</TableCell>
-                        <TableCell className='label border'>RPI_Curr</TableCell>
+                        <TableCell className='label border'>Total Protector Price Curr</TableCell>
+                        <TableCell className='label border'>Total Payment In Curr</TableCell>
+                        <TableCell className='label border'>Remaining Curr</TableCell>
                        </>
                        }
                       

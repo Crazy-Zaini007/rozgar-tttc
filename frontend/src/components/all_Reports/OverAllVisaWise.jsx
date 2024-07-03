@@ -345,20 +345,20 @@ export default function OverAllVisaWise() {
     <TableCell className='border data_td text-center bg-info text-white'>
       {/* Calculate the total sum of visa_Price_In_PKR */}
       {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-        return total + parseFloat(entry.visa_Sales_Rate_PKR);
+        return total + parseFloat(entry.visa_Sales_Rate_PKR||0);
       }, 0)}
     </TableCell>
     {show && <TableCell className='border data_td text-center bg-success text-white'>
       {/* Calculate the total sum of visa_Price_In_PKR */}
       {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-        return total + parseFloat(entry.visa_Purchase_Rate_PKR);
+        return total + parseFloat(entry.visa_Purchase_Rate_PKR||0);
       }, 0)}
     </TableCell>}
    
    {show &&  <TableCell className='border data_td text-center bg-success text-white'>
       {/* Calculate the total sum of visa_Price_In_PKR */}
       {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-        return total + parseFloat(entry.visa_Sales_Rate_PKR) - parseFloat(entry.visa_Purchase_Rate_PKR) 
+        return total + parseFloat(entry.visa_Sales_Rate_PKR||0) - parseFloat(entry.visa_Purchase_Rate_PKR||0) 
       }, 0)}
     </TableCell>}
   </TableRow>

@@ -1736,14 +1736,14 @@ const[rowsValue1,setRowsValue1]=useState("")
                         <TableCell className='label border' >SN</TableCell>
                         <TableCell className='label border' >Date</TableCell>
                         <TableCell className='label border' >Agents</TableCell>
-                        <TableCell className='label border' >TVPI_PKR</TableCell>
-                        <TableCell className='label border' >TPI_PKR</TableCell>
-                        <TableCell className='label border' >Total_Cash_Out</TableCell>
-                        <TableCell className='label border' >RPI_PKR</TableCell>
+                        <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                        <TableCell className='label border' >Total Payment In PKR</TableCell>
+                        <TableCell className='label border' >Total Cash Return</TableCell>
+                        <TableCell className='label border' >Remaining PKR</TableCell>
                         {show1 && <>
-                          <TableCell className='label border' >TVPI_Oth_Curr</TableCell>
-                          <TableCell className='label border' >TPI_Curr</TableCell>
-                          <TableCell className='label border' >RPI_Curr</TableCell>
+                          <TableCell className='label border' >Total Visa Price Oth Curr</TableCell>
+                          <TableCell className='label border' >Total Payment In Curr</TableCell>
+                          <TableCell className='label border' >Remaining Curr</TableCell>
                         </>}
                         <TableCell className='label border' >Status</TableCell>
                         <TableCell className='label border ' >Opening</TableCell>
@@ -2039,21 +2039,21 @@ const[rowsValue1,setRowsValue1]=useState("")
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Category</TableCell>
-                    <TableCell className='label border' >Payment_Via</TableCell>
-                    <TableCell className='label border' >Payment_Type</TableCell>
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
                     <TableCell className='label border' >Slip_No</TableCell>
                     <TableCell className='label border' >Details</TableCell>
-                    <TableCell className='label border' >Payment_In</TableCell>
+                    <TableCell className='label border' >Payment In</TableCell>
                     <TableCell className='label border' >Candidates</TableCell>
-                    <TableCell className='label border' >Total_Visa_Price_PKR</TableCell>
-                    <TableCell className='label border' >Total_Remaining_Price_PKR</TableCell>
+                    <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                    <TableCell className='label border' >Total Remaining Price PKR</TableCell>
                     <TableCell className='label border' >Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' >Payment_In_Curr</TableCell>
-                      <TableCell className='label border' >CUR_Amount</TableCell>
-                      <TableCell className='label border' >CUR_Rate</TableCell>
+                      <TableCell className='label border' >Payment In Curr</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
                     </>}
-                    <TableCell className='label border' >Slip_Pic</TableCell>
+                    <TableCell className='label border' >Slip Pic</TableCell>
                     <TableCell align='left' className='edw_label border'  colSpan={1}>
                       Actions
                     </TableCell>
@@ -2388,19 +2388,19 @@ const[rowsValue1,setRowsValue1]=useState("")
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
                     <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Entry Mode</TableCell>
                     <TableCell className='label border' >Company</TableCell>
                     <TableCell className='label border' >Trade</TableCell>
                     <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final_Status</TableCell>
-                    <TableCell className='label border' >Flight_Date</TableCell>
-                    <TableCell className='label border' >VPI_PKR</TableCell>
-                    <TableCell className='label border' >Total_In_PKR</TableCell>
-                    <TableCell className='label border' >Total_Cash_Out</TableCell>
+                    <TableCell className='label border' >Final Status</TableCell>
+                    <TableCell className='label border' >Flight Date</TableCell>
+                    <TableCell className='label border' >Visa Price PKR</TableCell>
+                    <TableCell className='label border' >Total In PKR</TableCell>
+                    <TableCell className='label border' >Total Cash Return</TableCell>
                     <TableCell className='label border' >Remaining</TableCell>
                     {show === true && <>
-                      <TableCell className='label border' >VPI_Oth_Curr</TableCell>
-                      <TableCell className='label border' >Remaining_Oth_Curr</TableCell>
+                      <TableCell className='label border' >Visa Price Curr</TableCell>
+                      <TableCell className='label border' >Remaining Curr</TableCell>
                     </>}
                     <TableCell className='label border' >Status</TableCell>
                     <TableCell className='label border' >Action</TableCell>
@@ -2618,26 +2618,26 @@ const[rowsValue1,setRowsValue1]=useState("")
                   <TableRow>
                     <TableCell className='label border'>SN</TableCell>
                     <TableCell className='label border'>Candidate</TableCell>
-                    <TableCell className='label border'>PP_NO</TableCell>
-                    <TableCell className='label border'>Entry_Mode</TableCell>
+                    <TableCell className='label border'>PP NO</TableCell>
+                    <TableCell className='label border'>Entry Mode</TableCell>
                     <TableCell className='label border'>Company</TableCell>
                     <TableCell className='label border'>Trade</TableCell>
                     <TableCell className='label border'>Country</TableCell>
-                    <TableCell className='label border'>Final_Status</TableCell>
-                    <TableCell className='label border'>Flight_Date</TableCell>
-                    <TableCell className='label border'>Visa_Amount_PKR</TableCell>
-                    <TableCell className='label border'>Past_Paid_PKR</TableCell>
-                    <TableCell className='label border'>Past_Remaining_PKR</TableCell>
-                    <TableCell className='label border'>New_Remaining_PKR</TableCell>
-                    <TableCell className='label border'>New_Payment_In_PKR</TableCell>
+                    <TableCell className='label border'>Final Status</TableCell>
+                    <TableCell className='label border'>Flight Date</TableCell>
+                    <TableCell className='label border'>Visa Amount PKR</TableCell>
+                    <TableCell className='label border'>Past Paid PKR</TableCell>
+                    <TableCell className='label border'>Past Remaining PKR</TableCell>
+                    <TableCell className='label border'>New Remaining PKR</TableCell>
+                    <TableCell className='label border'>New Payment In PKR</TableCell>
                     {show2 && 
                        <>
-                    <TableCell className='label border'>Visa_Amount_Curr</TableCell>
-                    <TableCell className='label border'>Past_Paid_Curr</TableCell>
-                    <TableCell className='label border'>Past_Remaining_Curr</TableCell>
-                    <TableCell className='label border'>New_Remaining_Curr</TableCell>
-                    <TableCell className='label border'>New_Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>Curr_Rate</TableCell>
+                    <TableCell className='label border'>Visa Amount Curr</TableCell>
+                    <TableCell className='label border'>Past Paid Curr</TableCell>
+                    <TableCell className='label border'>Past Remaining Curr</TableCell>
+                    <TableCell className='label border'>New Remaining Curr</TableCell>
+                    <TableCell className='label border'>New Payment In Curr</TableCell>
+                    <TableCell className='label border'>Curr Rate</TableCell>
                     </>
                     }
                  
@@ -2897,21 +2897,21 @@ const[rowsValue1,setRowsValue1]=useState("")
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' >Select</TableCell>
+                  <TableCell className='label border' >Select</TableCell>
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
                     <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Entry Mode</TableCell>
                     <TableCell className='label border' >Company</TableCell>
                     <TableCell className='label border' >Trade</TableCell>
                     <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final_Status</TableCell>
-                    <TableCell className='label border' >Flight_Date</TableCell>
-                    <TableCell className='label border' >VPI_PKR</TableCell>
+                    <TableCell className='label border' >Final Status</TableCell>
+                    <TableCell className='label border' >Flight Date</TableCell>
+                    <TableCell className='label border' >Visa Price PKR</TableCell>
                     <TableCell className='label border' >Total In</TableCell>
-                    <TableCell className='label border' >Remaining_PKR</TableCell>
-                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border' >Remaining PKR</TableCell>
+                    {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
                     
                   </TableRow>

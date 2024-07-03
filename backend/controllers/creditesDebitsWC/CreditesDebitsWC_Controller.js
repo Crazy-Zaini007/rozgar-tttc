@@ -617,7 +617,7 @@ const updateSinglePaymentIn = async (req, res) => {
             // Save the updated supplier
             await existingSupplier.save();
 
-            const updatedSupplier = await CDWC.findById(existingSupplier._id);
+          
             const newNotification=new Notifications({
                 type:`CDWC Payment ${payment_In? "In":"Out"} updated`,
                 content:`${user.userName} updated ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
@@ -625,7 +625,7 @@ const updateSinglePaymentIn = async (req, res) => {
       
               })
               await newNotification.save()
-            res.status(200).json({ message: "Payment details updated successfully", data: updatedSupplier });
+            res.status(200).json({ message: "Payment details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });
@@ -735,9 +735,8 @@ const updateSinglePaymentOut = async (req, res) => {
       
               })
               await newNotification.save()
-            const updatedSupplier = await CDWC.findById(existingSupplier._id);
-            console.log(updatedSupplier)
-            res.status(200).json({ message: "Payment details updated successfully", data: updatedSupplier });
+            
+            res.status(200).json({ message: "Payment details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });
@@ -801,9 +800,8 @@ const updateAgentTotalPaymentIn = async (req, res) => {
 
             await existingSupplier.save();
 
-            const updatedSupplier = await CDWC.findById(existingSupplier._id);
-            console.log(updatedSupplier)
-            res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
+            
+            res.status(200).json({ message: "Payment In details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });

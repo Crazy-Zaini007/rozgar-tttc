@@ -1279,26 +1279,26 @@ const[option,setOption]=useState(false)
                               <TableCell className='label border'>Entry Mode</TableCell>
                             <TableCell className='label border'>Type</TableCell>
                             <TableCell className='label border'>Category</TableCell>
-                            <TableCell className='label border'>Payment_Via</TableCell>
-                            <TableCell className='label border'>Payment_Type</TableCell>
-                            <TableCell className='label border'>Slip_No</TableCell>
-                            <TableCell className='label border'>Cash_In</TableCell>
-                            <TableCell className='label border'>Cash_Out</TableCell>
-                            <TableCell className='label border'>Cash_In_Return</TableCell>
-                            <TableCell className='label border'>Cash_Out_Return</TableCell>
+                            <TableCell className='label border'>Payment Via</TableCell>
+                            <TableCell className='label border'>Payment Type</TableCell>
+                            <TableCell className='label border'>Slip No</TableCell>
+                            <TableCell className='label border'>Cash In</TableCell>
+                            <TableCell className='label border'>Cash Out</TableCell>
+                            <TableCell className='label border'>Cash In Return</TableCell>
+                            <TableCell className='label border'>Cash Out Return</TableCell>
                           
 
                            {show && 
                            <>
-                            <TableCell className='label border'>Curr_Rate</TableCell>
-                            <TableCell className='label border'>Curr_Amount</TableCell>
-                            <TableCell className='label border'>Payment_In_Curr</TableCell>
+                            <TableCell className='label border'>Curr Rate</TableCell>
+                            <TableCell className='label border'>Curr Amount</TableCell>
+                            <TableCell className='label border'>Payment In Curr</TableCell>
                            </>
                            }
                             <TableCell className='label border'>Candidates</TableCell>
                             <TableCell className='label border'>Details</TableCell>
                             <TableCell className='label border'>Invoice</TableCell>
-                            <TableCell className='label border'>Slip_Pic</TableCell>
+                            <TableCell className='label border'>Slip Pic</TableCell>
                             <TableCell className='label border'>Actions</TableCell>
 
                         
@@ -1429,25 +1429,25 @@ const[option,setOption]=useState(false)
  }
  <TableCell className='border data_td text-center bg-secondary text-white'>
 Remaining PKR= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.type.toLowerCase().includes('in')||entry.payment_In<1) ? entry.cash_Out || 0 : 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.type.toLowerCase().includes('out')||entry.payment_Out<1) ? entry.cash_Out || 0 : 0)) 
   }, 0))}
 </TableCell>
 <TableCell className='border data_td text-center bg-secondary text-white'>
 Remaining Curr= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
   }, 0))}
 </TableCell>

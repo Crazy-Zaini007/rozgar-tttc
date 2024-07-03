@@ -500,9 +500,9 @@ const updateSinglePaymentIn = async (req, res) => {
 
             await existingSupplier.save();
 
-            const updatedSupplier = await CDWOC.findById(existingSupplier._id);
+          
    
-            res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
+            res.status(200).json({ message: "Payment In details updated successfully", });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });
@@ -592,9 +592,9 @@ const updateSinglePaymentOut = async (req, res) => {
 
             await existingSupplier.save();
 
-            const updatedSupplier = await CDWOC.findById(existingSupplier._id);
+           
           
-            res.status(200).json({ message: "Payment In details updated successfully", data: updatedSupplier });
+            res.status(200).json({ message: "Payment In details updated successfully", });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });
@@ -642,7 +642,7 @@ const updateAgentTotalPaymentIn = async (req, res) => {
             existingSupplier.payment_In_Schema.balance = newBalance;
             // Save the updated supplier
             await existingSupplier.save();
-            res.status(200).json({ message: "Payment details updated successfully", data: updatedSupplier });
+            res.status(200).json({ message: "Payment details updated successfully" });
         } catch (error) {
             console.error('Error updating payment details:', error);
             res.status(500).json({ message: 'Error updating payment details', error: error.message });

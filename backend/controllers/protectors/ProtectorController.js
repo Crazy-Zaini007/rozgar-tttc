@@ -172,11 +172,11 @@ const addPaymentOut = async (req, res) => {
             })
             await newNotification.save()
             await existingSupplier.save();
-            const updatedSupplier = await Protector.findById(existingSupplier._id);
+          
 
             res.status(200).json({
-              data: updatedSupplier,
-              message: `Payment Out: ${payment_Out} added Successfully to ${updatedSupplier.payment_Out_Schema.supplierName}'s Record`,
+              
+              message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record`,
             });
           
 
@@ -359,7 +359,7 @@ const addMultiplePaymentsOut = async (req, res) => {
             await newNotification.save()
 
             await existingSupplier.save();
-            const updatedSupplier = await Protector.findById(existingSupplier._id);
+           
 
         }
         catch (error) {
@@ -466,7 +466,7 @@ const deleteSinglePaymentOut = async (req, res) => {
 
       await existingSupplier.save()
 
-      const updatedSupplier = await Protector.findById(existingSupplier._id);
+      
       res.status(200).json({
         message: `Payment Out deleted sucessfully from ${supplierName}`,
       });
@@ -607,11 +607,11 @@ const updateSinglePaymentOut = async (req, res) => {
       })
       await newNotification.save()
 
-      const updatedSupplier = await Protector.findById(existingSupplier._id)
+    
 
       res.status(200).json({
         message: "Payment Out details updated successfully",
-        data: updatedSupplier,
+       
       });
       
 
@@ -1236,10 +1236,10 @@ const deleteAgentPaymentOutSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-    const updatedSupplier = await Protector.findById(existingSupplier._id);
+    
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
-      data: updatedSupplier,
+   
     });
   } catch (error) {
     console.error("Error deleting payment_Out_Schema:", error);

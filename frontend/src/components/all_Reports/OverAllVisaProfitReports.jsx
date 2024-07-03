@@ -540,6 +540,7 @@ const[show,setShow]=useState(false)
                                     <TableCell className='border data_td'>{entry.ticket_Purchase_PKR}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Purchase_Rate_Oth_Cur}</TableCell>
                                     <TableCell className='border data_td'>{entry.ticket_Section_Picture ? <img src={entry.ticket_Section_Picture} alt='Images' className='rounded' /> : "No Picture"}</TableCell>
+                                    <TableCell className='border data_td bg-success text-white'>{entry.ticket_Sales_PKR-entry.ticket_Purchase_PKR}</TableCell>
                                   </>
                                 }
 
@@ -596,7 +597,7 @@ const[show,setShow]=useState(false)
                             <TableCell colSpan={9}></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
                           {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-                            return total + (entry.visit_Sales_PKR || 0) +(entry.visit_Purchase_Rate_PKR || 0); 
+                            return total + (entry.visit_Sales_PKR || 0) -(entry.visit_Purchase_Rate_PKR || 0); 
                           }, 0)}
                         </TableCell>
                          </>}
@@ -604,7 +605,7 @@ const[show,setShow]=useState(false)
                             <TableCell colSpan={9}></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
                           {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-                            return total + (entry.ticket_Sales_PKR || 0) +(entry.ticket_Purchase_PKR || 0); 
+                            return total + (entry.ticket_Sales_PKR || 0) -(entry.ticket_Purchase_PKR || 0); 
                           }, 0)}
                         </TableCell>
                          </>}
@@ -612,7 +613,7 @@ const[show,setShow]=useState(false)
                             <TableCell colSpan={9}></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
                           {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-                            return total + (entry.azad_Visa_Sales_PKR || 0) +(entry.azad_Visa_Purchase_PKR || 0); 
+                            return total + (entry.azad_Visa_Sales_PKR || 0) -(entry.azad_Visa_Purchase_PKR || 0); 
                           }, 0)}
                         </TableCell>
                          </>}
@@ -620,7 +621,7 @@ const[show,setShow]=useState(false)
                             <TableCell colSpan={5}></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
                           {filteredEntries && filteredEntries.length > 0 && filteredEntries.reduce((total, entry) => {
-                            return total + (entry.protector_Price_In || 0) +(entry.protector_Price_Out || 0); 
+                            return total + (entry.protector_Price_In || 0) -(entry.protector_Price_Out || 0); 
                           }, 0)}
                         </TableCell>
                          </>}

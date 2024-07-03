@@ -417,7 +417,7 @@ export default function AgentPaymentInDetails() {
   
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('open')
 
 
   const filteredTotalPaymentIn = agent_Payments_In.filter(payment => {
@@ -677,7 +677,7 @@ export default function AgentPaymentInDetails() {
   }
 
   const[isOpening,setIsOpening]=useState('No')
-  const changeStatus = async (myStatus) => {
+  const changeStatus = async () => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
        
@@ -688,7 +688,7 @@ export default function AgentPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier,newStatus:myStatus,multipleIds })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus,multipleIds })
         })
 
         const json = await response.json()
@@ -1546,19 +1546,19 @@ const printPerson = (person) => {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <TableCell className='label border' >SN</TableCell>
+                      <TableCell className='label border' >SN</TableCell>
                         <TableCell className='label border' >Date</TableCell>
                         <TableCell className='label border' >Agents</TableCell>
-                        <TableCell className='label border' >TVPI_PKR</TableCell>
-                        <TableCell className='label border' >TPI_PKR</TableCell>
-                        <TableCell className='label border' >Total_Cash_Out</TableCell>
-                        <TableCell className='label border' >RPI_PKR</TableCell>
+                        <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                        <TableCell className='label border' >Total Payment In PKR</TableCell>
+                        <TableCell className='label border' >Total Cash Return</TableCell>
+                        <TableCell className='label border' >Remaining PKR</TableCell>
                         {show1 && <>
-                          <TableCell className='label border' >TVPI_Oth_Curr</TableCell>
-                          <TableCell className='label border' >TPI_Curr</TableCell>
-                          <TableCell className='label border' >RPI_Curr</TableCell>
+                          <TableCell className='label border' >Total Visa Price Oth Curr</TableCell>
+                          <TableCell className='label border' >Total Payment In Curr</TableCell>
+                          <TableCell className='label border' >Remaining Curr</TableCell>
                         </>}
-                        <TableCell className='label border ' >Status</TableCell>
+                        <TableCell className='label border' >Status</TableCell>
                         <TableCell className='label border ' >Opening</TableCell>
                         <TableCell className='label border ' >Closing</TableCell>
                       </TableRow>
@@ -1743,7 +1743,7 @@ const printPerson = (person) => {
 
               </div>
               <div className="right">
-                {agent_Payments_In && agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier && data.status===newStatus)&&
+                {agent_Payments_In && agent_Payments_In.some((data)=>data.supplierName===selectedSupplier && data.status.toLowerCase()==='open')&&
                  <div className="dropdown d-inline ">
                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                    {loading5 ? "Updating" : "Change Status"}
@@ -1842,19 +1842,19 @@ const printPerson = (person) => {
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Category</TableCell>
-                    <TableCell className='label border' >Payment_Via</TableCell>
-                    <TableCell className='label border' >Payment_Type</TableCell>
-                    <TableCell className='label border' >Slip_No</TableCell>
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    <TableCell className='label border' >Slip No</TableCell>
                     <TableCell className='label border' >Details</TableCell>
-                    <TableCell className='label border' >Payment_In</TableCell>
-                    <TableCell className='label border' >Cash_Out</TableCell>
+                    <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
                     <TableCell className='label border' >Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' >Payment_In_Curr</TableCell>
-                      <TableCell className='label border' >CUR_Rate</TableCell>
-                      <TableCell className='label border' >CUR_Amount</TableCell>
+                      <TableCell className='label border' >Payment InCurr</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
                     </>}
-                    <TableCell className='label border' >Slip_Pic</TableCell>
+                    <TableCell className='label border' >Slip Pic</TableCell>
                     <TableCell align='left' className='label border'  colSpan={1}>
                       Actions
                     </TableCell>
@@ -2193,14 +2193,14 @@ const printPerson = (person) => {
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
                     <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry_Mode</TableCell>
+                    <TableCell className='label border' >Entry Mode</TableCell>
                     <TableCell className='label border' >Company</TableCell>
                     <TableCell className='label border' >Trade</TableCell>
                     <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final_Status</TableCell>
-                    <TableCell className='label border' >Flight_Date</TableCell>
-                    <TableCell className='label border' >VPI_PKR</TableCell>
-                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border' >Final Status</TableCell>
+                    <TableCell className='label border' >Flight Date</TableCell>
+                    <TableCell className='label border' >Visa Price In PKR</TableCell>
+                    {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
                     <TableCell className='label border' >Action</TableCell>
                   </TableRow>
@@ -2366,11 +2366,11 @@ const printPerson = (person) => {
     <div className="modal-content">
       <div className="modal-header">
         <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
-       <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       {/* <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
        <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
        <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} |</span>
        <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
-       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)} |</span>
+       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)} |</span> */}
 
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
@@ -2414,13 +2414,13 @@ const printPerson = (person) => {
                     {showCompany && <TableCell className='label border' >Company</TableCell>}
                     {showTrade && <TableCell className='label border' >Trade</TableCell>}
                     {showCountry && <TableCell className='label border' >Country</TableCell>}
-                    {showFinalStatus && <TableCell className='label border' >Final_Status</TableCell>}
-                    {showFlightDate && <TableCell className='label border' >Flight_Date</TableCell>}
-                    <TableCell className='label border' >VPI_PKR</TableCell>
-                    <TableCell className='label border' >Total_In_PKR</TableCell>
-                    <TableCell className='label border' >Total_Cash_Return</TableCell>
-                    <TableCell className='label border' >Remaining</TableCell>
-                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    {showFinalStatus && <TableCell className='label border' >Final Status</TableCell>}
+                    {showFlightDate && <TableCell className='label border' >Flight Date</TableCell>}
+                    <TableCell className='label border' >Visa Price In PKR</TableCell>
+                    <TableCell className='label border' >Total In PKR</TableCell>
+                    <TableCell className='label border' >Total Cash Return</TableCell>
+                    <TableCell className='label border' >Remaining PKR</TableCell>
+                    {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
                     <TableCell className='label border' >Action</TableCell>
                   </TableRow>
@@ -2640,19 +2640,19 @@ const printPerson = (person) => {
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     {showCategory &&  <TableCell className='label border' >Category</TableCell>}
-                    <TableCell className='label border' >Payment_Via</TableCell>
-                    <TableCell className='label border' >Payment_Type</TableCell>
-                    {showSlipNo &&  <TableCell className='label border' >Slip_No</TableCell>}
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    {showSlipNo &&  <TableCell className='label border' >Slip No</TableCell>}
                    {showDetails &&  <TableCell className='label border' >Details</TableCell>}
-                    <TableCell className='label border' >Payment_In</TableCell>
-                    <TableCell className='label border' >Cash_Out</TableCell>
+                    <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
                     <TableCell className='label border' >Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' >Payment_In_Curr</TableCell>
-                      <TableCell className='label border' >CUR_Rate</TableCell>
-                      <TableCell className='label border' >CUR_Amount</TableCell>
+                      <TableCell className='label border' >Payment In Curr</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
                     </>}
-                    <TableCell className='label border' >Slip_Pic</TableCell>
+                    <TableCell className='label border' >Slip Pic</TableCell>
                     <TableCell align='left' className='label border'  colSpan={1}>
                       Actions
                     </TableCell>
@@ -2830,13 +2830,18 @@ const printPerson = (person) => {
       
       </div>
       <div className="modal-footer">
+      <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} |</span>
+       <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)} |</span>
         <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
           <option value="No">No</option>
           <option value="Yes">Yes</option>
         </select>
         <label htmlFor="">Convert Remaining Balance to New Khata?</label>
-        <button className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
-        <button className="btn btn-success btn-sm shadow" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
+        <button className="btn  btn-sm shadow cancel_btn" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
+        <button className="btn btn-sm shadow save_btn" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
       </div>
     </div>
   </div>

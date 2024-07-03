@@ -582,14 +582,11 @@ const addAzadCandPaymentInReturn = async (req, res) => {
               await newNotification.save()
               await existingSupplier.save()
 
-          const updatedSupplier = await VisitCandidate.findById(
-            existingSupplier._id
-          );
 
           res
             .status(200)
             .json({
-              data: updatedSupplier,
+              
               message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
@@ -709,9 +706,7 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
       await newNotification.save()
       await existingSupplier.save()
 
-      const updatedSupplier = await VisitCandidate.findById(
-        existingSupplier._id
-      );
+      
       res
         .status(200)
         .json({
@@ -921,10 +916,10 @@ const deleteAzadCandPaymentInSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-    const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
+ 
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
-      data: updatedSupplier,
+    
     });
   } catch (error) {
     console.error("Error deleting payment_In_Schema:", error);
@@ -1659,9 +1654,7 @@ const addAzadCandPaymentOut = async (req, res) => {
 
           await CashInHand.updateOne({}, cashInHandUpdate);
 
-          const updatedSupplier = await VisitCandidate.findById(
-            existingSupplier._id
-          );
+         
           const newBackup=new Backup({
             name: supplierName,
             category:category,
@@ -1690,7 +1683,7 @@ const addAzadCandPaymentOut = async (req, res) => {
           res
             .status(200)
             .json({
-              data: updatedSupplier,
+              
               message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
@@ -1881,14 +1874,12 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
               await newNotification.save()
               await existingSupplier.save()
 
-          const updatedSupplier = await VisitCandidate.findById(
-            existingSupplier._id
-          );
+         
 
           res
             .status(200)
             .json({
-              data: updatedSupplier,
+             
               message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
@@ -2007,9 +1998,7 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
       await newNotification.save()
       await existingSupplier.save()
 
-      const updatedSupplier = await VisitCandidate.findById(
-        existingSupplier._id
-      );
+    
       res
         .status(200)
         .json({
@@ -2150,15 +2139,12 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
       await newNotification.save()
                     await existingSupplier.save()
 
-      const updatedSupplier = await VisitCandidate.findById(
-        existingSupplier._id
-      );
-
+    
       res
         .status(200)
         .json({
           message: "Payment Out details updated successfully",
-          data: updatedSupplier,
+       
         });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -2425,10 +2411,10 @@ const deleteAzadCandPaymentOutSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-    const updatedSupplier = await VisitCandidate.findById(existingSupplier._id);
+    
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
-      data: updatedSupplier,
+     
     });
   } catch (error) {
     console.error("Error deleting payment_Out_Schema:", error);

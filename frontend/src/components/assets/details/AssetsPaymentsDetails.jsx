@@ -913,8 +913,8 @@ const formattedDate = formatDate(new Date());
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Suppliers</TableCell>
-                    <TableCell className='label border' >TPI_PKR</TableCell>
-                    <TableCell className='label border' >TPO_PKR</TableCell>
+                    <TableCell className='label border' >Total Payment In PKR</TableCell>
+                    <TableCell className='label border' >Total Payment Out PKR</TableCell>
                     <TableCell className='label border' >Balance</TableCell>
                    
                     <TableCell align='left' className='edw_label border'  colSpan={1}>
@@ -1065,19 +1065,19 @@ const formattedDate = formatDate(new Date());
                   <TableCell className='label border'>SN</TableCell>
                     <TableCell className='label border'>Date</TableCell>
                     <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
+                    <TableCell className='label border'>Payment Via</TableCell>
+                    <TableCell className='label border'>Payment Type</TableCell>
+                    <TableCell className='label border'>Slip No</TableCell>
                     <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_In</TableCell>
-                    <TableCell className='label border'>Payment_Out</TableCell>
+                    <TableCell className='label border'>Payment In</TableCell>
+                    <TableCell className='label border'>Payment Out</TableCell>
                     <TableCell className='label border'>Invoice</TableCell>
                     {show && <>
-                      <TableCell className='label border'>Payment_In_Curr</TableCell>
-                    <TableCell className='label border'>CUR_Rate</TableCell>
-                    <TableCell className='label border'>CUR_Amount</TableCell>
+                      <TableCell className='label border'>Payment In Curr</TableCell>
+                    <TableCell className='label border'>Curr Rate</TableCell>
+                    <TableCell className='label border'>Curr Amount</TableCell>
                     </>}
-                    <TableCell className='label border'>Slip_Pic</TableCell>
+                    <TableCell className='label border'>Slip Pic</TableCell>
                     <TableCell align='left' className='edw_label border' colSpan={1}>
                       Actions
                     </TableCell>

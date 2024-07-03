@@ -471,7 +471,6 @@ export default function Invoice() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
-                            <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>
   {/* Calculate the total sum of payment_In */}

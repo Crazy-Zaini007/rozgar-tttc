@@ -1775,13 +1775,13 @@ const filteredSalaryMonths = employees
                                                             <TableCell className='label border' >SN</TableCell>
                                                             <TableCell className='label border' >Date</TableCell>
                                                             <TableCell className='label border' >Employee</TableCell>
-                                                            <TableCell className='label border' >Father_Name</TableCell>
+                                                            <TableCell className='label border' >Father Name</TableCell>
                                                             <TableCell className='label border' >Email</TableCell>
                                                             <TableCell className='label border' >Phone</TableCell>
-                                                            <TableCell className='label border' >Emergency_Phone</TableCell>
+                                                            <TableCell className='label border' >Emergency Phone</TableCell>
                                                             <TableCell className='label border' >DOB</TableCell>
                                                             <TableCell className='label border' >CNIC</TableCell>
-                                                            <TableCell className='label border' >Salary_Type</TableCell>
+                                                            <TableCell className='label border' >Salary Type</TableCell>
                                                             <TableCell className='label border' >Address</TableCell>
                                                             {route !== "/rozgar/reports/payroll_reports" &&
                                                                 <TableCell align='left' className='edw_label border'  colSpan={1}> Actions</TableCell>
@@ -1954,9 +1954,9 @@ const filteredSalaryMonths = employees
                                                             <label htmlFor="">Payment Via:</label><br/>
                                                             <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
-                                                                {[...new Set(filteredIndividualPayments
+                                                                {[...new Set(employees
                                                                     .flatMap(data => data.payments.flatMap(paymentItem => paymentItem.payment))
-                                                                    .map(payment => payment.payment_Via)
+                                                                    .map(payment => payment?.payment_Via)
                                                                 )].map(paymentVia => (
                                                                     <option value={paymentVia} key={paymentVia}>{paymentVia}</option>
                                                                 ))}
@@ -1966,9 +1966,9 @@ const filteredSalaryMonths = employees
                                                             <label htmlFor="">Payment Type:</label><br/>
                                                             <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                                                                 <option value="">All</option>
-                                                                {[...new Set(filteredIndividualPayments
+                                                                {[...new Set(employees
                                                                     .flatMap(data => data.payments.flatMap(paymentItem => paymentItem.payment))
-                                                                    .map(payment => payment.payment_Type)
+                                                                    .map(payment => payment?.payment_Type)
                                                                 )].map(paymentType => (
                                                                     <option value={paymentType} key={paymentType}>{paymentType}</option>
                                                                 ))}
@@ -1997,19 +1997,19 @@ const filteredSalaryMonths = employees
                                                             <TableCell className='label border' >SN</TableCell>
                                                                 <TableCell className='label border' >Date</TableCell>
                                                                 <TableCell className='label border' >Category</TableCell>
-                                                                <TableCell className='label border' >Payment_Via</TableCell>
-                                                                <TableCell className='label border' >Payment_Type</TableCell>
-                                                                <TableCell className='label border' >Slip_No</TableCell>
+                                                                <TableCell className='label border' >Payment Via</TableCell>
+                                                                <TableCell className='label border' >Payment Type</TableCell>
+                                                                <TableCell className='label border' >Slip No</TableCell>
                                                                 <TableCell className='label border' >Details</TableCell>
-                                                                <TableCell className='label border' >Payment_Out</TableCell>
-                                                                <TableCell className='label border' >Cash_Return</TableCell>
+                                                                <TableCell className='label border' >Payment Out</TableCell>
+                                                                <TableCell className='label border' >Cash Return</TableCell>
                                                                 <TableCell className='label border' >Invoice</TableCell>
                                                            
-                                                                <TableCell className='label border' >Payment_In_Curr</TableCell>
-                                                                <TableCell className='label border' >CUR_Rate</TableCell>
-                                                                <TableCell className='label border' >CUR_Amount</TableCell>
+                                                                <TableCell className='label border' >Payment In Curr</TableCell>
+                                                                <TableCell className='label border' >Curr Rate</TableCell>
+                                                                <TableCell className='label border' >Curr Amount</TableCell>
                                                                 
-                                                                <TableCell className='label border' >Slip_Pic</TableCell>
+                                                                <TableCell className='label border' >Slip Pic</TableCell>
                                                                 {route !== "/rozgar/reports/payroll_reports" && <TableCell align='left' className='edw_label border'  colSpan={1}>
                                                                     Actions
                                                                 </TableCell>}
@@ -2279,11 +2279,11 @@ const filteredSalaryMonths = employees
                                                             <TableRow>
                                                                 <TableCell className='label border' >SN</TableCell>
                                                                 <TableCell className='label border' >Date</TableCell>
-                                                                <TableCell className='label border' >Date_From</TableCell>
-                                                                <TableCell className='label border' >Date_To</TableCell>
+                                                                <TableCell className='label border' >Date From</TableCell>
+                                                                <TableCell className='label border' >Date To</TableCell>
                                                                 <TableCell className='label border' >Days</TableCell>
-                                                                <TableCell className='label border' >Time_In</TableCell>
-                                                                <TableCell className='label border' >Time_Out</TableCell>
+                                                                <TableCell className='label border' >Time In</TableCell>
+                                                                <TableCell className='label border' >Time Out</TableCell>
                                                                 {route !== "/rozgar/reports/payroll_reports" &&
                                                                     <TableCell className='label border' >Action</TableCell>
                                                                 }
