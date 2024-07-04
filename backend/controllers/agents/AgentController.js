@@ -1700,15 +1700,16 @@ const changePaymentInStatus = async (req, res) => {
   try {
       const userId = req.user._id;
       const user = await User.findById(userId);
-      const{supplierName,newStatus,multipleIds}=req.body
+      const{supplierName,newStatus,multipleIds,convert}=req.body
       
-
       if (!user) {
           return res.status(404).json({ message: "User not found" });
       }
 
+      
       const existingSupplier = await Agents.findOne({
           "payment_In_Schema.supplierName": supplierName,
+          "payment_In_Schema.status": newStatus,
       });
 
       if (!existingSupplier) {
@@ -1716,13 +1717,12 @@ const changePaymentInStatus = async (req, res) => {
       }
 
       // Update status of all persons to false
-      if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons && newStatus.toLowerCase()==="closed") {
+      if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
         if(multipleIds.length>0){
           for(const myId of multipleIds){
             const allPersons=existingSupplier.payment_In_Schema.persons
             for (const person of allPersons){
               if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
-         
               person.status = "Closed"
               }
             }
@@ -1732,35 +1732,41 @@ const changePaymentInStatus = async (req, res) => {
       }
       if (existingSupplier.payment_In_Schema.status==="Open") {
         existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.total_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out
-        existingSupplier.payment_In_Schema.opening=0
+       
     }
       // Toggle the status of the payment in schema
-      existingSupplier.payment_In_Schema.status = newStatus;
+      existingSupplier.payment_In_Schema.status = 'Closed';
 
       // Save changes to the database
       await existingSupplier.save();
 
+      const newSupplier=new Agents({
+        payment_In_Schema:{
+          supplier_Id: new mongoose.Types.ObjectId(),
+          supplierName:existingSupplier.payment_In_Schema.supplierName,
+          total_Visa_Price_In_PKR:0,
+          remaining_Balance:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Balance):0,
+          total_Payment_In:0,
+          total_Visa_Price_In_Curr:0,
+          remaining_Curr:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Curr):0,
+          closing:0,
+          opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_In_Schema.remaining_Balance):0,
+          curr_Country:existingSupplier.payment_In_Schema.curr_Country,
+        }
+      })
+      await newSupplier.save()
       // Prepare response message based on the updated status
       let responseMessage;
-      if (existingSupplier.payment_In_Schema.status==="Open") {
-          responseMessage = "Agent Status updated to Open Successfully!";
-          const newNotification=new Notifications({
-            type:"Khata Open of Supplier Payment In",
-            content:`${user.userName} Opened Khata with Agent:${supplierName}`,
-            date: new Date().toISOString().split("T")[0]
-  
-          })
-          await newNotification.save()
-      } else {
-          responseMessage = "Agent Status updated to Closed Successfully!";
+       
+          responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
           const newNotification=new Notifications({
             type:"Khata Closed of Supplier Payment In",
-            content:`${user.userName} Closed Khata with Agent:${supplierName}`,
+            content:`${user.userName} Closed Khata with Agent:${supplierName} and new Khata created successfully`,
             date: new Date().toISOString().split("T")[0]
   
           })
           await newNotification.save()
-      }
+      
 
       return res.status(200).json({ message: responseMessage });
   } catch (error) {

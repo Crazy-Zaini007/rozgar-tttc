@@ -132,7 +132,7 @@ export default function SupplierEntry2() {
   const [option, setOption] = useState(false)
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const [outType, setOutType] = useState(false)
+  const [type, setOutType] = useState(false)
 
   // Form input States
 
@@ -150,7 +150,7 @@ export default function SupplierEntry2() {
   const [date, setDate] = useState('')
 
   useEffect(() => {
-  }, [outType,supplierName,selectedSupplier])
+  }, [type,supplierName,selectedSupplier])
 
   let curr_Amount = (payment_Out / curr_Rate).toFixed(2)
 
@@ -1419,7 +1419,7 @@ const handleInputChange = (e) => {
     <>
       <div className="col-md-12 ">
         {!option && <TableContainer component={Paper}>
-          <form className='py-3 px-2' onSubmit={(outType==='Agent'?handleAgentForm:outType==="Supplier"?handleSupplierForm:outType==="Candidate"?handleCandidateForm: outType === "Azad Agent" ? handleAzadAgentForm: outType === "Azad Supplier" ? handleAzadSupplierForm: outType === "Azad Candidate" ? handleAzadCandForm: outType === "Ticket Agent" ? handleTicketAgentForm: outType === "Ticket Supplier" ? handleTicketSupplierForm: outType === "Ticket Candidate" ? handleTicketCandForm: outType === "Visit Agent" ? handleVisitAgentForm: outType === "Visit Supplier" ? handleVisitSupplierForm: outType === "Visit Candidate" ? handleVisitCandForm: outType === "Credit/Debit WC" ? handleCDWCForm: outType === "Credit/Debit WOC" ? handleCDWOCForm:outType === "Assets"? handleAssetForm:outType === "Protector"? handleProtectorForm:outType === "Expense"&& handleExpenseForm)}>
+          <form className='py-3 px-2' onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"?handleSupplierForm:type==="Candidate"?handleCandidateForm: type === "Azad Agent" ? handleAzadAgentForm: type === "Azad Supplier" ? handleAzadSupplierForm: type === "Azad Candidate" ? handleAzadCandForm: type === "Ticket Agent" ? handleTicketAgentForm: type === "Ticket Supplier" ? handleTicketSupplierForm: type === "Ticket Candidate" ? handleTicketCandForm: type === "Visit Agent" ? handleVisitAgentForm: type === "Visit Supplier" ? handleVisitSupplierForm: type === "Visit Candidate" ? handleVisitCandForm: type === "Credit/Debit WC" ? handleCDWCForm: type === "Credit/Debit WOC" ? handleCDWOCForm:type === "Assets"? handleAssetForm:type === "Protector"? handleProtectorForm:type === "Expense"&& handleExpenseForm)}>
             <div className="text-end ">
              
               <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment Out"}</button>
@@ -1428,7 +1428,7 @@ const handleInputChange = (e) => {
             <div className="row p-0 m-0 my-1">
             <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Choose Type </label>
-                <select value={outType} onChange={(e) => setOutType(e.target.value)} required>
+                <select value={type} onChange={(e) => setOutType(e.target.value)} required>
                   <option value="">Choose</option>
                   <option value="Agent">Agent</option>
                  <option value="Supplier">Supplier</option>
@@ -1454,7 +1454,7 @@ const handleInputChange = (e) => {
               
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Name</label>
-                {outType==='Candidate' ?
+                {type==='Candidate' ?
                   <>
                  <input 
         list="outName" 
@@ -1473,13 +1473,13 @@ const handleInputChange = (e) => {
       </datalist>
                 </>:
                 <>
-                  {(outType!=='Expense' || outType==='')  ?
+                  {(type!=='Expense' || type==='')  ?
                 <select required value={supplierName} onChange={(e) => {
                   setSelectedSupplier(e.target.value);
                   setSupplierName(e.target.value)
                 }}>
                   
-                 {outType==="Agent" &&
+                 {type==="Agent" &&
                  <>
                  <option value="">Choose Agent</option>
                   {agent_Payments_Out &&
@@ -1491,7 +1491,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Supplier" &&
+                  {type==="Supplier" &&
                  <>
                  <option value="">Choose Supplier</option>
                   {supp_Payments_Out &&
@@ -1503,7 +1503,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Candidate" &&
+                  {type==="Candidate" &&
                  <>
                  <option value="">Choose Candidate</option>
                   {candidate_Payments_Out &&
@@ -1515,7 +1515,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                   {outType==="Protector" &&
+                   {type==="Protector" &&
                  <>
                  <option value="">Choose Protector</option>
                   {protector_Payments_Out &&
@@ -1527,7 +1527,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                 {outType==="Azad Agent" &&
+                 {type==="Azad Agent" &&
                  <>
                  <option value="">Choose Azad Agent</option>
                   {azadAgent_Payments_Out &&
@@ -1539,7 +1539,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Azad Supplier" &&
+                  {type==="Azad Supplier" &&
                  <>
                  <option value="">Choose Azad Supplier</option>
                   {azadSupplier_Payments_Out &&
@@ -1551,7 +1551,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Azad Candidate" &&
+                  {type==="Azad Candidate" &&
                  <>
                  <option value="">Choose Azad Candidate</option>
                   {azadCand_Payments_Out &&
@@ -1564,7 +1564,7 @@ const handleInputChange = (e) => {
                  </>
                  }
 
-                {outType==="Ticket Agent" &&
+                {type==="Ticket Agent" &&
                  <>
                  <option value="">Choose Ticket Agent</option>
                   {ticketAgent_Payments_Out &&
@@ -1576,7 +1576,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Ticket Supplier" &&
+                  {type==="Ticket Supplier" &&
                  <>
                  <option value="">Choose Ticket Supplier</option>
                   {ticketSupplier_Payments_Out &&
@@ -1588,7 +1588,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Ticket Candidate" &&
+                  {type==="Ticket Candidate" &&
                  <>
                  <option value="">Choose Ticket Candidate</option>
                   {ticketCand_Payments_Out &&
@@ -1601,7 +1601,7 @@ const handleInputChange = (e) => {
                  </>
                  }
 
-               {outType==="Visit Agent" &&
+               {type==="Visit Agent" &&
                  <>
                  <option value="">Choose Visit Agent</option>
                   {visitAgent_Payments_Out &&
@@ -1613,7 +1613,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Visit Supplier" &&
+                  {type==="Visit Supplier" &&
                  <>
                  <option value="">Choose Visit Supplier</option>
                   {visitSupplier_Payments_Out &&
@@ -1625,7 +1625,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Visit Candidate" &&
+                  {type==="Visit Candidate" &&
                  <>
                  <option value="">Choose Visit Candidate</option>
                   {visitCand_Payments_Out &&
@@ -1638,7 +1638,7 @@ const handleInputChange = (e) => {
                  </>
                  }
 
-                  {outType==="Credit/Debit WC" &&
+                  {type==="Credit/Debit WC" &&
                  <>
                  <option value="">Choose Credit/Debit WC</option>
                   {crediterPurchaseParties &&
@@ -1650,7 +1650,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Credit/Debit WOC" &&
+                  {type==="Credit/Debit WOC" &&
                  <>
                  <option value="">Choose Credit/Debit WOC</option>
                   {crediterSuppliers &&
@@ -1662,7 +1662,7 @@ const handleInputChange = (e) => {
                   }
                  </>
                  }
-                  {outType==="Assets" &&
+                  {type==="Assets" &&
                  <>
                  <option value="">Choose Asset</option>
                   {assets &&
@@ -1675,30 +1675,30 @@ const handleInputChange = (e) => {
                  </>
                  }
                 </select>:
-                <input outType="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
+                <input type="text" value={supplierName}  onChange={(e)=>setSupplierName(e.target.value)} />
                 }
                 </>
                 }
               </div>
-              {outType==="Candidate" &&
+              {type==="Candidate" &&
                <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                <label >PP# </label>
-               <input outType="text" value={pp_No} disabled />
+               <input type="text" value={pp_No} disabled />
              </div>
               }
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label>{outType==="Expense"&&"Expense"} Category </label>
+                <label>{type==="Expense"&&"Expense"} Category </label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                   <option value="">Choose</option>
-                 {outType !=="Expense" &&
+                 {type !=="Expense" &&
                  <>
                   {categories && categories.map((data) => (
                     <option key={data._id} value={data.category}>{data.category}</option>
                   ))}
                  </>
                  }
-                  {outType ==="Expense" &&
+                  {type ==="Expense" &&
                  <>
                   {expenseCategories && expenseCategories.map((data) => (
                     <option key={data._id} value={data.category}>{data.category}</option>
@@ -1727,21 +1727,21 @@ const handleInputChange = (e) => {
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Slip No </label>
-                <input outType="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
+                <input type="text" value={slip_No} onChange={(e) => setSlip_No(e.target.value)} />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Payment Out </label>
-                <input outType="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
+                <input type="number" min="0" value={payment_Out} onChange={(e) => setPayment_Out(e.target.value)} required />
               </div>
 
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Upload Slip </label>
-                <input outType="file" accept='image/*' onChange={handleImage} />
+                <input type="file" accept='image/*' onChange={handleImage} />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Date </label>
-                <input outType="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-12 p-1 my-1">
@@ -1770,11 +1770,11 @@ const handleInputChange = (e) => {
                 </div>
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >CUR Rate </label>
-                  <input outType="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                  <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                   <label >Currency Amount </label>
-                  <input outType="number" value={curr_Amount} readOnly />
+                  <input type="number" value={curr_Amount} readOnly />
                 </div>
               </div>}
           </form>
@@ -1810,8 +1810,8 @@ const handleInputChange = (e) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {(outType === "Agent" ? agent_Payments_Out : outType === "Supplier" ? supp_Payments_Out : outType === "Candidate" ? candidate_Payments_Out: outType === "Azad Agent" ? azadAgent_Payments_Out: outType === "Azad Supplier" ? azadSupplier_Payments_Out: outType === "Azad Candidate" ? azadCand_Payments_Out: outType === "Ticket Agent" ? ticketAgent_Payments_Out: outType === "Ticket Supplier" ? ticketSupplier_Payments_Out: outType === "Ticket Candidate" ? ticketCand_Payments_Out: outType === "Visit Agent" ? visitAgent_Payments_Out: outType === "Visit Supplier" ? visitSupplier_Payments_Out: outType === "Visit Candidate" ? visitCand_Payments_Out: outType === "Credit/Debit WC" ? CDWC_Payments_In: outType === "Credit/Debit WOC" ? CDWOC_Payments_In:outType === "Assets" ? assetsPayments:outType === "Protector" ? protector_Payments_Out: [])
-                    .filter((data) => outType === "Assets"? data.assetName:data.supplierName === selectedSupplier)
+                {(type === "Agent" ? agent_Payments_Out : type === "Supplier" ? supp_Payments_Out : type === "Candidate" ? candidate_Payments_Out: type === "Azad Agent" ? azadAgent_Payments_Out: type === "Azad Supplier" ? azadSupplier_Payments_Out: type === "Azad Candidate" ? azadCand_Payments_Out: type === "Ticket Agent" ? ticketAgent_Payments_Out: type === "Ticket Supplier" ? ticketSupplier_Payments_Out: type === "Ticket Candidate" ? ticketCand_Payments_Out: type === "Visit Agent" ? visitAgent_Payments_Out: type === "Visit Supplier" ? visitSupplier_Payments_Out: type === "Visit Candidate" ? visitCand_Payments_Out: type === "Credit/Debit WC" ? CDWC_Payments_In: type === "Credit/Debit WOC" ? CDWOC_Payments_In:type === "Assets" ? assetsPayments:type === "Protector" ? protector_Payments_Out: [])
+                    .filter((data) => type === "Assets"? data.assetName:data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array
                       <>

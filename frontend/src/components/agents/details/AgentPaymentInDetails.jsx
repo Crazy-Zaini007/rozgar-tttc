@@ -29,9 +29,6 @@ export default function AgentPaymentInDetails() {
   const [show1, setShow1] = useState(false)
   const [show2, setShow2] = useState(false)
 
-
-
-
   const[newStatus,setNewStatus]=useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
@@ -440,7 +437,7 @@ export default function AgentPaymentInDetails() {
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredIndividualPayments = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
+    .filter((data) => data.supplierName === selectedSupplier &&data.status===newStatus )
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData.payment
@@ -480,7 +477,7 @@ export default function AgentPaymentInDetails() {
   const [search2, setSearch2] = useState('')
 
   const filteredPersons = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
+    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
@@ -517,10 +514,10 @@ export default function AgentPaymentInDetails() {
         Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
         Total_Payment_In: payments.total_Payment_In,
         Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.total_Visa_Price_In_PKR - payments.total_Payment_In + payments.total_Cash_Out,
+        Remaining_PKR: payments.remaining_Balance,
         Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr: payments.total_Payment_In_Curr,
-        Remaining_Curr: payments.total_Visa_Price_In_Curr - payments.total_Payment_In_Curr,
+        Remaining_Curr: payments.remaining_Curr,
         Status: payments.status,
       }
 
@@ -676,7 +673,10 @@ export default function AgentPaymentInDetails() {
    
   }
 
-  const[isOpening,setIsOpening]=useState('No')
+
+  const [convert,setConvert]=useState('No')
+
+
   const changeStatus = async () => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
@@ -688,7 +688,7 @@ export default function AgentPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier,newStatus,multipleIds })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus,multipleIds,convert })
         })
 
         const json = await response.json()
@@ -757,10 +757,10 @@ export default function AgentPaymentInDetails() {
             <td>${String(entry.total_Visa_Price_In_PKR)}</td>
             <td>${String(entry.total_Payment_In)}</td>
             <td>${String(entry.total_Cash_Out)}</td>
-            <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
+            <td>${String(entry.remaining_Balance)}</td>
             <td>${String(entry.total_Visa_Price_In_Curr)}</td>
             <td>${String(entry.total_Payment_In_Curr)}</td>
-            <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
+            <td>${String(entry.remaining_Curr)}</td>
             <td>${String(entry.status)}</td>           
           </tr>
         `).join('')}
@@ -1476,7 +1476,6 @@ const printPerson = (person) => {
 
 
 
-  const [convert,setConvert]=useState('No')
   return (
     <>
       {!option &&
@@ -1635,7 +1634,7 @@ const printPerson = (person) => {
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
-                                    {entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out}
+                                    {entry.remaining_Balance}
                                   </TableCell>
                                   {show1 && <>
                                     <TableCell className='border data_td text-center' >
@@ -1645,7 +1644,7 @@ const printPerson = (person) => {
                                       {entry.total_Payment_In_Curr}
                                     </TableCell>
                                     <TableCell className='border data_td text-center' >
-                                      {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
+                                      {entry.remaining_Curr}
                                     </TableCell>
                                   </>}
 
@@ -2366,11 +2365,9 @@ const printPerson = (person) => {
     <div className="modal-content">
       <div className="modal-header">
         <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
-       {/* <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
        <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
-       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} |</span>
-       <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
-       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)} |</span> */}
+       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} </span>
 
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
@@ -2830,18 +2827,16 @@ const printPerson = (person) => {
       
       </div>
       <div className="modal-footer">
-      <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
-       <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
-       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} |</span>
+     
        <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
-       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)} |</span>
+       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)}</span>
         <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
           <option value="No">No</option>
           <option value="Yes">Yes</option>
         </select>
         <label htmlFor="">Convert Remaining Balance to New Khata?</label>
         <button className="btn  btn-sm shadow cancel_btn" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
-        <button className="btn btn-sm shadow save_btn" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
+        <button className="btn btn-sm shadow save_btn" onClick={() => changeStatus()} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
       </div>
     </div>
   </div>
