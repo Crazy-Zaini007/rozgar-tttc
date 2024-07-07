@@ -202,6 +202,10 @@ const Payment_InSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        cash_Out: {
+          type: Number,
+          default: 0,
+        },
         payment_In_Curr: {
           type: String,
         },
@@ -279,6 +283,10 @@ const Payment_InSchema = new mongoose.Schema(
               type: Number
             },
             new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+            cash_Out: {
               type: Number,
               default: 0,
             },
@@ -499,6 +507,10 @@ const Payment_OutSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        cash_Out: {
+          type: Number,
+          default: 0,
+        },
         payment_Out_Curr: {
           type: String,
         },
@@ -576,6 +588,10 @@ const Payment_OutSchema = new mongoose.Schema(
               type: Number
             },
             new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+            cash_Out: {
               type: Number,
               default: 0,
             },

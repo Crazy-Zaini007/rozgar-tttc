@@ -208,6 +208,10 @@ const Payment_InSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        cash_Out: {
+          type: Number,
+          default: 0,
+        },
         payment_In_Curr: {
           type: String,
         },
@@ -253,16 +257,21 @@ const Payment_InSchema = new mongoose.Schema(
             },
             flight_Date: {
               type: String,
-    
             },
             visa_Amount_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Paid_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Remain_PKR: {
               type: Number
@@ -274,18 +283,28 @@ const Payment_InSchema = new mongoose.Schema(
 
             visa_Curr_Amount: {
               type: Number,
+              default: 0,
+
             },
             past_Paid_Curr: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Curr_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
 
             past_Remain_Curr: {
               type: Number
             },
             new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+            cash_Out: {
               type: Number,
               default: 0,
             },
@@ -302,13 +321,16 @@ const Payment_InSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-//Visit Supplier Payment_Out Schema
+//Ticket Supplier Payment Out Schema
 const Payment_OutSchema = new mongoose.Schema(
   {
     supplier_Id: {
       type: String,
     },
     supplierName: {
+      type: String,
+    },
+    picture:{
       type: String,
     },
     total_Azad_Visa_Price_Out_PKR: {
@@ -360,9 +382,6 @@ const Payment_OutSchema = new mongoose.Schema(
     persons: [
       {
         name: {
-          type: String,
-        },
-        picture:{
           type: String,
         },
         pp_No: {
@@ -508,6 +527,10 @@ const Payment_OutSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        cash_Out: {
+          type: Number,
+          default: 0,
+        },
         payment_Out_Curr: {
           type: String,
         },
@@ -556,16 +579,24 @@ const Payment_OutSchema = new mongoose.Schema(
     
             },
             visa_Amount_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Paid_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Remain_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Remain_PKR: {
               type: Number,
@@ -574,17 +605,29 @@ const Payment_OutSchema = new mongoose.Schema(
 
             visa_Curr_Amount: {
               type: Number,
+              default: 0,
+
             },
             new_Curr_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Paid_Curr: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Remain_Curr: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+            cash_Out: {
               type: Number,
               default: 0,
             },
@@ -599,6 +642,7 @@ const Payment_OutSchema = new mongoose.Schema(
   },
   { timestamps: true}
 )
+
 
 //  Visit Supplier Schema
 

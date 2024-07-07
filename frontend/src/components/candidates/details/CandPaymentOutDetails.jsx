@@ -166,7 +166,7 @@ export default function CandPaymentOutDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier,pp_No, payment_Via: payment.payment_Via, payment_Out: payment.payment_Out, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, pp_No, payment_Via: payment.payment_Via, payment_Out: payment.payment_Out, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
         })
 
         const json = await response.json()
@@ -202,7 +202,7 @@ export default function CandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier,pp_No, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, pp_No, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
       })
 
       const json = await response.json()
@@ -290,7 +290,7 @@ export default function CandPaymentOutDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: person.supplierName,pp_No })
+          body: JSON.stringify({ supplierName: person.supplierName, pp_No })
         })
 
         const json = await response.json()
@@ -324,21 +324,21 @@ export default function CandPaymentOutDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('Open')
 
   const filteredTotalPaymentOut = candidate_Payments_Out.filter(payment => {
     // Check if supplierName exists and matches the provided name
     if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
-        payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-        payment.pp_No.toLowerCase().includes(searchPP_No.toLowerCase()) &&
-        payment.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-        payment.company.toLowerCase().includes(company.toLowerCase()) &&
-        payment.country.toLowerCase().includes(country.toLowerCase()) &&
-        payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
-        payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-        payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
-        payment.status.toLowerCase().includes(status.toLowerCase())
+        payment.createdAt?.toLowerCase().includes(date1.toLowerCase()) &&
+        payment.pp_No?.toLowerCase().includes(searchPP_No.toLowerCase()) &&
+        payment.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+        payment.company?.toLowerCase().includes(company.toLowerCase()) &&
+        payment.country?.toLowerCase().includes(country.toLowerCase()) &&
+        payment.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+        payment.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+        payment.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+        payment.status?.toLowerCase().includes(status.toLowerCase())
       );
     }
     // If supplierName doesn't exist or doesn't match, exclude the payment
@@ -351,7 +351,7 @@ export default function CandPaymentOutDetails() {
     setDetails(candidate)
 
   }
-  
+
 
   // individual payments filters
   const [dateFrom, setDateFrom] = useState('')
@@ -376,56 +376,19 @@ export default function CandPaymentOutDetails() {
 
           return (
             isDateInRange &&
-             paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-             paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
-             (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-              paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-              paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+            paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+              paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+              paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
               paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
-         )
+            )
           );
         }),
     }))
 
- 
 
 
-  // Changing Status
-
-  const changeStatus = async (myStatus) => {
-    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
-      setLoading5(true)
-      let newStatus = myStatus
-
-      try {
-        const response = await fetch(`${apiUrl}/auth/candidates/update/payment_out/status`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,pp_No })
-        })
-
-        const json = await response.json()
-
-        if (!response.ok) {
-          setNewMessage(toast.error(json.message));
-          setLoading5(false)
-        }
-        if (response.ok) {
-          fetchData()
-          setNewMessage(toast.success(json.message));
-          setLoading5(false)
-          setEditMode1(!editMode1)
-        }
-      }
-      catch (error) {
-        setNewMessage(toast.error('Server is not responding...'))
-        setLoading5(false)
-      }
-    }
-  }
 
   const printMainTable = () => {
     const formatDate = (date) => {
@@ -435,9 +398,9 @@ export default function CandPaymentOutDetails() {
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
     };
-  
+
     const formattedDate = formatDate(new Date());
-  
+
     let printContentString = '';
     printContentString += `
     <div class="print-header">
@@ -588,9 +551,9 @@ export default function CandPaymentOutDetails() {
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
     };
-  
+
     const formattedDate = formatDate(new Date());
-  
+
     let printContentString = '';
     printContentString += `
     <div class="print-header">
@@ -721,9 +684,9 @@ export default function CandPaymentOutDetails() {
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
     };
-  
+
     const formattedDate = formatDate(new Date());
-  
+
     // Convert JSX to HTML string
     const printContentString = `
       <div class="print-header">
@@ -782,7 +745,7 @@ export default function CandPaymentOutDetails() {
         </thead>
         <tbody>
           ${filteredIndividualPayments.map((entry, index) =>
-            entry.payment.map((paymentItem, paymentIndex) => `
+      entry.payment.map((paymentItem, paymentIndex) => `
               <tr key="${entry?._id}-${paymentIndex}">
                 <td>${index * entry.payment.length + paymentIndex + 1}</td>
                 <td>${String(paymentItem?.date)}</td>
@@ -799,7 +762,7 @@ export default function CandPaymentOutDetails() {
                 <td>${String(paymentItem?.payment_Out_Curr)}</td>
               </tr>
             `).join('')
-          ).join('')}
+    ).join('')}
           <tr>
             <td colspan="6"></td>
             <td>Total</td>
@@ -864,7 +827,7 @@ export default function CandPaymentOutDetails() {
         }
       </style>
     `;
-  
+
     // Create a new window for printing
     const printWindow = window.open('', '_blank');
     if (printWindow) {
@@ -877,7 +840,7 @@ export default function CandPaymentOutDetails() {
           <body>${printContentString}</body>
         </html>
       `);
-  
+
       // Trigger print dialog
       printWindow.print();
       // Close the new window after printing
@@ -889,7 +852,7 @@ export default function CandPaymentOutDetails() {
       alert('Could not open print window. Please check your browser settings.');
     }
   };
-  
+
   const printPaymentInvoice = (paymentItem) => {
     // Function to format the date as dd-MM-yyyy
     const formatDate = (date) => {
@@ -899,9 +862,9 @@ export default function CandPaymentOutDetails() {
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
     };
-  
+
     const formattedDate = formatDate(new Date());
-  
+
     // Convert JSX to HTML string
     const printContentString = `
       <div class="print-header">
@@ -1038,7 +1001,7 @@ export default function CandPaymentOutDetails() {
           <body>${printContentString}</body>
         </html>
       `);
-  
+
       // Trigger print dialog
       printWindow.print();
       // Close the new window after printing
@@ -1050,7 +1013,7 @@ export default function CandPaymentOutDetails() {
       alert('Could not open print window. Please check your browser settings.');
     }
   };
-  
+
 
   const downloadExcel = () => {
     const data = [];
@@ -1089,25 +1052,25 @@ export default function CandPaymentOutDetails() {
   const downloadCandidateDetails = (payments) => {
     const data = [];
     // Iterate over entries and push all fields
-      const rowData = {
-        Date: payments.createdAt,
-        Candidate: payments.supplierName,
-        PP_No: payments.pp_No,
-        Entry_Mode: payments.entry_Mode,
-        Company: payments.company,
-        Country: payments.country,
-        Trade: payments.trade,
-        Final_Status: payments.final_Status,
-        Flight_Date: payments.flight_Date,
-        Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
-        Total_Payment_In: payments.total_Payment_Out,
-        Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.remaining_Balance,
-        Status: payments.status,
-      }
+    const rowData = {
+      Date: payments.createdAt,
+      Candidate: payments.supplierName,
+      PP_No: payments.pp_No,
+      Entry_Mode: payments.entry_Mode,
+      Company: payments.company,
+      Country: payments.country,
+      Trade: payments.trade,
+      Final_Status: payments.final_Status,
+      Flight_Date: payments.flight_Date,
+      Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
+      Total_Payment_In: payments.total_Payment_Out,
+      Total_Cash_Out: payments.total_Cash_Out,
+      Remaining_PKR: payments.remaining_Balance,
+      Status: payments.status,
+    }
 
-      data.push(rowData);
-   
+    data.push(rowData);
+
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -1147,24 +1110,24 @@ export default function CandPaymentOutDetails() {
 
   const downloadPaymentInvoice = (payment) => {
     const data = [];
-  
-      const rowData = {
-        Candidate:selectedSupplier,
-        Date: payment.date,
-        Category: payment.category,
-        Payment_Via: payment.payment_Via,
-        Payment_Type: payment.payment_Type,
-        Slip_No: payment.slip_No,
-        Details: payment.details,
-        Payment_In: payment.payment_Out,
-        Cash_Out: payment.cash_Out,
-        Invoice: payment.invoice,
-        Payment_Out_Curr: payment.payment_Out_Curr,
-        Curr_Rate: payment.curr_Rate,
-        Curr_Amount: payment.curr_Amount
-      };
 
-      data.push(rowData);
+    const rowData = {
+      Candidate: selectedSupplier,
+      Date: payment.date,
+      Category: payment.category,
+      Payment_Via: payment.payment_Via,
+      Payment_Type: payment.payment_Type,
+      Slip_No: payment.slip_No,
+      Details: payment.details,
+      Payment_In: payment.payment_Out,
+      Cash_Out: payment.cash_Out,
+      Invoice: payment.invoice,
+      Payment_Out_Curr: payment.payment_Out_Curr,
+      Curr_Rate: payment.curr_Rate,
+      Curr_Amount: payment.curr_Amount
+    };
+
+    data.push(rowData);
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -1229,8 +1192,8 @@ export default function CandPaymentOutDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
   }
 
-  const[rowsValue,setRowsValue]=useState("")
-  const[rowsValue1,setRowsValue1]=useState("")
+  const [rowsValue, setRowsValue] = useState("")
+  const [rowsValue1, setRowsValue1] = useState("")
 
 
 
@@ -1244,19 +1207,19 @@ export default function CandPaymentOutDetails() {
                 <h4>PaymentOut Details</h4>
               </div>
               <div className="right d-flex">
-              <label htmlFor="" className='mx-1 mt-2'>Show Entries: </label><br/>
-                  <select name="" className='mt-1 mx-1' value={rowsValue1} onChange={(e)=>setRowsValue1(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
-                    <option value="">All</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="75">75</option>
-                    <option value="100">100</option>
-                    <option value="120">120</option>
-                    <option value="150">150</option>
-                    <option value="200">200</option>
-                    <option value="250">250</option>
-                    <option value="300">300</option>
-                  </select>
+                <label htmlFor="" className='mx-1 mt-2'>Show Entries: </label><br />
+                <select name="" className='mt-1 mx-1' value={rowsValue1} onChange={(e) => setRowsValue1(e.target.value)} id="" style={{ height: '30px', zIndex: '999', width: 'auto' }}>
+                  <option value="">All</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="75">75</option>
+                  <option value="100">100</option>
+                  <option value="120">120</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="250">250</option>
+                  <option value="300">300</option>
+                </select>
                 {candidate_Payments_Out.length > 0 &&
                   <>
                     <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
@@ -1268,7 +1231,7 @@ export default function CandPaymentOutDetails() {
               </div>
             </Paper>
           </div>
-          {(isLoading && candidate_Payments_Out.length<1) &&
+          {(isLoading && candidate_Payments_Out.length < 1) &&
             <div className='col-md-12 text-center my-4'>
               <ClipLoader color="#2C64C3" className='mx-auto' />
             </div>
@@ -1277,12 +1240,12 @@ export default function CandPaymentOutDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
-              <div className="col-auto px-1">
-                      <label htmlFor="">Search by Name:</label><br/>
-                     <input type="search"value={name} onChange={(e)=>setName(e.target.value)} />
-                    </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date:</label><br/>
+                  <label htmlFor="">Search by Name:</label><br />
+                  <input type="search" value={name} onChange={(e) => setName(e.target.value)} />
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date:</label><br />
                   <select value={date1} onChange={(e) => setDate1(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(candidate_Payments_Out.map(data => data.createdAt))].map(dateValue => (
@@ -1290,10 +1253,9 @@ export default function CandPaymentOutDetails() {
                     ))}
                   </select>
                 </div>
-              
 
                 <div className="col-auto px-1">
-                  <label htmlFor="">PP#:</label><br/>
+                  <label htmlFor="">PP#:</label><br />
                   <select value={searchPP_No} onChange={(e) => setSearchPP_NO(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1302,7 +1264,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Entry Mode:</label><br/>
+                  <label htmlFor="">Entry Mode:</label><br />
                   <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1311,7 +1273,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Company:</label><br/>
+                  <label htmlFor="">Company:</label><br />
                   <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1320,7 +1282,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Country:</label><br/>
+                  <label htmlFor="">Country:</label><br />
                   <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1329,7 +1291,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Trade:</label><br/>
+                  <label htmlFor="">Trade:</label><br />
                   <select value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1338,7 +1300,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Final Status:</label><br/>
+                  <label htmlFor="">Final Status:</label><br />
                   <select value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1347,7 +1309,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Flight Date:</label><br/>
+                  <label htmlFor="">Flight Date:</label><br />
                   <select value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {candidate_Payments_Out && candidate_Payments_Out.map((data) => (
@@ -1356,7 +1318,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Khata:</label><br/>
+                  <label htmlFor="">Khata:</label><br />
                   <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
                     <option value="" >All</option>
                     <option value="Open" >Open</option>
@@ -1368,7 +1330,7 @@ export default function CandPaymentOutDetails() {
             </Paper>
           </div>
 
-          {(!isLoading ||candidate_Payments_Out.length>0) &&
+          {(!isLoading || candidate_Payments_Out.length > 0) &&
             <div className='col-md-12'>
               <Paper className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer>
@@ -1405,7 +1367,7 @@ export default function CandPaymentOutDetails() {
 
                     <TableBody>
                       {filteredTotalPaymentOut
-                        .slice(0,rowsValue1 ? rowsValue1 : undefined).map((entry, outerIndex) => (
+                        .slice(0, rowsValue1 ? rowsValue1 : undefined).map((entry, outerIndex) => (
                           // Map through the payment array
                           <React.Fragment key={outerIndex}>
 
@@ -1506,7 +1468,7 @@ export default function CandPaymentOutDetails() {
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button onClick={() => setEditMode1(false)} className='btn delete_btn  btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                      <button onClick={() => setEditMode1(false)} className='btn delete_btn  btn-sm'><i className="fa-solid fa-xmark"></i></button>
                                       <button onClick={() => handleTotalPaymentUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
                                     </div>
                                   </TableCell>
@@ -1518,7 +1480,7 @@ export default function CandPaymentOutDetails() {
                                   <TableCell className='border data_td text-center'>
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center' onClick={() => { handleRowClick(entry.supplierName); handleCandidate(entry);setPP_No(entry.pp_No) }}>
+                                  <TableCell className='border data_td text-center' onClick={() => { handleRowClick(entry.supplierName); handleCandidate(entry); setPP_No(entry.pp_No) }}>
                                     {entry.supplierName}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
@@ -1572,14 +1534,14 @@ export default function CandPaymentOutDetails() {
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <div className="btn-group" role="group" aria-label="Basic">
-                                    <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
-                                  <button onClick={() => printCandidateDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
-                                  <button onClick={() => downloadCandidateDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
-                                    {/* <button className='btn delete_btn btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button> */}
+                                      <div className="btn-group" role="group" aria-label="Basic">
+                                        <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
+                                        <button onClick={() => printCandidateDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                        <button onClick={() => downloadCandidateDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                        {/* <button className='btn delete_btn btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button> */}
+                                      </div>
                                     </div>
-                                    </div>
-                                   
+
                                   </TableCell>
                                 </>
                               )}
@@ -1600,28 +1562,28 @@ export default function CandPaymentOutDetails() {
                         <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                         <TableCell className='border data_td text-center bg-info text-white'>
                           {/* Calculate the total sum of payment_In */}
-                          {filteredTotalPaymentOut.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
+                          {filteredTotalPaymentOut.slice(0, rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_Out_PKR);
                             return isNaN(paymentIn) ? total : total + paymentIn;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-success text-white'>
                           {/* Calculate the total sum of cash_Out */}
-                          {filteredTotalPaymentOut.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
+                          {filteredTotalPaymentOut.slice(0, rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Payment_Out);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-danger text-white'>
                           {/* Calculate the total sum of cash_Out */}
-                          {filteredTotalPaymentOut.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
+                          {filteredTotalPaymentOut.slice(0, rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-warning text-white'>
                           {/* Calculate the total sum of cash_Out */}
-                          {filteredTotalPaymentOut.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
+                          {filteredTotalPaymentOut.slice(0, rowsValue1 ? rowsValue1 : undefined).reduce((total, paymentItem) => {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_Out_PKR);
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             const paymentOut = parseFloat(paymentItem.total_Payment_Out);
@@ -1636,7 +1598,7 @@ export default function CandPaymentOutDetails() {
 
                   </Table>
                 </TableContainer>
-                
+
               </Paper>
             </div>
           }
@@ -1675,16 +1637,7 @@ export default function CandPaymentOutDetails() {
 
               </div>
               <div className="right">
-                <div className="dropdown d-inline ">
-                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    {loading5 ? "Updating" : "Change Status"}
-                  </button>
-                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
-                    <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
 
-                  </ul>
-                </div>
                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
@@ -1699,21 +1652,21 @@ export default function CandPaymentOutDetails() {
           <div className="col-md-12 filters">
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
-              <div className="col-auto px-1">
-                  <label htmlFor="">Serach Here:</label><br/>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Serach Here:</label><br />
                   <input type="search" value={search1} onChange={(e) => setSearch1(e.target.value)} className='m-0 p-1' />
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date From:</label><br/>
+                  <label htmlFor="">Date From:</label><br />
                   <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Date To:</label><br/>
+                  <label htmlFor="">Date To:</label><br />
                   <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1' />
 
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Payment Via:</label><br/>
+                  <label htmlFor="">Payment Via:</label><br />
                   <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(candidate_Payments_Out
@@ -1727,7 +1680,7 @@ export default function CandPaymentOutDetails() {
                   </select>
                 </div>
                 <div className="col-auto px-1">
-                  <label htmlFor="">Payment Type:</label><br/>
+                  <label htmlFor="">Payment Type:</label><br />
                   <select value={payment_Type} onChange={(e) => setPayment_Type(e.target.value)} className='m-0 p-1'>
                     <option value="">All</option>
                     {[...new Set(candidate_Payments_Out
@@ -1743,24 +1696,24 @@ export default function CandPaymentOutDetails() {
             </Paper>
           </div>
           <div className="col-md-12 detail_table my-2">
-          <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between">
               <div className="left d-flex">
-              <h6>Payment Out Details</h6>
+                <h6>Payment Out Details</h6>
               </div>
               <div className="right d-flex">
-              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label><br/>
-                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
-                    <option value="">All</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="75">75</option>
-                    <option value="100">100</option>
-                    <option value="120">120</option>
-                    <option value="150">150</option>
-                    <option value="200">200</option>
-                    <option value="250">250</option>
-                    <option value="300">300</option>
-                  </select>
+                <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label><br />
+                <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e) => setRowsValue(e.target.value)} id="" style={{ height: '30px', zIndex: '999', width: 'auto' }}>
+                  <option value="">All</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="75">75</option>
+                  <option value="100">100</option>
+                  <option value="120">120</option>
+                  <option value="150">150</option>
+                  <option value="200">200</option>
+                  <option value="250">250</option>
+                  <option value="300">300</option>
+                </select>
               </div>
             </div>
             <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
@@ -1792,7 +1745,7 @@ export default function CandPaymentOutDetails() {
                 <TableBody>
                   {filteredIndividualPayments.map((filteredData) => (
                     <>
-                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
+                      {filteredData.payment.slice(0, rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
                         <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode && editedRowIndex === index ? (
                             <>
@@ -1878,12 +1831,12 @@ export default function CandPaymentOutDetails() {
                                 <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
                                 <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
                               </>}
-                              <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                              <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
 
 
                             </>
                           )}
-                         <TableCell className='border data_td p-1 text-center'>
+                          <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -1899,12 +1852,12 @@ export default function CandPaymentOutDetails() {
                               // Render Edit button when not in edit mode or for other rows
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
                                   <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
                                   <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
                                   <button className='btn bg-danger text-white btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
                                 </div>
-                               
+
                               </>
                             )}
                           </TableCell>
@@ -1922,7 +1875,7 @@ export default function CandPaymentOutDetails() {
                     <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
                     <TableCell className='border data_td text-center bg-warning text-white'>
                       {/* Calculate the total sum of payment_In */}
-                      {filteredIndividualPayments.slice(0,rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
+                      {filteredIndividualPayments.slice(0, rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
                         return total + filteredData.payment.reduce((sum, paymentItem) => {
                           const paymentIn = parseFloat(paymentItem.payment_Out);
                           return isNaN(paymentIn) ? sum : sum + paymentIn;
@@ -1931,7 +1884,7 @@ export default function CandPaymentOutDetails() {
                     </TableCell>
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
-                      {filteredIndividualPayments.slice(0,rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
+                      {filteredIndividualPayments.slice(0, rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
                         return total + filteredData.payment.reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.cash_Out);
                           return isNaN(cashOut) ? sum : sum + cashOut;
@@ -1942,32 +1895,32 @@ export default function CandPaymentOutDetails() {
                     <TableCell></TableCell>
                     {show2 && <>
                       <TableCell className='border data_td text-center bg-warning text-white'>
-                      
-                      {filteredIndividualPayments.slice(0,rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
-                          const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
-                          return isNaN(paymentIn) ? sum : sum + paymentIn;
-                        }, 0);
-                      }, 0)}
-                    </TableCell>
-                    <TableCell className='border data_td text-center bg-info text-white'>
-                      {/* Calculate the total sum of cash_Out */}
-                      {filteredIndividualPayments.slice(0,rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
-                          const cashOut = parseFloat(paymentItem.curr_Rate);
-                          return isNaN(cashOut) ? sum : sum + cashOut;
-                        }, 0);
-                      }, 0)}
-                    </TableCell>
-                    <TableCell className='border data_td text-center bg-primary text-white'>
-                      {/* Calculate the total sum of cash_Out */}
-                      {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((sum, paymentItem) => {
-                          const cashOut = parseFloat(paymentItem.curr_Amount);
-                          return isNaN(cashOut) ? sum : sum + cashOut;
-                        }, 0);
-                      }, 0)}
-                    </TableCell>
+
+                        {filteredIndividualPayments.slice(0, rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
+                          return total + filteredData.payment.reduce((sum, paymentItem) => {
+                            const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
+                            return isNaN(paymentIn) ? sum : sum + paymentIn;
+                          }, 0);
+                        }, 0)}
+                      </TableCell>
+                      <TableCell className='border data_td text-center bg-info text-white'>
+                        {/* Calculate the total sum of cash_Out */}
+                        {filteredIndividualPayments.slice(0, rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((total, filteredData) => {
+                          return total + filteredData.payment.reduce((sum, paymentItem) => {
+                            const cashOut = parseFloat(paymentItem.curr_Rate);
+                            return isNaN(cashOut) ? sum : sum + cashOut;
+                          }, 0);
+                        }, 0)}
+                      </TableCell>
+                      <TableCell className='border data_td text-center bg-primary text-white'>
+                        {/* Calculate the total sum of cash_Out */}
+                        {filteredIndividualPayments.reduce((total, filteredData) => {
+                          return total + filteredData.payment.slice(0, rowsValue ? rowsValue : filteredIndividualPayments.length).reduce((sum, paymentItem) => {
+                            const cashOut = parseFloat(paymentItem.curr_Amount);
+                            return isNaN(cashOut) ? sum : sum + cashOut;
+                          }, 0);
+                        }, 0)}
+                      </TableCell>
                     </>}
                   </TableRow>
                 </TableBody>

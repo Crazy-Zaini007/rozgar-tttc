@@ -3832,6 +3832,198 @@ const addCandVisePaymentIn=async(req,res)=>{
 }
 
 
+// Candidate Wise Payments In Retrun
+const addCandVisePaymentInReturn=async(req,res)=>{
+  try{
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    const {
+      supplierName,
+      category,
+      payment_Via,
+      payment_Type,
+      slip_No,
+      curr_Country,
+      slip_Pic,
+      details,
+      date,
+      totalCurrRate,
+      payments
+    } = req.body;
+
+    let allPayments=[]
+    let newCash_Out=0
+    let new_Curr_Amount=0
+    
+    const existingSupplier = await Agents.findOne({
+      "payment_In_Schema.supplierName": supplierName,
+    })
+
+    if (!existingSupplier) {
+      res.status(404).json({
+        message: "Agent not Found",
+      });
+      return;
+    }
+    
+    let nextInvoiceNumber = 0;
+    const currentInvoiceNumber = await InvoiceNumber.findOne({});
+
+    if (!currentInvoiceNumber) {
+      const newInvoiceNumberDoc = new InvoiceNumber();
+      await newInvoiceNumberDoc.save();
+    }
+
+    const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+      {},
+      { $inc: { invoice_Number: 1 } },
+      { new: true, upsert: true }
+    );
+
+    if (updatedInvoiceNumber) {
+      nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+    }
+    let uploadImage;
+    if (slip_Pic) {
+      uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+        upload_preset: "rozgar",
+      });
+    }
+
+    for (const payment of payments){
+      const {cand_Name,cash_Out,curr_Amount,}=payment
+      const newPaymentIn = parseInt(cash_Out, 10);
+      const newCurrAmount = parseInt(curr_Amount, 10);
+      
+      const existPerson = existingSupplier.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
+    
+
+      if (existPerson) {
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
+      cand_Name=existPerson.name,
+      past_Paid_PKR=existPerson.total_In,
+      pp_No=existPerson.pp_No,
+      entry_Mode=existPerson.entry_Mode,
+      company=existPerson.company,
+      trade=existPerson.trade,
+      final_Status=existPerson.final_Status,
+      flight_Date=existPerson.flight_Date,
+      entry_Mode=existPerson.entry_Mode,
+      visa_Amount_PKR=existPerson.visa_Price_In_PKR
+      past_Paid_PKR=existPerson.total_In,
+      past_Remain_PKR=existPerson.visa_Price_In_PKR-existPerson.total_In,
+      new_Remain_PKR=existPerson.visa_Price_In_PKR-existPerson.total_In+newPaymentIn,
+      visa_Curr_Amount=existPerson.visa_Price_In_Curr,
+      past_Paid_Curr=existPerson.visa_Price_In_Curr-existPerson.remaining_Curr,
+      past_Remain_Curr=existPerson.remaining_Curr,
+      new_Remain_Curr=existPerson.remaining_Curr+newCurrAmount,
+      cash_Out=newPaymentIn,
+      new_Curr_Payment=newCurrAmount?newCurrAmount:0,
+      existPerson.remaining_Price += newPaymentIn,
+      existPerson.total_In -= newPaymentIn,
+      existPerson.remaining_Curr -= newCurrAmount ? newCurrAmount : 0
+      newCash_Out+=newPaymentIn
+      new_Curr_Amount+=newCurrAmount
+      curr_Rate=totalCurrRate
+
+      let myNewPayment={
+        _id:new mongoose.Types.ObjectId,
+        cand_Name,
+        pp_No,
+        entry_Mode,
+        company,
+        trade,
+        final_Status,
+        flight_Date,
+        visa_Amount_PKR,
+        cash_Out,
+        past_Paid_PKR,
+        past_Remain_PKR,
+        new_Remain_PKR,
+        visa_Curr_Amount,
+        new_Curr_Payment,
+        past_Paid_Curr,
+        past_Remain_Curr,
+        new_Remain_Curr,
+        curr_Rate
+      }
+      allPayments.push(myNewPayment)
+      }
+    }
+
+    const candPayments={
+      category,
+      payment_Via,
+      payment_Type,
+      slip_No,
+      cash_Out:newCash_Out,
+      curr_Amount:new_Curr_Amount,
+      payment_In_Curr:curr_Country,
+      slip_Pic: uploadImage?.secure_url || '',
+      details,
+      date:date?date:new Date().toISOString().split("T")[0],
+      invoice: nextInvoiceNumber,
+      payments:allPayments
+    }
+    await existingSupplier.updateOne({
+      $inc: {
+        "payment_In_Schema.total_Payment_In": -newCash_Out,
+        "payment_In_Schema.remaining_Balance": newCash_Out,
+        "payment_In_Schema.total_Payment_In_Curr": new_Curr_Amount ? -new_Curr_Amount : 0,
+        "payment_In_Schema.remaining_Curr": new_Curr_Amount ? new_Curr_Amount : 0,
+      },
+      $push: {
+        "payment_In_Schema.candPayments": candPayments,
+      },
+    })
+    
+    const cashInHandDoc = await CashInHand.findOne({})
+
+    if (!cashInHandDoc) {
+      const newCashInHandDoc = new CashInHand();
+      await newCashInHandDoc.save();
+    }
+
+    const cashInHandUpdate = {
+      $inc: {},
+    };
+
+     if (payment_Via.toLowerCase() === "cash" ) {
+      cashInHandUpdate.$inc.cash = -newCash_Out;
+      cashInHandUpdate.$inc.total_Cash = -newCash_Out;
+    }
+    else{
+      cashInHandUpdate.$inc.bank_Cash = -newCash_Out;
+      cashInHandUpdate.$inc.total_Cash = -newCash_Out;
+    }
+
+    await CashInHand.updateOne({}, cashInHandUpdate);
+
+    const newNotification=new Notifications({
+      type:"Agent Cand-Wise Payment In Return",
+      content:`${user.userName} added Candidate Wise Payment In Return: ${newCash_Out} to ${payments.length} Candidates of Agent:${supplierName}`,
+      date: new Date().toISOString().split("T")[0]
+
+    })
+    await newNotification.save()
+
+    await existingSupplier.save();
+    res.status(200).json({ data:candPayments,
+      message: `Payment In Return: ${newCash_Out} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
+    })
+
+  }
+  catch(error){
+    res.status(500).json({message:error.message})
+  }
+}
+
+
 // Deleting a CandWise Payment IN
 const deleteCandVisePaymentIn=async(req,res)=>{
   try{
@@ -3872,15 +4064,17 @@ const deleteCandVisePaymentIn=async(req,res)=>{
       for (const payment of allPayments){
       for (const person of allPersons){
         if(payment.cand_Name.toLowerCase()===person.name.toLowerCase()){
-          person.total_In-=payment.new_Payment
-          person.remaining_Price+=payment.new_Payment
-          person.remaining_Curr+=payment.new_Curr_Payment
+          person.total_In-=payment.new_Payment>0?payment.new_Payment:0
+          person.cash_Out-=payment.cash_Out>0?payment.cash_Out:0
+          person.remaining_Price+=payment.new_Payment>0?payment.new_Payment:-payment.cash_Out
+          person.remaining_Curr+=payment.new_Payment>0?payment.new_Curr_Payment:-payment.new_Curr_Payment
         }
       }
       }
       await existingSupplier.updateOne({
         $inc: {
           "payment_In_Schema.total_Payment_In": -paymentToDelete.payment_In,
+          "payment_In_Schema.total_Cash_Out": -paymentToDelete.cash_Out,
           "payment_In_Schema.remaining_Balance": paymentToDelete.payment_In,
           "payment_In_Schema.total_Payment_In_Curr": paymentToDelete.curr_Amount ? -paymentToDelete.curr_Amount : 0,
           "payment_In_Schema.remaining_Curr": paymentToDelete.curr_Amount ? paymentToDelete.curr_Amount : 0,
@@ -3890,26 +4084,7 @@ const deleteCandVisePaymentIn=async(req,res)=>{
         },
       })
       
-      const cashInHandDoc = await CashInHand.findOne({});
-
-      if (!cashInHandDoc) {
-        const newCashInHandDoc = new CashInHand();
-        await newCashInHandDoc.save();
-      }
-
-      const cashInHandUpdate = {
-        $inc: {},
-      };
-      if (paymentToDelete.payment_Via.toLowerCase() === "cash" ) {
-        cashInHandUpdate.$inc.cash = -paymentToDelete.payment_In;
-        cashInHandUpdate.$inc.total_Cash = -paymentToDelete.payment_In;
-      }
-      else{
-        cashInHandUpdate.$inc.bank_Cash = -paymentToDelete.payment_In;
-        cashInHandUpdate.$inc.total_Cash = -paymentToDelete.payment_In;
-      }
-      
-      await CashInHand.updateOne({}, cashInHandUpdate);
+    
       await existingSupplier.save()
       const newNotification=new Notifications({
         type:"Agents Cand-Wise Payment In Deleted",
@@ -4042,41 +4217,26 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
         const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
         if(personToUpdate){
           personToUpdate.total_In-=candPayment.new_Payment
-          personToUpdate.remaining_Price+=candPayment.new_Payment
-          personToUpdate.remaining_Curr+=candPayment.new_Curr_Payment
+          personToUpdate.cash_Out-=candPayment.cash_Out
+          personToUpdate.remaining_Price+=candPayment.new_Payment>0?candPayment.new_Payment:-candPayment.cash_Out
+          personToUpdate.remaining_Curr+=candPayment.new_Payment>0?candPayment:-candPayment.new_Curr_Payment
         }
         paymentToFind.payment_In-=candPayment.new_Payment
+        paymentToFind.cash_Out-=candPayment.cash_Out
         paymentToFind.curr_Amount-=candPayment.new_Curr_Payment
        
 
         await existingSupplier.updateOne({
           $inc: {
             "payment_In_Schema.total_Payment_In": -candPayment.new_Payment,
-            "payment_In_Schema.remaining_Balance": candPayment.new_Payment,
+            "payment_In_Schema.total_Cash_Out": -candPayment.cash_Out,
+            "payment_In_Schema.remaining_Balance": candPayment.new_Payment>0?candPayment.new_Payment:-candPayment.cash_Out,
             "payment_In_Schema.total_Payment_In_Curr": candPayment.new_Curr_Payment ? -candPayment.new_Curr_Payment : 0,
             "payment_In_Schema.remaining_Curr": candPayment.new_Curr_Payment ? candPayment.new_Curr_Payment : 0,
           },
         })
 
-        const cashInHandDoc = await CashInHand.findOne({});
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
-  
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-        if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = -candPayment.new_Payment;
-          cashInHandUpdate.$inc.total_Cash = -candPayment.new_Payment;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = -candPayment.new_Payment;
-          cashInHandUpdate.$inc.total_Cash = -candPayment.new_Payment;
-        }
-        
-        await CashInHand.updateOne({}, cashInHandUpdate);
+      
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment In Deleted",
           content:`${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
@@ -4133,14 +4293,17 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
       paymentId,
       myPaymentId,
       new_Payment,
+      cash_Out,
       new_Curr_Payment,
       curr_Rate
     } = req.body;
 
     let newPaymentIn = parseInt(new_Payment, 10);
+    let newCashOut = parseInt(cash_Out, 10);
+
     let newCurrAmount = parseInt(new_Curr_Payment, 10);
     let newCurrRate=parseInt(curr_Rate,10)
-    newCurrAmount=newPaymentIn/newCurrRate
+    newCurrAmount=newPaymentIn>0?newPaymentIn:newCashOut/newCurrRate
 
     const existingAgent = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
@@ -4172,6 +4335,8 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
       }
       if(candPayment){
         let updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
+        let updatedCashOut = candPayment.cash_Out - newCashOut;
+
         let updateCurr_Amount = candPayment.new_Curr_Payment?candPayment.new_Curr_Payment:0- newCurrAmount;
 
 
@@ -5033,6 +5198,7 @@ module.exports = {
   changePaymentInStatus,
   changePaymentOutStatus,
   addCandVisePaymentIn,
+  addCandVisePaymentInReturn,
   deleteCandVisePaymentIn,
   deleteSingleCandVisePaymentIn,
   updateSingleCandVisePaymentIn,

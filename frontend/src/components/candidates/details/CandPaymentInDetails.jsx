@@ -320,22 +320,22 @@ export default function CandPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('Open')
 
 
   const filteredTotalPaymentIn = candidate_Payments_In.filter(payment => {
     // Check if supplierName exists and matches the provided name
     if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
-        payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-        payment.pp_No.toLowerCase().includes(searchPP_No.toLowerCase()) &&
-        payment.entry_Mode.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-        payment.company.toLowerCase().includes(company.toLowerCase()) &&
-        payment.country.toLowerCase().includes(country.toLowerCase()) &&
-        payment.trade.toLowerCase().includes(trade.toLowerCase()) &&
-        payment.final_Status.toLowerCase().includes(final_Status.toLowerCase()) &&
-        payment.flight_Date.toLowerCase().includes(flight_Date.toLowerCase()) &&
-        payment.status.toLowerCase().includes(status.toLowerCase())
+        payment.createdAt?.toLowerCase().includes(date1.toLowerCase()) &&
+        payment.pp_No?.toLowerCase().includes(searchPP_No.toLowerCase()) &&
+        payment.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+        payment.company?.toLowerCase().includes(company.toLowerCase()) &&
+        payment.country?.toLowerCase().includes(country.toLowerCase()) &&
+        payment.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+        payment.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+        payment.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+        payment.status?.toLowerCase().includes(status.toLowerCase())
       );
     }
     return false;
@@ -389,42 +389,6 @@ export default function CandPaymentInDetails() {
 
 
 
-  // Changing Status
-
-  const changeStatus = async (myStatus) => {
-    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
-      setLoading5(true)
-      let newStatus = myStatus
-
-      try {
-        const response = await fetch(`${apiUrl}/auth/candidates/update/payment_in/status`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,pp_No })
-        })
-
-        const json = await response.json()
-
-        if (!response.ok) {
-          setNewMessage(toast.error(json.message));
-          setLoading5(false)
-        }
-        if (response.ok) {
-          fetchData()
-          setNewMessage(toast.success(json.message));
-          setLoading5(false)
-          setEditMode1(!editMode1)
-        }
-      }
-      catch (error) {
-        setNewMessage(toast.error('Server is not responding...'))
-        setLoading5(false)
-      }
-    }
-  }
 
   const printMainTable = () => {
     const formatDate = (date) => {
@@ -1669,16 +1633,7 @@ export default function CandPaymentInDetails() {
 
               </div>
               <div className="right">
-                <div className="dropdown d-inline ">
-                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    {loading5 ? "Updating" : "Change Status"}
-                  </button>
-                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
-                    <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
-
-                  </ul>
-                </div>
+              
                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>

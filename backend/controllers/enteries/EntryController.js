@@ -9188,10 +9188,7 @@ const updateEntry = async (req, res) => {
         azad_Visa_Reference_In_Name=name
       }
 
-      console.log('reference_In',reference_In)
-      console.log('reference_In_Name',reference_In_Name)
-      console.log('reference_Out',reference_Out)
-      console.log('reference_Out_Name',reference_Out_Name)
+  
       const agents=await Agents.find({})
       const suppliers=await Suppliers.find({})
       const azadSuppliers=await AzadSupplier.find({})
@@ -9458,6 +9455,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Suppliers.findOne({
           "payment_Out_Schema.supplierName": reference_In_Name,
+          "payment_Out_Schema.status": 'Open',
         });
 
         if (!existingPaymentOutSupplier) {
@@ -9481,6 +9479,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_Two,
+              opening:visa_Purchase_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -9496,7 +9496,6 @@ let azadPicture
                   remaining_Price: visa_Purchase_Rate_PKR
                     ? visa_Purchase_Rate_PKR
                     : 0,
-
                   visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
                     ? visa_Purchase_Rate_Oth_Cur
                     : 0,
@@ -9605,7 +9604,7 @@ let azadPicture
 
         const existingSupplierPaymentIn = await Suppliers.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.reference_In_Name,
-        });
+        })
 
         if (existingSupplierPaymentIn) {
           const personToUpdate =
@@ -9645,6 +9644,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Agents.findOne({
           "payment_Out_Schema.supplierName": reference_In_Name,
+          "payment_Out_Schema.status": 'Open',
         });
 
         if (!existingPaymentOutSupplier) {
@@ -9666,8 +9666,9 @@ let azadPicture
               remaining_Curr: visa_Purchase_Rate_Oth_Cur
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
-
               curr_Country: cur_Country_Two,
+              opening:visa_Purchase_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -9981,6 +9982,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Agents.findOne({
           "payment_Out_Schema.supplierName": reference_In_Name,
+          "payment_Out_Schema.status": 'Open',
         });
 
         if (!existingPaymentOutSupplier) {
@@ -10002,8 +10004,9 @@ let azadPicture
               remaining_Curr: visa_Purchase_Rate_Oth_Cur
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
-
               curr_Country: cur_Country_Two,
+              opening:visa_Purchase_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -10168,6 +10171,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Suppliers.findOne({
           "payment_Out_Schema.supplierName": reference_In_Name,
+          "payment_Out_Schema.status": "Open",
         });
 
         if (!existingPaymentOutSupplier) {
@@ -10191,6 +10195,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_Two,
+              opening:visa_Purchase_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -10465,6 +10471,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Suppliers.findOne({
           "payment_Out_Schema.supplierName": reference_In_Name,
+          "payment_Out_Schema.status": 'Open',
         });
 
         if (!existingPaymentOutSupplier) {
@@ -10486,8 +10493,9 @@ let azadPicture
               remaining_Curr: visa_Purchase_Rate_Oth_Cur
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
-
               curr_Country: cur_Country_Two,
+              opening:visa_Purchase_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -10609,6 +10617,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Agents.findOne({
           "payment_Out_Schema.supplierName": reference_In_Name,
+          "payment_Out_Schema.status": 'Open',
         });
 
         if (!existingPaymentOutSupplier) {
@@ -10632,6 +10641,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_Two,
+              opening:visa_Purchase_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -10708,7 +10719,6 @@ let azadPicture
               remaining_Curr: visa_Purchase_Rate_Oth_Cur
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
-
               company: company,
               final_Status: final_Status,
               flight_Date: flight_Date,
@@ -10842,6 +10852,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentInSupplier = await Suppliers.findOne({
           "payment_In_Schema.supplierName": reference_Out_Name,
+          "payment_In_Schema.supplierName": "Open",
         });
 
         if (!existingPaymentInSupplier) {
@@ -10864,6 +10875,8 @@ let azadPicture
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -11029,6 +11042,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentInSupplier = await Agents.findOne({
           "payment_In_Schema.supplierName": reference_Out_Name,
+          "payment_In_Schema.status": 'Open',
         });
 
         if (!existingPaymentInSupplier) {
@@ -11051,6 +11065,8 @@ let azadPicture
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -11363,6 +11379,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentInSupplier = await Agents.findOne({
           "payment_In_Schema.supplierName": reference_Out_Name,
+          "payment_In_Schema.status": "Open",
         });
 
         if (!existingPaymentInSupplier) {
@@ -11385,6 +11402,8 @@ let azadPicture
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -11550,6 +11569,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentInSupplier = await Suppliers.findOne({
           "payment_In_Schema.supplierName": reference_Out_Name,
+          "payment_In_Schema.status": "Open",
         });
 
         if (!existingPaymentInSupplier) {
@@ -11572,6 +11592,8 @@ let azadPicture
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -11840,6 +11862,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentInSupplier = await Suppliers.findOne({
           "payment_In_Schema.supplierName": reference_Out_Name,
+          "payment_In_Schema.status": 'Open',
         });
 
         if (!existingPaymentInSupplier) {
@@ -11862,6 +11885,8 @@ let azadPicture
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -11982,6 +12007,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentInSupplier = await Agents.findOne({
           "payment_In_Schema.supplierName": reference_Out_Name,
+          "payment_In_Schema.status": 'Open',
         });
 
         if (!existingPaymentInSupplier) {
@@ -12004,6 +12030,8 @@ let azadPicture
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -12182,7 +12210,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "supplier" && azad_Visa_Reference_In.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_In !== azad_Visa_Reference_In) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "supplier" && azad_Visa_Reference_In.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_In_Name !== azad_Visa_Reference_In_Name) {
 
         for (const agent of azadSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -12245,7 +12273,10 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_In_Name,
+              azad_Visa_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
+              
           }
         );
 
@@ -12271,6 +12302,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -12436,7 +12469,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_In_Name,
+              azad_Visa_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -12462,6 +12497,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -12742,7 +12779,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "agent" && azad_Visa_Reference_In.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_In !== azad_Visa_Reference_In) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "agent" && azad_Visa_Reference_In.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_In_Name !== azad_Visa_Reference_In_Name) {
 
         for (const agent of azadAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -12804,7 +12841,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_In_Name,
+              azad_Visa_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -12829,7 +12868,9 @@ let azadPicture
                 ? azad_Visa_Purchase_Rate_Oth_Cur
                 : 0,
 
-              curr_Country: cur_Country_One,
+              curr_Country: cur_Country_Two,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -12995,7 +13036,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_In_Name,
+              azad_Visa_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -13020,7 +13063,10 @@ let azadPicture
                 ? azad_Visa_Purchase_Rate_Oth_Cur
                 : 0,
 
-              curr_Country: cur_Country_One,
+              curr_Country: cur_Country_Two,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
+
               persons: [
                 {
                   name,
@@ -13294,7 +13340,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_In_Name,
+              azad_Visa_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -13320,6 +13368,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -13439,7 +13489,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_In_Name,
+              azad_Visa_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -13463,8 +13515,9 @@ let azadPicture
               remaining_Curr: azad_Visa_Purchase_Rate_Oth_Cur
                 ? azad_Visa_Purchase_Rate_Oth_Cur
                 : 0,
-
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -13640,7 +13693,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "supplier" && azad_Visa_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_Out !== azad_Visa_Reference_Out) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "supplier" && azad_Visa_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_Out_Name !== azad_Visa_Reference_Out_Name) {
 
         for (const agent of azadSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -13702,7 +13755,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_Out_Name,
+              azad_Visa_Reference_Out_Name,
+              "payment_In_Schema.status":
+              'Open',
           }
         );
 
@@ -13728,6 +13783,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -13892,7 +13949,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_Out_Name,
+              azad_Visa_Reference_Out_Name,
+              "payment_In_Schema.status":
+              'Open',
           }
         );
 
@@ -13918,6 +13977,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -14201,7 +14262,7 @@ let azadPicture
 
 
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "agent" && azad_Visa_Reference_Out.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_Out !== azad_Visa_Reference_Out) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "agent" && azad_Visa_Reference_Out.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_Out_Name !== azad_Visa_Reference_Out_Name) {
 
 
         for (const agent of azadAgents){
@@ -14264,7 +14325,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_Out_Name,
+              azad_Visa_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -14290,6 +14353,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -14454,7 +14519,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_Out_Name,
+              azad_Visa_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -14480,6 +14547,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -14755,7 +14824,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadSupplier.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_Out_Name,
+              azad_Visa_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -14781,6 +14852,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -14900,7 +14973,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await AzadAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.azad_Visa_Reference_Out_Name,
+              azad_Visa_Reference_Out_Name,
+            "payment_In_Schema.status":
+            'Open',
           }
         );
 
@@ -14926,6 +15001,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -15102,7 +15179,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "supplier" && ticket_Reference_In.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_In !== ticket_Reference_In) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "supplier" && ticket_Reference_In.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_In_Name !== ticket_Reference_In_Name) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -15164,7 +15241,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketSuppliers.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.ticket_Reference_In_Name,
+              ticket_Reference_In_Name,
+              "payment_Out_Schema.status":
+              'Open',
           }
         );
 
@@ -15190,6 +15269,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -15355,7 +15436,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.ticket_Reference_In_Name,
+             ticket_Reference_In_Name,
+              "payment_Out_Schema.status":
+             "Open"
           }
         );
 
@@ -15381,6 +15464,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -15661,7 +15746,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "agent" && ticket_Reference_In.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_In !== ticket_Reference_In) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "agent" && ticket_Reference_In.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_In_Name !== ticket_Reference_In_Name) {
 
        for (const agent of ticketAgents){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -15723,7 +15808,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.ticket_Reference_In_Name,
+              ticket_Reference_In_Name,
+              "payment_Out_Schema.status":
+              'Open',
           }
         );
 
@@ -15749,6 +15836,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -15914,12 +16003,14 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketSuppliers.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.ticket_Reference_In_Name,
+              ticket_Reference_In_Name,
+              "payment_Out_Schema.status":
+              'Open',
           }
         );
 
         if (!existingPaymentOutAzadSupplier) {
-          // If the supplier does not exist, create a new one
+          
           const newPaymentOutAzadSupplier = new TicketSuppliers({
             payment_Out_Schema: {
               supplier_Id: entryToUpdate._id,
@@ -15940,6 +16031,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:ticket_Reference_In_Name,
+              closing:0,
               persons: [
                 {
                   name,
@@ -16214,7 +16307,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketSuppliers.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.ticket_Reference_In_Name,
+              ticket_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -16240,6 +16335,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -16359,7 +16456,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.ticket_Reference_In_Name,
+              ticket_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -16385,6 +16484,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -16560,7 +16661,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "supplier" && ticket_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_Out !== ticket_Reference_Out) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "supplier" && ticket_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_Out_Name !== ticket_Reference_Out_Name) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -16622,7 +16723,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketSuppliers.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.ticket_Reference_Out_Name,
+             ticket_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -16648,6 +16751,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -16812,7 +16917,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.ticket_Reference_Out_Name,
+              ticket_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -16838,6 +16945,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -17119,7 +17228,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "agent" && ticket_Reference_Out.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_Out !== ticket_Reference_Out) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "agent" && ticket_Reference_Out.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_Out_Name !== ticket_Reference_Out_Name) {
 
 
         for (const agent of ticketAgents){
@@ -17182,7 +17291,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.ticket_Reference_Out_Name,
+              ticket_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -17208,6 +17319,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -17372,7 +17485,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketSuppliers.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.ticket_Reference_Out_Name,
+              ticket_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -17398,6 +17513,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -17671,7 +17788,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketSuppliers.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.ticket_Reference_Out_Name,
+              ticket_Reference_Out_Name,
+              "payment_In_Schema.status":
+              'Open',
           }
         );
 
@@ -17697,6 +17816,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -17816,7 +17937,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await TicketAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.ticket_Reference_Out_Name,
+              ticket_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -17842,6 +17965,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -18017,7 +18142,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "supplier" && visit_Reference_In.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_In !== visit_Reference_In) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "supplier" && visit_Reference_In.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_In_Name !== visit_Reference_In_Name) {
 
 
         for (const agent of visitSuppliers){
@@ -18080,7 +18205,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitSuppliers.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.visit_Reference_In_Name,
+              visit_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -18106,6 +18233,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -18271,7 +18400,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.visit_Reference_In_Name,
+              visit_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -18297,6 +18428,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -18577,7 +18710,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "agent" && visit_Reference_In.toLowerCase() === "agent" && entryToUpdate.visit_Reference_In !== visit_Reference_In) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "agent" && visit_Reference_In.toLowerCase() === "agent" && entryToUpdate.visit_Reference_In_Name !== visit_Reference_In_Name) {
 
         for (const agent of visitAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -18639,7 +18772,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.visit_Reference_In_Name,
+              visit_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -18665,6 +18800,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -18829,7 +18966,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitSuppliers.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.visit_Reference_In_Name,
+              visit_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -18855,6 +18994,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -19128,7 +19269,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitSuppliers.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.visit_Reference_In_Name,
+              visit_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -19154,6 +19297,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -19273,7 +19418,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitAgents.findOne(
           {
             "payment_Out_Schema.supplierName":
-              entryToUpdate.visit_Reference_In_Name,
+              visit_Reference_In_Name,
+              "payment_Out_Schema.status":
+              "Open",
           }
         );
 
@@ -19299,6 +19446,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Purchase_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -19474,7 +19623,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "supplier" && visit_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_Out !== visit_Reference_Out) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "supplier" && visit_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_Out_Name !== visit_Reference_Out_Name) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -19536,7 +19685,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitSuppliers.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.visit_Reference_Out_Name,
+              visit_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -19562,6 +19713,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -19726,7 +19879,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.visit_Reference_Out_Name,
+              visit_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -19752,6 +19907,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -20033,7 +20190,7 @@ let azadPicture
         }
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "agent" && visit_Reference_Out.toLowerCase() === "agent" && entryToUpdate.visit_Reference_Out !== visit_Reference_Out) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "agent" && visit_Reference_Out.toLowerCase() === "agent" && entryToUpdate.visit_Reference_Out_Name !== visit_Reference_Out_Name) {
 
         for (const agent of visitAgents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -20095,7 +20252,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.visit_Reference_Out_Name,
+              visit_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -20121,6 +20280,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -20286,7 +20447,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitSuppliers.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.visit_Reference_Out_Name,
+              visit_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -20312,6 +20475,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -20586,7 +20751,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitSuppliers.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.visit_Reference_Out_Name,
+              visit_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -20612,6 +20779,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -20731,7 +20900,9 @@ let azadPicture
         const existingPaymentOutAzadSupplier = await VisitAgents.findOne(
           {
             "payment_In_Schema.supplierName":
-              entryToUpdate.visit_Reference_Out_Name,
+              visit_Reference_Out_Name,
+              "payment_In_Schema.status":
+              "Open",
           }
         );
 
@@ -20757,6 +20928,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_One,
+              opening:azad_Visa_Sales_PKR,
+              closing:0,
               persons: [
                 {
                   name,
@@ -20960,6 +21133,7 @@ let azadPicture
         // Check if the supplier with the given name exists
         const existingPaymentOutSupplier = await Protector.findOne({
           "payment_Out_Schema.supplierName": protector_Reference_In_Name,
+          "payment_Out_Schema.status": "Open",
         });
 
         if (!existingPaymentOutSupplier) {
@@ -20983,6 +21157,8 @@ let azadPicture
                 : 0,
 
               curr_Country: cur_Country_Two,
+              opening:protector_Price_In,
+              closing:0,
               persons: [
                 {
                   name,
@@ -21155,6 +21331,7 @@ let azadPicture
     res.status(500).json({ message: error.message });
   }
 }
+
 module.exports = {
   addEntry,
   getEntry,

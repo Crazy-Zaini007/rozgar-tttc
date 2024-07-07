@@ -40,8 +40,10 @@ const Payment_InSchema = new mongoose.Schema(
       default: 0,
     },
 
+
     curr_Country: {
       type: String,
+
     },
     status:{
       type:String,
@@ -206,6 +208,10 @@ const Payment_InSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        cash_Out: {
+          type: Number,
+          default: 0,
+        },
         payment_In_Curr: {
           type: String,
         },
@@ -251,16 +257,21 @@ const Payment_InSchema = new mongoose.Schema(
             },
             flight_Date: {
               type: String,
-    
             },
             visa_Amount_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Paid_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Remain_PKR: {
               type: Number
@@ -272,18 +283,28 @@ const Payment_InSchema = new mongoose.Schema(
 
             visa_Curr_Amount: {
               type: Number,
+              default: 0,
+
             },
             past_Paid_Curr: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Curr_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
 
             past_Remain_Curr: {
               type: Number
             },
             new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+            cash_Out: {
               type: Number,
               default: 0,
             },
@@ -300,7 +321,7 @@ const Payment_InSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-//Visit Agent Payment_Out Schema
+//Ticket Supplier Payment Out Schema
 const Payment_OutSchema = new mongoose.Schema(
   {
     supplier_Id: {
@@ -506,6 +527,10 @@ const Payment_OutSchema = new mongoose.Schema(
           type: Number,
           default: 0,
         },
+        cash_Out: {
+          type: Number,
+          default: 0,
+        },
         payment_Out_Curr: {
           type: String,
         },
@@ -554,16 +579,24 @@ const Payment_OutSchema = new mongoose.Schema(
     
             },
             visa_Amount_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Paid_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Remain_PKR: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Remain_PKR: {
               type: Number,
@@ -572,17 +605,29 @@ const Payment_OutSchema = new mongoose.Schema(
 
             visa_Curr_Amount: {
               type: Number,
+              default: 0,
+
             },
             new_Curr_Payment:{
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Paid_Curr: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             past_Remain_Curr: {
-              type: Number
+              type: Number,
+              default: 0,
+
             },
             new_Remain_Curr: {
+              type: Number,
+              default: 0,
+            },
+            cash_Out: {
               type: Number,
               default: 0,
             },
@@ -597,6 +642,7 @@ const Payment_OutSchema = new mongoose.Schema(
   },
   { timestamps: true}
 )
+
 
 // Visit Agent Schema
 
