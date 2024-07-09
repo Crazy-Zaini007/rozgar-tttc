@@ -22,6 +22,7 @@ import TicketHook from '../hooks/ticketHooks/TicketHook';
 import VisitHook from '../hooks/visitsHooks/VisitHook';
 import CDWCHook from '../hooks/creditsDebitsWCHooks/CDWCHook'
 import CPPHook from '../hooks/settingHooks/CPPHook';
+import Entry1 from './candDoubleEntry/Entry1'
 
 import CreditorSupplierHook from '../hooks/settingHooks/CreditorSupplierHook';
 import CDWOCHook from '../hooks/creditsDebitsWOCHooks/CDWOCHook'

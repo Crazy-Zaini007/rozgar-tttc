@@ -974,12 +974,15 @@ const updateSupPaymentInPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
+        newStatus
       } = req.body;
 
       let entryMode;
 
       const existingSupplier = await TicketSuppliers.findOne({
         "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.supplierName": newStatus,
+
       });
 
       if (existingSupplier) {
@@ -2535,7 +2538,7 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
   }
 };
 
-// Updating Payments in Person
+// Updating Payments Out Person
 
 const updateSupPaymentOutPerson = async (req, res) => {
   const userId = req.user._id;
@@ -2564,12 +2567,15 @@ const updateSupPaymentOutPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
+        newStatus
       } = req.body;
 
       let entryMode;
 
       const existingSupplier = await TicketSuppliers.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.supplierName": newStatus,
+
       });
 
       if (existingSupplier) {

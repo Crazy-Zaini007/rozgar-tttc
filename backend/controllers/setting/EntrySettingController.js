@@ -17185,7 +17185,7 @@ const deleteExpenseCategory = async (req, res) => {
 
         }
 
-                const deleteExpCategory = await ExpenseCategories.findById(myId);
+                const deleteExpCategory = await ExpenseCategories.findByIdAndDelete(myId);
                     
                   res.status(200).json({  message: `Expense Category deleted successfully` })
               }

@@ -87,6 +87,7 @@ export default function CandWisePaymentOutReports() {
         <th>Payment Type</th>
         <th>Slip No</th>
         <th>Cash Out</th>
+        <th>Cash Out Return</th>
         <th>Remaining</th>
         <th>Details</th>
         <th>Candidates</th>
@@ -108,6 +109,7 @@ export default function CandWisePaymentOutReports() {
           <td>${String(entry.payment_Type)}</td>
           <td>${String(entry.slip_No)}</td>
           <td>${String(entry.payment_Out||0)}</td>
+          <td>${String(entry.cash_Out||0)}</td>
           <td>${String(entry.remaining||0)}</td>
           <td>${String(entry.details)}</td>
           <td>${String(entry.payments.length)}</td>
@@ -179,6 +181,7 @@ export default function CandWisePaymentOutReports() {
         Payment_Type: payments.payment_Type,
         Slip_No: payments.slip_No,
         Cash_Out: payments.payment_Out,
+        Cash_Retrun: payments.cash_Out,
         Remaining: payments.remaining,
         Details: payments.details,
         Candidates: payments.payments.length,
@@ -311,6 +314,7 @@ export default function CandWisePaymentOutReports() {
                               <TableCell className='label border'>Payment Type</TableCell>
                               <TableCell className='label border'>Slip No</TableCell>
                               <TableCell className='label border'>Cash Out</TableCell>
+                              <TableCell className='label border'>Cash Out Return</TableCell>
                               {show && 
                               <>
                               <TableCell className='label border' >Curr Rate</TableCell>
@@ -345,6 +349,8 @@ export default function CandWisePaymentOutReports() {
                                     <TableCell className='border data_td text-center'>{cash.payment_Type}</TableCell>
                                     <TableCell className='border data_td text-center'>{cash?.slip_No}</TableCell>
                                     <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{cash.payment_Out}</TableCell>
+                                    <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down text-warning text-bold"></i><i className="fa-solid fa-arrow-up  text-warning text-bold"></i>{cash.cash_Out}</TableCell>
+
                                     {show &&
                                        <>
                                       <TableCell className='border data_td text-center'>{Math.round(cash?.curr_Rate||0)}</TableCell>
@@ -383,13 +389,22 @@ export default function CandWisePaymentOutReports() {
                             <TableRow>
                               <TableCell colSpan={12}></TableCell>
                               <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                              <TableCell className='border data_td text-center bg-success text-white'>
+                              <TableCell className='border data_td text-center bg-danger text-white'>
                             {/* Calculate the total sum of payment_Out */}
                             {filteredPayments &&  filteredPayments.length > 0 &&
                               filteredPayments
                                 .filter(entry => (entry.type.toLowerCase().includes('cand')&&entry.type.toLowerCase().includes('out')))
                                 .reduce((total, entry) => {
                                   return total + (entry.payment_Out || 0);
+                                }, 0)}
+                          </TableCell>
+                          <TableCell className='border data_td text-center bg-warning text-white'>
+                            {/* Calculate the total sum of payment_Out */}
+                            {filteredPayments &&  filteredPayments.length > 0 &&
+                              filteredPayments
+                                .filter(entry => (entry.type.toLowerCase().includes('cand')&&entry.type.toLowerCase().includes('out')))
+                                .reduce((total, entry) => {
+                                  return total + (entry.cash_Out || 0);
                                 }, 0)}
                           </TableCell>
                           {show &&

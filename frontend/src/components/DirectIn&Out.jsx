@@ -10,6 +10,9 @@ import DirectPaymentIn from './DirectPaymentIn';
 import DirectPaymentOut from './DirectPaymentOut';
 import CashInHandHook from '../hooks/cashInHandHooks/CashInHandHook'
 import { useAuthContext } from "../hooks/userHooks/UserAuthHook";
+import Entry1 from './candDoubleEntry/Entry1'
+import Entry2 from './candDoubleEntry/Entry2'
+
 
 export default function DirectInOut() {
   const { user } = useAuthContext();
@@ -88,11 +91,11 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
         <div className="d-flex payment_form p-0 m-0">
           
             <div className="d-flex overflow-x-auto">
-                <div className="flex-grow-1 p-0 m-0">
-                    <DirectPaymentIn />
+                <div className="flex-grow-1 p-1 m-0 border-end">
+                    <Entry1 />
                 </div>
-                <div className="flex-grow-1 p-0 m-0">
-                    <DirectPaymentOut />
+                <div className="flex-grow-1 p-1 m-0">
+                    <Entry2 />
                 </div>
             </div>
             <div className="col-md-2 col-sm-12 p-0 m-0 total_cash">

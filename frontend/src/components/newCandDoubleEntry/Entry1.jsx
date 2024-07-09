@@ -526,8 +526,8 @@ let totalCurrency=(totalPayments/totalCurrRate).toFixed(2)
    <>
    
   
-    <TableContainer  className="mb-1">
-    <div className="col-md-12 ">
+    <TableContainer  className="mt-1">
+    <div className="col-md-12 col-md-12 p-0 border-0 border-bottom border-top">
       {!option && (
         <>
           <form className="py-3 px-2" onSubmit={(type==='Agent'?handleAgentForm:type==="Supplier"&& handleSupplierForm)}>

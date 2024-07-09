@@ -48,7 +48,6 @@ const getAllPayments = async (req, res) => {
     const ticketCandidates = await TicketCandidates.find();
     const visitCandidates = await VisitCandidates.find();
     const cashInHand = await CashInHand.find();
-    const cdwocs = await CDWOC.find();
     const cdwcs = await CDWC.find();
     const assets = await Assets.find();
     const expenses = await Expenses.find();
@@ -938,6 +937,7 @@ const getTotalPayments = async (req, res) => {
     const employees = await Employees.find();
     const expenses = await Expenses.find();
     const cdwcs = await CDWC.find();
+    const cdwocs = await CDWOC.find();
     const assets = await Assets.find();
     // Initialize variables to store total payments
     let totalPaymentIn = 0;
@@ -958,6 +958,7 @@ const getTotalPayments = async (req, res) => {
 
           for (const payment of item[schemaType].candPayments) {
             totalPaymentIn += payment.payment_In || 0;
+            totalPaymentOut += payment.cash_Out || 0;
           
           
         }
@@ -976,7 +977,7 @@ const getTotalPayments = async (req, res) => {
         }
       }
     }
-
+    
    
 
     for (const asset of assets) {
@@ -1006,8 +1007,8 @@ const getTotalPayments = async (req, res) => {
           }
 
           for (const payment of item[schemaType].candPayments) {
-            
-              totalPaymentOut += payment.payment_Out || 0;
+               totalPaymentIn += payment.cash_Out || 0;  
+               totalPaymentOut += payment.payment_Out || 0;
           
           }
          
@@ -1029,20 +1030,7 @@ const getTotalPayments = async (req, res) => {
       }
     }
 
-    for (const cdwoc of cdwocs) {
-      if (cdwoc.payment_In_Schema && cdwoc.payment_In_Schema.payment) {
-        const payments = cdwoc.payment_In_Schema.payment;
-        if (payments) {
-          for (const payment of payments) {
-           
-              totalPaymentOut += payment.payment_Out;
-
-            
-            
-          }
-        }
-      }
-    }
+   
 
     for (const asset of assets) {
       if (asset.payment_In_Schema && asset.payment_In_Schema.payment) {
@@ -1284,19 +1272,17 @@ const getTotalAdvancePayments = async (req, res) => {
     }
 
     for(const employee of employees){
-      if(employee.payments){
-        const allMonths=employee.payments
-        for (const month of allMonths){
-          if(month.payment && month.payment.length>0){
-            const payments= month.payment
+      if(employee.employeePayments && employee.employeePayments.length>0){
+          
+            const payments= employee.employeePayments
             for (const payment of payments){
               if(payment.payment_Type.toLowerCase() === "advance"){
             totalAdvancePaymentOut += payment.payment_Out;
                
               }
             }
-          }
-        }
+          
+        
       }
     }
 
@@ -2750,11 +2736,9 @@ const getNormalPayments = async (req, res) => {
 
   const employees=await Employees.find({})
   for(const employee of employees){
-    if(employee.payments){
-      const allMonths=employee.payments
-      for (const month of allMonths){
-        if(month.payment && month.payment.length>0){
-          const payments= month.payment
+    if(employee.employeePayments && employee.employeePayments.length>0){
+        
+          const payments= employee.employeePayments
           for (const payment of payments){
             if(payment.payment_Type.toLowerCase() === "normal"){
               
@@ -2776,14 +2760,14 @@ const getNormalPayments = async (req, res) => {
             
               };
               mergedPayments.push(newPayment);
-            }
           }
-        }
-      }
+        
+      
     }
   }
+ 
 
-    
+}
     res.status(200).json({ data: mergedPayments });
   } catch (error) {
     console.error(error);
@@ -3353,39 +3337,39 @@ const getAdvancePayments = async (req, res) => {
    }
  
    const employees=await Employees.find({})
-   for(const employee of employees){
-     if(employee.payments){
-       const allMonths=employee.payments
-       for (const month of allMonths){
-         if(month.payment && month.payment.length>0){
-           const payments= month.payment
-           for (const payment of payments){
-             if(payment.payment_Type.toLowerCase() === "advance"){
-               
-               const newPayment = {
-               category:payment.category,
-               payment_Via:payment.payment_Via,
-               payment_Type:payment.payment_Type,
-               slip_No:payment.slip_No,
-               payment_Out:payment.payment_Out,
-               payment_In_Curr:payment.payment_Out_Curr,
-               slip_Pic:payment.slip_Pic,
-               details:payment.details,
-               date:payment.date,
-               curr_Rate:payment.curr_Rate,
-               curr_Amount:payment.curr_Amount,
-               invoice:payment.invoice,
-                 name: employee.employeeName,
-                 type: "Employee_Payment_Out",
-             
-               };
-               mergedPayments.push(newPayment);
-             }
-           }
-         }
-       }
-     }
-   }
+  for(const employee of employees){
+    if(employee.employeePayments && employee.employeePayments.length>0){
+        
+          const payments= employee.employeePayments
+          for (const payment of payments){
+            if(payment.payment_Type.toLowerCase() === "advance"){
+              
+              const newPayment = {
+              category:payment.category,
+              payment_Via:payment.payment_Via,
+              payment_Type:payment.payment_Type,
+              slip_No:payment.slip_No,
+              payment_Out:payment.payment_Out,
+              payment_In_Curr:payment.payment_Out_Curr,
+              slip_Pic:payment.slip_Pic,
+              details:payment.details,
+              date:payment.date,
+              curr_Rate:payment.curr_Rate,
+              curr_Amount:payment.curr_Amount,
+              invoice:payment.invoice,
+                name: employee.employeeName,
+                type: "Employee_Payment_Out",
+            
+              };
+              mergedPayments.push(newPayment);
+          }
+        
+      
+    }
+  }
+ 
+
+}
  
      
      res.status(200).json({ data: mergedPayments });

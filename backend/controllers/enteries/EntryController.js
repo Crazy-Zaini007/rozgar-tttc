@@ -424,7 +424,8 @@ const addEntry = async (req, res) => {
                     ? visa_Sale_Rate_Oth_Cur
                     : 0,
                   curr_Country: cur_Country_One,
-                  opening:visa_Sales_Rate_PKR,
+                opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0,
+                 
                   closing:0,
                   persons: [
                     {
@@ -584,7 +585,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
-                  opening:visa_Purchase_Rate_PKR,
+                  opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
                   closing:0,
                   persons: [
                     {
@@ -747,7 +748,8 @@ const addEntry = async (req, res) => {
                     ? visa_Sale_Rate_Oth_Cur
                     : 0,
                   curr_Country: cur_Country_One,
-                  opening:visa_Sales_Rate_PKR,
+                  opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0,
+                  
                   closing:0,
                   persons: [
                     {
@@ -904,7 +906,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
-                  opening:visa_Purchase_Rate_PKR,
+                  opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
                   closing:0,
                   persons: [
                     {
@@ -9343,6 +9345,3052 @@ let azadPicture
             .json({ message: "Error uploading Visit Section Picture" });
         }
       }
+
+      if((entryToUpdate.reference_In===''||entryToUpdate.reference_In===null ||entryToUpdate.reference_In===undefined) && reference_In.toLowerCase().includes('supplier')){
+        try {
+          let existingPaymentOutSupplier;
+          for(const supplier of suppliers){
+            if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+              existingPaymentOutSupplier=supplier
+              break
+            }
+          }
+         
+
+          if (!existingPaymentOutSupplier) {
+            // If the supplier does not exist, create a new one
+            const newPaymentOutSupplier = new Suppliers({
+              payment_Out_Schema: {
+                supplier_Id: newEntry._id,
+                supplierName: reference_In_Name,
+                total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+                remaining_Balance: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+
+                total_Visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+
+                curr_Country: cur_Country_Two,
+                opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
+                closing:0,
+                persons: [
+                  {
+                    name,
+                    picture:picture,
+                    pp_No,
+                    entry_Mode,
+                    contact,
+                    trade,
+                    country,
+                    visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                      ? visa_Purchase_Rate_PKR
+                      : 0,
+                    remaining_Price: visa_Purchase_Rate_PKR
+                      ? visa_Purchase_Rate_PKR
+                      : 0,
+
+                    visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+                    remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+
+                    company: company,
+                    final_Status: final_Status,
+                    flight_Date: flight_Date,
+                    entry_Date: new Date().toISOString().split("T")[0],
+                  },
+                ],
+              },
+            });
+
+            await newPaymentOutSupplier.save();
+            paymentInfo.newPaymentOutSupplier = newPaymentOutSupplier;
+          } else {
+            const existingPersonIndex =
+              existingPaymentOutSupplier.payment_Out_Schema.persons.findIndex(
+                (person) =>
+                  person.pp_No === pp_No &&
+                  person.entry_Mode === entry_Mode &&
+                  person.name === name
+              );
+
+            if (existingPersonIndex !== -1) {
+              existingPaymentOutSupplier.payment_Out_Schema.total_Visa_Price_Out_PKR +=
+                visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0;
+              existingPaymentOutSupplier.payment_Out_Schema.remaining_Balance +=
+                visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0;
+
+              existingPaymentOutSupplier.payment_Out_Schema.total_Visa_Price_Out_Curr +=
+                visa_Purchase_Rate_Oth_Cur ? visa_Purchase_Rate_Oth_Cur : 0;
+              existingPaymentOutSupplier.payment_Out_Schema.remaining_Curr +=
+                visa_Purchase_Rate_Oth_Cur ? visa_Purchase_Rate_Oth_Cur : 0;
+                
+            } else {
+              // If the person does not exist, add them to the persons array
+              existingPaymentOutSupplier.payment_Out_Schema.persons.push({
+                name,
+                pp_No,
+                picture:picture,
+                entry_Mode,
+                trade,
+                contact,
+                country,
+                visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+                remaining_Price: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+
+                visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              });
+
+              const newStatus = existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutSupplier.payment_Out_Schema.status;
+              const isStatusClosed = existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
+              // Update total_Visa_In_Price_PKR and other fields using $inc
+              await existingPaymentOutSupplier.updateOne({
+                $inc: {
+                  "payment_Out_Schema.total_Visa_Price_Out_PKR":
+                    visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0,
+                  "payment_Out_Schema.remaining_Balance":
+                    visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0,
+
+                  "payment_Out_Schema.total_Visa_Price_Out_Curr":
+                    visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+                  "payment_Out_Schema.remaining_Curr":
+                    visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+                   
+                },
+               
+              });
+            }
+
+            await existingPaymentOutSupplier.save();
+            paymentInfo.existingPaymentOutSupplier =
+              existingPaymentOutSupplier;
+          }
+        } catch (saveError) {
+          console.error(saveError);
+          res
+            .status(500)
+            .json({ message:saveError });
+        }
+      }
+
+
+      if((entryToUpdate.reference_In===''||entryToUpdate.reference_In===null ||entryToUpdate.reference_In===undefined) && reference_In.toLowerCase().includes('agent')){
+        try {
+          let existingPaymentOutAgent
+          for(const agent of agents){
+            if(agent.payment_Out_Schema && agent.payment_Out_Schema.supplierName.toLowerCase()===reference_In_Name.toLowerCase()&& agent.payment_Out_Schema.status.toLowerCase()==='open'){
+              existingPaymentOutAgent=agent
+              break
+            }
+          }
+    
+
+          if (!existingPaymentOutAgent) {
+            // If the supplier does not exist, create a new one
+            const newPaymentOutAgent = new Agents({
+              payment_Out_Schema: {
+                supplier_Id: newEntry._id,
+                supplierName: reference_In_Name,
+                total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+                remaining_Balance: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+
+                total_Visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+
+                curr_Country: cur_Country_Two,
+                opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
+                closing:0,
+                persons: [
+                  {
+                    name,
+                    pp_No,
+                    picture:picture,
+                    entry_Mode,
+                    contact,
+                    trade,
+                    country,
+                    visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                      ? visa_Purchase_Rate_PKR
+                      : 0,
+                    remaining_Price: visa_Purchase_Rate_PKR
+                      ? visa_Purchase_Rate_PKR
+                      : 0,
+
+                    visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+                    remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+
+                    company: company,
+                    final_Status: final_Status,
+                    flight_Date: flight_Date,
+                    entry_Date: new Date().toISOString().split("T")[0],
+                  },
+                ],
+              },
+            });
+
+            await newPaymentOutAgent.save();
+            paymentInfo.newPaymentOutAgent = newPaymentOutAgent;
+          } else {
+            const existingPersonIndex =
+              existingPaymentOutAgent.payment_Out_Schema.persons.findIndex(
+                (person) =>
+                  person.pp_No === pp_No &&
+                  person.entry_Mode === entry_Mode &&
+                  person.name === name
+              );
+
+            if (existingPersonIndex !== -1) {
+              existingPaymentOutAgent.payment_Out_Schema.total_Visa_Price_Out_PKR +=
+                visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0;
+              existingPaymentOutAgent.payment_Out_Schema.remaining_Balance +=
+                visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0;
+
+              existingPaymentOutAgent.payment_Out_Schema.total_Visa_Price_Out_Curr +=
+                visa_Purchase_Rate_Oth_Cur ? visa_Purchase_Rate_Oth_Cur : 0;
+              existingPaymentOutAgent.payment_Out_Schema.remaining_Curr +=
+                visa_Purchase_Rate_Oth_Cur ? visa_Purchase_Rate_Oth_Cur : 0;
+            } else {
+              // If the person does not exist, add them to the persons array
+              existingPaymentOutAgent.payment_Out_Schema.persons.push({
+                name,
+                pp_No,
+                picture:picture,
+                entry_Mode,
+                trade,
+                contact,
+                country,
+                visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+                remaining_Price: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+                visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              });
+
+              const newStatus = existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAgent.payment_Out_Schema.status;
+              const isStatusClosed = existingPaymentOutAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
+              // Update total_Visa_In_Price_PKR and other fields using $inc
+              await existingPaymentOutAgent.updateOne({
+               
+                $inc: {
+                  "payment_Out_Schema.total_Visa_Price_Out_PKR":
+                    visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0,
+                  "payment_Out_Schema.remaining_Balance":
+                    visa_Purchase_Rate_PKR ? visa_Purchase_Rate_PKR : 0,
+
+                  "payment_Out_Schema.total_Visa_Price_Out_Curr":
+                    visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+                  "payment_Out_Schema.remaining_Curr":
+                    visa_Purchase_Rate_Oth_Cur
+                      ? visa_Purchase_Rate_Oth_Cur
+                      : 0,
+                      
+
+                },
+              
+               
+              });
+            }
+
+            await existingPaymentOutAgent.save();
+            paymentInfo.existingPaymentOutAgent = existingPaymentOutAgent;
+          }
+        } catch (saveError) {
+          console.error(saveError);
+          res
+            .status(500)
+            .json({ message:saveError });
+        }
+      }
+
+      if((entryToUpdate.reference_In===''||entryToUpdate.reference_In===null ||entryToUpdate.reference_In===undefined) && reference_In.toLowerCase().includes('candidate')){
+        try {
+          // Check if the supplier with the given name exists
+          const existingPaymentOutCandidate = await Candidate.findOne({
+            "payment_Out_Schema.supplierName": name,
+            "payment_Out_Schema.entry_Mode": entry_Mode,
+            "payment_Out_Schema.pp_No": pp_No,
+          });
+
+          if (!existingPaymentOutCandidate) {
+            // If the supplier does not exist, create a new one
+            const newPaymentOutCandidate = new Candidate({
+              payment_Out_Schema: {
+                supplier_Id: newEntry._id,
+                supplierName: name,
+                picture:picture,
+                total_Visa_Price_Out_PKR: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+                remaining_Balance: visa_Purchase_Rate_PKR
+                  ? visa_Purchase_Rate_PKR
+                  : 0,
+
+                total_Visa_Price_Out_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Purchase_Rate_Oth_Cur
+                  ? visa_Purchase_Rate_Oth_Cur
+                  : 0,
+
+                curr_Country: cur_Country_Two,
+                pp_No: pp_No,
+                entry_Mode: entry_Mode,
+                company: company,
+                trade: trade,
+                country: country,
+                contact: contact,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+              },
+            });
+
+            await newPaymentOutCandidate.save();
+            paymentInfo.newPaymentOutCandidate = newPaymentOutCandidate;
+          }
+        } catch (saveError) {
+          console.error(saveError);
+          res
+            .status(500)
+            .json({ message:saveError });
+        }
+      }
+
+
+      if((entryToUpdate.reference_Out===''||entryToUpdate.reference_Out===null ||entryToUpdate.reference_Out===undefined) && reference_Out.toLowerCase().includes('supplier')){
+        try {
+          let existingPaymentInSupplier;
+          // Check if the supplier with the given name exists
+          for(const supplier of suppliers){
+            if(supplier.payment_In_Schema){
+              if(supplier.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+                existingPaymentInSupplier=supplier
+                break
+              }
+            }
+           
+          }
+         
+          if (!existingPaymentInSupplier) {
+            // If the supplier does not exist, create a new one
+            const newPaymentInSupplier = new Suppliers({
+              payment_In_Schema: {
+                supplier_Id: newEntry._id,
+                supplierName: reference_Out_Name,
+                total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                remaining_Balance: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+
+                total_Visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                curr_Country: cur_Country_One,
+              opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0,
+               
+                closing:0,
+                persons: [
+                  {
+                    name,
+                    pp_No,
+                    picture:picture,
+                    entry_Mode,
+                    contact,
+                    country,
+                    trade,
+                    visa_Price_In_PKR: visa_Sales_Rate_PKR
+                      ? visa_Sales_Rate_PKR
+                      : 0,
+                    remaining_Price: visa_Sales_Rate_PKR
+                      ? visa_Sales_Rate_PKR
+                      : 0,
+                    visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                      ? visa_Sale_Rate_Oth_Cur
+                      : 0,
+                    remaining_Curr: visa_Sale_Rate_Oth_Cur
+                      ? visa_Sale_Rate_Oth_Cur
+                      : 0,
+
+                    company: company,
+                    final_Status: final_Status,
+                    flight_Date: flight_Date,
+                    entry_Date: new Date().toISOString().split("T")[0],
+                  },
+                ],
+              },
+            });
+
+            await newPaymentInSupplier.save();
+            paymentInfo.newPaymentInSupplier = newPaymentInSupplier;
+          } else {
+            // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+            const existingPersonIndex =
+              existingPaymentInSupplier.payment_In_Schema.persons.findIndex(
+                (person) =>
+                  person.pp_No === pp_No &&
+                  person.entry_Mode === entry_Mode &&
+                  person.name === name
+              );
+
+            if (existingPersonIndex !== -1) {
+             
+              existingPaymentInSupplier.payment_In_Schema.total_Visa_Price_In_PKR +=
+                visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0;
+              existingPaymentInSupplier.payment_In_Schema.remaining_Balance +=
+                visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0;
+              existingPaymentInSupplier.payment_In_Schema.total_Visa_Price_In_Curr +=
+                visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0;
+              existingPaymentInSupplier.payment_In_Schema.remaining_Curr +=
+                visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0;
+                if(existingPaymentInSupplier.payment_In_Schema.status.toLowerCase()==='closed'){
+                  existingPaymentInSupplier.payment_In_Schema.status='Open'
+                  existingPaymentInSupplier.payment_In_Schema.opening+=existingPaymentInSupplier.payment_In_Schema.closing+visa_Sales_Rate_PKR
+                }
+            } else {
+              // If the person does not exist, add them to the persons array
+              existingPaymentInSupplier.payment_In_Schema.persons.push({
+                name,
+                pp_No,
+                picture:picture,
+                entry_Mode,
+                contact,
+                country,
+                trade,
+                visa_Price_In_PKR: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                remaining_Price: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              });
+
+              const newStatus = existingPaymentInSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInSupplier.payment_In_Schema.status;
+              const isStatusClosed = existingPaymentInSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
+              // Update total_Visa_Price_In_PKR and other fields using $inc
+              await existingPaymentInSupplier.updateOne({
+            
+                $inc: {
+                  "payment_In_Schema.total_Visa_Price_In_PKR":
+                    visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0,
+                  "payment_In_Schema.remaining_Balance": visa_Sales_Rate_PKR
+                    ? visa_Sales_Rate_PKR
+                    : 0,
+                  "payment_In_Schema.total_Visa_Price_In_Curr":
+                    visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0,
+                  "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
+                    ? visa_Sale_Rate_Oth_Cur
+                    : 0,
+                   
+                },
+                
+              })
+            }
+
+            await existingPaymentInSupplier.save();
+            paymentInfo.existingPaymentInSupplier = existingPaymentInSupplier;
+          }
+        } catch (saveError) {
+          console.error(saveError);
+          res
+            .status(500)
+            .json({ message:saveError });
+        }
+      }
+
+      if((entryToUpdate.reference_Out===''||entryToUpdate.reference_Out===null ||entryToUpdate.reference_Out===undefined) && reference_Out.toLowerCase().includes('agent')){
+        try {
+          let existingPaymentInAgent;
+          for(const agent of agents){
+            if(agent.payment_In_Schema && agent.payment_In_Schema.supplierName.toLowerCase()===reference_Out_Name.toLowerCase()&& agent.payment_In_Schema.status.toLowerCase()==='open'){
+              existingPaymentInAgent=agent
+              break
+            }
+          }
+         
+
+          if (!existingPaymentInAgent) {
+            // If the supplier does not exist, create a new one
+            const newPaymentInAgent = new Agents({
+              payment_In_Schema: {
+                supplier_Id: newEntry._id,
+                supplierName: reference_Out_Name,
+                total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                remaining_Balance: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+
+                total_Visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                curr_Country: cur_Country_One,
+                opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0, 
+                closing:0,
+                persons: [
+                  {
+                    name,
+                    pp_No,
+                    picture:picture,
+                    entry_Mode,
+                    contact,
+                    country,
+                    trade,
+                    visa_Price_In_PKR: visa_Sales_Rate_PKR
+                      ? visa_Sales_Rate_PKR
+                      : 0,
+                    remaining_Price: visa_Sales_Rate_PKR
+                      ? visa_Sales_Rate_PKR
+                      : 0,
+                    visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                      ? visa_Sale_Rate_Oth_Cur
+                      : 0,
+                    remaining_Curr: visa_Sale_Rate_Oth_Cur
+                      ? visa_Sale_Rate_Oth_Cur
+                      : 0,
+
+                    company: company,
+                    final_Status: final_Status,
+                    flight_Date: flight_Date,
+                    entry_Date: new Date().toISOString().split("T")[0],
+                  },
+                ],
+              },
+            });
+
+            await newPaymentInAgent.save();
+            paymentInfo.newPaymentInAgent = newPaymentInAgent;
+          } else {
+            // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+            const existingPersonIndex =
+              existingPaymentInAgent.payment_In_Schema.persons.findIndex(
+                (person) =>
+                  person.pp_No === pp_No &&
+                  person.entry_Mode === entry_Mode &&
+                  person.name === name
+              );
+
+            if (existingPersonIndex !== -1) {
+              // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+              existingPaymentInAgent.payment_In_Schema.total_Visa_Price_In_PKR +=
+                visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0;
+              existingPaymentInAgent.payment_In_Schema.remaining_Balance +=
+                visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0;
+
+              existingPaymentInAgent.payment_In_Schema.total_Visa_Price_In_Curr +=
+                visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0;
+              existingPaymentInAgent.payment_In_Schema.remaining_Curr +=
+                visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0;
+            } else {
+              // If the person does not exist, add them to the persons array
+              existingPaymentInAgent.payment_In_Schema.persons.push({
+                name,
+                pp_No,
+                picture:picture,
+                entry_Mode,
+                contact,
+                country,
+                trade,
+                visa_Price_In_PKR: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                remaining_Price: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              });
+
+              const newStatus = existingPaymentInAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAgent.payment_In_Schema.status;
+              const isStatusClosed = existingPaymentInAgent.payment_In_Schema.status.toLowerCase() === 'closed';
+              // Update total_Visa_Price_In_PKR and other fields using $inc
+              await existingPaymentInAgent.updateOne({
+              
+                $inc: {
+                  "payment_In_Schema.total_Visa_Price_In_PKR":
+                    visa_Sales_Rate_PKR ? visa_Sales_Rate_PKR : 0,
+                  "payment_In_Schema.remaining_Balance": visa_Sales_Rate_PKR
+                    ? visa_Sales_Rate_PKR
+                    : 0,
+
+                  "payment_In_Schema.total_Visa_Price_In_Curr":
+                    visa_Sale_Rate_Oth_Cur ? visa_Sale_Rate_Oth_Cur : 0,
+                  "payment_In_Schema.remaining_Curr": visa_Sale_Rate_Oth_Cur
+                    ? visa_Sale_Rate_Oth_Cur
+                    : 0,
+                },
+            
+              });
+            }
+
+            await existingPaymentInAgent.save();
+            paymentInfo.existingPaymentInAgent = existingPaymentInAgent;
+          }
+        } catch (saveError) {
+          console.error(saveError);
+          res
+            .status(500)
+            .json({ message:saveError });
+        }
+      }
+
+      if((entryToUpdate.reference_Out===''||entryToUpdate.reference_Out===null ||entryToUpdate.reference_Out===undefined) && reference_Out.toLowerCase().includes('candidate')){
+        try {
+          // Check if the supplier with the given name and entry mode exists
+          const existingPaymentInCandidate = await Candidate.findOne({
+            "payment_In_Schema.supplierName": name,
+            "payment_In_Schema.entry_Mode": entry_Mode,
+            "payment_In_Schema.pp_No": pp_No,
+          });
+
+          if (!existingPaymentInCandidate) {
+            // If the supplier does not exist with the same entry mode, create a new one
+            const newPaymentInCandidate = new Candidate({
+              payment_In_Schema: {
+                supplier_Id: newEntry._id,
+                supplierName: name,
+                picture:picture,
+                total_Visa_Price_In_PKR: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+                remaining_Balance: visa_Sales_Rate_PKR
+                  ? visa_Sales_Rate_PKR
+                  : 0,
+
+                total_Visa_Price_In_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+                remaining_Curr: visa_Sale_Rate_Oth_Cur
+                  ? visa_Sale_Rate_Oth_Cur
+                  : 0,
+
+                curr_Country: cur_Country_One,
+                pp_No: pp_No,
+                entry_Mode: entry_Mode,
+                company: company,
+                country: country,
+                trade: trade,
+                contact: contact,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            });
+
+            await newPaymentInCandidate.save();
+            paymentInfo.newPaymentInCandidate = newPaymentInCandidate;
+          }
+        } catch (saveError) {
+          console.error(saveError);
+          res
+            .status(500)
+            .json({ message:saveError });
+        }
+      }
+
+
+//Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Supplier
+if (
+  (entryToUpdate.azad_Visa_Reference_Out === "" ||
+    entryToUpdate.azad_Visa_Reference_Out === null||
+    entryToUpdate.azad_Visa_Reference_Out === undefined
+   ) &&
+   azad_Visa_Reference_Out.toLowerCase().includes('supplier')
+) {
+  try {
+    let existingPaymentInAzadSupplier
+    for (const supplier of azadSuppliers){
+      if(supplier.payment_In_Schema){
+        if(supplier.payment_In_Schema && supplier.payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+          existingPaymentInAzadSupplier = supplier;
+          break
+        }
+      }
+     }
+  
+    if (!existingPaymentInAzadSupplier) {
+      // If the supplier does not exist, create a new one
+      const newPaymentInAzadSupplier = new AzadSupplier({
+        payment_In_Schema: {
+          supplier_Id: newEntry._id,
+          supplierName: azad_Visa_Reference_Out_Name,
+          total_Azad_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+            ? azad_Visa_Sales_PKR
+            : 0,
+          remaining_Balance: azad_Visa_Sales_PKR
+            ? azad_Visa_Sales_PKR
+            : 0,
+
+          total_Azad_Visa_Price_In_Curr: azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0,
+          remaining_Curr: azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0,
+
+          curr_Country: cur_Country_One,
+          opening:azad_Visa_Sales_PKR,
+          closing:0,
+          persons: [
+            {
+              name,
+              picture:azad_Visa_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+                ? azad_Visa_Sales_PKR
+                : 0,
+              azad_Visa_Price_In_Curr: azad_Visa_Sales_Rate_Oth_Cur
+                ? azad_Visa_Sales_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            },
+          ],
+        },
+      });
+
+      await newPaymentInAzadSupplier.save();
+      paymentInfo.newPaymentInAzadSupplier = newPaymentInAzadSupplier;
+    } else {
+      // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+      const existingPersonIndex =
+        existingPaymentInAzadSupplier.payment_In_Schema.persons.findIndex(
+          (person) =>
+            person.pp_No === pp_No &&
+            person.entry_Mode === entry_Mode &&
+            person.name === name
+        );
+
+      if (existingPersonIndex !== -1) {
+        // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+        existingPaymentInAzadSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR +=
+          azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0;
+        existingPaymentInAzadSupplier.payment_In_Schema.remaining_Balance +=
+          azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0;
+
+        existingPaymentInAzadSupplier.payment_In_Schema.total_Azad_Visa_Price_In_Curr +=
+          azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0;
+        existingPaymentInAzadSupplier.payment_In_Schema.remaining_Curr +=
+          azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0;
+      } else {
+        // If the person does not exist, add them to the persons array
+        existingPaymentInAzadSupplier.payment_In_Schema.persons.push(
+          {
+            name,
+            picture:azad_Visa_Section_Picture,
+            pp_No,
+            entry_Mode,
+            trade,
+            country,
+            contact,
+            azad_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+              ? azad_Visa_Sales_PKR
+              : 0,
+            azad_Visa_Price_In_Curr: azad_Visa_Sales_Cur
+              ? azad_Visa_Sales_Cur
+              : 0,
+            company: company,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+            entry_Date: new Date().toISOString().split("T")[0],
+          }
+        );
+
+        const newStatus = existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAzadSupplier.payment_In_Schema.status;
+        const isStatusClosed = existingPaymentInAzadSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
+        // Update total_Visa_Price_In_PKR and other fields using $inc
+        await existingPaymentInAzadSupplier.updateOne({
+        
+          $inc: {
+            "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
+              azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0,
+            "payment_In_Schema.remaining_Balance":
+              azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0,
+
+            "payment_In_Schema.total_Azad_Visa_Price_In_Curr":
+              azad_Visa_Sales_Rate_Oth_Cur
+                ? azad_Visa_Sales_Rate_Oth_Cur
+                : 0,
+            "payment_In_Schema.remaining_Curr":
+              azad_Visa_Sales_Rate_Oth_Cur
+                ? azad_Visa_Sales_Rate_Oth_Cur
+                : 0,
+                
+          },
+         
+        });
+      }
+
+      await existingPaymentInAzadSupplier.save();
+      paymentInfo.existingPaymentInAzadSupplier =
+        existingPaymentInAzadSupplier;
+    }
+  } catch (saveError) {
+    console.error(saveError);
+    res
+      .status(500)
+      .json({ message:saveError });
+  }
+}
+
+//Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
+if (
+  (entryToUpdate.azad_Visa_Reference_In === "" ||
+    entryToUpdate.azad_Visa_Reference_In === null||
+    entryToUpdate.azad_Visa_Reference_In === undefined
+   ) &&
+   azad_Visa_Reference_In.toLowerCase().includes('supplier')
+) {
+  try {
+    let existingPaymentOutAzadSupplier
+    for (const supplier of azadSuppliers){
+      if(supplier.payment_Out_Schema){
+        if(supplier.payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+          existingPaymentOutAzadSupplier = supplier;
+          break
+        }
+      }
+     }
+   
+
+    if (!existingPaymentOutAzadSupplier) {
+      // If the supplier does not exist, create a new one
+      const newPaymentOutAzadSupplier = new AzadSupplier({
+        payment_Out_Schema: {
+          supplier_Id: newEntry._id,
+          supplierName: azad_Visa_Reference_In_Name,
+          total_Azad_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+            ? azad_Visa_Purchase_PKR
+            : 0,
+          remaining_Balance: azad_Visa_Purchase_PKR
+            ? azad_Visa_Purchase_PKR
+            : 0,
+
+          total_Azad_Visa_Price_Out_Curr:
+            azad_Visa_Purchase_Rate_Oth_Cur
+              ? azad_Visa_Purchase_Rate_Oth_Cur
+              : 0,
+          remaining_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0,
+
+          curr_Country: cur_Country_Two,
+          opening:azad_Visa_Purchase_PKR,
+          closing:0,
+          persons: [
+            {
+              name,
+              picture:azad_Visa_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+                ? azad_Visa_Purchase_PKR
+                : 0,
+              azad_Visa_Price_Out_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+                ? azad_Visa_Purchase_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            },
+          ],
+        },
+      });
+
+      await newPaymentOutAzadSupplier.save();
+      paymentInfo.newPaymentOutAzadSupplier = newPaymentOutAzadSupplier;
+    } else {
+      // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+      const existingPersonIndex =
+        existingPaymentOutAzadSupplier.payment_Out_Schema.persons.findIndex(
+          (person) =>
+            person.pp_No === pp_No &&
+            person.entry_Mode === entry_Mode &&
+            person.name === name
+        );
+
+      if (existingPersonIndex !== -1) {
+        // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+        existingPaymentOutAzadSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR +=
+          azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0;
+        existingPaymentOutAzadSupplier.payment_Out_Schema.remaining_Balance +=
+          azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0;
+
+        existingPaymentOutAzadSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr +=
+          azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0;
+        existingPaymentOutAzadSupplier.payment_Out_Schema.remaining_Curr +=
+          azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0;
+      } else {
+        // If the person does not exist, add them to the persons array
+        existingPaymentOutAzadSupplier.payment_Out_Schema.persons.push(
+          {
+            name,
+            picture:azad_Visa_Section_Picture,
+            pp_No,
+            entry_Mode,
+            trade,
+            country,
+            contact,
+            azad_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+              ? azad_Visa_Purchase_PKR
+              : 0,
+            azad_Visa_Price_Out_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+              ? azad_Visa_Purchase_Rate_Oth_Cur
+              : 0,
+            company: company,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+            entry_Date: new Date().toISOString().split("T")[0],
+          }
+        );
+        const newStatus = existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAzadSupplier.payment_Out_Schema.status;
+        const isStatusClosed = existingPaymentOutAzadSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
+        // Update total_Visa_Price_In_PKR and other fields using $inc
+        await existingPaymentOutAzadSupplier.updateOne({
+        
+          $inc: {
+            "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
+              azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0,
+            "payment_Out_Schema.remaining_Balance":
+              azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0,
+
+            "payment_Out_Schema.total_Azad_Visa_Price_Out_Curr":
+              azad_Visa_Purchase_Rate_Oth_Cur
+                ? azad_Visa_Purchase_Rate_Oth_Cur
+                : 0,
+            "payment_Out_Schema.remaining_Curr":
+              azad_Visa_Purchase_Rate_Oth_Cur
+                ? azad_Visa_Purchase_Rate_Oth_Cur
+                : 0,
+               
+          },
+          
+        });
+      }
+
+      await existingPaymentOutAzadSupplier.save();
+      paymentInfo.existingPaymentOutAzadSupplier =
+        existingPaymentOutAzadSupplier;
+    }
+  } catch (saveError) {
+    console.error(saveError);
+    res
+      .status(500)
+      .json({ message:saveError });
+  }
+}
+
+//Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
+if (
+  (entryToUpdate.azad_Visa_Reference_Out === "" ||
+    entryToUpdate.azad_Visa_Reference_Out === null||
+    entryToUpdate.azad_Visa_Reference_Out === undefined
+   ) &&
+   azad_Visa_Reference_Out.toLowerCase().includes('agent')
+) {
+  try {
+    let existingPaymentInAzadAgent
+    for (const supplier of azadAgents){
+      if(supplier.payment_In_Schema){
+        if(supplier.payment_In_Schema.supplierName.toLowerCase()===azad_Visa_Reference_Out_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+          existingPaymentInAzadAgent = supplier;
+          break
+        }
+      }
+     }
+    // Check if the supplier with the given name exists
+  
+    if (!existingPaymentInAzadAgent) {
+      // If the supplier does not exist, create a new one
+      const newPaymentInAzadAgent = new AzadAgents({
+        payment_In_Schema: {
+          supplier_Id: newEntry._id,
+          supplierName: azad_Visa_Reference_Out_Name,
+          total_Azad_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+            ? azad_Visa_Sales_PKR
+            : 0,
+          remaining_Balance: azad_Visa_Sales_PKR
+            ? azad_Visa_Sales_PKR
+            : 0,
+
+          total_Azad_Visa_Price_In_Curr: azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0,
+          remaining_Curr: azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0,
+
+          curr_Country: cur_Country_One,
+          opening:azad_Visa_Sales_PKR,
+          closing:0,
+          persons: [
+            {
+              name,
+              picture:azad_Visa_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+                ? azad_Visa_Sales_PKR
+                : 0,
+              azad_Visa_Price_In_Curr: azad_Visa_Sales_Rate_Oth_Cur
+                ? azad_Visa_Sales_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            },
+          ],
+        },
+      });
+
+      await newPaymentInAzadAgent.save();
+      paymentInfo.newPaymentInAzadAgent = newPaymentInAzadAgent;
+    } else {
+      // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+      const existingPersonIndex =
+        existingPaymentInAzadAgent.payment_In_Schema.persons.findIndex(
+          (person) =>
+            person.pp_No === pp_No &&
+            person.entry_Mode === entry_Mode &&
+            person.name === name
+        );
+
+      if (existingPersonIndex !== -1) {
+        // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+        existingPaymentInAzadAgent.payment_In_Schema.total_Azad_Visa_Price_In_PKR +=
+          azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0;
+        existingPaymentInAzadAgent.payment_In_Schema.remaining_Balance +=
+          azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0;
+
+        existingPaymentInAzadAgent.payment_In_Schema.total_Azad_Visa_Price_In_Curr +=
+          azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0;
+        existingPaymentInAzadAgent.payment_In_Schema.remaining_Curr +=
+          azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0;
+      } else {
+        // If the person does not exist, add them to the persons array
+        existingPaymentInAzadAgent.payment_In_Schema.persons.push(
+          {
+            name,
+            picture:azad_Visa_Section_Picture,
+            pp_No,
+            entry_Mode,
+            trade,
+            country,
+            contact,
+            azad_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+              ? azad_Visa_Sales_PKR
+              : 0,
+            azad_Visa_Price_In_Curr: azad_Visa_Sales_Cur
+              ? azad_Visa_Sales_Cur
+              : 0,
+            company: company,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+            entry_Date: new Date().toISOString().split("T")[0],
+          }
+        );
+        const newStatus = existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInAzadAgent.payment_In_Schema.status;
+        const isStatusClosed = existingPaymentInAzadAgent.payment_In_Schema.status.toLowerCase() === 'closed';
+        // Update total_Visa_Price_In_PKR and other fields using $inc
+        await existingPaymentInAzadAgent.updateOne({
+         
+          $inc: {
+            "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
+              azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0,
+            "payment_In_Schema.remaining_Balance":
+              azad_Visa_Sales_PKR ? azad_Visa_Sales_PKR : 0,
+
+            "payment_In_Schema.total_Azad_Visa_Price_In_Curr":
+              azad_Visa_Sales_Rate_Oth_Cur
+                ? azad_Visa_Sales_Rate_Oth_Cur
+                : 0,
+            "payment_In_Schema.remaining_Curr":
+              azad_Visa_Sales_Rate_Oth_Cur
+                ? azad_Visa_Sales_Rate_Oth_Cur
+                : 0,
+               
+          },
+          
+        });
+      }
+
+      await existingPaymentInAzadAgent.save();
+      paymentInfo.existingPaymentInAzadAgent =
+        existingPaymentInAzadAgent;
+    }
+  } catch (saveError) {
+    console.error(saveError);
+    res
+      .status(500)
+      .json({ message:saveError });
+  }
+}
+
+//Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
+if (
+  (entryToUpdate.azad_Visa_Reference_In === "" ||
+    entryToUpdate.azad_Visa_Reference_In === null||
+    entryToUpdate.azad_Visa_Reference_In === undefined
+   ) &&
+   azad_Visa_Reference_In.toLowerCase().includes('agent')
+) {
+  try {
+    let existingPaymentOutAzadAgent
+    for (const supplier of azadAgents){
+      if(supplier.payment_Out_Schema){
+        if(supplier.payment_Out_Schema.supplierName.toLowerCase()===azad_Visa_Reference_In_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+          existingPaymentOutAzadAgent = supplier;
+          break
+        }
+      }
+     }
+   
+    if (!existingPaymentOutAzadAgent) {
+      // If the supplier does not exist, create a new one
+      const newPaymentOutAzadAgent = new AzadAgents({
+        payment_Out_Schema: {
+          supplier_Id: newEntry._id,
+          supplierName: azad_Visa_Reference_In_Name,
+          total_Azad_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+            ? azad_Visa_Purchase_PKR
+            : 0,
+          remaining_Balance: azad_Visa_Purchase_PKR
+            ? azad_Visa_Purchase_PKR
+            : 0,
+
+          total_Azad_Visa_Price_Out_Curr:
+            azad_Visa_Purchase_Rate_Oth_Cur
+              ? azad_Visa_Purchase_Rate_Oth_Cur
+              : 0,
+          remaining_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0,
+
+          curr_Country: cur_Country_Two,
+          opening:azad_Visa_Purchase_PKR,
+          closing:0,
+          persons: [
+            {
+              name,
+              picture:azad_Visa_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+                ? azad_Visa_Purchase_PKR
+                : 0,
+              azad_Visa_Price_Out_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+                ? azad_Visa_Purchase_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            },
+          ],
+        },
+      });
+
+      await newPaymentOutAzadAgent.save();
+      paymentInfo.newPaymentOutAzadAgent = newPaymentOutAzadAgent;
+    } else {
+      // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+      const existingPersonIndex =
+        existingPaymentOutAzadAgent.payment_Out_Schema.persons.findIndex(
+          (person) =>
+            person.pp_No === pp_No &&
+            person.entry_Mode === entry_Mode &&
+            person.name === name
+        );
+
+      if (existingPersonIndex !== -1) {
+        // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+        existingPaymentOutAzadAgent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR +=
+          azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0;
+        existingPaymentOutAzadAgent.payment_Out_Schema.remaining_Balance +=
+          azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0;
+
+        existingPaymentOutAzadAgent.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr +=
+          azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0;
+        existingPaymentOutAzadAgent.payment_Out_Schema.remaining_Curr +=
+          azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0;
+      } else {
+        // If the person does not exist, add them to the persons array
+        existingPaymentOutAzadAgent.payment_Out_Schema.persons.push(
+          {
+            name,
+            picture:azad_Visa_Section_Picture,
+            pp_No,
+            entry_Mode,
+            trade,
+            country,
+            contact,
+            azad_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+              ? azad_Visa_Purchase_PKR
+              : 0,
+            azad_Visa_Price_Out_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+              ? azad_Visa_Purchase_Rate_Oth_Cur
+              : 0,
+            company: company,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+            entry_Date: new Date().toISOString().split("T")[0],
+          }
+        );
+
+        const newStatus = existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutAzadAgent.payment_Out_Schema.status;
+        const isStatusClosed = existingPaymentOutAzadAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
+        // Update total_Visa_Price_In_PKR and other fields using $inc
+        await existingPaymentOutAzadAgent.updateOne({
+          
+          $inc: {
+            "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
+              azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0,
+            "payment_Out_Schema.remaining_Balance":
+              azad_Visa_Purchase_PKR ? azad_Visa_Purchase_PKR : 0,
+
+            "payment_Out_Schema.total_Azad_Visa_Price_Out_Curr":
+              azad_Visa_Purchase_Rate_Oth_Cur
+                ? azad_Visa_Purchase_Rate_Oth_Cur
+                : 0,
+            "payment_Out_Schema.remaining_Curr":
+              azad_Visa_Purchase_Rate_Oth_Cur
+                ? azad_Visa_Purchase_Rate_Oth_Cur
+                : 0,
+                
+          },
+         
+        });
+      }
+
+      await existingPaymentOutAzadAgent.save();
+      paymentInfo.existingPaymentOutAzadAgent =
+        existingPaymentOutAzadAgent;
+    }
+  } catch (saveError) {
+    console.error(saveError);
+    res
+      .status(500)
+      .json({ message:saveError });
+  }
+}
+
+//Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
+if (
+  (entryToUpdate.azad_Visa_Reference_Out === "" ||
+    entryToUpdate.azad_Visa_Reference_Out === null||
+    entryToUpdate.azad_Visa_Reference_Out === undefined
+   ) &&
+   azad_Visa_Reference_Out.toLowerCase().includes('candidate')
+) {
+  try {
+    // Check if the supplier with the given name and entry mode exists
+    const existingPaymentInAzadCandidate = await AzadCandidate.findOne({
+      "payment_In_Schema.supplierName": name,
+      "payment_In_Schema.entry_Mode": entry_Mode,
+      "payment_In_Schema.pp_No": pp_No,
+    });
+
+    if (!existingPaymentInAzadCandidate) {
+      // If the supplier does not exist with the same entry mode, create a new one
+      const newPaymentInAzadCandidate = new AzadCandidate({
+        payment_In_Schema: {
+          supplier_Id: newEntry._id,
+          supplierName: name,
+          picture:azad_Visa_Section_Picture,
+          total_Visa_Price_In_PKR: azad_Visa_Sales_PKR
+            ? azad_Visa_Sales_PKR
+            : 0,
+          remaining_Balance: azad_Visa_Sales_PKR
+            ? azad_Visa_Sales_PKR
+            : 0,
+
+          total_Visa_Price_In_Curr: azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0,
+          remaining_Curr: azad_Visa_Sales_Rate_Oth_Cur
+            ? azad_Visa_Sales_Rate_Oth_Cur
+            : 0,
+
+          curr_Country: cur_Country_One,
+          pp_No: pp_No,
+          entry_Mode: entry_Mode,
+          company: company,
+          trade: trade,
+          country: country,
+          contact: contact,
+          final_Status: final_Status,
+          flight_Date: flight_Date,
+        },
+      });
+
+      await newPaymentInAzadCandidate.save();
+      paymentInfo.newPaymentInAzadCandidate = newPaymentInAzadCandidate;
+    } else {
+      // If the supplier exists with the same entry mode, handle accordingly (e.g., update, do nothing)
+      // You may choose to update or do nothing based on your specific requirements
+    }
+  } catch (saveError) {
+    console.error(saveError);
+    res
+      .status(500)
+      .json({ message:saveError });
+  }
+}
+
+//Saving the Entry Details to the Candidate Payment Out Section if reference_In==="Candidate"
+if (
+  (entryToUpdate.azad_Visa_Reference_In === "" ||
+    entryToUpdate.azad_Visa_Reference_In === null||
+    entryToUpdate.azad_Visa_Reference_In === undefined
+   ) &&
+   azad_Visa_Reference_In.toLowerCase().includes('candidate')
+) {
+  try {
+    // Check if the supplier with the given name exists
+    const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
+      {
+        "payment_Out_Schema.supplierName": name,
+        "payment_Out_Schema.entry_Mode": entry_Mode,
+        "payment_Out_Schema.pp_No": pp_No,
+      }
+    );
+
+    if (!existingPaymentOutAzadCandidate) {
+      // If the supplier does not exist, create a new one
+      const newPaymentOutAzadCandidate = new AzadCandidate({
+        payment_Out_Schema: {
+          supplier_Id: newEntry._id,
+          supplierName: name,
+          picture:azad_Visa_Section_Picture,
+          total_Visa_Price_Out_PKR: azad_Visa_Purchase_PKR
+            ? azad_Visa_Purchase_PKR
+            : 0,
+          remaining_Balance: azad_Visa_Purchase_PKR
+            ? azad_Visa_Purchase_PKR
+            : 0,
+
+          total_Visa_Price_Out_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0,
+          remaining_Curr: azad_Visa_Purchase_Rate_Oth_Cur
+            ? azad_Visa_Purchase_Rate_Oth_Cur
+            : 0,
+
+          curr_Country: cur_Country_Two,
+          pp_No: pp_No,
+          entry_Mode: entry_Mode,
+          company: company,
+          trade: trade,
+          country: country,
+          contact: contact,
+          final_Status: final_Status,
+          flight_Date: flight_Date,
+        },
+      });
+
+      await newPaymentOutAzadCandidate.save();
+      paymentInfo.newPaymentOutAzadCandidate =
+        newPaymentOutAzadCandidate;
+    }
+  } catch (saveError) {
+    console.error(saveError);
+    res
+      .status(500)
+      .json({ message:saveError });
+  }
+}
+
+
+  //Saving the Entry Details to the Ticket Payment In Section if azad_Visa_Reference_Out_Name is Supplier
+  if (
+    (entryToUpdate.ticket_Reference_Out === "" ||
+      entryToUpdate.ticket_Reference_Out === null||
+      entryToUpdate.ticket_Reference_Out === undefined
+     ) &&
+     ticket_Reference_Out.toLowerCase().includes('supplier')
+   
+  ) {
+    try {
+      let existingPaymentInTicketSupplier
+      for (const supplier of ticketSuppliers){
+        if(supplier.payment_In_Schema){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+            existingPaymentInTicketSupplier = supplier;
+            break
+          }
+        }
+       }
+     
+      if (!existingPaymentInTicketSupplier) {
+        // If the supplier does not exist, create a new one
+        const newPaymentInTicketSupplier = new TicketSuppliers({
+          payment_In_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: ticket_Reference_Out_Name,
+            total_Azad_Visa_Price_In_PKR: ticket_Sales_PKR
+              ? ticket_Sales_PKR
+              : 0,
+            remaining_Balance: ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+
+            total_Azad_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+              ? ticket_Sales_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: ticket_Sales_Rate_Oth_Cur
+              ? ticket_Sales_Rate_Oth_Cur
+              : 0,
+
+            curr_Country: cur_Country_One,
+            opening:ticket_Sales_PKR,
+            closing:0,
+            persons: [
+              {
+                name,
+                picture:ticket_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                country,
+                contact,
+                azad_Visa_Price_In_PKR: ticket_Sales_PKR
+                  ? ticket_Sales_PKR
+                  : 0,
+                azad_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+                  ? ticket_Sales_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentInTicketSupplier.save();
+        paymentInfo.newPaymentInTicketSupplier =
+          newPaymentInTicketSupplier;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentInTicketSupplier.payment_In_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentInTicketSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR +=
+            ticket_Sales_PKR ? ticket_Sales_PKR : 0;
+          existingPaymentInTicketSupplier.payment_In_Schema.remaining_Balance +=
+            ticket_Sales_PKR ? ticket_Sales_PKR : 0;
+
+          existingPaymentInTicketSupplier.payment_In_Schema.total_Azad_Visa_Price_In_Curr +=
+            ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0;
+          existingPaymentInTicketSupplier.payment_In_Schema.remaining_Curr +=
+            ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentInTicketSupplier.payment_In_Schema.persons.push(
+            {
+              name,
+              picture:ticket_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_In_PKR: ticket_Sales_PKR
+                ? ticket_Sales_PKR
+                : 0,
+              azad_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+                ? ticket_Sales_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+
+          const newStatus = existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInTicketSupplier.payment_In_Schema.status;
+          const isStatusClosed = existingPaymentInTicketSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentInTicketSupplier.updateOne({
+           
+            $inc: {
+              "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
+                ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+              "payment_In_Schema.remaining_Balance":
+                ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+
+              "payment_In_Schema.total_Azad_Visa_Price_In_Curr":
+                ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
+              "payment_In_Schema.remaining_Curr":
+                ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
+                
+            },
+           
+           
+          });
+        }
+
+        await existingPaymentInTicketSupplier.save();
+        paymentInfo.existingPaymentInTicketSupplier =
+          existingPaymentInTicketSupplier;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
+  if (
+    (entryToUpdate.ticket_Reference_In === "" ||
+      entryToUpdate.ticket_Reference_In === null||
+      entryToUpdate.ticket_Reference_In === undefined
+     ) &&
+     ticket_Reference_In.toLowerCase().includes('supplier')
+  ) {
+    try {
+      let existingPaymentOutTicketSupplier
+      for (const supplier of ticketSuppliers){
+        if(supplier.payment_Out_Schema){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+            existingPaymentOutTicketSupplier = supplier;
+            break
+          }
+        }
+       }
+     
+
+      if (!existingPaymentOutTicketSupplier) {
+        // If the supplier does not exist, create a new one
+        const newPaymentOutTicketSupplier = new TicketSuppliers({
+          payment_Out_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: ticket_Reference_In_Name,
+            total_Azad_Visa_Price_Out_PKR: ticket_Purchase_PKR
+              ? ticket_Purchase_PKR
+              : 0,
+            remaining_Balance: ticket_Purchase_PKR
+              ? ticket_Purchase_PKR
+              : 0,
+
+            total_Azad_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0,
+
+              curr_Country: cur_Country_Two,
+              opening:ticket_Purchase_PKR,
+              closing:0,
+            persons: [
+              {
+                name,
+                picture:ticket_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                contact,
+                country,
+                azad_Visa_Price_Out_PKR: ticket_Purchase_PKR
+                  ? ticket_Purchase_PKR
+                  : 0,
+                azad_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+                  ? ticket_Purchase_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentOutTicketSupplier.save();
+        paymentInfo.newPaymentOutTicketSupplier =
+          newPaymentOutTicketSupplier;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentOutTicketSupplier.payment_Out_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentOutTicketSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR +=
+            ticket_Purchase_PKR ? ticket_Purchase_PKR : 0;
+          existingPaymentOutTicketSupplier.payment_Out_Schema.remaining_Balance +=
+            ticket_Purchase_PKR ? ticket_Purchase_PKR : 0;
+
+          existingPaymentOutTicketSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr +=
+            ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0;
+          existingPaymentOutTicketSupplier.payment_Out_Schema.remaining_Curr +=
+            ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentOutTicketSupplier.payment_Out_Schema.persons.push(
+            {
+              name,
+              picture:ticket_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_Out_PKR: ticket_Purchase_PKR
+                ? ticket_Purchase_PKR
+                : 0,
+              azad_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+                ? ticket_Purchase_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+
+          const newStatus = existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutTicketSupplier.payment_Out_Schema.status;
+          const isStatusClosed = existingPaymentOutTicketSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentOutTicketSupplier.updateOne({
+           
+            $inc: {
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
+                ticket_Purchase_PKR ? ticket_Purchase_PKR : 0,
+              "payment_Out_Schema.remaining_Balance":
+                ticket_Purchase_PKR ? ticket_Purchase_PKR : 0,
+
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_Curr":
+                ticket_Purchase_Rate_Oth_Cur
+                  ? ticket_Purchase_Rate_Oth_Cur
+                  : 0,
+              "payment_Out_Schema.remaining_Curr":
+                ticket_Purchase_Rate_Oth_Cur
+                  ? ticket_Purchase_Rate_Oth_Cur
+                  : 0,
+                  
+            },
+           
+            
+          });
+        }
+
+        await existingPaymentOutTicketSupplier.save();
+        paymentInfo.existingPaymentOutTicketSupplier =
+          existingPaymentOutTicketSupplier;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
+  if (
+    (entryToUpdate.ticket_Reference_Out === "" ||
+      entryToUpdate.ticket_Reference_Out === null||
+      entryToUpdate.ticket_Reference_Out === undefined
+     ) &&
+     ticket_Reference_Out.toLowerCase().includes('agent')
+  ) {
+    try {
+      let existingPaymentInTicketAgent
+      for (const supplier of ticketAgents){
+        if(supplier.payment_In_Schema){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===ticket_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+            existingPaymentInTicketAgent = supplier;
+            break
+          }
+        }
+       }
+   
+
+      if (!existingPaymentInTicketAgent) {
+        // If the supplier does not exist, create a new one
+        const newPaymentInTicketAgent = new TicketAgents({
+          payment_In_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: ticket_Reference_Out_Name,
+            total_Azad_Visa_Price_In_PKR: ticket_Sales_PKR
+              ? ticket_Sales_PKR
+              : 0,
+            remaining_Balance: ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+
+            total_Azad_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+              ? ticket_Sales_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: ticket_Sales_Rate_Oth_Cur
+              ? ticket_Sales_Rate_Oth_Cur
+              : 0,
+
+              curr_Country: cur_Country_One,
+              opening:ticket_Sales_PKR,
+              closing:0,
+            persons: [
+              {
+                name,
+                picture:ticket_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                contact,
+                country,
+                azad_Visa_Price_In_PKR: ticket_Sales_PKR
+                  ? ticket_Sales_PKR
+                  : 0,
+                azad_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+                  ? ticket_Sales_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentInTicketAgent.save();
+        paymentInfo.newPaymentInTicketAgent = newPaymentInTicketAgent;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentInTicketAgent.payment_In_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentInTicketAgent.payment_In_Schema.total_Azad_Visa_Price_In_PKR +=
+            ticket_Sales_PKR ? ticket_Sales_PKR : 0;
+          existingPaymentInTicketAgent.payment_In_Schema.remaining_Balance +=
+            ticket_Sales_PKR ? ticket_Sales_PKR : 0;
+
+          existingPaymentInTicketAgent.payment_In_Schema.total_Azad_Visa_Price_In_Curr +=
+            ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0;
+          existingPaymentInTicketAgent.payment_In_Schema.remaining_Curr +=
+            ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentInTicketAgent.payment_In_Schema.persons.push(
+            {
+              name,
+              picture:ticket_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_In_PKR: ticket_Sales_PKR
+                ? ticket_Sales_PKR
+                : 0,
+              azad_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+                ? ticket_Sales_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+          const newStatus = existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInTicketAgent.payment_In_Schema.status;
+          const isStatusClosed = existingPaymentInTicketAgent.payment_In_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentInTicketAgent.updateOne({
+           
+            $inc: {
+              "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
+                ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+              "payment_In_Schema.remaining_Balance":
+                ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+
+              "payment_In_Schema.total_Azad_Visa_Price_In_Curr":
+                ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
+              "payment_In_Schema.remaining_Curr":
+                ticket_Sales_Rate_Oth_Cur ? ticket_Sales_Rate_Oth_Cur : 0,
+               
+            },
+           
+           
+          });
+        }
+
+        await existingPaymentInTicketAgent.save();
+        paymentInfo.existingPaymentInTicketAgent =
+          existingPaymentInTicketAgent;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
+  if (
+    (entryToUpdate.ticket_Reference_In === "" ||
+      entryToUpdate.ticket_Reference_In === null||
+      entryToUpdate.ticket_Reference_In === undefined
+     ) &&
+     ticket_Reference_In.toLowerCase().includes('agent')
+  ) {
+    try {
+
+      let existingPaymentOutTicketAgent
+      for (const supplier of ticketAgents){
+        if(supplier.payment_Out_Schema){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===ticket_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+            existingPaymentOutTicketAgent = supplier;
+            break
+          }
+        }
+       }
+     
+
+      if (!existingPaymentOutTicketAgent) {
+        // If the supplier does not exist, create a new one
+        const newPaymentOutTicketAgent = new TicketAgents({
+          payment_Out_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: ticket_Reference_In_Name,
+            total_Azad_Visa_Price_Out_PKR: ticket_Purchase_PKR
+              ? ticket_Purchase_PKR
+              : 0,
+            remaining_Balance: ticket_Purchase_PKR
+              ? ticket_Purchase_PKR
+              : 0,
+
+            total_Azad_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0,
+
+              curr_Country: cur_Country_Two,
+              opening:ticket_Purchase_PKR,
+              closing:0,
+            persons: [
+              {
+                name,
+                picture:ticket_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                contact,
+                country,
+                azad_Visa_Price_Out_PKR: ticket_Purchase_PKR
+                  ? ticket_Purchase_PKR
+                  : 0,
+                azad_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+                  ? ticket_Purchase_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentOutTicketAgent.save();
+        paymentInfo.newPaymentOutTicketAgent = newPaymentOutTicketAgent;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentOutTicketAgent.payment_Out_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentOutTicketAgent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR +=
+            ticket_Purchase_PKR ? ticket_Purchase_PKR : 0;
+          existingPaymentOutTicketAgent.payment_Out_Schema.remaining_Balance +=
+            ticket_Purchase_PKR ? ticket_Purchase_PKR : 0;
+
+          existingPaymentOutTicketAgent.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr +=
+            ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0;
+          existingPaymentOutTicketAgent.payment_Out_Schema.remaining_Curr +=
+            ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentOutTicketAgent.payment_Out_Schema.persons.push(
+            {
+              name,
+              picture:ticket_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_Out_PKR: ticket_Purchase_PKR
+                ? ticket_Purchase_PKR
+                : 0,
+              azad_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+                ? ticket_Purchase_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+
+          const newStatus = existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutTicketAgent.payment_Out_Schema.status;
+          const isStatusClosed = existingPaymentOutTicketAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentOutTicketAgent.updateOne({
+           
+            $inc: {
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
+                ticket_Purchase_PKR ? ticket_Purchase_PKR : 0,
+              "payment_Out_Schema.remaining_Balance":
+                ticket_Purchase_PKR ? ticket_Purchase_PKR : 0,
+
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_Curr":
+                ticket_Purchase_Rate_Oth_Cur
+                  ? ticket_Purchase_Rate_Oth_Cur
+                  : 0,
+              "payment_Out_Schema.remaining_Curr":
+                ticket_Purchase_Rate_Oth_Cur
+                  ? ticket_Purchase_Rate_Oth_Cur
+                  : 0,
+                 
+            },
+            
+          });
+        }
+
+        await existingPaymentOutTicketAgent.save();
+        paymentInfo.existingPaymentOutTicketAgent =
+          existingPaymentOutTicketAgent;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
+  if (
+    (entryToUpdate.ticket_Reference_Out === "" ||
+      entryToUpdate.ticket_Reference_Out === null||
+      entryToUpdate.ticket_Reference_Out === undefined
+     ) &&
+     ticket_Reference_Out.toLowerCase().includes('candidate')
+  ) {
+    try {
+      // Check if the supplier with the given name and entry mode exists
+      const existingPaymentInTicketCandidate =
+        await TicketCandidate.findOne({
+          "payment_In_Schema.supplierName": name,
+          "payment_In_Schema.entry_Mode": entry_Mode,
+          "payment_In_Schema.pp_No": pp_No,
+        });
+
+      if (!existingPaymentInTicketCandidate) {
+        // If the supplier does not exist with the same entry mode, create a new one
+        const newPaymentInTicketCandidate = new TicketCandidate({
+          payment_In_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: name,
+            picture:ticket_Section_Picture,
+            total_Visa_Price_In_PKR: ticket_Sales_PKR
+              ? ticket_Sales_PKR
+              : 0,
+            remaining_Balance: ticket_Sales_PKR ? ticket_Sales_PKR : 0,
+
+            total_Visa_Price_In_Curr: ticket_Sales_Rate_Oth_Cur
+              ? ticket_Sales_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: ticket_Sales_Rate_Oth_Cur
+              ? ticket_Sales_Rate_Oth_Cur
+              : 0,
+
+            curr_Country: cur_Country_One,
+            pp_No: pp_No,
+            entry_Mode: entry_Mode,
+            company: company,
+            trade: trade,
+            contact: contact,
+            country: country,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+          },
+        });
+
+        await newPaymentInTicketCandidate.save();
+        paymentInfo.newPaymentInTicketCandidate =
+          newPaymentInTicketCandidate;
+      } else {
+        // If the supplier exists with the same entry mode, handle accordingly (e.g., update, do nothing)
+        // You may choose to update or do nothing based on your specific requirements
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+
+  //Saving the Entry Details to the Candidate Payment Out Section if reference_In==="Candidate"
+  if (
+    (entryToUpdate.ticket_Reference_In === "" ||
+      entryToUpdate.ticket_Reference_In === null||
+      entryToUpdate.ticket_Reference_In === undefined
+     ) &&
+     ticket_Reference_In.toLowerCase().includes('candidate')
+  ) {
+    try {
+      // Check if the supplier with the given name exists
+      const existingPaymentOutTicketCandidate =
+        await TicketCandidate.findOne({
+          "payment_Out_Schema.supplierName": name,
+          "payment_Out_Schema.entry_Mode": entry_Mode,
+          "payment_Out_Schema.pp_No": pp_No,
+        });
+
+      if (!existingPaymentOutTicketCandidate) {
+        // If the supplier does not exist, create a new one
+        const newPaymentOutTicketCandidate = new TicketCandidate({
+          payment_Out_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: name,
+            total_Visa_Price_Out_PKR: ticket_Purchase_PKR
+              ? ticket_Purchase_PKR
+              : 0,
+            remaining_Balance: ticket_Purchase_PKR
+              ? ticket_Purchase_PKR
+              : 0,
+
+            total_Visa_Price_Out_Curr: ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: ticket_Purchase_Rate_Oth_Cur
+              ? ticket_Purchase_Rate_Oth_Cur
+              : 0,
+
+            curr_Country: cur_Country_Two,
+            pp_No: pp_No,
+            entry_Mode: entry_Mode,
+            company: company,
+            trade: trade,
+            country: country,
+            contact: contact,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+            entry_Date: new Date().toISOString().split("T")[0],
+          },
+        });
+
+        await newPaymentOutTicketCandidate.save();
+        paymentInfo.newPaymentOutTicketCandidate =
+          newPaymentOutTicketCandidate;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+
+
+   //Saving the Entry Details to the Ticket Payment In Section if azad_Visa_Reference_Out_Name is Supplier
+   if (
+    (entryToUpdate.visit_Reference_Out === "" ||
+      entryToUpdate.visit_Reference_Out === null||
+      entryToUpdate.visit_Reference_Out === undefined
+     ) &&
+     visit_Reference_Out.toLowerCase().includes('supplier')
+  ) {
+    try {
+      let existingPaymentInVisitSupplier
+      for (const supplier of visitSuppliers){
+        if(supplier.payment_In_Schema){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+            existingPaymentInVisitSupplier = supplier;
+            break
+          }
+        }
+       }
+     
+
+      if (!existingPaymentInVisitSupplier) {
+        // If the supplier does not exist, create a new one
+        const newPaymentInVisitSupplier = new VisitSuppliers({
+          payment_In_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: visit_Reference_Out_Name,
+            total_Azad_Visa_Price_In_PKR: visit_Sales_PKR
+              ? visit_Sales_PKR
+              : 0,
+            remaining_Balance: visit_Sales_PKR ? visit_Sales_PKR : 0,
+
+            total_Azad_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+              ? visit_Sales_Rate_Oth_Curr
+              : 0,
+            remaining_Curr: visit_Sales_Rate_Oth_Curr
+              ? visit_Sales_Rate_Oth_Curr
+              : 0,
+
+            curr_Country: cur_Country_One,
+            opening:visit_Sales_PKR,
+              closing:0,
+            persons: [
+              {
+                name,
+                picture:visit_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                contact,
+                country,
+                azad_Visa_Price_In_PKR: visit_Sales_PKR
+                  ? visit_Sales_PKR
+                  : 0,
+                azad_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+                  ? visit_Sales_Rate_Oth_Curr
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentInVisitSupplier.save();
+        paymentInfo.newPaymentInVisitSupplier = newPaymentInVisitSupplier;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentInVisitSupplier.payment_In_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentInVisitSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR +=
+            visit_Sales_PKR;
+          existingPaymentInVisitSupplier.payment_In_Schema.remaining_Balance +=
+            visit_Sales_PKR;
+
+          existingPaymentInVisitSupplier.payment_In_Schema.total_Azad_Visa_Price_In_Curr +=
+            visit_Sales_Rate_Oth_Curr;
+          existingPaymentInVisitSupplier.payment_In_Schema.remaining_Curr +=
+            visit_Sales_Rate_Oth_Curr;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentInVisitSupplier.payment_In_Schema.persons.push(
+            {
+              name,
+              picture:visit_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_In_PKR: visit_Sales_PKR
+                ? visit_Sales_PKR
+                : 0,
+              azad_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+                ? visit_Sales_Rate_Oth_Curr
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+          const newStatus = existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInVisitSupplier.payment_In_Schema.status;
+          const isStatusClosed = existingPaymentInVisitSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentInVisitSupplier.updateOne({
+           
+            $inc: {
+              "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
+                visit_Sales_PKR ? visit_Sales_PKR : 0,
+              "payment_In_Schema.remaining_Balance":
+                visit_Sales_PKR ? visit_Sales_PKR : 0,
+
+              "payment_In_Schema.total_Azad_Visa_Price_In_Curr":
+                visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
+              "payment_In_Schema.remaining_Curr":
+                visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
+               
+            },
+           
+          });
+        }
+
+        await existingPaymentInVisitSupplier.save();
+        paymentInfo.existingPaymentInVisitSupplier =
+          existingPaymentInVisitSupplier;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
+  if (
+    (entryToUpdate.visit_Reference_In === "" ||
+      entryToUpdate.visit_Reference_In === null||
+      entryToUpdate.visit_Reference_In === undefined
+     ) &&
+     visit_Reference_In.toLowerCase().includes('supplier')
+  ) {
+    try {
+
+      let existingPaymentOutVisitSupplier
+      for (const supplier of visitSuppliers){
+        if(supplier.payment_Out_Schema){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+            existingPaymentOutVisitSupplier = supplier;
+            break
+          }
+        }
+       }
+     
+      if (!existingPaymentOutVisitSupplier) {
+        // If the supplier does not exist, create a new one
+        const newPaymentOutVisitSupplier = new VisitSuppliers({
+          payment_Out_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: visit_Reference_In_Name,
+            total_Azad_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+              ? visit_Purchase_Rate_PKR
+              : 0,
+            remaining_Balance: visit_Purchase_Rate_PKR
+              ? visit_Purchase_Rate_PKR
+              : 0,
+
+            total_Azad_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+              ? visit_Purchase_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: visit_Purchase_Rate_Oth_Cur
+              ? visit_Purchase_Rate_Oth_Cur
+              : 0,
+
+              curr_Country: cur_Country_Two,
+              opening:visit_Purchase_Rate_PKR,
+              closing:0,
+            persons: [
+              {
+                name,
+                picture:visit_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                country,
+                contact,
+                azad_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+                  ? visit_Purchase_Rate_PKR
+                  : 0,
+                azad_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+                  ? visit_Purchase_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentOutVisitSupplier.save();
+        paymentInfo.newPaymentOutVisitSupplier =
+          newPaymentOutVisitSupplier;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentOutVisitSupplier.payment_Out_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentOutVisitSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR +=
+            visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0;
+          existingPaymentOutVisitSupplier.payment_Out_Schema.remaining_Balance +=
+            visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0;
+
+          existingPaymentOutVisitSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr +=
+            visit_Purchase_Rate_Oth_Cur ? visit_Purchase_Rate_Oth_Cur : 0;
+          existingPaymentOutVisitSupplier.payment_Out_Schema.remaining_Curr +=
+            visit_Purchase_Rate_Oth_Cur ? visit_Purchase_Rate_Oth_Cur : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentOutVisitSupplier.payment_Out_Schema.persons.push(
+            {
+              name,
+              picture:visit_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+                ? visit_Purchase_Rate_PKR
+                : 0,
+              azad_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+                ? visit_Purchase_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+
+          const newStatus = existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutVisitSupplier.payment_Out_Schema.status;
+          const isStatusClosed = existingPaymentOutVisitSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentOutVisitSupplier.updateOne({
+            $inc: {
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
+                visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0,
+              "payment_Out_Schema.remaining_Balance":
+                visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0,
+
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_Curr":
+                visit_Purchase_Rate_Oth_Cur
+                  ? visit_Purchase_Rate_Oth_Cur
+                  : 0,
+              "payment_Out_Schema.remaining_Curr":
+                visit_Purchase_Rate_Oth_Cur
+                  ? visit_Purchase_Rate_Oth_Cur
+                  : 0,
+                  
+            },
+           
+          });
+        }
+
+        await existingPaymentOutVisitSupplier.save();
+        paymentInfo.existingPaymentOutVisitSupplier =
+          existingPaymentOutVisitSupplier;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Azad Visa Payment In Section if azad_Visa_Reference_Out_Name is Agent
+  if (
+    (entryToUpdate.visit_Reference_Out === "" ||
+      entryToUpdate.visit_Reference_Out === null||
+      entryToUpdate.visit_Reference_Out === undefined
+     ) &&
+     visit_Reference_Out.toLowerCase().includes('agent')
+  ) {
+    try {
+
+      let existingPaymentInVisitAgent
+      for (const supplier of visitAgents){
+        if(supplier.payment_In_Schema){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===visit_Reference_Out_Name.toLowerCase()&& supplier.payment_In_Schema.status.toLowerCase()==='open'){
+            existingPaymentInVisitAgent = supplier;
+            break
+          }
+        }
+       }
+    
+      if (!existingPaymentInVisitAgent) {
+        // If the supplier does not exist, create a new one
+        const newPaymentInVisitAgent = new VisitAgents({
+          payment_In_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: visit_Reference_Out_Name,
+            total_Azad_Visa_Price_In_PKR: visit_Sales_PKR
+              ? visit_Sales_PKR
+              : 0,
+            remaining_Balance: visit_Sales_PKR ? visit_Sales_PKR : 0,
+
+            total_Azad_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+              ? visit_Sales_Rate_Oth_Curr
+              : 0,
+            remaining_Curr: visit_Sales_Rate_Oth_Curr
+              ? visit_Sales_Rate_Oth_Curr
+              : 0,
+
+            curr_Country: cur_Country_One,
+            opening:visit_Sales_PKR,
+            closing:0,
+            persons: [
+              {
+                name,
+                picture:visit_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                country,
+                contact,
+                azad_Visa_Price_In_PKR: visit_Sales_PKR
+                  ? visit_Sales_PKR
+                  : 0,
+                azad_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+                  ? visit_Sales_Rate_Oth_Curr
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentInVisitAgent.save();
+        paymentInfo.newPaymentInVisitAgent = newPaymentInVisitAgent;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentInVisitAgent.payment_In_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentInVisitAgent.payment_In_Schema.total_Azad_Visa_Price_In_PKR +=
+            visit_Sales_PKR ? visit_Sales_PKR : 0;
+          existingPaymentInVisitAgent.payment_In_Schema.remaining_Balance +=
+            visit_Sales_PKR ? visit_Sales_PKR : 0;
+
+          existingPaymentInVisitAgent.payment_In_Schema.total_Azad_Visa_Price_In_Curr +=
+            visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0;
+          existingPaymentInVisitAgent.payment_In_Schema.remaining_Curr +=
+            visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentInVisitAgent.payment_In_Schema.persons.push(
+            {
+              name,
+              picture:visit_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              contact,
+              country,
+              azad_Visa_Price_In_PKR: visit_Sales_PKR
+                ? visit_Sales_PKR
+                : 0,
+              azad_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+                ? visit_Sales_Rate_Oth_Curr
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+          const newStatus = existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInVisitAgent.payment_In_Schema.status;
+          const isStatusClosed = existingPaymentInVisitAgent.payment_In_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentInVisitAgent.updateOne({
+            $inc: {
+              "payment_In_Schema.total_Azad_Visa_Price_In_PKR":
+                visit_Sales_PKR ? visit_Sales_PKR : 0,
+              "payment_In_Schema.remaining_Balance": visit_Sales_PKR
+                ? visit_Sales_PKR
+                : 0,
+
+              "payment_In_Schema.total_Azad_Visa_Price_In_Curr":
+                visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
+              "payment_In_Schema.remaining_Curr":
+                visit_Sales_Rate_Oth_Curr ? visit_Sales_Rate_Oth_Curr : 0,
+                
+            },
+           
+          });
+        }
+
+        await existingPaymentInVisitAgent.save();
+        paymentInfo.existingPaymentInVisitAgent =
+          existingPaymentInVisitAgent;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Azad Supplier Payment Out Section if azad_Visa_Reference_In_Name is avialable
+  if (
+    (entryToUpdate.visit_Reference_In === "" ||
+      entryToUpdate.visit_Reference_In === null||
+      entryToUpdate.visit_Reference_In === undefined
+     ) &&
+     visit_Reference_In.toLowerCase().includes('agent')
+  ) {
+    try {
+
+      let existingPaymentOutVisitAgent
+      for (const supplier of visitAgents){
+        if(supplier.payment_Out_Schema){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===visit_Reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
+            existingPaymentOutVisitAgent = supplier;
+            break
+          }
+        }
+       }
+     
+
+      if (!existingPaymentOutVisitAgent) {
+        // If the supplier does not exist, create a new one
+        const newPaymentOutVisitAgent = new VisitAgents({
+          payment_Out_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: visit_Reference_In_Name,
+            total_Azad_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+              ? visit_Purchase_Rate_PKR
+              : 0,
+            remaining_Balance: visit_Purchase_Rate_PKR
+              ? visit_Purchase_Rate_PKR
+              : 0,
+
+            total_Azad_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+              ? visit_Purchase_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: visit_Purchase_Rate_Oth_Cur
+              ? visit_Purchase_Rate_Oth_Cur
+              : 0,
+              curr_Country: cur_Country_Two,
+              opening:visit_Purchase_Rate_PKR,
+              closing:0,
+            persons: [
+              {
+                name,
+                picture:visit_Section_Picture,
+                pp_No,
+                entry_Mode,
+                trade,
+                country,
+                contact,
+                azad_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+                  ? visit_Purchase_Rate_PKR
+                  : 0,
+                azad_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+                  ? visit_Purchase_Rate_Oth_Cur
+                  : 0,
+                company: company,
+                final_Status: final_Status,
+                flight_Date: flight_Date,
+                entry_Date: new Date().toISOString().split("T")[0],
+              },
+            ],
+          },
+        });
+
+        await newPaymentOutVisitAgent.save();
+        paymentInfo.newPaymentOutVisitAgent = newPaymentOutVisitAgent;
+      } else {
+        // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+        const existingPersonIndex =
+          existingPaymentOutVisitAgent.payment_Out_Schema.persons.findIndex(
+            (person) =>
+              person.pp_No === pp_No &&
+              person.entry_Mode === entry_Mode &&
+              person.name === name
+          );
+
+        if (existingPersonIndex !== -1) {
+          // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+          existingPaymentOutVisitAgent.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR +=
+            visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0;
+          existingPaymentOutVisitAgent.payment_Out_Schema.remaining_Balance +=
+            visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0;
+
+          existingPaymentOutVisitAgent.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr +=
+            visit_Purchase_Rate_Oth_Cur ? visit_Purchase_Rate_Oth_Cur : 0;
+          existingPaymentOutVisitAgent.payment_Out_Schema.remaining_Curr +=
+            visit_Purchase_Rate_Oth_Cur ? visit_Purchase_Rate_Oth_Cur : 0;
+        } else {
+          // If the person does not exist, add them to the persons array
+          existingPaymentOutVisitAgent.payment_Out_Schema.persons.push(
+            {
+              name,
+              picture:visit_Section_Picture,
+              pp_No,
+              entry_Mode,
+              trade,
+              country,
+              contact,
+              azad_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+                ? visit_Purchase_Rate_PKR
+                : 0,
+              azad_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+                ? visit_Purchase_Rate_Oth_Cur
+                : 0,
+              company: company,
+              final_Status: final_Status,
+              flight_Date: flight_Date,
+              entry_Date: new Date().toISOString().split("T")[0],
+            }
+          );
+
+          const newStatus = existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutVisitAgent.payment_Out_Schema.status;
+          const isStatusClosed = existingPaymentOutVisitAgent.payment_Out_Schema.status.toLowerCase() === 'closed';
+          // Update total_Visa_Price_In_PKR and other fields using $inc
+          await existingPaymentOutVisitAgent.updateOne({
+            $inc: {
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_PKR":
+                visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0,
+              "payment_Out_Schema.remaining_Balance":
+                visit_Purchase_Rate_PKR ? visit_Purchase_Rate_PKR : 0,
+
+              "payment_Out_Schema.total_Azad_Visa_Price_Out_Curr":
+                visit_Purchase_Rate_Oth_Cur
+                  ? visit_Purchase_Rate_Oth_Cur
+                  : 0,
+              "payment_Out_Schema.remaining_Curr":
+                visit_Purchase_Rate_Oth_Cur
+                  ? visit_Purchase_Rate_Oth_Cur
+                  : 0,
+                
+            },
+          
+          });
+        }
+
+        await existingPaymentOutVisitAgent.save();
+        paymentInfo.existingPaymentOutVisitAgent =
+          existingPaymentOutVisitAgent;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+  //Saving the Entry Details to the Candidate Payment In Section if reference_Out==="Candidate"
+  if (
+    (entryToUpdate.visit_Reference_Out === "" ||
+      entryToUpdate.visit_Reference_Out === null||
+      entryToUpdate.visit_Reference_Out === undefined
+     ) &&
+     visit_Reference_Out.toLowerCase().includes('candidate')
+  ) {
+    try {
+      // Check if the supplier with the given name and entry mode exists
+      const existingPaymentInVisitCandidate =
+        await VisitCandidate.findOne({
+          "payment_In_Schema.supplierName": name,
+          "payment_In_Schema.entry_Mode": entry_Mode,
+          "payment_In_Schema.pp_No": pp_No,
+        });
+
+      if (!existingPaymentInVisitCandidate) {
+        // If the supplier does not exist with the same entry mode, create a new one
+        const newPaymentInVisitCandidate = new VisitCandidate({
+          payment_In_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: name,
+            picture:visit_Section_Picture,
+            total_Visa_Price_In_PKR: visit_Sales_PKR
+              ? visit_Sales_PKR
+              : 0,
+            remaining_Balance: visit_Sales_PKR ? visit_Sales_PKR : 0,
+
+            total_Visa_Price_In_Curr: visit_Sales_Rate_Oth_Curr
+              ? visit_Sales_Rate_Oth_Curr
+              : 0,
+            remaining_Curr: visit_Sales_Rate_Oth_Curr
+              ? visit_Sales_Rate_Oth_Curr
+              : 0,
+
+            curr_Country: cur_Country_One,
+            pp_No: pp_No,
+            entry_Mode: entry_Mode,
+            company: company,
+            trade: trade,
+            country: country,
+            contact: trade,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+          },
+        });
+
+        await newPaymentInVisitCandidate.save();
+        paymentInfo.newPaymentInVisitCandidate =
+          newPaymentInVisitCandidate;
+      } else {
+        // If the supplier exists with the same entry mode, handle accordingly (e.g., update, do nothing)
+        // You may choose to update or do nothing based on your specific requirements
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+
+  //Saving the Entry Details to the Candidate Payment Out Section if reference_In==="Candidate"
+  if (
+    (entryToUpdate.visit_Reference_In === "" ||
+      entryToUpdate.visit_Reference_In === null||
+      entryToUpdate.visit_Reference_In === undefined
+     ) &&
+     visit_Reference_In.toLowerCase().includes('candidate')
+  ) {
+    try {
+      // Check if the supplier with the given name exists
+      const existingPaymentOutVisitCandidate =
+        await VisitCandidate.findOne({
+          "payment_Out_Schema.supplierName": name,
+          "payment_Out_Schema.entry_Mode": entry_Mode,
+          "payment_Out_Schema.pp_No": pp_No,
+        });
+
+      if (!existingPaymentOutVisitCandidate) {
+        // If the supplier does not exist, create a new one
+        const newPaymentOutVisitCandidate = new VisitCandidate({
+          payment_Out_Schema: {
+            supplier_Id: newEntry._id,
+            supplierName: name,
+            picture:visit_Section_Picture,
+            total_Visa_Price_Out_PKR: visit_Purchase_Rate_PKR
+              ? visit_Purchase_Rate_PKR
+              : 0,
+            remaining_Balance: visit_Purchase_Rate_PKR
+              ? visit_Purchase_Rate_PKR
+              : 0,
+
+            total_Visa_Price_Out_Curr: visit_Purchase_Rate_Oth_Cur
+              ? visit_Purchase_Rate_Oth_Cur
+              : 0,
+            remaining_Curr: visit_Purchase_Rate_Oth_Cur
+              ? visit_Purchase_Rate_Oth_Cur
+              : 0,
+
+            curr_Country: cur_Country_Two,
+            pp_No: pp_No,
+            entry_Mode: entry_Mode,
+            company: company,
+            trade: trade,
+            country: country,
+            contact: contact,
+            final_Status: final_Status,
+            flight_Date: flight_Date,
+          },
+        });
+
+        await newPaymentOutVisitCandidate.save();
+        paymentInfo.newPaymentOutVisitCandidate =
+          newPaymentOutVisitCandidate;
+      }
+    } catch (saveError) {
+      console.error(saveError);
+      res
+        .status(500)
+        .json({ message:saveError });
+    }
+  }
+
+  if (
+    (entryToUpdate.protector_Reference_In === "" ||
+      entryToUpdate.protector_Reference_In === null||
+      entryToUpdate.protector_Reference_In === undefined
+     ) &&
+     protector_Reference_In.toLowerCase().includes('protector')
+    
+   ) {
+     try {
+       let existingPaymentOutProtector
+       for(const protector of protectors){
+         if(protector.payment_Out_Schema){
+           if(protector.payment_Out_Schema.supplierName.toLowerCase()===protector_Reference_In_Name.toLowerCase()&& protector.payment_Out_Schema.status.toLowerCase()==='open'){
+             existingPaymentOutProtector=protector
+           }
+         }
+       }
+     
+
+       if (!existingPaymentOutProtector) {
+         // If the supplier does not exist, create a new one
+         const newPaymentOutProtector = new Protector({
+           payment_Out_Schema: {
+             supplier_Id: newEntry._id,
+             supplierName: protector_Reference_In_Name,
+             total_Protector_Price_Out_PKR: protector_Price_In
+               ? protector_Price_In
+               : 0,
+             remaining_Balance: protector_Price_In
+               ? protector_Price_In
+               : 0,
+
+             total_Protector_Price_Out_Curr: protector_Price_In_Oth_Cur
+               ? protector_Price_In_Oth_Cur
+               : 0,
+             remaining_Curr: protector_Price_In_Oth_Cur
+               ? protector_Price_In_Oth_Cur
+               : 0,
+
+             curr_Country: cur_Country_One,
+             persons: [
+               {
+                 name,
+                picture: picture,
+                 pp_No,
+                 entry_Mode,
+                 trade,
+                 contact,
+                 country,
+                 protector_Out_PKR: protector_Price_In
+                   ? protector_Price_In
+                   : 0,
+                 protector_Out_Curr: protector_Price_In_Oth_Cur
+                   ? protector_Price_In_Oth_Cur
+                   : 0,
+                 company: company,
+                 final_Status: final_Status,
+                 flight_Date: flight_Date,
+                 entry_Date: new Date().toISOString().split("T")[0],
+               },
+             ],
+           },
+         });
+
+         await newPaymentOutProtector.save();
+         paymentInfo.newPaymentOutProtector = newPaymentOutProtector;
+       } else {
+         // If the supplier exists, check if the person already exists in the persons array of payment_In_Schema
+         const existingPersonIndex =
+           existingPaymentOutProtector.payment_Out_Schema.persons.findIndex(
+             (person) =>
+               person.pp_No === pp_No &&
+               person.entry_Mode === entry_Mode &&
+               person.name === name
+           );
+
+         if (existingPersonIndex !== -1) {
+           // If the person already exists, update visa_Sales_Rate_PKR and total_Visa_Price_In_PKR
+           existingPaymentOutProtector.payment_Out_Schema.total_Protector_Price_Out_PKR +=
+             protector_Price_In ? protector_Price_In : 0;
+           existingPaymentOutProtector.payment_Out_Schema.remaining_Balance +=
+             protector_Price_In ? protector_Price_In : 0;
+
+           existingPaymentOutProtector.payment_Out_Schema.total_Protector_Price_Out_Curr +=
+             protector_Price_In_Oth_Cur ? protector_Price_In_Oth_Cur : 0;
+           existingPaymentOutProtector.payment_Out_Schema.remaining_Curr +=
+             protector_Price_In_Oth_Cur ? protector_Price_In_Oth_Cur : 0;
+         } else {
+           // If the person does not exist, add them to the persons array
+           existingPaymentOutProtector.payment_Out_Schema.persons.push({
+             name,
+             picture: picture,
+             pp_No,
+             entry_Mode,
+             trade,
+             contact,
+             country,
+             protector_Out_PKR: protector_Price_In
+               ? protector_Price_In
+               : 0,
+             protector_Out_Curr: protector_Price_In_Oth_Cur
+               ? protector_Price_In_Oth_Cur
+               : 0,
+             company: company,
+             final_Status: final_Status,
+             flight_Date: flight_Date,
+             entry_Date: new Date().toISOString().split("T")[0],
+           });
+
+           // Update total_Visa_Price_In_PKR and other fields using $inc
+           await existingPaymentOutProtector.updateOne({
+             $inc: {
+               "payment_Out_Schema.total_Protector_Price_Out_PKR":
+                 protector_Price_In ? protector_Price_In : 0,
+               "payment_Out_Schema.remaining_Balance": protector_Price_In
+                 ? protector_Price_In
+                 : 0,
+
+               "payment_Out_Schema.total_Protector_Price_Out_Curr":
+                 protector_Price_In_Oth_Cur
+                   ? protector_Price_In_Oth_Cur
+                   : 0,
+               "payment_Out_Schema.remaining_Curr":
+                 protector_Price_In_Oth_Cur
+                   ? protector_Price_In_Oth_Cur
+                   : 0,
+             },
+           });
+         }
+
+         await existingPaymentOutProtector.save();
+         paymentInfo.existingPaymentOutProtector =
+           existingPaymentOutProtector;
+       }
+     } catch (saveError) {
+       console.error(saveError);
+       res
+         .status(500)
+         .json({ message:saveError });
+     }
+   }
 
       // Updating the Entry values in all sections
 

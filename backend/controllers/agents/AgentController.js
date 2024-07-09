@@ -60,6 +60,8 @@ const addPaymentIn = async (req, res) => {
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": 'open',
+
     });
 
     if (!existingSupplier) {
@@ -248,7 +250,7 @@ const addMultiplePaymentsIn = async (req, res) => {
 
        for (const supplier of suppliers){
         if(supplier.payment_In_Schema){
-          if(supplier.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+          if(supplier.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()&&supplier.payment_In_Schema.status.toLowerCase()==='open'){
             existingSupplier = supplier;
             break
           }
@@ -448,6 +450,8 @@ const addPaymentInReturn = async (req, res) => {
 
         const existingSupplier = await Agents.findOne({
           "payment_In_Schema.supplierName": supplierName,
+          "payment_In_Schema.status": 'Open',
+
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -690,11 +694,14 @@ const deleteSinglePaymentIn = async (req, res) => {
       cash_Out,
       curr_Amount,
       supplierName,
-      payment_Via
+      payment_Via,
+      newStatus
     } = req.body;
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -814,6 +821,7 @@ const updateSinglePaymentIn = async (req, res) => {
         curr_Amount,
         slip_Pic,
         date,
+        newStatus
         
       } = req.body;
 
@@ -823,6 +831,7 @@ const updateSinglePaymentIn = async (req, res) => {
 
       const existingSupplier = await Agents.findOne({
         "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.status": newStatus,
       });
       if (!existingSupplier) {
         res.status(404).json({ message: "Agent not found" });
@@ -1102,11 +1111,13 @@ const deletePaymentInPerson = async (req, res) => {
   }
 
   if (user && user.role === "Admin") {
-    const { personId, supplierName, visa_Price_In_PKR, visa_Price_In_Curr } =
+    const { personId, supplierName, visa_Price_In_PKR, visa_Price_In_Curr,newStatus } =
       req.body;
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -1171,13 +1182,15 @@ const updatePaymentInPerson=async(req,res)=>{
   if (user && user.role === "Admin") {
     try {
 
-      const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
+      const {supplierName,newStatus,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
       req.body;
      
       let entryMode
      
       const existingSupplier = await Agents.findOne({
         "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.status": newStatus,
+
       });
     
       if(existingSupplier){
@@ -1760,7 +1773,7 @@ const changePaymentInStatus = async (req, res) => {
        
           responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
           const newNotification=new Notifications({
-            type:"Khata Closed of Supplier Payment In",
+            type:"Khata Closed of Agent Payment In",
             content:`${user.userName} Closed Khata with Agent:${supplierName} and new Khata created successfully`,
             date: new Date().toISOString().split("T")[0]
   
@@ -1879,6 +1892,8 @@ const addPaymentOut = async (req, res) => {
 
         const existingSupplier = await Agents.findOne({
           "payment_Out_Schema.supplierName": supplierName,
+          "payment_Out_Schema.status": 'Open',
+
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -2073,7 +2088,7 @@ const addMultiplePaymentsOut = async (req, res) => {
 
        for (const supplier of suppliers){
         if(supplier.payment_Out_Schema){
-          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+          if(supplier.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()&&supplier.payment_Out_Schema.status.toLowerCase()==='open'){
             existingSupplier = supplier;
             break
           }
@@ -2266,13 +2281,14 @@ const addPaymentOutReturn = async (req, res) => {
         }
 
         
-
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
         // Fetch the current invoice number and increment it by 1 atomically
 
         const existingSupplier = await Agents.findOne({
           "payment_Out_Schema.supplierName": supplierName,
+          "payment_Out_Schema.status": "Open",
+
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -2511,12 +2527,14 @@ const deleteSinglePaymentOut = async (req, res) => {
       curr_Amount,
       supplierName,
       cash_Out,
-      payment_Via
+      payment_Via,
+      newStatus
     } = req.body;
 
 
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2635,6 +2653,7 @@ const updateSinglePaymentOut = async (req, res) => {
       slip_Pic,
       date,
       cash_Out,
+      newStatus
     } = req.body;
     const newPaymentOut = parseInt(payment_Out, 10);
     const newCashOut = parseInt(cash_Out, 10);
@@ -2643,6 +2662,8 @@ const updateSinglePaymentOut = async (req, res) => {
     try {
       const existingSupplier = await Agents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
       });
 
       if (!existingSupplier) {
@@ -2766,13 +2787,15 @@ const deletePaymentOutPerson = async (req, res) => {
   }
 
   if (user && user.role === "Admin") {
-    const { personId, supplierName, visa_Price_Out_PKR, visa_Price_Out_Curr } =
+    const { personId, supplierName, visa_Price_Out_PKR, visa_Price_Out_Curr,newStatus } =
       req.body;
     // console.log(personId, supplierName, visa_Price_Out_PKR);
     const newVisa_Price_Out_PKR = parseInt(visa_Price_Out_PKR, 10);
     const newVisa_Price_Out_Curr = parseInt(visa_Price_Out_Curr, 10);
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2996,13 +3019,14 @@ const updatePaymentOutPerson=async(req,res)=>{
   if (user && user.role === "Admin") {
     try {
 
-      const {supplierName,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
+      const {supplierName,newStatus,personId,name,pp_No,status,company,country,entry_Mode,final_Status,trade,flight_Date} =
       req.body;
      
       let entryMode
      
       const existingSupplier = await Agents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.status": newStatus,
       });
     
       if(existingSupplier){
@@ -3523,70 +3547,78 @@ await newNotification.save()
 // changing Status 
 const changePaymentOutStatus = async (req, res) => {
   try {
-      const userId = req.user._id;
-      const user = await User.findById(userId);
-      const{supplierName,newStatus,multipleIds}=req.body
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    const{supplierName,newStatus,multipleIds,convert}=req.body
     
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
-      }
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
 
-      const existingSupplier = await Agents.findOne({
-          "payment_Out_Schema.supplierName": supplierName,
-      });
+    
+    const existingSupplier = await Agents.findOne({
+        "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.status": newStatus,
+    });
 
-      if (!existingSupplier) {
-          return res.status(404).json({ message: "Agent not found" });
-      }
+    if (!existingSupplier) {
+        return res.status(404).json({ message: "Agent not found" });
+    }
 
-     
-      if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons && newStatus.toLowerCase()==="closed") {
-        if(multipleIds.length>0){
-          for(const myId of multipleIds){
-            const allPersons=existingSupplier.payment_Out_Schema.persons
-            for (const person of allPersons){
-              if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
-              person.status = "Closed"
-              }
+    // Update status of all persons to false
+    if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons) {
+      if(multipleIds.length>0){
+        for(const myId of multipleIds){
+          const allPersons=existingSupplier.payment_Out_Schema.persons
+          for (const person of allPersons){
+            if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
+            person.status = "Closed"
             }
           }
         }
-        
       }
       
-      if (existingSupplier.payment_Out_Schema.status==="Open") {
-        existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
-        existingSupplier.payment_Out_Schema.opening=0
     }
-      existingSupplier.payment_Out_Schema.status = newStatus;
+    if (existingSupplier.payment_Out_Schema.status==="Open") {
+      existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
+     
+  }
+    // Toggle the status of the payment in schema
+    existingSupplier.payment_Out_Schema.status = 'Closed';
 
-      // Save changes to the database
-      await existingSupplier.save();
+    // Save changes to the database
+    await existingSupplier.save();
 
-      // Prepare response message based on the updated status
-      let responseMessage;
-      if (existingSupplier.payment_Out_Schema.status==="Open") {
-          responseMessage = "Agent Status updated to Open Successfully!";
-          const newNotification=new Notifications({
-            type:"Khata Open of Supplier Payment Out",
-            content:`${user.userName} Opened Khata with Agent:${supplierName}`,
-            date: new Date().toISOString().split("T")[0]
-  
-          })
-          await newNotification.save()
-      } else {
-          responseMessage = "Agent Status updated to Closed Successfully!";
-          const newNotification=new Notifications({
-            type:"Khata Closed of Supplier Payment Out",
-            content:`${user.userName} Closed Khata with Agent:${supplierName}`,
-            date: new Date().toISOString().split("T")[0]
-  
-          })
-          await newNotification.save()
+    const newSupplier=new Agents({
+      payment_Out_Schema:{
+        supplier_Id: new mongoose.Types.ObjectId(),
+        supplierName:existingSupplier.payment_Out_Schema.supplierName,
+        total_Visa_Price_Out_PKR:0,
+        remaining_Balance:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Balance):0,
+        total_Payment_Out:0,
+        total_Visa_Price_Out_Curr:0,
+        remaining_Curr:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Curr):0,
+        closing:0,
+        opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_Out_Schema.remaining_Balance):0,
+        curr_Country:existingSupplier.payment_Out_Schema.curr_Country,
       }
+    })
+    await newSupplier.save()
+    // Prepare response message based on the updated status
+    let responseMessage;
+     
+        responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
+        const newNotification=new Notifications({
+          type:"Khata Closed of Agent Payment Out",
+          content:`${user.userName} Closed Khata with Agent:${supplierName} and new Khata created successfully`,
+          date: new Date().toISOString().split("T")[0]
 
-      return res.status(200).json({ message: responseMessage });
-  } catch (error) {
+        })
+        await newNotification.save()
+    
+
+    return res.status(200).json({ message: responseMessage });
+} catch (error) {
       console.error('Error:', error);
       return res.status(500).json({ message: "Internal server error" });
   }
@@ -3670,6 +3702,7 @@ const addCandVisePaymentIn=async(req,res)=>{
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": 'Open',
     })
 
     if (!existingSupplier) {
@@ -3862,6 +3895,8 @@ const addCandVisePaymentInReturn=async(req,res)=>{
     
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": 'Open',
+
     })
 
     if (!existingSupplier) {
@@ -3982,27 +4017,6 @@ const addCandVisePaymentInReturn=async(req,res)=>{
       },
     })
     
-    const cashInHandDoc = await CashInHand.findOne({})
-
-    if (!cashInHandDoc) {
-      const newCashInHandDoc = new CashInHand();
-      await newCashInHandDoc.save();
-    }
-
-    const cashInHandUpdate = {
-      $inc: {},
-    };
-
-     if (payment_Via.toLowerCase() === "cash" ) {
-      cashInHandUpdate.$inc.cash = -newCash_Out;
-      cashInHandUpdate.$inc.total_Cash = -newCash_Out;
-    }
-    else{
-      cashInHandUpdate.$inc.bank_Cash = -newCash_Out;
-      cashInHandUpdate.$inc.total_Cash = -newCash_Out;
-    }
-
-    await CashInHand.updateOne({}, cashInHandUpdate);
 
     const newNotification=new Notifications({
       type:"Agent Cand-Wise Payment In Return",
@@ -4036,10 +4050,13 @@ const deleteCandVisePaymentIn=async(req,res)=>{
     }
     const {
       supplierName,
-      paymentId
+      paymentId,
+      newStatus
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status":newStatus ,
+
     })
 
     if (!existingSupplier) {
@@ -4059,6 +4076,7 @@ const deleteCandVisePaymentIn=async(req,res)=>{
     }
 
     if(paymentToDelete){
+      let combinePayment=paymentToDelete.cash_Out-paymentToDelete.payment_In
       const allPayments=paymentToDelete.payments
       const allPersons=existingSupplier.payment_In_Schema.persons
       for (const payment of allPayments){
@@ -4075,7 +4093,7 @@ const deleteCandVisePaymentIn=async(req,res)=>{
         $inc: {
           "payment_In_Schema.total_Payment_In": -paymentToDelete.payment_In,
           "payment_In_Schema.total_Cash_Out": -paymentToDelete.cash_Out,
-          "payment_In_Schema.remaining_Balance": paymentToDelete.payment_In,
+          "payment_In_Schema.remaining_Balance": paymentToDelete.payment_In>0?paymentToDelete.payment_In:-paymentToDelete.cash_Out,
           "payment_In_Schema.total_Payment_In_Curr": paymentToDelete.curr_Amount ? -paymentToDelete.curr_Amount : 0,
           "payment_In_Schema.remaining_Curr": paymentToDelete.curr_Amount ? paymentToDelete.curr_Amount : 0,
         },
@@ -4121,11 +4139,14 @@ const updateCandVisePaymentIn=async(req,res)=>{
     curr_Country,
     slip_Pic,
     date,
+    newStatus
   } = req.body;
 
   
   const existingSupplier = await Agents.findOne({
     "payment_In_Schema.supplierName": supplierName,
+    "payment_In_Schema.status":newStatus
+
   });
   if (!existingSupplier) {
     res.status(404).json({ message: "Agent not found" });
@@ -4182,10 +4203,14 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
     const {
       supplierName,
       paymentId,
-      myPaymentId
+      myPaymentId,
+    newStatus
+
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+    "payment_In_Schema.status":newStatus
+
     })
 
     if (!existingSupplier) {
@@ -4295,7 +4320,8 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
       new_Payment,
       cash_Out,
       new_Curr_Payment,
-      curr_Rate
+      curr_Rate,
+      newStatus
     } = req.body;
 
     let newPaymentIn = parseInt(new_Payment, 10);
@@ -4307,6 +4333,8 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
 
     const existingAgent = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status":newStatus
+
     })
 
     if (!existingAgent) {
@@ -4336,21 +4364,21 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
       if(candPayment){
         let updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
         let updatedCashOut = candPayment.cash_Out - newCashOut;
-
+        let combinePayment=updatedCashOut-updatedPaymentIn;
         let updateCurr_Amount = candPayment.new_Curr_Payment?candPayment.new_Curr_Payment:0- newCurrAmount;
 
 
 if(candPayment.cand_Name.toLowerCase()!==cand_Name.toLowerCase()){
   const existingPaymentPerson = existingAgent.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === candPayment.cand_Name.toLowerCase())
   if(existingPaymentPerson){
-    existingPaymentPerson.remaining_Price+=candPayment?.new_Payment||0
-    existingPaymentPerson.total_In-=candPayment?.new_Payment||0
-    existingPaymentPerson.remaining_Curr+=candPayment?.visa_Curr_Amount||0
+    existingPaymentPerson.remaining_Price+=candPayment.new_Payment>0?candPayment.new_Payment:-candPayment.cash_Out
+    existingPaymentPerson.total_In+=candPayment.new_Payment>0?-candPayment.new_Payment:candPayment.cash_Out
+    existingPaymentPerson.remaining_Curr+=candPayment?.new_Curr_Payment||0
   const existingNewPaymentPerson = existingAgent.payment_In_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
 if(existingNewPaymentPerson){
-  existingNewPaymentPerson.remaining_Price -= newPaymentIn
-  existingNewPaymentPerson.total_In += newPaymentIn
-  existingNewPaymentPerson.remaining_Curr -= newCurrAmount
+  existingNewPaymentPerson.remaining_Price += newPaymentIn>0?-newPaymentIn:newCashOut
+  existingNewPaymentPerson.total_In += newPaymentIn>0?newPaymentIn:-newCashOut
+  existingNewPaymentPerson.remaining_Curr +=newPaymentIn>0?-newCurrAmount:newCurrAmount
 
   candPayment.cand_Name=existingNewPaymentPerson.name
   candPayment.pp_No=existingNewPaymentPerson.pp_No
@@ -4363,16 +4391,18 @@ if(existingNewPaymentPerson){
   candPayment.visa_Amount_PKR=existingNewPaymentPerson.visa_Price_In_PKR
   candPayment.past_Paid_PKR=existingNewPaymentPerson.total_In
   candPayment.past_Remain_PKR=existingNewPaymentPerson.visa_Price_In_PKR-existingNewPaymentPerson.total_In
-  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_In_PKR-existingNewPaymentPerson.total_In-newPaymentIn
+  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_In_PKR-existingNewPaymentPerson.total_In+(newPaymentIn>0?-newPaymentIn:newCashOut)
   candPayment.visa_Curr_Amount=existingNewPaymentPerson.visa_Price_In_Curr
   candPayment.past_Paid_Curr=existingNewPaymentPerson.visa_Price_In_Curr-existingNewPaymentPerson.remaining_Curr?existingNewPaymentPerson.remaining_Curr:0
-  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_In_Curr-newCurrAmount
+  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_In_Curr+(newPaymentIn>0?-newCurrAmount:newCurrAmount)
   candPayment.new_Payment=newPaymentIn
-  candPayment.new_Curr_Payment=newPaymentIn/newCurrRate
+  candPayment.cash_Out=newCashOut
+  candPayment.new_Curr_Payment=newPaymentIn>0?newPaymentIn:newCashOut/newCurrRate
   candPayment.curr_Rate=newCurrRate
   }
 
   paymentToFind.payment_In+=-updatedPaymentIn
+  paymentToFind.cash_Out+=-updatedCashOut
   paymentToFind.curr_Amount+=- newCurrRate>0 ?updatedPaymentIn/newCurrRate:0
   paymentToFind.curr_Rate+=-newCurrRate
 
@@ -4380,30 +4410,13 @@ if(existingNewPaymentPerson){
   await existingAgent.updateOne({
     $inc: {
       "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
-      "payment_In_Schema.remaining_Balance": updatedPaymentIn,
+      "payment_In_Schema.total_Cash_Out": -updatedCashOut,
+      "payment_In_Schema.remaining_Balance": -combinePayment,
       "payment_In_Schema.total_Payment_In_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
       "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
     },
   })
-  const cashInHandDoc = await CashInHand.findOne({});
-  if (!cashInHandDoc) {
-    const newCashInHandDoc = new CashInHand();
-    await newCashInHandDoc.save();
-  }
-
-  const cashInHandUpdate = {
-    $inc: {},
-  };
-  if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-    cashInHandUpdate.$inc.cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
-  else{
-    cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
   
-  await CashInHand.updateOne({}, cashInHandUpdate);
   const newNotification=new Notifications({
     type:"Agent Cand-Wise Payment In Updated",
     content:`${user.userName} updated Cand-Wise Payment_In ${newPaymentIn} of Candidate ${cand_Name} of Agent:${supplierName}'s Record`,
@@ -4421,8 +4434,9 @@ if(existingNewPaymentPerson){
 else{
 // Updating The Cand payment
 
-candPayment.new_Remain_PKR+=updatedPaymentIn
+candPayment.new_Remain_PKR+=updatedPaymentIn>0?updatedPaymentIn:-updatedCashOut
 candPayment.new_Payment+=-updatedPaymentIn
+candPayment.cash_Out+=-updatedCashOut
 candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
 candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
@@ -4431,41 +4445,25 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
   const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
   if(personToUpdate){
     personToUpdate.total_In+=-updatedPaymentIn
-    personToUpdate.remaining_Price+=-updatedPaymentIn
+    personToUpdate.cash_Out+=-updatedCashOut
+    personToUpdate.remaining_Price+=updatedPaymentIn>0?-updatedPaymentIn:updatedCashOut
     personToUpdate.remaining_Curr+=-newCurrAmount
   }
 
   // uodating parent payment
   paymentToFind.payment_In+=-updatedPaymentIn
+  paymentToFind.cash_Out+=-updatedCashOut
   paymentToFind.curr_Amount+=-updateCurr_Amount
   await existingAgent.updateOne({
     $inc: {
       "payment_In_Schema.total_Payment_In": -updatedPaymentIn,
-      "payment_In_Schema.remaining_Balance": updatedPaymentIn,
+      "payment_In_Schema.total_Cash_Out": -updatedCashOut,
+      "payment_In_Schema.remaining_Balance": -combinePayment,
       "payment_In_Schema.total_Payment_In_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
       "payment_In_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
     },
   })
 
-  const cashInHandDoc = await CashInHand.findOne({});
-  if (!cashInHandDoc) {
-    const newCashInHandDoc = new CashInHand();
-    await newCashInHandDoc.save();
-  }
-
-  const cashInHandUpdate = {
-    $inc: {},
-  };
-  if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-    cashInHandUpdate.$inc.cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
-  else{
-    cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
-  
-  await CashInHand.updateOne({}, cashInHandUpdate);
   const newNotification=new Notifications({
     type:"Agent Cand-Wise Payment In Updated",
     content:`${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
@@ -4520,6 +4518,8 @@ const addCandVisePaymentOut=async(req,res)=>{
 
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status":"Open"
+
     })
 
     if (!existingSupplier) {
@@ -4682,6 +4682,178 @@ const addCandVisePaymentOut=async(req,res)=>{
 }
 
 
+const addCandVisePaymentOutReturn=async(req,res)=>{
+  try{
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    const {
+      supplierName,
+      category,
+      payment_Via,
+      payment_Type,
+      slip_No,
+      curr_Country,
+      slip_Pic,
+      details,
+      date,
+      totalCurrRate,
+      payments
+    } = req.body;
+
+    let allPayments=[]
+    let newCash_Out=0
+    let new_Curr_Amount=0
+    
+    const existingSupplier = await Agents.findOne({
+      "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status":"Open"
+
+    })
+
+    if (!existingSupplier) {
+      res.status(404).json({
+        message: "Agent not Found",
+      });
+      return;
+    }
+    
+    let nextInvoiceNumber = 0;
+    const currentInvoiceNumber = await InvoiceNumber.findOne({});
+
+    if (!currentInvoiceNumber) {
+      const newInvoiceNumberDoc = new InvoiceNumber();
+      await newInvoiceNumberDoc.save();
+    }
+
+    const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+      {},
+      { $inc: { invoice_Number: 1 } },
+      { new: true, upsert: true }
+    );
+
+    if (updatedInvoiceNumber) {
+      nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+    }
+    let uploadImage;
+    if (slip_Pic) {
+      uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+        upload_preset: "rozgar",
+      });
+    }
+
+    for (const payment of payments){
+      const {cand_Name,cash_Out,curr_Amount,}=payment
+      const newPaymentOut = parseInt(cash_Out, 10);
+      const newCurrAmount = parseInt(curr_Amount, 10);
+      
+      const existPerson = existingSupplier.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
+    
+
+      if (existPerson) {
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
+      cand_Name=existPerson.name,
+      past_Paid_PKR=existPerson.total_In,
+      pp_No=existPerson.pp_No,
+      entry_Mode=existPerson.entry_Mode,
+      company=existPerson.company,
+      trade=existPerson.trade,
+      final_Status=existPerson.final_Status,
+      flight_Date=existPerson.flight_Date,
+      entry_Mode=existPerson.entry_Mode,
+      visa_Amount_PKR=existPerson.visa_Price_Out_PKR
+      past_Paid_PKR=existPerson.total_In,
+      past_Remain_PKR=existPerson.visa_Price_Out_PKR-existPerson.total_In,
+      new_Remain_PKR=existPerson.visa_Price_Out_PKR-existPerson.total_In+newPaymentOut,
+      visa_Curr_Amount=existPerson.visa_Price_Out_Curr,
+      past_Paid_Curr=existPerson.visa_Price_Out_Curr-existPerson.remaining_Curr,
+      past_Remain_Curr=existPerson.remaining_Curr,
+      new_Remain_Curr=existPerson.remaining_Curr+newCurrAmount,
+      cash_Out=newPaymentOut,
+      new_Curr_Payment=newCurrAmount?newCurrAmount:0,
+      existPerson.remaining_Price += newPaymentOut,
+      existPerson.total_In -= newPaymentOut,
+      existPerson.remaining_Curr -= newCurrAmount ? newCurrAmount : 0
+      newCash_Out+=newPaymentOut
+      new_Curr_Amount+=newCurrAmount
+      curr_Rate=totalCurrRate
+
+      let myNewPayment={
+        _id:new mongoose.Types.ObjectId,
+        cand_Name,
+        pp_No,
+        entry_Mode,
+        company,
+        trade,
+        final_Status,
+        flight_Date,
+        visa_Amount_PKR,
+        cash_Out,
+        past_Paid_PKR,
+        past_Remain_PKR,
+        new_Remain_PKR,
+        visa_Curr_Amount,
+        new_Curr_Payment,
+        past_Paid_Curr,
+        past_Remain_Curr,
+        new_Remain_Curr,
+        curr_Rate
+      }
+      allPayments.push(myNewPayment)
+      }
+    }
+
+    const candPayments={
+      category,
+      payment_Via,
+      payment_Type,
+      slip_No,
+      cash_Out:newCash_Out,
+      curr_Amount:new_Curr_Amount,
+      payment_Out_Curr:curr_Country,
+      slip_Pic: uploadImage?.secure_url || '',
+      details,
+      date:date?date:new Date().toISOString().split("T")[0],
+      invoice: nextInvoiceNumber,
+      payments:allPayments
+    }
+    await existingSupplier.updateOne({
+      $inc: {
+        "payment_Out_Schema.total_Payment_Out": -newCash_Out,
+        "payment_Out_Schema.remaining_Balance": newCash_Out,
+        "payment_Out_Schema.total_Payment_Out_Curr": new_Curr_Amount ? -new_Curr_Amount : 0,
+        "payment_Out_Schema.remaining_Curr": new_Curr_Amount ? new_Curr_Amount : 0,
+      },
+      $push: {
+        "payment_Out_Schema.candPayments": candPayments,
+      },
+    })
+    
+
+    const newNotification=new Notifications({
+      type:"Agent Cand-Wise Payment Out Return",
+      content:`${user.userName} added Candidate Wise Payment Out Return: ${newCash_Out} to ${payments.length} Candidates of Agent:${supplierName}`,
+      date: new Date().toISOString().split("T")[0]
+
+    })
+    await newNotification.save()
+
+    await existingSupplier.save();
+    res.status(200).json({ data:candPayments,
+      message: `Payment Out Return: ${newCash_Out} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
+    })
+
+  }
+  catch(error){
+    res.status(500).json({message:error.message})
+  }
+}
+
+
 // Deleting a CandWise Payment Out
 const deleteCandVisePaymentOut=async(req,res)=>{
   try{
@@ -4694,10 +4866,12 @@ const deleteCandVisePaymentOut=async(req,res)=>{
     }
     const {
       supplierName,
-      paymentId
+      paymentId,
+      newStatus
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status":newStatus
     })
 
     if (!existingSupplier) {
@@ -4717,21 +4891,24 @@ const deleteCandVisePaymentOut=async(req,res)=>{
     }
 
     if(paymentToDelete){
+      let combinePayment=paymentToDelete.cash_Out-paymentToDelete.payment_Out
       const allPayments=paymentToDelete.payments
       const allPersons=existingSupplier.payment_Out_Schema.persons
       for (const payment of allPayments){
       for (const person of allPersons){
         if(payment.cand_Name.toLowerCase()===person.name.toLowerCase()){
-          person.total_In-=payment.new_Payment
-          person.remaining_Price+=payment.new_Payment
-          person.remaining_Curr+=payment.new_Curr_Payment
+          person.total_In-=payment.new_Payment>0?payment.new_Payment:0
+          person.cash_Out-=payment.cash_Out>0?payment.cash_Out:0
+          person.remaining_Price+=payment.new_Payment>0?payment.new_Payment:-payment.cash_Out
+          person.remaining_Curr+=payment.new_Payment>0?payment.new_Curr_Payment:-payment.new_Curr_Payment
         }
       }
       }
       await existingSupplier.updateOne({
         $inc: {
           "payment_Out_Schema.total_Payment_Out": -paymentToDelete.payment_Out,
-          "payment_Out_Schema.remaining_Balance": paymentToDelete.payment_Out,
+          "payment_Out_Schema.total_Cash_Out": -paymentToDelete.cash_Out,
+          "payment_Out_Schema.remaining_Balance": paymentToDelete.payment_Out>0?paymentToDelete.payment_Out:-paymentToDelete.cash_Out,
           "payment_Out_Schema.total_Payment_Out_Curr": paymentToDelete.curr_Amount ? -paymentToDelete.curr_Amount : 0,
           "payment_Out_Schema.remaining_Curr": paymentToDelete.curr_Amount ? paymentToDelete.curr_Amount : 0,
         },
@@ -4740,37 +4917,18 @@ const deleteCandVisePaymentOut=async(req,res)=>{
         },
       })
       
-      const cashInHandDoc = await CashInHand.findOne({});
-
-      if (!cashInHandDoc) {
-        const newCashInHandDoc = new CashInHand();
-        await newCashInHandDoc.save();
-      }
-
-      const cashInHandUpdate = {
-        $inc: {},
-      };
-      if (paymentToDelete.payment_Via.toLowerCase() === "cash" ) {
-        cashInHandUpdate.$inc.cash = paymentToDelete.payment_Out;
-        cashInHandUpdate.$inc.total_Cash = paymentToDelete.payment_Out;
-      }
-      else{
-        cashInHandUpdate.$inc.bank_Cash = paymentToDelete.payment_Out;
-        cashInHandUpdate.$inc.total_Cash = paymentToDelete.payment_Out;
-      }
-      
-      await CashInHand.updateOne({}, cashInHandUpdate);
+    
       await existingSupplier.save()
       const newNotification=new Notifications({
-        type:"Agent Cand-Wise Payment Out Deleted",
-        content:`${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out } of ${paymentToDelete.payments.length} Candidates from  Agent:${supplierName}'s Record`,
+        type:"Agents Cand-Wise Payment Out Deleted",
+        content:`${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out } of ${paymentToDelete.payments.length} Candidates from  Suppliers: ${supplierName}'s Record`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
     
       res.status(200).json({
-        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Agent:${supplierName}'s Record`,
+        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Suppliers: ${supplierName}'s Record`,
       });
 
     }
@@ -4781,8 +4939,6 @@ const deleteCandVisePaymentOut=async(req,res)=>{
     res.status(500).json({message:error.message})
   }
 }
-
-
 
 
 // Update Cand-Wise Payment Out
@@ -4798,11 +4954,14 @@ const updateCandVisePaymentOut=async(req,res)=>{
     curr_Country,
     slip_Pic,
     date,
+    newStatus
   } = req.body;
 
   
   const existingSupplier = await Agents.findOne({
     "payment_Out_Schema.supplierName": supplierName,
+    "payment_Out_Schema.status":newStatus
+
   });
   if (!existingSupplier) {
     res.status(404).json({ message: "Agent not found" });
@@ -4860,10 +5019,12 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
     const {
       supplierName,
       paymentId,
-      myPaymentId
+      myPaymentId,
+      newStatus
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status":newStatus
     })
 
     if (!existingSupplier) {
@@ -4895,39 +5056,26 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
         const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
         if(personToUpdate){
           personToUpdate.total_In-=candPayment.new_Payment
-          personToUpdate.remaining_Price+=candPayment.new_Payment
-          personToUpdate.remaining_Curr+=candPayment.new_Curr_Payment
+          personToUpdate.cash_Out-=candPayment.cash_Out
+          personToUpdate.remaining_Price+=candPayment.new_Payment>0?candPayment.new_Payment:-candPayment.cash_Out
+          personToUpdate.remaining_Curr+=candPayment.new_Payment>0?candPayment:-candPayment.new_Curr_Payment
         }
         paymentToFind.payment_Out-=candPayment.new_Payment
+        paymentToFind.cash_Out-=candPayment.cash_Out
         paymentToFind.curr_Amount-=candPayment.new_Curr_Payment
+       
+
         await existingSupplier.updateOne({
           $inc: {
             "payment_Out_Schema.total_Payment_Out": -candPayment.new_Payment,
-            "payment_Out_Schema.remaining_Balance": candPayment.new_Payment,
+            "payment_Out_Schema.total_Cash_Out": -candPayment.cash_Out,
+            "payment_Out_Schema.remaining_Balance": candPayment.new_Payment>0?candPayment.new_Payment:-candPayment.cash_Out,
             "payment_Out_Schema.total_Payment_Out_Curr": candPayment.new_Curr_Payment ? -candPayment.new_Curr_Payment : 0,
             "payment_Out_Schema.remaining_Curr": candPayment.new_Curr_Payment ? candPayment.new_Curr_Payment : 0,
           },
         })
 
-        const cashInHandDoc = await CashInHand.findOne({});
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
-  
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-        if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-          cashInHandUpdate.$inc.cash = candPayment.new_Payment;
-          cashInHandUpdate.$inc.total_Cash = candPayment.new_Payment;
-        }
-        else{
-          cashInHandUpdate.$inc.bank_Cash = candPayment.new_Payment;
-          cashInHandUpdate.$inc.total_Cash = candPayment.new_Payment;
-        }
-        
-        await CashInHand.updateOne({}, cashInHandUpdate);
+      
         const newNotification=new Notifications({
           type:"Agent Cand-Wise Payment Out Deleted",
           content:`${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment } of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
@@ -4961,6 +5109,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
 
   }
   catch(error){
+    console.log(error)
     res.status(500).json({message:error.message})
   }
 }
@@ -4983,17 +5132,23 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
       paymentId,
       myPaymentId,
       new_Payment,
+      cash_Out,
       new_Curr_Payment,
-      curr_Rate
+      curr_Rate,
+      newStatus
     } = req.body;
 
-    let newPaymentIn = parseInt(new_Payment, 10);
+    let newPaymentOut = parseInt(new_Payment, 10);
+    let newCashOut = parseInt(cash_Out, 10);
+
     let newCurrAmount = parseInt(new_Curr_Payment, 10);
     let newCurrRate=parseInt(curr_Rate,10)
-    newCurrAmount=newPaymentIn/newCurrRate
+    newCurrAmount=newPaymentOut>0?newPaymentOut:newCashOut/newCurrRate
 
     const existingAgent = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status":newStatus
+
     })
 
     if (!existingAgent) {
@@ -5021,21 +5176,23 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
         });
       }
       if(candPayment){
-        let updatedPaymentIn = candPayment.new_Payment - newPaymentIn;
+        let updatedPaymentOut = candPayment.new_Payment - newPaymentOut;
+        let updatedCashOut = candPayment.cash_Out - newCashOut;
+        let combinePayment=updatedCashOut-updatedPaymentOut;
         let updateCurr_Amount = candPayment.new_Curr_Payment?candPayment.new_Curr_Payment:0- newCurrAmount;
 
 
 if(candPayment.cand_Name.toLowerCase()!==cand_Name.toLowerCase()){
   const existingPaymentPerson = existingAgent.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === candPayment.cand_Name.toLowerCase())
   if(existingPaymentPerson){
-    existingPaymentPerson.remaining_Price+=candPayment?.new_Payment||0
-    existingPaymentPerson.total_In-=candPayment?.new_Payment||0
-    existingPaymentPerson.remaining_Curr+=candPayment?.visa_Curr_Amount||0
+    existingPaymentPerson.remaining_Price+=candPayment.new_Payment>0?candPayment.new_Payment:-candPayment.cash_Out
+    existingPaymentPerson.total_In+=candPayment.new_Payment>0?-candPayment.new_Payment:candPayment.cash_Out
+    existingPaymentPerson.remaining_Curr+=candPayment?.new_Curr_Payment||0
   const existingNewPaymentPerson = existingAgent.payment_Out_Schema.persons.find((person) => person.name.toLowerCase() === cand_Name.toLowerCase())
 if(existingNewPaymentPerson){
-  existingNewPaymentPerson.remaining_Price -= newPaymentIn
-  existingNewPaymentPerson.total_In += newPaymentIn
-  existingNewPaymentPerson.remaining_Curr -= newCurrAmount
+  existingNewPaymentPerson.remaining_Price += newPaymentOut>0?-newPaymentOut:newCashOut
+  existingNewPaymentPerson.total_In += newPaymentOut>0?newPaymentOut:-newCashOut
+  existingNewPaymentPerson.remaining_Curr +=newPaymentOut>0?-newCurrAmount:newCurrAmount
 
   candPayment.cand_Name=existingNewPaymentPerson.name
   candPayment.pp_No=existingNewPaymentPerson.pp_No
@@ -5048,50 +5205,35 @@ if(existingNewPaymentPerson){
   candPayment.visa_Amount_PKR=existingNewPaymentPerson.visa_Price_Out_PKR
   candPayment.past_Paid_PKR=existingNewPaymentPerson.total_In
   candPayment.past_Remain_PKR=existingNewPaymentPerson.visa_Price_Out_PKR-existingNewPaymentPerson.total_In
-  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_Out_PKR-existingNewPaymentPerson.total_In-newPaymentIn
+  candPayment.new_Remain_PKR=existingNewPaymentPerson.visa_Price_Out_PKR-existingNewPaymentPerson.total_In+(newPaymentOut>0?-newPaymentOut:newCashOut)
   candPayment.visa_Curr_Amount=existingNewPaymentPerson.visa_Price_Out_Curr
   candPayment.past_Paid_Curr=existingNewPaymentPerson.visa_Price_Out_Curr-existingNewPaymentPerson.remaining_Curr?existingNewPaymentPerson.remaining_Curr:0
-  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_Out_Curr-newCurrAmount
-  candPayment.new_Payment=newPaymentIn
-  candPayment.new_Curr_Payment=newPaymentIn/newCurrRate
+  candPayment.new_Remain_Curr=existingNewPaymentPerson.visa_Price_Out_Curr+(newPaymentOut>0?-newCurrAmount:newCurrAmount)
+  candPayment.new_Payment=newPaymentOut
+  candPayment.cash_Out=newCashOut
+  candPayment.new_Curr_Payment=newPaymentOut>0?newPaymentOut:newCashOut/newCurrRate
   candPayment.curr_Rate=newCurrRate
   }
 
-  paymentToFind.payment_Out+=-updatedPaymentIn
-  paymentToFind.curr_Amount+=- newCurrRate>0 ?updatedPaymentIn/newCurrRate:0
+  paymentToFind.payment_Out+=-updatedPaymentOut
+  paymentToFind.cash_Out+=-updatedCashOut
+  paymentToFind.curr_Amount+=- newCurrRate>0 ?updatedPaymentOut/newCurrRate:0
   paymentToFind.curr_Rate+=-newCurrRate
 
 
   await existingAgent.updateOne({
     $inc: {
-      "payment_Out_Schema.total_Payment_Out": -updatedPaymentIn,
-      "payment_Out_Schema.remaining_Balance": updatedPaymentIn,
+      "payment_Out_Schema.total_Payment_Out": -updatedPaymentOut,
+      "payment_Out_Schema.total_Cash_Out": -updatedCashOut,
+      "payment_Out_Schema.remaining_Balance": -combinePayment,
       "payment_Out_Schema.total_Payment_Out_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
       "payment_Out_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
     },
   })
-  const cashInHandDoc = await CashInHand.findOne({});
-  if (!cashInHandDoc) {
-    const newCashInHandDoc = new CashInHand();
-    await newCashInHandDoc.save();
-  }
-
-  const cashInHandUpdate = {
-    $inc: {},
-  };
-  if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-    cashInHandUpdate.$inc.cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
-  else{
-    cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
   
-  await CashInHand.updateOne({}, cashInHandUpdate);
   const newNotification=new Notifications({
     type:"Agent Cand-Wise Payment Out Updated",
-    content:`${user.userName} updated Cand-Wise Payment_Out ${newPaymentIn} of Candidate ${cand_Name} of Agent:${supplierName}'s Record`,
+    content:`${user.userName} updated Cand-Wise Payment_Out ${newPaymentOut} of Candidate ${cand_Name} of Agent:${supplierName}'s Record`,
     date: new Date().toISOString().split("T")[0]
 
   })
@@ -5099,58 +5241,43 @@ if(existingNewPaymentPerson){
   await existingAgent.save()
 
   res.status(200).json({
-    message: `Successfuly, updated Cand-Wise Payment_Out ${newPaymentIn} of Candidate ${cand_Name} of Agent: ${supplierName}'s Record`,
+    message: `Successfuly, updated Cand-Wise Payment_Out ${newPaymentOut} of Candidate ${cand_Name} of Agent: ${supplierName}'s Record`,
   });
 
 }
 else{
 // Updating The Cand payment
 
-candPayment.new_Remain_PKR+=updatedPaymentIn
-candPayment.new_Payment+=-updatedPaymentIn
+candPayment.new_Remain_PKR+=updatedPaymentOut>0?updatedPaymentOut:-updatedCashOut
+candPayment.new_Payment+=-updatedPaymentOut
+candPayment.cash_Out+=-updatedCashOut
 candPayment.new_Remain_Curr+=updateCurr_Amount
 candPayment.new_Curr_Payment+=-updateCurr_Amount
-candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
+candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
 
 // updating Person total_In and remainig pkr and curr as well
   const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
   if(personToUpdate){
-    personToUpdate.total_In+=-updatedPaymentIn
-    personToUpdate.remaining_Price+=-updatedPaymentIn
+    personToUpdate.total_In+=-updatedPaymentOut
+    personToUpdate.cash_Out+=-updatedCashOut
+    personToUpdate.remaining_Price+=updatedPaymentOut>0?-updatedPaymentOut:updatedCashOut
     personToUpdate.remaining_Curr+=-newCurrAmount
   }
 
   // uodating parent payment
-  paymentToFind.payment_Out+=-updatedPaymentIn
+  paymentToFind.payment_Out+=-updatedPaymentOut
+  paymentToFind.cash_Out+=-updatedCashOut
   paymentToFind.curr_Amount+=-updateCurr_Amount
   await existingAgent.updateOne({
     $inc: {
-      "payment_Out_Schema.total_Payment_Out": -updatedPaymentIn,
-      "payment_Out_Schema.remaining_Balance": updatedPaymentIn,
+      "payment_Out_Schema.total_Payment_Out": -updatedPaymentOut,
+      "payment_Out_Schema.total_Cash_Out": -updatedCashOut,
+      "payment_Out_Schema.remaining_Balance": -combinePayment,
       "payment_Out_Schema.total_Payment_Out_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
       "payment_Out_Schema.remaining_Curr": updateCurr_Amount ? -updateCurr_Amount : 0,
     },
   })
 
-  const cashInHandDoc = await CashInHand.findOne({});
-  if (!cashInHandDoc) {
-    const newCashInHandDoc = new CashInHand();
-    await newCashInHandDoc.save();
-  }
-
-  const cashInHandUpdate = {
-    $inc: {},
-  };
-  if (paymentToFind.payment_Via.toLowerCase() === "cash" ) {
-    cashInHandUpdate.$inc.cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
-  else{
-    cashInHandUpdate.$inc.bank_Cash = -updatedPaymentIn;
-    cashInHandUpdate.$inc.total_Cash = -updatedPaymentIn;
-  }
-  
-  await CashInHand.updateOne({}, cashInHandUpdate);
   const newNotification=new Notifications({
     type:"Agent Cand-Wise Payment Out Updated",
     content:`${user.userName} updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
@@ -5173,6 +5300,7 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
     res.status(500).json({message:error.message})
   }
 }
+
 
 module.exports = {
   addPaymentIn,
@@ -5203,6 +5331,7 @@ module.exports = {
   deleteSingleCandVisePaymentIn,
   updateSingleCandVisePaymentIn,
   addCandVisePaymentOut,
+  addCandVisePaymentOutReturn,
   deleteCandVisePaymentOut,
   deleteSingleCandVisePaymentOut,
   updateSingleCandVisePaymentOut,

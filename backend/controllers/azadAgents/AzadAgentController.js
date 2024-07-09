@@ -60,6 +60,8 @@ const addAzadAgentPaymentIn = async (req, res) => {
 
     const existingSupplier = await AzadAgents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": 'Open',
+
     });
 
     if (!existingSupplier) {
@@ -241,7 +243,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
           if (supplier.payment_In_Schema) {
             if (
               supplier.payment_In_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplierName.toLowerCase()&&supplier.payment_In_Schema.status.toLowerCase()==='open'
             ) {
               existingSupplier = supplier;
               break;
@@ -425,6 +427,8 @@ const addAzadAgentPaymentInReturn = async (req, res) => {
 
         const existingSupplier = await AzadAgents.findOne({
           "payment_In_Schema.supplierName": supplierName,
+          "payment_In_Schema.status": 'Open',
+          
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -577,14 +581,17 @@ const deleteSingleAgentPaymentIn = async (req, res) => {
       curr_Amount,
       supplierName,
       payment_Via,
+      newStatus
     } = req.body;
 
     const existingSupplier = await AzadAgents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
     const newPaymentIn = payment_In - cash_Out;
@@ -700,6 +707,7 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
         curr_Amount,
         slip_Pic,
         date,
+        newStatus
       } = req.body;
 
       const newPaymentIn = parseInt(payment_In, 10);
@@ -708,6 +716,8 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
 
       const existingSupplier = await AzadAgents.findOne({
         "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
       });
       if (!existingSupplier) {
         res.status(404).json({ message: "Supplier not found" });
@@ -894,14 +904,17 @@ const deleteAzadAgentPaymentInPerson = async (req, res) => {
       supplierName,
       azad_Visa_Price_In_PKR,
       azad_Visa_Price_In_Curr,
+      newStatus
     } = req.body;
 
     const existingSupplier = await AzadAgents.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
 
@@ -971,12 +984,15 @@ const updateAgentPaymentInPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
+        newStatus
       } = req.body;
 
       let entryMode;
 
       const existingSupplier = await AzadAgents.findOne({
         "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
       });
 
       if (existingSupplier) {
@@ -1700,6 +1716,8 @@ const addAzadAgentPaymentOut = async (req, res) => {
 
         const existingSupplier = await AzadAgents.findOne({
           "payment_Out_Schema.supplierName": supplierName,
+          "payment_Out_Schema.status": 'Open',
+
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -1894,7 +1912,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
           if (supplier.payment_Out_Schema) {
             if (
               supplier.payment_Out_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplierName.toLowerCase()&&supplier.payment_Out_Schema.status.toLowerCase()==='open'
             ) {
               existingSupplier = supplier;
               break;
@@ -2079,10 +2097,12 @@ const addAzadAgentPaymentOutReturn = async (req, res) => {
 
         const existingSupplier = await AzadAgents.findOne({
           "payment_Out_Schema.supplierName": supplierName,
+          "payment_Out_Schema.status": "Open",
+
         });
         if (!existingSupplier) {
           res.status(404).json({
-            message: "Supplier not Found",
+            message: "Agent not Found",
           });
         }
 
@@ -2235,10 +2255,13 @@ const deleteAzadAgentSinglePaymentOut = async (req, res) => {
       supplierName,
       cash_Out,
       payment_Via,
+      newStatus
     } = req.body;
     // console.log(paymentId, payment_Out, curr_Amount, supplierName, cash_Out, payment_Via)
     const existingSupplier = await AzadAgents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2359,6 +2382,7 @@ const updateAzadAgentSinglePaymentOut = async (req, res) => {
       slip_Pic,
       date,
       cash_Out,
+      newStatus
     } = req.body;
     const newPaymentOut = parseInt(payment_Out, 10);
     const newCashOut = parseInt(cash_Out, 10);
@@ -2367,6 +2391,8 @@ const updateAzadAgentSinglePaymentOut = async (req, res) => {
     try {
       const existingSupplier = await AzadAgents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
       });
 
       if (!existingSupplier) {
@@ -2494,12 +2520,15 @@ const deleteAzadAgentPaymentOutPerson = async (req, res) => {
       supplierName,
       azad_visa_Price_Out_PKR,
       azad_Visa_Price_Out_Curr,
+      newStatus
     } = req.body;
 
     const newVisa_Price_Out_PKR = parseInt(azad_Visa_Price_Out_Curr, 10);
     const newVisa_Price_Out_Curr = parseInt(azad_visa_Price_Out_PKR, 10);
     const existingSupplier = await AzadAgents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2634,12 +2663,15 @@ const updateAgentPaymentOutPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
+        newStatus
       } = req.body;
 
       let entryMode;
 
       const existingSupplier = await AzadAgents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
       });
 
       if (existingSupplier) {
@@ -3312,28 +3344,29 @@ const changeAgentPaymentInStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    const { supplierName, newStatus,multipleIds } = req.body;
-
+    const{supplierName,newStatus,multipleIds,convert}=req.body
+    
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
     }
 
+    
     const existingSupplier = await AzadAgents.findOne({
-      "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.status": newStatus,
     });
 
     if (!existingSupplier) {
-      return res.status(404).json({ message: "Agent not found" });
+        return res.status(404).json({ message: "Agent not found" });
     }
 
     // Update status of all persons to false
-    if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons && newStatus.toLowerCase()==="closed") {
+    if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
       if(multipleIds.length>0){
         for(const myId of multipleIds){
           const allPersons=existingSupplier.payment_In_Schema.persons
           for (const person of allPersons){
             if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
-       
             person.status = "Closed"
             }
           }
@@ -3341,43 +3374,49 @@ const changeAgentPaymentInStatus = async (req, res) => {
       }
       
     }
-
     if (existingSupplier.payment_In_Schema.status==="Open") {
-      existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out
-      existingSupplier.payment_In_Schema.opening=0
+      existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.total_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out
+     
   }
-
-  
-    existingSupplier.payment_In_Schema.status = newStatus;
+    // Toggle the status of the payment in schema
+    existingSupplier.payment_In_Schema.status = 'Closed';
 
     // Save changes to the database
     await existingSupplier.save();
 
+    const newSupplier=new AzadAgents({
+      payment_In_Schema:{
+        supplier_Id: new mongoose.Types.ObjectId(),
+        supplierName:existingSupplier.payment_In_Schema.supplierName,
+        total_Visa_Price_In_PKR:0,
+        remaining_Balance:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Balance):0,
+        total_Payment_In:0,
+        total_Visa_Price_In_Curr:0,
+        remaining_Curr:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Curr):0,
+        closing:0,
+        opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_In_Schema.remaining_Balance):0,
+        curr_Country:existingSupplier.payment_In_Schema.curr_Country,
+      }
+    })
+    await newSupplier.save()
     // Prepare response message based on the updated status
     let responseMessage;
-    if (existingSupplier.payment_In_Schema.status === "Open") {
-      responseMessage = "Azad Agent Status updated to Open Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Open of Azad Agent Payment In",
-        content: `${user.userName} Opened Khata with Azad Agent: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    } else {
-      responseMessage = "Azad Agent Status updated to Closed Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Closed of Azad Agent Payment In",
-        content: `${user.userName} Closed Khata with Azad Agent: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    }
+     
+        responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
+        const newNotification=new Notifications({
+          type:"Khata Closed of Azad Agent Payment In",
+          content:`${user.userName} Closed Khata with Azad Agent:${supplierName} and new Khata created successfully`,
+          date: new Date().toISOString().split("T")[0]
+
+        })
+        await newNotification.save()
+    
 
     return res.status(200).json({ message: responseMessage });
-  } catch (error) {
-    console.error("Error:", error);
+} catch (error) {
+    console.error('Error:', error);
     return res.status(500).json({ message: "Internal server error" });
-  }
+}
 };
 
 // changing Status
@@ -3385,22 +3424,24 @@ const changeAgentPaymentOutStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    const { supplierName, newStatus,multipleIds } = req.body;
-
+    const{supplierName,newStatus,multipleIds,convert}=req.body
+    
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
     }
 
+    
     const existingSupplier = await AzadAgents.findOne({
-      "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.status": newStatus,
     });
 
     if (!existingSupplier) {
-      return res.status(404).json({ message: "Agent not found" });
+        return res.status(404).json({ message: "Agent not found" });
     }
 
     // Update status of all persons to false
-    if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons && newStatus.toLowerCase()==="closed") {
+    if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons) {
       if(multipleIds.length>0){
         for(const myId of multipleIds){
           const allPersons=existingSupplier.payment_Out_Schema.persons
@@ -3414,40 +3455,47 @@ const changeAgentPaymentOutStatus = async (req, res) => {
       
     }
     if (existingSupplier.payment_Out_Schema.status==="Open") {
-      existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
-      existingSupplier.payment_Out_Schema.opening=0
+      existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
+     
   }
-    
-    existingSupplier.payment_Out_Schema.status = newStatus;
+    // Toggle the status of the payment in schema
+    existingSupplier.payment_Out_Schema.status = 'Closed';
 
     // Save changes to the database
     await existingSupplier.save();
 
+    const newSupplier=new AzadAgents({
+      payment_Out_Schema:{
+        supplier_Id: new mongoose.Types.ObjectId(),
+        supplierName:existingSupplier.payment_Out_Schema.supplierName,
+        total_Visa_Price_Out_PKR:0,
+        remaining_Balance:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Balance):0,
+        total_Payment_Out:0,
+        total_Visa_Price_Out_Curr:0,
+        remaining_Curr:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Curr):0,
+        closing:0,
+        opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_Out_Schema.remaining_Balance):0,
+        curr_Country:existingSupplier.payment_Out_Schema.curr_Country,
+      }
+    })
+    await newSupplier.save()
     // Prepare response message based on the updated status
     let responseMessage;
-    if (existingSupplier.payment_Out_Schema.status === "Open") {
-      responseMessage = "Azad Agent Status updated to Open Successfully!";
+     
+        responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
+        const newNotification=new Notifications({
+          type:"Khata Closed of Azad Agent Payment Out",
+          content:`${user.userName} Closed Khata with Azad Agent:${supplierName} and new Khata created successfully`,
+          date: new Date().toISOString().split("T")[0]
 
-      const newNotification = new Notifications({
-        type: "Khata Open of Azad Agent Payment Out",
-        content: `${user.userName} Opened Khata with Azad Agent: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    } else {
-      responseMessage = "Azad Agent Status updated to Closed Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Closed of Azad Agent Payment Out",
-        content: `${user.userName} Closed Khata with Azad Agent: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    }
+        })
+        await newNotification.save()
+    
 
     return res.status(200).json({ message: responseMessage });
-  } catch (error) {
-    console.error("Error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+} catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
   }
 };
 

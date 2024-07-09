@@ -1733,11 +1733,18 @@ color:white;
       display: flex;
       overflow-x: auto; 
   }
+  .direct_payment .payment_form label{
+    font-size: 9px;
+  }
+  .direct_payment .payment_form input, .direct_payment .payment_form select{
+    height: 30px;
+    font-size: 10px;
+  }
   .direct_payment .flex-grow-1 {
     flex-grow: 1;
     padding: 0;
     margin: 0;
-    min-width: 200px; /* Ensures the elements have a minimum width */
+    min-width: 900px; /* Ensures the elements have a minimum width */
 }
   
 .total_cash {

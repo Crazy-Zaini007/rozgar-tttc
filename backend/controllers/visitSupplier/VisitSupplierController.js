@@ -24,7 +24,6 @@ const CashInHand = require("../../database/cashInHand/CashInHandSchema");
 const mongoose = require("mongoose");
 const moment = require("moment");
 
-// Visit Supplier Section
 // Addding a New addAzadSupplier PaymentIn
 const addAzadSupplierPaymentIn = async (req, res) => {
   try {
@@ -61,6 +60,8 @@ const addAzadSupplierPaymentIn = async (req, res) => {
 
     const existingSupplier = await VisitSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": 'Open',
+
     });
 
     if (!existingSupplier) {
@@ -136,6 +137,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
       const cashInHandUpdate = {
         $inc: {},
       };
+
       if (payment_Via.toLowerCase() === "cash") {
         cashInHandUpdate.$inc.cash = newPaymentIn;
         cashInHandUpdate.$inc.total_Cash = newPaymentIn;
@@ -143,6 +145,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
         cashInHandUpdate.$inc.bank_Cash = newPaymentIn;
         cashInHandUpdate.$inc.total_Cash = newPaymentIn;
       }
+
       await CashInHand.updateOne({}, cashInHandUpdate);
 
       const newBackup = new Backup({
@@ -161,7 +164,6 @@ const addAzadSupplierPaymentIn = async (req, res) => {
         invoice: nextInvoiceNumber,
       });
       await newBackup.save();
-
       await existingSupplier.save();
 
       const newNotification = new Notifications({
@@ -170,6 +172,7 @@ const addAzadSupplierPaymentIn = async (req, res) => {
         date: new Date().toISOString().split("T")[0],
       });
       await newNotification.save();
+
       res.status(200).json({
         message: `Payment In: ${payment_In} added Successfully to ${supplierName}'s Record`,
       });
@@ -240,7 +243,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
           if (supplier.payment_In_Schema) {
             if (
               supplier.payment_In_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplierName.toLowerCase()&&supplier.payment_In_Schema.status.toLowerCase()==='open'
             ) {
               existingSupplier = supplier;
               break;
@@ -305,6 +308,7 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
               ? newCurrAmount
               : 0,
           },
+
           $push: {
             "payment_In_Schema.payment": newPayment,
           },
@@ -345,7 +349,6 @@ const addAzadSupplierMultiplePaymentsIn = async (req, res) => {
           invoice: nextInvoiceNumber,
         });
         await newBackup.save();
-
         await existingSupplier.save();
 
         const newNotification = new Notifications({
@@ -418,13 +421,14 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
           return res.status(400).json({ message: "Cash Return is required" });
         }
 
-      
 
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 
         const existingSupplier = await VisitSuppliers.findOne({
           "payment_In_Schema.supplierName": supplierName,
+          "payment_In_Schema.status": 'Open',
+          
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -503,7 +507,6 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
           const cashInHandUpdate = {
             $inc: {},
           };
-
           if (payment_Via.toLowerCase() === "cash") {
             cashInHandUpdate.$inc.cash = -newCashOut;
             cashInHandUpdate.$inc.total_Cash = -newCashOut;
@@ -513,6 +516,7 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
           }
 
           await CashInHand.updateOne({}, cashInHandUpdate);
+
           const newBackup = new Backup({
             name: supplierName,
             category: category,
@@ -531,11 +535,10 @@ const addAzadSupplierPaymentInReturn = async (req, res) => {
           await newBackup.save();
           const newNotification = new Notifications({
             type: "Visit Supplier Payment In Return",
-            content: `${user.userName} added Payment_Return: ${cash_Out} of Visit Supplier: ${supplierName}`,
+            content: `${user.userName} added Payment_Return: ${cash_Out}  of Visit Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0],
           });
           await newNotification.save();
-        
 
           res
             .status(200)
@@ -578,14 +581,17 @@ const deleteSingleAzadSupplierPaymentIn = async (req, res) => {
       curr_Amount,
       supplierName,
       payment_Via,
+      newStatus
     } = req.body;
 
     const existingSupplier = await VisitSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
     const newPaymentIn = payment_In - cash_Out;
@@ -701,6 +707,7 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
         curr_Amount,
         slip_Pic,
         date,
+        newStatus
       } = req.body;
 
       const newPaymentIn = parseInt(payment_In, 10);
@@ -709,6 +716,8 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
 
       const existingSupplier = await VisitSuppliers.findOne({
         "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
       });
       if (!existingSupplier) {
         res.status(404).json({ message: "Supplier not found" });
@@ -793,12 +802,12 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
       });
       await newNotification.save();
 
-  
+     
       res
         .status(200)
         .json({
           message: "Payment In details updated successfully",
-        
+       
         });
     } catch (error) {
       console.error("Error updating payment details:", error);
@@ -895,14 +904,17 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
       supplierName,
       azad_Visa_Price_In_PKR,
       azad_Visa_Price_In_Curr,
+      newStatus
     } = req.body;
 
     const existingSupplier = await VisitSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
-        message: "Supplier not Found",
+        message: "Agent not Found",
       });
     }
 
@@ -920,6 +932,7 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
           "payment_In_Schema.persons": { _id: personId },
         },
       });
+
       const newNotification = new Notifications({
         type: "Visit Supplier Payment In Person Deleted",
         content: `${user.userName} deleted Person having Visa Price In PKR: ${azad_Visa_Price_In_PKR} of Visit Supplier: ${supplierName}`,
@@ -927,6 +940,7 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
       });
       await newNotification.save();
 
+      
       res
         .status(200)
         .json({
@@ -942,7 +956,6 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
 };
 
 // Updating Payments in Person
-
 const updateSupPaymentInPerson = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
@@ -970,12 +983,15 @@ const updateSupPaymentInPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
+        newStatus
       } = req.body;
 
       let entryMode;
 
       const existingSupplier = await VisitSuppliers.findOne({
         "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.status": newStatus,
+
       });
 
       if (existingSupplier) {
@@ -1628,8 +1644,8 @@ const getAllAzadSupplierPaymentsIn = async (req, res) => {
             curr_Country: paymentInSchema.curr_Country,
             persons: paymentInSchema.persons || [],
             payment: paymentInSchema.payment || [],
+            status: paymentInSchema.status,
             candPayments: paymentInSchema.candPayments || [],
-            status: paymentInSchema.status ,
             opening: paymentInSchema.opening,
             closing: paymentInSchema.closing,
             createdAt: moment(paymentInSchema.createdAt).format("YYYY-MM-DD"),
@@ -1692,7 +1708,6 @@ const addAzadSupplierPaymentOut = async (req, res) => {
           return res.status(400).json({ message: "Payment Out is required" });
         }
 
-      
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
@@ -1700,6 +1715,8 @@ const addAzadSupplierPaymentOut = async (req, res) => {
 
         const existingSupplier = await VisitSuppliers.findOne({
           "payment_Out_Schema.supplierName": supplierName,
+          "payment_Out_Schema.status": 'Open',
+
         });
         if (!existingSupplier) {
           res.status(404).json({
@@ -1807,6 +1824,7 @@ const addAzadSupplierPaymentOut = async (req, res) => {
             invoice: nextInvoiceNumber,
           });
           await newBackup.save();
+
           const newNotification = new Notifications({
             type: "Visit Supplier Payment Out",
             content: `${user.userName} added Payment_Out: ${payment_Out} of Visit Supplier: ${supplierName}`,
@@ -1879,7 +1897,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
           break;
         }
         if (!supplierName) {
-          res.status(400).json({ message: "Supplier Name is required" });
+          res.status(400).json({ message: "Name is required" });
           return;
         }
 
@@ -1893,7 +1911,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
           if (supplier.payment_Out_Schema) {
             if (
               supplier.payment_Out_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplierName.toLowerCase()&&supplier.payment_Out_Schema.status.toLowerCase()==='open'
             ) {
               existingSupplier = supplier;
               break;
@@ -1971,6 +1989,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
         const cashInHandUpdate = {
           $inc: {},
         };
+
         if (payment_Via.toLowerCase() === "cash") {
           cashInHandUpdate.$inc.cash = -newPaymentOut;
           cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
@@ -1980,6 +1999,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
         }
 
         await CashInHand.updateOne({}, cashInHandUpdate);
+
         const newBackup = new Backup({
           name: supplierName,
           category: category,
@@ -1996,6 +2016,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
           invoice: nextInvoiceNumber,
         });
         await newBackup.save();
+
         const newNotification = new Notifications({
           type: "Visit Supplier Payment Out",
           content: `${user.userName} added Payment_Out: ${payment_Out} of Visit Supplier: ${supplierName}`,
@@ -2003,6 +2024,7 @@ const addAzadSupplierMultiplePaymentsOut = async (req, res) => {
         });
         await newNotification.save();
       }
+
       res
         .status(200)
         .json({
@@ -2045,6 +2067,8 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
+          open,
+          close,
           date,
         } = req.body;
         if (!supplierName) {
@@ -2064,6 +2088,7 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
           return res.status(400).json({ message: "Cash Return is required" });
         }
 
+       
 
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
@@ -2071,10 +2096,12 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
 
         const existingSupplier = await VisitSuppliers.findOne({
           "payment_Out_Schema.supplierName": supplierName,
+          "payment_Out_Schema.status": "Open",
+
         });
         if (!existingSupplier) {
           res.status(404).json({
-            message: "Supplier not Found",
+            message: "Agent not Found",
           });
         }
 
@@ -2179,14 +2206,12 @@ const addAzadSupplierPaymentOutReturn = async (req, res) => {
           });
           await newBackup.save();
 
-          await existingSupplier.save();
           const newNotification = new Notifications({
             type: "Visit Supplier Payment Out Return",
             content: `${user.userName} added Payment_Return: ${cash_Out} of Visit Supplier: ${supplierName}`,
             date: new Date().toISOString().split("T")[0],
           });
           await newNotification.save();
-         
 
           res
             .status(200)
@@ -2229,10 +2254,13 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
       supplierName,
       cash_Out,
       payment_Via,
+      newStatus
     } = req.body;
     // console.log(paymentId, payment_Out, curr_Amount, supplierName, cash_Out, payment_Via)
     const existingSupplier = await VisitSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2309,6 +2337,7 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
       });
       await newNotification.save();
 
+      
       res
         .status(200)
         .json({
@@ -2352,6 +2381,7 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
       slip_Pic,
       date,
       cash_Out,
+      newStatus
     } = req.body;
     const newPaymentOut = parseInt(payment_Out, 10);
     const newCashOut = parseInt(cash_Out, 10);
@@ -2360,6 +2390,8 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
     try {
       const existingSupplier = await VisitSuppliers.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
       });
 
       if (!existingSupplier) {
@@ -2441,6 +2473,8 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
       paymentToUpdate.date = date;
       // Save the updated supplier
       await existingSupplier.save();
+
+    
       const newNotification = new Notifications({
         type: "Visit Supplier Payment Out Updated",
         content: `${user.userName} updated Payment_Out: ${payment_Out} of Visit Supplier: ${supplierName}`,
@@ -2450,7 +2484,10 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
 
       res
         .status(200)
-        .json({ message: "Payment Out details updated successfully" });
+        .json({
+          message: "Payment Out details updated successfully",
+         
+        });
     } catch (error) {
       console.error("Error updating payment details:", error);
       res
@@ -2482,19 +2519,21 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
       supplierName,
       azad_visa_Price_Out_PKR,
       azad_Visa_Price_Out_Curr,
+      newStatus
     } = req.body;
-    // console.log(personId, supplierName, azad_visa_Price_Out_PKR,)
+
     const newVisa_Price_Out_PKR = parseInt(azad_Visa_Price_Out_Curr, 10);
     const newVisa_Price_Out_Curr = parseInt(azad_visa_Price_Out_PKR, 10);
     const existingSupplier = await VisitSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema.status": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
         message: "Supplier not Found",
       });
     }
-
     try {
       // Add this line for logging
 
@@ -2511,13 +2550,14 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
           "payment_Out_Schema.persons": { _id: personId },
         },
       });
+
       const newNotification = new Notifications({
         type: "Visit Supplier Payment Out Person Deleted",
         content: `${user.userName} deleted Person having Visa Price In PKR: ${azad_visa_Price_Out_PKR} of Visit Supplier: ${supplierName}`,
         date: new Date().toISOString().split("T")[0],
       });
       await newNotification.save();
-      
+
       res
         .status(200)
         .json({
@@ -2532,8 +2572,69 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
   }
 };
 
-// Updating Payments in Person
+//deleting the Visit Supplier payment_In_Schema
+const deleteAzadSupplierPaymentOutSchema = async (req, res) => {
+  const userId = req.user._id;
+  const user = await User.findById(userId);
 
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+
+  if (user.role !== "Admin") {
+    res.status(403).json({ message: "Only Admin is allowed!" });
+    return;
+  }
+
+  try {
+    const { supplierName } = req.body;
+
+    const existingSupplier = await VisitSuppliers.findOne({
+      "payment_Out_Schema.supplierName": supplierName,
+    });
+
+    if (!existingSupplier) {
+      res.status(404).json({ message: "Supplier not found" });
+      return;
+    }
+
+    const cashInHandDoc = await CashInHand.findOne({});
+
+    if (!cashInHandDoc) {
+      const newCashInHandDoc = new CashInHand();
+      await newCashInHandDoc.save();
+    }
+
+    const cashInHandUpdate = {
+      $inc: {},
+    };
+    cashInHandUpdate.$inc.total_Cash =
+      existingSupplier.payment_Out_Schema.total_Payment_Out;
+    cashInHandUpdate.$inc.total_Cash =
+      -existingSupplier.payment_Out_Schema.total_Cash_Out;
+
+    await CashInHand.updateOne({}, cashInHandUpdate);
+
+    // Delete the payment_In_Schema
+    existingSupplier.payment_Out_Schema = undefined;
+
+    // Save the updated supplier without payment_In_Schema
+    await existingSupplier.save();
+
+    res.status(200).json({
+      message: `${supplierName} deleted successfully`,
+    });
+  } catch (error) {
+    console.error("Error deleting payment_Out_Schema:", error);
+    res.status(500).json({
+      message: "Error deleting payment_Out_Schema",
+      error: error.message,
+    });
+  }
+};
+
+// Updating Payments Out Person
 const updateSupPaymentOutPerson = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
@@ -2561,12 +2662,15 @@ const updateSupPaymentOutPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
+        newStatus
       } = req.body;
 
       let entryMode;
 
       const existingSupplier = await VisitSuppliers.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.status": newStatus,
+
       });
 
       if (existingSupplier) {
@@ -3186,68 +3290,6 @@ const updateSupPaymentOutPerson = async (req, res) => {
   }
 };
 
-//deleting the Visit Supplier payment_In_Schema
-const deleteAzadSupplierPaymentOutSchema = async (req, res) => {
-  const userId = req.user._id;
-  const user = await User.findById(userId);
-
-  if (!user) {
-    res.status(404).json({ message: "User not found" });
-    return;
-  }
-
-  if (user.role !== "Admin") {
-    res.status(403).json({ message: "Only Admin is allowed!" });
-    return;
-  }
-
-  try {
-    const { supplierName } = req.body;
-
-    const existingSupplier = await VisitSuppliers.findOne({
-      "payment_Out_Schema.supplierName": supplierName,
-    });
-
-    if (!existingSupplier) {
-      res.status(404).json({ message: "Supplier not found" });
-      return;
-    }
-
-    const cashInHandDoc = await CashInHand.findOne({});
-
-    if (!cashInHandDoc) {
-      const newCashInHandDoc = new CashInHand();
-      await newCashInHandDoc.save();
-    }
-
-    const cashInHandUpdate = {
-      $inc: {},
-    };
-    cashInHandUpdate.$inc.total_Cash =
-      existingSupplier.payment_Out_Schema.total_Payment_Out;
-    cashInHandUpdate.$inc.total_Cash =
-      -existingSupplier.payment_Out_Schema.total_Cash_Out;
-
-    await CashInHand.updateOne({}, cashInHandUpdate);
-
-    // Delete the payment_In_Schema
-    existingSupplier.payment_Out_Schema = undefined;
-
-    // Save the updated supplier without payment_In_Schema
-    await existingSupplier.save();
-
-    res.status(200).json({
-      message: `${supplierName} deleted successfully`,
-    });
-  } catch (error) {
-    console.error("Error deleting payment_Out_Schema:", error);
-    res.status(500).json({
-      message: "Error deleting payment_Out_Schema",
-      error: error.message,
-    });
-  }
-};
-
 // Getting All Visit Supplier Payments Out
 const getAllAzadSupplierPaymentsOut = async (req, res) => {
   try {
@@ -3298,33 +3340,36 @@ const getAllAzadSupplierPaymentsOut = async (req, res) => {
   }
 };
 
+
+
 // changing Status
 const changeSupplierPaymentInStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    const { supplierName, newStatus,multipleIds } = req.body;
-
+    const{supplierName,newStatus,multipleIds,convert}=req.body
+    
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
     }
 
+    
     const existingSupplier = await VisitSuppliers.findOne({
-      "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema.status": newStatus,
     });
 
     if (!existingSupplier) {
-      return res.status(404).json({ message: "Supplier not found" });
+        return res.status(404).json({ message: "Agent not found" });
     }
 
     // Update status of all persons to false
-    if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons && newStatus.toLowerCase()==="closed") {
+    if (existingSupplier.payment_In_Schema && existingSupplier.payment_In_Schema.persons) {
       if(multipleIds.length>0){
         for(const myId of multipleIds){
           const allPersons=existingSupplier.payment_In_Schema.persons
           for (const person of allPersons){
             if(person._id.toString()===myId.toString() && person.status.toLowerCase()==='open'){
-       
             person.status = "Closed"
             }
           }
@@ -3332,43 +3377,49 @@ const changeSupplierPaymentInStatus = async (req, res) => {
       }
       
     }
-
     if (existingSupplier.payment_In_Schema.status==="Open") {
-      existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out
-      existingSupplier.payment_In_Schema.opening=0
+      existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.total_Visa_Price_In_PKR-existingSupplier.payment_In_Schema.total_Payment_In+existingSupplier.payment_In_Schema.total_Cash_Out
+     
   }
-
     // Toggle the status of the payment in schema
-    existingSupplier.payment_In_Schema.status = newStatus;
+    existingSupplier.payment_In_Schema.status = 'Closed';
 
     // Save changes to the database
     await existingSupplier.save();
 
+    const newSupplier=new VisitSuppliers({
+      payment_In_Schema:{
+        supplier_Id: new mongoose.Types.ObjectId(),
+        supplierName:existingSupplier.payment_In_Schema.supplierName,
+        total_Visa_Price_In_PKR:0,
+        remaining_Balance:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Balance):0,
+        total_Payment_In:0,
+        total_Visa_Price_In_Curr:0,
+        remaining_Curr:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Curr):0,
+        closing:0,
+        opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_In_Schema.remaining_Balance):0,
+        curr_Country:existingSupplier.payment_In_Schema.curr_Country,
+      }
+    })
+    await newSupplier.save()
     // Prepare response message based on the updated status
     let responseMessage;
-    if (existingSupplier.payment_In_Schema.status === "Open") {
-      responseMessage = "Visit Supplier Status updated to Open Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Open of Visit Supplier Payment In",
-        content: `${user.userName} Opened Khata with Visit Supplier: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    } else {
-      responseMessage = "Visit Supplier Status updated to Closed Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Closed of Visit Supplier Payment In",
-        content: `${user.userName} Closed Khata with Visit Supplier: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    }
+     
+        responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
+        const newNotification=new Notifications({
+          type:"Khata Closed of Visit Supplier Payment In",
+          content:`${user.userName} Closed Khata with Visit Supplier:${supplierName} and new Khata created successfully`,
+          date: new Date().toISOString().split("T")[0]
+
+        })
+        await newNotification.save()
+    
 
     return res.status(200).json({ message: responseMessage });
-  } catch (error) {
-    console.error("Error:", error);
+} catch (error) {
+    console.error('Error:', error);
     return res.status(500).json({ message: "Internal server error" });
-  }
+}
 };
 
 // changing Status
@@ -3376,22 +3427,24 @@ const changeSupplierPaymentOutStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    const { supplierName, newStatus,multipleIds } = req.body;
-
+    const{supplierName,newStatus,multipleIds,convert}=req.body
+    
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found" });
     }
 
+    
     const existingSupplier = await VisitSuppliers.findOne({
-      "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema.status": newStatus,
     });
 
     if (!existingSupplier) {
-      return res.status(404).json({ message: "Supplier not found" });
+        return res.status(404).json({ message: "Agent not found" });
     }
 
     // Update status of all persons to false
-    if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons && newStatus.toLowerCase()==="closed") {
+    if (existingSupplier.payment_Out_Schema && existingSupplier.payment_Out_Schema.persons) {
       if(multipleIds.length>0){
         for(const myId of multipleIds){
           const allPersons=existingSupplier.payment_Out_Schema.persons
@@ -3405,40 +3458,47 @@ const changeSupplierPaymentOutStatus = async (req, res) => {
       
     }
     if (existingSupplier.payment_Out_Schema.status==="Open") {
-      existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
-      existingSupplier.payment_Out_Schema.opening=0
+      existingSupplier.payment_Out_Schema.closing=existingSupplier.payment_Out_Schema.total_Visa_Price_Out_PKR-existingSupplier.payment_Out_Schema.total_Payment_Out+existingSupplier.payment_Out_Schema.total_Cash_Out
+     
   }
-
     // Toggle the status of the payment in schema
-    existingSupplier.payment_Out_Schema.status = newStatus;
+    existingSupplier.payment_Out_Schema.status = 'Closed';
 
     // Save changes to the database
     await existingSupplier.save();
 
+    const newSupplier=new VisitSuppliers({
+      payment_Out_Schema:{
+        supplier_Id: new mongoose.Types.ObjectId(),
+        supplierName:existingSupplier.payment_Out_Schema.supplierName,
+        total_Visa_Price_Out_PKR:0,
+        remaining_Balance:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Balance):0,
+        total_Payment_Out:0,
+        total_Visa_Price_Out_Curr:0,
+        remaining_Curr:convert.toLowerCase()==='yes'?(existingSupplier.remaining_Curr):0,
+        closing:0,
+        opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_Out_Schema.remaining_Balance):0,
+        curr_Country:existingSupplier.payment_Out_Schema.curr_Country,
+      }
+    })
+    await newSupplier.save()
     // Prepare response message based on the updated status
     let responseMessage;
-    if (existingSupplier.payment_Out_Schema.status === "Open") {
-      responseMessage = "Visit Supplier Status updated to Open Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Open of Visit Supplier Payment Out",
-        content: `${user.userName} Opened Khata with Visit Supplier: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    } else {
-      responseMessage = "Visit Supplier Status updated to Closed Successfully!";
-      const newNotification = new Notifications({
-        type: "Khata Closed of Visit Supplier Payment Out",
-        content: `${user.userName} Closed Khata with Visit Supplier: ${supplierName}`,
-        date: new Date().toISOString().split("T")[0],
-      });
-      await newNotification.save();
-    }
+     
+        responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
+        const newNotification=new Notifications({
+          type:"Khata Closed of Visit Supplier Payment Out",
+          content:`${user.userName} Closed Khata with Visit Supplier:${supplierName} and new Khata created successfully`,
+          date: new Date().toISOString().split("T")[0]
+
+        })
+        await newNotification.save()
+    
 
     return res.status(200).json({ message: responseMessage });
-  } catch (error) {
-    console.error("Error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+} catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -3641,14 +3701,14 @@ const addCandVisePaymentIn = async (req, res) => {
 
     const newNotification = new Notifications({
       type: "Visit Supplier Cand-Wise Payment In",
-      content: `${user.userName} added Candidate Wise Payment_In: ${new_Payment_In} to ${payments.length} Candidates of Visit Supplier:${supplierName}`,
+      content: `${user.userName} added Candidate Wise Payment_In: ${new_Payment_In} to ${payments.length} Candidates of Agent:${supplierName}`,
       date: new Date().toISOString().split("T")[0],
     });
     await newNotification.save();
 
     await existingSupplier.save();
     res.status(200).json({
-      message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Visit Supplier:${supplierName}'s Record`,
+      message: `Payment In: ${new_Payment_In} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -3894,7 +3954,7 @@ const deleteSingleCandVisePaymentIn = async (req, res) => {
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification = new Notifications({
           type: "Visit Supplier Cand-Wise Payment In Deleted",
-          content: `${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Visit Supplier:${supplierName}'s Record`,
+          content: `${user.userName} deleted Cand-Wise Payment_In: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0],
         });
         await newNotification.save();
@@ -3915,7 +3975,7 @@ const deleteSingleCandVisePaymentIn = async (req, res) => {
         }
 
         res.status(200).json({
-          message: `Successfuly, deleted Cand-Wise Payment_In: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Visit Supplier:${supplierName}'s Record`,
+          message: `Successfuly, deleted Cand-Wise Payment_In: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
         });
       }
     }
@@ -4032,14 +4092,14 @@ const updateSingleCandVisePaymentIn = async (req, res) => {
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification = new Notifications({
           type: "Visit Supplier Cand-Wise Payment In Updated",
-          content: `${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Visit Supplier:${supplierName}'s Record`,
+          content: `${user.userName} updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0],
         });
         await newNotification.save();
         await existingSupplier.save();
 
         res.status(200).json({
-          message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Visit Supplier: ${supplierName}'s Record`,
+          message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent: ${supplierName}'s Record`,
         });
       }
     }
@@ -4247,14 +4307,14 @@ const addCandVisePaymentOut = async (req, res) => {
 
     const newNotification = new Notifications({
       type: "Visit Supplier Cand-Wise Payment Out",
-      content: `${user.userName} added Candidate Wise Payment_Ou: ${new_Payment_Out} to ${payments.length} Candidates of Visit Supplier:${supplierName}`,
+      content: `${user.userName} added Candidate Wise Payment_Ou: ${new_Payment_Out} to ${payments.length} Candidates of Agent:${supplierName}`,
       date: new Date().toISOString().split("T")[0],
     });
     await newNotification.save();
 
     await existingSupplier.save();
     res.status(200).json({
-      message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Visit Supplier:${supplierName}'s Record`,
+      message: `Payment Out: ${new_Payment_Out} added Successfully for to ${payments.length} Candidates to Agent:${supplierName}'s Record`,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -4343,13 +4403,13 @@ const deleteCandVisePaymentOut = async (req, res) => {
       await existingSupplier.save();
       const newNotification = new Notifications({
         type: "Visit Supplier Cand-Wise Payment Out Deleted",
-        content: `${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out} of ${paymentToDelete.payments.length} Candidates from  Visit Supplier:${supplierName}'s Record`,
+        content: `${user.userName} deleted Cand-Wise Payment_Out: ${paymentToDelete.payment_Out} of ${paymentToDelete.payments.length} Candidates from  Agent:${supplierName}'s Record`,
         date: new Date().toISOString().split("T")[0],
       });
       await newNotification.save();
 
       res.status(200).json({
-        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Visit Supplier:${supplierName}'s Record`,
+        message: `Payment Out with ID ${paymentId} deleted successfully of ${paymentToDelete.payments.length} Candidates from  Agent:${supplierName}'s Record`,
       });
     }
   } catch (error) {
@@ -4499,7 +4559,7 @@ const deleteSingleCandVisePaymentOut = async (req, res) => {
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification = new Notifications({
           type: "Visit Supplier Cand-Wise Payment Out Deleted",
-          content: `${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Visit Supplier:${supplierName}'s Record`,
+          content: `${user.userName} deleted Cand-Wise Payment_Out: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0],
         });
         await newNotification.save();
@@ -4520,7 +4580,7 @@ const deleteSingleCandVisePaymentOut = async (req, res) => {
         }
 
         res.status(200).json({
-          message: `Successfuly, deleted Cand-Wise Payment_Out: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Visit Supplier:${supplierName}'s Record`,
+          message: `Successfuly, deleted Cand-Wise Payment_Out: ${candPayment.new_Payment} of Candidate ${candPayment.cand_Name} from  Agent:${supplierName}'s Record`,
         });
       }
     }
@@ -4636,14 +4696,14 @@ const updateSingleCandVisePaymentOut = async (req, res) => {
         await CashInHand.updateOne({}, cashInHandUpdate);
         const newNotification = new Notifications({
           type: "Visit Supplier Cand-Wise Payment Out Updated",
-          content: `${user.userName} updated Cand-Wise Payment_Out: ${new_Payment} of Candidate ${candPayment.cand_Name} of Visit Supplier:${supplierName}'s Record`,
+          content: `${user.userName} updated Cand-Wise Payment_Out: ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
           date: new Date().toISOString().split("T")[0],
         });
         await newNotification.save();
         await existingSupplier.save();
 
         res.status(200).json({
-          message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Visit Supplier:${supplierName}'s Record`,
+          message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Agent:${supplierName}'s Record`,
         });
       }
     }
@@ -4651,6 +4711,7 @@ const updateSingleCandVisePaymentOut = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 module.exports = {
   addAzadSupplierPaymentIn,
   addAzadSupplierMultiplePaymentsIn,
@@ -4674,12 +4735,12 @@ module.exports = {
   changeSupplierPaymentOutStatus,
   addCandVisePaymentIn,
   deleteCandVisePaymentIn,
+  updateCandVisePaymentIn,
   deleteSingleCandVisePaymentIn,
   updateSingleCandVisePaymentIn,
   addCandVisePaymentOut,
   deleteCandVisePaymentOut,
+  updateCandVisePaymentOut,
   deleteSingleCandVisePaymentOut,
   updateSingleCandVisePaymentOut,
-  updateCandVisePaymentIn,
-  updateCandVisePaymentOut,
 };

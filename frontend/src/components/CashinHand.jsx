@@ -1382,10 +1382,7 @@ export default function CashinHand() {
                         <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
                       </div>
 
-                      <div className="col-xl-6 col-12   p-1 my-1">
-                        <label >Details </label><br />
-                        <textarea className='pt-2' value={details} onChange={(e) => setDetails(e.target.value)} />
-                      </div>
+                   
                     </div>
                     <div className="text-center">
 

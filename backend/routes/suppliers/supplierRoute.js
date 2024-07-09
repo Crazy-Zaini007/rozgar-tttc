@@ -1,32 +1,35 @@
 const express = require('express');
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addPaymentIn,
-    deleteSinglePaymentIn,
-    addPaymentInReturn,
-    updateSinglePaymentIn,
-    updateAgentTotalPaymentIn,
-    addMultiplePaymentsIn,
-    deletePaymentInPerson,
-    updatePaymentInPerson,
-    deleteAgentPaymentInSchema,
-    getAllPaymentsIn,
-    addPaymentOut,
-    addPaymentOutReturn,
-    deleteSinglePaymentOut,
-    updateSinglePaymentOut,
-    addMultiplePaymentsOut,
-    deletePaymentOutPerson,
-    updatePaymentOutPerson,
-    deleteAgentPaymentOutSchema,
-    updateAgentTotalPaymentOut,
-    changePaymentInStatus,
+const {
+  addPaymentIn,
+  deleteSinglePaymentIn,
+  addPaymentInReturn,
+  updateSinglePaymentIn,
+  updateAgentTotalPaymentIn,
+  addMultiplePaymentsIn,
+  deletePaymentInPerson,
+  updatePaymentInPerson,
+  deleteAgentPaymentInSchema,
+  getAllPaymentsIn,
+  addPaymentOut,
+  addPaymentOutReturn,
+  deleteSinglePaymentOut,
+  updateSinglePaymentOut,
+  addMultiplePaymentsOut,
+  deletePaymentOutPerson,
+  updatePaymentOutPerson,
+  deleteAgentPaymentOutSchema,
+  updateAgentTotalPaymentOut,
+  getAllPaymentsOut,
+  changePaymentInStatus,
   changePaymentOutStatus,
-    getAllPaymentsOut,
-    addCandVisePaymentIn,
-    deleteCandVisePaymentIn,
+  addCandVisePaymentIn,
+  addCandVisePaymentInReturn,
+  deleteCandVisePaymentIn,
   deleteSingleCandVisePaymentIn,
   updateSingleCandVisePaymentIn,
   addCandVisePaymentOut,
+  addCandVisePaymentOutReturn,
   deleteCandVisePaymentOut,
   deleteSingleCandVisePaymentOut,
   updateSingleCandVisePaymentOut,
@@ -86,12 +89,14 @@ router.patch('/update/payment_out/status', changePaymentOutStatus)
 
 // Candidate Vise payments in and Out
 router.post('/add/cand_vise/payment_in',addCandVisePaymentIn)
+router.post('/add/cand_vise/payment_in/cash_out',addCandVisePaymentInReturn)
 router.delete('/delete/cand_vise/payment_in',deleteCandVisePaymentIn)
 router.delete('/delete/cand_vise/single/payment_in',deleteSingleCandVisePaymentIn)
 router.patch('/update/cand_vise/single/payment_in',updateSingleCandVisePaymentIn)
 
 
 router.post('/add/cand_vise/payment_out',addCandVisePaymentOut)
+router.post('/add/cand_vise/payment_out/cash_out',addCandVisePaymentOutReturn)
 router.delete('/delete/cand_vise/payment_out',deleteCandVisePaymentOut)
 router.delete('/delete/cand_vise/single/payment_out',deleteSingleCandVisePaymentOut)
 router.patch('/update/cand_vise/single/payment_out',updateSingleCandVisePaymentOut)

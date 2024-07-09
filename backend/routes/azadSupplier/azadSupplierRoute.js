@@ -19,7 +19,8 @@ const {  addAzadSupplierPaymentIn, addAzadSupplierMultiplePaymentsIn, addAzadSup
     deleteSingleCandVisePaymentOut,
     updateSingleCandVisePaymentOut,
     updateCandVisePaymentIn,
-    updateCandVisePaymentOut, } = require('../../controllers/azadSupplier/AzadSupplierController')
+    updateCandVisePaymentOut, 
+} = require('../../controllers/azadSupplier/AzadSupplierController')
 const {addAzadCandPaymentIn, addAzadCandMultiplePaymentsIn, addAzadCandPaymentInReturn, deleteSingleAzadCandPaymentIn, updateSingleAzadCandPaymentIn,deleteAzadCandPaymentInSchema, getAzadCandAllPaymentsIn, addAzadCandPaymentOut, addAzadCandPaymentOutReturn, deleteAzadCandSinglePaymentOut, updateAzadCandSinglePaymentOut, addAzadCandMultiplePaymentsOut,deleteAzadCandPaymentOutSchema, getAzadCandAllPaymentsOut } = require('../../controllers/azadCandidate/AzadCandidateController')
 
 const router = express.Router()
