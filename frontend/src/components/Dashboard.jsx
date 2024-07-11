@@ -949,7 +949,14 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? totalEmployeeExpense:0)+(expenses?totalExpense:0) }</h5> }
+            {loading2 
+    ? <i className="fa-solid fa-spinner fa-spin"></i>
+    : <h5>
+        {(Number(employees ? totalEmployeeExpense : 0) + 
+         Number(expenses ? totalExpense : 0)).toFixed(2)}
+      </h5>
+}
+
                 <h6 className='ml-2'>Total Expenses with Employess <br /> </h6>
             </div>
           </div> 
@@ -971,7 +978,14 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? currentMonthEmployeeExpense:0)+(expenses? currentMonthExpense:0) }</h5> }
+            {loading2 
+    ? <i className="fa-solid fa-spinner fa-spin"></i>
+    : <h5>
+        {(Number(employees ? currentMonthEmployeeExpense : 0) + 
+         Number(expenses ? currentMonthExpense : 0)).toFixed(2)}
+      </h5>
+}
+
                 <h6 className='ml-2'> Current Month Expenses with Employess<br /> </h6>
             </div>
           </div> 
@@ -991,7 +1005,13 @@ const[option,setOption]=useState(false)
               </div>
             </div>
             <div className="side text-end ">
-            {loading2 ? <i className="fa-solid fa-spinner fa-spin"></i>:<h5>{(employees ? threeMonthsEmployeeExpense:0)+(expenses ?threeMonthsExpense:0)}</h5> }
+            {loading2 
+    ? <i className="fa-solid fa-spinner fa-spin"></i>
+    : <h5>
+        {(Number(employees ? threeMonthsEmployeeExpense : 0) + 
+         Number(expenses ? threeMonthsExpense : 0)).toFixed(2)}
+      </h5>
+}
                 <h6 className='ml-2'>Last 3 Month Expenses with Employess<br /> </h6>
             </div>
           </div> 

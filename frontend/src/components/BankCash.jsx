@@ -878,7 +878,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
          <div className="col-md-12 payment_details my-2">
            <div className="row justify-content-start">
 <div className="col-md-12 tex-start mb-3">
-  <button className='btn btn-sm me-1 shadow'style={!bankName?{background:'var(--accent-stonger-blue)',color:'white',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName('')}>All</button>
+  <button className='btn btn-sm me-1 mb-1 shadow'style={!bankName?{background:'var(--accent-stonger-blue)',color:'white',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName('')}>All</button>
 {[...new Set(paymentVia && paymentVia.map(data => data.payment_Via))].map(dateValue => (
                                 <button className='btn btn-sm me-1 shadow' style={bankName===dateValue?{background:'var(--accent-stonger-blue)',color:'white',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName(dateValue)} value={dateValue} key={dateValue}>{dateValue}</button>
                               ))}
@@ -1034,21 +1034,8 @@ Remaining PKR=
     return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
   }, 0))}
 </TableCell>
-<TableCell className='border data_td text-center bg-secondary text-white'>
-Remaining Curr= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.curr_Amount:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.curr_Amount:0) || 0)); 
-  }, 0))}
-</TableCell>
-                            
-                          </TableRow>
-                          </TableBody>
+</TableRow>
+</TableBody>
            </Table>
           </TableContainer>
            </div>
