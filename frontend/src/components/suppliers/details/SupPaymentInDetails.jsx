@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState ,useRef} from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import SupplierHook from '../../../hooks/supplierHooks/SupplierHook'
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuthContext } from '../../../hooks/userHooks/UserAuthHook';
@@ -15,20 +15,22 @@ import EntryMoodHook from '../../../hooks/settingHooks/EntryMoodHook'
 import FinalStatusHook from '../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
-import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
-
-export default function SupPaymentInDetails() {
+import ClipLoader from 'react-spinners/ClipLoader'
+import logo from '../../logo.png' 
+export default function SuppPaymentInDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
   const [loading2, setLoading2] = useState(false)
   const [loading3, setLoading3] = useState(false)
   const [loading4, setLoading4] = useState(false)
   const [loading5, setLoading5] = useState(false)
-  const [loading6, setLoading6] = useState(false)
   const [show, setShow] = useState(false)
   const [show1, setShow1] = useState(false)
   const [show2, setShow2] = useState(false)
+
+  const[newStatus,setNewStatus]=useState('')
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
 
   const { getCurrencyData } = CurrencyHook()
@@ -44,8 +46,8 @@ export default function SupPaymentInDetails() {
   const { getPaymentsIn } = SupplierHook()
   const { user } = useAuthContext()
   const dispatch = useDispatch()
-  const apiUrl = process.env.REACT_APP_API_URL;
 
+  const abortCont = useRef(new AbortController());
 
   const fetchData = async () => {
 
@@ -70,9 +72,6 @@ export default function SupPaymentInDetails() {
       setIsLoading(false);
     }
   }
-
-  const abortCont = useRef(new AbortController());
-
   useEffect(() => {
     if (user) {
       fetchData();
@@ -84,6 +83,10 @@ export default function SupPaymentInDetails() {
     }
   }, [])
 
+
+
+  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In);
+
   const currencies = useSelector((state) => state.setting.currencies);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
@@ -94,7 +97,6 @@ export default function SupPaymentInDetails() {
   const finalStatus = useSelector((state) => state.setting.finalStatus);
   const trades = useSelector((state) => state.setting.trades);
 
-  const supp_Payments_In = useSelector((state) => state.suppliers.supp_Payments_In);
 
 
   const rowsPerPageOptions = [10, 15, 30];
@@ -124,8 +126,6 @@ export default function SupPaymentInDetails() {
     setOption(!option)
 
   }
-
-
   // Editing for single Payment In 
   const [editMode, setEditMode] = useState(false);
   const [editedEntry, setEditedEntry] = useState({});
@@ -175,7 +175,7 @@ export default function SupPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount, cand_Name: payment.cand_Name })
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount, cand_Name: payment.cand_Name,newStatus })
         })
 
         const json = await response.json()
@@ -185,7 +185,7 @@ export default function SupPaymentInDetails() {
           setLoading1(false)
         }
         if (response.ok) {
-          fetchData()
+          fetchData();
           setNewMessage(toast.success(json.message));
           setLoading1(false)
           setEditMode(!editMode)
@@ -211,7 +211,7 @@ export default function SupPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr })
+          body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr,newStatus })
         })
 
         const json = await response.json()
@@ -221,7 +221,7 @@ export default function SupPaymentInDetails() {
           setLoading2(false)
         }
         if (response.ok) {
-          fetchData()
+          fetchData();
           setNewMessage(toast.success(json.message));
           setLoading2(false)
           setEditMode(!editMode)
@@ -244,7 +244,7 @@ export default function SupPaymentInDetails() {
   const handlePersonEditClick = (person, index) => {
     setEditMode2(!editMode2);
     setEditedEntry2(person);
-    setEditedRowIndex2(index); // Set the index of the row being edited
+    setEditedRowIndex2(index);
   };
 
 
@@ -266,7 +266,7 @@ export default function SupPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, personId: editedEntry2._id, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status,newStatus })
       })
 
       const json = await response.json()
@@ -277,7 +277,7 @@ export default function SupPaymentInDetails() {
         setLoading4(false)
       }
       if (response.ok) {
-        fetchData()
+        fetchData();
         setNewMessage(toast.success(json.message));
         setLoading4(null)
         setEditMode2(!editMode2)
@@ -300,7 +300,7 @@ export default function SupPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date, cand_Name: editedEntry.cand_Name })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_In: editedEntry.payment_In, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_In_Curr, curr_Amount: editedEntry.curr_Amount, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date, cand_Name: editedEntry.cand_Name,newStatus })
       })
 
       const json = await response.json()
@@ -311,7 +311,7 @@ export default function SupPaymentInDetails() {
         setLoading3(false)
       }
       if (response.ok) {
-        fetchData()
+        fetchData();
         setNewMessage(toast.success(json.message));
         setLoading3(null)
         setEditMode(!editMode)
@@ -353,7 +353,7 @@ export default function SupPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: editedEntry1.supplierName, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close })
+        body: JSON.stringify({ supplierName: editedEntry1.supplierName,newStatus, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close })
       })
 
       const json = await response.json()
@@ -364,7 +364,7 @@ export default function SupPaymentInDetails() {
         setLoading3(false)
       }
       if (response.ok) {
-        fetchData()
+        fetchData();
         setNewMessage(toast.success(json.message));
         setLoading3(null)
         setEditMode1(!editMode1)
@@ -397,7 +397,7 @@ export default function SupPaymentInDetails() {
           setLoading5(false)
         }
         if (response.ok) {
-          fetchData()
+          fetchData();
           setNewMessage(toast.success(json.message));
           setLoading5(false)
           setEditMode1(!editMode1)
@@ -413,37 +413,40 @@ export default function SupPaymentInDetails() {
 
 
 
+  
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('open')
+
 
   const filteredTotalPaymentIn = supp_Payments_In.filter(payment => {
     return (
       payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
       payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
       payment.status.toLowerCase().includes(status.toLowerCase())
-
     )
   })
 
+  
 
 
   // individual payments filters
-
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
   const [search1, setSearch1] = useState('')
+
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredIndividualPayments = supp_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
+    .filter((data) => data.supplierName === selectedSupplier &&data.status===newStatus )
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData.payment
         .filter((paymentItem) => paymentItem.cand_Name === undefined)
         .filter((paymentItem) => {
           let isDateInRange = true;
+
           // Check if the payment item's date is within the selected date range
           if (dateFrom && dateTo) {
             isDateInRange =
@@ -452,18 +455,17 @@ export default function SupPaymentInDetails() {
 
           return (
             isDateInRange &&
-             paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-             paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
-          (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-           paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-           paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-           paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
-      )
+            paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
+            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
+             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+        )
           );
         }),
     }))
 
- 
   const [date3, setDate3] = useState('')
   const [name, setName] = useState('')
   const [pp_No, setPP_NO] = useState('')
@@ -477,32 +479,55 @@ export default function SupPaymentInDetails() {
   const [search2, setSearch2] = useState('')
 
   const filteredPersons = supp_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
+  .filter((data) => data.supplierName === selectedSupplier && data.status === newStatus)
+  .map((filteredData) => ({
+    ...filteredData,
+    persons: filteredData.persons
+      .filter((person) => {
+        // Check if person.name does not match any cand_Name in candPayments.payments
+        const isNotInCandPayments = !filteredData.candPayments.some((candPayment) =>
+          candPayment.payments.some((payment) =>
+            payment.cand_Name.trim().toLowerCase() === person.name.trim().toLowerCase()
+          )
+        );
+
+        return (
+          isNotInCandPayments &&
+          person.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
+          person.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
+          person.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
+          person.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+          person.company?.toLowerCase().includes(company.toLowerCase()) &&
+          person.country?.toLowerCase().includes(country.toLowerCase()) &&
+          person.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+          person.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+          person.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+          person.status?.toLowerCase().includes(status1.toLowerCase()) &&
+          (
+            person.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase())
+          )
+        );
+      })
+  }))
+
+
+  
+  const filteredClosingPersons = supp_Payments_In
+    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
-        .filter((persons) =>
-          persons.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-          persons.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
-          persons.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
-          persons.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-          persons.company?.toLowerCase().includes(company.toLowerCase()) &&
-          persons.country?.toLowerCase().includes(country.toLowerCase()) &&
-          persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-          persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-          persons.status?.toLowerCase().includes(status1.toLowerCase()) &&
-          (persons.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()))
-        )
     }))
+
+
 
   const downloadExcel = () => {
     const data = [];
@@ -514,12 +539,11 @@ export default function SupPaymentInDetails() {
         Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
         Total_Payment_In: payments.total_Payment_In,
         Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.total_Visa_Price_In_PKR - payments.total_Payment_In + payments.total_Cash_Out,
+        Remaining_PKR: payments.remaining_Balance,
         Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr: payments.total_Payment_In_Curr,
-        Remaining_Curr: payments.total_Visa_Price_In_Curr - payments.total_Payment_In_Curr,
-        Status: payments.status
-
+        Remaining_Curr: payments.remaining_Curr,
+        Status: payments.status,
       }
 
       data.push(rowData);
@@ -543,17 +567,16 @@ export default function SupPaymentInDetails() {
         SN: index + 1,
         Date: payment.date,
         Category: payment.category,
-        payment_Via: payment.payment_Via,
-        payment_Type: payment.payment_Type,
-        slip_No: payment.slip_No,
-        details: payment.details,
-        payment_In: payment.payment_In,
-        cash_Out: payment.cash_Out,
-        invoice: payment.invoice,
-        candidate_Name: payment.cand_Name,
-        payment_In_Curr: payment.payment_In_Curr,
-        curr_Rate: payment.curr_Rate,
-        curr_Amount: payment.curr_Amount
+        Payment_Via: payment.payment_Via,
+        Payment_Type: payment.payment_Type,
+        Slip_No: payment.slip_No,
+        Details: payment.details,
+        Payment_In: payment.payment_In,
+        Cash_Out: payment.cash_Out,
+        Invoice: payment.invoice,
+        Payment_In_Curr: payment.payment_In_Curr,
+        Curr_Rate: payment.curr_Rate,
+        Curr_Amount: payment.curr_Amount
       };
 
       data.push(rowData);
@@ -574,21 +597,21 @@ export default function SupPaymentInDetails() {
     individualPayments.forEach((payment, index) => {
       const rowData = {
         SN: index + 1,
-        entry_Date: payment.entry_Date,
-        name: payment.name,
-        pp_No: payment.pp_No,
-        entry_Mode: payment.entry_Mode,
-        company: payment.company,
-        trade: payment.trade,
-        country: payment.country,
-        final_Status: payment.final_Status,
-        flight_Date: payment.flight_Date,
-        visa_Price_In_PKR: payment.visa_Price_In_PKR,
-        total_In: payment.total_In,
-        total_Cash_Out: payment.cash_Out,
+        Entry_Date: payment.entry_Date,
+        Name: payment.name,
+        PP_No: payment.pp_No,
+        Entry_Mode: payment.entry_Mode,
+        Company: payment.company,
+        Trade: payment.trade,
+        Country: payment.country,
+        Final_Status: payment.final_Status,
+        Flight_Date: payment.flight_Date,
+        Visa_Price_In_PKR: payment.visa_Price_In_PKR,
+        Total_In: payment.total_In,
+        Total_Cash_Out: payment.cash_Out,
         Remaining_PKR: payment.visa_Price_In_PKR - payment.total_In + payment.cash_Out,
-        visa_Price_In_Curr: payment.visa_Price_In_Curr,
-        remaining_Curr: payment.remaining_Curr,
+        Visa_Price_In_Curr: payment.visa_Price_In_Curr,
+        Remaining_Curr: payment.remaining_Curr,
         Status: payment.status
       };
 
@@ -606,8 +629,6 @@ export default function SupPaymentInDetails() {
     const anotherData = []
 
     const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
-
-    // Iterate over individual payments and push all fields
     individualPayments.forEach((payment, index) => {
       const rowData = {
         SN: index + 1,
@@ -664,8 +685,6 @@ export default function SupPaymentInDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
   }
 
-
-
   // Changing Status
   const [multipleIds, setMultipleIds] = useState([]);
   const handleEntryId = (id, isChecked) => {
@@ -678,12 +697,15 @@ export default function SupPaymentInDetails() {
     }
    
   }
-  const changeStatus = async (myStatus) => {
+
+
+  const [convert,setConvert]=useState('No')
+
+
+  const changeStatus = async () => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
-      let newStatus = myStatus
-
       setLoading5(true)
-
+       
       try {
         const response = await fetch(`${apiUrl}/auth/suppliers/update/payment_in/status`, {
           method: 'PATCH',
@@ -691,7 +713,7 @@ export default function SupPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,multipleIds })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus,multipleIds,convert })
         })
 
         const json = await response.json()
@@ -704,7 +726,7 @@ export default function SupPaymentInDetails() {
           fetchData()
           setNewMessage(toast.success(json.message));
           setLoading5(false)
-          setEditMode1(!editMode1)
+
         }
       }
       catch (error) {
@@ -714,7 +736,7 @@ export default function SupPaymentInDetails() {
     }
   }
 
-  
+
   const printMainTable = () => {
     // Function to format the date as dd-MM-yyyy
     const formatDate = (date) => {
@@ -760,10 +782,10 @@ export default function SupPaymentInDetails() {
             <td>${String(entry.total_Visa_Price_In_PKR)}</td>
             <td>${String(entry.total_Payment_In)}</td>
             <td>${String(entry.total_Cash_Out)}</td>
-            <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
+            <td>${String(entry.remaining_Balance)}</td>
             <td>${String(entry.total_Visa_Price_In_Curr)}</td>
             <td>${String(entry.total_Payment_In_Curr)}</td>
-            <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
+            <td>${String(entry.remaining_Curr)}</td>
             <td>${String(entry.status)}</td>           
           </tr>
         `).join('')}
@@ -855,8 +877,7 @@ export default function SupPaymentInDetails() {
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
-    };
-  
+    }
     const formattedDate = formatDate(new Date());
   
     // Convert JSX to HTML string
@@ -981,157 +1002,9 @@ export default function SupPaymentInDetails() {
       // Handle if the new window cannot be opened
       alert('Could not open print window. Please check your browser settings.');
     }
-  };
+  }
   
-  const printPersonsTable = () => {
-    // Function to format the date as dd-MM-yyyy
-    const formatDate = (date) => {
-      const d = new Date(date);
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear();
-      return `${day}-${month}-${year}`;
-    };
-  
-    const formattedDate = formatDate(new Date());
-  
-    // Convert JSX to HTML string
-    const printContentString = `
-      <div class="print-header">
-      <p class="invoice">Supplier: ${selectedSupplier}</p>
-        <h1 class="title">ROZGAR TTTC</h1>
-        <p class="date">Date: ${formattedDate}</p>
-      </div>
-      <div class="print-header">
-        <h1 class="title">Supplier Persons Details</h1>
-      </div>
-      <hr/>
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>PP#</th>
-            <th>Entry Mode</th>
-            <th>Company</th>
-            <th>Trade</th>
-            <th>Country</th>
-            <th>Final Status</th>
-            <th>Flight Date</th>
-            <th>VPI PKR</th>
-            <th>VPI Oth Curr</th>
-            <th>Paid PKR</th>
-            <th>Remaining PKR</th>
-            <th>Status</th>
-          <th>Image</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          ${filteredPersons.map((entry, index) =>
-            entry.persons.map((person, personIndex) => `
-              <tr key="${person?._id}">
-                <td>${index * entry.persons.length + personIndex + 1}</td>
-                <td>${String(person?.entry_Date)}</td>
-                <td>${String(person?.name)}</td>
-                <td>${String(person?.pp_No)}</td>
-                <td>${String(person?.entry_Mode)}</td>
-                <td>${String(person?.company)}</td>
-                <td>${String(person?.trade)}</td>
-                <td>${String(person?.country)}</td>
-                <td>${String(person?.final_Status)}</td>
-                <td>${String(person?.flight_Date)}</td>
-                <td>${String(person?.visa_Price_In_PKR)}</td>
-                <td>${String(person?.visa_Price_In_Curr)}</td>
-                <td>${String(person?.total_In)}</td>
-                <td>${String(person?.remaining_Price)}</td>
-                <td>${String(person?.status)}</td>
-                <td>
-                ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
-              </td>
-              </tr>
-            `).join('')
-          ).join('')}
-          <tr>
-            <td colspan="9"></td>
-            <td>Total</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_PKR, 0), 0))}</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_Curr, 0), 0))}</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
-            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-      <style>
-        /* Add your custom print styles here */
-        body {
-          background-color: #fff;
-        }
-        .print-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .title {
-          flex-grow: 1;
-          text-align: center;
-          margin: 0;
-          font-size: 24px;
-        }
-        .date {
-          flex-grow: 0;
-          text-align: right;
-          font-size: 20px;
-        }
-        .print-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 20px 0;
-        }
-        .print-table th, .print-table td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: left;
-          text-transform: capitalize;
-        }
-        .print-table td img{
-          height:40px;
-          width:40px;
-         }
-        .print-table th {
-          background-color: #f2f2f2;
-        }
-      </style>
-    `;
-  
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>${selectedSupplier}'s Persons Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-  
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
-  };
-  
-
+ 
 
   const printPaymentInvoice = (paymentItem) => {
       // Function to format the date as dd-MM-yyyy
@@ -1261,147 +1134,297 @@ export default function SupPaymentInDetails() {
     }
   }
   
-  const printPerson = (person) => {
-    // Function to format the date as dd-MM-yyyy
-    const formatDate = (date) => {
-      const d = new Date(date);
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear();
-      return `${day}-${month}-${year}`;
-    };
   
-    const formattedDate = formatDate(new Date());
-  
-    // Convert JSX to HTML string
-    const printContentString = `
-      <div class="print-header">
-      <p class="invoice">Supplier: ${selectedSupplier}</p>
-        <h1 class="title">ROZGAR TTTC</h1>
-        <p class="date">Date: ${formattedDate}</p>
-      </div>
-      <div class="print-header">
-        <h1 class="title">Supplier Person Details</h1>
-      </div>
-      <hr/>
-      <table class='print-table'>
-        <thead>
-          <tr>
-            <th>SN</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>PP#</th>
-            <th>Entry Mode</th>
-            <th>Company</th>
-            <th>Trade</th>
-            <th>Country</th>
-            <th>Final Status</th>
-            <th>Flight Date</th>
-            <th>VPI PKR</th>
-            <th>VPI Oth Curr</th>
-            <th>Paid PKR</th>
-            <th>Remaining PKR</th>
-            <th>Status</th>
-          <th>Image</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>${String(person?.entry_Date)}</td>
-            <td>${String(person?.name)}</td>
-            <td>${String(person?.pp_No)}</td>
-            <td>${String(person?.entry_Mode)}</td>
-            <td>${String(person?.company)}</td>
-            <td>${String(person?.trade)}</td>
-            <td>${String(person?.country)}</td>
-            <td>${String(person?.final_Status)}</td>
-            <td>${String(person?.flight_Date)}</td>
-            <td>${String(person?.visa_Price_In_PKR)}</td>
-            <td>${String(person?.visa_Price_In_Curr)}</td>
-            <td>${String(person?.total_In)}</td>
-            <td>${String(person?.remaining_Price)}</td>
-            <td>${String(person?.status)}</td>
-            <td>
-            ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
-          </td>
-          </tr>
-        </tbody>
-      </table>
-      <style>
-        /* Add your custom print styles here */
-        body {
-          background-color: #fff;
-        }
-        .print-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .logo {
-          max-width: 100px;
-        }
-        .title {
-          flex-grow: 1;
-          text-align: center;
-          margin: 0;
-          font-size: 24px;
-        }
-        .invoice {
-          flex-grow: 0;
-          text-align: left;
-          font-size: 20px;
-        }
-        .date {
-          flex-grow: 0;
-          text-align: right;
-          font-size: 20px;
-        }
-        .print-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 20px 0;
-        }
-        .print-table th, .print-table td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: left;
-          text-transform: capitalize;
-        }
-        .print-table td img{
-          height:40px;
-          width:40px;
-         }
-        .print-table th {
-          background-color: #f2f2f2;
-        }
-      </style>
-    `;
-  
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      // Write the print content to the new window
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>${selectedSupplier}'s Persons Details</title>
-          </head>
-          <body class='bg-dark'>${printContentString}</body>
-        </html>
-      `);
-  
-      // Trigger print dialog
-      printWindow.print();
-      // Close the new window after printing
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    } else {
-      // Handle if the new window cannot be opened
-      alert('Could not open print window. Please check your browser settings.');
-    }
+const printPersonsTable = () => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
   };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Supplier: ${selectedSupplier}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Supplier Persons Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>VPI PKR</th>
+          <th>VPI Oth Curr</th>
+          <th>Paid PKR</th>
+          <th>Remaining PKR</th>
+          <th>Status</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filteredPersons.map((entry, index) =>
+          entry.persons.map((person, personIndex) => `
+            <tr key="${person?._id}">
+              <td>${index * entry.persons.length + personIndex + 1}</td>
+              <td>${String(person?.entry_Date)}</td>
+              <td>${String(person?.name)}</td>
+              <td>${String(person?.pp_No)}</td>
+              <td>${String(person?.entry_Mode)}</td>
+              <td>${String(person?.company)}</td>
+              <td>${String(person?.trade)}</td>
+              <td>${String(person?.country)}</td>
+              <td>${String(person?.final_Status)}</td>
+              <td>${String(person?.flight_Date)}</td>
+              <td>${String(person?.visa_Price_In_PKR)}</td>
+              <td>${String(person?.visa_Price_In_Curr)}</td>
+              <td>${String(person?.total_In)}</td>
+              <td>${String(person?.remaining_Price)}</td>
+              <td>${String(person?.status)}</td>
+              <td>
+              ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+            </td>
+            </tr>
+          `).join('')
+        ).join('')}
+        <tr>
+          <td colspan="9"></td>
+          <td>Total</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_PKR, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.visa_Price_In_Curr, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
+          <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table td img{
+        height:40px;
+        width:40px;
+       }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier}'s Persons Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
+
+
+const printPerson = (person) => {
+  // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+
+  // Convert JSX to HTML string
+  const printContentString = `
+    <div class="print-header">
+    <p class="invoice">Supplier: ${selectedSupplier}</p>
+      <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+    </div>
+    <div class="print-header">
+      <h1 class="title">Supplier Person Details</h1>
+    </div>
+    <hr/>
+    <table class='print-table'>
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Date</th>
+          <th>Name</th>
+          <th>PP#</th>
+          <th>Entry Mode</th>
+          <th>Company</th>
+          <th>Trade</th>
+          <th>Country</th>
+          <th>Final Status</th>
+          <th>Flight Date</th>
+          <th>VPI PKR</th>
+          <th>VPI Oth Curr</th>
+          <th>Paid PKR</th>
+          <th>Remaining PKR</th>
+          <th>Status</th>
+          <th>Image</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>${String(person?.entry_Date)}</td>
+          <td>${String(person?.name)}</td>
+          <td>${String(person?.pp_No)}</td>
+          <td>${String(person?.entry_Mode)}</td>
+          <td>${String(person?.company)}</td>
+          <td>${String(person?.trade)}</td>
+          <td>${String(person?.country)}</td>
+          <td>${String(person?.final_Status)}</td>
+          <td>${String(person?.flight_Date)}</td>
+          <td>${String(person?.visa_Price_In_PKR)}</td>
+          <td>${String(person?.visa_Price_In_Curr)}</td>
+          <td>${String(person?.total_In)}</td>
+          <td>${String(person?.remaining_Price)}</td>
+          <td>${String(person?.status)}</td>
+          <td>
+          ${person.picture ? `<img src="${person.picture}" alt="Person Picture" />` : "No Picture"}
+        </td>
+        </tr>
+      </tbody>
+    </table>
+    <style>
+      /* Add your custom print styles here */
+      body {
+        background-color: #fff;
+      }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        max-width: 100px;
+      }
+      .title {
+        flex-grow: 1;
+        text-align: center;
+        margin: 0;
+        font-size: 24px;
+      }
+      .invoice {
+        flex-grow: 0;
+        text-align: left;
+        font-size: 20px;
+      }
+      .date {
+        flex-grow: 0;
+        text-align: right;
+        font-size: 20px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        text-transform: capitalize;
+      }
+      .print-table td img{
+        height:40px;
+        width:40px;
+       }
+      .print-table th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  `;
+
+  // Create a new window for printing
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    // Write the print content to the new window
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>${selectedSupplier}'s Persons Details</title>
+        </head>
+        <body class='bg-dark'>${printContentString}</body>
+      </html>
+    `);
+
+    // Trigger print dialog
+    printWindow.print();
+    // Close the new window after printing
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
+  } else {
+    // Handle if the new window cannot be opened
+    alert('Could not open print window. Please check your browser settings.');
+  }
+};
   
 
   const downloadPaymentInvoice = (payment) => {
@@ -1460,16 +1483,30 @@ export default function SupPaymentInDetails() {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
+  
 
   const[rowsValue,setRowsValue]=useState("")
   const[rowsValue1,setRowsValue1]=useState("")
+
+
+  const[showEntryMode,setShowEntryMode]=useState(false)
+  const[showTrade,setShowTrade]=useState(false)
+  const[showCompany,setShowCompany]=useState(false)
+  const[showCountry,setShowCountry]=useState(false)
+  const[showFinalStatus,setShowFinalStatus]=useState(false)
+  const[showFlightDate,setShowFlightDate]=useState(false)
+  const[showSlipNo,setShowSlipNo]=useState(false)
+  const[showDetails,setShowDetails]=useState(false)
+  const[showCategory,setShowCategory]=useState(false)
+
+
 
   return (
     <>
       {!option &&
         <>
           <div className='col-md-12 p-0 border-0 border-bottom'>
-            <div className='pt-3 mb-2 px-2 d-flex justify-content-between'>
+            <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
               <div className="left d-flex">
                 <h4>PaymentIn Details</h4>
               </div>
@@ -1478,21 +1515,22 @@ export default function SupPaymentInDetails() {
                   <>
                     <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow1(!show1)}>{show1 === false ? "Show" : "Hide"}</button>
                     <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
-                    <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
+                    <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print</button>
 
                   </>
                 }
               </div>
             </div>
           </div>
+
+
           {(isLoading && supp_Payments_In.length<1) &&
             <div className='col-md-12 text-center my-4'>
               <ClipLoader color="#2C64C3" className='mx-auto' />
             </div>
           }
-
-          <div className="col-md-12 filters ">
-            <div className='py-1 mb-2'>
+          <div className="col-md-12 filters">
+            <div className='py-1 mb-2 '>
               <div className="row">
                 <div className="col-auto px-1">
                   <label htmlFor="">Date:</label><br/>
@@ -1525,32 +1563,28 @@ export default function SupPaymentInDetails() {
             </div>
           </div>
 
-          {(!isLoading || supp_Payments_In.length>0) &&
+          {(!isLoading|| supp_Payments_In.length>0) &&
             <div className='col-md-12 p-0'>
-              <div className='py-3 mb-1 px-1 detail_table'>
+              <div className='py-3 mb-1 px-2 detail_table'>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader>
                     <TableHead>
-
                       <TableRow>
-                        <TableCell className='label border'>SN</TableCell>
-                        <TableCell className='label border'>Date</TableCell>
-                        <TableCell className='label border'>Suppliers</TableCell>
-                        <TableCell className='label border'>TVPI_PKR</TableCell>
-                        <TableCell className='label border'>TPI_PKR</TableCell>
-                        <TableCell className='label border'>Total_Cash_Out</TableCell>
-                        <TableCell className='label border'>RPI_PKR</TableCell>
+                      <TableCell className='label border' >SN</TableCell>
+                        <TableCell className='label border' >Date</TableCell>
+                        <TableCell className='label border' >Suppliers</TableCell>
+                        <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                        <TableCell className='label border' >Total Payment In PKR</TableCell>
+                        <TableCell className='label border' >Total Cash Return</TableCell>
+                        <TableCell className='label border' >Remaining PKR</TableCell>
                         {show1 && <>
-                          <TableCell className='label border' >TVPI_Oth_Curr</TableCell>
-                          <TableCell className='label border' >TPI_Curr</TableCell>
-                          <TableCell className='label border' >RPI_Curr</TableCell>
+                          <TableCell className='label border' >Total Visa Price Oth Curr</TableCell>
+                          <TableCell className='label border' >Total Payment In Curr</TableCell>
+                          <TableCell className='label border' >Remaining Curr</TableCell>
                         </>}
-                        <TableCell className='label border'>Status</TableCell>
+                        <TableCell className='label border' >Status</TableCell>
                         <TableCell className='label border ' >Opening</TableCell>
                         <TableCell className='label border ' >Closing</TableCell>
-                        {/* <TableCell align='left' className='edw_label border' colSpan={1}>
-                          Actions
-                        </TableCell> */}
                       </TableRow>
                     </TableHead>
 
@@ -1559,7 +1593,6 @@ export default function SupPaymentInDetails() {
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, outerIndex) => (
                           // Map through the payment array
                           <React.Fragment key={outerIndex}>
-
                             <TableRow key={entry?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
                               {editMode1 && editedRowIndex1 === outerIndex ? (
                                 // Edit Mode
@@ -1583,20 +1616,19 @@ export default function SupPaymentInDetails() {
                                     <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} required />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.total_Visa_Price_In_PKR - editedEntry1.total_Payment_In + editedEntry1.total_Cash_Out} readonly />
+                                    <input type='number' value={editedEntry1.remaining_Balance} readonly />
                                   </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr - editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
-                                  </TableCell>
-                                  <TableCell className='border data_td p-1 '>
-                                    <input type='text' value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')} readonly />
-                                  </TableCell>
+                                  {show1 && <>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
+                                    </TableCell>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} />
+                                    </TableCell>
+                                    <TableCell className='border data_td p-1 '>
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr - editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
+                                    </TableCell>
+                                  </>}
 
                                   {/* ... Other cells in edit mode */}
                                   <TableCell className='border data_td p-1 '>
@@ -1609,25 +1641,25 @@ export default function SupPaymentInDetails() {
                               ) : (
                                 // Non-Edit Mode
                                 <>
-                                  <TableCell className='border data_td text-center'>{outerIndex + 1}</TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' >{outerIndex + 1}</TableCell>
+                                  <TableCell className='border data_td text-center' >
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center' onClick={() => handleRowClick(entry.supplierName)}>
+                                  <TableCell className='border data_td text-center'  onClick={() => {handleRowClick(entry.supplierName); setNewStatus(entry.status)}}>
                                     {entry.supplierName}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' >
                                     {entry.total_Visa_Price_In_PKR}
                                   </TableCell>
 
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' >
                                     <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{entry.total_Payment_In}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
+                                  <TableCell className='border data_td text-center' >
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out}
+                                  <TableCell className='border data_td text-center' >
+                                    {entry.remaining_Balance}
                                   </TableCell>
                                   {show1 && <>
                                     <TableCell className='border data_td text-center' >
@@ -1637,11 +1669,12 @@ export default function SupPaymentInDetails() {
                                       {entry.total_Payment_In_Curr}
                                     </TableCell>
                                     <TableCell className='border data_td text-center' >
-                                      {entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
+                                      {entry.remaining_Curr}
                                     </TableCell>
                                   </>}
-                                  <TableCell className='border data_td text-center'>
-                                    {entry.status}
+
+                                  <TableCell className='border data_td text-center' >
+                                    <span>{entry.status}</span>
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
                                     <span>{entry.opening}</span>
@@ -1650,12 +1683,12 @@ export default function SupPaymentInDetails() {
                                     <span>{entry.closing}</span>
                                   </TableCell>
                                   {/* ... Other cells in non-edit mode */}
-                                  {/* <TableCell className='border data_td p-1 '>
+                                  {/* <TableCell className='border data_td p-1 text-center'>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                       <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
-                                      <button className='btn delete_btn btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
+                                      <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
                                     </div>
-                                   
+                                    
                                   </TableCell> */}
                                 </>
                               )}
@@ -1668,35 +1701,33 @@ export default function SupPaymentInDetails() {
                         <TableCell></TableCell>
                         <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                         <TableCell className='border data_td text-center bg-info text-white'>
-                          {/* Calculate the total sum of payment_In */}
+                         
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
                             return isNaN(paymentIn) ? total : total + paymentIn;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-success text-white'>
-                          {/* Calculate the total sum of cash_Out */}
+                        
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Payment_In);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-danger text-white'>
-                          {/* Calculate the total sum of cash_Out */}
+                          
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-warning text-white'>
-                          {/* Calculate the total sum of cash_Out */}
+                         
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
-                            const cashOut = parseFloat(paymentItem.total_Cash_Out);
-                            const paymentOut = parseFloat(paymentItem.total_Payment_In);
-
+                            const paymentIn = parseFloat(paymentItem.remaining_Balance);
+                           
                             // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
-                            const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+                            const netCashOut = isNaN(paymentIn) ? 0 : paymentIn;
                             return total + netCashOut;
                           }, 0)}
                         </TableCell>
@@ -1707,7 +1738,7 @@ export default function SupPaymentInDetails() {
                 <TablePagination
                   rowsPerPageOptions={rowsPerPageOptions}
                   component='div'
-                  count={supp_Payments_In.length}
+                  count={filteredTotalPaymentIn.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   style={{
@@ -1735,20 +1766,24 @@ export default function SupPaymentInDetails() {
 
               </div>
               <div className="right">
-                <div className="dropdown d-inline ">
-                  <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    {loading5 ? "Updating" : "Change Status"}
-                  </button>
-                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
-                  </ul>
-                </div>
+                {supp_Payments_In && supp_Payments_In.some((data)=>data.supplierName===selectedSupplier && data.status.toLowerCase()==='open')&&
+                 <div className="dropdown d-inline ">
+                 <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                   {loading5 ? "Updating" : "Change Status"}
+                 </button>
+                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                   <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
+                 </ul>
+               </div>
+                }
+               
+                
                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
-                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
-                {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
-
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print All</button>
+                {selectedSupplier && <button className='btn detail_btn btn-sm' onClick={handleOption}><i className="fas fa-times"></i></button>}
               </div>
             </div>
           </div>
@@ -1776,6 +1811,7 @@ export default function SupPaymentInDetails() {
                     {[...new Set(supp_Payments_In
                       .filter(data => data.supplierName === selectedSupplier)
                       .flatMap(data => data.payment)
+
                       .map(data => data.payment_Via)
                     )].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
@@ -1789,6 +1825,7 @@ export default function SupPaymentInDetails() {
                     {[...new Set(supp_Payments_In
                       .filter(data => data.supplierName === selectedSupplier)
                       .flatMap(data => data.payment)
+
                       .map(data => data.payment_Type)
                     )].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
@@ -1799,8 +1836,8 @@ export default function SupPaymentInDetails() {
             </div>
           </div>
 
-          <div className="col-md-12 detail_table my-2 ">
-             <div className="d-flex justify-content-between">
+          <div className="col-md-12 detail_table my-2">
+            <div className="d-flex justify-content-between">
               <div className="left d-flex">
               <h6>Payment In Details</h6>
               </div>
@@ -1820,30 +1857,30 @@ export default function SupPaymentInDetails() {
                   </select>
               </div>
             </div>
-            <TableContainer sx={{ maxHeight: 600 }}>
+           
+            <TableContainer  sx={{ maxHeight: 600 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>SN</TableCell>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Category</TableCell>
-                    <TableCell className='label border'>Payment_Via</TableCell>
-                    <TableCell className='label border'>Payment_Type</TableCell>
-                    <TableCell className='label border'>Slip_No</TableCell>
-                    <TableCell className='label border'>Details</TableCell>
-                    <TableCell className='label border'>Payment_In</TableCell>
-                    <TableCell className='label border'>Cash_Out</TableCell>
-                    <TableCell className='label border'>Invoice</TableCell>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Category</TableCell>
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    <TableCell className='label border' >Slip No</TableCell>
+                    <TableCell className='label border' >Details</TableCell>
+                    <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
+                    <TableCell className='label border' >Invoice</TableCell>
                     {show2 && <>
-                      <TableCell className='label border' >Payment_In_Curr</TableCell>
-                      <TableCell className='label border' >CUR_Rate</TableCell>
-                      <TableCell className='label border' >CUR_Amount</TableCell>
+                      <TableCell className='label border' >Payment InCurr</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
                     </>}
-                    <TableCell className='label border'>Slip_Pic</TableCell>
-                    <TableCell align='left' className='edw_label border' colSpan={1}>
+                    <TableCell className='label border' >Slip Pic</TableCell>
+                    <TableCell align='left' className='label border'  colSpan={1}>
                       Actions
                     </TableCell>
-
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1920,27 +1957,27 @@ export default function SupPaymentInDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
-                              <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
                               {show2 && <>
                                 <TableCell className='border data_td text-center' >{paymentItem?.payment_In_Curr}</TableCell>
                                 <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
                                 <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
                               </>}
-                              <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ?<a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
 
 
                             </>
                           )}
-                         <TableCell className='border data_td p-1 text-center'>
+                          <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -1997,16 +2034,7 @@ export default function SupPaymentInDetails() {
                     </TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
-                    {show2 && <>
-                      <TableCell className='border data_td text-center bg-warning text-white'>
-                      
-                      {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
-                          const paymentIn = parseFloat(paymentItem.payment_In_Curr);
-                          return isNaN(paymentIn) ? sum : sum + paymentIn;
-                        }, 0);
-                      }, 0)}
-                    </TableCell>
+                    {show2 && <> 
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
@@ -2033,9 +2061,8 @@ export default function SupPaymentInDetails() {
             </TableContainer>
           </div>
 
-
           <div className="col-md-12 filters">
-            <div className='py-1 mb-2'>
+            <div className='py-1 mb-2 '>
               <div className="row">
               <div className="col-auto px-1">
                   <label htmlFor="">Search Here:</label><br/>
@@ -2157,7 +2184,6 @@ export default function SupPaymentInDetails() {
               </div>
             </div>
           </div>
-          {/* Display Table for payment array */}
           <div className="col-md-12 detail_table my-2 p-0">
             <div className="d-flex justify-content-between">
               <div className="left d-flex">
@@ -2186,20 +2212,20 @@ export default function SupPaymentInDetails() {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border'>SN</TableCell>
-                    <TableCell className='label border'>Date</TableCell>
-                    <TableCell className='label border'>Name</TableCell>
-                    <TableCell className='label border'>PP#</TableCell>
-                    <TableCell className='label border'>Entry_Mode</TableCell>
-                    <TableCell className='label border'>Company</TableCell>
-                    <TableCell className='label border'>Trade</TableCell>
-                    <TableCell className='label border'>Country</TableCell>
-                    <TableCell className='label border'>Final_Status</TableCell>
-                    <TableCell className='label border'>Flight_Date</TableCell>
-                    <TableCell className='label border'>VPI_PKR</TableCell>
-                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Name</TableCell>
+                    <TableCell className='label border' >PP#</TableCell>
+                    <TableCell className='label border' >Entry Mode</TableCell>
+                    <TableCell className='label border' >Company</TableCell>
+                    <TableCell className='label border' >Trade</TableCell>
+                    <TableCell className='label border' >Country</TableCell>
+                    <TableCell className='label border' >Final Status</TableCell>
+                    <TableCell className='label border' >Flight Date</TableCell>
+                    <TableCell className='label border' >Visa Price In PKR</TableCell>
+                    {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
-                    <TableCell className='label border'>Action</TableCell>
+                    <TableCell className='label border' >Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -2281,17 +2307,17 @@ export default function SupPaymentInDetails() {
                             </>
                           ) : (
                             <>
-                              <TableCell className='border data_td text-center'>{index + 1}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.entry_Date}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.name}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
-                              <TableCell className='border data_td text-center'>{person?.visa_Price_In_PKR}</TableCell>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR}</TableCell>
                               {show && <TableCell className='border data_td text-center' >{person?.visa_Price_In_Curr}</TableCell>}
                               <TableCell className='border data_td text-center' >{person?.status}</TableCell>
                             </>
@@ -2303,9 +2329,13 @@ export default function SupPaymentInDetails() {
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                   <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
                                   <button onClick={() => handleUpdatePerson()} className='btn save_btn btn-sm' disabled={loading4}><i className="fa-solid fa-check"></i></button>
+
                                 </div>
+
                               </>
+
                             ) : (
+                              
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                   <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
@@ -2313,6 +2343,7 @@ export default function SupPaymentInDetails() {
                                   <button onClick={() => downloadPersonDetails(person)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
                                   <button className='btn bg-danger text-white btn-sm' onClick={() => deletePerson(person)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
                                 </div>
+
                               </>
                             )}
                           </TableCell>
@@ -2331,7 +2362,7 @@ export default function SupPaymentInDetails() {
                         <TableCell></TableCell>
                         <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
                         <TableCell className='border data_td text-center bg-warning text-white'>
-                          {/* Calculate the total sum of payment_In */}
+                          
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
@@ -2339,102 +2370,244 @@ export default function SupPaymentInDetails() {
                             }, 0);
                           }, 0)}
                         </TableCell>
-
-
-
                       </TableRow>
                     </>
                   ))}
                 </TableBody>
 
-
               </Table>
             </TableContainer>
           </div>
+
+        
         </>
       )}
-  {/* Modal for closing the status of  persons*/}
+          {/* Modal for closing the status of  persons*/}
 
-  <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-xl">
+          <div className="modal fade p-0 m-0" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-fullscreen">
     <div className="modal-content">
       <div className="modal-header">
-        <h4 className="modal-title" id="exampleModalLabel">Select Persons to closed</h4>
+        <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
+       <span className='mx-1'>Total: {supp_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {supp_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {supp_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} </span>
+
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
       <div className="modal-body detail_table">
-      <TableContainer component={Paper} >
+        <div className="d-flex payment_form p-0 m-0">
+        <div className="d-flex overflow-x-auto">
+                <div className="flex-grow-1 p-0 mx-1">
+                  <div className="text-end">
+                 
+                  <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
+                  <div class="dropdown dropstart d-inline" >
+  <button class="btn dropdown-toggle btn-sm m-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    See More
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" onClick={()=>setShowTrade(!showTrade)}>{showTrade?'Hide':'Show'} Trade</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowEntryMode(!showEntryMode)}>{showEntryMode?'Hide':'Show'} Entry Mode</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowCompany(!showCompany)}>{showCompany?'Hide':'Show'} Company</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowCountry(!showCountry)}>{showCountry?'Hide':'Show'} Country</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowFinalStatus(!showFinalStatus)}>{showFinalStatus?'Hide':'Show'} Final Status</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowFlightDate(!showFlightDate)}>{showFlightDate?'Hide':'Show'} Flight Date</a></li>
+  </ul>
+</div>
+<div className="col-md-12 filters">
+            <div className='py-1 mb-2 '>
+             
+            </div>
+          </div>
+                  </div>
+                  <TableContainer component={Paper}  sx={{ maxHeight: 700 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
-                    <TableCell className='label border' >Select</TableCell>
+                  <TableCell className='label border' >Select</TableCell>
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
                     <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry_Mode</TableCell>
-                    <TableCell className='label border' >Company</TableCell>
-                    <TableCell className='label border' >Trade</TableCell>
-                    <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final_Status</TableCell>
-                    <TableCell className='label border' >Flight_Date</TableCell>
-                    <TableCell className='label border' >VPI_PKR</TableCell>
-                    <TableCell className='label border' >Total In</TableCell>
-                    <TableCell className='label border' >Remaining_PKR</TableCell>
-                    {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                    {showEntryMode && <TableCell className='label border' >Entry_Mode</TableCell>}
+                    {showCompany && <TableCell className='label border' >Company</TableCell>}
+                    {showTrade && <TableCell className='label border' >Trade</TableCell>}
+                    {showCountry && <TableCell className='label border' >Country</TableCell>}
+                    {showFinalStatus && <TableCell className='label border' >Final Status</TableCell>}
+                    {showFlightDate && <TableCell className='label border' >Flight Date</TableCell>}
+                    <TableCell className='label border' >Visa Price In PKR</TableCell>
+                    <TableCell className='label border' >Total In PKR</TableCell>
+                    <TableCell className='label border' >Total Cash Return</TableCell>
+                    <TableCell className='label border' >Remaining PKR</TableCell>
+                    {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
-                    
+                    <TableCell className='label border' >Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredPersons.map((filteredData) => (
+                  {filteredClosingPersons.map((filteredData) => (
                     <>
                       {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
 
                         <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode2 && editedRowIndex2 === index ? (
                             <>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry2.entry_Date} onChange={(e) => handlePersonInputChange(e, 'entry_Date')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry2.name} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry2.pp_No} readonly />
+                              </TableCell>
+                               {showEntryMode &&
+                            <TableCell className='border data_td p-1 '>
+                            <select value={editedEntry2.entry_Mode} onChange={(e) => handlePersonInputChange(e, 'entry_Mode')} required>
+                              <option value="">Choose</option>
+                              {entryMode && entryMode.map((data) => (
+                                <option key={data._id} value={data.entry_Mode}>{data.entry_Mode}</option>
+                              ))}
+                            </select>
+                            </TableCell>
+                              }
                              
+                             {showCompany && 
+                             <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry2.company} onChange={(e) => handlePersonInputChange(e, 'company')} required>
+                                  <option value="">Choose</option>
+                                  {companies && companies.map((data) => (
+                                    <option key={data._id} value={data.company}>{data.company}</option>
+                                  ))}
+                                </select>
+                              </TableCell>}
+                            
+                            {showTrade &&
+                            <TableCell className='border data_td p-1 '>
+                            <select value={editedEntry2.trade} onChange={(e) => handlePersonInputChange(e, 'trade')} required>
+                              <option value="">Choose</option>
+                              {trades && trades.map((data) => (
+                                <option key={data._id} value={data.trade}>{data.trade}</option>
+                              ))}
+                            </select>
+                          </TableCell>
+                            }
+                              
+                              {showCountry &&
+                                <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry2.country} onChange={(e) => handlePersonInputChange(e, 'country')} required>
+                                  <option value="">Choose</option>
+                                  {countries && countries.map((data) => (
+                                    <option key={data._id} value={data.country}>{data.country}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              }
+                            {showFinalStatus &&
+                              <TableCell className='border data_td p-1 '>
+                              <select value={editedEntry2.final_Status} onChange={(e) => handlePersonInputChange(e, 'final_Status')} required>
+                                <option value="">Choose</option>
+                                {finalStatus && finalStatus.map((data) => (
+                                  <option key={data._id} value={data.final_Status}>{data.final_Status}</option>
+                                ))}
+                              </select>
+                            </TableCell>
+                            }
+                            
+                            {showFlightDate &&
+                             <TableCell className='border data_td p-1 '>
+                             <input type='date' value={editedEntry2.flight_Date} onChange={(e) => handlePersonInputChange(e, 'flight_Date')} />
+                           </TableCell>
+                            }
+
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.total_In} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              {show && <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
+                              </TableCell>}
+                              <TableCell className='border data_td p-1 '>
+                                <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
+                                  <option value="Open">Open</option>
+                                  <option value="Closed">Closed</option>
+                                </select>
+                              </TableCell>
                             </>
                           ) : (
                             <>
-                             <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
                                 <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
                               </TableCell>
                               <TableCell className='border data_td text-center' >{index + 1}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.name}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
+                              {showEntryMode && <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>}
+                              {showCompany && <TableCell className='border data_td text-center' >{person?.company}</TableCell>}
+                              {showTrade && <TableCell className='border data_td text-center' >{person?.trade}</TableCell>}
+                              {showCountry && <TableCell className='border data_td text-center' >{person?.country}</TableCell>}
+                              {showFinalStatus && <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>}
+                              {showFlightDate && <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>}
                               <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.remaining_Price}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
                               {show && <TableCell className='border data_td text-center' >{person?.visa_Price_In_Curr}</TableCell>}
                               <TableCell className='border data_td text-center' >{person?.status}</TableCell>
                             </>
                           )}
-                         
+                          <TableCell className='border data_td p-1 text-center'>
+                            {editMode2 && editedRowIndex2 === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn btn-sm' disabled={loading4}><i className="fa-solid fa-check"></i></button>
+
+                                </div>
+
+                              </>
+
+                            ) : (
+                              
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPerson(person)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPersonDetails(person)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePerson(person)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+
+                              </>
+                            )}
+                          </TableCell>
 
                         </TableRow>
                       ))}
                       <TableRow>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                        
                         <TableCell className='border data_td text-center bg-warning text-white'>
-                          
+                        Total Visa Price PKR= 
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
@@ -2442,8 +2615,9 @@ export default function SupPaymentInDetails() {
                             }, 0);
                           }, 0)}
                         </TableCell>
+ 
                         <TableCell className='border data_td text-center bg-success text-white'>
-                          
+                        Total In PKR= 
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.total_In);
@@ -2451,8 +2625,9 @@ export default function SupPaymentInDetails() {
                             }, 0);
                           }, 0)}
                         </TableCell>
-                        <TableCell className='border data_td text-center bg-danger text-white'>
-                          
+
+                        <TableCell className='border data_td text-center bg-info text-white'>
+                        Total Remaining= 
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.remaining_Price);
@@ -2467,14 +2642,237 @@ export default function SupPaymentInDetails() {
 
               </Table>
             </TableContainer>
+                </div>
+                <div className="flex-grow-1 p-0 mx-1">
+                <div className="text-end">
+                <div className="dropdown dropstart">
+                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print All</button>
+  <button class="btn dropdown-toggle btn-sm m-1 d-inline" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    See More
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item"onClick={()=>setShowCategory(!showCategory)}>{showCategory?'Hide':'Show'} Category</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowSlipNo(!showSlipNo)}>{showSlipNo?'Hide':'Show'} Slip No</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowDetails(!showDetails)}>{showDetails?'Hide':'Show'} Details</a></li>
+    
+  </ul>
+</div>
+                  </div>
+                  <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                  <Table stickyHeader>
+                <TableHead className="thead">
+                  <TableRow>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    {showCategory &&  <TableCell className='label border' >Category</TableCell>}
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    {showSlipNo &&  <TableCell className='label border' >Slip No</TableCell>}
+                   {showDetails &&  <TableCell className='label border' >Details</TableCell>}
+                    <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
+                    <TableCell className='label border' >Invoice</TableCell>
+                    {show2 && <>
+                      <TableCell className='label border' >Payment In Curr</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
+                    </>}
+                    <TableCell className='label border' >Slip Pic</TableCell>
+                    <TableCell align='left' className='label border'  colSpan={1}>
+                      Actions
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredIndividualPayments.map((filteredData) => (
+                    <>
+                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
+                        <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode && editedRowIndex === index ? (
+                            <>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
+                              </TableCell>
+                              {showCategory && <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
+                                  <option value="">Choose</option>
+                                  {categories && categories.map((data) => (
+                                    <option key={data._id} value={data.category}>{data.category}</option>
+                                  ))}
+                                </select>
+                              </TableCell>}
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
+                                  <option value="">Choose</option>
+                                  {paymentVia && paymentVia.map((data) => (
+                                    <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Type} onChange={(e) => handleInputChange(e, 'payment_Type')} required>
+                                  <option value="">Choose</option>
+                                  {paymentType && paymentType.map((data) => (
+                                    <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              {showSlipNo && <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.slip_No} onChange={(e) => handleInputChange(e, 'slip_No')} />
+                              </TableCell>}
+                              {showDetails && <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.details} onChange={(e) => handleInputChange(e, 'details')} />
+                              </TableCell>}
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.payment_In} onChange={(e) => handleInputChange(e, 'payment_In')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.cash_Out} onChange={(e) => handleInputChange(e, 'cash_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.invoice} readonly />
+                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_In_Curr} onChange={(e) => handleInputChange(e, 'payment_In_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
+                              <TableCell className='border data_td p-1 '>
+                                <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              {showCategory &&  <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>}
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              {showSlipNo && <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>}
+                              {showDetails && <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>}
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_In_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                              </>}
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ?<a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
+
+
+                            </>
+                          )}
+                          <TableCell className='border data_td p-1 text-center'>
+                            {editMode && editedRowIndex === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
+
+                                </div>
+
+                              </>
+
+                            ) : (
+                              // Render Edit button when not in edit mode or for other rows
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+                               
+                              </>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  ))}
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>
+                    Total Payment In=
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_In);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-danger text-white'>
+                    Total Cash Return=
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.cash_Out);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    {show2 && <> 
+                    
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                    Total Curr Amount=
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
+                  </TableRow>
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+                </div>
+            </div>
+       </div>
+      
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
-        <button type="button" className="btn btn-success btn-sm shadow" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
+     
+       <span className='mx-1'>Opening Balance: {supp_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {supp_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)}</span>
+        <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <label htmlFor="">Convert Remaining Balance to New Khata?</label>
+        <button className="btn  btn-sm shadow cancel_btn" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
+        <button className="btn btn-sm shadow save_btn" onClick={() => changeStatus()} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
       </div>
     </div>
   </div>
 </div>
+
     </>
   )
 }

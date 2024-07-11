@@ -246,7 +246,7 @@ export default function ExpenseDetails() {
         Slip_No:payments.slip_No,
         Details:payments.details,
         Invoice:payments.invoice,
-        Total:filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)
+        
       }
 
       data.push(rowData);

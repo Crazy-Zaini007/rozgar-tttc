@@ -43,6 +43,10 @@ export default function AgentCandPaymentInDetails() {
 
   const { getPaymentsIn } = AgentHook()
   const { user } = useAuthContext()
+
+
+  const[newStatus,setNewStatus]=useState('')
+
   const apiUrl = process.env.REACT_APP_API_URL;
 
 
@@ -178,7 +182,7 @@ export default function AgentCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier})
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier,newStatus})
         })
 
         const json = await response.json()
@@ -215,7 +219,7 @@ export default function AgentCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier,myPaymentId})
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier,myPaymentId,newStatus})
         })
 
         const json = await response.json()
@@ -252,7 +256,7 @@ export default function AgentCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr })
+          body: JSON.stringify({ personId, supplierName: selectedSupplier, visa_Price_In_PKR: person.visa_Price_In_PKR, visa_Price_In_Curr: person.visa_Price_In_Curr,newStatus })
         })
 
         const json = await response.json()
@@ -307,7 +311,7 @@ export default function AgentCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status,newStatus })
       })
 
       const json = await response.json()
@@ -341,7 +345,7 @@ export default function AgentCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, myPaymentId: editedEntry._id,new_Payment: editedEntry.new_Payment,new_Curr_Payment: editedEntry.new_Curr_Payment,curr_Rate: editedEntry.curr_Rate,cand_Name: editedEntry.cand_Name })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, myPaymentId: editedEntry._id,new_Payment: editedEntry.new_Payment,cash_Out: editedEntry.cash_Out,new_Curr_Payment: editedEntry.new_Curr_Payment,curr_Rate: editedEntry.curr_Rate,cand_Name: editedEntry.cand_Name,newStatus })
       })
 
       const json = await response.json()
@@ -394,7 +398,7 @@ export default function AgentCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: editedEntry1.supplierName, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close })
+        body: JSON.stringify({ supplierName: editedEntry1.supplierName, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, open: editedEntry1.open, close: editedEntry1.close,newStatus })
       })
 
       const json = await response.json()
@@ -429,7 +433,7 @@ export default function AgentCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: person.supplierName })
+          body: JSON.stringify({ supplierName: person.supplierName,newStatus })
         })
 
         const json = await response.json()
@@ -455,7 +459,7 @@ export default function AgentCandPaymentInDetails() {
 
   const [date1, setDate1] = useState('')
   const [supplier1, setSupplier1] = useState('')
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('open')
 
 
   const filteredTotalPaymentIn = agent_Payments_In.filter(payment => {
@@ -478,7 +482,7 @@ export default function AgentCandPaymentInDetails() {
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
   const filteredIndividualPayments = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
+    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData?.candPayments
@@ -513,39 +517,57 @@ export default function AgentCandPaymentInDetails() {
   const [trade, setTrade] = useState('')
   const [final_Status, setFinal_Status] = useState('')
   const [flight_Date, setFlight_Date] = useState('')
-  const [status1, setStatus1] = useState("")
+  const [status1, setStatus1] = useState("open")
   const [search2, setSearch2] = useState('')
 
-
   const filteredPersons = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
+  .filter((data) => data.supplierName === selectedSupplier && data.status === newStatus)
+  .map((filteredData) => ({
+    ...filteredData,
+    persons: filteredData.persons
+      .filter((person) => {
+        // Check if person.name does not match any cand_Name in candPayments.payments
+        const isNotInCandPayments = filteredData.candPayments.some((candPayment) =>
+          candPayment.payments.some((payment) =>
+            payment.cand_Name.trim().toLowerCase() === person.name.trim().toLowerCase()
+          )
+        );
+
+        return (
+          isNotInCandPayments &&
+          person.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
+          person.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
+          person.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
+          person.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+          person.company?.toLowerCase().includes(company.toLowerCase()) &&
+          person.country?.toLowerCase().includes(country.toLowerCase()) &&
+          person.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+          person.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+          person.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+          person.status?.toLowerCase().includes(status1.toLowerCase()) &&
+          (
+            person.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase())
+          )
+        );
+      })
+  }))
+ 
+  
+  const filteredClosingPersons = agent_Payments_In
+    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
-        .filter((persons) =>
-          persons.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-          persons.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
-          persons.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
-          persons.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-          persons.company?.toLowerCase().includes(company.toLowerCase()) &&
-          persons.country?.toLowerCase().includes(country.toLowerCase()) &&
-          persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-          persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-          persons.status?.toLowerCase().includes(status1.toLowerCase()) &&
-          (persons.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()))
-        )
     }))
 
- 
 
 
   // Changing Status
@@ -562,6 +584,8 @@ export default function AgentCandPaymentInDetails() {
    
   }
 
+
+  const [convert,setConvert]=useState('No')
   const changeStatus = async (myStatus) => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
@@ -574,7 +598,7 @@ export default function AgentCandPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,multipleIds })
+          body: JSON.stringify({ supplierName: selectedSupplier, newStatus,multipleIds,convert })
         })
 
         const json = await response.json()
@@ -646,7 +670,7 @@ export default function AgentCandPaymentInDetails() {
         'Content-Type': 'application/json',
         "Authorization": `Bearer ${user.token}`,
       },
-      body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry3.category, payment_Via: editedEntry3.payment_Via, payment_Type: editedEntry3.payment_Type, slip_No: editedEntry3.slip_No, details: editedEntry3.details, payment_In: editedEntry3.payment_In, curr_Country: editedEntry3.payment_In_Curr, curr_Amount: editedEntry3.curr_Amount, slip_Pic: editedEntry3.slip_Pic, date: editedEntry3.date })
+      body: JSON.stringify({newStatus, paymentId, supplierName: selectedSupplier, category: editedEntry3.category, payment_Via: editedEntry3.payment_Via, payment_Type: editedEntry3.payment_Type, slip_No: editedEntry3.slip_No, details: editedEntry3.details, payment_In: editedEntry3.payment_In, curr_Country: editedEntry3.payment_In_Curr, curr_Amount: editedEntry3.curr_Amount, slip_Pic: editedEntry3.slip_Pic, date: editedEntry3.date })
     })
 
     const json = await response.json()
@@ -714,7 +738,7 @@ const printMainTable = () => {
           <td>${String(entry.total_Visa_Price_In_PKR)}</td>
           <td>${String(entry.total_Payment_In)}</td>
           <td>${String(entry.total_Cash_Out)}</td>
-          <td>${String(entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out)}</td>
+          <td>${String(entry.remaining_Balance)}</td>
           <td>${String(entry.total_Visa_Price_In_Curr)}</td>
           <td>${String(entry.total_Payment_In_Curr)}</td>
           <td>${String(entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr)}</td>
@@ -727,7 +751,7 @@ const printMainTable = () => {
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_In_PKR, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
-        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out), 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.remaining_Balance), 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_In_Curr, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_In_Curr, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_In_Curr - entry.total_Payment_In_Curr), 0))}</td>
@@ -834,6 +858,7 @@ const printPaymentsTable = () => {
       <th>Slip No</th>
       <th>Details</th>
       <th>Payment In</th>
+      <th>Cash Return</th>
       <th>Invoice</th>
       <th>Candidates</th>
       <th>Total Visa Price In PKR</th>
@@ -854,6 +879,7 @@ const printPaymentsTable = () => {
           <td>${String(paymentItem?.slip_No)}</td>
           <td>${String(paymentItem?.details)}</td>
           <td>${String(paymentItem?.payment_In)}</td>
+          <td>${String(paymentItem?.cash_Out)}</td>
           <td>${String(paymentItem?.invoice)}</td>
           <td>${String(paymentItem?.payments.length)}</td>
           <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
@@ -873,6 +899,7 @@ const printPaymentsTable = () => {
   <td></td>
   <td>Total</td>
   <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_In, 0), 0))}</td>
+  <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
   <td></td>
   <td></td>
   <td>
@@ -1009,6 +1036,7 @@ const printPaymentInvoice = (paymentItem) => {
       <td>${String(payment?.past_Paid_PKR)}</td>
       <td>${String(payment?.past_Remain_PKR)}</td>
       <td>${String(payment?.new_Payment)}</td>
+      <td>${String(payment?.cash_Out)}</td>
       <td>${String(payment?.new_Remain_PKR)}</td>
       <td>${String(payment?.curr_Amount,0)}</td>
       <td>${String(payment?.curr_Rate,0)}</td>
@@ -1036,6 +1064,7 @@ const printPaymentInvoice = (paymentItem) => {
           <th>Slip No</th>
           <th>Details</th>
           <th>Payment In</th>
+          <th>Cash Return</th>
           <th>Invoice</th>
           <th>Candidates</th>
           <th>Total Visa Price In PKR</th>
@@ -1054,6 +1083,7 @@ const printPaymentInvoice = (paymentItem) => {
           <td>${String(paymentItem?.slip_No)}</td>
           <td>${String(paymentItem?.details)}</td>
           <td>${String(paymentItem?.payment_In)}</td>
+          <td>${String(paymentItem?.cash_Out)}</td>
           <td>${String(paymentItem?.invoice)}</td>
           <td>${String(paymentItem?.payments.length)}</td>
           <td>${String(paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0))}</td>
@@ -1080,6 +1110,7 @@ const printPaymentInvoice = (paymentItem) => {
           <th>Past Paid (PKR)</th>
           <th>Past Remaining (PKR)</th>
           <th>New Payment In (PKR)</th>
+          <th>New Cash Return (PKR)</th>
           <th>New Remaining (PKR)</th>
           <th>Currency Amount</th>
           <th>Currency Rate</th>
@@ -1173,7 +1204,7 @@ const downloadExcel = () => {
       Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
       Total_Payment_In: payments.total_Payment_In,
       Total_Cash_Out: payments.total_Cash_Out,
-      Remaining_PKR: payments.total_Visa_Price_In_PKR - payments.total_Payment_In + payments.total_Cash_Out,
+      Remaining_PKR: payments.remaining_Balance,
       Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
       Total_Payment_In_Curr: payments.total_Payment_In_Curr,
       Remaining_Curr: payments.total_Visa_Price_In_Curr - payments.total_Payment_In_Curr,
@@ -1205,6 +1236,7 @@ const downloadIndividualPayments = () => {
       slip_No: payment.slip_No,
       details: payment.details,
       payment_In: payment.payment_In,
+      cash_Return: payment.cash_Out,
       Invoice: payment.invoice,
       Candidates: payment.payments.length,
       Payment_In_Curr: payment.payment_In_Curr,
@@ -1231,6 +1263,7 @@ const downloadPaymentInvoice = (payment) => {
       slip_No: payment.slip_No,
       details: payment.details,
       payment_In: payment.payment_In,
+      cash_Return: payment.cash_Out,
       Invoice: payment.invoice,
       Candidates: payment.payments.length,
       Payment_In_Curr: payment.payment_In_Curr,
@@ -1299,6 +1332,7 @@ const downloadCombinedPayments = () => {
       slip_No: payment.slip_No,
       details: payment.details,
       payment_In: payment.payment_In,
+      cash_Return: payment.cash_Out,
       Invoice: payment.invoice,
       Candidates: payment.payments.length,
       Payment_In_Curr: payment.payment_In_Curr,
@@ -1667,6 +1701,19 @@ const downloadPersonDetails = (payment) => {
 const[rowsValue,setRowsValue]=useState("")
 const[rowsValue1,setRowsValue1]=useState("")
 
+
+
+const[showEntryMode,setShowEntryMode]=useState(false)
+const[showTrade,setShowTrade]=useState(false)
+const[showCompany,setShowCompany]=useState(false)
+const[showCountry,setShowCountry]=useState(false)
+const[showFinalStatus,setShowFinalStatus]=useState(false)
+const[showFlightDate,setShowFlightDate]=useState(false)
+const[showSlipNo,setShowSlipNo]=useState(false)
+const[showDetails,setShowDetails]=useState(false)
+const[showCategory,setShowCategory]=useState(false)
+
+
   return (
     <>
       {!option &&
@@ -1783,7 +1830,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                                     <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} required />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.total_Visa_Price_In_PKR - editedEntry1.total_Payment_In + editedEntry1.total_Cash_Out} readonly />
+                                    <input type='number' value={editedEntry1.remaining_Balance} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
                                     <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
@@ -1810,7 +1857,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                                   <TableCell className='border data_td text-center' >
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center'  onClick={() => handleRowClick(entry.supplierName)}>
+                                  <TableCell className='border data_td text-center' onClick={() => {handleRowClick(entry.supplierName); setNewStatus(entry.status)}}>
                                     {entry.supplierName}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
@@ -1824,7 +1871,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
-                                    {entry.total_Visa_Price_In_PKR - entry.total_Payment_In + entry.total_Cash_Out}
+                                    {entry.remaining_Balance}
                                   </TableCell>
                                   {show1 && <>
                                     <TableCell className='border data_td text-center' >
@@ -1888,12 +1935,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                         <TableCell className='border data_td text-center bg-warning text-white'>
                           {/* Calculate the total sum of cash_Out */}
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
-                            const cashOut = parseFloat(paymentItem.total_Cash_Out);
-                            const paymentOut = parseFloat(paymentItem.total_Payment_In);
-
+                            const paymentIn = parseFloat(paymentItem.remaining_Balance);
                             // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
-                            const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+                            const netCashOut =  isNaN(paymentIn) ? 0 : paymentIn ;
                             return total + netCashOut;
                           }, 0)}
                         </TableCell>
@@ -1935,16 +1979,19 @@ const[rowsValue1,setRowsValue1]=useState("")
               </div>
              
               <div className="right">
-         {!details &&
-              <div className="dropdown d-inline ">
-                <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  {loading5 ? "Updating" : "Change Status"}
-                </button>
-                <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
-                  </ul>
-              </div>
-         }
+              {agent_Payments_In && agent_Payments_In.some((data)=>data.supplierName===selectedSupplier && data.status.toLowerCase()==='open')&&
+                 <div className="dropdown d-inline ">
+                 <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                   {loading5 ? "Updating" : "Change Status"}
+                 </button>
+                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                   <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
+                 </ul>
+               </div>
+                }
+                 
+                 
+                
               <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
               {!details && <>
               <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
@@ -2044,6 +2091,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                     <TableCell className='label border' >Slip_No</TableCell>
                     <TableCell className='label border' >Details</TableCell>
                     <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
                     <TableCell className='label border' >Candidates</TableCell>
                     <TableCell className='label border' >Total Visa Price PKR</TableCell>
                     <TableCell className='label border' >Total Remaining Price PKR</TableCell>
@@ -2106,6 +2154,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                                 <input type='text' value={editedEntry3.payment_In} disabled />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.cash_Out} disabled />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
                                 <input type='text' value={editedEntry3.payments.length} disabled />
                               </TableCell>
                               
@@ -2156,6 +2207,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                               <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
                               <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
                               <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down text-warning text-bold"></i><i className="fa-solid fa-arrow-up text-warning text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                               <TableCell className='border data_td text-center' >{paymentItem?.payments.length}</TableCell>
                               <TableCell className='border data_td text-center' >{paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0)} </TableCell>
                               <TableCell className='border data_td text-center' >{paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0)} </TableCell>
@@ -2196,8 +2248,8 @@ const[rowsValue1,setRowsValue1]=useState("")
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
-                    <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                    <TableCell className='border data_td text-center bg-warning text-white'>
+                    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>
                       {/* Calculate the total sum of payment_In */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
                         return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
@@ -2206,7 +2258,15 @@ const[rowsValue1,setRowsValue1]=useState("")
                         }, 0);
                       }, 0)}
                     </TableCell>
-                    
+                    <TableCell className='border data_td text-center bg-warning text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.cash_Out);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell></TableCell>
@@ -2512,10 +2572,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                               <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell> <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell> 
                               <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
+                            
                               {show && <>
                                 <TableCell className='border data_td text-center' >{person?.visa_Price_In_Curr}</TableCell>
                                 <TableCell className='border data_td text-center' >{person?.remaining_Curr}</TableCell>
@@ -2630,6 +2689,7 @@ const[rowsValue1,setRowsValue1]=useState("")
                     <TableCell className='label border'>Past Remaining PKR</TableCell>
                     <TableCell className='label border'>New Remaining PKR</TableCell>
                     <TableCell className='label border'>New Payment In PKR</TableCell>
+                    <TableCell className='label border'>Cash Return In PKR</TableCell>
                     {show2 && 
                        <>
                     <TableCell className='label border'>Visa Amount Curr</TableCell>
@@ -2704,9 +2764,11 @@ const[rowsValue1,setRowsValue1]=useState("")
                                 <input type='text' value={editedEntry.new_Remain_PKR} readonly/>
                               </TableCell>
                                <TableCell className='border data_td p-1 '>
-                                <input type='text' value={editedEntry.new_Payment} onChange={(e) => handleInputChange(e, 'new_Payment')} required/>
+                                <input type='text' value={editedEntry.new_Payment} onChange={(e) => handleInputChange(e, 'new_Payment')} disabled={paymentItem.new_Payment<1}/>
                               </TableCell>
-
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.cash_Out} onChange={(e) => handleInputChange(e, 'cash_Out')} disabled={paymentItem.cash_Out<1}/>
+                              </TableCell>
                               {show2 &&
                               <>
                                <TableCell className='border data_td p-1 '>
@@ -2747,6 +2809,8 @@ const[rowsValue1,setRowsValue1]=useState("")
                               <TableCell className='border data_td text-center bg-warning text-white'>{paymentItem?.past_Remain_PKR}</TableCell>
                               <TableCell className='border data_td text-center'>{paymentItem?.new_Remain_PKR}</TableCell>
                               <TableCell className='border data_td text-center bg-success text-white'><i className="fa-solid fa-arrow-down me-2 text-bold"></i>{paymentItem?.new_Payment}</TableCell>
+                              <TableCell className='border data_td text-center bg-warning text-white'><i className="fa-solid fa-arrow-down text-bold"></i><i className="fa-solid fa-arrow-up  text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+
 
                              {show2 &&
                              <>
@@ -2829,6 +2893,13 @@ const[rowsValue1,setRowsValue1]=useState("")
                         }, 0)}
 
                     </TableCell>
+                    <TableCell className='border data_td text-center bg-warning text-white'>  
+                      {details.payments.reduce((total, paymentItem) => {
+                          const newTotal = parseFloat(paymentItem.cash_Out);
+                          return isNaN(newTotal) ? total : total + newTotal;
+                        }, 0)}
+
+                    </TableCell>
                      {show2 && 
                      <>
                           <TableCell className='border data_td text-center bg-info text-white'>  
@@ -2884,16 +2955,46 @@ const[rowsValue1,setRowsValue1]=useState("")
 </>
 }
  {/* Modal for closing the status of  persons*/}
-
- <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-xl">
+ <div className="modal fade p-0 m-0" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-fullscreen">
     <div className="modal-content">
       <div className="modal-header">
-        <h4 className="modal-title" id="exampleModalLabel">Select Persons to closed</h4>
+        <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
+       <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} </span>
+
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
       <div className="modal-body detail_table">
-      <TableContainer component={Paper} >
+        <div className="d-flex payment_form p-0 m-0">
+        <div className="d-flex overflow-x-auto">
+                <div className="flex-grow-1 p-0 mx-1">
+                  <div className="text-end">
+                 
+                  <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
+                  <div class="dropdown dropstart d-inline" >
+  <button class="btn dropdown-toggle btn-sm m-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    See More
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" onClick={()=>setShowTrade(!showTrade)}>{showTrade?'Hide':'Show'} Trade</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowEntryMode(!showEntryMode)}>{showEntryMode?'Hide':'Show'} Entry Mode</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowCompany(!showCompany)}>{showCompany?'Hide':'Show'} Company</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowCountry(!showCountry)}>{showCountry?'Hide':'Show'} Country</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowFinalStatus(!showFinalStatus)}>{showFinalStatus?'Hide':'Show'} Final Status</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowFlightDate(!showFlightDate)}>{showFlightDate?'Hide':'Show'} Flight Date</a></li>
+  </ul>
+</div>
+<div className="col-md-12 filters">
+            <div className='py-1 mb-2 '>
+             
+            </div>
+          </div>
+                  </div>
+                  <TableContainer component={Paper}  sx={{ maxHeight: 700 }}>
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
@@ -2902,69 +3003,182 @@ const[rowsValue1,setRowsValue1]=useState("")
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
                     <TableCell className='label border' >PP#</TableCell>
-                    <TableCell className='label border' >Entry Mode</TableCell>
-                    <TableCell className='label border' >Company</TableCell>
-                    <TableCell className='label border' >Trade</TableCell>
-                    <TableCell className='label border' >Country</TableCell>
-                    <TableCell className='label border' >Final Status</TableCell>
-                    <TableCell className='label border' >Flight Date</TableCell>
-                    <TableCell className='label border' >Visa Price PKR</TableCell>
-                    <TableCell className='label border' >Total In</TableCell>
+                    {showEntryMode && <TableCell className='label border' >Entry_Mode</TableCell>}
+                    {showCompany && <TableCell className='label border' >Company</TableCell>}
+                    {showTrade && <TableCell className='label border' >Trade</TableCell>}
+                    {showCountry && <TableCell className='label border' >Country</TableCell>}
+                    {showFinalStatus && <TableCell className='label border' >Final Status</TableCell>}
+                    {showFlightDate && <TableCell className='label border' >Flight Date</TableCell>}
+                    <TableCell className='label border' >Visa Price In PKR</TableCell>
+                    <TableCell className='label border' >Total In PKR</TableCell>
+                    <TableCell className='label border' >Total Cash Return</TableCell>
                     <TableCell className='label border' >Remaining PKR</TableCell>
                     {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
                     <TableCell className='label border'>Status</TableCell>
-                    
+                    <TableCell className='label border' >Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredPersons.map((filteredData) => (
+                  {filteredClosingPersons.map((filteredData) => (
                     <>
                       {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
 
                         <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode2 && editedRowIndex2 === index ? (
                             <>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry2.entry_Date} onChange={(e) => handlePersonInputChange(e, 'entry_Date')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry2.name} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry2.pp_No} readonly />
+                              </TableCell>
+                               {showEntryMode &&
+                            <TableCell className='border data_td p-1 '>
+                            <select value={editedEntry2.entry_Mode} onChange={(e) => handlePersonInputChange(e, 'entry_Mode')} required>
+                              <option value="">Choose</option>
+                              {entryMode && entryMode.map((data) => (
+                                <option key={data._id} value={data.entry_Mode}>{data.entry_Mode}</option>
+                              ))}
+                            </select>
+                            </TableCell>
+                              }
                              
+                             {showCompany && 
+                             <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry2.company} onChange={(e) => handlePersonInputChange(e, 'company')} required>
+                                  <option value="">Choose</option>
+                                  {companies && companies.map((data) => (
+                                    <option key={data._id} value={data.company}>{data.company}</option>
+                                  ))}
+                                </select>
+                              </TableCell>}
+                            
+                            {showTrade &&
+                            <TableCell className='border data_td p-1 '>
+                            <select value={editedEntry2.trade} onChange={(e) => handlePersonInputChange(e, 'trade')} required>
+                              <option value="">Choose</option>
+                              {trades && trades.map((data) => (
+                                <option key={data._id} value={data.trade}>{data.trade}</option>
+                              ))}
+                            </select>
+                          </TableCell>
+                            }
+                              
+                              {showCountry &&
+                                <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry2.country} onChange={(e) => handlePersonInputChange(e, 'country')} required>
+                                  <option value="">Choose</option>
+                                  {countries && countries.map((data) => (
+                                    <option key={data._id} value={data.country}>{data.country}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              }
+                            {showFinalStatus &&
+                              <TableCell className='border data_td p-1 '>
+                              <select value={editedEntry2.final_Status} onChange={(e) => handlePersonInputChange(e, 'final_Status')} required>
+                                <option value="">Choose</option>
+                                {finalStatus && finalStatus.map((data) => (
+                                  <option key={data._id} value={data.final_Status}>{data.final_Status}</option>
+                                ))}
+                              </select>
+                            </TableCell>
+                            }
+                            
+                            {showFlightDate &&
+                             <TableCell className='border data_td p-1 '>
+                             <input type='date' value={editedEntry2.flight_Date} onChange={(e) => handlePersonInputChange(e, 'flight_Date')} />
+                           </TableCell>
+                            }
+
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.total_In} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              {show && <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
+                              </TableCell>}
+                              <TableCell className='border data_td p-1 '>
+                                <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
+                                  <option value="Open">Open</option>
+                                  <option value="Closed">Closed</option>
+                                </select>
+                              </TableCell>
                             </>
                           ) : (
                             <>
-                             <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
                                 <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
                               </TableCell>
                               <TableCell className='border data_td text-center' >{index + 1}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.name}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.company}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.trade}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.country}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>
+                              {showEntryMode && <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>}
+                              {showCompany && <TableCell className='border data_td text-center' >{person?.company}</TableCell>}
+                              {showTrade && <TableCell className='border data_td text-center' >{person?.trade}</TableCell>}
+                              {showCountry && <TableCell className='border data_td text-center' >{person?.country}</TableCell>}
+                              {showFinalStatus && <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>}
+                              {showFlightDate && <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>}
                               <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
-                              <TableCell className='border data_td text-center' >{person?.remaining_Price}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.visa_Price_In_PKR - person?.total_In + person?.cash_Out}</TableCell>
                               {show && <TableCell className='border data_td text-center' >{person?.visa_Price_In_Curr}</TableCell>}
                               <TableCell className='border data_td text-center' >{person?.status}</TableCell>
                             </>
                           )}
-                         
+                          <TableCell className='border data_td p-1 text-center'>
+                            {editMode2 && editedRowIndex2 === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn btn-sm' disabled={loading4}><i className="fa-solid fa-check"></i></button>
+
+                                </div>
+
+                              </>
+
+                            ) : (
+                              
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPerson(person)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPersonDetails(person)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePerson(person)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+
+                              </>
+                            )}
+                          </TableCell>
 
                         </TableRow>
                       ))}
                       <TableRow>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                        
                         <TableCell className='border data_td text-center bg-warning text-white'>
-                          
+                        Total Visa Price PKR= 
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
@@ -2972,8 +3186,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                             }, 0);
                           }, 0)}
                         </TableCell>
+ 
                         <TableCell className='border data_td text-center bg-success text-white'>
-                          
+                        Total In PKR= 
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.total_In);
@@ -2981,8 +3196,9 @@ const[rowsValue1,setRowsValue1]=useState("")
                             }, 0);
                           }, 0)}
                         </TableCell>
-                        <TableCell className='border data_td text-center bg-danger text-white'>
-                          
+
+                        <TableCell className='border data_td text-center bg-info text-white'>
+                        Total Remaining= 
                           {filteredPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.remaining_Price);
@@ -2997,10 +3213,244 @@ const[rowsValue1,setRowsValue1]=useState("")
 
               </Table>
             </TableContainer>
+                </div>
+                <div className="flex-grow-1 p-0 mx-1">
+                <div className="text-end">
+                <div className="dropdown dropstart">
+                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print All</button>
+                <button class="btn dropdown-toggle btn-sm m-1 d-inline" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  See More
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li><a class="dropdown-item"onClick={()=>setShowCategory(!showCategory)}>{showCategory?'Hide':'Show'} Category</a></li>
+                  <li><a class="dropdown-item" onClick={()=>setShowSlipNo(!showSlipNo)}>{showSlipNo?'Hide':'Show'} Slip No</a></li>
+                  <li><a class="dropdown-item" onClick={()=>setShowDetails(!showDetails)}>{showDetails?'Hide':'Show'} Details</a></li>
+                </ul>
+              </div>
+                  </div>
+                  <TableContainer  sx={{ maxHeight: 600 }}>
+              <Table stickyHeader>
+                <TableHead className="thead">
+                  <TableRow>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    {showCategory &&  <TableCell className='label border' >Category</TableCell>}
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    {showSlipNo &&  <TableCell className='label border' >Slip No</TableCell>}
+                    {showDetails &&  <TableCell className='label border' >Details</TableCell>}
+                    <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
+                    <TableCell className='label border' >Candidates</TableCell>
+                    <TableCell className='label border' >Total Visa Price PKR</TableCell>
+                    <TableCell className='label border' >Total Remaining Price PKR</TableCell>
+                    <TableCell className='label border' >Invoice</TableCell>
+                    {show2 && <>
+                      <TableCell className='label border' >Payment In Curr</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
+                    </>}
+                    <TableCell className='label border' >Slip Pic</TableCell>
+                    <TableCell align='left' className='edw_label border'  colSpan={1}>
+                      Actions
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredIndividualPayments.map((filteredData) => (
+                    <>
+                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
+                        <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode3 && editedRowIndex3 === index ?(
+                            <>
+                            <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry3.date} onChange={(e) => handleInputChange3(e, 'date')} />
+                              </TableCell>
+                              {showCategory && <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry3.category} onChange={(e) => handleInputChange3(e, 'category')} required>
+                                  <option value="">Choose</option>
+                                  {categories && categories.map((data) => (
+                                    <option key={data._id} value={data.category}>{data.category}</option>
+                                  ))}
+                                </select>
+                              </TableCell>}
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry3.payment_Via} onChange={(e) => handleInputChange3(e, 'payment_Via')} required>
+                                  <option value="">Choose</option>
+                                  {paymentVia && paymentVia.map((data) => (
+                                    <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry3.payment_Type} onChange={(e) => handleInputChange3(e, 'payment_Type')} required>
+                                  <option value="">Choose</option>
+                                  {paymentType && paymentType.map((data) => (
+                                    <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              {showSlipNo && <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.slip_No} onChange={(e) => handleInputChange3(e, 'slip_No')} />
+                              </TableCell>}
+                              {showDetails && <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.details} onChange={(e) => handleInputChange3(e, 'details')} />
+                              </TableCell>}
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.payment_In} disabled />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.cash_Out} disabled />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.payments.length} disabled />
+                              </TableCell>
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' readonly disabled/>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' readonly disabled/>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry3.invoice} readonly disabled/>
+                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry3.payment_In_Curr} onChange={(e) => handleInputChange3(e, 'payment_In_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                               
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry3.curr_Amount} onChange={(e) => handleInputChange3(e, 'curr_Amount')} disabled/>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry3.curr_Rate} onChange={(e) => handleInputChange3(e, 'curr_Rate')} disabled/>
+                                </TableCell>
+                              </>}
+                              <TableCell className='border data_td p-1 '>
+                                <input type='file' accept='image/*' onChange={(e) => handleImageChange3(e, 'slip_Pic')} />
+                              </TableCell>
+                            <TableCell>
+                            <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode3(!editMode3)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePayment()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
+
+                                </div>
+                            </TableCell>
+</>
+                          ):
+                          <>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              {showCategory &&  <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>}
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              {showSlipNo && <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>}
+                              {showDetails && <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>}
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_In}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down text-warning text-bold"></i><i className="fa-solid fa-arrow-up text-warning text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payments.length}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payments.reduce((total, payment) => total + payment.visa_Amount_PKR, 0)} </TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payments.reduce((total, payment) => total + payment.new_Remain_PKR, 0)} </TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_In_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+
+                              </>}
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                              <TableCell className='border data_td p-1 '>
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button className='btn btn-info btn-sm' onClick={()=>handleDetails(paymentItem)}><i className="fas fa-eye"></i></button>
+                                <button onClick={() => handleEditClick3(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fas fa-edit"></i></button>
+                                <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn delete_btn btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fas fa-trash-alt"></i></button>
+                                </div>
+                               
+                              </>
+                          
+                          </TableCell>
+                          </>
+                          }
+                           
+                          
+                          
+                        </TableRow>
+                      ))}
+                    </>
+                  ))}
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    
+                    <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_In);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-warning text-white'>
+                      {/* Calculate the total sum of payment_In */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.cash_Out);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                   
+                    {show2 && <>
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                     
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
+
+                  </TableRow>
+
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+                </div>
+            </div>
+       </div>
+      
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-danger btn-sm shadow" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
-        <button type="button" className="btn btn-success btn-sm shadow" onClick={() => changeStatus("Closed")} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
+     
+       <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)}</span>
+        <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <label htmlFor="">Convert Remaining Balance to New Khata?</label>
+        <button className="btn  btn-sm shadow cancel_btn" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
+        <button className="btn btn-sm shadow save_btn" onClick={() => changeStatus()} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
       </div>
     </div>
   </div>

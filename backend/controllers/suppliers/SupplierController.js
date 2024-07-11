@@ -3747,7 +3747,7 @@ const addCandVisePaymentIn=async(req,res)=>{
     
 
       if (existPerson) {
-      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
       past_Paid_PKR=existPerson.total_In,
       pp_No=existPerson.pp_No,
@@ -3766,6 +3766,7 @@ const addCandVisePaymentIn=async(req,res)=>{
       past_Remain_Curr=existPerson.remaining_Curr,
       new_Remain_Curr=existPerson.remaining_Curr-newCurrAmount,
       new_Payment=newPaymentIn,
+      cash_Out=0,
       new_Curr_Payment=newCurrAmount?newCurrAmount:0,
       existPerson.remaining_Price += -newPaymentIn,
       existPerson.total_In += newPaymentIn,
@@ -3785,6 +3786,7 @@ const addCandVisePaymentIn=async(req,res)=>{
         flight_Date,
         visa_Amount_PKR,
         new_Payment,
+        cash_Out:0,
         past_Paid_PKR,
         past_Remain_PKR,
         new_Remain_PKR,
@@ -3805,6 +3807,7 @@ const addCandVisePaymentIn=async(req,res)=>{
       payment_Type,
       slip_No,
       payment_In:new_Payment_In,
+      cash_Out:0,
       curr_Amount:new_Curr_Amount,
       payment_In_Curr:curr_Country,
       slip_Pic: uploadImage?.secure_url || '',
@@ -3941,7 +3944,7 @@ const addCandVisePaymentInReturn=async(req,res)=>{
     
 
       if (existPerson) {
-      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
       past_Paid_PKR=existPerson.total_In,
       pp_No=existPerson.pp_No,
@@ -3960,6 +3963,7 @@ const addCandVisePaymentInReturn=async(req,res)=>{
       past_Remain_Curr=existPerson.remaining_Curr,
       new_Remain_Curr=existPerson.remaining_Curr+newCurrAmount,
       cash_Out=newPaymentIn,
+      new_Payment=0,
       new_Curr_Payment=newCurrAmount?newCurrAmount:0,
       existPerson.remaining_Price += newPaymentIn,
       existPerson.total_In -= newPaymentIn,
@@ -3979,6 +3983,7 @@ const addCandVisePaymentInReturn=async(req,res)=>{
         flight_Date,
         visa_Amount_PKR,
         cash_Out,
+        new_Payment:0,
         past_Paid_PKR,
         past_Remain_PKR,
         new_Remain_PKR,
@@ -3998,6 +4003,7 @@ const addCandVisePaymentInReturn=async(req,res)=>{
       payment_Via,
       payment_Type,
       slip_No,
+      payment_In:0,
       cash_Out:newCash_Out,
       curr_Amount:new_Curr_Amount,
       payment_In_Curr:curr_Country,
@@ -4433,7 +4439,7 @@ if(existingNewPaymentPerson){
     message: `Successfuly, updated Cand-Wise Payment_In ${newPaymentIn} of Candidate ${cand_Name} of Supplier: ${supplierName}'s Record`,
   });
 
-}
+}}
 else{
 // Updating The Cand payment
 
@@ -4479,7 +4485,6 @@ candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
   res.status(200).json({
     message: `Successfuly, updated Cand-Wise Payment_In ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
   });
-}
 }
       }
     }
@@ -4565,7 +4570,7 @@ const addCandVisePaymentOut=async(req,res)=>{
     
 
       if (existPerson) {
-      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
       past_Paid_PKR=existPerson.total_In,
       pp_No=existPerson.pp_No,
@@ -4584,6 +4589,8 @@ const addCandVisePaymentOut=async(req,res)=>{
       past_Remain_Curr=existPerson.remaining_Curr,
       new_Remain_Curr=existPerson.remaining_Curr-newCurrAmount,
       new_Payment=newPaymentOut,
+      cash_Out=0,
+
       new_Curr_Payment=newCurrAmount?newCurrAmount:0,
       existPerson.remaining_Price += -newPaymentOut,
       existPerson.total_In += newPaymentOut,
@@ -4603,6 +4610,7 @@ const addCandVisePaymentOut=async(req,res)=>{
         flight_Date,
         visa_Amount_PKR,
         new_Payment,
+        cash_Out:0,
         past_Paid_PKR,
         past_Remain_PKR,
         new_Remain_PKR,
@@ -4623,6 +4631,7 @@ const addCandVisePaymentOut=async(req,res)=>{
       payment_Type,
       slip_No,
       payment_Out:new_Payment_Out,
+      cash_Out:0,
       curr_Amount:new_Curr_Amount,
       payment_Out_Curr:curr_Country,
       slip_Pic: uploadImage?.secure_url || '',
@@ -4758,7 +4767,7 @@ const addCandVisePaymentOutReturn=async(req,res)=>{
     
 
       if (existPerson) {
-      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
+      let cand_Name, pp_No,entry_Mode, company,trade,final_Status,flight_Date,visa_Amount_PKR,new_Payment,cash_Out,past_Paid_PKR,past_Remain_PKR,new_Remain_PKR,visa_Curr_Amount,new_Curr_Payment,past_Paid_Curr,past_Remain_Curr,new_Remain_Curr,curr_Rate
       cand_Name=existPerson.name,
       past_Paid_PKR=existPerson.total_In,
       pp_No=existPerson.pp_No,
@@ -4777,6 +4786,7 @@ const addCandVisePaymentOutReturn=async(req,res)=>{
       past_Remain_Curr=existPerson.remaining_Curr,
       new_Remain_Curr=existPerson.remaining_Curr+newCurrAmount,
       cash_Out=newPaymentOut,
+      new_Payment=0,
       new_Curr_Payment=newCurrAmount?newCurrAmount:0,
       existPerson.remaining_Price += newPaymentOut,
       existPerson.total_In -= newPaymentOut,
@@ -4796,6 +4806,7 @@ const addCandVisePaymentOutReturn=async(req,res)=>{
         flight_Date,
         visa_Amount_PKR,
         cash_Out,
+        new_Payment:0,
         past_Paid_PKR,
         past_Remain_PKR,
         new_Remain_PKR,
@@ -4815,6 +4826,7 @@ const addCandVisePaymentOutReturn=async(req,res)=>{
       payment_Via,
       payment_Type,
       slip_No,
+      payment_Out:0,
       cash_Out:newCash_Out,
       curr_Amount:new_Curr_Amount,
       payment_Out_Curr:curr_Country,
@@ -5250,6 +5262,7 @@ if(existingNewPaymentPerson){
   });
 
 }
+}
 else{
 // Updating The Cand payment
 
@@ -5296,7 +5309,7 @@ candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
     message: `Successfuly, updated Cand-Wise Payment_Out ${new_Payment} of Candidate ${candPayment.cand_Name} of Supplier: ${supplierName}'s Record`,
   });
 }
-}
+
       }
     }
   }

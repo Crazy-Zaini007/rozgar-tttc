@@ -1262,7 +1262,7 @@ export default function CashinHand() {
                                   return total + (Math.round((entry.payment_Out || entry.payment_Out < 1 || entry.type.toLowerCase().includes('out') ? entry.cash_Out : 0) || 0));
                                 }, 0))}
                               </TableCell>
-                              <TableCell className='border data_td text-center bg-secondary text-white'>
+                              {/* <TableCell className='border data_td text-center bg-secondary text-white'>
                                 Remaining Curr=
                                 {(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
                                   return total + (Math.round((entry.payment_In || entry.payment_In > 0 || entry.type.toLowerCase().includes('in') ? entry.curr_Amount : 0) || 0));
@@ -1273,7 +1273,7 @@ export default function CashinHand() {
                                 }, 0)) - (filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
                                   return total + (Math.round((entry.payment_Out || entry.payment_Out < 1 || entry.type.toLowerCase().includes('out') ? entry.curr_Amount : 0) || 0));
                                 }, 0))}
-                              </TableCell>
+                              </TableCell> */}
                             </TableRow>
                           </TableBody>
                         </Table>

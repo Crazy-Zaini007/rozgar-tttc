@@ -477,32 +477,55 @@ export default function AgentPaymentInDetails() {
   const [search2, setSearch2] = useState('')
 
   const filteredPersons = agent_Payments_In
+  .filter((data) => data.supplierName === selectedSupplier && data.status === newStatus)
+  .map((filteredData) => ({
+    ...filteredData,
+    persons: filteredData.persons
+      .filter((person) => {
+        // Check if person.name does not match any cand_Name in candPayments.payments
+        const isNotInCandPayments = !filteredData.candPayments.some((candPayment) =>
+          candPayment.payments.some((payment) =>
+            payment.cand_Name.trim().toLowerCase() === person.name.trim().toLowerCase()
+          )
+        );
+
+        return (
+          isNotInCandPayments &&
+          person.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
+          person.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
+          person.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
+          person.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+          person.company?.toLowerCase().includes(company.toLowerCase()) &&
+          person.country?.toLowerCase().includes(country.toLowerCase()) &&
+          person.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+          person.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+          person.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+          person.status?.toLowerCase().includes(status1.toLowerCase()) &&
+          (
+            person.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+            person.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase())
+          )
+        );
+      })
+  }))
+
+
+  
+  const filteredClosingPersons = agent_Payments_In
     .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
-        .filter((persons) =>
-          persons.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-          persons.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
-          persons.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
-          persons.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-          persons.company?.toLowerCase().includes(company.toLowerCase()) &&
-          persons.country?.toLowerCase().includes(country.toLowerCase()) &&
-          persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-          persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-          persons.status?.toLowerCase().includes(status1.toLowerCase()) &&
-          (persons.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-          persons.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()))
-        )
     }))
+
+
 
   const downloadExcel = () => {
     const data = [];
@@ -1591,7 +1614,7 @@ const printPerson = (person) => {
                                     <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} required />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.total_Visa_Price_In_PKR - editedEntry1.total_Payment_In + editedEntry1.total_Cash_Out} readonly />
+                                    <input type='number' value={editedEntry1.remaining_Balance} readonly />
                                   </TableCell>
                                   {show1 && <>
                                     <TableCell className='border data_td p-1 '>
@@ -1676,34 +1699,33 @@ const printPerson = (person) => {
                         <TableCell></TableCell>
                         <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
                         <TableCell className='border data_td text-center bg-info text-white'>
-                          {/* Calculate the total sum of payment_In */}
+                         
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
                             const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
                             return isNaN(paymentIn) ? total : total + paymentIn;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-success text-white'>
-                          {/* Calculate the total sum of cash_Out */}
+                        
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Payment_In);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-danger text-white'>
-                          {/* Calculate the total sum of cash_Out */}
+                          
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
                             const cashOut = parseFloat(paymentItem.total_Cash_Out);
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
                         <TableCell className='border data_td text-center bg-warning text-white'>
-                          {/* Calculate the total sum of cash_Out */}
+                         
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_In_PKR);
-                            const cashOut = parseFloat(paymentItem.total_Cash_Out);
-                            const paymentOut = parseFloat(paymentItem.total_Payment_In);
+                            const paymentIn = parseFloat(paymentItem.remaining_Balance);
+                           
                             // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
-                            const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+                            const netCashOut = isNaN(paymentIn) ? 0 : paymentIn;
                             return total + netCashOut;
                           }, 0)}
                         </TableCell>
@@ -2403,6 +2425,7 @@ const printPerson = (person) => {
               <Table stickyHeader>
                 <TableHead className="thead">
                   <TableRow>
+                  <TableCell className='label border' >Select</TableCell>
                     <TableCell className='label border' >SN</TableCell>
                     <TableCell className='label border' >Date</TableCell>
                     <TableCell className='label border' >Name</TableCell>
@@ -2423,13 +2446,16 @@ const printPerson = (person) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredPersons.map((filteredData) => (
+                  {filteredClosingPersons.map((filteredData) => (
                     <>
                       {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
 
                         <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           {editMode2 && editedRowIndex2 === index ? (
                             <>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='text' value={index + 1} readonly />
                               </TableCell>
@@ -2525,6 +2551,9 @@ const printPerson = (person) => {
                             </>
                           ) : (
                             <>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
                               <TableCell className='border data_td text-center' >{index + 1}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
                               <TableCell className='border data_td text-center' >{person?.name}</TableCell>
