@@ -327,7 +327,7 @@ export default function CandPaymentOutDetails() {
   const [status, setStatus] = useState('Open')
 
   const filteredTotalPaymentOut = candidate_Payments_Out.filter(payment => {
-    // Check if supplierName exists and matches the provided name
+    
     if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
         payment.createdAt?.toLowerCase().includes(date1.toLowerCase()) &&
