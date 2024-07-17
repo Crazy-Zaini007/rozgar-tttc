@@ -21,6 +21,38 @@ import SupplierEntry2 from '../doubleEntry/SupplierEntry2'
 import SupplierEntry1 from '../doubleEntry/SupplierEntry1'
 
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
+const allKeys = [
+  'date', 'supplierName', 'pp_No', 'category', 'payment_Via', 'payment_Type', 'slip_No',
+  'payment_Out', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'
+];
+
+const defaultValues = {
+  'date': '',
+  'supplierName': '',
+  'pp_No': '',
+  'category': '',
+  'payment_Via': '',
+  'payment_Type': '',
+  'slip_No': '',
+  'payment_Out': 0,
+  'details': '',
+  'curr_Country': '',
+  'curr_Rate': 0,
+  'curr_Amount': 0
+};
+
+
+const initializeMissingFields = (entry) => {
+  const initializedEntry = { ...entry };
+  allKeys.forEach(key => {
+    if (!initializedEntry.hasOwnProperty(key)) {
+      initializedEntry[key] = defaultValues[key];
+    } else if (typeof defaultValues[key] === 'number') {
+      initializedEntry[key] = parseFloat(initializedEntry[key]);
+    }
+  });
+  return initializedEntry;
+};
 
 export default function CandPaymentOut() {
   const dispatch = useDispatch();
@@ -218,7 +250,7 @@ export default function CandPaymentOut() {
     setSingle(index)
   }
 
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '',pp_No:'', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
 
   const [triggerEffect, setTriggerEffect] = useState(false);
 
@@ -229,7 +261,6 @@ export default function CandPaymentOut() {
       return;
     }
 
-    // Check if the file type is either Excel or CSV
     if (
       file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
       file.type !== 'text/csv'
@@ -243,58 +274,47 @@ export default function CandPaymentOut() {
       const data = e.target.result;
       const dataArray = parseExcelData(data);
       setMultiplePayment(dataArray);
-      setTriggerEffect(true); // Trigger the useEffect when multiplePayment changes
+      setTriggerEffect(true);
     };
 
     fileReader.readAsBinaryString(file);
-
-    // Clear the file input value
     e.target.value = null;
   };
 
- 
   const parseExcelData = (data) => {
     const workbook = XLSX.read(data, { type: 'binary' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-    
-    // Modify the dataArray to ensure missing fields are initialized with undefined
-    const updatedDataArray = dataArray.map((entry, rowIndex) => {
-      // Map over each entry and replace empty strings with undefined
-      return Object.fromEntries(
-        Object.entries(entry).map(([key, value]) => {
-          const trimmedValue = typeof value === 'string' ? value.trim() : value; // Check if the value is a string before trimming
-  
-          // Convert the flight_Date value if the key is 'flight_Date'
-          if (key === 'date') {
-            if (!isNaN(trimmedValue) && trimmedValue !== '') {
-              // Parse the numeric value as a date without time component
-              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000); // Adjust for timezone offset
-  
-              if (!isNaN(dateValue.getTime())) {
-                return [key, dateValue.toISOString().split('T')[0]]; // Format the date as 'YYYY-MM-DD' if the date is valid
-              } else {
-                console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
-                return [key, undefined];
-              }
-            } 
-          }
-  
-          return [key, trimmedValue === '' ? undefined : trimmedValue];
-        })
+
+    return dataArray.map((entry, rowIndex) => {
+      return initializeMissingFields(
+        Object.fromEntries(
+          Object.entries(entry).map(([key, value]) => {
+            const trimmedValue = typeof value === 'string' ? value.trim() : value;
+
+            if (key === 'date' && !isNaN(trimmedValue) && trimmedValue !== '') {
+              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
+              return [key, !isNaN(dateValue.getTime()) ? dateValue.toISOString().split('T')[0] : undefined];
+            }
+
+            return [key, trimmedValue === '' ? undefined : trimmedValue];
+          })
+        )
       );
     });
-  
-    return updatedDataArray;
-
-  }
+  };
 
   const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...multiplePayment];
-    updatedData[rowIndex][key] = value;
+    if (typeof defaultValues[key] === 'number') {
+      updatedData[rowIndex][key] = parseFloat(value) || defaultValues[key];
+    } else {
+      updatedData[rowIndex][key] = value;
+    }
     setMultiplePayment(updatedData);
   };
+
 
   
   const handleUploadList =async (e) => {
@@ -396,22 +416,20 @@ export default function CandPaymentOut() {
                             </tr>
                           </thead>
                           <tbody className='p-0 m-0'>
-                            {multiplePayment.length > 0 && multiplePayment.map((rowData, rowIndex) => (
-                              <tr key={rowIndex} className='p-0 m-0'>
-                                {Object.entries(rowData).map(([key, value], colIndex) => (
-                                  <td key={colIndex} className='p-0 m-0'>
-
-                                    <input
-                                      type="text"
-                                      className='m-0'
-                                      value={value}
-                                      onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
-                                    />
-
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
+                          {multiplePayment.length > 0 && multiplePayment.map((rowData, rowIndex) => (
+                            <tr key={rowIndex} className='p-0 m-0'>
+                              {allKeys.map((key, colIndex) => (
+                                <td key={colIndex} className='p-0 m-0'>
+                                  <input
+                                    type={typeof defaultValues[key] === 'number' ? 'number' : 'text'}
+                                    className='m-0'
+                                    value={rowData[key] || ""}
+                                    onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
+                                  />
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
 
 
                           </tbody>
@@ -579,7 +597,7 @@ export default function CandPaymentOut() {
                         </TableHead>
                         <TableBody>
                           {candidate_Payments_Out
-                            .filter((data) => data.supplierName === selectedSupplier)
+                            .filter((data) => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
                             .map((filteredData) => (
                               // Map through the payment array
                               <>
@@ -672,7 +690,7 @@ export default function CandPaymentOut() {
                        </TableHead>
                        <TableBody>
                  {candidate_Payments_Out
-                   .filter(data => data.supplierName === selectedSupplier)
+                   .filter(data => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
                    .map((person, index) => (
                      <TableRow key={person._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                        <TableCell className='border data_td text-center'>{index + 1}</TableCell>
@@ -694,7 +712,160 @@ export default function CandPaymentOut() {
                  </div>
                   </>
                 )}
+                {candidate_Payments_Out
+          .filter(data => data.supplierName === selectedSupplier &&data.pp_No === pp_No)
+          .map((person, index) => (
+            <>
+              <form>
+                <div className="row p-0 m-0 mt-2">
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Candidate Name</label>
+                    <input disabled
+                      type="text"
+                      value={person.supplierName}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>PP#</label>
+                    <input disabled
+                      type="text"
+                      value={person.pp_No}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Entry Mode</label>
+                    <input disabled
+                      type="text"
+                      value={person.entry_Mode}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Country</label>
+                    <input disabled
+                      type="text"
+                      value={person.country}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Final Status</label>
+                    <input disabled
+                      type="text"
+                      value={person.final_Status}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Flight Date</label>
+                    <input disabled
+                      type="text"
+                      value={person.flight_Date}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Company</label>
+                    <input disabled
+                      type="text"
+                      value={person.company}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Visa Price In PKR</label>
+                    <input disabled
+                      type="text"
+                      value={Math.round(person.total_Visa_Price_Out_PKR)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label >Total In PKR</label>
+                    <input type="text" disabled value={Math.round(person.total_Payment_Out)} readOnly />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label >New Total In PKR</label>
+                    <input type="text" disabled value={
+                      person.total_Payment_Out + parseInt(payment_Out, 10)
+                    } readOnly />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Remaining PKR</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.remaining_Balance)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Remaining PKR</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.remaining_Balance - payment_Out)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Visa Price In Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.total_Visa_Price_Out_Curr)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Total Paid Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.total_Payment_Out_Curr)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Total Paid Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.total_Payment_Out_Curr + curr_Amount)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Remaining Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={person.remaining_Curr}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Remaining Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.remaining_Curr - curr_Amount)}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              </form>
+              {/* <div className="row p-0 m-0 mt-2 justify-content-center">
+                <div className="col-md-2 col-sm-12">
+                <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(person)}>Print</button>
+                </div>
+              </div> */}
 
+
+            </>
+          ))}
               </div>
               </>
             }

@@ -364,7 +364,6 @@ export default function AddPayment() {
                             <tr >
                               <th >Date</th>
                               <th >Employee Name</th>
-                              <th >Salary Month</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
                               <th >Payment_Type</th>

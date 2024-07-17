@@ -501,7 +501,7 @@ export default function PaymentOutReturn() {
                   </TableHead>
                   <TableBody>
                     {candidate_Payments_Out
-                      .filter((data) => data.supplierName === selectedSupplier)
+                      .filter((data) => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
                       .map((filteredData) => (
                         // Map through the payment array
                         <>
@@ -594,7 +594,7 @@ export default function PaymentOutReturn() {
                   </TableHead>
                   <TableBody>
                     {candidate_Payments_Out
-                      .filter(data => data.supplierName === selectedSupplier)
+                      .filter(data => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
                       .map((person, index) => (
                         <TableRow key={person._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                           <TableCell className='border data_td text-center'>{index + 1}</TableCell>
@@ -620,7 +620,7 @@ export default function PaymentOutReturn() {
           </>
         )}
         {candidate_Payments_Out
-          .filter(data => data.supplierName === selectedSupplier)
+          .filter(data => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
           .map((person, index) => (
             <>
               <form>
