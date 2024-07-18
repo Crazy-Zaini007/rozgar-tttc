@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import VisitHook from '../../../../hooks/visitsHooks/VisitHook'
 import { useSelector, useDispatch } from 'react-redux';
@@ -31,8 +30,6 @@ export default function VisitSupPayOutDetails() {
     const [show2, setShow2] = useState(false)
 
     const apiUrl = process.env.REACT_APP_API_URL;
-
-
     const [, setNewMessage] = useState('')
     const { getVisitSupplierPaymentsOut } = VisitHook()
     const { getCurrencyData } = CurrencyHook()
@@ -92,6 +89,7 @@ export default function VisitSupPayOutDetails() {
     const trades = useSelector((state) => state.setting.trades);
 
     const visitSupplier_Payments_Out = useSelector((state) => state.visits.visitSupplier_Payments_Out);
+    
     const rowsPerPageOptions = [10, 15, 30];
 
     const [page, setPage] = useState(0);
@@ -160,79 +158,80 @@ export default function VisitSupPayOutDetails() {
 
 
     const deletePaymentIn = async (payment) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            setLoading1(true)
-            let paymentId = payment._id
-            try {
-                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/single/payment_out`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
-                })
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading1(true)
+        let paymentId = payment._id
+        try {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/single/payment_out`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+            })
 
-                const json = await response.json()
+            const json = await response.json()
 
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading1(false)
-                }
-                if (response.ok) {
-                    fetchData()
-                    setNewMessage(toast.success(json.message));
-                    setLoading1(false)
-                    setEditMode(!editMode)
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading1(false)
             }
+            if (response.ok) {
+                fetchData()
+                setNewMessage(toast.success(json.message));
+                setLoading1(false)
+                setEditMode(!editMode)
+            }
         }
-
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading1(false)
+        }
+    }
+        
     }
 
 
     const deletePerson = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            setLoading2(true)
-            let personId = person._id
-            try {
-                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/person/payment_out`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Visa_Price_Out_PKR: person.azad_Visa_Price_Out_PKR, azad_Visa_Price_Out_Curr: person.azad_Visa_Price_Out_Curr })
-                })
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading2(true)
+        
+        let personId = person._id
+        try {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/person/payment_out`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Visa_Price_Out_PKR: person.azad_Visa_Price_Out_PKR, azad_Visa_Price_Out_Curr: person.azad_Visa_Price_Out_Curr })
+            })
 
-                const json = await response.json()
+            const json = await response.json()
 
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading2(false)
-                }
-                if (response.ok) {
-                    fetchData()
-                    setNewMessage(toast.success(json.message));
-                    setLoading2(false)
-                    setEditMode(!editMode)
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading2(false)
             }
+            if (response.ok) {
+                fetchData()
+                setNewMessage(toast.success(json.message));
+                setLoading2(false)
+                setEditMode(!editMode)
+            }
         }
-
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading2(false)
+        }
+    }
+       
     }
 
 
 
-    //Editing for Agent Person 
+    //Editing for Supplier Person 
     const [editMode2, setEditMode2] = useState(false);
     const [editedEntry2, setEditedEntry2] = useState({});
     const [editedRowIndex2, setEditedRowIndex2] = useState(null);
@@ -261,7 +260,7 @@ export default function VisitSupPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date, status: editedEntry2.status })
+                body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
             })
 
             const json = await response.json()
@@ -318,37 +317,37 @@ export default function VisitSupPayOutDetails() {
 
 
     const deleteTotalpayment = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            setLoading5(true)
-            try {
-                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/all/payment_out`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ supplierName: person.supplierName })
-                })
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading5(true)
+        try {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/all/payment_out`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ supplierName: person.supplierName })
+            })
 
-                const json = await response.json()
+            const json = await response.json()
 
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading5(false)
-                }
-                if (response.ok) {
-                    fetchData();
-                    setNewMessage(toast.success(json.message));
-                    setLoading5(false)
-
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading5(false)
             }
-        }
+            if (response.ok) {
+                fetchData();
+                setNewMessage(toast.success(json.message));
+                setLoading5(false)
 
+            }
+        }
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading5(false)
+        }
+    }
+       
     }
 
 
@@ -368,32 +367,32 @@ export default function VisitSupPayOutDetails() {
    
     // individual payments filters
     const [dateFrom, setDateFrom] = useState('')
-    const [dateTo, setDateTo] = useState('')
+  const [dateTo, setDateTo] = useState('')
 
-    const [payment_Via, setPayment_Via] = useState('')
-    const [payment_Type, setPayment_Type] = useState('')
+  const [payment_Via, setPayment_Via] = useState('')
+  const [payment_Type, setPayment_Type] = useState('')
 
-    const filteredIndividualPayments = visitSupplier_Payments_Out
-        .filter((data) => data.supplierName === selectedSupplier)
-        .map((filteredData) => ({
-            ...filteredData,
-            payment: filteredData.payment
-                .filter((paymentItem) => {
-                    let isDateInRange = true;
-                    // Check if the payment item's date is within the selected date range
-                    if (dateFrom && dateTo) {
-                        isDateInRange =
-                            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
-                    }
+  const filteredIndividualPayments = visitSupplier_Payments_Out
+  .filter((data) => data.supplierName === selectedSupplier)
+  .map((filteredData) => ({
+    ...filteredData,
+    payment: filteredData.payment
+      .filter((paymentItem) => {
+        let isDateInRange = true;
+        // Check if the payment item's date is within the selected date range
+        if (dateFrom && dateTo) {
+          isDateInRange =
+            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+        }
 
-                    return (
-                        isDateInRange &&
-                        paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-                         paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
-                    );
-                }),
-        }))
-   
+        return (
+          isDateInRange &&
+          paymentItem.payment_Via.toLowerCase().includes(payment_Via.toLowerCase()) &&
+          paymentItem.payment_Type.toLowerCase().includes(payment_Type.toLowerCase())
+        );
+      }),
+  }))
+    
     const [date3, setDate3] = useState('')
     const [name, setName] = useState('')
     const [pp_No, setPP_NO] = useState('')
@@ -420,7 +419,7 @@ export default function VisitSupPayOutDetails() {
                     persons.country?.toLowerCase().includes(country.toLowerCase()) &&
                     persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
                     persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-                    persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+                    persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
                     persons.status?.toLowerCase().includes(status1.toLowerCase())
 
                 ),
@@ -428,648 +427,370 @@ export default function VisitSupPayOutDetails() {
 
    
 
-    const downloadExcel = () => {
-        const data = [];
-        // Iterate over entries and push all fields
-        filteredTotalPaymentIn.forEach((payments, index) => {
-            const rowData = {
-                SN: index + 1,
-                Agents: payments.supplierName,
-                Total_Visa_Price_Out_PKR: payments.total_Azad_Visa_Price_Out_PKR,
-                Total_Payment_Out: payments.total_Payment_Out,
-                Total_Cash_Out: payments.total_Cash_Out,
-                Remaining_PKR: payments.total_Azad_Visa_Price_Out_PKR - payments.total_Payment_Out + payments.total_Cash_Out,
-                Total_Visa_Price_In_Curr: payments.total_Azad_Visa_Price_Out_Curr,
-                Total_Payment_Out_Curr: payments.total_Payment_Out_Curr,
-                Remaining_Curr: payments.total_Azad_Visa_Price_Out_Curr - payments.total_Payment_Out_Curr,
-                Status: payments.status,
-              
-
-            }
-
-            data.push(rowData);
-        });
-
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, 'Agent_Payments_Details.xlsx');
-    }
-
-
-    const downloadIndividualPayments = () => {
-        const data = [];
-        // Iterate over entries and push all fields
-        filteredIndividualPayments.forEach((payments, index) => {
-            const rowData = {
-                SN: index + 1,
-                Date: payments.date,
-                Category: payments.category,
-                payment_Via: payments.payment_Via,
-                payment_Type: payments.payment_Type,
-                slip_No: payments.slip_No,
-                details: payments.details,
-                payment_Out: payments.payment_Out,
-                cash_Out: payments.cash_Out,
-                invoice: payments.invoice,
-                payment_Out_Curr: payments.payment_Out_Curr,
-                curr_Rate: payments.curr_Rate,
-                curr_Amount: payments.curr_Amount
-            }
-
-            data.push(rowData);
-        });
-
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-    }
-
-
-    const downloadPersons = () => {
-        const data = [];
-        // Iterate over entries and push all fields
-        filteredPersons.forEach((payments, index) => {
-            const rowData = {
-                SN: index + 1,
-                entry_Date: payments.entry_Date,
-                Category: payments.category,
-                name: payments.name,
-                pp_No: payments.pp_No,
-                entry_Mode: payments.entry_Mode,
-                company: payments.company,
-                trade: payments.trade,
-                country: payments.country,
-                final_Status: payments.final_Status,
-                flight_Date: payments.flight_Date,
-                visa_Price_Out_PKR: payments.azad_Visa_Price_Out_PKR,
-                visa_Price_Out_Curr: payments.azad_Visa_Price_Out_Curr,
-                Status: payments.status,
-
-
-            }
-
-            data.push(rowData);
-        });
-
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-    }
-
-    const downloadCombinedPayments = () => {
-        const combinedData = [];
-        const anotherData=[]
+         
+  const downloadExcel = () => {
+    const data = [];
+    // Iterate over entries and push all fields
+    filteredTotalPaymentIn.forEach((payments, index) => {
+      const rowData = {
+        SN: index + 1,
+        Suppliers:payments.supplierName,
+        Total_Visa_Price_Out_PKR:payments.total_Azad_Visa_Price_Out_PKR,
+        Total_Payment_Out:payments.total_Payment_Out,
+        Total_Cash_Out:payments.total_Cash_Out,
+        Remaining_PKR: payments.total_Azad_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
+        Total_Visa_Price_In_Curr:payments.total_Azad_Visa_Price_Out_Curr,
+        Total_Payment_Out_Curr:payments.total_Payment_Out_Curr,
+        Remaining_Curr:payments.total_Azad_Visa_Price_Out_Curr-payments.total_Payment_Out_Curr,
+        Status:payments.status
         
-        const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
-    
-        // Iterate over individual payments and push all fields
-        individualPayments.forEach((payment, index) => {
-            const rowData = {
-                SN: index + 1,
-                Date: payment.date,
-                Category: payment.category,
-                Payment_Via: payment.payment_Via,
-                Payment_Type: payment.payment_Type,
-                Slip_No: payment.slip_No,
-                Details: payment.details,
-                Payment_In: payment.payment_Out,
-                Cash_Out: payment.cash_Out,
-                Invoice: payment.invoice,
-               
-                Payment_In_Curr: payment.payment_Out_Curr,
-                Curr_Rate: payment.curr_Rate,
-                Curr_Amount: payment.curr_Amount
-            };
-    
-            combinedData.push(rowData);
-        });
-    
-        const individualPerons = filteredPersons.flatMap(payment => payment.persons);
+      }
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'Supplier_Payments_Details.xlsx');
+  }
+
+
+  const downloadIndividualPayments = () => {
+    const data = [];
+    // Iterate over entries and push all fields
+    filteredIndividualPayments.forEach((payments, index) => {
+      const rowData = {
+        SN: index + 1,
+        Date:payments.date,
+        Category:payments.category,
+        payment_Via:payments.payment_Via,
+        payment_Type:payments.payment_Type,
+        slip_No: payments.slip_No,
+        details:payments.details,
+        payment_Out:payments.payment_Out,
+        cash_Out:payments.cash_Out,
+        invoice:payments.invoice,
+        payment_Out_Curr:payments.payment_Out_Curr,
+        curr_Rate:payments.curr_Rate,
+        curr_Amount:payments.curr_Amount
+      }
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+  }
+
+  
+  const downloadPersons = () => {
+    const data = [];
+    // Iterate over entries and push all fields
+    filteredPersons.forEach((payments, index) => {
+      const rowData = {
+        SN: index + 1,
+        entry_Date:payments.entry_Date,
+        Category:payments.category,
+        name:payments.name,
+        pp_No:payments.pp_No,
+        entry_Mode: payments.entry_Mode,
+        company:payments.company,
+        trade:payments.trade,
+        country:payments.country,
+        final_Status:payments.final_Status,
+        flight_Date:payments.flight_Date,
+        visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
+        visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
+        Status:payments.status
         
+      }
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
+  }
+
+  const downloadCombinedPayments = () => {
+    const combinedData = [];
+    const anotherData=[]
     
-        // Iterate over individual payments and push all fields
-        individualPerons.forEach((payments, index) => {
-            const rowData = {
+    const individualPayments = filteredIndividualPayments.flatMap(payment => payment.payment);
+
+    // Iterate over individual payments and push all fields
+    individualPayments.forEach((payment, index) => {
+        const rowData = {
             SN: index + 1,
-            Entry_Date:payments.entry_Date,
-            Category:payments.category,
-            name:payments.name,
-            PP_No:payments.pp_No,
-            Entry_Mode: payments.entry_Mode,
-            Company:payments.company,
-            Trade:payments.trade,
-            Country:payments.country,
-            Final_Status:payments.final_Status,
-            Flight_Date:payments.flight_Date,
-            Visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
-            Visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
-            Status:payments.status,
-            };
+            Date: payment.date,
+            Category: payment.category,
+            Payment_Via: payment.payment_Via,
+            Payment_Type: payment.payment_Type,
+            Slip_No: payment.slip_No,
+            Details: payment.details,
+            Payment_In: payment.payment_Out,
+            Cash_Out: payment.cash_Out,
+            Invoice: payment.invoice,
+            Payment_In_Curr: payment.payment_Out_Curr,
+            Curr_Rate: payment.curr_Rate,
+            Curr_Amount: payment.curr_Amount
+        };
+
+        combinedData.push(rowData);
+    });
+
+    const individualPerons = filteredPersons.flatMap(payment => payment.persons);
     
-            anotherData.push(rowData);
-        });
-        const ws1 = XLSX.utils.json_to_sheet(combinedData);
-        const ws2 = XLSX.utils.json_to_sheet(anotherData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
-        XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
-        XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
-    }
-    
-    
-    const changeStatus = async (myStatus) => {
-        if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
-          setLoading5(true)
-          let newStatus=myStatus
-    
-          try {
-            const response = await fetch(`${apiUrl}/auth/visit/suppliers/update/payment_out/status`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${user.token}`,
-              },
-              body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
-            })
-            
-            const json = await response.json()
-    
-            if (!response.ok) {
-              setNewMessage(toast.error(json.message));
-              setLoading5(false)
-            }
-            if (response.ok) {
-              fetchData()
-              setNewMessage(toast.success(json.message));
-              setLoading5(false)
-            }
-          }
-          catch (error) {
-            setNewMessage(toast.error('Server is not responding...'))
-            setLoading5(false)
-          }
+
+    // Iterate over individual payments and push all fields
+    individualPerons.forEach((payments, index) => {
+        const rowData = {
+        SN: index + 1,
+        Entry_Date:payments.entry_Date,
+        Category:payments.category,
+        name:payments.name,
+        PP_No:payments.pp_No,
+        Entry_Mode: payments.entry_Mode,
+        Company:payments.company,
+        Trade:payments.trade,
+        Country:payments.country,
+        Final_Status:payments.final_Status,
+        Flight_Date:payments.flight_Date,
+        Visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
+        Visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
+        Status:payments.status,
+        };
+
+        anotherData.push(rowData);
+    });
+    const ws1 = XLSX.utils.json_to_sheet(combinedData);
+    const ws2 = XLSX.utils.json_to_sheet(anotherData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws1, 'Payments Details');
+    XLSX.utils.book_append_sheet(wb, ws2, 'Persons Details'); // Add the second sheet
+    XLSX.writeFile(wb, `${selectedSupplier} Details.xlsx`);
+}
+
+
+const changeStatus = async (myStatus) => {
+    if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
+      setLoading5(true)
+      let newStatus=myStatus
+
+      try {
+        const response = await fetch(`${apiUrl}/auth/visit/suppliers/update/payment_out/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
+        })
+        
+        const json = await response.json()
+
+        if (!response.ok) {
+          setNewMessage(toast.error(json.message));
+          setLoading5(false)
+        }
+        if (response.ok) {
+          fetchData()
+          setNewMessage(toast.success(json.message));
+          setLoading5(false)
         }
       }
-    
+      catch (error) {
+        setNewMessage(toast.error('Server is not responding...'))
+        setLoading5(false)
+      }
+    }
+  }
 
 
-      const printMainTable = () => {
-        // Function to format the date as dd-MM-yyyy
-        const formatDate = (date) => {
-          const d = new Date(date);
-          const day = String(d.getDate()).padStart(2, '0');
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const year = d.getFullYear();
-          return `${day}-${month}-${year}`;
-        };
+  const printMainTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Supplier Payment Out Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Suppliers</th>
+            <th>TVPI PKR</th>
+            <th>TPI PKR</th>
+            <th>Total Cash Out</th>
+            <th>RPI PKR</th>
+            <th>TVPI Oth Curr</th>
+            <th>TPI Curr</th>
+            <th>RPI Curr</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        ${filteredTotalPaymentIn.map((entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${String(entry.supplierName)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_Out_PKR)}</td>
+            <td>${String(entry.total_Payment_Out)}</td>
+            <td>${String(entry.total_Cash_Out)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_Out_Curr)}</td>
+            <td>${String(entry.total_Payment_Out_Curr)}</td>
+            <td>${String(entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr)}</td>
+            <td>${String(entry.status)}</td>           
+          </tr>
+        `).join('')}
+        <tr>
+          <td colspan="1"></td>
+          <td>Total</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Azad_Visa_Price_Out_PKR, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out), 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Azad_Visa_Price_Out_Curr, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out_Curr, 0))}</td>
+          <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr), 0))}</td>
+          <td></td>
+        </tr>
+      </tbody>
       
-        const formattedDate = formatDate(new Date());
-      
-        // Convert JSX to HTML string
-        const printContentString = `
-          <div class="print-header">
-            <h1 class="title">ROZGAR TTTC</h1>
-            <p class="date">Date: ${formattedDate}</p>
-          </div>
-          <div class="print-header">
-            <h1 class="title">Supplier Payment Out Details</h1>
-          </div>
-          <hr/>
-          <table class='print-table'>
-            <thead>
-              <tr>
-                <th>SN</th>
-                <th>Suppliers</th>
-                <th>TVPI PKR</th>
-                <th>TPI PKR</th>
-                <th>Total Cash Out</th>
-                <th>RPI PKR</th>
-                <th>TVPI Oth Curr</th>
-                <th>TPI Curr</th>
-                <th>RPI Curr</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-            ${filteredTotalPaymentIn.map((entry, index) => `
-              <tr>
-                <td>${index + 1}</td>
-                <td>${String(entry.supplierName)}</td>
-                <td>${String(entry.total_Azad_Visa_Price_Out_PKR)}</td>
-                <td>${String(entry.total_Payment_Out)}</td>
-                <td>${String(entry.total_Cash_Out)}</td>
-                <td>${String(entry.total_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out)}</td>
-                <td>${String(entry.total_Azad_Visa_Price_Out_Curr)}</td>
-                <td>${String(entry.total_Payment_Out_Curr)}</td>
-                <td>${String(entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr)}</td>
-                <td>${String(entry.status)}</td>           
-              </tr>
-            `).join('')}
-            <tr>
-              <td colspan="1"></td>
-              <td>Total</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Azad_Visa_Price_Out_PKR, 0))}</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out, 0))}</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out), 0))}</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Azad_Visa_Price_Out_Curr, 0))}</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out_Curr, 0))}</td>
-              <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr), 0))}</td>
-              <td></td>
-            </tr>
-          </tbody>
-          
-          </table>
-          <style>
-            /* Add your custom print styles here */
-            body {
-              background-color: #fff;
-            }
-            .print-header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              margin-bottom: 20px;
-            }
-            .title {
-              flex-grow: 1;
-              text-align: center;
-              margin: 0;
-              font-size: 24px;
-            }
-            .date {
-              flex-grow: 0;
-              text-align: right;
-              font-size: 20px;
-            }
-            .print-table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 20px 0;
-            }
-            .print-table th, .print-table td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: left;
-              text-transform: capitalize;
-            }
-            .print-table th {
-              background-color: #f2f2f2;
-            }
-          </style>
-        `;
-      
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          // Write the print content to the new window
-          printWindow.document.write(`
-            <html>
-              <head>
-                <title>Suppliers Payment Out Details</title>
-              </head>
-              <body class='bg-dark'>${printContentString}</body>
-            </html>
-          `);
-      
-          // Trigger print dialog
-          printWindow.print();
-          // Close the new window after printing
-          printWindow.onafterprint = function () {
-            printWindow.close();
-          };
-        } else {
-          // Handle if the new window cannot be opened
-          alert('Could not open print window. Please check your browser settings.');
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
         }
-      };
-      
-      
-      const printPaymentsTable = () => {
-        // Function to format the date as dd-MM-yyyy
-        const formatDate = (date) => {
-          const d = new Date(date);
-          const day = String(d.getDate()).padStart(2, '0');
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const year = d.getFullYear();
-          return `${day}-${month}-${year}`;
-        };
-      
-        const formattedDate = formatDate(new Date());
-      
-        // Convert JSX to HTML string
-        const printContentString = `
-          <div class="print-header">
-          <p class="invoice">Supplier: ${selectedSupplier}</p>
-            <h1 class="title">ROZGAR TTTC</h1>
-            <p class="date">Date: ${formattedDate}</p>
-          </div>
-          <div class="print-header">
-            <h1 class="title">Supplier Payment Invoices</h1>
-          </div>
-          <hr/>
-          <table class='print-table'>
-            <thead>
-              <tr>
-                <th>SN</th>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Payment Via</th>
-                <th>Payment Type</th>
-                <th>Slip No</th>
-                <th>Details</th>
-                <th>Payment Out</th>
-                <th>Cash Out</th>
-                <th>Curr Rate</th>
-                <th>Curr Amount</th>
-                <th>Invoice</th>
-                <th>Payment Out Curr</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${filteredIndividualPayments.map((entry, index) =>
-                entry.payment.map((paymentItem, paymentIndex) => `
-                  <tr key="${entry?._id}-${paymentIndex}">
-                    <td>${index * entry.payment.length + paymentIndex + 1}</td>
-                    <td>${String(paymentItem?.date)}</td>
-                    <td>${String(paymentItem?.category)}</td>
-                    <td>${String(paymentItem?.payment_Via)}</td>
-                    <td>${String(paymentItem?.payment_Type)}</td>
-                    <td>${String(paymentItem?.slip_No)}</td>
-                    <td>${String(paymentItem?.details)}</td>
-                    <td>${String(paymentItem?.payment_Out)}</td>
-                    <td>${String(paymentItem?.cash_Out)}</td>
-                    <td>${String(paymentItem?.curr_Rate)}</td>
-                    <td>${String(paymentItem?.curr_Amount)}</td>
-                    <td>${String(paymentItem?.invoice)}</td>
-                    <td>${String(paymentItem?.payment_Out_Curr)}</td>
-                  </tr>
-                `).join('')
-              ).join('')}
-              <tr>
-                <td colspan="6"></td>
-                <td>Total</td>
-                <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_Out, 0), 0))}</td>
-                <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
-                <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Rate, 0), 0))}</td>
-                <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <style>
-            /* Add your custom print styles here */
-            body {
-              background-color: #fff;
-            }
-            .print-header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            }
-            .title {
-              flex-grow: 1;
-              text-align: center;
-              margin: 0;
-              font-size: 24px;
-            }
-            .date {
-              flex-grow: 0;
-              text-align: right;
-              font-size: 20px;
-            }
-            .print-table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 20px 0;
-            }
-            .print-table th, .print-table td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: left;
-              text-transform: capitalize;
-            }
-            .print-table th {
-              background-color: #f2f2f2;
-            }
-          </style>
-        `;
-      
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          // Write the print content to the new window
-          printWindow.document.write(`
-            <html>
-              <head>
-                <title>${selectedSupplier} Payment Out Details</title>
-              </head>
-              <body class='bg-dark'>${printContentString}</body>
-            </html>
-          `);
-      
-          // Trigger print dialog
-          printWindow.print();
-          // Close the new window after printing
-          printWindow.onafterprint = function () {
-            printWindow.close();
-          };
-        } else {
-          // Handle if the new window cannot be opened
-          alert('Could not open print window. Please check your browser settings.');
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
         }
-      };
-      
-      const printPersonsTable = () => {
-        // Function to format the date as dd-MM-yyyy
-        const formatDate = (date) => {
-          const d = new Date(date);
-          const day = String(d.getDate()).padStart(2, '0');
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const year = d.getFullYear();
-          return `${day}-${month}-${year}`;
-        };
-      
-        const formattedDate = formatDate(new Date());
-      
-        // Convert JSX to HTML string
-        const printContentString = `
-          <div class="print-header">
-          <p class="invoice">Supplier: ${selectedSupplier}</p>
-            <h1 class="title">ROZGAR TTTC</h1>
-            <p class="date">Date: ${formattedDate}</p>
-          </div>
-          <div class="print-header">
-            <h1 class="title">Supplier Persons Details</h1>
-          </div>
-          <hr/>
-          <table class='print-table'>
-            <thead>
-              <tr>
-                <th>SN</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>PP#</th>
-                <th>Entry Mode</th>
-                <th>Company</th>
-                <th>Trade</th>
-                <th>Country</th>
-                <th>Final Status</th>
-                <th>Flight Date</th>
-                <th>VPI PKR</th>
-                <th>VPI Oth Curr</th>
-                <th>Paid PKR</th>
-                <th>Remaining PKR</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${filteredPersons.map((entry, index) =>
-                entry.persons.map((person, personIndex) => `
-                  <tr key="${person?._id}">
-                    <td>${index * entry.persons.length + personIndex + 1}</td>
-                    <td>${String(person?.entry_Date)}</td>
-                    <td>${String(person?.name)}</td>
-                    <td>${String(person?.pp_No)}</td>
-                    <td>${String(person?.entry_Mode)}</td>
-                    <td>${String(person?.company)}</td>
-                    <td>${String(person?.trade)}</td>
-                    <td>${String(person?.country)}</td>
-                    <td>${String(person?.final_Status)}</td>
-                    <td>${String(person?.flight_Date)}</td>
-                    <td>${String(person?.azad_Visa_Price_Out_PKR)}</td>
-                    <td>${String(person?.azad_Visa_Price_Out_Curr)}</td>
-                    <td>${String(person?.total_In)}</td>
-                    <td>${String(person?.remaining_Price)}</td>
-                    <td>${String(person?.status)}</td>
-                  </tr>
-                `).join('')
-              ).join('')}
-              <tr>
-                <td colspan="9"></td>
-                <td>Total</td>
-                <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.azad_Visa_Price_Out_PKR, 0), 0))}</td>
-                <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.azad_Visa_Price_Out_Curr, 0), 0))}</td>
-                <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
-                <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <style>
-            /* Add your custom print styles here */
-            body {
-              background-color: #fff;
-            }
-            .print-header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            }
-            .title {
-              flex-grow: 1;
-              text-align: center;
-              margin: 0;
-              font-size: 24px;
-            }
-            .date {
-              flex-grow: 0;
-              text-align: right;
-              font-size: 20px;
-            }
-            .print-table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 20px 0;
-            }
-            .print-table th, .print-table td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: left;
-              text-transform: capitalize;
-            }
-            .print-table th {
-              background-color: #f2f2f2;
-            }
-          </style>
-        `;
-      
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          // Write the print content to the new window
-          printWindow.document.write(`
-            <html>
-              <head>
-                <title>${selectedSupplier}'s Persons Details</title>
-              </head>
-              <body class='bg-dark'>${printContentString}</body>
-            </html>
-          `);
-      
-          // Trigger print dialog
-          printWindow.print();
-          // Close the new window after printing
-          printWindow.onafterprint = function () {
-            printWindow.close();
-          };
-        } else {
-          // Handle if the new window cannot be opened
-          alert('Could not open print window. Please check your browser settings.');
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
         }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Suppliers Payment Out Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
       };
-      
-    
-    
-      const printPaymentInvoice = (paymentItem) => {
-          // Function to format the date as dd-MM-yyyy
-      const formatDate = (date) => {
-        const d = new Date(date);
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        return `${day}-${month}-${year}`;
-      };
-    
-      const formattedDate = formatDate(new Date());
-        // Convert JSX to HTML string
-        const printContentString = `
-          <div class="print-header">
-          <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
-            <h1 class="title">ROZGAR TTTC</h1>
-          <p class="date">Date: ${formattedDate}</p>
-          </div>
-          <div class="print-header">
-            <h1 class="title">Supplier Payment Invoice</h1>
-          </div>
-          <hr/>
-          <table class='print-table'>
-            <thead>
-              <tr>
-                <th>SN</th>
-                <th>Date</th>
-                <th>Supplier Name</th>
-                <th>Category</th>
-                <th>Payment Via</th>
-                <th>Payment Type</th>
-                <th>Slip No</th>
-                <th>Details</th>
-                <th>Payment Out</th>
-                <th>Cash Out</th>
-                <th>Curr Rate</th>
-                <th>Curr Amount</th>
-                <th>Payment Out Curr</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+  
+  const printPaymentsTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Supplier: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Supplier Payment Invoices</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Payment Via</th>
+            <th>Payment Type</th>
+            <th>Slip No</th>
+            <th>Details</th>
+            <th>Payment Out</th>
+            <th>Cash Out</th>
+            <th>Curr Rate</th>
+            <th>Curr Amount</th>
+            <th>Invoice</th>
+            <th>Payment Out Curr</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filteredIndividualPayments.map((entry, index) =>
+            entry.payment.map((paymentItem, paymentIndex) => `
+              <tr key="${entry?._id}-${paymentIndex}">
+                <td>${index * entry.payment.length + paymentIndex + 1}</td>
                 <td>${String(paymentItem?.date)}</td>
-                <td>${String(selectedSupplier)}</td>
                 <td>${String(paymentItem?.category)}</td>
                 <td>${String(paymentItem?.payment_Via)}</td>
                 <td>${String(paymentItem?.payment_Type)}</td>
@@ -1079,126 +800,134 @@ export default function VisitSupPayOutDetails() {
                 <td>${String(paymentItem?.cash_Out)}</td>
                 <td>${String(paymentItem?.curr_Rate)}</td>
                 <td>${String(paymentItem?.curr_Amount)}</td>
+                <td>${String(paymentItem?.invoice)}</td>
                 <td>${String(paymentItem?.payment_Out_Curr)}</td>
               </tr>
-            </tbody>
-          </table>
-          <style>
-            body {
-              background-color: #fff;
-            }
-            .print-header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            }
-            .logo {
-              max-width: 100px;
-            }
-            .title {
-              flex-grow: 1;
-              text-align: center;
-              margin: 0;
-              font-size: 24px;
-            }
-            .invoice {
-              flex-grow: 0;
-              text-align: left;
-              font-size: 20px;
-            }
-            .date{
-              flex-grow: 0;
-              text-align: right;
-              font-size: 20px;
-            }
-            .print-table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 20px 0;
-            }
-            .print-table th, .print-table td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: left;
-              text-transform: capitalize;
-            }
-            .print-table th {
-              background-color: #f2f2f2;
-            }
-          </style>
-        `;
-      
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          // Write the print content to the new window
-          printWindow.document.write(`
-            <html>
-              <head>
-                <title>${selectedSupplier} Payment Out Details</title>
-              </head>
-              <body class='bg-dark'>${printContentString}</body>
-            </html>
-          `);
-      
-          // Trigger print dialog
-          printWindow.print();
-          // Close the new window after printing
-          printWindow.onafterprint = function () {
-            printWindow.close();
-          };
-        } else {
-          // Handle if the new window cannot be opened
-          alert('Could not open print window. Please check your browser settings.');
+            `).join('')
+          ).join('')}
+          <tr>
+            <td colspan="6"></td>
+            <td>Total</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.payment_Out, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.cash_Out, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Rate, 0), 0))}</td>
+            <td>${String(filteredIndividualPayments.reduce((total, entry) => total + entry.payment.reduce((acc, paymentItem) => acc + paymentItem.curr_Amount, 0), 0))}</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
         }
-      }
-      
-      const printPerson = (person) => {
-        // Function to format the date as dd-MM-yyyy
-        const formatDate = (date) => {
-          const d = new Date(date);
-          const day = String(d.getDate()).padStart(2, '0');
-          const month = String(d.getMonth() + 1).padStart(2, '0');
-          const year = d.getFullYear();
-          return `${day}-${month}-${year}`;
-        };
-      
-        const formattedDate = formatDate(new Date());
-      
-        // Convert JSX to HTML string
-        const printContentString = `
-          <div class="print-header">
-          <p class="invoice">Supplier: ${selectedSupplier}</p>
-            <h1 class="title">ROZGAR TTTC</h1>
-            <p class="date">Date: ${formattedDate}</p>
-          </div>
-          <div class="print-header">
-            <h1 class="title">Supplier Person Details</h1>
-          </div>
-          <hr/>
-          <table class='print-table'>
-            <thead>
-              <tr>
-                <th>SN</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>PP#</th>
-                <th>Entry Mode</th>
-                <th>Company</th>
-                <th>Trade</th>
-                <th>Country</th>
-                <th>Final Status</th>
-                <th>Flight Date</th>
-                <th>VPI PKR</th>
-                <th>VPI Oth Curr</th>
-                <th>Paid PKR</th>
-                <th>Remaining PKR</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier} Payment Out Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+  const printPersonsTable = () => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Supplier: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Supplier Persons Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>PP#</th>
+            <th>Entry Mode</th>
+            <th>Company</th>
+            <th>Trade</th>
+            <th>Country</th>
+            <th>Final Status</th>
+            <th>Flight Date</th>
+            <th>VPI PKR</th>
+            <th>VPI Oth Curr</th>
+            <th>Paid PKR</th>
+            <th>Remaining PKR</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filteredPersons.map((entry, index) =>
+            entry.persons.map((person, personIndex) => `
+              <tr key="${person?._id}">
+                <td>${index * entry.persons.length + personIndex + 1}</td>
                 <td>${String(person?.entry_Date)}</td>
                 <td>${String(person?.name)}</td>
                 <td>${String(person?.pp_No)}</td>
@@ -1214,137 +943,403 @@ export default function VisitSupPayOutDetails() {
                 <td>${String(person?.remaining_Price)}</td>
                 <td>${String(person?.status)}</td>
               </tr>
-            </tbody>
-          </table>
-          <style>
-            /* Add your custom print styles here */
-            body {
-              background-color: #fff;
-            }
-            .print-header {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            }
-            .logo {
-              max-width: 100px;
-            }
-            .title {
-              flex-grow: 1;
-              text-align: center;
-              margin: 0;
-              font-size: 24px;
-            }
-            .invoice {
-              flex-grow: 0;
-              text-align: left;
-              font-size: 20px;
-            }
-            .date {
-              flex-grow: 0;
-              text-align: right;
-              font-size: 20px;
-            }
-            .print-table {
-              width: 100%;
-              border-collapse: collapse;
-              margin: 20px 0;
-            }
-            .print-table th, .print-table td {
-              border: 1px solid #ddd;
-              padding: 8px;
-              text-align: left;
-              text-transform: capitalize;
-            }
-            .print-table th {
-              background-color: #f2f2f2;
-            }
-          </style>
-        `;
-      
-        // Create a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          // Write the print content to the new window
-          printWindow.document.write(`
-            <html>
-              <head>
-                <title>${selectedSupplier}'s Persons Details</title>
-              </head>
-              <body class='bg-dark'>${printContentString}</body>
-            </html>
-          `);
-      
-          // Trigger print dialog
-          printWindow.print();
-          // Close the new window after printing
-          printWindow.onafterprint = function () {
-            printWindow.close();
-          };
-        } else {
-          // Handle if the new window cannot be opened
-          alert('Could not open print window. Please check your browser settings.');
+            `).join('')
+          ).join('')}
+          <tr>
+            <td colspan="9"></td>
+            <td>Total</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.azad_Visa_Price_Out_PKR, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.azad_Visa_Price_Out_Curr, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.total_In, 0), 0))}</td>
+            <td>${String(filteredPersons.reduce((total, entry) => total + entry.persons.reduce((acc, paymentItem) => acc + paymentItem.remaining_Price, 0), 0))}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
         }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier}'s Persons Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
       };
-      
-    
-      const downloadPaymentInvoice = (payment) => {
-        const data = [];
-        // Flatten the array of objects to get an array of individual payments
-        // Iterate over individual payments and push all fields
-          const rowData = {
-            Supplier:selectedSupplier,
-            Date: payment.date,
-            Category: payment.category,
-            Payment_Via: payment.payment_Via,
-            Payment_Type: payment.payment_Type,
-            Slip_No: payment.slip_No,
-            Details: payment.details,
-            Payment_Out: payment.payment_Out,
-            Cash_Out: payment.cash_Out,
-            Invoice: payment.invoice,
-            Payment_Out_Curr: payment.payment_Out_Curr,
-            Curr_Rate: payment.curr_Rate,
-            Curr_Amount: payment.curr_Amount
-          };
-    
-          data.push(rowData);
-    
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
-      }
-    
-      const downloadPersonDetails = (payment) => {
-        const data = [];
-          const rowData = {
-            Supplier:selectedSupplier,
-            Entry_Date: payment.entry_Date,
-            Name: payment.name,
-            PP_No: payment.pp_No,
-            Entry_Mode: payment.entry_Mode,
-            Company: payment.company,
-            Trade: payment.trade,
-            Country: payment.country,
-            Final_Status: payment.final_Status,
-            Flight_Date: payment.flight_Date,
-            Visa_Price_Out_PKR: payment.azad_Visa_Price_Out_PKR,
-            Total_In: payment.total_In,
-            Total_Cash_Out: payment.cash_Out,
-            Remaining_PKR: payment.azad_Visa_Price_Out_PKR - payment.total_In + payment.cash_Out,
-            Visa_Price_Out_Curr: payment.azad_Visa_Price_Out_Curr,
-            Remaining_Curr: payment.remaining_Curr,
-            Status: payment.status
-          };
-    
-        data.push(rowData);
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
-      }
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
 
+
+  const printPaymentInvoice = (paymentItem) => {
+      // Function to format the date as dd-MM-yyyy
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDate(new Date());
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Invoice No: ${paymentItem.invoice}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+      <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Supplier Payment Invoice</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Supplier Name</th>
+            <th>Category</th>
+            <th>Payment Via</th>
+            <th>Payment Type</th>
+            <th>Slip No</th>
+            <th>Details</th>
+            <th>Payment Out</th>
+            <th>Cash Out</th>
+            <th>Curr Rate</th>
+            <th>Curr Amount</th>
+            <th>Payment Out Curr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>${String(paymentItem?.date)}</td>
+            <td>${String(selectedSupplier)}</td>
+            <td>${String(paymentItem?.category)}</td>
+            <td>${String(paymentItem?.payment_Via)}</td>
+            <td>${String(paymentItem?.payment_Type)}</td>
+            <td>${String(paymentItem?.slip_No)}</td>
+            <td>${String(paymentItem?.details)}</td>
+            <td>${String(paymentItem?.payment_Out)}</td>
+            <td>${String(paymentItem?.cash_Out)}</td>
+            <td>${String(paymentItem?.curr_Rate)}</td>
+            <td>${String(paymentItem?.curr_Amount)}</td>
+            <td>${String(paymentItem?.payment_Out_Curr)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .logo {
+          max-width: 100px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .invoice {
+          flex-grow: 0;
+          text-align: left;
+          font-size: 20px;
+        }
+        .date{
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier} Payment Out Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  }
+  
+  const printPerson = (person) => {
+    // Function to format the date as dd-MM-yyyy
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+  
+    const formattedDate = formatDate(new Date());
+  
+    // Convert JSX to HTML string
+    const printContentString = `
+      <div class="print-header">
+      <p class="invoice">Supplier: ${selectedSupplier}</p>
+        <h1 class="title">ROZGAR TTTC</h1>
+        <p class="date">Date: ${formattedDate}</p>
+      </div>
+      <div class="print-header">
+        <h1 class="title">Supplier Person Details</h1>
+      </div>
+      <hr/>
+      <table class='print-table'>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>PP#</th>
+            <th>Entry Mode</th>
+            <th>Company</th>
+            <th>Trade</th>
+            <th>Country</th>
+            <th>Final Status</th>
+            <th>Flight Date</th>
+            <th>VPI PKR</th>
+            <th>VPI Oth Curr</th>
+            <th>Paid PKR</th>
+            <th>Remaining PKR</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>${String(person?.entry_Date)}</td>
+            <td>${String(person?.name)}</td>
+            <td>${String(person?.pp_No)}</td>
+            <td>${String(person?.entry_Mode)}</td>
+            <td>${String(person?.company)}</td>
+            <td>${String(person?.trade)}</td>
+            <td>${String(person?.country)}</td>
+            <td>${String(person?.final_Status)}</td>
+            <td>${String(person?.flight_Date)}</td>
+            <td>${String(person?.azad_Visa_Price_Out_PKR)}</td>
+            <td>${String(person?.azad_Visa_Price_Out_Curr)}</td>
+            <td>${String(person?.total_In)}</td>
+            <td>${String(person?.remaining_Price)}</td>
+            <td>${String(person?.status)}</td>
+          </tr>
+        </tbody>
+      </table>
+      <style>
+        /* Add your custom print styles here */
+        body {
+          background-color: #fff;
+        }
+        .print-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .logo {
+          max-width: 100px;
+        }
+        .title {
+          flex-grow: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 24px;
+        }
+        .invoice {
+          flex-grow: 0;
+          text-align: left;
+          font-size: 20px;
+        }
+        .date {
+          flex-grow: 0;
+          text-align: right;
+          font-size: 20px;
+        }
+        .print-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        .print-table th, .print-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+          text-transform: capitalize;
+        }
+        .print-table th {
+          background-color: #f2f2f2;
+        }
+      </style>
+    `;
+  
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      // Write the print content to the new window
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>${selectedSupplier}'s Persons Details</title>
+          </head>
+          <body class='bg-dark'>${printContentString}</body>
+        </html>
+      `);
+  
+      // Trigger print dialog
+      printWindow.print();
+      // Close the new window after printing
+      printWindow.onafterprint = function () {
+        printWindow.close();
+      };
+    } else {
+      // Handle if the new window cannot be opened
+      alert('Could not open print window. Please check your browser settings.');
+    }
+  };
+  
+
+  const downloadPaymentInvoice = (payment) => {
+    const data = [];
+    // Flatten the array of objects to get an array of individual payments
+    // Iterate over individual payments and push all fields
+      const rowData = {
+        Supplier:selectedSupplier,
+        Date: payment.date,
+        Category: payment.category,
+        Payment_Via: payment.payment_Via,
+        Payment_Type: payment.payment_Type,
+        Slip_No: payment.slip_No,
+        Details: payment.details,
+        Payment_Out: payment.payment_Out,
+        Cash_Out: payment.cash_Out,
+        Invoice: payment.invoice,
+        Payment_Out_Curr: payment.payment_Out_Curr,
+        Curr_Rate: payment.curr_Rate,
+        Curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Payment Details.xlsx`);
+  }
+
+  const downloadPersonDetails = (payment) => {
+    const data = [];
+      const rowData = {
+        Supplier:selectedSupplier,
+        Entry_Date: payment.entry_Date,
+        Name: payment.name,
+        PP_No: payment.pp_No,
+        Entry_Mode: payment.entry_Mode,
+        Company: payment.company,
+        Trade: payment.trade,
+        Country: payment.country,
+        Final_Status: payment.final_Status,
+        Flight_Date: payment.flight_Date,
+        Visa_Price_Out_PKR: payment.azad_Visa_Price_Out_PKR,
+        Total_In: payment.total_In,
+        Total_Cash_Out: payment.cash_Out,
+        Remaining_PKR: payment.azad_Visa_Price_Out_PKR - payment.total_In + payment.cash_Out,
+        Visa_Price_Out_Curr: payment.azad_Visa_Price_Out_Curr,
+        Remaining_Curr: payment.remaining_Curr,
+        Status: payment.status
+      };
+
+    data.push(rowData);
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
+  }
 
     return (
         <>
@@ -1358,7 +1353,7 @@ export default function VisitSupPayOutDetails() {
                             <div className="right d-flex">
                                 {visitSupplier_Payments_Out.length > 0 &&
                                     <>
-                                        <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow1(!show1)}>{show1 === false ? "Show" : "Hide"}</button>
+                                         <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow1(!show1)}>{show1 === false ? "Show" : "Hide"}</button>
                                         <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                                         <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printMainTable}>Print </button>
                                     </>
@@ -1397,14 +1392,13 @@ export default function VisitSupPayOutDetails() {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                                <label htmlFor="">Khata:</label><br/>
-                                <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
-                                    <option value="" >All</option>
-                                    <option value="Open" >Open</option>
-                                    <option value="Closed" >Closed</option>
-                                </select>
-
-                                </div>
+                  <label htmlFor="">Khata:</label><br/>
+                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                    <option value="" >All</option>
+                    <option value="Open" >Open</option>
+                    <option value="Closed" >Closed</option>
+                  </select>
+                </div>
                             </div>
                         </Paper>
                     </div>
@@ -1417,19 +1411,21 @@ export default function VisitSupPayOutDetails() {
                                         <TableHead>
 
                                             <TableRow>
-                                                <TableCell className='label border'>SN</TableCell>
-                                                <TableCell className='label border'>Date</TableCell>
-                                                <TableCell className='label border'>Suppliers</TableCell>
-                                                <TableCell className='label border'>TVPriceOut_PKR</TableCell>
-                                                <TableCell className='label border'>TVPayOut_PKR</TableCell>
-                                                <TableCell className='label border'>Total_Cash_Out</TableCell>
-                                                <TableCell className='label border'>RPayOut_PKR</TableCell>
-                                                {show1 && <>
-                                                <TableCell className='label border'>TVPriceOut_Oth_Curr</TableCell>
-                                                <TableCell className='label border'>TPO_Curr</TableCell>
-                                                <TableCell className='label border'>RPO_Curr</TableCell>
-                                               </>}
-                                                <TableCell className='label border'>Status</TableCell>
+                                            <TableCell className='label border' >SN</TableCell>
+                                            <TableCell className='label border' >Date</TableCell>
+                                            <TableCell className='label border' >Suppliers</TableCell>
+                                            <TableCell className='label border' >Total Visit Visa Price In PKR</TableCell>
+                                            <TableCell className='label border' >Total Payment In PKR</TableCell>
+                                            <TableCell className='label border' >Total Cash Return</TableCell>
+                                            <TableCell className='label border' >Remaining PKR</TableCell>
+                                            {show1 && <>
+                                              <TableCell className='label border' >Total Visit Visa Price In Curr</TableCell>
+                                              <TableCell className='label border' >Total Payment In Curr</TableCell>
+                                              <TableCell className='label border' >Remaining Curr</TableCell>
+                                            </>}
+                                            <TableCell className='label border' >Status</TableCell>
+                                            <TableCell className='label border ' >Opening</TableCell>
+                                            <TableCell className='label border ' >Closing</TableCell>
                                                 
                                                 {/* <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell> */}
                                             </TableRow>
@@ -1472,15 +1468,13 @@ export default function VisitSupPayOutDetails() {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.status}
                                                     </TableCell>
-                                                    {/* <TableCell className='border data_td p-1 '>
-                                                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                            <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
-                                                            <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
-                                                            
-                                                        </div>
-                                                       
-                                                    </TableCell> */}
-
+                                                  
+                                                    <TableCell className='border data_td text-center' >
+                                                    <span>{entry.opening}</span>
+                                                  </TableCell>
+                                                  <TableCell className='border data_td text-center' >
+                                                    <span>{entry.closing}</span>
+                                                  </TableCell>
 
                                                 </TableRow>
                                             ))}
@@ -1571,7 +1565,7 @@ export default function VisitSupPayOutDetails() {
 
                             <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
 
-                                {selectedSupplier && <button className='btn detail_btn  btn-sm ' onClick={handleOption}><i className="fas fa-times"></i></button>}
+                                {selectedSupplier && <button className='btn detail_btn btn-sm ' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
                             </div>
                         </div>
@@ -1579,15 +1573,15 @@ export default function VisitSupPayOutDetails() {
                     <div className="col-md-12 filters">
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
-                                <div className="col-auto px-1">
-                                    <label htmlFor="">Date From:</label><br/>
-                                    <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1' />
-                                </div>
-                                <div className="col-auto px-1">
-                                    <label htmlFor="">Date To:</label><br/>
-                                    <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1' />
-
-                                </div>
+                            <div className="col-auto px-1">
+                  <label htmlFor="">Date From:</label><br/>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className='m-0 p-1'/>
+                </div>
+                <div className="col-auto px-1">
+                  <label htmlFor="">Date To:</label><br/>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className='m-0 p-1'/>
+                 
+                </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Payment Via:</label><br/>
                                     <select value={payment_Via} onChange={(e) => setPayment_Via(e.target.value)} className='m-0 p-1'>
@@ -1628,19 +1622,19 @@ export default function VisitSupPayOutDetails() {
                                         <TableCell className='label border'>SN</TableCell>
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Category</TableCell>
-                                        <TableCell className='label border'>Payment_Via</TableCell>
-                                        <TableCell className='label border'>Payment_Type</TableCell>
-                                        <TableCell className='label border'>Slip_No</TableCell>
+                                        <TableCell className='label border'>Payment Via</TableCell>
+                                        <TableCell className='label border'>Payment Type</TableCell>
+                                        <TableCell className='label border'>Slip No</TableCell>
                                         <TableCell className='label border'>Details</TableCell>
-                                        <TableCell className='label border'>Payment_Out</TableCell>
-                                        <TableCell className='label border'>Cash_Out</TableCell>
+                                        <TableCell className='label border'>Payment Out</TableCell>
+                                        <TableCell className='label border'>Cash Return</TableCell>
                                         <TableCell className='label border'>Invoice</TableCell>
                                         {show2 &&  <>
-                                        <TableCell className='label border' >Payment_Out_Curr</TableCell>
-                                        <TableCell className='label border' >CUR_Rate</TableCell>
-                                        <TableCell className='label border' >CUR_Amount</TableCell>
+                                        <TableCell className='label border' >Payment OutCurr</TableCell>
+                                        <TableCell className='label border' >Curr Rate</TableCell>
+                                        <TableCell className='label border' >Curr Amount</TableCell>
                                         </>}
-                                        <TableCell className='label border'>Slip_Pic</TableCell>
+                                        <TableCell className='label border'>Slip Pic</TableCell>
                                         <TableCell align='left' className='edw_label border' colSpan={1}>
                                             Actions
                                         </TableCell>
@@ -1656,9 +1650,9 @@ export default function VisitSupPayOutDetails() {
                                                     <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                         {editMode && editedRowIndex === index ? (
                                                             <>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={index + 1} readonly />
-                                                                </TableCell>
+                                                            <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index+1} readonly />
+                              </TableCell>
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                                                                 </TableCell>
@@ -1724,7 +1718,7 @@ export default function VisitSupPayOutDetails() {
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <TableCell className='border data_td text-center'>{index + 1}</TableCell>
+                                                               <TableCell className='border data_td text-center'>{index+1}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
@@ -1744,7 +1738,7 @@ export default function VisitSupPayOutDetails() {
 
                                                             </>
                                                         )}
-                                                          <TableCell className='border data_td p-1 text-center'>
+                                                        <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -1775,33 +1769,33 @@ export default function VisitSupPayOutDetails() {
 
                                             </>
                                         ))}
-                                    <TableRow>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
+                                         <TableRow>
                             <TableCell></TableCell>
-                                        <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                                        <TableCell className='border data_td text-center bg-warning text-white'>
-                                            {/* Calculate the total sum of payment_In */}
-                                            {filteredIndividualPayments.reduce((total, filteredData) => {
-                                                return total + filteredData.payment.reduce((sum, paymentItem) => {
-                                                    const paymentIn = parseFloat(paymentItem.payment_Out);
-                                                    return isNaN(paymentIn) ? sum : sum + paymentIn;
-                                                }, 0);
-                                            }, 0)}
-                                        </TableCell>
-                                        <TableCell className='border data_td text-center bg-info text-white'>
-                                            {/* Calculate the total sum of cash_Out */}
-                                            {filteredIndividualPayments.reduce((total, filteredData) => {
-                                                return total + filteredData.payment.reduce((sum, paymentItem) => {
-                                                    const cashOut = parseFloat(paymentItem.cash_Out);
-                                                    return isNaN(cashOut) ? sum : sum + cashOut;
-                                                }, 0);
-                                            }, 0)}
-                                        </TableCell>
-                                        <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                            <TableCell className='border data_td text-center bg-warning text-white'>
+          {/* Calculate the total sum of payment_In */}
+          {filteredIndividualPayments.reduce((total, filteredData) => {
+            return total + filteredData.payment.reduce((sum, paymentItem) => {
+              const paymentIn = parseFloat(paymentItem.payment_Out);
+              return isNaN(paymentIn) ? sum : sum + paymentIn;
+            }, 0);
+          }, 0)}
+        </TableCell>
+        <TableCell className='border data_td text-center bg-info text-white'>
+          {/* Calculate the total sum of cash_Out */}
+          {filteredIndividualPayments.reduce((total, filteredData) => {
+            return total + filteredData.payment.reduce((sum, paymentItem) => {
+              const cashOut = parseFloat(paymentItem.cash_Out);
+              return isNaN(cashOut) ? sum : sum + cashOut;
+            }, 0);
+          }, 0)}
+        </TableCell>
+        <TableCell></TableCell>
                     <TableCell></TableCell>
                     {show2 && <>
                       <TableCell className='border data_td text-center bg-warning text-white'>
@@ -1832,7 +1826,8 @@ export default function VisitSupPayOutDetails() {
                       }, 0)}
                     </TableCell>
                     </>}
-                                    </TableRow>
+                            
+                          </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -1842,13 +1837,13 @@ export default function VisitSupPayOutDetails() {
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                             <div className="col-auto px-1">
-                                    <label htmlFor="">Khata:</label><br/>
-                                    <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
-                                        <option value="" >All</option>
-                                        <option value="Open" >Open</option>
-                                        <option value="Closed" >Closed</option>
-                                    </select>
-                                    </div>
+                                <label htmlFor="">Khata:</label><br/>
+                                <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
+                                    <option value="" >All</option>
+                                    <option value="Open" >Open</option>
+                                    <option value="Closed" >Closed</option>
+                                </select>
+                                </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Entry Date:</label><br/>
                                     <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
@@ -1976,7 +1971,7 @@ export default function VisitSupPayOutDetails() {
                                 <h6>Persons Details</h6>
                             </div>
                             <div className="right">
-                                <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                                 <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
                             </div>
@@ -1989,14 +1984,14 @@ export default function VisitSupPayOutDetails() {
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Name</TableCell>
                                         <TableCell className='label border'>PP#</TableCell>
-                                        <TableCell className='label border'>Entry_Mode</TableCell>
+                                        <TableCell className='label border'>Entry Mode</TableCell>
                                         <TableCell className='label border'>Company</TableCell>
                                         <TableCell className='label border'>Trade</TableCell>
                                         <TableCell className='label border'>Country</TableCell>
-                                        <TableCell className='label border'>Final_Status</TableCell>
-                                        <TableCell className='label border'>Flight_Date</TableCell>
-                                        <TableCell className='label border'>VPI_PKR</TableCell>
-                                        {show && <TableCell className='label border'>VPI_Oth_Curr</TableCell>}
+                                        <TableCell className='label border'>Final Status</TableCell>
+                                        <TableCell className='label border'>Flight Date</TableCell>
+                                        <TableCell className='label border'>Visit Visa Price In PKR</TableCell>
+                                        {show && <TableCell className='label border'>Visit Visa Price In Oth Curr</TableCell>}
                                         <TableCell className='label border'>Status</TableCell>
                                         <TableCell className='label border'>Action</TableCell>
                                     </TableRow>
@@ -2067,7 +2062,7 @@ export default function VisitSupPayOutDetails() {
                                                             <TableCell className='border data_td p-1 '>
                                                                 <input type='number' value={editedEntry2.azad_Visa_Price_Out_PKR} readonly />
                                                             </TableCell>
-                                                           {show &&  <TableCell className='border data_td p-1 '>
+                                                            {show &&  <TableCell className='border data_td p-1 '>
                                                                 <input type='number' value={editedEntry2.azad_Visa_Price_Out_Curr} readonly />
                                                             </TableCell>}
                                                             <TableCell className='border data_td p-1 '>
@@ -2077,7 +2072,6 @@ export default function VisitSupPayOutDetails() {
                                                                 </select>
                                                             
                                                             </TableCell>
-
 
                                                         </>
                                                     ) : (
@@ -2093,14 +2087,13 @@ export default function VisitSupPayOutDetails() {
                                                             <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
                                                             <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                                                             <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_PKR}</TableCell>
-                                                           {show && <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_Curr}</TableCell>}
+                                                            {show && <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_Curr}</TableCell>}
                                                             <TableCell className='border data_td text-center'>{person?.status}</TableCell>
-
-
                                                         </>
                                                     )}
-                                                    <TableCell className='border data_td p-1 text-center'>
+                                                   <TableCell className='border data_td p-1 text-center'>
                             {editMode2 && editedRowIndex2 === index ? (
+                              // Render Save button when in edit mode for the specific row
                               <>
                                 <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                   <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
@@ -2126,29 +2119,29 @@ export default function VisitSupPayOutDetails() {
 
                                                 </TableRow>
                                             ))}
-                                            <TableRow>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell></TableCell>
-                                                <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                                                <TableCell className='border data_td text-center bg-warning text-white'>
-                                                    {/* Calculate the total sum of payment_In */}
-                                                    {filteredPersons.reduce((total, filteredData) => {
-                                                        return total + filteredData.persons.reduce((sum, paymentItem) => {
-                                                            const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
-                                                            return isNaN(paymentIn) ? sum : sum + paymentIn;
-                                                        }, 0);
-                                                    }, 0)}
-                                                </TableCell>
-
-
-                                            </TableRow>
+                                               <TableRow>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                            <TableCell className='border data_td text-center bg-warning text-white'>
+          {/* Calculate the total sum of payment_In */}
+          {filteredPersons.reduce((total, filteredData) => {
+            return total + filteredData.persons.reduce((sum, paymentItem) => {
+              const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
+              return isNaN(paymentIn) ? sum : sum + paymentIn;
+            }, 0);
+          }, 0)}
+        </TableCell>
+      
+                            
+                          </TableRow>
                                         </>
                                     ))}
                                 </TableBody>

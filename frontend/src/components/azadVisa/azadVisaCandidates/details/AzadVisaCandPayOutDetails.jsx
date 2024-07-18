@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import AzadVisaHook from '../../../../hooks/azadVisaHooks/AzadVisaHooks'
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,6 +25,8 @@ export default function AzadVisaCandPaymentOutDetails() {
   const [show, setShow] = useState(false)
   const [show2, setShow2] = useState(false)
   const [pp_No, setPP_No] = useState('')
+
+
   const [, setNewMessage] = useState('')
 
   const { getCurrencyData } = CurrencyHook()
@@ -84,6 +85,7 @@ export default function AzadVisaCandPaymentOutDetails() {
   const trades = useSelector((state) => state.setting.trades);
 
   const azadCand_Payments_Out = useSelector((state) => state.azadVisa.azadCand_Payments_Out);
+
 
   const rowsPerPageOptions = [10, 15, 30];
 
@@ -163,7 +165,7 @@ export default function AzadVisaCandPaymentOutDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_Out: payment.payment_Out, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, pp_No, payment_Via: payment.payment_Via, payment_Out: payment.payment_Out, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
         })
 
         const json = await response.json()
@@ -199,7 +201,7 @@ export default function AzadVisaCandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
+        body: JSON.stringify({ paymentId, supplierName: selectedSupplier, pp_No, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount, curr_Rate: editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
       })
 
       const json = await response.json()
@@ -253,7 +255,7 @@ export default function AzadVisaCandPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ name: editedEntry1.supplierName, pp_No: editedEntry1.pp_No, entry_Mode: editedEntry1.entry_Mode, contact: editedEntry1.contact, company: editedEntry1.company, country: editedEntry1.country, trade: editedEntry1.trade, final_Status: editedEntry1.final_Status, flight_Date: editedEntry1.flight_Date, total_Payment_Out: editedEntry1.total_Payment_Out, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_Out_Curr: editedEntry1.total_Payment_Out_Curr, status: editedEntry1.status })
+        body: JSON.stringify({ name: editedEntry1.supplierName, pp_No: editedEntry1.pp_No, contact: editedEntry1.contact, entry_Mode: editedEntry1.entry_Mode, company: editedEntry1.company, country: editedEntry1.country, trade: editedEntry1.trade, final_Status: editedEntry1.final_Status, flight_Date: editedEntry1.flight_Date, total_Payment_Out: editedEntry1.total_Payment_Out, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_Out_Curr: editedEntry1.total_Payment_Out_Curr, status: editedEntry1.status })
       })
 
       const json = await response.json()
@@ -287,7 +289,7 @@ export default function AzadVisaCandPaymentOutDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: person.supplierName })
+          body: JSON.stringify({ supplierName: person.supplierName, pp_No })
         })
 
         const json = await response.json()
@@ -324,8 +326,8 @@ export default function AzadVisaCandPaymentOutDetails() {
   const [status, setStatus] = useState('Open')
 
   const filteredTotalPaymentOut = azadCand_Payments_Out.filter(payment => {
-    // Check if supplierName exists and matches the provided name
-    if (payment?.supplierName && payment.supplierName.toLowerCase().includes(name.toLowerCase())) {
+    
+    if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
         payment.createdAt?.toLowerCase().includes(date1.toLowerCase()) &&
         payment.pp_No?.toLowerCase().includes(searchPP_No.toLowerCase()) &&
@@ -338,14 +340,17 @@ export default function AzadVisaCandPaymentOutDetails() {
         payment.status?.toLowerCase().includes(status.toLowerCase())
       );
     }
+    // If supplierName doesn't exist or doesn't match, exclude the payment
     return false;
   })
+
   const [details, setDetails] = useState("")
 
   const handleCandidate = (candidate) => {
     setDetails(candidate)
 
   }
+
 
   // individual payments filters
   const [dateFrom, setDateFrom] = useState('')
@@ -371,10 +376,17 @@ export default function AzadVisaCandPaymentOutDetails() {
           return (
             isDateInRange &&
             paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
+            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+              paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+              paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+              paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
+            )
           );
         }),
     }))
+
+
 
 
   const printMainTable = () => {
@@ -1228,7 +1240,7 @@ export default function AzadVisaCandPaymentOutDetails() {
             <Paper className='py-1 mb-2 px-3'>
               <div className="row">
                 <div className="col-auto px-1">
-                  <label htmlFor="">Search Here:</label><br />
+                  <label htmlFor="">Search by Name:</label><br />
                   <input type="search" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="col-auto px-1">
@@ -1237,15 +1249,6 @@ export default function AzadVisaCandPaymentOutDetails() {
                     <option value="">All</option>
                     {[...new Set(azadCand_Payments_Out.map(data => data.createdAt))].map(dateValue => (
                       <option value={dateValue} key={dateValue}>{dateValue}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-auto px-1">
-                  <label htmlFor="">Candidate:</label><br />
-                  <select value={name} onChange={(e) => setName(e.target.value)} className='m-0 p-1'>
-                    <option value="">All</option>
-                    {azadCand_Payments_Out && azadCand_Payments_Out.map((data) => (
-                      <option value={data.supplierName} key={data._id}>{data.supplierName} </option>
                     ))}
                   </select>
                 </div>
@@ -1329,7 +1332,7 @@ export default function AzadVisaCandPaymentOutDetails() {
           {(!isLoading || azadCand_Payments_Out.length > 0) &&
             <div className='col-md-12'>
               <Paper className='py-3 mb-1 px-2 detail_table'>
-                <TableContainer sx={{ maxHeight: 600 }}>
+                <TableContainer>
                   <Table stickyHeader>
                     <TableHead>
 
@@ -1338,20 +1341,20 @@ export default function AzadVisaCandPaymentOutDetails() {
                         <TableCell className='label border'>Date</TableCell>
                         <TableCell className='label border'>Candidates</TableCell>
                         <TableCell className='label border'>PP#</TableCell>
-                        <TableCell className='label border'>Entry Mode</TableCell>
+                        <TableCell className='label border'>EM</TableCell>
                         <TableCell className='label border'>Company</TableCell>
                         <TableCell className='label border'>Country</TableCell>
                         <TableCell className='label border'>Trade</TableCell>
                         <TableCell className='label border'>Final Status</TableCell>
                         <TableCell className='label border'>Flight Date</TableCell>
-                        <TableCell className='label border'>Azad Visa Price In PKR</TableCell>
+                        <TableCell className='label border'>Total Visa Price In PKR</TableCell>
                         <TableCell className='label border'>Total Payment In PKR</TableCell>
                         <TableCell className='label border'>Total Cash Return</TableCell>
                         <TableCell className='label border'>Remaining PKR</TableCell>
                         {show && <>
-                          <TableCell className='label border'>Total Azad Visa Price In Curr</TableCell>
+                          <TableCell className='label border'>Total Visa Price In Curr</TableCell>
                           <TableCell className='label border'>Total Payment In Curr</TableCell>
-                          <TableCell className='label border'>Remaining In Curr</TableCell>
+                          <TableCell className='label border'>Remaining Curr</TableCell>
                         </>}
                         <TableCell className='label border'>Status</TableCell>
 
@@ -1372,7 +1375,7 @@ export default function AzadVisaCandPaymentOutDetails() {
                                 // Edit Mode
                                 <>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='date' value={outerIndex + 1} readonly />
+                                    <input type='number' value={outerIndex + 1} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
                                     <input type='date' value={editedEntry1.createdAt} readonly />
@@ -1452,6 +1455,7 @@ export default function AzadVisaCandPaymentOutDetails() {
                                       <input type='number' min='0' value={editedEntry1.remaining_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
                                     </TableCell>
                                   </>}
+
                                   <TableCell className='border data_td p-1 '>
                                     <select name="" id="" value={editedEntry1.status} onChange={(e) => handleTotalPaymentInputChange(e, 'status')}>
                                       <option value="Open">Open</option>
@@ -1524,16 +1528,17 @@ export default function AzadVisaCandPaymentOutDetails() {
                                     </TableCell>
                                   </>}
                                   <TableCell className='border data_td text-center'>
-                                    {entry.status}
+                                    <span>{entry.status}</span>
                                   </TableCell>
-
                                   {/* ... Other cells in non-edit mode */}
                                   <TableCell className='border data_td p-1 '>
                                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                      <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
-                                      <button onClick={() => printCandidateDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
-                                      <button onClick={() => downloadCandidateDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
-                                      {/* <button className='btn delete_btn' onClick={() => deleteTotalpayment(entry)} disabled={loading5}>{loading5 ? "Deleting..." : "Delete"}</button> */}
+                                      <div className="btn-group" role="group" aria-label="Basic">
+                                        <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'><i className="fa-solid fa-pen-to-square"></i></button>
+                                        <button onClick={() => printCandidateDetails(entry)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                        <button onClick={() => downloadCandidateDetails(entry)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                        {/* <button className='btn delete_btn btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button> */}
+                                      </div>
                                     </div>
 
                                   </TableCell>
@@ -1589,6 +1594,7 @@ export default function AzadVisaCandPaymentOutDetails() {
                         </TableCell>
                       </TableRow>
                     </TableBody>
+
                   </Table>
                 </TableContainer>
 
@@ -1829,7 +1835,7 @@ export default function AzadVisaCandPaymentOutDetails() {
 
                             </>
                           )}
-                          <TableCell className='border data_td p-1 '>
+                          <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -1915,9 +1921,7 @@ export default function AzadVisaCandPaymentOutDetails() {
                         }, 0)}
                       </TableCell>
                     </>}
-
                   </TableRow>
-
                 </TableBody>
 
               </Table>

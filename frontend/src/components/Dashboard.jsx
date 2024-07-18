@@ -227,7 +227,7 @@ overAllPayments.forEach(payment => {
 
 
 // Calculate the combined total
-const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
+const combinedTotal = (totalPaymentIn - totalCashOutIn) + (totalCashOutOut -totalPaymentOut);
 
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   
@@ -1451,11 +1451,11 @@ const[option,setOption]=useState(false)
 Remaining PKR= 
 {(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
-  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.type.toLowerCase().includes('in')||entry.payment_In<1) ? entry.cash_Out || 0 : 0)); 
   }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
-  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.type.toLowerCase().includes('out')||entry.payment_Out<1) ? entry.cash_Out || 0 : 0)) 
   }, 0))}
 </TableCell>

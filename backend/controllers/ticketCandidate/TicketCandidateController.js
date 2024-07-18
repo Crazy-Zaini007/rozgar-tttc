@@ -24,7 +24,7 @@ const InvoiceNumber = require("../../database/invoiceNumber/InvoiceNumberSchema"
 const CashInHand = require("../../database/cashInHand/CashInHandSchema");
 const mongoose = require("mongoose");
 const moment = require("moment");
-// Azad Candidate Section
+// Ticket Candidate Section
 
 // Addding a New Payment In
 const addAzadCandPaymentIn = async (req, res) => {
@@ -42,6 +42,7 @@ const addAzadCandPaymentIn = async (req, res) => {
       if (user.role === "Admin") {
         const {
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -58,6 +59,9 @@ const addAzadCandPaymentIn = async (req, res) => {
         if (!supplierName) {
           return res.status(400).json({ message: "supplier Name is required" });
         }
+        if (!pp_No) {
+          return res.status(400).json({ message: "PP_No is required" })
+      }
         if (!category) {
           return res.status(400).json({ message: "Category is required" });
         }
@@ -72,18 +76,22 @@ const addAzadCandPaymentIn = async (req, res) => {
           return res.status(400).json({ message: "Payment In is required" });
         }
 
+       
 
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 
-        const existingSupplier = await TicketCandidate.findOne({
-          "payment_In_Schema.supplierName": supplierName,
-        });
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: "Supplier not Found",
-          });
+        const candidates=await TicketCandidate.find({})
+        let existingSupplier
+
+       for (const candidate of candidates){
+        if(candidate.payment_In_Schema){
+          if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+            existingSupplier = candidate;
+            break
+          }
         }
+       }
 
         let nextInvoiceNumber = 0;
 
@@ -186,8 +194,8 @@ const addAzadCandPaymentIn = async (req, res) => {
               })
               await newBackup.save()
               const newNotification=new Notifications({
-                type:"Azad Candidate Payment In",
-                content:`${user.userName} added Payment_In: ${payment_In} of Azad Candidate: ${supplierName}`,
+                type:"Ticket Candidate Payment In",
+                content:`${user.userName} added Payment_In: ${payment_In} of Ticket Candidate: ${supplierName}`,
                 date: new Date().toISOString().split("T")[0]
       
               })
@@ -243,6 +251,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
         let {
           supplierName,
           category,
+          pp_No,
           payment_Via,
           payment_Type,
           slip_No,
@@ -267,8 +276,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
         for (const supplier of suppliers) {
           if (supplier.payment_In_Schema) {
             if (
-              supplier.payment_In_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplier.payment_In_Schema.supplierName.trim().toLowerCase() ===
+              supplierName.trim().toLowerCase()&& supplier.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.toString().trim().toLowerCase()
             ) {
               existingSupplier = supplier;
               break;
@@ -383,8 +392,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
             })
             await newBackup.save()
             const newNotification=new Notifications({
-              type:"Azad Candidate Payment In",
-              content:`${user.userName} added Payment_In: ${payment_In} of Azad Candidate: ${supplierName}`,
+              type:"Ticket Candidate Payment In",
+              content:`${user.userName} added Payment_In: ${payment_In} of Ticket Candidate: ${supplierName}`,
               date: new Date().toISOString().split("T")[0]
     
             })
@@ -394,7 +403,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
       }
 
       res.status(200).json({
-        message: `${updatedPayments.length} Payments In added Successfully to ${supplierName}'s Record`,
+        message: `${updatedPayments.length} Payments In added Successfully`,
       });
     } catch (error) {
       console.error("Error updating values:", error);
@@ -424,6 +433,7 @@ const addAzadCandPaymentInReturn = async (req, res) => {
       if (user.role === "Admin") {
         const {
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -441,6 +451,9 @@ const addAzadCandPaymentInReturn = async (req, res) => {
         if (!supplierName) {
           return res.status(400).json({ message: "supplier Name is required" });
         }
+        if (!pp_No) {
+          return res.status(400).json({ message: "PP_No is required" })
+      }
         if (!category) {
           return res.status(400).json({ message: "Category is required" });
         }
@@ -455,18 +468,21 @@ const addAzadCandPaymentInReturn = async (req, res) => {
           return res.status(400).json({ message: "Cash Return is required" });
         }
 
-      
+       
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 
-        const existingSupplier = await TicketCandidate.findOne({
-          "payment_In_Schema.supplierName": supplierName,
-        });
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: "Supplier not Found",
-          });
-        }
+        const candidates=await TicketCandidate.find({})
+                let existingSupplier
+        
+               for (const candidate of candidates){
+                if(candidate.payment_In_Schema){
+                  if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+                    existingSupplier = candidate;
+                    break
+                  }
+                }
+               }
 
         let nextInvoiceNumber = 0;
 
@@ -572,8 +588,8 @@ const addAzadCandPaymentInReturn = async (req, res) => {
               await newBackup.save()
 
               const newNotification=new Notifications({
-                type:"Azad Candidate Payment In Return",
-                content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Candidate: ${supplierName}`,
+                type:"Ticket Candidate Payment In Return",
+                content:`${user.userName} added Payment_Return: ${cash_Out} of Ticket Candidate: ${supplierName}`,
                 date: new Date().toISOString().split("T")[0]
       
               })
@@ -585,7 +601,7 @@ const addAzadCandPaymentInReturn = async (req, res) => {
           res
             .status(200)
             .json({
-          
+             
               message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
@@ -619,6 +635,7 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
   if (user && user.role === "Admin") {
     const {
       paymentId,
+      pp_No,
       payment_In,
       cash_Out,
       curr_Amount,
@@ -626,14 +643,26 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
       payment_Via,
     } = req.body;
 
-    const existingSupplier = await TicketCandidate.findOne({
-      "payment_In_Schema.supplierName": supplierName,
-    });
-    if (!existingSupplier) {
-      res.status(404).json({
-        message: "Supplier not Found",
-      });
+    if (!supplierName) {
+      return res.status(400).json({ message: "Candidate Name is required" })
+  }
+  if (!pp_No) {
+    return res.status(400).json({ message: "PP_No is required" })
+}
+   
+    const candidates=await TicketCandidate.find({})
+    let existingSupplier
+
+   for (const candidate of candidates){
+    if(candidate.payment_In_Schema){
+      if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+        existingSupplier = candidate;
+        break
+      }
     }
+   }
+
+
     const newPaymentIn = payment_In - cash_Out;
 
     try {
@@ -641,7 +670,7 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
       let paymentToDelete=existingSupplier.payment_In_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
       const newRecycle=new RecycleBin({
         name:supplierName,
-        type:"Azad Candidate Payment In",
+        type:"Ticket Candidate Payment In",
         category:paymentToDelete.category,
         payment_Via:paymentToDelete.payment_Via,
         payment_Type:paymentToDelete.payment_Type,
@@ -697,8 +726,8 @@ const deleteSingleAzadCandPaymentIn = async (req, res) => {
 
       await CashInHand.updateOne({}, cashInHandUpdate);
       const newNotification=new Notifications({
-        type:"Azad Candidate Payment In Deleted",
-        content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Azad Candidate: ${supplierName}`,
+        type:"Ticket Candidate Payment In Deleted",
+        content:`${user.userName} deleted ${payment_In ? "Payment_In":"Cash_Retrun"}: ${payment_In ? payment_In :cash_Out} of Ticket Candidate: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -738,6 +767,7 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
       const {
         supplierName,
         paymentId,
+        pp_No,
         category,
         payment_Via,
         payment_Type,
@@ -752,18 +782,27 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
         date,
       } = req.body;
 
+      if (!supplierName) {
+        return res.status(400).json({ message: "Candidate Name is required" })
+    }
+    if (!pp_No) {
+      return res.status(400).json({ message: "PP_No is required" })
+  }
       const newPaymentIn = parseInt(payment_In, 10);
       const newCashOut = parseInt(cash_Out, 10);
       const newCurrAmount = parseInt(curr_Amount, 10);
 
-      const existingSupplier = await TicketCandidate.findOne({
-        "payment_In_Schema.supplierName": supplierName,
-      });
-      if (!existingSupplier) {
-        res.status(404).json({ message: "Supplier not found" });
-        return;
-      }
+      const candidates=await TicketCandidate.find({})
+      let existingSupplier
 
+     for (const candidate of candidates){
+      if(candidate.payment_In_Schema){
+        if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+          existingSupplier = candidate;
+          break
+        }
+      }
+     }
       // Find the payment within the payment array using paymentId
       const paymentToUpdate =
         existingSupplier.payment_In_Schema.payment.find(
@@ -838,8 +877,8 @@ const updateSingleAzadCandPaymentIn = async (req, res) => {
 
       // Save the updated supplier
       const newNotification=new Notifications({
-        type:"Azad Candidate Payment In Updated",
-        content:`${user.userName} updated Payment_In: ${payment_In} of Azad Candidate: ${supplierName}`,
+        type:"Ticket Candidate Payment In Updated",
+        content:`${user.userName} updated Payment_In: ${payment_In} of Ticket Candidate: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
@@ -880,11 +919,18 @@ const deleteAzadCandPaymentInSchema = async (req, res) => {
   }
 
   try {
-    const { supplierName } = req.body;
+    const { supplierName,pp_No} = req.body;
 
-    const existingSupplier = await TicketCandidate.findOne({
-      "payment_In_Schema.supplierName": supplierName,
-    });
+    const candidates=await TicketCandidate.find({})
+        let existingSupplier
+    for (const candidate of candidates){
+      if(candidate.payment_In_Schema){
+        if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+          existingSupplier = candidate;
+          break
+        }
+      }
+     }
 
     if (!existingSupplier) {
       res.status(404).json({ message: "Supplier not found" });
@@ -915,10 +961,10 @@ const deleteAzadCandPaymentInSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-    
+   
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
-      
+     
     });
   } catch (error) {
     console.error("Error deleting payment_In_Schema:", error);
@@ -1520,6 +1566,7 @@ const addAzadCandPaymentOut = async (req, res) => {
         const {
           supplierName,
           category,
+          pp_No,
           payment_Via,
           payment_Type,
           slip_No,
@@ -1536,6 +1583,9 @@ const addAzadCandPaymentOut = async (req, res) => {
         if (!supplierName) {
           return res.status(400).json({ message: "supplier Name is required" });
         }
+        if (!pp_No) {
+          return res.status(400).json({ message: "PP_No is required" })
+      }
         if (!category) {
           return res.status(400).json({ message: "Category is required" });
         }
@@ -1550,20 +1600,23 @@ const addAzadCandPaymentOut = async (req, res) => {
           return res.status(400).json({ message: "Payment Out is required" });
         }
 
-    
+      
 
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
         // Fetch the current invoice number and increment it by 1 atomically
+        
+        const candidates=await TicketCandidate.find({})
+        let existingSupplier
 
-        const existingSupplier = await TicketCandidate.findOne({
-          "payment_Out_Schema.supplierName": supplierName,
-        });
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: "Supplier not Found",
-          });
+       for (const candidate of candidates){
+        if(candidate.payment_Out_Schema){
+          if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+            existingSupplier = candidate;
+            break
+          }
         }
+       }
 
         let nextInvoiceNumber = 0;
 
@@ -1671,8 +1724,8 @@ const addAzadCandPaymentOut = async (req, res) => {
               })
               await newBackup.save()
               const newNotification=new Notifications({
-                type:"Azad Candidate Payment Out",
-                content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Candidate: ${supplierName}`,
+                type:"Ticket Candidate Payment Out",
+                content:`${user.userName} added Payment_Out: ${payment_Out} of Ticket Candidate: ${supplierName}`,
                 date: new Date().toISOString().split("T")[0]
       
               })
@@ -1682,7 +1735,7 @@ const addAzadCandPaymentOut = async (req, res) => {
           res
             .status(200)
             .json({
-              
+             
               message: `Payment Out: ${payment_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
@@ -1713,7 +1766,8 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
       }
       if (user.role === "Admin") {
         const {
-          supplierName,
+          supplierName
+          ,pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -1731,6 +1785,9 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
         if (!supplierName) {
           return res.status(400).json({ message: "supplier Name is required" });
         }
+        if (!pp_No) {
+          return res.status(400).json({ message: "PP_No is required" })
+      }
         if (!category) {
           return res.status(400).json({ message: "Category is required" });
         }
@@ -1745,20 +1802,23 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
           return res.status(400).json({ message: "Cash Return is required" });
         }
 
-              
-
+  
         const newCashOut = parseInt(cash_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
-        // Fetch the current invoice number and increment it by 1 atomically
+       
 
-        const existingSupplier = await TicketCandidate.findOne({
-          "payment_Out_Schema.supplierName": supplierName,
-        });
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: "Supplier not Found",
-          });
+        const candidates=await TicketCandidate.find({})
+        let existingSupplier
+
+       for (const candidate of candidates){
+        if(candidate.payment_Out_Schema){
+          if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+            existingSupplier = candidate;
+            break
+          }
         }
+       }
+        
 
         let nextInvoiceNumber = 0;
 
@@ -1865,20 +1925,20 @@ const addAzadCandPaymentOutReturn = async (req, res) => {
                    await newBackup.save()
         
               const newNotification=new Notifications({
-                type:"Azad Candidate Payment Out Return",
-                content:`${user.userName} added Payment_Return: ${cash_Out} of Azad Candidate: ${supplierName}`,
+                type:"Ticket Candidate Payment Out Return",
+                content:`${user.userName} added Payment_Return: ${cash_Out} of Ticket Candidate: ${supplierName}`,
                 date: new Date().toISOString().split("T")[0]
       
               })
               await newNotification.save()
               await existingSupplier.save()
 
-          
+        
 
           res
             .status(200)
             .json({
-            
+             
               message: `Cash Out: ${cash_Out} added Successfully to ${supplierName}'s Record`,
             });
         } catch (error) {
@@ -1913,27 +1973,40 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
     const {
       paymentId,
       payment_Out,
+      pp_No,
       supplierName,
       cash_Out,
       curr_Amount,
       payment_Via,
     } = req.body;
 
-    const existingSupplier = await TicketCandidate.findOne({
-      "payment_Out_Schema.supplierName": supplierName,
-    });
-    if (!existingSupplier) {
-      res.status(404).json({
-        message: "Supplier not Found",
-      });
+    if (!supplierName) {
+      return res.status(400).json({ message: "Candidate Name is required" })
+  }
+  if (!pp_No) {
+    return res.status(400).json({ message: "PP_No is required" })
+}
+
+    const candidates=await TicketCandidate.find({})
+    let existingSupplier
+
+   for (const candidate of candidates){
+    if(candidate.payment_Out_Schema){
+      if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+        existingSupplier = candidate;
+        break
+      }
     }
+   }
+
+    
     const newPaymentOut = payment_Out - cash_Out;
 
     try {
       let paymentToDelete=existingSupplier.payment_Out_Schema.payment.find((p)=>p._id.toString()===paymentId.toString())
       const newRecycle=new RecycleBin({
         name:supplierName,
-        type:"Azad Candidate Payment Out",
+        type:"Ticket Candidate Payment Out",
         category:paymentToDelete.category,
         payment_Via:paymentToDelete.payment_Via,
         payment_Type:paymentToDelete.payment_Type,
@@ -1989,14 +2062,15 @@ const deleteAzadCandSinglePaymentOut = async (req, res) => {
 
       await CashInHand.updateOne({}, cashInHandUpdate);
       const newNotification=new Notifications({
-        type:"Azad Candidate Payment Out Deleted",
-        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Azad Candidate: ${supplierName}`,
+        type:"Ticket Candidate Payment Out Deleted",
+        content:`${user.userName} deleted ${payment_Out ? "Payment_Out":"Cash_Retrun"}: ${payment_Out ? payment_Out :cash_Out} of Ticket Candidate: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
       await existingSupplier.save()
 
+     
       res
         .status(200)
         .json({
@@ -2027,6 +2101,7 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
   if (user && user.role === "Admin") {
     const {
       supplierName,
+      pp_No,
       paymentId,
       category,
       payment_Via,
@@ -2041,19 +2116,32 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
       date,
       cash_Out,
     } = req.body;
+
+    
+    if (!supplierName) {
+      return res.status(400).json({ message: "Candidate Name is required" })
+  }
+  if (!pp_No) {
+    return res.status(400).json({ message: "PP_No is required" })
+}
+
     const newPaymentOut = parseInt(payment_Out, 10);
     const newCashOut = parseInt(cash_Out, 10);
     const newCurrAmount = parseInt(curr_Amount, 10);
 
     try {
-      const existingSupplier = await TicketCandidate.findOne({
-        "payment_Out_Schema.supplierName": supplierName,
-      });
+    
+      const candidates=await TicketCandidate.find({})
+      let existingSupplier
 
-      if (!existingSupplier) {
-        res.status(404).json({ message: "Supplier not found" });
-        return;
+     for (const candidate of candidates){
+      if(candidate.payment_Out_Schema){
+        if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+          existingSupplier = candidate;
+          break
+        }
       }
+     }
       // Find the payment within the payment array using paymentId
       const paymentToUpdate =
         existingSupplier.payment_Out_Schema.payment.find(
@@ -2129,14 +2217,15 @@ const updateAzadCandSinglePaymentOut = async (req, res) => {
       // Save the updated supplier
       await existingSupplier.save();
       const newNotification=new Notifications({
-        type:"Azad Candidate Payment Out Updated",
-        content:`${user.userName} updated Payment_Out: ${payment_Out} of Azad Candidate: ${supplierName}`,
+        type:"Ticket Candidate Payment Out Updated",
+        content:`${user.userName} updated Payment_Out: ${payment_Out} of Ticket Candidate: ${supplierName}`,
         date: new Date().toISOString().split("T")[0]
 
       })
       await newNotification.save()
-                    await existingSupplier.save()
+      await existingSupplier.save()
 
+    
 
       res
         .status(200)
@@ -2185,6 +2274,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
       for (const payment of multiplePayment) {
         let {
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -2215,8 +2305,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
         for (const supplier of suppliers) {
           if (supplier.payment_Out_Schema) {
             if (
-              supplier.payment_Out_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplier.payment_Out_Schema.supplierName.trim().toLowerCase() ===
+              supplierName.trim().toLowerCase() && supplier.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.toString().trim().toLowerCase()
             ) {
               existingSupplier = supplier;
               break;
@@ -2331,8 +2421,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
             })
             await newBackup.save()
             const newNotification=new Notifications({
-              type:"Azad Candidate Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} of Azad Candidate: ${supplierName}`,
+              type:"Ticket Candidate Payment Out",
+              content:`${user.userName} added Payment_Out: ${payment_Out} of Ticket Candidate: ${supplierName}`,
               date: new Date().toISOString().split("T")[0]
     
             })
@@ -2373,11 +2463,25 @@ const deleteAzadCandPaymentOutSchema = async (req, res) => {
   }
 
   try {
-    const { supplierName } = req.body;
+    const { supplierName,pp_No } = req.body;
 
-    const existingSupplier = await TicketCandidate.findOne({
-      "payment_Out_Schema.supplierName": supplierName,
-    });
+    if (!supplierName) {
+      return res.status(400).json({ message: "Candidate Name is required" })
+  }
+  if (!pp_No) {
+    return res.status(400).json({ message: "PP_No is required" })
+}
+const candidates=await TicketCandidate.find({})
+let existingSupplier
+
+for (const candidate of candidates){
+if(candidate.payment_Out_Schema){
+  if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+    existingSupplier = candidate;
+    break
+  }
+}
+}
 
     if (!existingSupplier) {
       res.status(404).json({ message: "Supplier not found" });
@@ -2408,7 +2512,7 @@ const deleteAzadCandPaymentOutSchema = async (req, res) => {
     // Save the updated supplier without payment_In_Schema
     await existingSupplier.save();
 
-  
+    
     res.status(200).json({
       message: `${supplierName} deleted successfully`,
      

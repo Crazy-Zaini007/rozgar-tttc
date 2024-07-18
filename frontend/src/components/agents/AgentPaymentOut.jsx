@@ -21,7 +21,7 @@ import SupplierEntry2 from '../newDoubleEntry/SupplierEntry2'
 import SupplierEntry1 from '../newDoubleEntry/SupplierEntry1'
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
-export default function SupPaymentOut() {
+export default function AgentPaymentOut() {
   const dispatch = useDispatch();
   // getting data from redux store 
 

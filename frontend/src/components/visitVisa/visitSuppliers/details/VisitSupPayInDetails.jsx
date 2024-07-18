@@ -18,6 +18,7 @@ import CountryHook from '../../../../hooks/settingHooks/CountryHook'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
 
+
 export default function VisitSupPayInDetails() {
     const [isLoading, setIsLoading] = useState(false)
     const [loading1, setLoading1] = useState(false)
@@ -31,9 +32,8 @@ export default function VisitSupPayInDetails() {
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
-
     const [, setNewMessage] = useState('')
-    const {  getVisitSupplierPaymentsIn } = VisitHook()
+    const { getVisitSupplierPaymentsIn } = VisitHook()
     const { getCurrencyData } = CurrencyHook()
     const { getCategoryData } = CategoryHook()
     const { getPaymentViaData } = PaymentViaHook()
@@ -91,7 +91,8 @@ export default function VisitSupPayInDetails() {
     const trades = useSelector((state) => state.setting.trades);
 
     const visitSupplier_Payments_In = useSelector((state) => state.visits.visitSupplier_Payments_In);
-    
+   
+
     const rowsPerPageOptions = [10, 15, 30];
 
     const [page, setPage] = useState(0);
@@ -160,79 +161,79 @@ export default function VisitSupPayInDetails() {
 
 
     const deletePaymentIn = async (payment) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
-            setLoading1(true)
-            let paymentId = payment._id
-            try {
-                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/single/payment_in`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_In: payment.payment_In, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
-                })
-    
-                const json = await response.json()
-    
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading1(false)
-                }
-                if (response.ok) {
-                    fetchData()
-                    setNewMessage(toast.success(json.message));
-                    setLoading1(false)
-                    setEditMode(!editMode)
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading1(true)
+        let paymentId = payment._id
+        try {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/single/payment_in`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_In: payment.payment_In, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+            })
+
+            const json = await response.json()
+
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading1(false)
             }
+            if (response.ok) {
+                fetchData()
+                setNewMessage(toast.success(json.message));
+                setLoading1(false)
+                setEditMode(!editMode)
+            }
         }
-      
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading1(false)
+        }
     }
-
-
-    const deletePerson = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
-            setLoading2(true)
-            let personId = person._id
-            try {
-                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/person/payment_in`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Visa_Price_In_PKR: person.azad_Visa_Price_In_PKR, azad_Visa_Price_In_Curr: person.azad_Visa_Price_In_Curr })
-                })
-    
-                const json = await response.json()
-    
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading2(false)
-                }
-                if (response.ok) {
-                    fetchData()
-                    setNewMessage(toast.success(json.message));
-                    setLoading2(false)
-                    setEditMode(!editMode)
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
-                setLoading2(false)
-            }
-        }
        
     }
 
 
+    const deletePerson = async (person) => {
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading2(true)
+        let personId = person._id
+        try {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/person/payment_in`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Visa_Price_In_PKR: person.azad_Visa_Price_In_PKR, azad_Visa_Price_In_Curr: person.azad_Visa_Price_In_Curr })
+            })
 
-    //Editing for Agent Person 
+            const json = await response.json()
+
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
+                setLoading2(false)
+            }
+            if (response.ok) {
+                fetchData()
+                setNewMessage(toast.success(json.message));
+                setLoading2(false)
+                setEditMode(!editMode)
+            }
+        }
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading2(false)
+        }
+    }
+        
+    }
+
+
+
+    //Editing for Supplier Person 
     const [editMode2, setEditMode2] = useState(false);
     const [editedEntry2, setEditedEntry2] = useState({});
     const [editedRowIndex2, setEditedRowIndex2] = useState(null);
@@ -320,37 +321,37 @@ export default function VisitSupPayInDetails() {
 
 
     const deleteTotalpayment = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
-            setLoading5(true)
-            try {
-                const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/all/payment_in`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ supplierName: person.supplierName })
-                })
-    
-                const json = await response.json()
-    
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading5(false)
-                }
-                if (response.ok) {
-                    fetchData();
-                    setNewMessage(toast.success(json.message));
-                    setLoading5(false)
-    
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading5(true)
+        try {
+            const response = await fetch(`${apiUrl}/auth/visit/suppliers/delete/all/payment_in`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ supplierName: person.supplierName })
+            })
+
+            const json = await response.json()
+
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading5(false)
             }
+            if (response.ok) {
+                fetchData();
+                setNewMessage(toast.success(json.message));
+                setLoading5(false)
+
+            }
         }
-       
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading5(false)
+        }
+    }
+        
     }
 
 
@@ -366,34 +367,39 @@ export default function VisitSupPayInDetails() {
             payment.status.toLowerCase().includes(status.toLowerCase())
         )
     })
+
+   
+
     // individual payments filters
     const [dateFrom, setDateFrom] = useState('')
-    const [dateTo, setDateTo] = useState('')
-  
-    const [payment_Via, setPayment_Via] = useState('')
-    const [payment_Type, setPayment_Type] = useState('')
-  
-    const filteredIndividualPayments = visitSupplier_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier)
-    .map((filteredData) => ({
-      ...filteredData,
-      payment: filteredData.payment
-        .filter((paymentItem) => {
-          let isDateInRange = true;
-          // Check if the payment item's date is within the selected date range
-          if (dateFrom && dateTo) {
-            isDateInRange =
-              paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
-          }
-  
-          return (
-            isDateInRange &&
-             paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-             paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
-          );
-        }),
-    }))
-  
+  const [dateTo, setDateTo] = useState('')
+
+  const [payment_Via, setPayment_Via] = useState('')
+  const [payment_Type, setPayment_Type] = useState('')
+
+  const filteredIndividualPayments = visitSupplier_Payments_In
+  .filter((data) => data.supplierName === selectedSupplier)
+  .map((filteredData) => ({
+    ...filteredData,
+    payment: filteredData.payment
+      .filter((paymentItem) => {
+        let isDateInRange = true;
+        // Check if the payment item's date is within the selected date range
+        if (dateFrom && dateTo) {
+          isDateInRange =
+            paymentItem.date >= dateFrom && paymentItem.date <= dateTo;
+        }
+
+        return (
+          isDateInRange &&
+           paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+           paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())
+        );
+      }),
+  }))
+
+
+   
 
     const [date3, setDate3] = useState('')
     const [name, setName] = useState('')
@@ -428,14 +434,15 @@ export default function VisitSupPayInDetails() {
         }))
 
    
-     
+
+      
   const downloadExcel = () => {
     const data = [];
     // Iterate over entries and push all fields
     filteredTotalPaymentIn.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        Agents:payments.supplierName,
+        Suppliers:payments.supplierName,
         Total_Visa_Price_In_PKR:payments.total_Azad_Visa_Price_In_PKR,
         Total_Payment_In:payments.total_Payment_In,
         Total_Cash_Out:payments.total_Cash_Out,
@@ -443,7 +450,8 @@ export default function VisitSupPayInDetails() {
         Total_Visa_Price_In_Curr:payments.total_Azad_Visa_Price_In_Curr,
         Total_Payment_In_Curr:payments.total_Payment_In_Curr,
         Remaining_Curr:payments.total_Azad_Visa_Price_In_Curr-payments.total_Payment_In_Curr,
-        Status:payments.status
+        Status:payments.status,
+       
         
       }
 
@@ -453,7 +461,7 @@ export default function VisitSupPayInDetails() {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Agent_Payments_Details.xlsx');
+    XLSX.writeFile(wb, 'Supplier_Payments_Details.xlsx');
   }
 
 
@@ -508,7 +516,6 @@ export default function VisitSupPayInDetails() {
         Status:payments.status,
 
         
-        
       }
 
       data.push(rowData);
@@ -520,7 +527,7 @@ export default function VisitSupPayInDetails() {
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
 
-const downloadCombinedPayments = () => {
+  const downloadCombinedPayments = () => {
     const combinedData = [];
     const anotherData=[]
 
@@ -613,7 +620,7 @@ const changeStatus = async (myStatus) => {
     }
   }
 
-
+  
   const printMainTable = () => {
     // Function to format the date as dd-MM-yyyy
     const formatDate = (date) => {
@@ -766,7 +773,7 @@ const changeStatus = async (myStatus) => {
         <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title">Azad Supplier Payment Invoices</h1>
+        <h1 class="title">Visit Supplier Payment Invoices</h1>
       </div>
       <hr/>
       <table class='print-table'>
@@ -902,7 +909,7 @@ const changeStatus = async (myStatus) => {
         <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title">Azad Supplier Persons Details</h1>
+        <h1 class="title">Visit Supplier Persons Details</h1>
       </div>
       <hr/>
       <table class='print-table'>
@@ -1042,7 +1049,7 @@ const changeStatus = async (myStatus) => {
       <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title">Azad Supplier Payment Invoice</h1>
+        <h1 class="title">Visit Supplier Payment Invoice</h1>
       </div>
       <hr/>
       <table class='print-table'>
@@ -1050,7 +1057,7 @@ const changeStatus = async (myStatus) => {
           <tr>
             <th>SN</th>
             <th>Date</th>
-            <th>Azad Supplier Name</th>
+            <th>Visit Supplier Name</th>
             <th>Category</th>
             <th>Payment Via</th>
             <th>Payment Type</th>
@@ -1171,7 +1178,7 @@ const changeStatus = async (myStatus) => {
         <p class="date">Date: ${formattedDate}</p>
       </div>
       <div class="print-header">
-        <h1 class="title">Azad Supplier Person Details</h1>
+        <h1 class="title">Visit Supplier Person Details</h1>
       </div>
       <hr/>
       <table class='print-table'>
@@ -1343,7 +1350,6 @@ const changeStatus = async (myStatus) => {
     XLSX.writeFile(wb, `${selectedSupplier} Persons Details.xlsx`);
   }
 
-
     return (
         <>
             {!option &&
@@ -1368,7 +1374,7 @@ const changeStatus = async (myStatus) => {
                         </Paper>
                     </div>
 
-                    {(isLoading && visitSupplier_Payments_In.length<1) &&
+                    {(isLoading && visitSupplier_Payments_In.lenght<1) &&
                         <div className='col-md-12 text-center my-4'>
                             <ClipLoader color="#2C64C3" className='mx-auto' />
                         </div>
@@ -1408,7 +1414,7 @@ const changeStatus = async (myStatus) => {
                         </Paper>
                     </div>
 
-                    {(!isLoading ||  visitSupplier_Payments_In.length>0) &&
+                    {(!isLoading || visitSupplier_Payments_In.lenght>0) &&
                         <div className='col-md-12'>
                             <Paper className='py-3 mb-1 px-2 detail_table'>
                                 <TableContainer sx={{ maxHeight: 600 }}>
@@ -1416,19 +1422,21 @@ const changeStatus = async (myStatus) => {
                                         <TableHead>
 
                                             <TableRow>
-                                                <TableCell className='label border'>SN</TableCell>
-                                                <TableCell className='label border'>Date</TableCell>
-                                                <TableCell className='label border'>Suppliers</TableCell>
-                                                <TableCell className='label border'>TVPriceIn_PKR</TableCell>
-                                                <TableCell className='label border'>TVPayIn_PKR</TableCell>
-                                                <TableCell className='label border'>Total_Cash_Out</TableCell>
-                                                <TableCell className='label border'>RPayIn_PKR</TableCell>
-                                                {show1 && <>
-                                                    <TableCell className='label border' >TVPI_Oth_Curr</TableCell>
-                                                    <TableCell className='label border' >TPI_Curr</TableCell>
-                                                    <TableCell className='label border' >RPI_Curr</TableCell>
-                                                    </>}
-                                                <TableCell className='label border'>Status</TableCell>
+                                            <TableCell className='label border' >SN</TableCell>
+                                            <TableCell className='label border' >Date</TableCell>
+                                            <TableCell className='label border' >Suppliers</TableCell>
+                                            <TableCell className='label border' >Total Visit Visa Price In PKR</TableCell>
+                                            <TableCell className='label border' >Total Payment In PKR</TableCell>
+                                            <TableCell className='label border' >Total Cash Return</TableCell>
+                                            <TableCell className='label border' >Remaining PKR</TableCell>
+                                            {show1 && <>
+                                              <TableCell className='label border' >Total Visit Visa Price In Curr</TableCell>
+                                              <TableCell className='label border' >Total Payment In Curr</TableCell>
+                                              <TableCell className='label border' >Remaining Curr</TableCell>
+                                            </>}
+                                            <TableCell className='label border' >Status</TableCell>
+                                            <TableCell className='label border ' >Opening</TableCell>
+                                            <TableCell className='label border ' >Closing</TableCell>
                                                 {/* <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell> */}
                                             </TableRow>
                                         </TableHead>
@@ -1466,22 +1474,20 @@ const changeStatus = async (myStatus) => {
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.total_Azad_Visa_Price_In_Curr - entry.total_Payment_In_Curr}
                                                     </TableCell>
-                                                   </>} 
+                                                   </>}
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.status}
                                                     </TableCell>
-                                                    {/* <TableCell className='border data_td p-1 '>
-                                                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                            <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
-                                                            <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
-                                                        </div>
-                                                        
-                                                    </TableCell> */}
-
-
+                                                    <TableCell className='border data_td text-center' >
+                                                    <span>{entry.opening}</span>
+                                                  </TableCell>
+                                                  <TableCell className='border data_td text-center' >
+                                                    <span>{entry.closing}</span>
+                                                  </TableCell>
+                                                    
                                                 </TableRow>
                                             ))}
-                                             <TableRow>
+                                                <TableRow>
     <TableCell></TableCell>
     <TableCell></TableCell>
     <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
@@ -1562,11 +1568,11 @@ const changeStatus = async (myStatus) => {
                     <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
                   </ul>
                 </div>
-                <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                            <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                 <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
-                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
-                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
-                {selectedSupplier && <button className='btn detail_btn  btn-sm ' onClick={handleOption}><i className="fas fa-times"></i></button>}
+                            <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                           <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
+                                {selectedSupplier && <button className='btn detail_btn' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
                             </div>
                         </div>
@@ -1623,19 +1629,19 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>SN</TableCell>
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Category</TableCell>
-                                        <TableCell className='label border'>Payment_Via</TableCell>
-                                        <TableCell className='label border'>Payment_Type</TableCell>
-                                        <TableCell className='label border'>Slip_No</TableCell>
+                                        <TableCell className='label border'>Payment Via</TableCell>
+                                        <TableCell className='label border'>Payment Type</TableCell>
+                                        <TableCell className='label border'>Slip No</TableCell>
                                         <TableCell className='label border'>Details</TableCell>
-                                        <TableCell className='label border'>Payment_In</TableCell>
-                                        <TableCell className='label border'>Cash_Out</TableCell>
+                                        <TableCell className='label border'>Payment In</TableCell>
+                                        <TableCell className='label border'>Cash Return</TableCell>
                                         <TableCell className='label border'>Invoice</TableCell>
                                         {show2 &&  <>
-                                        <TableCell className='label border' >Payment_In_Curr</TableCell>
-                                        <TableCell className='label border' >CUR_Rate</TableCell>
-                                        <TableCell className='label border' >CUR_Amount</TableCell>
+                                        <TableCell className='label border' >Payment In Curr</TableCell>
+                                        <TableCell className='label border' >Curr Rate</TableCell>
+                                        <TableCell className='label border' >Curr Amount</TableCell>
                                         </>}
-                                        <TableCell className='label border'>Slip_Pic</TableCell>
+                                        <TableCell className='label border'>Slip Pic</TableCell>
                                         <TableCell align='left' className='edw_label border' colSpan={1}>
                                             Actions
                                         </TableCell>
@@ -1653,7 +1659,7 @@ const changeStatus = async (myStatus) => {
                                                             <>
                                                             <TableCell className='border data_td p-1 '>
                                                                 <input type='text' value={index+1} readonly />
-                                                            </TableCell>
+                                                                </TableCell>
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                                                                 </TableCell>
@@ -1719,7 +1725,7 @@ const changeStatus = async (myStatus) => {
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <TableCell className='border data_td text-center'>{index+1}</TableCell>
+                                                                 <TableCell className='border data_td text-center'>{index+1}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
@@ -1739,7 +1745,7 @@ const changeStatus = async (myStatus) => {
 
                                                             </>
                                                         )}
-                                                             <TableCell className='border data_td p-1 text-center'>
+                                                          <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -1814,7 +1820,7 @@ const changeStatus = async (myStatus) => {
                         return total + filteredData.payment.reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Rate);
                           return isNaN(cashOut) ? sum : sum + cashOut;
-                        }, 0);
+                        }, 0)
                       }, 0)}
                     </TableCell>
                     <TableCell className='border data_td text-center bg-primary text-white'>
@@ -1838,13 +1844,13 @@ const changeStatus = async (myStatus) => {
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                             <div className="col-auto px-1">
-                                <label htmlFor="">Khata:</label><br/>
-                                <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
-                                    <option value="" >All</option>
-                                    <option value="Open" >Open</option>
-                                    <option value="Closed" >Closed</option>
-                                </select>
-                                </div>
+                                    <label htmlFor="">Khata:</label><br/>
+                                    <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
+                                        <option value="" >All</option>
+                                        <option value="Open" >Open</option>
+                                        <option value="Closed" >Closed</option>
+                                    </select>
+                                    </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Entry Date:</label><br/>
                                     <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
@@ -1985,14 +1991,14 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>Date</TableCell>
                                         <TableCell className='label border'>Name</TableCell>
                                         <TableCell className='label border'>PP#</TableCell>
-                                        <TableCell className='label border'>Entry_Mode</TableCell>
+                                        <TableCell className='label border'>Entry Mode</TableCell>
                                         <TableCell className='label border'>Company</TableCell>
                                         <TableCell className='label border'>Trade</TableCell>
                                         <TableCell className='label border'>Country</TableCell>
-                                        <TableCell className='label border'>Final_Status</TableCell>
-                                        <TableCell className='label border'>Flight_Date</TableCell>
-                                        <TableCell className='label border'>VPI_PKR</TableCell>
-                                        {show === true && <TableCell className='label border' >VPI_Oth_Curr</TableCell>}
+                                        <TableCell className='label border'>Final Status</TableCell>
+                                        <TableCell className='label border'>Flight Date</TableCell>
+                                        <TableCell className='label border'>Visit Visa Price In PKR</TableCell>
+                                        {show === true && <TableCell className='label border' >Visit Visa Price In PKR Oth Curr</TableCell>}
                                         <TableCell className='label border'>Status</TableCell>
                                         <TableCell className='label border'>Action</TableCell>
                                     </TableRow>
@@ -2073,6 +2079,7 @@ const changeStatus = async (myStatus) => {
                                                                 </select>
                                                             
                                                             </TableCell>
+
                                                         </>
                                                     ) : (
                                                         <>
@@ -2089,12 +2096,9 @@ const changeStatus = async (myStatus) => {
                                                             <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_In_PKR}</TableCell>
                                                             {show &&  <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_In_Curr}</TableCell>}
                                                             <TableCell className='border data_td text-center'>{person?.status}</TableCell>
-
-
-
                                                         </>
                                                     )}
-                                                      <TableCell className='border data_td p-1 text-center'>
+                                                        <TableCell className='border data_td p-1 text-center'>
                             {editMode2 && editedRowIndex2 === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>

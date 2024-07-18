@@ -43,6 +43,7 @@ export default function ExpenseOverAllReport() {
 
 
   const expenses = useSelector((state) => state.expenses.expenses);
+  const [show, setShow] = useState(false)
  
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -128,7 +129,7 @@ export default function ExpenseOverAllReport() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ expenseId, name: editedEntry.name, expCategory: editedEntry.expCategory, expAmount: editedEntry.expAmount, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, slip_Pic: editedEntry.slip_Pic, details: editedEntry.details, curr_Country: editedEntry.curr_Country, curr_Rate: editedEntry.curr_Rate, curr_Amount: editedEntry.curr_Amount, date: editedEntry.date })
+        body: JSON.stringify({ expenseId, name: editedEntry.name, expCategory: editedEntry.expCategory, payment_Out: editedEntry.payment_Out, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, slip_Pic: editedEntry.slip_Pic, details: editedEntry.details, curr_Country: editedEntry.curr_Country, curr_Rate: editedEntry.curr_Rate, curr_Amount: editedEntry.curr_Amount, date: editedEntry.date })
       })
 
       const json = await response.json()
@@ -195,28 +196,29 @@ export default function ExpenseOverAllReport() {
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
   const [search1, setSearch1] = useState('')
-
-  const filteredExpenses = expenses.filter(expense => {
+  const filteredExpenses = expenses
+  .filter(expense => {
     let isDateInRange = true;
-  
+
     // Check if the expense date is within the selected date range
     if (dateFrom && dateTo) {
       isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
     }
+
     return (
       isDateInRange &&
       expense.name?.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
-      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
-  )
-    )
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
+    );
   })
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const downloadExcel = () => {
     const data = [];
@@ -352,7 +354,7 @@ export default function ExpenseOverAllReport() {
                 <div className="right d-flex">
                   {filteredExpenses.length > 0 &&
                     <>
-                      {/* <button className='btn pdf_btn m-1 btn-sm' onClick={downloadPDF}><i className="fa-solid fa-file-pdf me-1 "></i>Download PDF </button> */}
+                      <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
                       <button className='btn excel_btn m-1 btn-sm' onClick={downloadExcel}>Download </button>
                       <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printExpenseTable}>Print </button>
                     </>
@@ -434,15 +436,17 @@ export default function ExpenseOverAllReport() {
                       <TableCell className='label border'>Slip_No</TableCell>
                       <TableCell className='label border'>Details</TableCell>
                       <TableCell className='label border'>Invoice</TableCell>
-                      <TableCell className='label border'>CUR_Country</TableCell>
-                      <TableCell className='label border'>CUR_Rate</TableCell>
-                      <TableCell className='label border'>CUR_Amount</TableCell>
+                      {show && <>
+                      <TableCell className='label border'>Curr Country</TableCell>
+                      <TableCell className='label border'>Curr Rate</TableCell>
+                      <TableCell className='label border'>Curr Amount</TableCell>
+                    </>}
                       <TableCell className='label border'>Slip_Pic</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {filteredExpenses
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((expense, outerIndex) => (
+                      .map((expense, outerIndex) => (
                         // Map through the payment array
                         <React.Fragment key={outerIndex}>
                           <TableRow key={expense?._id} className={outerIndex % 2 === 0 ? 'bg_white' : 'bg_dark'} >
@@ -467,7 +471,7 @@ export default function ExpenseOverAllReport() {
                                   </select>
                                 </TableCell>
                                 <TableCell className='border data_td p-1 '>
-                                  <input type='number' min='0' value={editedEntry.expAmount} onChange={(e) => handleInputChange(e, 'expAmount')} />
+                                  <input type='number' min='0' value={editedEntry.payment_Out} onChange={(e) => handleInputChange(e, 'payment_Out')} />
                                 </TableCell>
                                 <TableCell className='border data_td p-1 '>
                                   <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
@@ -519,15 +523,19 @@ export default function ExpenseOverAllReport() {
                                 <TableCell className='border data_td text-center'>{expense.date}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense.name}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense.expCategory}</TableCell>
-                                <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{expense.expAmount}</TableCell>
+                                <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{expense.payment_Out}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense.payment_Via}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense.payment_Type}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.slip_No}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.details}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.invoice}</TableCell>
+                                {show &&
+                                <>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Country}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Rate}</TableCell>
                                 <TableCell className='border data_td text-center'>{expense?.curr_Amount}</TableCell>
+                                </>
+                                }
                                 <TableCell className='border data_td text-center'>{expense.slip_Pic ?<a href={expense.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={expense.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
                                 
                               </>
@@ -541,27 +549,13 @@ export default function ExpenseOverAllReport() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'> {filteredExpenses.reduce((total, expense) => total + expense.expAmount, 0)}</TableCell>
+                            <TableCell className='border data_td text-center bg-success text-white'> {filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)}</TableCell>
                             
                           </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={rowsPerPageOptions}
-                component='div'
-                count={filteredExpenses.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                style={{
-                  color: 'blue',
-                  fontSize: '14px',
-                  fontWeight: '700',
-                  textTransform: 'capitalize',
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+           
             </div>
             
           </div>

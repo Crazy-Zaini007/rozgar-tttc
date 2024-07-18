@@ -1787,7 +1787,7 @@ color:white;
   font-size: 9px;
   font-weight: 600;
   display: inline-flexbox;
-  width: 18.28%;
+  width: auto;
 }
 .direct_payment .detail_table .data_td {
   font-size: 9px;

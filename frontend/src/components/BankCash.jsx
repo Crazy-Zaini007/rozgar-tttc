@@ -1024,14 +1024,14 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
  }
 <TableCell className='border data_td text-center bg-secondary text-white'>
 Remaining PKR= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.type.toLowerCase().includes('in')||entry.payment_In<1) ? entry.cash_Out || 0 : 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.type.toLowerCase().includes('out')||entry.payment_Out<1) ? entry.cash_Out || 0 : 0)) 
   }, 0))}
 </TableCell>
 </TableRow>
@@ -1525,14 +1525,14 @@ Remaining PKR=
   }
    <TableCell className='border data_td text-center bg-secondary text-white'>
 Remaining PKR= 
-{(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+{(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_In||entry.payment_In>0||entry.type.toLowerCase().includes('in')?entry.payment_In:0) || 0)); 
-  }, 0))+(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_In||entry.payment_In<1||entry.type.toLowerCase().includes('in')?entry.cash_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.type.toLowerCase().includes('in')||entry.payment_In<1) ? entry.cash_Out || 0 : 0)); 
+  }, 0))-(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
     return total + (Math.round((entry.payment_Out||entry.payment_Out>0||entry.type.toLowerCase().includes('out')?entry.payment_Out:0) || 0)); 
-  }, 0))-(filteredPayment && filteredPayment.length > 0 && filteredPayment.reduce((total, entry) => {
-    return total + (Math.round((entry.payment_Out||entry.payment_Out<1||entry.type.toLowerCase().includes('out')?entry.cash_Out:0) || 0)); 
+  }, 0))+(overAllPayments && overAllPayments.length > 0 && overAllPayments.reduce((total, entry) => {
+    return total + (Math.round((entry.type.toLowerCase().includes('out')||entry.payment_Out<1) ? entry.cash_Out || 0 : 0)) 
   }, 0))}
 </TableCell>
 {/* <TableCell className='border data_td text-center bg-secondary text-white'>

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import TicketHook from '../../../../hooks/ticketHooks/TicketHook'
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,7 +17,7 @@ import CountryHook from '../../../../hooks/settingHooks/CountryHook'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
 
-export default function AzadVisaAgentPayOutDetails() {
+export default function TicketAgentPayOutDetails() {
     const [isLoading, setIsLoading] = useState(false)
     const [loading1, setLoading1] = useState(false)
     const [loading2, setLoading2] = useState(false)
@@ -40,11 +39,10 @@ export default function AzadVisaAgentPayOutDetails() {
     const { getEntryMoodData } = EntryMoodHook()
     const { getFinalStatusData } = FinalStatusHook()
     const { getTradeData } = TradeHook()
-
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const { user } = useAuthContext()
     const dispatch = useDispatch()
-    const apiUrl = process.env.REACT_APP_API_URL;
 
     
     const fetchData = async () => {
@@ -89,7 +87,7 @@ export default function AzadVisaAgentPayOutDetails() {
     const trades = useSelector((state) => state.setting.trades);
 
     const ticketAgent_Payments_Out = useSelector((state) => state.tickets.ticketAgent_Payments_Out);
-   
+    
 
     const rowsPerPageOptions = [10, 15, 30];
 
@@ -159,73 +157,73 @@ export default function AzadVisaAgentPayOutDetails() {
 
 
     const deletePaymentIn = async (payment) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
-            setLoading1(true)
-            let paymentId = payment._id
-            try {
-                const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/single/payment_out`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
-                })
-    
-                const json = await response.json()
-    
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading1(false)
-                }
-                if (response.ok) {
-                    fetchData()
-                    setNewMessage(toast.success(json.message));
-                    setLoading1(false)
-                    setEditMode(!editMode)
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading1(true)
+        let paymentId = payment._id
+        try {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/single/payment_out`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+            })
+
+            const json = await response.json()
+
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading1(false)
             }
+            if (response.ok) {
+                fetchData()
+                setNewMessage(toast.success(json.message));
+                setLoading1(false)
+                setEditMode(!editMode)
+            }
         }
-        
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading1(false)
+        }
+    }
+       
     }
 
 
     const deletePerson = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
-            setLoading2(true)
-            let personId = person._id
-            try {
-                const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/person/payment_out`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Visa_Price_Out_PKR: person.azad_Visa_Price_Out_PKR, azad_Visa_Price_Out_Curr: person.azad_Visa_Price_Out_Curr })
-                })
-    
-                const json = await response.json()
-    
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading2(false)
-                }
-                if (response.ok) {
-                    fetchData()
-                    setNewMessage(toast.success(json.message));
-                    setLoading2(false)
-                    setEditMode(!editMode)
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading2(true)
+        let personId = person._id
+        try {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/person/payment_out`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Azad_Visa_Price_Out_PKR: person.azad_Azad_Visa_Price_Out_PKR, azad_Azad_Visa_Price_Out_Curr: person.azad_Azad_Visa_Price_Out_Curr })
+            })
+
+            const json = await response.json()
+
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading2(false)
             }
+            if (response.ok) {
+                fetchData()
+                setNewMessage(toast.success(json.message));
+                setLoading2(false)
+                setEditMode(!editMode)
+            }
         }
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading2(false)
+        }
+    }
        
     }
 
@@ -317,40 +315,38 @@ export default function AzadVisaAgentPayOutDetails() {
 
 
     const deleteTotalpayment = async (person) => {
-        if (window.confirm('Are you sure you want to delete this record?')){
-            setLoading5(true)
-            try {
-                const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/all/payment_out`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                    body: JSON.stringify({ supplierName: person.supplierName })
-                })
-    
-                const json = await response.json()
-    
-                if (!response.ok) {
-                    setNewMessage(toast.error(json.message));
-                    setLoading5(false)
-                }
-                if (response.ok) {
-                    fetchData();
-                    setNewMessage(toast.success(json.message));
-                    setLoading5(false)
-    
-                }
-            }
-            catch (error) {
-                setNewMessage(toast.error('Server is not responding...'))
+    if (window.confirm('Are you sure you want to delete this record?')){
+        setLoading5(true)
+        try {
+            const response = await fetch(`${apiUrl}/auth/ticket/agents/delete/all/payment_out`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ supplierName: person.supplierName })
+            })
+
+            const json = await response.json()
+
+            if (!response.ok) {
+                setNewMessage(toast.error(json.message));
                 setLoading5(false)
             }
+            if (response.ok) {
+                fetchData();
+                setNewMessage(toast.success(json.message));
+                setLoading5(false)
+
+            }
         }
-       
+        catch (error) {
+            setNewMessage(toast.error('Server is not responding...'))
+            setLoading5(false)
+        }
     }
-
-
+        
+    }
 
     const [date1, setDate1] = useState('')
     const [supplier1, setSupplier1] = useState('')
@@ -359,11 +355,10 @@ export default function AzadVisaAgentPayOutDetails() {
     const filteredTotalPaymentIn = ticketAgent_Payments_Out.filter(payment => {
         return (
             payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-            payment.supplierName.toLowerCase().includes(supplier1.toLowerCase()) &&
+            payment.supplierName.toLowerCase().includes(supplier1.toLowerCase())&&
             payment.status.toLowerCase().includes(status.toLowerCase())
         )
     })
-
     // individual payments filters
     const [dateFrom, setDateFrom] = useState('')
     const [dateTo, setDateTo] = useState('')
@@ -392,7 +387,6 @@ export default function AzadVisaAgentPayOutDetails() {
         }),
     }))
 
-   
     const [date3, setDate3] = useState('')
     const [name, setName] = useState('')
     const [pp_No, setPP_NO] = useState('')
@@ -424,7 +418,8 @@ export default function AzadVisaAgentPayOutDetails() {
 
                 ),
         }))
-        
+
+   
   const downloadExcel = () => {
     const data = [];
     // Iterate over entries and push all fields
@@ -432,13 +427,13 @@ export default function AzadVisaAgentPayOutDetails() {
       const rowData = {
         SN: index + 1,
         Agents:payments.supplierName,
-        Total_Visa_Price_Out_PKR:payments.total_Azad_Visa_Price_Out_PKR,
+        Total_Azad_Visa_Price_Out_PKR:payments.total_Azad_Azad_Visa_Price_Out_PKR,
         Total_Payment_Out:payments.total_Payment_Out,
         Total_Cash_Out:payments.total_Cash_Out,
-        Remaining_PKR: payments.total_Azad_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
-        Total_Visa_Price_In_Curr:payments.total_Azad_Visa_Price_Out_Curr,
+        Remaining_PKR: payments.total_Azad_Azad_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
+        Total_Azad_Visa_Price_In_Curr:payments.total_Azad_Azad_Visa_Price_Out_Curr,
         Total_Payment_Out_Curr:payments.total_Payment_Out_Curr,
-        Remaining_Curr:payments.total_Azad_Visa_Price_Out_Curr-payments.total_Payment_Out_Curr,
+        Remaining_Curr:payments.total_Azad_Azad_Visa_Price_Out_Curr-payments.total_Payment_Out_Curr,
         Status:payments.status
         
       }
@@ -489,18 +484,18 @@ export default function AzadVisaAgentPayOutDetails() {
     filteredPersons.forEach((payments, index) => {
       const rowData = {
         SN: index + 1,
-        entry_Date:payments.entry_Date,
+        Entry_Date:payments.entry_Date,
         Category:payments.category,
         name:payments.name,
-        pp_No:payments.pp_No,
-        entry_Mode: payments.entry_Mode,
-        company:payments.company,
-        trade:payments.trade,
-        country:payments.country,
-        final_Status:payments.final_Status,
-        flight_Date:payments.flight_Date,
-        visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
-        visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
+        PP_No:payments.pp_No,
+        Entry_Mode: payments.entry_Mode,
+        Company:payments.company,
+        Trade:payments.trade,
+        Country:payments.country,
+        Final_Status:payments.final_Status,
+        Flight_Date:payments.flight_Date,
+        Visa_Price_Out_PKR:payments.azad_Azad_Visa_Price_Out_PKR,
+        Visa_Price_Out_Curr:payments.azad_Azad_Visa_Price_Out_Curr,
         Status:payments.status,
 
         
@@ -534,7 +529,7 @@ export default function AzadVisaAgentPayOutDetails() {
             Payment_In: payment.payment_Out,
             Cash_Out: payment.cash_Out,
             Invoice: payment.invoice,
-            
+           
             Payment_In_Curr: payment.payment_Out_Curr,
             Curr_Rate: payment.curr_Rate,
             Curr_Amount: payment.curr_Amount
@@ -560,8 +555,8 @@ export default function AzadVisaAgentPayOutDetails() {
         Country:payments.country,
         Final_Status:payments.final_Status,
         Flight_Date:payments.flight_Date,
-        Visa_Price_Out_PKR:payments.azad_Visa_Price_Out_PKR,
-        Visa_Price_Out_Curr:payments.azad_Visa_Price_Out_Curr,
+        Visa_Price_Out_PKR:payments.azad_Azad_Visa_Price_Out_PKR,
+        Visa_Price_Out_Curr:payments.azad_Azad_Visa_Price_Out_Curr,
         Status:payments.status,
         };
 
@@ -609,6 +604,7 @@ const changeStatus = async (myStatus) => {
       }
     }
   }
+
   
 
   const printMainTable = () => {
@@ -1392,19 +1388,19 @@ const changeStatus = async (myStatus) => {
                                     </select>
                                 </div>
                                 <div className="col-auto px-1">
-                  <label htmlFor="">Khata:</label><br/>
-                  <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
-                    <option value="" >All</option>
-                    <option value="Open" >Open</option>
-                    <option value="Closed" >Closed</option>
-                  </select>
+                                    <label htmlFor="">Khata:</label><br/>
+                                    <select value={status} onChange={(e) => setStatus(e.target.value)} className='m-0 p-1'>
+                                        <option value="" >All</option>
+                                        <option value="Open" >Open</option>
+                                        <option value="Closed" >Closed</option>
+                                    </select>
 
-                </div>
+                                    </div>
                             </div>
                         </Paper>
                     </div>
 
-                    {(!isLoading ||ticketAgent_Payments_Out.length>0) &&
+                    {(!isLoading || ticketAgent_Payments_Out.length>0) &&
                         <div className='col-md-12'>
                             <Paper className='py-3 mb-1 px-2 detail_table'>
                                 <TableContainer sx={{ maxHeight: 600 }}>
@@ -1412,20 +1408,22 @@ const changeStatus = async (myStatus) => {
                                         <TableHead>
 
                                             <TableRow>
-                                                <TableCell className='label border'>SN</TableCell>
-                                                <TableCell className='label border'>Date</TableCell>
-                                                <TableCell className='label border'>Agents</TableCell>
-                                                <TableCell className='label border'>TVPriceOut_PKR</TableCell>
-                                                <TableCell className='label border'>TVPayOut_PKR</TableCell>
-                                                <TableCell className='label border'>Total_Cash_Out</TableCell>
-                                                <TableCell className='label border'>RPayOut_PKR</TableCell>
-                                                {show1 && <>
-                                                <TableCell className='label border'>TVPriceOut_Oth_Curr</TableCell>
-                                                <TableCell className='label border'>TPO_Curr</TableCell>
-                                                <TableCell className='label border'>RPO_Curr</TableCell>
-                                               </>}
-                                                <TableCell className='label border'>Status</TableCell>
-                                              
+                                            <TableCell className='label border' >SN</TableCell>
+                                            <TableCell className='label border' >Date</TableCell>
+                                            <TableCell className='label border' >Agents</TableCell>
+                                            <TableCell className='label border' >Total Ticket Visa Price PKR</TableCell>
+                                            <TableCell className='label border' >Total Payment In PKR</TableCell>
+                                            <TableCell className='label border' >Total Cash Return</TableCell>
+                                            <TableCell className='label border' >Remaining PKR</TableCell>
+                                            {show1 && <>
+                                              <TableCell className='label border' >Total Ticket Visa Price In Curr</TableCell>
+                                              <TableCell className='label border' >Total Payment In Curr</TableCell>
+                                              <TableCell className='label border' >Remaining Curr</TableCell>
+                                            </>}
+                                            <TableCell className='label border' >Status</TableCell>
+                                            <TableCell className='label border ' >Opening</TableCell>
+                                            <TableCell className='label border ' >Closing</TableCell>
+                                               
                                                 {/* <TableCell align='left' className='edw_label border' colSpan={1}> Actions</TableCell> */}
                                             </TableRow>
                                         </TableHead>
@@ -1442,7 +1440,7 @@ const changeStatus = async (myStatus) => {
                                                         {entry.supplierName}
                                                     </TableCell>
                                                     <TableCell className='border data_td text-center'>
-                                                        {entry.total_Azad_Visa_Price_Out_PKR}
+                                                        {entry.total_Azad_Azad_Visa_Price_Out_PKR}
                                                     </TableCell>
                                                     <TableCell className='border data_td text-center'>
                                                         <i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i> {entry.total_Payment_Out}
@@ -1451,28 +1449,32 @@ const changeStatus = async (myStatus) => {
                                                         <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                                     </TableCell>
                                                     <TableCell className='border data_td text-center'>
-                                                        {entry.total_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out}
+                                                        {entry.total_Azad_Azad_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out}
                                                     </TableCell>
                                                     {show1 && <>
                                                         <TableCell className='border data_td text-center'>
-                                                        {entry.total_Azad_Visa_Price_Out_Curr}
+                                                        {entry.total_Azad_Azad_Visa_Price_Out_Curr}
                                                     </TableCell>
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.total_Payment_Out_Curr}
                                                     </TableCell>
                                                     <TableCell className='border data_td text-center'>
-                                                        {entry.total_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr}
+                                                        {entry.total_Azad_Azad_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr}
                                                     </TableCell>
                                                     </>}
-                                                  
                                                     <TableCell className='border data_td text-center'>
                                                         {entry.status}
                                                     </TableCell>
+                                                    <TableCell className='border data_td text-center' >
+                                                    <span>{entry.opening}</span>
+                                                  </TableCell>
+                                                  <TableCell className='border data_td text-center' >
+                                                    <span>{entry.closing}</span>
+                                                  </TableCell>
                                                     {/* <TableCell className='border data_td p-1 '>
                                                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                                                             <button onClick={() => handleTotalPaymentEditClick(entry, outerIndex)} className='btn edit_btn'>Edit</button>
                                                             <button className='btn bg-danger text-white btn-sm' onClick={() => deleteTotalpayment(entry)} disabled={loading5}><i className="fa-solid fa-trash-can"></i></button>
-                                            
                                                         </div>
                                                        
                                                     </TableCell> */}
@@ -1480,14 +1482,14 @@ const changeStatus = async (myStatus) => {
 
                                                 </TableRow>
                                             ))}
-                                                   <TableRow>
+                                             <TableRow>
     <TableCell></TableCell>
     <TableCell></TableCell>
     <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
     <TableCell className='border data_td text-center bg-info text-white'>
         {/* Calculate the total sum of payment_In */}
         {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-            const paymentIn = parseFloat(paymentItem.total_Azad_Visa_Price_Out_PKR);
+            const paymentIn = parseFloat(paymentItem.total_Azad_Azad_Visa_Price_Out_PKR);
             return isNaN(paymentIn) ? total : total + paymentIn;
         }, 0)}
     </TableCell>
@@ -1508,11 +1510,11 @@ const changeStatus = async (myStatus) => {
     <TableCell className='border data_td text-center bg-warning text-white'>
     {/* Calculate the total sum of cash_Out */}
     {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-        const paymentIn = parseFloat(paymentItem.total_Azad_Visa_Price_Out_PKR);
+        const paymentIn = parseFloat(paymentItem.total_Azad_Azad_Visa_Price_Out_PKR);
         const cashOut = parseFloat(paymentItem.total_Cash_Out);
         const paymentOut = parseFloat(paymentItem.total_Payment_Out);
         
-        // Add the difference between total_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
+        // Add the difference between total_Azad_Visa_Price_In_PKR and total_Payment_In, then add total_Cash_Out
         const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
         return total + netCashOut;
     }, 0)}
@@ -1567,7 +1569,7 @@ const changeStatus = async (myStatus) => {
 
                             <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print </button>
 
-                                {selectedSupplier && <button className='btn detail_btn  btn-sm ' onClick={handleOption}><i className="fas fa-times"></i></button>}
+                                {selectedSupplier && <button className='btn detail_btn btn-sm' onClick={handleOption}><i className="fas fa-times"></i></button>}
 
                             </div>
                         </div>
@@ -1617,7 +1619,7 @@ const changeStatus = async (myStatus) => {
                     </div>
                     <div className="col-md-12 detail_table my-2">
                         <h6>Payment Out Details</h6>
-                        <TableContainer component={Paper} sx={{ maxHeight: 600 }} >
+                        <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
                             <Table stickyHeader>
                                 <TableHead className="thead">
                                     <TableRow>
@@ -1652,7 +1654,7 @@ const changeStatus = async (myStatus) => {
                                                     <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                         {editMode && editedRowIndex === index ? (
                                                             <>
-                                                            <TableCell className='border data_td p-1 '>
+                                                              <TableCell className='border data_td p-1 '>
                                                                 <input type='text' value={index+1} readonly />
                                                             </TableCell>
                                                                 <TableCell className='border data_td p-1 '>
@@ -1698,7 +1700,7 @@ const changeStatus = async (myStatus) => {
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <input type='text' value={editedEntry.invoice} readonly />
                                                                 </TableCell>
-                                                                {show2 && <>
+                                                               {show2 && <>
                                                                 <TableCell className='border data_td p-1 '>
                                                                     <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
                                                                         <option className="my-1 py-2" value="">choose</option>
@@ -1730,7 +1732,7 @@ const changeStatus = async (myStatus) => {
                                                                 <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
                                                                 <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                                                                {show2 && <>
+                                                               {show2 && <>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.payment_Out_Curr}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
                                                                 <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
@@ -1839,13 +1841,13 @@ const changeStatus = async (myStatus) => {
                         <Paper className='py-1 mb-2 px-3'>
                             <div className="row">
                             <div className="col-auto px-1">
-                                <label htmlFor="">Khata:</label><br/>
-                                <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
-                                    <option value="" >All</option>
-                                    <option value="Open" >Open</option>
-                                    <option value="Closed" >Closed</option>
-                                </select>
-                                </div>
+                                    <label htmlFor="">Khata:</label><br/>
+                                    <select value={status1} onChange={(e) => setStatus1(e.target.value)} className='m-0 p-1'>
+                                        <option value="" >All</option>
+                                        <option value="Open" >Open</option>
+                                        <option value="Closed" >Closed</option>
+                                    </select>
+                                    </div>
                                 <div className="col-auto px-1">
                                     <label htmlFor="">Entry Date:</label><br/>
                                     <select value={date3} onChange={(e) => setDate3(e.target.value)} className='m-0 p-1'>
@@ -1980,7 +1982,7 @@ const changeStatus = async (myStatus) => {
             </div>
                         <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
                             <Table stickyHeader>
-                                <TableHead className="thead">
+                                <TableHead className="thead" >
                                     <TableRow>
                                         <TableCell className='label border'>SN</TableCell>
                                         <TableCell className='label border'>Date</TableCell>
@@ -1992,8 +1994,8 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>Country</TableCell>
                                         <TableCell className='label border'>Final_Status</TableCell>
                                         <TableCell className='label border'>Flight_Date</TableCell>
-                                        <TableCell className='label border'>VPI_PKR</TableCell>
-                                        {show && <TableCell className='label border'>VPI_Oth_Curr</TableCell>}
+                                        <TableCell className='label border'>AVPI_PKR</TableCell>
+                                        {show && <TableCell className='label border'>AVPI_Oth_Curr</TableCell>}
                                         <TableCell className='label border'>Status</TableCell>
                                         <TableCell className='label border'>Action</TableCell>
                                     </TableRow>
@@ -2064,7 +2066,7 @@ const changeStatus = async (myStatus) => {
                                                             <TableCell className='border data_td p-1 '>
                                                                 <input type='number' value={editedEntry2.azad_Visa_Price_Out_PKR} readonly />
                                                             </TableCell>
-                                                            {show &&  <TableCell className='border data_td p-1 '>
+                                                           {show &&  <TableCell className='border data_td p-1 '>
                                                                 <input type='number' value={editedEntry2.azad_Visa_Price_Out_Curr} readonly />
                                                             </TableCell>}
                                                             <TableCell className='border data_td p-1 '>
@@ -2074,7 +2076,6 @@ const changeStatus = async (myStatus) => {
                                                                 </select>
                                                             
                                                             </TableCell>
-
 
                                                         </>
                                                     ) : (
@@ -2090,11 +2091,12 @@ const changeStatus = async (myStatus) => {
                                                             <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
                                                             <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
                                                             <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_PKR}</TableCell>
-                                                            {show && <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_Curr}</TableCell>}
+                                                           {show && <TableCell className='border data_td text-center'>{person?.azad_Visa_Price_Out_Curr}</TableCell>}
                                                             <TableCell className='border data_td text-center'>{person?.status}</TableCell>
+
                                                         </>
                                                     )}
-                                                      <TableCell className='border data_td p-1 text-center'>
+                                                   <TableCell className='border data_td p-1 text-center'>
                             {editMode2 && editedRowIndex2 === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -2142,9 +2144,8 @@ const changeStatus = async (myStatus) => {
             }, 0);
           }, 0)}
         </TableCell>
-      
                             
-                          </TableRow>
+                        </TableRow>
                                         </>
                                     ))}
                                 </TableBody>

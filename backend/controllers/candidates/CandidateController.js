@@ -265,8 +265,6 @@ const addMultiplePaymentsIn = async (req, res) => {
         }
 
         try {
-
-
             const updatedPayments = [];
 
             for (const payment of multiplePayment) {
@@ -286,6 +284,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                     date,
                     close
                 } = payment;
+
                 if(!payment_Via){
                   res.status(400).json({message:"Payment Via is required"})
                   break;
@@ -302,7 +301,7 @@ const addMultiplePaymentsIn = async (req, res) => {
 
                 for (const candidate of candidates){
                   if(candidate.payment_In_Schema){
-                    if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+                    if(candidate.payment_In_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.toString().trim().toLowerCase()){
                       existingSupplier = candidate;
                       break
                     }
@@ -428,7 +427,7 @@ const addMultiplePaymentsIn = async (req, res) => {
 
             }
             res.status(200).json({
-                message: `Multiple Payments In added Successfully to ${supplierName}'s Record`
+                message: `${multiplePayment.length} Payments In added Successfully`
             });
         } catch (error) {
             console.error('Error updating values:', error);
@@ -2342,7 +2341,7 @@ const addMultiplePaymentsOut = async (req, res) => {
         
                for (const candidate of candidates){
                 if(candidate.payment_Out_Schema){
-                  if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.trim().toLowerCase()){
+                  if(candidate.payment_Out_Schema.supplierName.trim().toLowerCase()===supplierName.trim().toLowerCase() && candidate.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.toString().trim().toLowerCase()){
                     existingSupplier = candidate;
                     break
                   }

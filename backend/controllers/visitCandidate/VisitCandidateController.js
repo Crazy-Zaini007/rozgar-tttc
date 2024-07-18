@@ -244,6 +244,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
         let {
           supplierName,
           category,
+          pp_No,
           payment_Via,
           payment_Type,
           slip_No,
@@ -269,8 +270,8 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
         for (const supplier of suppliers) {
           if (supplier.payment_In_Schema) {
             if (
-              supplier.payment_In_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplier.payment_In_Schema.supplierName.trim().toLowerCase() ===
+              supplierName.trim().toLowerCase()&& supplier.payment_In_Schema.pp_No.trim().toLowerCase()===pp_No.toString().trim().toLowerCase()
             ) {
               existingSupplier = supplier;
               break;
@@ -396,7 +397,7 @@ const addAzadCandMultiplePaymentsIn = async (req, res) => {
       }
 
       res.status(200).json({
-        message: `${updatedPayments.length} Payments In added Successfully to ${supplierName}'s Record`,
+        message: `${updatedPayments.length} Payments In added Successfully`,
       });
     } catch (error) {
       console.error("Error updating values:", error);
@@ -2187,6 +2188,7 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
       for (const payment of multiplePayment) {
         let {
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -2218,8 +2220,8 @@ const addAzadCandMultiplePaymentsOut = async (req, res) => {
         for (const supplier of suppliers) {
           if (supplier.payment_Out_Schema) {
             if (
-              supplier.payment_Out_Schema.supplierName.toLowerCase() ===
-              supplierName.toLowerCase()
+              supplier.payment_Out_Schema.supplierName.trim().toLowerCase() ===
+              supplierName.trim().toLowerCase() && supplier.payment_Out_Schema.pp_No.trim().toLowerCase()===pp_No.toString().trim().toLowerCase()
             ) {
               existingSupplier = supplier;
               break;

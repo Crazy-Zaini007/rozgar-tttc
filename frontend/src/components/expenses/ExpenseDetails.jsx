@@ -197,15 +197,15 @@ export default function ExpenseDetails() {
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
   const [search1, setSearch1] = useState('')
-
-  const filteredExpenses = expenses.filter(expense => {
+  const filteredExpenses = expenses
+  .filter(expense => {
     let isDateInRange = true;
-  
+
     // Check if the expense date is within the selected date range
     if (dateFrom && dateTo) {
       isDateInRange = expense.date >= dateFrom && expense.date <= dateTo;
     }
-  
+
     // Filter payment_Via based on the selected cash_Type
     let filteredPaymentVia = true;
     if (cash_Type === 'cash') {
@@ -213,23 +213,23 @@ export default function ExpenseDetails() {
     } else if (cash_Type === 'banks') {
       filteredPaymentVia = !expense.payment_Via?.toLowerCase().includes('cash');
     }
-  
+
     return (
       isDateInRange &&
       expense.name?.toLowerCase().includes(name.toLowerCase()) &&
       expense.expCategory?.toLowerCase().includes(expe_Category.toLowerCase()) &&
       expense.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
-      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-      expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
-  )&&
+      expense.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+      (expense.expCategory?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.name?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+        expense.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())) &&
       filteredPaymentVia
-    )
+    );
   })
-  
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+
 
   const downloadExcel = () => {
     const data = [];
@@ -525,10 +525,10 @@ export default function ExpenseDetails() {
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
-        <div className="container-fluid payment_details">
+        <div className="container-fluid payment_details mt-3">
           <div className="row">
             <div className="col-md-12 p-0 border-0 border-bottom">
-              <div className='py-3 mb-2 px-2 d-flex justify-content-between'>
+              <div className='py-2 mb-2 px-2 d-flex justify-content-between'>
                 <div className="left d-flex">
                   <h4>Expenses Details</h4>
                 </div>
@@ -653,7 +653,7 @@ export default function ExpenseDetails() {
                                   <input type='number' value={outerIndex + 1} readOnly />
                                 </TableCell>
                                 <TableCell className='border data_td p-1 '>
-                                  <input type='dateFrom' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'dateFrom')} />
+                                  <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
                                 </TableCell>
                                 <TableCell className='border data_td p-1 '>
                                   <input type='text' value={editedEntry.name} onChange={(e) => handleInputChange(e, 'name')} />
@@ -768,7 +768,7 @@ export default function ExpenseDetails() {
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-secondary text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'> {filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)}</TableCell>    
+                            <TableCell className='border data_td text-center bg-danger text-white'> {filteredExpenses.reduce((total, expense) => total + expense.payment_Out, 0)}</TableCell>    
                           </TableRow>
                   </TableBody>
                 </Table>

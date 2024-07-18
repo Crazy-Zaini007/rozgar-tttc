@@ -317,7 +317,7 @@ export default function EmployeeReports() {
                                 <TableCell className='border data_td '>{entry.details}</TableCell>
                                 <TableCell className='border data_td '>{entry.slip_No}</TableCell>
                                 <TableCell className='border data_td bg-danger text-white'>{entry.payment_Out}</TableCell>
-                                <TableCell className='border data_td bg-success text-white'>{entry.payment_Out}</TableCell>
+                                <TableCell className='border data_td bg-success text-white'>{entry.cash_Out}</TableCell>
                                 <TableCell className='border data_td '>{entry.invoice}</TableCell>
                           
                           </TableRow>

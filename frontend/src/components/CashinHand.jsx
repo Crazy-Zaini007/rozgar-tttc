@@ -143,9 +143,9 @@ export default function CashinHand() {
   });
 
   // Calculate the combined total
-  const combinedTotal = (totalPaymentIn + totalCashOutIn) - (totalPaymentOut + totalCashOutOut);
-  const combinedTotalCash = (totalCashPaymentIn + totalCashCashOutIn) - (totalCashPaymentOut + totalCashCashOutOut);
-  const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
+  const combinedTotal = (totalPaymentIn - totalCashOutIn) + ( totalCashOutOut-totalPaymentOut);
+  const combinedTotalCash = (totalCashPaymentIn - totalCashCashOutIn) + (totalCashCashOutOut-totalCashPaymentOut );
+  const combinedTotalBankCash = (totalBankPaymentIn - totalBankCashOutIn) + (totalBankCashOutOut-totalBankPaymentOut );
 
   // getting Data from DB
 

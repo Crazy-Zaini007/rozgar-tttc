@@ -747,32 +747,33 @@ let sr_No=0;
     const [payment_Via, setPayment_Via] = useState('')
     const [payment_Type, setPayment_Type] = useState('')
     
-    const filteredIndividualPayments = employees
-    .filter((data) => data.employeeName === selectedEmployee)
-    .map((filteredData) => ({
-      ...filteredData,
-      payment: filteredData.employeePayments
-        .filter((paymentItem) => {
-          let isDateInRange = true;
+   
+  const filteredIndividualPayments = employees
+  .filter((data) => data.employeeName === selectedEmployee)
+  .map((filteredData) => ({
+    ...filteredData,
+    employeePayments: filteredData.employeePayments
+      .filter((paymentItem) => {
+        let isDateInRange = true;
 
-          // Check if the payment item's date is within the selected date range
-          if (newDateFrom && newDateTo) {
-            isDateInRange =
-              paymentItem.date >= newDateFrom && paymentItem.date <= newDateTo;
-          }
+        // Check if the payment item's date is within the selected date range
+        if (newDateFrom && newDateTo) {
+          isDateInRange =
+            new Date(paymentItem.date) >= new Date(newDateFrom) && new Date(paymentItem.date) <= new Date(newDateTo);
+        }
 
-          return (
-            isDateInRange &&
-            paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
-            paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase())&&
-            (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-             paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-             paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())||
-             paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase())
-        )
-          );
-        }),
-    }))
+        return (
+          isDateInRange &&
+          paymentItem.payment_Via?.toLowerCase().includes(payment_Via.toLowerCase()) &&
+          paymentItem.payment_Type?.toLowerCase().includes(payment_Type.toLowerCase()) &&
+          (paymentItem.category?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+            paymentItem.payment_Via?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+            paymentItem.slip_No?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()) ||
+            paymentItem.payment_Type?.trim().toLowerCase().startsWith(search1.trim().toLowerCase()))
+        );
+      })
+      .sort((a, b) => new Date(b.date) - new Date(a.date)), // Sort payments by date in descending order
+  }));
         const printPaymentsTable = () => {
             const formatDate = (date) => {
                 const d = new Date(date);
@@ -1035,18 +1036,20 @@ let sr_No=0;
     const [dateFrom, setDateFrom] = useState('')
     const [dateTo, setDateTo] = useState('')
 
-    const filteredVacations = employees
-        .filter((data) => data.employeeName === selectedEmployee)
-        .map((filteredData) => ({
-            ...filteredData,
-            vacation: filteredData.vacation
-                .filter((vacation) =>
-                    vacation.date?.toLowerCase().includes(date3.toLowerCase()) &&
-                    vacation.dateFrom?.toLowerCase().includes(dateFrom.toLowerCase()) &&
-                    vacation.dateTo?.toLowerCase().includes(dateTo.toLowerCase())
 
-                ),
-        }))
+const filteredVacations = employees
+.filter((data) => data.employeeName === selectedEmployee)
+.map((filteredData) => ({
+  ...filteredData,
+  vacation: filteredData.vacation
+    .filter((vacation) =>
+      (!date3 || vacation.date?.toLowerCase().includes(date3.toLowerCase())) &&
+      (!dateFrom || vacation.dateFrom?.toLowerCase().includes(dateFrom.toLowerCase())) &&
+      (!dateTo || vacation.dateTo?.toLowerCase().includes(dateTo.toLowerCase()))
+    )
+    .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date
+}));
+    
 
         const printVacationsTable = () => {
             // Calculate total days

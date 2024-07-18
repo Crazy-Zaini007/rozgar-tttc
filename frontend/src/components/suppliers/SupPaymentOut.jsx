@@ -20,19 +20,16 @@ import * as XLSX from 'xlsx';
 import SupplierEntry2 from '../newDoubleEntry/SupplierEntry2'
 import SupplierEntry1 from '../newDoubleEntry/SupplierEntry1'
 
-// import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 export default function SupPaymentOut() {
   const dispatch = useDispatch();
   // getting data from redux store 
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   const currCountries = useSelector((state) => state.setting.currCountries);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
   const supp_Payments_Out = useSelector((state) => state.suppliers.supp_Payments_Out)
-
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
   const { getPaymentViaData } = PaymentViaHook()
@@ -129,6 +126,7 @@ export default function SupPaymentOut() {
     }
   };
 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   // Submitting Form Data
   const [loading, setLoading] = useState(null)
@@ -136,6 +134,17 @@ export default function SupPaymentOut() {
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setPayment_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/suppliers/add/payment_out`, {
         method: 'POST',
@@ -191,12 +200,11 @@ export default function SupPaymentOut() {
 
 
     } catch (error) {
-      console.error('Fetch error:', error);
+
       setNewMessage(toast.error('Server is not Responding...'));
       setLoading(false);
     }
   }
-
 
   const [single, setSingle] = useState(0)
 
@@ -204,7 +212,7 @@ export default function SupPaymentOut() {
     setSingle(index)
   }
 
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+  const [multiplePayment, setMultiplePayment] = useState([{date:'', supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0 }])
 
   const [triggerEffect, setTriggerEffect] = useState(false);
 
@@ -236,8 +244,9 @@ export default function SupPaymentOut() {
 
     // Clear the file input value
     e.target.value = null;
-  }
+  };
 
+ 
   const parseExcelData = (data) => {
     const workbook = XLSX.read(data, { type: 'binary' });
     const sheetName = workbook.SheetNames[0];
@@ -279,9 +288,9 @@ export default function SupPaymentOut() {
     const updatedData = [...multiplePayment];
     updatedData[rowIndex][key] = value;
     setMultiplePayment(updatedData);
-  }
+  };
+
   const handleUploadList =async (e) => {
-    
     setLoading(true)
     e.preventDefault()
     try {
@@ -311,7 +320,7 @@ export default function SupPaymentOut() {
 
     }
 
-  }
+  };
 
   useEffect(() => {
     if (triggerEffect) {
@@ -320,38 +329,39 @@ export default function SupPaymentOut() {
   }, [triggerEffect, multiplePayment]);
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
+
+
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
         <div className="container-fluid payment_form">
           <div className="row">
-            <div className="col-md-12 p-0 border-0 border-bottom">
-              <div className='py-3 mb-1 px-2'>
+            <div className="col-md-12">
+              <Paper className='py-3 mb-1 px-2'>
                 <h4>Supplier Payment Out</h4>
-                <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
-                <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
-                {single === 1 && <label className="btn m-12 btn-sm upload_btn">
+                <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-Out</button>
+                <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-Out</button>
+                {single === 1 && <label className="btn m-1  btn-sm upload_btn">
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>}
                 <button className='btn m-1 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
-
-              </div>
+              </Paper>
             </div>
             {single === 1 &&
               <>
-                <div className="col-md-12 multiple_form p-0 border-0 border-bottom">
+                <div className="col-md-12 multiple_form">
 
-               
+                  <Paper>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
-                      <button className='btn submit_btn m-1 btn-sm' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
+                      <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
                       </div>
                       <div className="table-responsive">
                         <table className='table table-borderless table-striped'>
                           <thead >
                             <tr >
-                            <th >Date</th>
+                              <th >Date</th>
                               <th >Name</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
@@ -390,16 +400,14 @@ export default function SupPaymentOut() {
                       </div>
 
                     </form>
-             
+                  </Paper>
 
                 </div>
               </>
             }
-
-
             {single === 0 &&
               <>
-                <div className="col-md-12 p-0 border-0 border-bottom">
+                <div className="col-md-12 ">
                   {!option && <TableContainer component={Paper}>
                     <form className='py-3 px-2' onSubmit={handleForm}>
                       <div className="text-end ">
@@ -415,7 +423,7 @@ export default function SupPaymentOut() {
                             <input type="checkbox" value={close} onClick={() => setClose(!close)} />
                           </label>
                         } */}
-                        <button className='btn submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
+                        <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
                         {/* <span className='btn submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
                       </div>
                       <div className="row p-0 m-0 my-1">
@@ -493,7 +501,7 @@ export default function SupPaymentOut() {
                           </div>
                         </div>}
                       </div>
-                      <span className='btn add_section_btn' style={!section ? { backgroundColor: 'var(--accent-lighter-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={handleSection}>{!section ? <AddIcon fontSize='small'></AddIcon> : <RemoveIcon fontSize='small'></RemoveIcon>}{!section ? "Add Currency" : "Remove"}</span>
+                      <span className='btn btn-sm  add_section_btn' style={!section ? { backgroundColor: 'var(--accent-lighter-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={handleSection}>{!section ? <AddIcon fontSize='small'></AddIcon> : <RemoveIcon fontSize='small'></RemoveIcon>}{!section ? "Add Currency" : "Remove"}</span>
                       {/* Add Crrency section */}
                       {section &&
                         <div className="row p-0 m-0 mt-5">
@@ -509,7 +517,7 @@ export default function SupPaymentOut() {
                           </div>
                           <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                             <label >CUR Rate </label>
-                            <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
+                            <input type="number"  value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                           </div>
                           <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                             <label >Currency Amount </label>
@@ -524,11 +532,11 @@ export default function SupPaymentOut() {
                 {/* Details */}
                 <div className="row payment_details mt-0">
                   <div className="col-md-12 my-2">
-                    {selectedSupplier && <button className='btn detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
+                    {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
                   </div>
                   {option && (
-                    <div className="col-md-12 detail_table p-0">
-                      <TableContainer>
+                    <div className="col-md-12 detail_table">
+                      <TableContainer component={Paper}>
                         <Table>
                           <TableHead className="thead">
                             <TableRow>
@@ -542,7 +550,6 @@ export default function SupPaymentOut() {
                               <TableCell className='label border'>Cash_Out</TableCell>
                               <TableCell className='label border'>Invoice</TableCell>
                               <TableCell className='label border'>Payment_Out_Curr</TableCell>
-                              <TableCell className='label border'>CUR_Rate</TableCell>
                               <TableCell className='label border'>CUR_Amount</TableCell>
                             </TableRow>
                           </TableHead>
@@ -564,14 +571,12 @@ export default function SupPaymentOut() {
                                       <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
                                       <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
                                       <TableCell className='border data_td text-center'>{paymentItem.payment_Out_Curr}</TableCell>
-                                      <TableCell className='border data_td text-center'>{paymentItem.curr_Rate}</TableCell>
                                       <TableCell className='border data_td text-center'>{paymentItem.curr_Amount}</TableCell>
 
                                     </TableRow>
                                   ))}
                                   {/* Move these cells inside the innermost map loop */}
 
-                                
                                   <TableRow>
                           <TableCell></TableCell>
                           <TableCell></TableCell>
@@ -613,8 +618,6 @@ export default function SupPaymentOut() {
                           <TableCell className='label border'>Remaining Total_Payment_Out_Curr</TableCell>
                           <TableCell className=' data_td text-center  bg-danger text-white text-bold'>{filteredData.total_Visa_Price_Out_Curr-filteredData.total_Payment_Out_Curr}</TableCell>
                         </TableRow>
-
-
                                 </>
                               ))}
 
@@ -623,17 +626,17 @@ export default function SupPaymentOut() {
                       </TableContainer>
                     </div>
                   )}
-
                 </div>
               </>
             }
-   {single === 2 &&
+            
+            {single === 2 &&
               <SupplierEntry2></SupplierEntry2>
             }
             {single === 2 &&
               <SupplierEntry1></SupplierEntry1>
             }
-
+           
           </div>
         </div>
       </div>
