@@ -556,11 +556,10 @@ export default function AzadVisaAgentSinglePayOut() {
         </div>
       }
 
-      {/* Multiple Entry */}
+      
       {single === 1 &&
         <>
           <div className="col-md-12 multiple_form">
-
              <Paper>
                     <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
