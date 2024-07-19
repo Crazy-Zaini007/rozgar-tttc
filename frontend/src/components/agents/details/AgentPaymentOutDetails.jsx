@@ -1627,7 +1627,7 @@ export default function AgentPaymentOutDetails() {
                                   <TableCell className='border data_td text-center' >
                                     {entry.createdAt}
                                   </TableCell>
-                                  <TableCell className='border data_td text-center' onClick={() => {handleRowClick(entry.supplierName); setNewStatus(entry.status)}}>
+                                  <TableCell className='border data_td text-center' onClick={() => {handleRowClick(entry.supplierName); setNewStatus(entry._id)}}>
                                     {entry.supplierName}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >

@@ -73,7 +73,7 @@ overAllPayments.forEach(payment => {
   }
 
   // Update the sums based on payment type
-  if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in'))) {
+  if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in'))&&payment.payment_Via.toLowerCase()!=='cash') {
     aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
     aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
 
@@ -81,7 +81,7 @@ overAllPayments.forEach(payment => {
     totalBankCashOutIn += payment.cash_Out || 0;
   }
 
-  if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out'))) {
+  if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out'))&&payment.payment_Via.toLowerCase()!=='cash') {
     aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
     aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
 
@@ -94,13 +94,13 @@ overAllPayments.forEach(payment => {
 const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, totals]) => {
   return {
     paymentVia,
-    total: (totals.totalBankPaymentIn + totals.totalBankCashOutIn) - (totals.totalBankPaymentOut + totals.totalBankCashOutOut),
+    total: (totals.totalBankPaymentIn - totals.totalBankCashOutIn) + ( totals.totalBankCashOutOut-totals.totalBankPaymentOut),
   };
 });
 
 // Output the results
 
-  const combinedTotalBankCash = (totalBankPaymentIn + totalBankCashOutIn) - (totalBankPaymentOut + totalBankCashOutOut);
+  const combinedTotalBankCash = (totalBankPaymentIn - totalBankCashOutIn) + ( totalBankCashOutOut - totalBankPaymentOut);
   // getting Data from DB
 
 
@@ -833,7 +833,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
            <Table stickyHeader>
              <TableHead className="thead">
                <TableRow>
-                 {paymentViaTotals && paymentViaTotals.map((data)=>(
+                 {paymentViaTotals && paymentViaTotals.filter(data=>data.paymentVia.toLowerCase()!=='cash').map((data)=>(
                    <>
                    <TableCell className='label border text-center' >{data.paymentVia}</TableCell>
                    </>
@@ -843,7 +843,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                </TableRow>
              </TableHead>
              <TableBody>
-             {paymentViaTotals && paymentViaTotals.map((data,index)=>(
+             {paymentViaTotals && paymentViaTotals.filter(data=>data.paymentVia.toLowerCase()!=='cash').map((data,index)=>(
                    <>
                    <TableCell className='border data_td text-center ' key={index} >{Math.round(data.total)}</TableCell>
                    </>
@@ -1290,7 +1290,7 @@ Remaining PKR=
                       {filteredCash.reduce((total, cash) => total + cash.payment_In, 0)}
                     </TableCell>
                     <TableCell className='border data_td text-center bg-danger text-white'>
-                      {/* Calculate the total sum of payment_Out */}
+                   
                       {filteredCash.reduce((total, cash) => total + cash.payment_Out, 0)}
                     </TableCell>
                     <TableCell></TableCell>

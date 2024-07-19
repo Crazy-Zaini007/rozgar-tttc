@@ -586,7 +586,7 @@ const deleteSingleAgentPaymentIn = async (req, res) => {
 
     const existingSupplier = await VisitAgents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status": newStatus,
+      "payment_In_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -716,7 +716,7 @@ const updateSingleAzadAgentPaymentIn = async (req, res) => {
 
       const existingSupplier = await VisitAgents.findOne({
         "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status": newStatus,
+      "payment_In_Schema._id": newStatus,
 
       });
       if (!existingSupplier) {
@@ -909,7 +909,7 @@ const deleteAzadAgentPaymentInPerson = async (req, res) => {
 
     const existingSupplier = await VisitAgents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status": newStatus,
+      "payment_In_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -990,7 +990,7 @@ const updateAgentPaymentInPerson = async (req, res) => {
 
       const existingSupplier = await VisitAgents.findOne({
         "payment_In_Schema.supplierName": supplierName,
-        "payment_In_Schema.supplierName": newStatus,
+        "payment_In_Schema._id": newStatus,
 
       });
 
@@ -2257,7 +2257,7 @@ const deleteAzadAgentSinglePaymentOut = async (req, res) => {
     // console.log(paymentId, payment_Out, curr_Amount, supplierName, cash_Out, payment_Via)
     const existingSupplier = await VisitAgents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status": newStatus,
+      "payment_Out_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -2388,7 +2388,7 @@ const updateAzadAgentSinglePaymentOut = async (req, res) => {
     try {
       const existingSupplier = await VisitAgents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status": newStatus,
+      "payment_Out_Schema._id": newStatus,
 
       });
 
@@ -2524,7 +2524,7 @@ const deleteAzadAgentPaymentOutPerson = async (req, res) => {
     const newVisa_Price_Out_Curr = parseInt(azad_visa_Price_Out_PKR, 10);
     const existingSupplier = await VisitAgents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status": newStatus,
+      "payment_Out_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -2668,7 +2668,7 @@ const updateAgentPaymentOutPerson = async (req, res) => {
 
       const existingSupplier = await VisitAgents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-        "payment_Out_Schema.supplierName": newStatus,
+        "payment_Out_Schema._id": newStatus,
 
       });
 
@@ -3351,7 +3351,7 @@ const changeAgentPaymentInStatus = async (req, res) => {
     
     const existingSupplier = await VisitAgents.findOne({
         "payment_In_Schema.supplierName": supplierName,
-        "payment_In_Schema.status": newStatus,
+        "payment_In_Schema._id": newStatus,
     });
 
     if (!existingSupplier) {
@@ -3431,7 +3431,7 @@ const changeAgentPaymentOutStatus = async (req, res) => {
     
     const existingSupplier = await VisitAgents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-        "payment_Out_Schema.status": newStatus,
+        "payment_Out_Schema._id": newStatus,
     });
 
     if (!existingSupplier) {

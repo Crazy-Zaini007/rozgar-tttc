@@ -578,6 +578,7 @@ const deleteSingleAzadSupplierPaymentIn = async (req, res) => {
     const {
       paymentId,
       payment_In,
+      newStatus,
       cash_Out,
       curr_Amount,
       supplierName,
@@ -586,6 +587,8 @@ const deleteSingleAzadSupplierPaymentIn = async (req, res) => {
 
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema._id": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -693,6 +696,7 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
       const {
         supplierName,
         paymentId,
+        newStatus,
         category,
         payment_Via,
         payment_Type,
@@ -713,6 +717,7 @@ const updateSingleAzadSupplierPaymentIn = async (req, res) => {
 
       const existingSupplier = await TicketSuppliers.findOne({
         "payment_In_Schema.supplierName": supplierName,
+        "payment_In_Schema._id": newStatus,
       });
       if (!existingSupplier) {
         res.status(404).json({ message: "Supplier not found" });
@@ -896,6 +901,7 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
   if (user && user.role === "Admin") {
     const {
       personId,
+      newStatus,
       supplierName,
       azad_Visa_Price_In_PKR,
       azad_Visa_Price_In_Curr,
@@ -903,6 +909,7 @@ const deleteAzadSupplierPaymentInPerson = async (req, res) => {
 
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema._id": newStatus,
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -981,7 +988,7 @@ const updateSupPaymentInPerson = async (req, res) => {
 
       const existingSupplier = await TicketSuppliers.findOne({
         "payment_In_Schema.supplierName": supplierName,
-        "payment_In_Schema.supplierName": newStatus,
+        "payment_In_Schema._id": newStatus,
 
       });
 
@@ -2230,6 +2237,7 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
   if (user && user.role === "Admin") {
     const {
       paymentId,
+      newStatus,
       payment_Out,
       curr_Amount,
       supplierName,
@@ -2239,6 +2247,8 @@ const deleteAzadSupplierSinglePaymentOut = async (req, res) => {
     // console.log(paymentId, payment_Out, curr_Amount, supplierName, cash_Out, payment_Via)
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema._id": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2345,6 +2355,7 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
   if (user && user.role === "Admin") {
     const {
       supplierName,
+      newStatus,
       paymentId,
       category,
       payment_Via,
@@ -2366,6 +2377,8 @@ const updateAzadSupplierSinglePaymentOut = async (req, res) => {
     try {
       const existingSupplier = await TicketSuppliers.findOne({
         "payment_Out_Schema.supplierName": supplierName,
+        "payment_Out_Schema._id": newStatus,
+
       });
 
       if (!existingSupplier) {
@@ -2485,6 +2498,7 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
   if (user && user.role === "Admin") {
     const {
       personId,
+      newStatus,
       supplierName,
       azad_visa_Price_Out_PKR,
       azad_Visa_Price_Out_Curr,
@@ -2494,6 +2508,8 @@ const deleteAzadSupplierPaymentOutPerson = async (req, res) => {
     const newVisa_Price_Out_Curr = parseInt(azad_visa_Price_Out_PKR, 10);
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema._id": newStatus,
+
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2574,7 +2590,7 @@ const updateSupPaymentOutPerson = async (req, res) => {
 
       const existingSupplier = await TicketSuppliers.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-        "payment_Out_Schema.supplierName": newStatus,
+        "payment_Out_Schema._id": newStatus,
 
       });
 
@@ -3318,6 +3334,8 @@ const changeSupplierPaymentInStatus = async (req, res) => {
 
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema._id": newStatus,
+
     });
 
     if (!existingSupplier) {
@@ -3392,6 +3410,7 @@ const changeSupplierPaymentOutStatus = async (req, res) => {
 
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema._id": newStatus,
     });
 
     if (!existingSupplier) {
@@ -3674,9 +3693,11 @@ const deleteCandVisePaymentIn = async (req, res) => {
       res.status(404).json({ message: "User not found" });
       return;
     }
-    const { supplierName, paymentId } = req.body;
+    const { supplierName, paymentId,newStatus } = req.body;
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema._id": newStatus,
+
     });
 
     if (!existingSupplier) {
@@ -3765,6 +3786,7 @@ const deleteCandVisePaymentIn = async (req, res) => {
 const updateCandVisePaymentIn = async (req, res) => {
   const {
     supplierName,
+    newStatus,
     paymentId,
     category,
     payment_Via,
@@ -3778,6 +3800,8 @@ const updateCandVisePaymentIn = async (req, res) => {
 
   const existingSupplier = await TicketSuppliers.findOne({
     "payment_In_Schema.supplierName": supplierName,
+    "payment_In_Schema._id": newStatus,
+
   });
   if (!existingSupplier) {
     res.status(404).json({ message: "Ticket Supplier not found" });
@@ -3828,9 +3852,11 @@ const deleteSingleCandVisePaymentIn = async (req, res) => {
       res.status(404).json({ message: "User not found" });
       return;
     }
-    const { supplierName, paymentId, myPaymentId } = req.body;
+    const { supplierName,newStatus, paymentId, myPaymentId } = req.body;
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema.supplierName": _id,
+
     });
 
     if (!existingSupplier) {
@@ -3945,6 +3971,7 @@ const updateSingleCandVisePaymentIn = async (req, res) => {
     }
     const {
       supplierName,
+      newStatus,
       paymentId,
       myPaymentId,
       new_Payment,
@@ -3952,6 +3979,8 @@ const updateSingleCandVisePaymentIn = async (req, res) => {
     } = req.body;
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_In_Schema.supplierName": supplierName,
+      "payment_In_Schema._id": newStatus,
+
     });
 
     if (!existingSupplier) {
@@ -4280,9 +4309,11 @@ const deleteCandVisePaymentOut = async (req, res) => {
       res.status(404).json({ message: "User not found" });
       return;
     }
-    const { supplierName, paymentId } = req.body;
+    const { supplierName, paymentId,newStatus } = req.body;
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema._id": newStatus,
+
     });
 
     if (!existingSupplier) {
@@ -4370,6 +4401,7 @@ const deleteCandVisePaymentOut = async (req, res) => {
 const updateCandVisePaymentOut = async (req, res) => {
   const {
     supplierName,
+    newStatus,
     paymentId,
     category,
     payment_Via,
@@ -4383,6 +4415,8 @@ const updateCandVisePaymentOut = async (req, res) => {
 
   const existingSupplier = await TicketSuppliers.findOne({
     "payment_Out_Schema.supplierName": supplierName,
+    "payment_Out_Schema._id": newStatus,
+
   });
   if (!existingSupplier) {
     res.status(404).json({ message: "Ticket Supplier not found" });
@@ -4433,9 +4467,11 @@ const deleteSingleCandVisePaymentOut = async (req, res) => {
       res.status(404).json({ message: "User not found" });
       return;
     }
-    const { supplierName, paymentId, myPaymentId } = req.body;
+    const { supplierName, paymentId,newStatus, myPaymentId } = req.body;
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema._id": newStatus,
+
     });
 
     if (!existingSupplier) {
@@ -4550,6 +4586,7 @@ const updateSingleCandVisePaymentOut = async (req, res) => {
     }
     const {
       supplierName,
+      newStatus,
       paymentId,
       myPaymentId,
       new_Payment,
@@ -4557,6 +4594,8 @@ const updateSingleCandVisePaymentOut = async (req, res) => {
     } = req.body;
     const existingSupplier = await TicketSuppliers.findOne({
       "payment_Out_Schema.supplierName": supplierName,
+      "payment_Out_Schema._id": newStatus,
+
     });
 
     if (!existingSupplier) {

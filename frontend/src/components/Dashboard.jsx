@@ -34,14 +34,12 @@ export default function AdminDashboard() {
   const { getExpenses } = ExpenseHook()
 
   const enteries = useSelector((state) => state.enteries.enteries);
-  const cashInHand = useSelector((state) => state.cashInHand.cashInHand);
   const employees = useSelector((state) => state.employees.employees)
   const expenses = useSelector((state) => state.expenses.expenses);
 
 
 const today = new Date();
 today.setHours(23, 59, 59, 999);
-
 // Calculate the start of the current month
 const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 
@@ -251,10 +249,6 @@ const combinedTotal = (totalPaymentIn - totalCashOutIn) + (totalCashOutOut -tota
     // Exclude today's date
     return flightDate >= threeMonthsAgo && flightDate < today;
   }).length : 0;
-
-
-
-
 
 const myDate = new Date(); myDate .setHours(0, 0, 0, 0);const currentDate = myDate.toLocaleDateString('en-CA');
 // Filter payments based on the current date

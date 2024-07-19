@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { useSelector } from 'react-redux';
 
-
 const allKeys = [
   'date', 'supplierName', 'category', 'payment_Via', 'payment_Type', 'slip_No', 
   'payment_In', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'

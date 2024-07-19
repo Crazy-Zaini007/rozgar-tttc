@@ -57,13 +57,12 @@ const addPaymentIn = async (req, res) => {
 
     const newPaymentIn = parseInt(payment_In, 10);
     const newCurrAmount = parseInt(curr_Amount, 10);
-
+    
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status": 'open',
+      "payment_In_Schema.status": 'Open',
 
-    });
-
+    })
     if (!existingSupplier) {
       res.status(404).json({
         message: "Agent not Found",
@@ -700,7 +699,7 @@ const deleteSinglePaymentIn = async (req, res) => {
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status": newStatus,
+      "payment_In_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -831,7 +830,7 @@ const updateSinglePaymentIn = async (req, res) => {
 
       const existingSupplier = await Agents.findOne({
         "payment_In_Schema.supplierName": supplierName,
-        "payment_In_Schema.status": newStatus,
+        "payment_In_Schema._id": newStatus,
       });
       if (!existingSupplier) {
         res.status(404).json({ message: "Agent not found" });
@@ -1116,7 +1115,7 @@ const deletePaymentInPerson = async (req, res) => {
 
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status": newStatus,
+      "payment_In_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -1189,7 +1188,7 @@ const updatePaymentInPerson=async(req,res)=>{
      
       const existingSupplier = await Agents.findOne({
         "payment_In_Schema.supplierName": supplierName,
-        "payment_In_Schema.status": newStatus,
+        "payment_In_Schema._id": newStatus,
 
       });
     
@@ -1722,7 +1721,7 @@ const changePaymentInStatus = async (req, res) => {
       
       const existingSupplier = await Agents.findOne({
           "payment_In_Schema.supplierName": supplierName,
-          "payment_In_Schema.status": newStatus,
+          "payment_In_Schema._id": newStatus,
       });
 
       if (!existingSupplier) {
@@ -2534,7 +2533,7 @@ const deleteSinglePaymentOut = async (req, res) => {
 
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status": newStatus,
+      "payment_Out_Schema._id": newStatus,
     });
     if (!existingSupplier) {
       res.status(404).json({
@@ -2662,7 +2661,7 @@ const updateSinglePaymentOut = async (req, res) => {
     try {
       const existingSupplier = await Agents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status": newStatus,
+      "payment_Out_Schema._id": newStatus,
 
       });
 
@@ -2794,7 +2793,7 @@ const deletePaymentOutPerson = async (req, res) => {
     const newVisa_Price_Out_Curr = parseInt(visa_Price_Out_Curr, 10);
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status": newStatus,
+      "payment_Out_Schema._id": newStatus,
 
     });
     if (!existingSupplier) {
@@ -3026,7 +3025,7 @@ const updatePaymentOutPerson=async(req,res)=>{
      
       const existingSupplier = await Agents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-        "payment_Out_Schema.status": newStatus,
+        "payment_Out_Schema._id": newStatus,
       });
     
       if(existingSupplier){
@@ -3558,7 +3557,7 @@ const changePaymentOutStatus = async (req, res) => {
     
     const existingSupplier = await Agents.findOne({
         "payment_Out_Schema.supplierName": supplierName,
-        "payment_Out_Schema.status": newStatus,
+        "payment_Out_Schema._id": newStatus,
     });
 
     if (!existingSupplier) {
@@ -4061,7 +4060,7 @@ const deleteCandVisePaymentIn=async(req,res)=>{
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status":newStatus ,
+      "payment_In_Schema._id":newStatus ,
 
     })
 
@@ -4151,7 +4150,7 @@ const updateCandVisePaymentIn=async(req,res)=>{
   
   const existingSupplier = await Agents.findOne({
     "payment_In_Schema.supplierName": supplierName,
-    "payment_In_Schema.status":newStatus
+    "payment_In_Schema._id":newStatus
 
   });
   if (!existingSupplier) {
@@ -4215,7 +4214,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-    "payment_In_Schema.status":newStatus
+    "payment_In_Schema._id":newStatus
 
     })
 
@@ -4339,7 +4338,7 @@ const updateSingleCandVisePaymentIn=async(req,res)=>{
 
     const existingAgent = await Agents.findOne({
       "payment_In_Schema.supplierName": supplierName,
-      "payment_In_Schema.status":newStatus
+      "payment_In_Schema._id":newStatus
 
     })
 
@@ -4883,7 +4882,7 @@ const deleteCandVisePaymentOut=async(req,res)=>{
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status":newStatus
+      "payment_Out_Schema._id":newStatus
     })
 
     if (!existingSupplier) {
@@ -4972,7 +4971,7 @@ const updateCandVisePaymentOut=async(req,res)=>{
   
   const existingSupplier = await Agents.findOne({
     "payment_Out_Schema.supplierName": supplierName,
-    "payment_Out_Schema.status":newStatus
+    "payment_Out_Schema._id":newStatus
 
   });
   if (!existingSupplier) {
@@ -5036,7 +5035,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
     } = req.body;
     const existingSupplier = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status":newStatus
+      "payment_Out_Schema._id":newStatus
     })
 
     if (!existingSupplier) {
@@ -5159,7 +5158,7 @@ const updateSingleCandVisePaymentOut=async(req,res)=>{
 
     const existingAgent = await Agents.findOne({
       "payment_Out_Schema.supplierName": supplierName,
-      "payment_Out_Schema.status":newStatus
+      "payment_Out_Schema._id":newStatus
 
     })
 
