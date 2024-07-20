@@ -73,7 +73,7 @@ overAllPayments.forEach(payment => {
   }
 
   // Update the sums based on payment type
-  if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in'))&&payment.payment_Via.toLowerCase()!=='cash') {
+  if ((payment.payment_In > 0 || payment.type.toLowerCase().includes('in'))) {
     aggregatedPayments[paymentVia].totalBankPaymentIn += payment.payment_In || 0;
     aggregatedPayments[paymentVia].totalBankCashOutIn += payment.cash_Out || 0;
 
@@ -81,7 +81,7 @@ overAllPayments.forEach(payment => {
     totalBankCashOutIn += payment.cash_Out || 0;
   }
 
-  if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out'))&&payment.payment_Via.toLowerCase()!=='cash') {
+  if ((payment.payment_Out > 0 || payment.type.toLowerCase().includes('out'))) {
     aggregatedPayments[paymentVia].totalBankPaymentOut += payment.payment_Out || 0;
     aggregatedPayments[paymentVia].totalBankCashOutOut += payment.cash_Out || 0;
 
@@ -833,7 +833,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
            <Table stickyHeader>
              <TableHead className="thead">
                <TableRow>
-                 {paymentViaTotals && paymentViaTotals.filter(data=>data.paymentVia.toLowerCase()!=='cash').map((data)=>(
+                 {paymentViaTotals && paymentViaTotals.map((data)=>(
                    <>
                    <TableCell className='label border text-center' >{data.paymentVia}</TableCell>
                    </>
@@ -843,7 +843,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
                </TableRow>
              </TableHead>
              <TableBody>
-             {paymentViaTotals && paymentViaTotals.filter(data=>data.paymentVia.toLowerCase()!=='cash').map((data,index)=>(
+             {paymentViaTotals && paymentViaTotals.map((data,index)=>(
                    <>
                    <TableCell className='border data_td text-center ' key={index} >{Math.round(data.total)}</TableCell>
                    </>
