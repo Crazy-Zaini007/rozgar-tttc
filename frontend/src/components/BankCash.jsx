@@ -791,7 +791,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
   const filteredBanksPayments = overAllPayments
   ? overAllPayments.filter((paymentItem) => {
       return (
-        paymentItem.payment_Via?.toLowerCase().includes(bankName.toLowerCase()) 
+        paymentItem.payment_Via?.toLowerCase()===bankName.toLowerCase() 
       );
     })
   : [];

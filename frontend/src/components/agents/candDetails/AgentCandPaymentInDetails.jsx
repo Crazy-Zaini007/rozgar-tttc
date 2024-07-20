@@ -482,7 +482,7 @@ export default function AgentCandPaymentInDetails() {
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
   const filteredIndividualPayments = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
+    .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData?.candPayments
@@ -521,7 +521,7 @@ export default function AgentCandPaymentInDetails() {
   const [search2, setSearch2] = useState('')
 
   const filteredPersons = agent_Payments_In
-  .filter((data) => data.supplierName === selectedSupplier && data.status === newStatus)
+  .filter((data) => data.supplierName === selectedSupplier && data._id===newStatus)
   .map((filteredData) => ({
     ...filteredData,
     persons: filteredData.persons
@@ -562,7 +562,7 @@ export default function AgentCandPaymentInDetails() {
  
   
   const filteredClosingPersons = agent_Payments_In
-    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
+    .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
@@ -2960,9 +2960,9 @@ const[showCategory,setShowCategory]=useState(false)
     <div className="modal-content">
       <div className="modal-header">
         <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
-       <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
-       <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_In||0)} |</span>
-       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} </span>
+       <span className='mx-1'>Total: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Visa_Price_In_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Payment_In||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.remaining_Balance||0)} </span>
 
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
@@ -3442,8 +3442,8 @@ const[showCategory,setShowCategory]=useState(false)
       </div>
       <div className="modal-footer">
      
-       <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
-       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)}</span>
+       <span className='mx-1'>Opening Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {agent_Payments_In.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.closing||0)}</span>
         <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
           <option value="No">No</option>
           <option value="Yes">Yes</option>

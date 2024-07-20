@@ -719,7 +719,7 @@ export default function CandPaymentOutDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
               <p>Total Out: <b>${details.total_Payment_Out}</b></p>
-              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR - details.total_Payment_Out + details.total_Cash_Out}</b></p>
+              <p>Remaining: <b>${details.remaining_Balance}</b></p>
             </div>
           </div>
         </div>
@@ -897,7 +897,7 @@ export default function CandPaymentOutDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
               <p>Total In: <b>${details.total_Payment_Out}</b></p>
-              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR - details.total_Payment_Out + details.total_Cash_Out}</b></p>
+              <p>Remaining: <b>${details.remaining_Balance}</b></p>
             </div>
           </div>
         </div>
@@ -1628,7 +1628,7 @@ export default function CandPaymentOutDetails() {
               <div className="col-md-4">
                 <p>Rozgar Visa Price: <b>{details.total_Visa_Price_Out_PKR}</b></p>
                 <p>Total In: <b>{details.total_Payment_Out}</b></p>
-                <p>Remaning: <b>{details.total_Visa_Price_Out_PKR - details.total_Payment_Out + details.total_Cash_Out}</b></p>
+                <p>Remaning: <b>{details.remaining_Balance}</b></p>
               </div>
             </div>
             <div className="d-flex justify-content-between supplier_Name">

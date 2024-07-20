@@ -476,7 +476,7 @@ export default function AgentPaymentInDetails() {
   const [search2, setSearch2] = useState('')
 
   const filteredPersons = agent_Payments_In
-  .filter((data) => data.supplierName === selectedSupplier && data.status === newStatus)
+  .filter((data) => data.supplierName === selectedSupplier && data._id === newStatus)
   .map((filteredData) => ({
     ...filteredData,
     persons: filteredData.persons
