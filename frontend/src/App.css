@@ -325,7 +325,8 @@ display: inline-block;
   box-shadow: 10px 10px 10px 10px solid var(--black);
   font-size: 12px;
 }
-.sidenav .btn i {
+
+.sidenav .btn i{
   margin-left: auto;
 }
 
@@ -342,7 +343,10 @@ display: inline-block;
 }
 
 .sidenav li i {
-  font-size: 13px;
+  font-size: 12px;
+  background-color: white;
+  border-radius: 100px;
+  padding: 6px;
 }
 .sidenav li:hover {
   cursor: pointer;

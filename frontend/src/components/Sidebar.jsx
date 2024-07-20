@@ -2622,25 +2622,33 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
             {/* <div className='text-center image mx-auto '><img className='mx-auto' src={logo} alt="" /></div> */}
           </div>
           <ul className="pt-2 mt-2">
-            <li className=' my-2' style={activeItem === 1 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(1, `/`)}><i className="fas fa-chart-line me-2"></i>Dashboard</li>
-            <li className=' my-2' style={activeItem === 2 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(2, `/rozgar/cash_in_hand`)}><i className="fas fa-hand-holding-usd me-2"></i>Cash in Hand </li>
-            <li className=' my-2' style={activeItem === 90 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(90, `/rozgar/bank_cash`)}><i className="fas fa-university me-2"></i>Banks Cash </li>
-            <li className=' my-2' style={activeItem === 114 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(114, `/rozgar/direct/payment_in_out`)}><i className="fa-solid fa-right-left me-2"></i>Direct IN/OUT </li>
+            <li className=' my-2' style={activeItem === 1 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(1, `/`)}><i className="fas fa-chart-line me-2 shadow "></i>Dashboard</li>
+            <li className=' my-2' style={activeItem === 2 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(2, `/rozgar/cash_in_hand`)}><i className="fas fa-hand-holding-usd me-2 shadow"></i>Cash in Hand </li>
+            <li className=' my-2' style={activeItem === 90 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(90, `/rozgar/bank_cash`)}><i className="fas fa-university me-2 shadow "></i>Banks Cash </li>
+            <li className=' my-2' style={activeItem === 114 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(114, `/rozgar/direct/payment_in_out`)}><i className="fa-solid fa-right-left me-2 shadow"></i>Direct IN/OUT </li>
             
           </ul>
           <Divider className='mx-4'></Divider>
           <ul className='pt-2 mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption1} style={option1 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-pen-to-square mx-2"></i>Enteries {option1 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-pen-to-square mx-2"></i>Enteries
+                  </div>
+                  <div className="right">
+                  {option1 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+               
               </button>
 
             </div>
             {option1 &&
               <>
-                <li className=' my-2' style={activeItem === 3 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(3, `/rozgar/enteries/add_new_entry`)}><i className="fas fa-plus me-2"></i>Add New Entry</li>
-                <li className=' my-2' style={activeItem === 4 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(4, `/rozgar/enteries/entry_details`)}><i className="fas fa-info-circle me-2"></i>Entery Details</li>
-                <li className=' my-2' style={activeItem === 5 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(5, `/rozgar/enteries/reports_details`)}><i className="far fa-file-alt me-2"></i>Details Reports</li>
+                <li className=' my-2' style={activeItem === 3 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(3, `/rozgar/enteries/add_new_entry`)}><i className="fas fa-plus me-2 shadow"></i>Add New Entry</li>
+                <li className=' my-2' style={activeItem === 4 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(4, `/rozgar/enteries/entry_details`)}><i className="fas fa-info-circle me-2 shadow"></i>Entery Details</li>
+                <li className=' my-2' style={activeItem === 5 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(5, `/rozgar/enteries/reports_details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports</li>
               </>
             }
           </ul>
@@ -2650,20 +2658,28 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption2} style={option2 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-users mx-2"></i>Suppliers {option2 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-users mx-2"></i>Suppliers
+                  </div>
+                  <div className="right">
+                  {option2 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+               
               </button>
 
             </div>
             {option2 &&
               <>
-                <li className=' my-2' style={activeItem === 7 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(7, `/rozgar/supplier/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 8 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(8, `/rozgar/supplier/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 9 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(9, `/rozgar/supplier/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li>
-                <li className=' my-2' style={activeItem === 10 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(10, `/rozgar/supplier/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
-                <li className=' my-2' style={activeItem === 11 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(11, `/rozgar/supplier/cand_vise_payment_in`)}><i className="fas fa-arrow-down me-2"></i>C-V Payment IN</li>
-                <li className=' my-2' style={activeItem === 49 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(49, `/rozgar/supplier/cand_vise_payment_out`)}><i className="fas fa-arrow-up me-2"></i>C-V Payment OUT</li>
-                <li className=' my-2' style={activeItem === 50 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(50, `/rozgar/supplier/cand_vise_payment_return`)}><i className="fas fa-exchange-alt me-2"></i>C-V Payment Return</li>
-                <li className=' my-2' style={activeItem === 51 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(51, `/rozgar/supplier/cand_vise_payment_details`)}><i className="far fa-file-alt me-2"></i>C-V Details Reports</li>
+                <li className=' my-2' style={activeItem === 7 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(7, `/rozgar/supplier/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 8 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(8, `/rozgar/supplier/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 9 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(9, `/rozgar/supplier/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li>
+                <li className=' my-2' style={activeItem === 10 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(10, `/rozgar/supplier/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 11 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(11, `/rozgar/supplier/cand_vise_payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>C-V Payment IN</li>
+                <li className=' my-2' style={activeItem === 49 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(49, `/rozgar/supplier/cand_vise_payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>C-V Payment OUT</li>
+                <li className=' my-2' style={activeItem === 50 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(50, `/rozgar/supplier/cand_vise_payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>C-V Payment Return</li>
+                <li className=' my-2' style={activeItem === 51 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(51, `/rozgar/supplier/cand_vise_payment_details`)}><i className="far fa-file-alt me-2 shadow"></i>C-V Details Reports</li>
 
 
 
@@ -2676,19 +2692,27 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption3} style={option3 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-users-line mx-2"></i>Agents {option3 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-users-line mx-2"></i>Agents
+                  </div>
+                  <div className="right">
+                  {option3 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                
               </button>
             </div>
             {option3 &&
               <>
-                <li className=' my-2' style={activeItem === 19 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(19, `/rozgar/agents/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 20 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(20, `/rozgar/agents/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 21 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(21, `/rozgar/agents/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li>
-                <li className=' my-2' style={activeItem === 22 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(22, `/rozgar/agents/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
-                <li className=' my-2' style={activeItem === 23 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(23, `/rozgar/agents/cand_vise_payment_in`)}><i className="fas fa-arrow-down me-2"></i>C-V Payment IN</li>
-                <li className=' my-2' style={activeItem === 52 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(52, `/rozgar/agents/cand_vise_payment_out`)}><i className="fas fa-arrow-up me-2"></i>C-V Payment OUT</li>
-                <li className=' my-2' style={activeItem === 53 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(53, `/rozgar/agents/cand_vise_payment_return`)}><i className="fas fa-exchange-alt me-2"></i>C-V Payment Return</li>
-                <li className=' my-2' style={activeItem === 54 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(54, `/rozgar/agents/cand_vise_payment_details`)}><i className="far fa-file-alt me-2"></i>C-V Details Reports</li>
+                <li className=' my-2' style={activeItem === 19 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(19, `/rozgar/agents/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 20 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(20, `/rozgar/agents/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 21 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(21, `/rozgar/agents/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li>
+                <li className=' my-2' style={activeItem === 22 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(22, `/rozgar/agents/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 23 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(23, `/rozgar/agents/cand_vise_payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>C-V Payment IN</li>
+                <li className=' my-2' style={activeItem === 52 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(52, `/rozgar/agents/cand_vise_payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>C-V Payment OUT</li>
+                <li className=' my-2' style={activeItem === 53 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(53, `/rozgar/agents/cand_vise_payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>C-V Payment Return</li>
+                <li className=' my-2' style={activeItem === 54 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(54, `/rozgar/agents/cand_vise_payment_details`)}><i className="far fa-file-alt me-2 shadow"></i>C-V Details Reports</li>
 
               </>
             }
@@ -2699,15 +2723,23 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption5} style={option5 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-user mx-2"></i>Candidates{option5 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-user mx-2"></i>Candidates
+                  </div>
+                  <div className="right">
+                  {option5 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+              
               </button>
             </div>
             {option5 &&
               <>
-                <li className=' my-2' style={activeItem === 25 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(25, `/rozgar/candidates/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 26 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(26, `/rozgar/candidates/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 27 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(27, `/rozgar/candidates/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li>
-                <li className=' my-2' style={activeItem === 28 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(28, `/rozgar/candidates/details`)}><i className="far fa-file-alt me-2"></i>Details Reports</li>
+                <li className=' my-2' style={activeItem === 25 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(25, `/rozgar/candidates/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 26 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(26, `/rozgar/candidates/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 27 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(27, `/rozgar/candidates/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li>
+                <li className=' my-2' style={activeItem === 28 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(28, `/rozgar/candidates/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports</li>
 
 
               </>
@@ -2720,15 +2752,23 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption6} style={option6 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-ticket mx-2"></i>Tickets {option6 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-ticket mx-2"></i>Tickets
+                  </div>
+                  <div className="right">
+                  {option6 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                
               </button>
             </div>
             {option6 &&
               <>
-                <li className=' my-2' style={activeItem === 31 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(31, `/rozgar/tickets/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 32 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(32, `/rozgar/tickets/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 33 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(33, `/rozgar/tickets/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li>
-                <li className=' my-2' style={activeItem === 34 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(34, `/rozgar/tickets/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 31 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(31, `/rozgar/tickets/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 32 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(32, `/rozgar/tickets/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 33 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(33, `/rozgar/tickets/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li>
+                <li className=' my-2' style={activeItem === 34 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(34, `/rozgar/tickets/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
 
               </>
             }
@@ -2739,15 +2779,23 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption7} style={option7 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-braille mx-2"></i>Visits {option7 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-braille mx-2"></i>Visits
+                  </div>
+                  <div className="right">
+                  {option7 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+               
               </button>
             </div>
             {option7 &&
               <>
-                <li className=' my-2' style={activeItem === 37 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(37, `/rozgar/visits/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 38 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(38, `/rozgar/visits/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 39 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(39, `/rozgar/visits/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li>
-                <li className=' my-2' style={activeItem === 40 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(40, `/rozgar/visits/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 37 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(37, `/rozgar/visits/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 38 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(38, `/rozgar/visits/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 39 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(39, `/rozgar/visits/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li>
+                <li className=' my-2' style={activeItem === 40 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(40, `/rozgar/visits/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
 
               </>
             }
@@ -2759,15 +2807,23 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption8} style={option8 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-flag mx-2"></i>Azad  {option8 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-flag mx-2"></i>Azad
+                  </div>
+                  <div className="right">
+                  {option8 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                 
               </button>
             </div>
             {option8 &&
               <>
-                <li className=' my-2' style={activeItem === 43 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(34, `/rozgar/azad/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 44 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(44, `/rozgar/azad/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 45 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(45, `/rozgar/azad/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li>
-                <li className=' my-2' style={activeItem === 46 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(46, `/rozgar/azad/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 43 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(34, `/rozgar/azad/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 44 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(44, `/rozgar/azad/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 45 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(45, `/rozgar/azad/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li>
+                <li className=' my-2' style={activeItem === 46 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(46, `/rozgar/azad/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
 
               </>
             }
@@ -2778,15 +2834,23 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption13} style={option13 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa fa-shield mx-2"></i>Protector  {option13 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa fa-shield mx-2"></i>Protector
+                  </div>
+                  <div className="right">
+                  {option13 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                  
               </button>
             </div>
             {option13 &&
               <>
 
-                <li className=' my-2' style={activeItem === 81 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(81, `/rozgar/protector/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                {/* <li className=' my-2' style={activeItem === 82 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(82, `/rozgar/protector/payment_return`)}><i className="fas fa-exchange-alt me-2"></i>Payment Return </li> */}
-                <li className=' my-2' style={activeItem === 83 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(83, `/rozgar/protector/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 81 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(81, `/rozgar/protector/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                {/* <li className=' my-2' style={activeItem === 82 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(82, `/rozgar/protector/payment_return`)}><i className="fas fa-exchange-alt me-2 shadow"></i>Payment Return </li> */}
+                <li className=' my-2' style={activeItem === 83 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(83, `/rozgar/protector/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
 
               </>
             }
@@ -2797,14 +2861,22 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption10} style={option10 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-credit-card mx-2"></i>Credits/Debits{option10 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-credit-card mx-2"></i>Credits/Debits
+                  </div>
+                  <div className="right">
+                  {option10 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+               
               </button>
             </div>
             {option10 &&
               <>
-                <li className=' my-2' style={activeItem === 58 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(58, `/rozgar/credites&debits/payment_in/with_cash_in_hand`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 59 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(59, `/rozgar/credites&debits/payment_out/with_cash_in_hand`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 61 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(61, `/rozgar/credites&debits/details/with_cash_in_hand`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 58 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(58, `/rozgar/credites&debits/payment_in/with_cash_in_hand`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 59 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(59, `/rozgar/credites&debits/payment_out/with_cash_in_hand`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 61 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(61, `/rozgar/credites&debits/details/with_cash_in_hand`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
 
               </>
             }
@@ -2816,14 +2888,22 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption11} style={option11 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-regular fa-credit-card mx-2"></i>C/D(WOCIH){option11 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-regular fa-credit-card mx-2"></i>C/D(WOCIH)
+                  </div>
+                  <div className="right">
+                  {option11 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                
               </button>
             </div>
             {option11 &&
               <>
-                <li className=' my-2' style={activeItem === 62 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(62, `/rozgar/credites&debits/payment_in/without_cash_in_hand`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 63 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(63, `/rozgar/credites&debits/payment_out/without_cash_in_hand`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 65 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(65, `/rozgar/credites&debits/details/without_cash_in_hand`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 62 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(62, `/rozgar/credites&debits/payment_in/without_cash_in_hand`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 63 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(63, `/rozgar/credites&debits/payment_out/without_cash_in_hand`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 65 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(65, `/rozgar/credites&debits/details/without_cash_in_hand`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
 
               </>
             }
@@ -2835,14 +2915,22 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
              <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption16} style={option16 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fas fa-shopping-basket mx-2"></i>Assets{option16 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fas fa-shopping-basket mx-2"></i>Assets
+                  </div>
+                  <div className="right">
+                  {option16 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+               
               </button>
             </div>
             {option16 &&
               <>
-                <li className=' my-2' style={activeItem === 103 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(103, `/rozgar/assets/payment_in`)}><i className="fas fa-arrow-down me-2"></i>Payment IN </li>
-                <li className=' my-2' style={activeItem === 104 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(104, `/rozgar/assets/payment_out`)}><i className="fas fa-arrow-up me-2"></i>Payment OUT </li>
-                <li className=' my-2' style={activeItem === 105 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(105, `/rozgar/assets/details`)}><i className="far fa-file-alt me-2"></i>Details Reports </li>
+                <li className=' my-2' style={activeItem === 103 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(103, `/rozgar/assets/payment_in`)}><i className="fas fa-arrow-down me-2 shadow"></i>Payment IN </li>
+                <li className=' my-2' style={activeItem === 104 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(104, `/rozgar/assets/payment_out`)}><i className="fas fa-arrow-up me-2 shadow"></i>Payment OUT </li>
+                <li className=' my-2' style={activeItem === 105 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(105, `/rozgar/assets/details`)}><i className="far fa-file-alt me-2 shadow"></i>Details Reports </li>
               </>
             }
           </ul>
@@ -2852,15 +2940,23 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption9} style={option9 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fas fa-usd mx-2"></i>Expenses {option9 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fas fa-usd mx-2"></i>Expenses
+                  </div>
+                  <div className="right">
+                  {option9 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                 
               </button>
 
             </div>
             {option9 &&
               <>
-                <li className=' my-2' style={activeItem === 47 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(47, `/rozgar/expenses/add_new_expense`)}><i className="fas fa-plus me-2"></i>Add Expense</li>
-                <li className=' my-2' style={activeItem === 89 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(89, `/rozgar/expenses/add/mul_expense`)}><i className="fas fa-plus me-2"></i>Add Mutiple Expense</li>
-                <li className=' my-2' style={activeItem === 48 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(48, `/rozgar/expenses/expenses_details`)}><i className="fas fa-info-circle me-2"></i>Expenses Details</li>
+                <li className=' my-2' style={activeItem === 47 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(47, `/rozgar/expenses/add_new_expense`)}><i className="fas fa-plus me-2 shadow"></i>Add Expense</li>
+                <li className=' my-2' style={activeItem === 89 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(89, `/rozgar/expenses/add/mul_expense`)}><i className="fas fa-plus me-2 shadow"></i>Add Mutiple Expense</li>
+                <li className=' my-2' style={activeItem === 48 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(48, `/rozgar/expenses/expenses_details`)}><i className="fas fa-info-circle me-2 shadow"></i>Expenses Details</li>
 
               </>
             }
@@ -2871,17 +2967,25 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption15} style={option15 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-users mx-2"></i>HR PayRolls {option15 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-users mx-2"></i>HR PayRolls
+                  </div>
+                  <div className="right">
+                  {option15 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                
               </button>
 
             </div>
             {option15 &&
               <>
-                <li className=' my-2' style={activeItem === 85 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(85, `/rozgar/employees/add`)}><i className="fas fa-plus me-2"></i>Add Employee</li>
-                <li className=' my-2' style={activeItem === 99 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(99, `/rozgar/employees/salary_month`)}><i className="fas fa-money-check-alt me-2"></i>Add Salary Month</li>
-                <li className=' my-2' style={activeItem === 86 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(86, `/rozgar/employees/add_payment`)}><i className="fa-solid fa-money-check me-2"></i>Add Payment</li>
-                <li className=' my-2' style={activeItem === 87 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(87, `/rozgar/employees/add_leave`)}><i className="fa-solid fa-person-walking-arrow-right me-2"></i>Add Vacation</li>
-                <li className=' my-2' style={activeItem === 88 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(88, `/rozgar/employees/employees_details`)}><i className="fas fa-info-circle me-2"></i>Employees Details</li>
+                <li className=' my-2' style={activeItem === 85 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(85, `/rozgar/employees/add`)}><i className="fas fa-plus me-2 shadow"></i>Add Employee</li>
+                <li className=' my-2' style={activeItem === 99 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(99, `/rozgar/employees/salary_month`)}><i className="fas fa-money-check-alt me-2 shadow"></i>Add Salary Month</li>
+                <li className=' my-2' style={activeItem === 86 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(86, `/rozgar/employees/add_payment`)}><i className="fa-solid fa-money-check me-2 shadow"></i>Add Payment</li>
+                <li className=' my-2' style={activeItem === 87 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(87, `/rozgar/employees/add_leave`)}><i className="fa-solid fa-person-walking-arrow-right me-2 shadow"></i>Add Vacation</li>
+                <li className=' my-2' style={activeItem === 88 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(88, `/rozgar/employees/employees_details`)}><i className="fas fa-info-circle me-2 shadow"></i>Employees Details</li>
               </>
             }
           </ul>
@@ -2891,7 +2995,15 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className="mt-2">
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption4} style={option4 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa-solid fa-gear mx-2"></i>Setting {option4 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa-solid fa-gear mx-2"></i>Setting
+                  </div>
+                  <div className="right">
+                  {option4 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                
               </button>
 
             </div>
@@ -2913,7 +3025,15 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className="mt-2">
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption12} style={option12 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="far fa-file-alt mx-2"></i>All Reports {option12 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="far fa-file-alt mx-2"></i>All Reports
+                  </div>
+                  <div className="right">
+                  {option12 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+                
               </button>
 
             </div>
@@ -2958,7 +3078,15 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
           <ul className='mt-2'>
             <div className="dropdown">
               <button className="btn text-start" onClick={handleOption14} style={option14 === true ? { backgroundColor: 'var(--cool-Green)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>
-                <i className="fa fa-user-circle mx-2"></i>Account {option14 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+              <div className="d-flex justify-content-between">
+                  <div className="left">
+                  <i className="fa fa-user-circle mx-2"></i>Account
+                  </div>
+                  <div className="right">
+                  {option14 ? <i className="fa-solid fa-chevron-up ms-2"></i> : <i className="fa-solid fa-chevron-down ms-2"></i>}
+                  </div>
+                </div>
+              
               </button>
 
             </div>
@@ -2973,11 +3101,11 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
             <Divider className='mx-4'></Divider>
           }
           <ul className=" mt-2">
-            <li className=' my-2' style={activeItem === 91 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(91, `/rozgar/reminders`)}><i className="fas fa-business-time me-2"></i>Reminders</li>
-            <li className=' my-2' style={activeItem === 109 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(109, `/rozgar/notifications`)}><i className="fas fa-bell me-2"></i>Notifications</li>
-            <li className=' my-2' style={activeItem === 110 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(110, `/rozgar/recyclebin`)}><i className="fas fa-recycle me-2"></i>RecycleBin</li>
-            <li className=' my-2' style={activeItem === 92 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(92, `/rozgar/notes`)}><i className="fas fa-sticky-note me-2"></i>Notes</li>
-            <li className=' my-2' style={activeItem === 93 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(93, `/rozgar/backup`)}><i className="fas fa-database me-2"></i>Backup</li>
+            <li className=' my-2' style={activeItem === 91 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(91, `/rozgar/reminders`)}><i className="fas fa-business-time me-2 shadow"></i>Reminders</li>
+            <li className=' my-2' style={activeItem === 109 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(109, `/rozgar/notifications`)}><i className="fas fa-bell me-2 shadow"></i>Notifications</li>
+            <li className=' my-2' style={activeItem === 110 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(110, `/rozgar/recyclebin`)}><i className="fas fa-recycle me-2 shadow"></i>RecycleBin</li>
+            <li className=' my-2' style={activeItem === 92 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(92, `/rozgar/notes`)}><i className="fas fa-sticky-note me-2 shadow"></i>Notes</li>
+            <li className=' my-2' style={activeItem === 93 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(93, `/rozgar/backup`)}><i className="fas fa-database me-2 shadow"></i>Backup</li>
 
           </ul>
           <ul className='mt-4'>
