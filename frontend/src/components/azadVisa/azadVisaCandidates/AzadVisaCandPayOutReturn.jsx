@@ -64,6 +64,7 @@ export default function AzadVisaCandPayOutReturn() {
 
   // Form input States
   const [supplierName, setSupplierName] = useState('')
+  const [pp_No, setPPNo] = useState('');
   const [category, setCategory] = useState('')
   const [payment_Via, setPayment_Via] = useState('')
   const [payment_Type, setPayment_Type] = useState('')
@@ -128,6 +129,18 @@ export default function AzadVisaCandPayOutReturn() {
   const handleForm = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSupplierName('')
+    setPPNo('')
+    setCategory('');
+    setPayment_Via('');
+    setPayment_Type('');
+    setSlip_No('');
+    setCash_Out('');
+    setSlip_Pic('');
+    setDetails('');
+    setCurr_Country('');
+    setCurr_Rate('');
+    setDate('')
     try {
       const response = await fetch(`${apiUrl}/auth/azadVisa/candidates/payment_in/cash_out`, {
         method: 'POST',
@@ -137,6 +150,7 @@ export default function AzadVisaCandPayOutReturn() {
         },
         body: JSON.stringify({
           supplierName,
+          pp_No,
           category,
           payment_Via,
           payment_Type,
@@ -165,6 +179,7 @@ export default function AzadVisaCandPayOutReturn() {
         setNewMessage(toast.success(json.message));
         setLoading(false);
         setSupplierName('')
+        setPPNo('')
         setCategory('');
         setPayment_Via('');
         setPayment_Type('');
@@ -175,7 +190,6 @@ export default function AzadVisaCandPayOutReturn() {
         setCurr_Country('');
         setSelectedSupplier('')
         setCurr_Rate('');
-        // setOpen(true)
         setClose(false);
         setDate('')
       }
@@ -188,8 +202,13 @@ export default function AzadVisaCandPayOutReturn() {
   };
 
 
-
-
+  const handlePPNOInputChange = (e) => {
+    const selectedValue = e.target.value;
+    const [supplierNamePart, ppNoPart] = selectedValue.split('/').map(part => part.trim());
+    setSupplierName(supplierNamePart);
+    setSelectedSupplier(supplierNamePart)
+    setPPNo(ppNoPart);
+  };
   return (
     <>
       <div className="col-md-12 ">
@@ -205,23 +224,28 @@ export default function AzadVisaCandPayOutReturn() {
               {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}
             </div>
             <div className="row p-0 m-0 my-1">
-
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                <label >Name</label>
-                <select required value={supplierName} onChange={(e) => {
-                  setSelectedSupplier(e.target.value);
-                  setSupplierName(e.target.value)
-                }}>
-                  <option value="">Choose Candidate</option>
-                  {azadCand_Payments_Out &&
-                    azadCand_Payments_Out.map((data) => (
-                      <option key={data._id} value={data.supplierName}>
-                        {data.supplierName}
-                      </option>
-                    ))
-                  }
-                </select>
-
+              <label>Name</label>
+              <input 
+        list="name" 
+        required 
+        value={supplierName} 
+        onChange={handlePPNOInputChange} 
+      />
+      <datalist id="name">
+        {azadCand_Payments_Out && 
+          azadCand_Payments_Out.map((data) => (
+            <option key={data._id} value={`${data.supplierName}/${data.pp_No}`}>
+              {`${data.supplierName}/${data.pp_No}`}
+            </option>
+          ))
+        }
+      </datalist>
+      
+              </div>
+              <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                <label >PP# </label>
+                <input type="text" value={pp_No} disabled />
               </div>
               <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
                 <label >Category </label>
@@ -313,6 +337,7 @@ export default function AzadVisaCandPayOutReturn() {
           {selectedSupplier && <button className='btn btn-sm  detail_btn' onClick={handleOpen}>{option ? 'Hide Details' : "Show Details"}</button>}
         </div>
         {option && (
+         <>
           <div className="col-md-12 detail_table">
             <TableContainer component={Paper}>
               <Table aria-label="customized table">
@@ -405,8 +430,207 @@ export default function AzadVisaCandPayOutReturn() {
               </Table>
             </TableContainer>
           </div>
+
+          <div className="col-md-12 detail_table my-2">
+              <h6>Persons Details</h6>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead className="thead">
+                    <TableRow>
+                      <TableCell className='label border'>SN</TableCell>
+                      <TableCell className='label border'>Date</TableCell>
+                      <TableCell className='label border'>Name</TableCell>
+                      <TableCell className='label border'>PP#</TableCell>
+                      <TableCell className='label border'>Entry_Mode</TableCell>
+                      <TableCell className='label border'>Company</TableCell>
+                      <TableCell className='label border'>Final_Status</TableCell>
+                      <TableCell className='label border'>Flight_Date</TableCell>
+                      <TableCell className='label border'>VPI_PKR</TableCell>
+                      <TableCell className='label border'>VPI_Oth_Curr</TableCell>
+
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {azadCand_Payments_Out
+                      .filter(data => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
+                      .map((person, index) => (
+                        <TableRow key={person._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          <TableCell className='border data_td text-center'>{index + 1}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.createdAt}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.supplierName}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.pp_No}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.entry_Mode}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.company}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.final_Status}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.flight_Date}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.total_Visa_Price_Out_PKR}</TableCell>
+                          <TableCell className='border data_td text-center'>{person?.total_Visa_Price_Out_Curr}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+
+                </Table>
+              </TableContainer>
+              <hr className='my-2 ' />
+
+            </div>
+         </>
         )}
 
+{azadCand_Payments_Out
+          .filter(data => data.supplierName === selectedSupplier&&data.pp_No === pp_No)
+          .map((person, index) => (
+            <>
+              <form>
+                <div className="row p-0 m-0 mt-2">
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Candidate Name</label>
+                    <input disabled
+                      type="text"
+                      value={person.supplierName}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>PP#</label>
+                    <input disabled
+                      type="text"
+                      value={person.pp_No}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Entry Mode</label>
+                    <input disabled
+                      type="text"
+                      value={person.entry_Mode}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Country</label>
+                    <input disabled
+                      type="text"
+                      value={person.country}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Final Status</label>
+                    <input disabled
+                      type="text"
+                      value={person.final_Status}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Flight Date</label>
+                    <input disabled
+                      type="text"
+                      value={person.flight_Date}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Company</label>
+                    <input disabled
+                      type="text"
+                      value={person.company}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Visa Price In PKR</label>
+                    <input disabled
+                      type="text"
+                      value={Math.round(person.total_Visa_Price_Out_PKR)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label >Total In PKR</label>
+                    <input type="text" disabled value={Math.round(person.total_Payment_Out)} readOnly />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label >New Total In PKR</label>
+                    <input type="text" disabled value={
+                      person.total_Payment_Out - parseInt(cash_Out, 10)
+                    } readOnly />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Remaining PKR</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.remaining_Balance)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Remaining PKR</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.remaining_Balance)+Math.round(cash_Out)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Visa Price In Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.total_Visa_Price_Out_Curr)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Total Paid Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.total_Payment_Out_Curr)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Total Paid Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.total_Payment_Out_Curr - curr_Amount)}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>Remaining Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={person.remaining_Curr}
+                      readOnly
+                    />
+                  </div>
+                  <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
+                    <label>New Remaining Curr</label>
+                    <input
+                      disabled
+                      type="text"
+                      value={Math.round(person.remaining_Curr + curr_Amount)}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              </form>
+              {/* <div className="row p-0 m-0 mt-2 justify-content-center">
+                <div className="col-md-2 col-sm-12">
+                <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(person)}>Print</button>
+                </div>
+              </div> */}
+
+
+            </>
+          ))}
       </div>
     </>
   )

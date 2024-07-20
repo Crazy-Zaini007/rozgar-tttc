@@ -224,7 +224,6 @@ export default function AzadVisaAgentSinglePayOut() {
   };
 
 
-  
   const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
 

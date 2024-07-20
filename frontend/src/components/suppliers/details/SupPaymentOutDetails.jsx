@@ -437,7 +437,7 @@ export default function SuppPaymentOutDetails() {
   const [payment_Type, setPayment_Type] = useState('')
 
   const filteredIndividualPayments = supp_Payments_Out
-    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
+    .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData.payment
@@ -479,7 +479,7 @@ export default function SuppPaymentOutDetails() {
 
 
   const filteredPersons = supp_Payments_Out
-    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
+    .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
@@ -507,7 +507,7 @@ export default function SuppPaymentOutDetails() {
     }))
 
     const filteredClosingPersons = supp_Payments_Out
-    .filter((data) => data.supplierName === selectedSupplier&&data.status===newStatus)
+    .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       persons: filteredData.persons
@@ -2388,9 +2388,9 @@ export default function SuppPaymentOutDetails() {
     <div className="modal-content">
       <div className="modal-header">
         <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
-       <span className='mx-1'>Total: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Visa_Price_Out_PKR||0)} |</span>
-       <span className='mx-1'>Total Payment done: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.total_Payment_Out||0)} |</span>
-       <span className='mx-1'>Remaining Balance: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.remaining_Balance||0)} </span>
+       <span className='mx-1'>Total: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Visa_Price_Out_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Payment_Out||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.remaining_Balance||0)} </span>
 
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>
@@ -2858,8 +2858,8 @@ export default function SuppPaymentOutDetails() {
       </div>
       <div className="modal-footer">
      
-       <span className='mx-1'>Opening Balance: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.opening||0)} |</span>
-       <span className='mx-1'>Closing Balance: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data.status===newStatus).map(data=>data.closing||0)}</span>
+       <span className='mx-1'>Opening Balance: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {supp_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.closing||0)}</span>
         <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
           <option value="No">No</option>
           <option value="Yes">Yes</option>

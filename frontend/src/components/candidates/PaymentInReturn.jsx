@@ -333,7 +333,7 @@ export default function PaymentInReturn() {
       }
 
     } catch (error) {
-      console.log(error)
+     
       setNewMessage(toast.error('Server is not Responding...'));
       setLoading(false);
     }
@@ -449,7 +449,7 @@ export default function PaymentInReturn() {
               <div className="row p-0 m-0 mt-5">
                 <hr />
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >CUR Country </label>
+                  <label >Currency Country </label>
                   <select value={curr_Country} onChange={(e) => setCurr_Country(e.target.value)}>
                     <option value="">choose</option>
                     {currCountries && currCountries.map((data) => (
@@ -458,7 +458,7 @@ export default function PaymentInReturn() {
                   </select>
                 </div>
                 <div className="col-xl-1 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
-                  <label >CUR Rate </label>
+                  <label >Currency Rate </label>
                   <input type="number" value={curr_Rate} onChange={(e) => setCurr_Rate(parseFloat(e.target.value))} />
                 </div>
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-12 p-1 my-1">
@@ -490,7 +490,7 @@ export default function PaymentInReturn() {
                       <TableCell className='label border'>Slip_No</TableCell>
                       <TableCell className='label border'>Details</TableCell>
                       <TableCell className='label border'>Payment_In</TableCell>
-                      <TableCell className='label border'>Cash_Out</TableCell>
+                      <TableCell className='label border'>Cash_Return</TableCell>
                       <TableCell className='label border'>Invoice</TableCell>
                       <TableCell className='label border'>Payment_In_Curr</TableCell>
                       <TableCell className='label border'>CUR_Rate</TableCell>
@@ -764,13 +764,6 @@ export default function PaymentInReturn() {
                   </div>
                 </div>
               </form>
-              {/* <div className="row p-0 m-0 mt-2 justify-content-center">
-                <div className="col-md-2 col-sm-12">
-                <button className='btn btn-sm  shadow bg-success text-white'  onClick={() => printPersonsTable(person)}>Print</button>
-                </div>
-              </div> */}
-
-
             </>
           ))}
       </div>

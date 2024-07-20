@@ -76,8 +76,6 @@ const addAzadCandPaymentIn = async (req, res) => {
           return res.status(400).json({ message: "Payment In is required" });
         }
 
-       
-
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 

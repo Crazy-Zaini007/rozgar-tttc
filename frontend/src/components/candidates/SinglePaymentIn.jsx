@@ -299,7 +299,6 @@ export default function SinglePaymentIn() {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          // open,
           close,
           date
         }),

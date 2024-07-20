@@ -126,9 +126,6 @@ const addPaymentIn = async (req, res) => {
                     invoice: nextInvoiceNumber,
                 };
 
-
-                
-
                 let printInvoice={
                   name:existingSupplier.payment_In_Schema.supplierName,
                   pp_No:existingSupplier.payment_In_Schema.pp_No,

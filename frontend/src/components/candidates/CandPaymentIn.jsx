@@ -47,6 +47,7 @@ export default function CandPaymentIn() {
   const setEntry = (index) => {
     setSingle(index);
   };
+
   const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -157,7 +158,7 @@ export default function CandPaymentIn() {
           <div className="row">
             <div className="col-md-12">
               <Paper className='py-3 mb-1 px-2'>
-                <h4>Candidates Payment IN</h4>
+                <h4>Candidates Payment In</h4>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
                 {single === 1 && <label className="btn m-1 btn-sm upload_btn">

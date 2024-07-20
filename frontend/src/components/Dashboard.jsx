@@ -1089,7 +1089,7 @@ const[option,setOption]=useState(false)
       ? Math.round(
           overAllPayments.reduce((total, payment) => {
             const cashOut = isNaN(payment.cash_Out) ? 0 : payment.cash_Out;
-            return total + (payment.type.toLowerCase().includes('in') ? cashOut : 0);
+            return total + (payment.type.toLowerCase().includes('out') ? cashOut : 0);
           }, 0)
         )
       : 0}</h5> }

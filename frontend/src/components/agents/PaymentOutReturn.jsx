@@ -27,7 +27,7 @@ export default function PaymentOutReturn() {
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
   const categories = useSelector((state) => state.setting.categories);
-  const agents_Payments_Out = useSelector((state) => state.agents.agents_Payments_Out)
+  const agent_Payments_Out = useSelector((state) => state.agents.agent_Payments_Out)
 
   const { getCurrCountryData } = CurrCountryHook()
   const { getCategoryData } = CategoryHook()
@@ -234,8 +234,8 @@ export default function PaymentOutReturn() {
                   setSupplierName(e.target.value)
                 }}>
                   <option value="">Choose Agent</option>
-                  {agents_Payments_Out &&
-                    agents_Payments_Out.map((data) => (
+                  {agent_Payments_Out &&
+                    agent_Payments_Out.map((data) => (
                       <option key={data._id} value={data.supplierName}>
                         {data.supplierName}
                       </option>
@@ -355,7 +355,7 @@ export default function PaymentOutReturn() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {agents_Payments_Out
+                  {agent_Payments_Out
                     .filter((data) => data.supplierName === selectedSupplier)
                     .map((filteredData) => (
                       // Map through the payment array

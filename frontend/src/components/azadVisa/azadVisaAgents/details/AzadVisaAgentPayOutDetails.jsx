@@ -28,7 +28,9 @@ export default function AzadVisaAgentPayOutDetails() {
     const [show, setShow] = useState(false)
     const [show1, setShow1] = useState(false)
     const [show2, setShow2] = useState(false)
+    const[newStatus,setNewStatus]=useState('')
 
+    
     const [, setNewMessage] = useState('')
     const { getAzadAgentPaymentsOut } = AzadVisaHook()
     const { getCurrencyData } = CurrencyHook()
@@ -168,7 +170,7 @@ export default function AzadVisaAgentPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
+                body: JSON.stringify({ paymentId,newStatus, supplierName: selectedSupplier, payment_Out: payment.payment_Out, payment_Via: payment.payment_Via, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount })
             })
 
             const json = await response.json()
@@ -204,7 +206,7 @@ export default function AzadVisaAgentPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ personId, supplierName: selectedSupplier, azad_Azad_Visa_Price_Out_PKR: person.azad_Azad_Visa_Price_Out_PKR, azad_Azad_Visa_Price_Out_Curr: person.azad_Azad_Visa_Price_Out_Curr })
+                body: JSON.stringify({ personId,newStatus, supplierName: selectedSupplier, azad_Azad_Visa_Price_Out_PKR: person.azad_Azad_Visa_Price_Out_PKR, azad_Azad_Visa_Price_Out_Curr: person.azad_Azad_Visa_Price_Out_Curr })
             })
 
             const json = await response.json()
@@ -259,7 +261,7 @@ export default function AzadVisaAgentPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
+                body: JSON.stringify({newStatus, supplierName: selectedSupplier, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
             })
 
             const json = await response.json()
@@ -294,7 +296,7 @@ export default function AzadVisaAgentPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount,curr_Rate:editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
+                body: JSON.stringify({ newStatus,paymentId, supplierName: selectedSupplier, category: editedEntry.category, payment_Via: editedEntry.payment_Via, payment_Type: editedEntry.payment_Type, slip_No: editedEntry.slip_No, details: editedEntry.details, payment_Out: editedEntry.payment_Out, cash_Out: editedEntry.cash_Out, curr_Country: editedEntry.payment_Out_Curr, curr_Amount: editedEntry.curr_Amount,curr_Rate:editedEntry.curr_Rate, slip_Pic: editedEntry.slip_Pic, date: editedEntry.date })
             })
             const json = await response.json()
             if (!response.ok) {
@@ -325,7 +327,7 @@ export default function AzadVisaAgentPayOutDetails() {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${user.token}`,
                 },
-                body: JSON.stringify({ supplierName: person.supplierName })
+                body: JSON.stringify({ supplierName: person.supplierNamenewStatus, })
             })
 
             const json = await response.json()
@@ -351,7 +353,7 @@ export default function AzadVisaAgentPayOutDetails() {
 
     const [date1, setDate1] = useState('')
     const [supplier1, setSupplier1] = useState('')
-    const [status, setStatus] = useState('')
+    const [status, setStatus] = useState('open')
 
     const filteredTotalPaymentIn = azadAgent_Payments_Out.filter(payment => {
         return (
@@ -368,7 +370,7 @@ export default function AzadVisaAgentPayOutDetails() {
     const [payment_Type, setPayment_Type] = useState('')
   
     const filteredIndividualPayments = azadAgent_Payments_Out
-    .filter((data) => data.supplierName === selectedSupplier)
+    .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
     .map((filteredData) => ({
       ...filteredData,
       payment: filteredData.payment
@@ -397,11 +399,10 @@ export default function AzadVisaAgentPayOutDetails() {
     const [trade, setTrade] = useState('')
     const [final_Status, setFinal_Status] = useState('')
     const [flight_Date, setFlight_Date] = useState('')
-    const [status1, setStatus1] = useState("")
-
-
+    const [status1, setStatus1] = useState("open")
+    
     const filteredPersons = azadAgent_Payments_Out
-        .filter((data) => data.supplierName === selectedSupplier)
+        .filter((data) => data.supplierName === selectedSupplier&&data._id===newStatus)
         .map((filteredData) => ({
             ...filteredData,
             persons: filteredData.persons
@@ -572,10 +573,26 @@ export default function AzadVisaAgentPayOutDetails() {
 }
 
 
-const changeStatus = async (myStatus) => {
+// Changing Status
+const [multipleIds, setMultipleIds] = useState([]);
+const handleEntryId = (id, isChecked) => {
+  if (isChecked) {
+  
+    setMultipleIds((prevIds) => [...prevIds, id]);
+  } else {
+   
+    setMultipleIds((prevIds) => prevIds.filter((entryId) => entryId !== id));
+  }
+ 
+}
+
+
+const [convert,setConvert]=useState('No')
+
+const changeStatus = async () => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
-      let newStatus=myStatus
+    
 
       try {
         const response = await fetch(`${apiUrl}/auth/azadVisa/agents/update/payment_out/status`, {
@@ -584,7 +601,7 @@ const changeStatus = async (myStatus) => {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ supplierName: selectedSupplier,newStatus })
+          body: JSON.stringify({ supplierName: selectedSupplier,newStatus,multipleIds,convert })
         })
         
         const json = await response.json()
@@ -1338,6 +1355,18 @@ const changeStatus = async (myStatus) => {
   }
 
 
+  const[rowsValue,setRowsValue]=useState("")
+  const[rowsValue1,setRowsValue1]=useState("")
+
+  const[showEntryMode,setShowEntryMode]=useState(false)
+  const[showTrade,setShowTrade]=useState(false)
+  const[showCompany,setShowCompany]=useState(false)
+  const[showCountry,setShowCountry]=useState(false)
+  const[showFinalStatus,setShowFinalStatus]=useState(false)
+  const[showFlightDate,setShowFlightDate]=useState(false)
+  const[showSlipNo,setShowSlipNo]=useState(false)
+  const[showDetails,setShowDetails]=useState(false)
+  const[showCategory,setShowCategory]=useState(false)
     return (
         <>
             {!option &&
@@ -1431,7 +1460,7 @@ const changeStatus = async (myStatus) => {
 
                                         <TableBody>
                                             {filteredTotalPaymentIn.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((entry, index) => (
-                                                <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'} onClick={() => handleRowClick(entry.supplierName)}>
+                                                <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'} onClick={() => {handleRowClick(entry.supplierName); setNewStatus(entry._id)}}>
 
                                                     <TableCell className='border data_td text-center'>{index + 1}</TableCell>
                                                     <TableCell className='border data_td text-center'>
@@ -1555,15 +1584,16 @@ const changeStatus = async (myStatus) => {
 
                             </div>
                             <div className="right">
+                            {azadAgent_Payments_Out && azadAgent_Payments_Out.some((data)=>data.supplierName===selectedSupplier && data.status.toLowerCase()==='open')&&
                             <div className="dropdown d-inline ">
                             <button className="btn btn-secondary dropdown-toggle m-1 btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            {loading5 ? "Updating" : "Change Status"}
+                              {loading5 ? "Updating" : "Change Status"}
                             </button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><Link className="dropdown-item" onClick={() => changeStatus("Open")}>Khata Open</Link></li>
-                            <li><Link className="dropdown-item" onClick={() => changeStatus("Closed")}>Khata Close</Link></li>
+                              <li ><button className="dropdown-item"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Khata Close</button></li>
                             </ul>
-                            </div>
+                          </div>
+                            }
                            <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
                            <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
                             <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
@@ -1619,7 +1649,26 @@ const changeStatus = async (myStatus) => {
                         </Paper>
                     </div>
                     <div className="col-md-12 detail_table my-2">
-                        <h6>Payment Out Details</h6>
+                    <div className="d-flex justify-content-between">
+              <div className="left d-flex">
+              <h6>Payment Out Details</h6>
+              </div>
+              <div className="right d-flex">
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label><br/>
+                  <select name="" className='my-2 mx-1' value={rowsValue} onChange={(e)=>setRowsValue(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
+              </div>
+            </div>
                         <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
                             <Table stickyHeader>
                                 <TableHead className="thead">
@@ -1647,103 +1696,100 @@ const changeStatus = async (myStatus) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {filteredIndividualPayments
-                                        .map((filteredData) => (
-                                            // Map through the payment array
-                                            <>
-                                                {filteredData.payment && filteredData.payment?.map((paymentItem, index) => (
-                                                    <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
-                                                        {editMode && editedRowIndex === index ? (
-                                                            <>
-                                                              <TableCell className='border data_td p-1 '>
-                                                                <input type='text' value={index+1} readonly />
-                                                            </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
-                                                                        <option value="">Choose</option>
-                                                                        {categories && categories.map((data) => (
-                                                                            <option key={data._id} value={data.category}>{data.category}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
-                                                                        <option value="">Choose</option>
-                                                                        {paymentVia && paymentVia.map((data) => (
-                                                                            <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <select value={editedEntry.payment_Type} onChange={(e) => handleInputChange(e, 'payment_Type')} required>
-                                                                        <option value="">Choose</option>
-                                                                        {paymentType && paymentType.map((data) => (
-                                                                            <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
-                                                                        ))}
-                                                                    </select>
-
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={editedEntry.slip_No} onChange={(e) => handleInputChange(e, 'slip_No')} />
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={editedEntry.details} onChange={(e) => handleInputChange(e, 'details')} />
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={editedEntry.payment_Out} onChange={(e) => handleInputChange(e, 'payment_Out')} />
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={editedEntry.cash_Out} onChange={(e) => handleInputChange(e, 'cash_Out')} />
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='text' value={editedEntry.invoice} readonly />
-                                                                </TableCell>
-                                                               {show2 && <>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
-                                                                        <option className="my-1 py-2" value="">choose</option>
-                                                                        {currencies && currencies.map((data) => (
-                                                                            <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
-                                                                </TableCell>
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
-                                                                </TableCell>
-                                                               </>}
-                                                                <TableCell className='border data_td p-1 '>
-                                                                    <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
-                                                                </TableCell>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <TableCell className='border data_td text-center'>{index+1}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.date}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.category}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.payment_Via}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.payment_Type}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.slip_No}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.details}</TableCell>
-                                                                <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
-                                                                <TableCell className='border data_td text-center'><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.invoice}</TableCell>
-                                                               {show2 && <>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.payment_Out_Curr}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.curr_Rate}</TableCell>
-                                                                <TableCell className='border data_td text-center'>{paymentItem?.curr_Amount}</TableCell>
-                                                               </>}
-                                                                <TableCell className='border data_td text-center'>{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
+                  {filteredIndividualPayments.map((filteredData) => (
+                    <>
+                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
+                        <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode && editedRowIndex === index ? (
+                            <>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
+                                  <option value="">Choose</option>
+                                  {categories && categories.map((data) => (
+                                    <option key={data._id} value={data.category}>{data.category}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
+                                  <option value="">Choose</option>
+                                  {paymentVia && paymentVia.map((data) => (
+                                    <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Type} onChange={(e) => handleInputChange(e, 'payment_Type')} required>
+                                  <option value="">Choose</option>
+                                  {paymentType && paymentType.map((data) => (
+                                    <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.slip_No} onChange={(e) => handleInputChange(e, 'slip_No')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.details} onChange={(e) => handleInputChange(e, 'details')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.payment_Out} onChange={(e) => handleInputChange(e, 'payment_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.cash_Out} onChange={(e) => handleInputChange(e, 'cash_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.invoice} readonly />
+                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
+                              <TableCell className='border data_td p-1 '>
+                                <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                              </>}
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ? <a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a>  : "No Picture"}</TableCell>
 
 
-                                                            </>
-                                                        )}
-                                                         <TableCell className='border data_td p-1 text-center'>
+                            </>
+                          )}
+                         <TableCell className='border data_td p-1 text-center'>
                             {editMode && editedRowIndex === index ? (
                               // Render Save button when in edit mode for the specific row
                               <>
@@ -1768,45 +1814,43 @@ const changeStatus = async (myStatus) => {
                               </>
                             )}
                           </TableCell>
-                                                    </TableRow>
-                                                ))}
-
-
-                                            </>
-                                        ))}
-                                         <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
-                            <TableCell className='border data_td text-center bg-warning text-white'>
-          {/* Calculate the total sum of payment_In */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const paymentIn = parseFloat(paymentItem.payment_Out);
-              return isNaN(paymentIn) ? sum : sum + paymentIn;
-            }, 0);
-          }, 0)}
-        </TableCell>
-        <TableCell className='border data_td text-center bg-info text-white'>
-          {/* Calculate the total sum of cash_Out */}
-          {filteredIndividualPayments.reduce((total, filteredData) => {
-            return total + filteredData.payment.reduce((sum, paymentItem) => {
-              const cashOut = parseFloat(paymentItem.cash_Out);
-              return isNaN(cashOut) ? sum : sum + cashOut;
-            }, 0);
-          }, 0)}
-        </TableCell>
-        <TableCell></TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  ))}
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
+                    <TableCell className='border data_td text-center bg-warning text-white'>
+                      {/* Calculate the total sum of payment_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const paymentOut = parseFloat(paymentItem.payment_Out);
+                          return isNaN(paymentOut) ? sum : sum + paymentOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-info text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.cash_Out);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell></TableCell>
                     <TableCell></TableCell>
                     {show2 && <>
                       <TableCell className='border data_td text-center bg-warning text-white'>
                       
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const paymentIn = parseFloat(paymentItem.payment_Out_Curr);
                           return isNaN(paymentIn) ? sum : sum + paymentIn;
                         }, 0);
@@ -1815,7 +1859,7 @@ const changeStatus = async (myStatus) => {
                     <TableCell className='border data_td text-center bg-info text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Rate);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
@@ -1824,16 +1868,17 @@ const changeStatus = async (myStatus) => {
                     <TableCell className='border data_td text-center bg-primary text-white'>
                       {/* Calculate the total sum of cash_Out */}
                       {filteredIndividualPayments.reduce((total, filteredData) => {
-                        return total + filteredData.payment.reduce((sum, paymentItem) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
                           const cashOut = parseFloat(paymentItem.curr_Amount);
                           return isNaN(cashOut) ? sum : sum + cashOut;
                         }, 0);
                       }, 0)}
                     </TableCell>
                     </>}
-                            
-                          </TableRow>
-                                </TableBody>
+
+                  </TableRow>
+
+                </TableBody>
                             </Table>
                         </TableContainer>
                     </div>
@@ -1976,8 +2021,21 @@ const changeStatus = async (myStatus) => {
                 <h6>Persons Details</h6>
               </div>
               <div className="right">
-              <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
-              <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
+              <label htmlFor="" className='mb-2 mt-3 mx-1'>Show Entries: </label><br/>
+                  <select name="" className='my-2 mx-1' value={rowsValue1} onChange={(e)=>setRowsValue1(e.target.value)} id="" style={{height:'30px',zIndex:'999',width:'auto'}}>
+                    <option value="">All</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="120">120</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                  </select>
+                <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
                 <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
               </div>
             </div>
@@ -1995,8 +2053,8 @@ const changeStatus = async (myStatus) => {
                                         <TableCell className='label border'>Country</TableCell>
                                         <TableCell className='label border'>Final_Status</TableCell>
                                         <TableCell className='label border'>Flight_Date</TableCell>
-                                        <TableCell className='label border'>AVPI_PKR</TableCell>
-                                        {show && <TableCell className='label border'>AVPI_Oth_Curr</TableCell>}
+                                        <TableCell className='label border'>Azad Visa Price PKR</TableCell>
+                                        {show && <TableCell className='label border'>Azad Visa Price In Curr</TableCell>}
                                         <TableCell className='label border'>Status</TableCell>
                                         <TableCell className='label border'>Action</TableCell>
                                     </TableRow>
@@ -2004,7 +2062,7 @@ const changeStatus = async (myStatus) => {
                                 <TableBody>
                                     {filteredPersons.map((filteredData) => (
                                         <>
-                                            {filteredData.persons.map((person, index) => (
+                                            {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
 
                                                 <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                                                     {editMode2 && editedRowIndex2 === index ? (
@@ -2137,14 +2195,14 @@ const changeStatus = async (myStatus) => {
                             <TableCell></TableCell>
                             <TableCell className='border data_td text-center bg-success text-white'>Total</TableCell>
                             <TableCell className='border data_td text-center bg-warning text-white'>
-          {/* Calculate the total sum of payment_In */}
-          {filteredPersons.reduce((total, filteredData) => {
-            return total + filteredData.persons.reduce((sum, paymentItem) => {
-              const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
-              return isNaN(paymentIn) ? sum : sum + paymentIn;
-            }, 0);
-          }, 0)}
-        </TableCell>
+                          {/* Calculate the total sum of payment_Out */}
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
                             
                         </TableRow>
                                         </>
@@ -2155,6 +2213,496 @@ const changeStatus = async (myStatus) => {
                     </div>
                 </>
             )}
+{/* Modal for closing the status of  persons*/}
+
+<div className="modal fade p-0 m-0" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-fullscreen">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
+       <span className='mx-1'>Total: {azadAgent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Azad_Visa_Price_Out_PKR||0)} |</span>
+       <span className='mx-1'>Total Payment done: {azadAgent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Payment_Out||0)} |</span>
+       <span className='mx-1'>Remaining Balance: {azadAgent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.remaining_Balance||0)} </span>
+
+        <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
+      </div>
+      <div className="modal-body detail_table">
+        <div className="d-flex payment_form p-0 m-0">
+        <div className="d-flex overflow-x-auto">
+                <div className="flex-grow-1 p-0 mx-1">
+                  <div className="text-end">
+                 
+                  <button className='btn btn-sm m-1 bg-info text-white shadow' onClick={() => setShow(!show)}>{show === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadPersons}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPersonsTable}>Print </button>
+                  <div class="dropdown dropstart d-inline" >
+  <button class="btn dropdown-toggle btn-sm m-1" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    See More
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" onClick={()=>setShowTrade(!showTrade)}>{showTrade?'Hide':'Show'} Trade</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowEntryMode(!showEntryMode)}>{showEntryMode?'Hide':'Show'} Entry Mode</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowCompany(!showCompany)}>{showCompany?'Hide':'Show'} Company</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowCountry(!showCountry)}>{showCountry?'Hide':'Show'} Country</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowFinalStatus(!showFinalStatus)}>{showFinalStatus?'Hide':'Show'} Final Status</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowFlightDate(!showFlightDate)}>{showFlightDate?'Hide':'Show'} Flight Date</a></li>
+  </ul>
+</div>
+<div className="col-md-12 filters">
+            <div className='py-1 mb-2 '>
+             
+            </div>
+          </div>
+                  </div>
+                  <TableContainer component={Paper}  sx={{ maxHeight: 700 }}>
+              <Table stickyHeader>
+                <TableHead className="thead">
+                  <TableRow>
+                  <TableCell className='label border' >Select</TableCell>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    <TableCell className='label border' >Name</TableCell>
+                    <TableCell className='label border' >PP#</TableCell>
+                    {showEntryMode && <TableCell className='label border' >Entry_Mode</TableCell>}
+                    {showCompany && <TableCell className='label border' >Company</TableCell>}
+                    {showTrade && <TableCell className='label border' >Trade</TableCell>}
+                    {showCountry && <TableCell className='label border' >Country</TableCell>}
+                    {showFinalStatus && <TableCell className='label border' >Final Status</TableCell>}
+                    {showFlightDate && <TableCell className='label border' >Flight Date</TableCell>}
+                    <TableCell className='label border' >Visa Price In PKR</TableCell>
+                    <TableCell className='label border' >Total In PKR</TableCell>
+                    <TableCell className='label border' >Total Cash Return</TableCell>
+                    <TableCell className='label border' >Remaining PKR</TableCell>
+                    {show === true && <TableCell className='label border' >Visa Price In Curr</TableCell>}
+                    <TableCell className='label border'>Status</TableCell>
+                    <TableCell className='label border' >Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredPersons.map((filteredData) => (
+                    <>
+                      {filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).map((person, index) => (
+
+                        <TableRow key={person?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode2 && editedRowIndex2 === index ? (
+                            <>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry2.entry_Date} onChange={(e) => handlePersonInputChange(e, 'entry_Date')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry2.name} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry2.pp_No} readonly />
+                              </TableCell>
+                               {showEntryMode &&
+                            <TableCell className='border data_td p-1 '>
+                            <select value={editedEntry2.entry_Mode} onChange={(e) => handlePersonInputChange(e, 'entry_Mode')} required>
+                              <option value="">Choose</option>
+                              {entryMode && entryMode.map((data) => (
+                                <option key={data._id} value={data.entry_Mode}>{data.entry_Mode}</option>
+                              ))}
+                            </select>
+                            </TableCell>
+                              }
+                             
+                             {showCompany && 
+                             <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry2.company} onChange={(e) => handlePersonInputChange(e, 'company')} required>
+                                  <option value="">Choose</option>
+                                  {companies && companies.map((data) => (
+                                    <option key={data._id} value={data.company}>{data.company}</option>
+                                  ))}
+                                </select>
+                              </TableCell>}
+                            
+                            {showTrade &&
+                            <TableCell className='border data_td p-1 '>
+                            <select value={editedEntry2.trade} onChange={(e) => handlePersonInputChange(e, 'trade')} required>
+                              <option value="">Choose</option>
+                              {trades && trades.map((data) => (
+                                <option key={data._id} value={data.trade}>{data.trade}</option>
+                              ))}
+                            </select>
+                          </TableCell>
+                            }
+                              
+                              {showCountry &&
+                                <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry2.country} onChange={(e) => handlePersonInputChange(e, 'country')} required>
+                                  <option value="">Choose</option>
+                                  {countries && countries.map((data) => (
+                                    <option key={data._id} value={data.country}>{data.country}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              }
+                            {showFinalStatus &&
+                              <TableCell className='border data_td p-1 '>
+                              <select value={editedEntry2.final_Status} onChange={(e) => handlePersonInputChange(e, 'final_Status')} required>
+                                <option value="">Choose</option>
+                                {finalStatus && finalStatus.map((data) => (
+                                  <option key={data._id} value={data.final_Status}>{data.final_Status}</option>
+                                ))}
+                              </select>
+                            </TableCell>
+                            }
+                            
+                            {showFlightDate &&
+                             <TableCell className='border data_td p-1 '>
+                             <input type='date' value={editedEntry2.flight_Date} onChange={(e) => handlePersonInputChange(e, 'flight_Date')} />
+                           </TableCell>
+                            }
+
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.azad_Visa_Price_Out_PKR} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.total_In} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.azad_Visa_Price_Out_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
+                              </TableCell>
+                              {show && <TableCell className='border data_td p-1 '>
+                                <input type='number' value={editedEntry2.azad_Visa_Price_Out_Curr} readonly />
+                              </TableCell>}
+                              <TableCell className='border data_td p-1 '>
+                                <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
+                                  <option value="Open">Open</option>
+                                  <option value="Closed">Closed</option>
+                                </select>
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                            <TableCell className='border data_td p-0 text-center' style={{ width: 'auto' }}>
+                                <input type='checkbox' className='p-0' onChange={(e) => handleEntryId(person._id, e.target.checked)} />
+                              </TableCell>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.entry_Date}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.name}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.pp_No}</TableCell>
+                              {showEntryMode && <TableCell className='border data_td text-center' >{person?.entry_Mode}</TableCell>}
+                              {showCompany && <TableCell className='border data_td text-center' >{person?.company}</TableCell>}
+                              {showTrade && <TableCell className='border data_td text-center' >{person?.trade}</TableCell>}
+                              {showCountry && <TableCell className='border data_td text-center' >{person?.country}</TableCell>}
+                              {showFinalStatus && <TableCell className='border data_td text-center' >{person?.final_Status}</TableCell>}
+                              {showFlightDate && <TableCell className='border data_td text-center' >{person?.flight_Date}</TableCell>}
+                              <TableCell className='border data_td text-center' >{person?.azad_Visa_Price_Out_PKR}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.total_In}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{person?.azad_Visa_Price_Out_PKR - person?.total_In + person?.cash_Out}</TableCell>
+                              {show && <TableCell className='border data_td text-center' >{person?.azad_Visa_Price_Out_Curr}</TableCell>}
+                              <TableCell className='border data_td text-center' >{person?.status}</TableCell>
+                            </>
+                          )}
+                          <TableCell className='border data_td p-1 text-center'>
+                            {editMode2 && editedRowIndex2 === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode2(!editMode2)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdatePerson()} className='btn save_btn btn-sm' disabled={loading4}><i className="fa-solid fa-check"></i></button>
+
+                                </div>
+
+                              </>
+
+                            ) : (
+                              
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => handlePersonEditClick(person, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPerson(person)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPersonDetails(person)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePerson(person)} disabled={loading2}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+
+                              </>
+                            )}
+                          </TableCell>
+
+                        </TableRow>
+                      ))}
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        
+                        <TableCell className='border data_td text-center bg-warning text-white'>
+                        Total Visa Price PKR= 
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.azad_Visa_Price_Out_PKR);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+ 
+                        <TableCell className='border data_td text-center bg-success text-white'>
+                        Total In PKR= 
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.total_In);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+
+                        <TableCell className='border data_td text-center bg-info text-white'>
+                        Total Remaining= 
+                          {filteredPersons.reduce((total, filteredData) => {
+                            return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
+                              const paymentIn = parseFloat(paymentItem.remaining_Price);
+                              return isNaN(paymentIn) ? sum : sum + paymentIn;
+                            }, 0);
+                          }, 0)}
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+                </div>
+                <div className="flex-grow-1 p-0 mx-1">
+                <div className="text-end">
+                <div className="dropdown dropstart">
+                <button className='btn btn-sm m-1 bg-info text-white shadow border-0' onClick={() => setShow2(!show2)}>{show2 === false ? "Show" : "Hide"}</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadCombinedPayments}>Download All</button>
+                <button className='btn excel_btn m-1 btn-sm' onClick={downloadIndividualPayments}>Download </button>
+                <button className='btn excel_btn m-1 btn-sm bg-success border-0' onClick={printPaymentsTable}>Print All</button>
+  <button class="btn dropdown-toggle btn-sm m-1 d-inline" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    See More
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item"onClick={()=>setShowCategory(!showCategory)}>{showCategory?'Hide':'Show'} Category</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowSlipNo(!showSlipNo)}>{showSlipNo?'Hide':'Show'} Slip No</a></li>
+    <li><a class="dropdown-item" onClick={()=>setShowDetails(!showDetails)}>{showDetails?'Hide':'Show'} Details</a></li>
+    
+  </ul>
+</div>
+                  </div>
+                  <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
+                  <Table stickyHeader>
+                <TableHead className="thead">
+                  <TableRow>
+                    <TableCell className='label border' >SN</TableCell>
+                    <TableCell className='label border' >Date</TableCell>
+                    {showCategory &&  <TableCell className='label border' >Category</TableCell>}
+                    <TableCell className='label border' >Payment Via</TableCell>
+                    <TableCell className='label border' >Payment Type</TableCell>
+                    {showSlipNo &&  <TableCell className='label border' >Slip No</TableCell>}
+                   {showDetails &&  <TableCell className='label border' >Details</TableCell>}
+                    <TableCell className='label border' >Payment In</TableCell>
+                    <TableCell className='label border' >Cash Return</TableCell>
+                    <TableCell className='label border' >Invoice</TableCell>
+                    {show2 && <>
+                      <TableCell className='label border' >Payment In Curr</TableCell>
+                      <TableCell className='label border' >Curr Rate</TableCell>
+                      <TableCell className='label border' >Curr Amount</TableCell>
+                    </>}
+                    <TableCell className='label border' >Slip Pic</TableCell>
+                    <TableCell align='left' className='label border'  colSpan={1}>
+                      Actions
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredIndividualPayments.map((filteredData) => (
+                    <>
+                      {filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).map((paymentItem, index) => (
+                        <TableRow key={paymentItem?._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
+                          {editMode && editedRowIndex === index ? (
+                            <>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={index + 1} readonly />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='date' value={editedEntry.date} onChange={(e) => handleInputChange(e, 'date')} />
+                              </TableCell>
+                              {showCategory && <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.category} onChange={(e) => handleInputChange(e, 'category')} required>
+                                  <option value="">Choose</option>
+                                  {categories && categories.map((data) => (
+                                    <option key={data._id} value={data.category}>{data.category}</option>
+                                  ))}
+                                </select>
+                              </TableCell>}
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Via} onChange={(e) => handleInputChange(e, 'payment_Via')} required>
+                                  <option value="">Choose</option>
+                                  {paymentVia && paymentVia.map((data) => (
+                                    <option key={data._id} value={data.payment_Via}>{data.payment_Via}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <select value={editedEntry.payment_Type} onChange={(e) => handleInputChange(e, 'payment_Type')} required>
+                                  <option value="">Choose</option>
+                                  {paymentType && paymentType.map((data) => (
+                                    <option key={data._id} value={data.payment_Type}>{data.payment_Type}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                              {showSlipNo && <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.slip_No} onChange={(e) => handleInputChange(e, 'slip_No')} />
+                              </TableCell>}
+                              {showDetails && <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.details} onChange={(e) => handleInputChange(e, 'details')} />
+                              </TableCell>}
+                              
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.payment_Out} onChange={(e) => handleInputChange(e, 'payment_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.cash_Out} onChange={(e) => handleInputChange(e, 'cash_Out')} />
+                              </TableCell>
+                              <TableCell className='border data_td p-1 '>
+                                <input type='text' value={editedEntry.invoice} readonly />
+                              </TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td p-1 '>
+                                  <select required value={editedEntry.payment_Out_Curr} onChange={(e) => handleInputChange(e, 'payment_Out_Curr')}>
+                                    <option className="my-1 py-2" value="">choose</option>
+                                    {currencies && currencies.map((data) => (
+                                      <option className="my-1 py-2" key={data._id} value={data.currency}>{data.currency}</option>
+                                    ))}
+                                  </select>
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Rate} onChange={(e) => handleInputChange(e, 'curr_Rate')} />
+                                </TableCell>
+                                <TableCell className='border data_td p-1 '>
+                                  <input type='number' value={editedEntry.curr_Amount} onChange={(e) => handleInputChange(e, 'curr_Amount')} />
+                                </TableCell>
+                              </>}
+                              <TableCell className='border data_td p-1 '>
+                                <input type='file' accept='image/*' onChange={(e) => handleImageChange(e, 'slip_Pic')} />
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className='border data_td text-center' >{index + 1}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.date}</TableCell>
+                              {showCategory &&  <TableCell className='border data_td text-center' >{paymentItem?.category}</TableCell>}
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Via}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.payment_Type}</TableCell>
+                              {showSlipNo && <TableCell className='border data_td text-center' >{paymentItem?.slip_No}</TableCell>}
+                              {showDetails && <TableCell className='border data_td text-center' >{paymentItem?.details}</TableCell>}
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-down me-2 text-success text-bold"></i>{paymentItem?.payment_Out}</TableCell>
+                              <TableCell className='border data_td text-center' ><i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{paymentItem?.cash_Out}</TableCell>
+                              <TableCell className='border data_td text-center' >{paymentItem?.invoice}</TableCell>
+                              {show2 && <>
+                                <TableCell className='border data_td text-center' >{paymentItem?.payment_Out_Curr}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Rate}</TableCell>
+                                <TableCell className='border data_td text-center' >{paymentItem?.curr_Amount}</TableCell>
+                              </>}
+                              <TableCell className='border data_td text-center' >{paymentItem.slip_Pic ?<a href={paymentItem.slip_Pic} target="_blank" rel="noopener noreferrer"> <img src={paymentItem.slip_Pic} alt='Images' className='rounded' /></a> : "No Picture"}</TableCell>
+
+
+                            </>
+                          )}
+                          <TableCell className='border data_td p-1 text-center'>
+                            {editMode && editedRowIndex === index ? (
+                              // Render Save button when in edit mode for the specific row
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                  <button onClick={() => setEditMode(!editMode)} className='btn delete_btn btn-sm'><i className="fa-solid fa-xmark"></i></button>
+                                  <button onClick={() => handleUpdate()} className='btn save_btn btn-sm' disabled={loading3}><i className="fa-solid fa-check"></i></button>
+
+                                </div>
+
+                              </>
+
+                            ) : (
+                              // Render Edit button when not in edit mode or for other rows
+                              <>
+                                <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button onClick={() => handleEditClick(paymentItem, index)} className='btn edit_btn btn-sm'><i className="fa-solid fa-pen-to-square"></i></button>
+                                  <button onClick={() => printPaymentInvoice(paymentItem)} className='btn bg-success text-white btn-sm'><i className="fa-solid fa-print"></i></button>
+                                  <button onClick={() => downloadPaymentInvoice(paymentItem)} className='btn bg-warning text-white btn-sm'><i className="fa-solid fa-download"></i></button>
+                                  <button className='btn bg-danger text-white btn-sm' onClick={() => deletePaymentIn(paymentItem)} disabled={loading1}><i className="fa-solid fa-trash-can"></i></button>
+                                </div>
+                               
+                              </>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  ))}
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className='border data_td text-center bg-success text-white'>
+                    Total Payment In=
+                      {/* Calculate the total sum of payment_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const paymentIn = parseFloat(paymentItem.payment_Out);
+                          return isNaN(paymentIn) ? sum : sum + paymentIn;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    <TableCell className='border data_td text-center bg-danger text-white'>
+                    Total Cash Return=
+                      {/* Calculate the total sum of cash_Out */}
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.cash_Out);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    {show2 && <> 
+                    
+                    <TableCell className='border data_td text-center bg-primary text-white'>
+                      {/* Calculate the total sum of cash_Out */}
+                    Total Curr Amount=
+                      {filteredIndividualPayments.reduce((total, filteredData) => {
+                        return total + filteredData.payment.slice(0,rowsValue ? rowsValue : undefined).reduce((sum, paymentItem) => {
+                          const cashOut = parseFloat(paymentItem.curr_Amount);
+                          return isNaN(cashOut) ? sum : sum + cashOut;
+                        }, 0);
+                      }, 0)}
+                    </TableCell>
+                    </>}
+                  </TableRow>
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+                </div>
+            </div>
+       </div>
+      
+      </div>
+      <div className="modal-footer">
+     
+       <span className='mx-1'>Opening Balance: {azadAgent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.opening||0)} |</span>
+       <span className='mx-1'>Closing Balance: {azadAgent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.closing||0)}</span>
+        <select name="" id="" value={convert} onChange={(e)=>setConvert(e.target.value)}>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <label htmlFor="">Convert Remaining Balance to New Khata?</label>
+        <button className="btn  btn-sm shadow cancel_btn" data-bs-dismiss="modal" disabled={loading5}>Cancel</button>
+        <button className="btn btn-sm shadow save_btn" onClick={() => changeStatus()} disabled={loading5}>{loading5 ?"Saving":"Save changes"}</button>
+      </div>
+    </div>
+  </div>
+</div>
 
         </>
     )

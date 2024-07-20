@@ -7,6 +7,38 @@ import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
+
+const allKeys = [
+  'date', 'supplierName', 'category', 'payment_Via', 'payment_Type', 'slip_No', 
+  'payment_In', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'
+];
+
+const defaultValues = {
+  'date': '',
+  'supplierName': '',
+  'category': '',
+  'payment_Via': '',
+  'payment_Type': '',
+  'slip_No': '',
+  'payment_In': 0,
+  'details': '',
+  'curr_Country': '',
+  'curr_Rate': 0,
+  'curr_Amount': 0
+};
+
+const initializeMissingFields = (entry) => {
+  const initializedEntry = { ...entry };
+  allKeys.forEach(key => {
+    if (!initializedEntry.hasOwnProperty(key)) {
+      initializedEntry[key] = defaultValues[key];
+    } else if (typeof defaultValues[key] === 'number') {
+      initializedEntry[key] = parseFloat(initializedEntry[key]);
+    }
+  });
+  return initializedEntry;
+};
+
 export default function CDWCPaymentIn() {
 
   const { user } = useAuthContext();
@@ -20,11 +52,11 @@ export default function CDWCPaymentIn() {
 
   }
 
-  
-  const [multiplePayment, setMultiplePayment] = useState([{date:'',supplierName: '', category: '', payment_Via: '', payment_Type: '', slip_No: '', payment_In: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0}])
+ 
+  const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
 
-  
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -32,7 +64,6 @@ export default function CDWCPaymentIn() {
       return;
     }
 
-    // Check if the file type is either Excel or CSV
     if (
       file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
       file.type !== 'text/csv'
@@ -46,14 +77,13 @@ export default function CDWCPaymentIn() {
       const data = e.target.result;
       const dataArray = parseExcelData(data);
       setMultiplePayment(dataArray);
-      setTriggerEffect(true); // Trigger the useEffect when multiplePayment changes
+      setTriggerEffect(true);
     };
 
     fileReader.readAsBinaryString(file);
 
-    // Clear the file input value
     e.target.value = null;
-  }
+  };
 
  
   const parseExcelData = (data) => {
@@ -61,43 +91,34 @@ export default function CDWCPaymentIn() {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-    
-    // Modify the dataArray to ensure missing fields are initialized with undefined
-    const updatedDataArray = dataArray.map((entry, rowIndex) => {
-      // Map over each entry and replace empty strings with undefined
-      return Object.fromEntries(
-        Object.entries(entry).map(([key, value]) => {
-          const trimmedValue = typeof value === 'string' ? value.trim() : value; // Check if the value is a string before trimming
-  
-          // Convert the flight_Date value if the key is 'flight_Date'
-          if (key === 'date') {
-            if (!isNaN(trimmedValue) && trimmedValue !== '') {
-              // Parse the numeric value as a date without time component
-              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000); // Adjust for timezone offset
-  
-              if (!isNaN(dateValue.getTime())) {
-                return [key, dateValue.toISOString().split('T')[0]]; // Format the date as 'YYYY-MM-DD' if the date is valid
-              } else {
-                console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
-                return [key, undefined];
-              }
-            } 
-          }
-  
-          return [key, trimmedValue === '' ? undefined : trimmedValue];
-        })
+
+    return dataArray.map((entry, rowIndex) => {
+      return initializeMissingFields(
+        Object.fromEntries(
+          Object.entries(entry).map(([key, value]) => {
+            const trimmedValue = typeof value === 'string' ? value.trim() : value;
+
+            if (key === 'date' && !isNaN(trimmedValue) && trimmedValue !== '') {
+              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
+              return [key, !isNaN(dateValue.getTime()) ? dateValue.toISOString().split('T')[0] : undefined];
+            }
+
+            return [key, trimmedValue === '' ? undefined : trimmedValue];
+          })
+        )
       );
     });
-  
-    return updatedDataArray;
+  };
 
-  }
-
-  const handleInputChange = (rowIndex, key, value) => {
+ const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...multiplePayment];
-    updatedData[rowIndex][key] = value;
+    if (typeof defaultValues[key] === 'number') {
+      updatedData[rowIndex][key] = parseFloat(value) || defaultValues[key];
+    } else {
+      updatedData[rowIndex][key] = value;
+    }
     setMultiplePayment(updatedData);
-  }
+  };
 
   const handleUploadList =async (e) => {
     setLoading(true)
@@ -169,15 +190,15 @@ export default function CDWCPaymentIn() {
               <>
                 <div className="col-md-12 multiple_form p-0 border-0 border-bottom" >
                   <div>
-                    <form className='py-0 px-2' onSubmit={handleUploadList} >
+                  <form className='py-0 px-2' onSubmit={handleUploadList} >
                       <div className="text-end">
-                      <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
+                        <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading?"Adding...":"Add Payment"}</button>
                       </div>
                       <div className="table-responsive">
                         <table className='table table-borderless table-striped'>
                           <thead >
                             <tr >
-                            <th >Date</th>
+                              <th >Date</th>
                               <th >Name</th>
                               <th >Category</th>
                               <th >Payment_Via </th>
@@ -192,25 +213,21 @@ export default function CDWCPaymentIn() {
                             </tr>
                           </thead>
                           <tbody className='p-0 m-0'>
-                            {multiplePayment.length > 0 && multiplePayment.map((rowData, rowIndex) => (
-                              <tr key={rowIndex} className='p-0 m-0'>
-                                {Object.entries(rowData).map(([key, value], colIndex) => (
-                                  <td key={colIndex} className='p-0 m-0'>
-
-                                    <input
-                                      type="text"
-                                      className='m-0'
-                                      value={value}
-                                      onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
-                                    />
-
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
-
-
-                          </tbody>
+            {multiplePayment.length > 0 && multiplePayment.map((rowData, rowIndex) => (
+              <tr key={rowIndex} className='p-0 m-0'>
+                {allKeys.map((key, colIndex) => (
+                  <td key={colIndex} className='p-0 m-0'>
+                    <input
+                      type={typeof defaultValues[key] === 'number' ? 'number' : 'text'}
+                      className='m-0'
+                      value={rowData[key] || ""}
+                      onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
 
                         </table>
                       </div>
