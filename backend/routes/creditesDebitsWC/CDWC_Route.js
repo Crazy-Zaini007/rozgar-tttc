@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userAuth = require("../../middleware/userMiddleware/userAuth");
 const {
-  addPaymentIn,addMultiplePaymentIn, deleteSinglePaymentIn, updateSinglePaymentIn, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn, updateSinglePaymentOut
+  addPaymentIn,addMultiplePaymentIn, deleteSinglePaymentIn, updateSinglePaymentIn, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn, updateSinglePaymentOut,changePaymentInStatus
 } = require("../../controllers/creditesDebitsWC/CreditesDebitsWC_Controller");
 
 router.use(userAuth);
@@ -23,4 +23,6 @@ router.patch("/update/total/payment_in", updateAgentTotalPaymentIn);
 // Deleting a Total payment In
 router.delete("/delete/total/payment_in", deleteAgentPaymentInSchema);
 
+// Closing Khata
+router.patch("/change/status", changePaymentInStatus);
 module.exports = router;

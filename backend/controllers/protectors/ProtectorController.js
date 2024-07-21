@@ -1271,6 +1271,7 @@ const getAllPaymentsOut = async (req, res) => {
 
           return {
             supplier_Id: paymentOutSchema.supplier_Id,
+            _id: paymentOutSchema._id,
             supplierName: paymentOutSchema.supplierName,
             total_Protector_Price_Out_Curr: paymentOutSchema.total_Protector_Price_Out_Curr,
             total_Payment_Out_Curr: paymentOutSchema.total_Payment_Out_Curr,

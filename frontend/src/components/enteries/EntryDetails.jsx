@@ -331,6 +331,21 @@ const EntryDetails = () => {
   const [reference_In, setReference_In] = useState('')
   const [reference_Out_Type, setReference_Out_Type] = useState('')
   const [reference_In_Type, setReference_In_Type] = useState('')
+  const [azad_Reference_In_Type, setAzadReference_In_Type] = useState('')
+  const [azad_Reference_Out_Type, setAzadReference_Out_Type] = useState('')
+  const [azad_Reference_Out, setAzadReference_Out] = useState('')
+  const [azad_Reference_In, setAzadReference_In] = useState('')
+
+  const [ticket_Reference_In_Type, setTicketReference_In_Type] = useState('')
+  const [ticket_Reference_Out_Type, setTicketReference_Out_Type] = useState('')
+  const [ticket_Reference_Out, setTicketReference_Out] = useState('')
+  const [ticket_Reference_In, setTicketReference_In] = useState('')
+
+  const [visit_Reference_In_Type, setVisitReference_In_Type] = useState('')
+  const [visit_Reference_Out_Type, setVisitReference_Out_Type] = useState('')
+  const [visit_Reference_Out, setVisitReference_Out] = useState('')
+  const [visit_Reference_In, setVisitReference_In] = useState('')
+
   const [flight_Date, setFlight_Date] = useState('')
 
   const filteredEntries = enteries.filter(entry => {
@@ -352,6 +367,23 @@ const EntryDetails = () => {
       entry.reference_In_Name && entry.reference_In_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.reference_Out && entry.reference_Out.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.reference_In && entry.reference_In.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      
+      entry.azad_Visa_Reference_Out_Name && entry.azad_Reference_Out_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.azad_Visa_Reference_In_Name && entry.azad_Reference_In_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.azad_Visa_Reference_Out && entry.azad_Reference_Out.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.azad_Visa_Reference_In && entry.azad_Reference_In.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+
+      entry.ticket_Reference_Out_Name && entry.ticket_Reference_Out_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.ticket_Reference_In_Name && entry.ticket_Reference_In_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.ticket_Reference_Out && entry.ticket_Reference_Out.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.ticket_Reference_In && entry.ticket_Reference_In.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+
+      entry.visit_Reference_Out_Name && entry.visit_Reference_Out_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.visit_Reference_In_Name && entry.visit_Reference_In_Name.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.visit_Reference_Out && entry.visit_Reference_Out.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+      entry.visit_Reference_In && entry.visit_Reference_In.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
+
+
       entry.contact && entry.contact.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.pp_No && entry.entry_Mode.trim().toLowerCase().startsWith(name.trim().toLowerCase())
 
@@ -366,11 +398,27 @@ const EntryDetails = () => {
       entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase()) &&
       entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase()) &&
       entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
-      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase())
+      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase())&&
+
+      entry.azad_Visa_Reference_Out_Name?.toLowerCase().includes(azad_Reference_Out.toLowerCase()) &&
+      entry.azad_Visa_Reference_In_Name?.toLowerCase().includes(azad_Reference_In.toLowerCase()) &&
+      entry.azad_Visa_Reference_Out?.toLowerCase().includes(azad_Reference_Out_Type.toLowerCase()) &&
+      entry.azad_Visa_Reference_In?.toLowerCase().includes(azad_Reference_In_Type.toLowerCase()) &&
+
+      entry.ticket_Reference_Out_Name?.toLowerCase().includes(ticket_Reference_Out.toLowerCase()) &&
+      entry.ticket_Reference_In_Name?.toLowerCase().includes(ticket_Reference_In.toLowerCase()) &&
+      entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_Out_Type.toLowerCase()) &&
+      entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_In_Type.toLowerCase())&&
+
+      entry.visit_Reference_Out_Name?.toLowerCase().includes(visit_Reference_Out.toLowerCase()) &&
+      entry.visit_Reference_In_Name?.toLowerCase().includes(visit_Reference_In.toLowerCase()) &&
+      entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_Out_Type.toLowerCase()) &&
+      entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_In_Type.toLowerCase())
 
 
     );
   })
+  
 
   const[rowsValue,setRowsValue]=useState("")
 
@@ -504,112 +552,351 @@ const EntryDetails = () => {
                     </div>
                   <div className="col-auto px-1">
                       <label htmlFor="">Date:</label><br/>
-                      <select value={date} onChange={(e) => setDate(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="date" 
+                      required 
+                      value={date} onChange={(e) => setDate(e.target.value)}
+                    /> <datalist id="date">
+                  {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
                           <option value={dateValue} key={dateValue}>{dateValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                     
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Date From:</label><br/>
-                     <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} />
+                     <input type="date" value={dateFrom} onChange={(e)=>setDateFrom(e.target.value)} className='m-0 p-1'  />
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Date To:</label><br/>
-                     <input  type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)} />
+                     <input  type="date" value={dateTo} onChange={(e)=>setDateTo(e.target.value)}  className='m-0 p-1'/>
                     </div>
                     <div className="col-auto px-1">
                       <label htmlFor="">Trade:</label><br/>
-                      <select  value={trade} onChange={(e) => setTrade(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
-                          <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
-                        ))}
-                      </select>
+                      <input 
+                      className='m-0 p-1'
+                      list="trade" 
+                      required 
+                      value={trade} onChange={(e) => setTrade(e.target.value)}
+                    /> <datalist id="trade">
+                  {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
+                                        <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
+                                      ))}
+                  </datalist>
+                     
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Company:</label><br/>
-                      <select value={company} onChange={(e) => setCompany(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.company))].map(companyValue => (
+                      
+                      <input  
+                      className='m-0 p-1'
+                      list="company" 
+                      required 
+                      value={company} onChange={(e) => setCompany(e.target.value)}
+                    /> <datalist id="company">
+                  {[...new Set(enteries.map(data => data.company))].map(companyValue => (
                           <option key={companyValue} value={companyValue}>{companyValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                    
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Country:</label><br/>
-                      <select value={country} onChange={(e) => setCountry(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.country))].map(countryValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="country" 
+                      required 
+                      value={country} onChange={(e) => setCountry(e.target.value)} 
+                    /> <datalist id="country">
+                  {[...new Set(enteries.map(data => data.country))].map(countryValue => (
                           <option key={countryValue} value={countryValue}>{countryValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                    
                     </div>
 
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Final Status:</label><br/>
-                      <select  value={final_Status} onChange={(e) => setFinal_Status(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="final_Status" 
+                      required 
+                      value={final_Status} onChange={(e) => setFinal_Status(e.target.value)}
+                    /> <datalist id="final_Status">
+                  {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
                           <option key={final_StatusValue} value={final_StatusValue}>{final_StatusValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                     
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Flight Date:</label><br/>
-                      <select  value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="flight_Date" 
+                      required 
+                      value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)}
+                    /> <datalist id="flight_Date">
+                  {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
                           <option key={flight_DateValue} value={flight_DateValue}>{flight_DateValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                    
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Entry Mode:</label><br/>
-                      <select value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="entry_Mode" 
+                      required 
+                      value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)}
+                    /> <datalist id="entry_Mode">
+                       {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
                           <option key={entry_ModeValue} value={entry_ModeValue}>{entry_ModeValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                     
                     </div>
-                    <div className="col-auto px-1 ">
+                    <div className="col-auto px-1">
                       <label htmlFor="">Reference Out Type:</label><br/>
-                      <select  value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
+                      <input  
+                      className='m-0 p-1'
+                      list="reference_Out_Type" 
+                      required 
+                      value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)}
+                    /> <datalist id="reference_Out_Type">
+                      <option value="">All</option>
                         <option value="agent">Agents</option>
                         <option value="supplier">Suppliers</option>
                         <option value="candidate">Candidates</option>
-
-                      </select>
+                  </datalist>
+          
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference Out:</label><br/>
-                      <select  value={reference_Out} onChange={(e) => setReference_Out(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="reference_Out" 
+                      required 
+                      value={reference_Out} onChange={(e) => setReference_Out(e.target.value)}
+                    /> <datalist id="reference_Out">
+                       {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
                           <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                     
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference In Type:</label><br/>
-                      <select  value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
+                      <input  
+                      className='m-0 p-1'
+                      list="reference_In_Type" 
+                      required 
+                      value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)}
+                    /> <datalist id="reference_In_Type">
+                      <option value="">All</option>
                         <option value="agent">Agents</option>
                         <option value="supplier">Suppliers</option>
                         <option value="candidate">Candidates</option>
-                      </select>
+                  </datalist>
+                      
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Reference In:</label><br/>
-                      <select  value={reference_In} onChange={(e) => setReference_In(e.target.value)} className='m-0 p-1'>
-                        <option value="">All</option>
-                        {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                      <input  
+                      className='m-0 p-1'
+                      list="reference_In" 
+                      required 
+                      value={reference_In} onChange={(e) => setReference_In(e.target.value)}
+                    /> <datalist id="reference_In">
+                      {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
                           <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
                         ))}
-                      </select>
+                  </datalist>
+                    
+                    </div>
+
+                    {/* Azad  */}
+                     <div className="col-auto px-1">
+                      <label htmlFor="">Azad Reference Out Type:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="azad_Reference_Out_Type" 
+                      required 
+                      value={azad_Reference_Out_Type} onChange={(e) => setAzadReference_Out_Type(e.target.value)}
+                    /> <datalist id="azad_Reference_Out_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+          
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Azad Reference Out:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="azad_Reference_Out" 
+                      required 
+                      value={azad_Reference_Out} onChange={(e) => setAzadReference_Out(e.target.value)}
+                    /> <datalist id="azad_Reference_Out">
+                       {[...new Set(enteries.map(data => data.azad_Reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                     
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Azad Reference In Type:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="azad_Reference_In_Type" 
+                      required 
+                      value={azad_Reference_In_Type} onChange={(e) => setAzadReference_In_Type(e.target.value)}
+                    /> <datalist id="azad_Reference_In_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                      
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Azad Reference In:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="azad_Reference_In" 
+                      required 
+                      value={azad_Reference_In} onChange={(e) => setAzadReference_In(e.target.value)}
+                    /> <datalist id="azad_Reference_In">
+                      {[...new Set(enteries.map(data => data.azad_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                    
+                    </div>
+
+                    {/* Ticket */}
+                  
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Ticket Reference Out Type:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="ticket_Reference_Out_Type" 
+                      required 
+                      value={ticket_Reference_Out_Type} onChange={(e) => setTicketReference_Out_Type(e.target.value)}
+                    /> <datalist id="ticket_Reference_Out_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+          
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Ticket Reference Out:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="ticket_Reference_Out" 
+                      required 
+                      value={ticket_Reference_Out} onChange={(e) => setTicketReference_Out(e.target.value)}
+                    /> <datalist id="ticket_Reference_Out">
+                       {[...new Set(enteries.map(data => data.ticket_Reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                     
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Ticket Reference In Type:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="ticket_Reference_In_Type" 
+                      required 
+                      value={ticket_Reference_In_Type} onChange={(e) => setTicketReference_In_Type(e.target.value)}
+                    /> <datalist id="ticket_Reference_In_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                      
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Ticket Reference In:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="ticket_Reference_In" 
+                      required 
+                      value={ticket_Reference_In} onChange={(e) => setTicketReference_In(e.target.value)}
+                    /> <datalist id="ticket_Reference_In">
+                      {[...new Set(enteries.map(data => data.ticket_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                    
+                    </div>
+
+                    {/* Visist */}
+
+                    <div className="col-auto px-1">
+                      <label htmlFor="">Visit Reference Out Type:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_Out_Type" 
+                      required 
+                      value={visit_Reference_Out_Type} onChange={(e) => setVisitReference_Out_Type(e.target.value)}
+                    /> <datalist id="visit_Reference_Out_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+          
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Visit Reference Out:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_Out" 
+                      required 
+                      value={visit_Reference_Out} onChange={(e) => setVisitReference_Out(e.target.value)}
+                    /> <datalist id="visit_Reference_Out">
+                       {[...new Set(enteries.map(data => data.visit_Reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                     
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Visit Reference In Type:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In_Type" 
+                      required 
+                      value={visit_Reference_In_Type} onChange={(e) => setVisitReference_In_Type(e.target.value)}
+                    /> <datalist id="visit_Reference_In_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                      
+                    </div>
+                    <div className="col-auto px-1 ">
+                      <label htmlFor="">Visit Reference In:</label><br/>
+                      <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In" 
+                      required 
+                      value={visit_Reference_In} onChange={(e) => setVisitReference_In(e.target.value)}
+                    /> <datalist id="visit_Reference_In">
+                      {[...new Set(enteries.map(data => data.visit_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                    
                     </div>
 
                   </div>

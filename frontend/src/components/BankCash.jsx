@@ -880,7 +880,7 @@ const paymentViaTotals = Object.entries(aggregatedPayments).map(([paymentVia, to
 <div className="col-md-12 tex-start mb-3">
   <button className='btn btn-sm me-1 mb-1 shadow'style={!bankName?{background:'var(--accent-stonger-blue)',color:'white',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName('')}>All</button>
 {[...new Set(paymentVia && paymentVia.map(data => data.payment_Via))].map(dateValue => (
-                                <button className='btn btn-sm me-1 shadow' style={bankName===dateValue?{background:'var(--accent-stonger-blue)',color:'white',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName(dateValue)} value={dateValue} key={dateValue}>{dateValue}</button>
+                                <button className='btn btn-sm me-1 mb-1 shadow' style={bankName===dateValue?{background:'var(--accent-stonger-blue)',color:'white',fontSize:'12px'}:{color:'var(--accent-stonger-blue)',border:'1px solid var(--accent-stonger-blue)',fontSize:'12px'}} onClick={()=>setBankName(dateValue)} value={dateValue} key={dateValue}>{dateValue}</button>
                               ))}
 </div>
 <TableContainer className='detail_table' sx={{ maxHeight: 600 }}>

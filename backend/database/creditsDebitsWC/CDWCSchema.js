@@ -20,6 +20,14 @@ const payment_In_Schema = new mongoose.Schema(
     status:{
       type: String,
     },
+    opening:{
+      type: Number,
+      default: 0,
+    },
+    closing:{
+      type: Number,
+      default: 0,
+    },
     payment: [
       {
         name: {

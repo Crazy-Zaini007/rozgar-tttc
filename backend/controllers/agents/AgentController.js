@@ -1810,6 +1810,7 @@ const getAllPaymentsIn = async (req, res) => {
 
           return {
             supplier_Id: paymentInSchema.supplier_Id,
+            _id: paymentInSchema._id,
             supplierName: paymentInSchema.supplierName,
             total_Visa_Price_In_Curr: paymentInSchema.total_Visa_Price_In_Curr,
             total_Payment_In_Curr: paymentInSchema.total_Payment_In_Curr,
@@ -3643,6 +3644,7 @@ const getAllPaymentsOut = async (req, res) => {
 
           return {
             supplier_Id: paymentOutSchema.supplier_Id,
+            _id: paymentOutSchema._id,
             supplierName: paymentOutSchema.supplierName,
             total_Visa_Price_Out_Curr: paymentOutSchema.total_Visa_Price_Out_Curr,
             total_Payment_Out_Curr: paymentOutSchema.total_Payment_Out_Curr,

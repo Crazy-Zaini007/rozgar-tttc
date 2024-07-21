@@ -47,7 +47,9 @@ const addPaymentIn = async (req, res) => {
 
         // Check if the supplier already exists
         const existingSupplier = await CDWOC.findOne({
-            'payment_In_Schema.supplierName': supplierName
+            'payment_In_Schema.supplierName': supplierName,
+            'payment_In_Schema._id': newStatus,
+
         })
 
 
@@ -143,6 +145,7 @@ const addPaymentIn = async (req, res) => {
                     }],
                     total_Payment_In: payment_In,
                     total_Payment_Out: payment_Out,
+                    status: 'Open',
                     balance: payment_In ? payment_In : -payment_Out
                 }
             })
@@ -214,7 +217,7 @@ const newPaymentOut=Number(payment_Out)
 
        for (const agent of agents){
         if(agent.payment_In_Schema){
-          if(agent.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()){
+          if(agent.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()&&agent.payment_In_Schema.status.toLowerCase()==='open'){
             existingSupplier = agent;
             break
           }
@@ -308,6 +311,7 @@ const newPaymentOut=Number(payment_Out)
                     }],
                     total_Payment_In: payment_In,
                     total_Payment_Out: payment_Out,
+                    status: 'Open',
                     balance: payment_In ? payment_In : -payment_Out
                 }
             })
@@ -355,9 +359,13 @@ const deleteSinglePaymentIn = async (req, res) => {
 
     if (user && user.role === "Admin") {
 
-        const { paymentId, payment_In, payment_Out, supplierName } = req.body
+        const { paymentId,newStatus, payment_In, payment_Out, supplierName } = req.body
 
-        const existingSupplier = await CDWOC.findOne({ 'payment_In_Schema.supplierName': supplierName })
+        const existingSupplier = await CDWOC.findOne({
+            'payment_In_Schema.supplierName': supplierName,
+            'payment_In_Schema._id': newStatus,
+
+         })
         if (!existingSupplier) {
             res.status(404).json({
                 message: "Supplier not Found"
@@ -435,8 +443,12 @@ const updateSinglePaymentIn = async (req, res) => {
     }
     if (user && user.role === "Admin") {
         try {
-            const { supplierName, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_In, payment_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date } = req.body;
-            const existingSupplier = await CDWOC.findOne({ 'payment_In_Schema.supplierName': supplierName });
+            const { supplierName,newStatus, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_In, payment_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date } = req.body;
+            const existingSupplier = await CDWOC.findOne({
+                'payment_In_Schema.supplierName': supplierName,
+                'payment_In_Schema._id': newStatus,
+
+             });
             if (!existingSupplier) {
                 res.status(404).json({ message: "Supplier not found" });
                 return;
@@ -527,11 +539,14 @@ const updateSinglePaymentOut = async (req, res) => {
     if (user && user.role === "Admin") {
 
         try {
-            const { supplierName, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_In, payment_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date } = req.body;
+            const { supplierName,newStatus, paymentId, category, payment_Via, payment_Type, slip_No, details, payment_In, payment_Out, curr_Country, curr_Rate, curr_Amount, slip_Pic, date } = req.body;
 
 
 
-            const existingSupplier = await CDWOC.findOne({ 'payment_In_Schema.supplierName': supplierName });
+            const existingSupplier = await CDWOC.findOne({
+                'payment_In_Schema.supplierName': supplierName,
+                'payment_In_Schema._id': newStatus,
+             });
             if (!existingSupplier) {
                 res.status(404).json({ message: "Supplier not found" });
                 return;
@@ -667,9 +682,9 @@ const deleteAgentPaymentInSchema = async (req, res) => {
     }
 
     try {
-        const { supplierName } = req.body;
+        const { supplierId } = req.body;
 
-        const existingSupplier = await CDWOC.findOne({ 'payment_In_Schema.supplierName': supplierName });
+        const existingSupplier = await CDWOC.findOne({ 'payment_In_Schema._id': supplierId });
 
         if (!existingSupplier) {
             res.status(404).json({ message: "Supplier not found" });
@@ -710,12 +725,14 @@ const getAllPaymentsIn = async (req, res) => {
                     const paymentInSchema = supplier.payment_In_Schema;
                     return {
                         supplierName: paymentInSchema.supplierName,
+                        _id: paymentInSchema._id,
                         total_Payment_In: paymentInSchema.total_Payment_In,
                         total_Payment_Out: paymentInSchema.total_Payment_Out,
                         balance: paymentInSchema.balance,
                         payment: paymentInSchema.payment || [],
-                        open: paymentInSchema.open || false,
-                        close: paymentInSchema.close || false,
+                        opening: paymentInSchema.opening,
+                        closing: paymentInSchema.closing,
+                        status: paymentInSchema.status,
                         createdAt: moment(paymentInSchema.createdAt).format('YYYY-MM-DD'),
                         updatedAt: moment(paymentInSchema.updatedAt).format('YYYY-MM-DD'),
                     };
@@ -728,6 +745,70 @@ const getAllPaymentsIn = async (req, res) => {
     }
 }
 
+// changing Status 
+const changePaymentInStatus = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+        const{supplierName,newStatus,convert}=req.body
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+  
+        
+        const existingSupplier = await CDWOC.findOne({
+            "payment_In_Schema.supplierName": supplierName,
+            "payment_In_Schema._id": newStatus,
+        });
+  
+        if (!existingSupplier) {
+            return res.status(404).json({ message: "Supplier not found" });
+        }
+  
+      
+        if (existingSupplier.payment_In_Schema.status==="Open") {
+          existingSupplier.payment_In_Schema.closing=existingSupplier.payment_In_Schema.balance
+         
+      }
+        // Toggle the status of the payment in schema
+        existingSupplier.payment_In_Schema.status = 'Closed';
+  
+        // Save changes to the database
+        await existingSupplier.save();
+  
+        const newSupplier=new CDWOC({
+          payment_In_Schema:{
+            supplier_Id: new mongoose.Types.ObjectId(),
+            supplierName:existingSupplier.payment_In_Schema.supplierName,
+            total_Payment_In:0,
+            total_Payment_Out:0,
+            balance:convert.toLowerCase()==='yes'?(existingSupplier.balance):0,
+            closing:0,
+            status:'Open',
+            opening:convert.toLowerCase()==='yes'?(existingSupplier.payment_In_Schema.balance):0,
+            
+          }
+        })
+        await newSupplier.save()
+        // Prepare response message based on the updated status
+        let responseMessage;
+         
+            responseMessage = `Khata Closed with ${supplierName} and new Khata created Successfully!`;
+            const newNotification=new Notifications({
+              type:"Khata Closed of Credit Debits WOC Payment In",
+              content:`${user.userName} Closed Khata with Supplier:${supplierName} and new Khata created successfully`,
+              date: new Date().toISOString().split("T")[0]
+    
+            })
+            await newNotification.save()
+        
+  
+        return res.status(200).json({ message: responseMessage });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+  }
 
-
-module.exports = { addPaymentIn,addMultiplePaymentIn, deleteSinglePaymentIn, updateSinglePaymentIn, updateSinglePaymentOut, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn }
+module.exports = { addPaymentIn,addMultiplePaymentIn, deleteSinglePaymentIn, updateSinglePaymentIn, updateSinglePaymentOut, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn,changePaymentInStatus }

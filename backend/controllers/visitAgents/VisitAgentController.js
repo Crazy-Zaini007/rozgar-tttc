@@ -1630,6 +1630,7 @@ const getAllAzadAgentPaymentsIn = async (req, res) => {
 
           return {
             supplier_Id: paymentInSchema.supplier_Id,
+            _id: paymentInSchema._id,
             supplierName: paymentInSchema.supplierName,
             total_Azad_Visa_Price_In_PKR:
               paymentInSchema.total_Azad_Visa_Price_In_PKR,
@@ -3309,6 +3310,7 @@ const getAllAzadAgentPaymentsOut = async (req, res) => {
           const paymentOutSchema = supplier.payment_Out_Schema;
           return {
             supplier_Id: paymentOutSchema.supplier_Id,
+            _id: paymentOutSchema._id,
             supplierName: paymentOutSchema.supplierName,
             total_Azad_Visa_Price_Out_PKR:
               paymentOutSchema.total_Azad_Visa_Price_Out_PKR,

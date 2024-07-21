@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const userAuth = require('../../middleware/userMiddleware/userAuth')
-const { addPaymentIn,addMultiplePaymentIn, deleteSinglePaymentIn, updateSinglePaymentIn, updateSinglePaymentOut, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn } = require('../../controllers/creditesDebitsWOC/CreditesDebitsWOC_Controller')
+const { addPaymentIn,addMultiplePaymentIn, deleteSinglePaymentIn, updateSinglePaymentIn, updateSinglePaymentOut, updateAgentTotalPaymentIn, deleteAgentPaymentInSchema, getAllPaymentsIn,changePaymentInStatus } = require('../../controllers/creditesDebitsWOC/CreditesDebitsWOC_Controller')
 
 router.use(userAuth)
 // Adding a new payment in 
@@ -21,5 +21,6 @@ router.patch('/update/total/payment_in', updateAgentTotalPaymentIn)
 // Deleting a Total payment In
 router.delete('/delete/total/payment_in', deleteAgentPaymentInSchema)
 
-
+// Closing Khata
+router.patch("/change/status", changePaymentInStatus);
 module.exports = router

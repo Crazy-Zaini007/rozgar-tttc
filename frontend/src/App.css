@@ -698,7 +698,7 @@ display: inline-block;
 }
 
 .entry_details .filters select, .entry_details .filters input  {
-  width:auto;
+  width:120px;
   height: 30px;
   border: none;
   border-radius: 2px;
@@ -708,9 +708,10 @@ display: inline-block;
   font-weight: 500;
   letter-spacing: 1px;
   box-shadow: 10px 10px 10px 10px solid var(--black);
-  text-transform: normal;
-background-color: #dad5d5;
+ background-color: #dad5d5;
+
 }
+
 .entry_details .filters select:focus,.entry_details .filters input:focus {
   background-color: white;
   outline: none;
@@ -837,7 +838,7 @@ background-color: #dad5d5;
   font-size: 12px;
 }
 .entry_details label {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--black);
   font-weight: 600;
   letter-spacing: 1px;
