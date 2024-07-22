@@ -1895,3 +1895,220 @@ color: white;
   font-size: 11px;
   color: white;
   }
+
+  /* New Requirements */
+
+  /* Notes */
+.requirements .add_btn{
+  font-size: 12px;
+  color: var(--white);
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  background: var(--accent-stonger-blue);
+  font-weight: 600;
+}
+.requirements .filters label{
+  font-size: 12px;
+}
+.requirements .filters input{
+  width: auto;
+  height: 30px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 2px;
+  font-size: 12px;
+  padding-left: 15px;
+  padding-right: 4px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 1px;
+background-color: #dad5d5;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  text-transform: capitalize;
+}
+.requirements .filters input:focus{
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue);
+}
+
+/* Requirements  adding a new requirement modal*/
+.add_Modal h2{
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent-stonger-blue);
+}
+
+.add_Modal label{
+  color:var(--accent-stong-blue);
+  font-size:12px;
+  font-weight:600;
+}
+.add_Modal input,.add_Modal select{
+  width:100%;
+  height:35px;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 20px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  text-transform: capitalize;
+}
+.add_Modal textarea{
+  width:100%;
+  min-height:10vh;
+  border: 1px solid var(--grays-dm-white);
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  color: var(--accent-stong-blue);
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  text-transform: capitalize;
+
+}
+.add_Modal textarea:focus,.add_Modal input:focus,.add_Modal form select:focus{
+  outline: none;
+  border: 1px solid var(--accent-lighter-blue);
+}
+.add_Modal .save_btn{
+background:var(--accent-stonger-blue);
+color:white;
+}
+.add_Modal .save_btn:hover{
+  background: none;
+  border:1px solid var(--accent-stonger-blue);
+  color:var(--accent-stonger-blue);
+  }
+
+  .add_Modal .cancel_btn{
+    background:var(--b-Red);
+    color:white;
+    }
+    .add_Modal .cancel_btn:hover{
+      background: none;
+      border:1px solid var(--b-Red);
+      color:var(--b-Red);
+      }
+
+
+      /* Card */
+  .requirements img{
+        width: 60%;
+        height: 60%;
+        }
+       
+      .requirements .card{
+        height: 100%;
+        position: relative;
+        border: none;
+        border-radius: 10px;
+        border-bottom: 2px solid var(--accent-stonger-blue);
+       }  
+       
+       .requirements .card .buttons{
+        position: absolute;
+        bottom: 2px;
+        right: 10px;
+      
+       }
+  .requirements .image img{
+    width: 70px;
+    height: 70px;
+   }
+.requirements h2{
+  font-size: 20px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: var(--black);
+}
+.requirements p {
+  font-size: 13px;
+}
+.requirements p img{
+  height: 20px;
+  width: 20px;
+}
+.requirements .edit_btn{
+  font-size: 12px;
+  background-color: var(--accent-lighter-blue);
+  color: var(--white);
+}
+.requirements .edit_btn:hover{
+  font-size: 12px;
+  background: none;
+  color: var(--accent-lighter-blue);
+  border:1px solid var(--accent-lighter-blue);
+}
+.requirements .view_btn{
+  font-size: 12px;
+  background-color: var(--cool-Green);
+  color: var(--white);
+}
+.requirements .view_btn:hover{
+  font-size: 12px;
+  background: none;
+  color: var(--cool-Green);
+  border:1px solid var(--cool-Green);
+}
+
+
+
+/* Comments */
+.requirements .comments {
+  position: relative;
+  min-height:70vh;
+  overflow-y: scroll;
+}
+.requirements .comments .intro{
+  position:sticky;
+  width: auto;
+  z-index: 999;
+}
+.requirements .comments .dropdown .dropdown-menu .dropdown-item{
+  font-size: 12px;
+  font-weight: 600;
+}
+.requirements .comments .dropdown .btn{
+  box-shadow: 10px 10px 10px 10px solid var(--black);
+  
+}
+.requirements .comments .dropdown .dropdown-menu .close_btn{
+  font-size: 12px;
+  color: var(--accent-stonger-blue);
+}
+.requirements .comments .dropdown .dropdown-menu .del_btn{
+  font-size: 12px;
+  color: var(--b-Red);
+}
+.requirements .comments .dropdown .dropdown-menu .add_btn{
+  font-size: 12px;
+  color: var(--cool-Green);
+  background-color:white;
+}
+.requirements .comments .no_message{
+position: relative;
+}
+.requirements .comments .data img{
+  height: 50%;
+  width: 50%;
+  top: 50%;
+}
+.requirements .comments .send_message{
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+}
+.requirements .comments .send_message button{
+  background-color: var(--cool-Green);
+  color:var(--white);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing: 1px;
+}

@@ -161,6 +161,8 @@ import Notes from './components/Notes.jsx'
 
 // Backup
 import Backup from './components/Backup.jsx'
+import Requirements from './components/Requirements.jsx'
+
 
 
 function App() {
@@ -329,6 +331,10 @@ function App() {
 
           {/* Backup */}
           <Route path='/rozgar/backup' element={user && <Backup></Backup>}></Route>
+
+           {/* Requirements */}
+           <Route path='/rozgar/requirements' element={user && <Requirements></Requirements>}></Route>
+
           {/* User */}
           <Route path='/rozgar/user/account' element={user && <User></User>}></Route>
 

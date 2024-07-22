@@ -30,7 +30,7 @@ const addExpense = async (req, res) => {
         if (!user) {
             res.status(404).json({ message: "User not found" })
         }
-        if (user && user.role === "Admin") {
+        if (user) {
            
             let nextInvoiceNumber = 0;
 

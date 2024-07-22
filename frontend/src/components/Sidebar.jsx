@@ -3106,7 +3106,7 @@ const collapsed = useSelector((state) => state.collapsed.collapsed);
             <li className=' my-2' style={activeItem === 110 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(110, `/rozgar/recyclebin`)}><i className="fas fa-recycle me-2 shadow"></i>RecycleBin</li>
             <li className=' my-2' style={activeItem === 92 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(92, `/rozgar/notes`)}><i className="fas fa-sticky-note me-2 shadow"></i>Notes</li>
             <li className=' my-2' style={activeItem === 93 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(93, `/rozgar/backup`)}><i className="fas fa-database me-2 shadow"></i>Backup</li>
-
+            <li className=' my-2' style={activeItem === 120 ? { backgroundColor: 'var(--accent-stonger-blue)', border: '0px', borderRadius: '4px', fontWeight: '600', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}} onClick={() => handleItemClick(120, `/rozgar/requirements`)}><i className="fa-solid  fa-list-check me-2 shadow"></i>Requirements</li>
           </ul>
           <ul className='mt-4'>
             <li className=' my-2' onClick={handleLogout}><i className=" me-2"><LogoutRoundedIcon fontSize='small'></LogoutRoundedIcon></i> Logout</li>

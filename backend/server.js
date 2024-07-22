@@ -67,6 +67,8 @@ const Assets =require('./routes/assets/Assets_Route')
 //Backup
 const Backup=require('./routes/backup/backup_Route')
  
+//Requirements
+const Requirements=require('./routes/requirements/Requirement_Route')
 //express app
 const app = express()
 const server = http.createServer(app)
@@ -162,6 +164,8 @@ app.use('/auth/recyclebin',RecycleBin)
 // Assets
 app.use('/auth/assets',Assets)
 
+// Requirements
+app.use('/auth/requirements',Requirements)
 
 //PORT number
 const PORT = process.env.PORT
