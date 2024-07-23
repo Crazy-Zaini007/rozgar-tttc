@@ -3029,6 +3029,7 @@ if(entry){
   entry.entry_Mode=entry_Mode
   entry.final_Status=final_Status
   entry.trade=trade
+  // updated
   entry.visa_Purchase_Rate_PKR=visa_Price
   entry.visa_Purchase_Rate_Oth_Cur=visa_Price_Curr
   entry.flight_Date=flight_Date?flight_Date:'Not Fly'
