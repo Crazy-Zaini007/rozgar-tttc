@@ -254,7 +254,7 @@ export default function VisitCandPaymentInDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ name: editedEntry1.supplierName, pp_No: editedEntry1.pp_No, contact: editedEntry1.contact, entry_Mode: editedEntry1.entry_Mode, company: editedEntry1.company, country: editedEntry1.country, trade: editedEntry1.trade, final_Status: editedEntry1.final_Status, flight_Date: editedEntry1.flight_Date, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_Curr: editedEntry1.total_Payment_In_Curr, status: editedEntry1.status })
+        body: JSON.stringify({ name: editedEntry1.supplierName, pp_No: editedEntry1.pp_No, contact: editedEntry1.contact, entry_Mode: editedEntry1.entry_Mode, company: editedEntry1.company, country: editedEntry1.country, trade: editedEntry1.trade, final_Status: editedEntry1.final_Status, flight_Date: editedEntry1.flight_Date, total_Payment_In: editedEntry1.total_Payment_In, total_Cash_Out: editedEntry1.total_Cash_Out, total_Visa_Price_In_PKR: editedEntry1.total_Visa_Price_In_PKR, total_Visa_Price_In_Curr: editedEntry1.total_Visa_Price_In_Curr, status: editedEntry1.status })
       })
 
       const json = await response.json()
@@ -1384,10 +1384,10 @@ export default function VisitCandPaymentInDetails() {
                                     <input type='text' value={editedEntry1.supplierName} readonly />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='text' min='0' value={editedEntry1.pp_No} onChange={(e) => handleTotalPaymentInputChange(e, 'pp_No')} readonly />
+                                    <input type='text' min='0' value={editedEntry1.pp_No} onChange={(e) => handleTotalPaymentInputChange(e, 'pp_No')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <select value={editedEntry1.entry_Mode} onChange={(e) => handleTotalPaymentInputChange(e, 'entry_Mode')} required>
+                                    <select value={editedEntry1.entry_Mode} onChange={(e) => handleTotalPaymentInputChange(e, 'entry_Mode')} >
                                       <option value="">Choose</option>
                                       {entryMode && entryMode.map((data) => (
                                         <option key={data._id} value={data.entry_Mode}>{data.entry_Mode}</option>
@@ -1395,7 +1395,7 @@ export default function VisitCandPaymentInDetails() {
                                     </select>
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <select value={editedEntry1.company} onChange={(e) => handleTotalPaymentInputChange(e, 'company')} required>
+                                    <select value={editedEntry1.company} onChange={(e) => handleTotalPaymentInputChange(e, 'company')} >
                                       <option value="">Choose</option>
                                       {companies && companies.map((data) => (
                                         <option key={data._id} value={data.company}>{data.company}</option>
@@ -1403,7 +1403,7 @@ export default function VisitCandPaymentInDetails() {
                                     </select>
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <select value={editedEntry1.country} onChange={(e) => handleTotalPaymentInputChange(e, 'country')} required>
+                                    <select value={editedEntry1.country} onChange={(e) => handleTotalPaymentInputChange(e, 'country')} >
                                       <option value="">Choose</option>
                                       {countries && countries.map((data) => (
                                         <option key={data._id} value={data.country}>{data.country}</option>
@@ -1412,7 +1412,7 @@ export default function VisitCandPaymentInDetails() {
 
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <select value={editedEntry1.trade} onChange={(e) => handleTotalPaymentInputChange(e, 'trade')} required>
+                                    <select value={editedEntry1.trade} onChange={(e) => handleTotalPaymentInputChange(e, 'trade')} >
                                       <option value="">Choose</option>
                                       {trades && trades.map((data) => (
                                         <option key={data._id} value={data.trade}>{data.trade}</option>
@@ -1421,7 +1421,7 @@ export default function VisitCandPaymentInDetails() {
 
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <select value={editedEntry1.final_Status} onChange={(e) => handleTotalPaymentInputChange(e, 'final_Status')} required>
+                                    <select value={editedEntry1.final_Status} onChange={(e) => handleTotalPaymentInputChange(e, 'final_Status')} >
                                       <option value="">Choose</option>
                                       {finalStatus && finalStatus.map((data) => (
                                         <option key={data._id} value={data.final_Status}>{data.final_Status}</option>
@@ -1432,27 +1432,27 @@ export default function VisitCandPaymentInDetails() {
                                     <input type='date' value={editedEntry1.flight_Date} onChange={(e) => handleTotalPaymentInputChange(e, 'flight_Date')} />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_PKR} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_PKR')} readonly />
+                                    <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_PKR} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_PKR')} />
                                   </TableCell>
 
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Payment_In} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In')} readonly />
+                                    <input type='number' min='0' value={editedEntry1.total_Payment_In} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} readonly />
+                                    <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.remaining_Balance} readonly />
+                                    <input type='number' value={editedEntry1.remaining_Balance} disabled />
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td p-1 '>
-                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} readonly />
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_In_Curr')} />
                                     </TableCell>
                                     <TableCell className='border data_td p-1 '>
-                                      <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} readonly />
+                                      <input type='number' min='0' value={editedEntry1.total_Payment_In_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_In_Curr')} disabled />
                                     </TableCell>
                                     <TableCell className='border data_td p-1 '>
-                                      <input type='number' min='0' value={editedEntry1.remaining_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} readonly />
+                                      <input type='number' min='0' value={editedEntry1.remaining_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'remaining_Curr')} disabled />
                                     </TableCell>
                                   </>}
 

@@ -226,9 +226,9 @@ export default function PaymentInDetails() {
 
   const filteredTotalPaymentIn = CDWC_Payments_In.filter(payment => {
     return (
-      payment.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
-      payment.supplierName?.toLowerCase().includes(supplier1.toLowerCase())&&
-      payment.status?.toLowerCase().includes(status.toLowerCase())
+      payment?.createdAt.toLowerCase().includes(date1.toLowerCase()) &&
+      payment?.supplierName?.toLowerCase().includes(supplier1.toLowerCase())&&
+      payment?.status?.toLowerCase().includes(status.toLowerCase())
     )
   })
 

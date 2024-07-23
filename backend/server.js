@@ -1,8 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 
-const AgentsSchema=require('./database/agents/AgentSchema')
-const SuppliersSchema=require('./database/suppliers/SupplierSchema')
+const CDWOCSchema=require('./database/creditsDebitsWOC/CDWOCSchema')
+const CDWCSchema=require('./database/creditsDebitsWC/CDWCSchema')
 
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
@@ -170,35 +170,19 @@ app.use('/auth/requirements',Requirements)
 //PORT number
 const PORT = process.env.PORT
 
-async function updateAgentsCashOut() {
+async function updateCDWOCSchema() {
     try {
-      // Update the payment_In_Schema candPayments
-      await AgentsSchema.updateMany(
-        { 'payment_In_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.cash_Out': { $exists: false } }] }
-      );
-  
-      // Update the payment_Out_Schema candPayments
-      await AgentsSchema.updateMany(
-        { 'payment_Out_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.cash_Out': { $exists: false } }] }
-      );
-  
-      // Update the payment_In_Schema candPayments payments array
-      await AgentsSchema.updateMany(
-        { 'payment_In_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].payments.$[subelem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.payments.cash_Out': { $exists: false } }, { 'subelem.cash_Out': { $exists: false } }] }
-      );
-  
-      // Update the payment_Out_Schema candPayments payments array
-      await AgentsSchema.updateMany(
-        { 'payment_Out_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].payments.$[subelem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.payments.cash_Out': { $exists: false } }, { 'subelem.cash_Out': { $exists: false } }] }
-      );
+      // Add status, opening, and closing to payment_In_Schema if they don't exist
+    await CDWOCSchema.updateMany(
+      { 'payment_In_Schema.status': { $exists: false } },
+      {
+        $set: {
+          'payment_In_Schema.status': 'Open',
+          'payment_In_Schema.opening': 0,
+          'payment_In_Schema.closing': 0,
+        },
+      }
+    );
   
       console.log('cash_Out fields updated successfully.');
     } catch (err) {
@@ -207,114 +191,23 @@ async function updateAgentsCashOut() {
   }
   
   
-async function updateSuppliersCashOut() {
+async function updateCDWCSchema() {
     try {
-      // Update the payment_In_Schema candPayments
-      await SuppliersSchema.updateMany(
-        { 'payment_In_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.cash_Out': { $exists: false } }] }
-      );
-  
-      // Update the payment_Out_Schema candPayments
-      await SuppliersSchema.updateMany(
-        { 'payment_Out_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.cash_Out': { $exists: false } }] }
-      );
-  
-      // Update the payment_In_Schema candPayments payments array
-      await SuppliersSchema.updateMany(
-        { 'payment_In_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].payments.$[subelem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.payments.cash_Out': { $exists: false } }, { 'subelem.cash_Out': { $exists: false } }] }
-      );
-  
-      // Update the payment_Out_Schema candPayments payments array
-      await SuppliersSchema.updateMany(
-        { 'payment_Out_Schema.candPayments': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].payments.$[subelem].cash_Out': 0 } },
-        { arrayFilters: [{ 'elem.payments.cash_Out': { $exists: false } }, { 'subelem.cash_Out': { $exists: false } }] }
-      );
-  
-      console.log('cash_Out fields updated successfully.');
+     // Add status, opening, and closing to payment_In_Schema if they don't exist
+    await CDWCSchema.updateMany(
+      { 'payment_In_Schema.status': { $exists: false } },
+      {
+        $set: {
+          'payment_In_Schema.status': 'Open',
+          'payment_In_Schema.opening': 0,
+          'payment_In_Schema.closing': 0,
+        },
+      }
+    );
+
+      console.log('fields updated successfully.');
     } catch (err) {
       console.error('Error updating cash_Out:', err);
-    }
-  }
-
-
-  async function updateCandPayments() {
-    try {
-      // Update payment_In in payment_In_Schema.candPayments
-      await AgentsSchema.updateMany(
-        { 'payment_In_Schema.candPayments.payment_In': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].payment_In': 0 } },
-        { arrayFilters: [{ 'elem.payment_In': { $exists: false } }] }
-      );
-  
-      // Update payment_Out in payment_Out_Schema.candPayments
-      await AgentsSchema.updateMany(
-        { 'payment_Out_Schema.candPayments.payment_Out': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].payment_Out': 0 } },
-        { arrayFilters: [{ 'elem.payment_Out': { $exists: false } }] }
-      );
-  
-      // Update new_Payment in payment_In_Schema.candPayments.payments
-      await AgentsSchema.updateMany(
-        { 'payment_In_Schema.candPayments.payments.new_Payment': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].payments.$[subelem].new_Payment': 0 } },
-        { arrayFilters: [{ 'elem.payments.new_Payment': { $exists: false } }, { 'subelem.new_Payment': { $exists: false } }] }
-      );
-  
-      // Update new_Payment in payment_Out_Schema.candPayments.payments
-      await AgentsSchema.updateMany(
-        { 'payment_Out_Schema.candPayments.payments.new_Payment': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].payments.$[subelem].new_Payment': 0 } },
-        { arrayFilters: [{ 'elem.payments.new_Payment': { $exists: false } }, { 'subelem.new_Payment': { $exists: false } }] }
-      );
-  
-      console.log('candPayments and payments fields updated successfully.');
-    } catch (err) {
-      console.error('Error updating candPayments and payments:', err);
-    }
-  }
-  
-
-
-  async function updateSuppCandPayments() {
-    try {
-      // Update payment_In in payment_In_Schema.candPayments
-      await SuppliersSchema.updateMany(
-        { 'payment_In_Schema.candPayments.payment_In': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].payment_In': 0 } },
-        { arrayFilters: [{ 'elem.payment_In': { $exists: false } }] }
-      );
-  
-      // Update payment_Out in payment_Out_Schema.candPayments
-      await SuppliersSchema.updateMany(
-        { 'payment_Out_Schema.candPayments.payment_Out': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].payment_Out': 0 } },
-        { arrayFilters: [{ 'elem.payment_Out': { $exists: false } }] }
-      );
-  
-      // Update new_Payment in payment_In_Schema.candPayments.payments
-      await SuppliersSchema.updateMany(
-        { 'payment_In_Schema.candPayments.payments.new_Payment': { $exists: true } },
-        { $set: { 'payment_In_Schema.candPayments.$[elem].payments.$[subelem].new_Payment': 0 } },
-        { arrayFilters: [{ 'elem.payments.new_Payment': { $exists: false } }, { 'subelem.new_Payment': { $exists: false } }] }
-      );
-  
-      // Update new_Payment in payment_Out_Schema.candPayments.payments
-      await SuppliersSchema.updateMany(
-        { 'payment_Out_Schema.candPayments.payments.new_Payment': { $exists: true } },
-        { $set: { 'payment_Out_Schema.candPayments.$[elem].payments.$[subelem].new_Payment': 0 } },
-        { arrayFilters: [{ 'elem.payments.new_Payment': { $exists: false } }, { 'subelem.new_Payment': { $exists: false } }] }
-      );
-  
-      console.log('candPayments and payments fields updated successfully.');
-    } catch (err) {
-      console.error('Error updating candPayments and payments:', err);
     }
   }
 
@@ -325,10 +218,9 @@ mongoose
     .then(async () => {
         // Run the update script once after connection is established
     
-//     await updateAgentsCashOut();
-// await updateSuppliersCashOut()
-// await updateCandPayments()
-// await updateSuppCandPayments()
+//  await updateCDWOCSchema();
+//  await updateCDWCSchema();
+
         server.listen(PORT, () => {
             console.log(`Connected on port ${PORT}`)
         })

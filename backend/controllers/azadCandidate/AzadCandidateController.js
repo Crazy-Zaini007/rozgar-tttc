@@ -992,7 +992,7 @@ const updateAgentTotalPaymentIn = async (req, res) => {
   if (user && user.role === "Admin") {
     try {
 
-      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status} =req.body;
+      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status,total_Visa_Price_In_PKR,total_Visa_Price_In_Curr} =req.body;
      
       let entryMode
 
@@ -1001,7 +1001,17 @@ const candidateIn=await AzadCandidate.findOne({
     "payment_In_Schema.contact": contact.toString(),
     "payment_In_Schema.pp_No": pp_No.toString(),
   })
-  if(candidateIn){     
+  let visa_Price=0
+  let visa_Price_Curr=0
+  let newRemainingPKR=0
+  let newRemainingCurr=0
+
+  if(candidateIn){  
+    visa_Price=parseInt(total_Visa_Price_In_PKR?total_Visa_Price_In_PKR:0,10)
+     visa_Price_Curr=parseInt(total_Visa_Price_In_Curr?total_Visa_Price_In_Curr:0,10)
+     newRemainingPKR= candidateIn.payment_In_Schema.total_Visa_Price_In_PKR-visa_Price
+     newRemainingCurr= candidateIn.payment_In_Schema.total_Visa_Price_In_Curr-visa_Price_Curr
+
     entryMode=candidateIn.payment_In_Schema.entry_Mode
     candidateIn.payment_In_Schema.company=company
     candidateIn.payment_In_Schema.country=country
@@ -1009,6 +1019,10 @@ const candidateIn=await AzadCandidate.findOne({
     candidateIn.payment_In_Schema.final_Status=final_Status
     candidateIn.payment_In_Schema.trade=trade
     candidateIn.payment_In_Schema.status=status
+    candidateIn.payment_In_Schema.total_Visa_Price_In_PKR=visa_Price
+    candidateIn.payment_In_Schema.remaining_Balance-=newRemainingPKR
+    candidateIn.payment_In_Schema.total_Visa_Price_In_Curr=visa_Price_Curr
+    candidateIn.payment_In_Schema.remaining_Curr-=newRemainingCurr
     candidateIn.payment_In_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await candidateIn.save()
   }
@@ -1298,6 +1312,10 @@ for (const visitAgent of visitAgents){
             SupPersonIn.entry_Mode=entry_Mode
             SupPersonIn.final_Status=final_Status
             SupPersonIn.trade=trade
+            SupPersonIn.azad_Visa_Price_In_PKR=visa_Price
+            SupPersonIn.remaining_Price-=newRemainingPKR
+            SupPersonIn.azad_Visa_Price_In_Curr=visa_Price_Curr
+            SupPersonIn.remaining_Curr-=newRemainingCurr
             SupPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
            await azadSupplier.save()
 
@@ -1333,6 +1351,10 @@ for (const visitAgent of visitAgents){
             AgentPersonIn.entry_Mode=entry_Mode
             AgentPersonIn.final_Status=final_Status
             AgentPersonIn.trade=trade
+            AgentPersonIn.azad_Visa_Price_In_PKR=visa_Price
+            AgentPersonIn.remaining_Price-=newRemainingPKR
+            AgentPersonIn.azad_Visa_Price_In_Curr=visa_Price_Curr
+            AgentPersonIn.remaining_Curr-=newRemainingCurr
             AgentPersonIn.flight_Date=flight_Date?flight_Date:'Not Fly'
            await azadAgent.save()
 
@@ -1476,6 +1498,8 @@ if(entry){
   entry.entry_Mode=entry_Mode
   entry.final_Status=final_Status
   entry.trade=trade
+  entry.azad_Visa_Sales_PKR=visa_Price
+  entry.azad_Visa_Sales_Rate_Oth_Cur=visa_Price_Curr
   entry.flight_Date=flight_Date?flight_Date:'Not Fly'
   await entry.save()
 
@@ -2542,7 +2566,7 @@ const updateAgentTotalPaymentOut = async (req, res) => {
   if (user && user.role === "Admin") {
     try {
 
-      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status} =
+      const {name,pp_No,contact,company,country,entry_Mode,final_Status,trade,flight_Date,status,total_Visa_Price_Out_PKR,total_Visa_Price_Out_Curr} =
       req.body;
      
       let entryMode
@@ -2552,7 +2576,17 @@ const updateAgentTotalPaymentOut = async (req, res) => {
     "payment_Out_Schema.contact": contact.toString(),
     "payment_Out_Schema.pp_No": pp_No.toString(),
   })
+  let visa_Price=0
+  let visa_Price_Curr=0
+  let newRemainingPKR=0
+  let newRemainingCurr=0
+
   if(candidateOut){
+    visa_Price=parseInt(total_Visa_Price_Out_PKR?total_Visa_Price_Out_PKR:0,10)
+    visa_Price_Curr=parseInt(total_Visa_Price_Out_Curr?total_Visa_Price_Out_Curr:0,10)
+    newRemainingPKR= candidateIn.payment_Out_Schema.total_Visa_Price_Out_PKR-visa_Price
+    newRemainingCurr= candidateIn.payment_Out_Schema.total_Visa_Price_Out_Curr-visa_Price_Curr
+
     entryMode=candidateOut.payment_Out_Schema.entry_Mode
     candidateOut.payment_Out_Schema.company=company
     candidateOut.payment_Out_Schema.country=country
@@ -2560,6 +2594,10 @@ const updateAgentTotalPaymentOut = async (req, res) => {
     candidateOut.payment_Out_Schema.final_Status=final_Status
     candidateOut.payment_Out_Schema.trade=trade
     candidateOut.payment_Out_Schema.status=status
+    candidateOut.payment_Out_Schema.total_Visa_Price_Out_PKR=visa_Price
+    candidateOut.payment_Out_Schema.remaining_Balance-=newRemainingPKR
+    candidateOut.payment_Out_Schema.total_Visa_Price_Out_Curr=visa_Price_Curr
+    candidateOut.payment_Out_Schema.remaining_Curr-=newRemainingCurr
     candidateOut.payment_Out_Schema.flight_Date=flight_Date?flight_Date:'Not Fly'
     await candidateOut.save()
   
@@ -2866,6 +2904,10 @@ for (const visitAgent of visitAgents){
             SupPersonOut.entry_Mode=entry_Mode
             SupPersonOut.final_Status=final_Status
             SupPersonOut.trade=trade
+            SupPersonOut.azad_Visa_Price_Out_PKR=visa_Price
+            SupPersonOut.remaining_Price-=newRemainingPKR
+            SupPersonOut.azad_Visa_Price_Out_Curr=visa_Price_Curr
+            SupPersonOut.remaining_Curr-=newRemainingCurr
             SupPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
            await azadSupplier.save()
 
@@ -2901,6 +2943,10 @@ for (const azadAgent of azadAgents){
       AgentPersonOut.entry_Mode=entry_Mode
       AgentPersonOut.final_Status=final_Status
       AgentPersonOut.trade=trade
+      AgentPersonOut.azad_Visa_Price_Out_PKR=visa_Price
+      AgentPersonOut.remaining_Price-=newRemainingPKR
+      AgentPersonOut.azad_Visa_Price_Out_Curr=visa_Price_Curr
+      AgentPersonOut.remaining_Curr-=newRemainingCurr
       AgentPersonOut.flight_Date=flight_Date?flight_Date:'Not Fly'
      await azadAgent.save()
       
@@ -3017,6 +3063,8 @@ if(azadCandidateOut){
        personOut.entry_Mode=entry_Mode
        personOut.final_Status=final_Status
        personOut.trade=trade
+       entry.azad_Visa_Purchase_PKR=visa_Price
+       entry.azad_Visa_Purchase_Rate_Oth_Cur=visa_Price_Curr
        personOut.flight_Date=flight_Date?flight_Date:'Not Fly'
        await protector.save()
 
