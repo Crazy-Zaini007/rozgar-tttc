@@ -17,7 +17,6 @@ import FinalStatusHook from '../../../hooks/settingHooks/FinalStatusHook'
 import TradeHook from '../../../hooks/settingHooks/TradeHook'
 import { toast } from 'react-toastify';
 import ClipLoader from 'react-spinners/ClipLoader'
-import { Link } from 'react-router-dom'
 export default function AgentCandPaymentOutDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
@@ -733,7 +732,7 @@ const printMainTable = () => {
           <td>${String(entry.total_Visa_Price_Out_PKR)}</td>
           <td>${String(entry.total_Payment_Out)}</td>
           <td>${String(entry.total_Cash_Out)}</td>
-          <td>${String(entry.total_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out)}</td>
+          <td>${String(entry.total_Visa_Price_Out_PKR>0?entry.total_Visa_Price_Out_PKR:entry.opening-entry.total_Payment_Out+entry.total_Cash_Out)}</td>
           <td>${String(entry.total_Visa_Price_Out_Curr)}</td>
           <td>${String(entry.total_Payment_Out_Curr)}</td>
           <td>${String(entry.total_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr)}</td>
@@ -746,7 +745,7 @@ const printMainTable = () => {
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_Out_PKR, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Cash_Out, 0))}</td>
-        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out), 0))}</td>
+        <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_Out_PKR>0?entry.total_Visa_Price_Out_PKR:entry.opening-entry.total_Payment_Out+entry.total_Cash_Out), 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Visa_Price_Out_Curr, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + entry.total_Payment_Out_Curr, 0))}</td>
         <td>${String(filteredTotalPaymentIn.reduce((total, entry) => total + (entry.total_Visa_Price_Out_Curr - entry.total_Payment_Out_Curr), 0))}</td>
@@ -1338,7 +1337,7 @@ const downloadExcel = () => {
       Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
       Total_Payment_In: payments.total_Payment_Out,
       Total_Cash_Out: payments.total_Cash_Out,
-      Remaining_PKR: payments.total_Visa_Price_Out_PKR - payments.total_Payment_Out + payments.total_Cash_Out,
+      Remaining_PKR: payments.total_Visa_Price_Out_PKR>0?payments.total_Visa_Price_Out_PKR:payments.opening-payments.total_Payment_Out+payments.total_Cash_Out,
       Total_Visa_Price_Out_Curr: payments.total_Visa_Price_Out_Curr,
       Total_Payment_Out_Curr: payments.total_Payment_Out_Curr,
       Remaining_Curr: payments.total_Visa_Price_Out_Curr - payments.total_Payment_Out_Curr,
@@ -1852,7 +1851,7 @@ const[showCategory,setShowCategory]=useState(false)
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
-                                    {entry.total_Visa_Price_Out_PKR - entry.total_Payment_Out + entry.total_Cash_Out}
+                                    {entry.total_Visa_Price_Out_PKR>0?entry.total_Visa_Price_Out_PKR:entry.opening-entry.total_Payment_Out+entry.total_Cash_Out}
                                   </TableCell>
                                   {show1 && <>
                                     <TableCell className='border data_td text-center' >
@@ -1911,15 +1910,13 @@ const[showCategory,setShowCategory]=useState(false)
                             return isNaN(cashOut) ? total : total + cashOut;
                           }, 0)}
                         </TableCell>
+                        
                         <TableCell className='border data_td text-center bg-warning text-white'>
                           {/* Calculate the total sum of cash_Out */}
                           {filteredTotalPaymentIn.reduce((total, paymentItem) => {
-                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_Out_PKR);
-                            const cashOut = parseFloat(paymentItem.total_Cash_Out);
-                            const paymentOut = parseFloat(paymentItem.total_Payment_Out);
-
+                            const paymentIn = parseFloat(paymentItem.total_Visa_Price_Out_PKR>0?paymentItem.total_Visa_Price_Out_PKR:paymentItem.opening-paymentItem.total_Payment_Out+paymentItem.total_Cash_Out);
                             // Add the difference between total_Visa_Price_Out_PKR and total_Payment_Out, then add total_Cash_Out
-                            const netCashOut = isNaN(paymentIn) || isNaN(paymentOut) ? 0 : paymentIn - paymentOut + cashOut;
+                            const netCashOut =  isNaN(paymentIn) ? 0 : paymentIn ;
                             return total + netCashOut;
                           }, 0)}
                         </TableCell>
@@ -2916,7 +2913,7 @@ const[showCategory,setShowCategory]=useState(false)
         <h4 className="modal-title" id="exampleModalLabel">{selectedSupplier} Khata Details:-</h4>
        <span className='mx-1'>Total: {agent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Visa_Price_Out_PKR||0)} |</span>
        <span className='mx-1'>Total Payment done: {agent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Payment_Out||0)} |</span>
-       <span className='mx-1'>Remaining Balance: {agent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.remaining_Balance||0)} </span>
+       <span className='mx-1'>Remaining Balance: {agent_Payments_Out.filter((data)=>data.supplierName===selectedSupplier&&data._id===newStatus).map(data=>data.total_Visa_Price_Out_PKR>0?data.total_Visa_Price_Out_PKR:data.opening-data.total_Payment_Out+data.total_Cash_Out||0)} </span>
 
         <button type="button" className="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close" onClick={()=>setMultipleIds([])}/>
       </div>

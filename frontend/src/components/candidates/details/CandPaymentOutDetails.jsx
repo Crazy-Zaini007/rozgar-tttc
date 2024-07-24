@@ -448,7 +448,7 @@ export default function CandPaymentOutDetails() {
                         <td>${String(entry.total_Visa_Price_Out_PKR)}</td>
                         <td>${String(entry.total_Payment_Out)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
-                        <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.total_Visa_Price_Out_PKR-entry.total_Payment_Out+entry.total_Cash_Out)}</td>
                         <td>${String(entry.status)}</td>
                         <td>
                         ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
@@ -598,7 +598,7 @@ export default function CandPaymentOutDetails() {
                         <td>${String(entry.total_Visa_Price_Out_PKR)}</td>
                         <td>${String(entry.total_Payment_Out)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
-                        <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.total_Visa_Price_Out_PKR-entry.total_Payment_Out+entry.total_Cash_Out)}</td>
                         <td>${String(entry.status)}</td>
                         <td>
                         ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
@@ -719,7 +719,7 @@ export default function CandPaymentOutDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
               <p>Total Out: <b>${details.total_Payment_Out}</b></p>
-              <p>Remaining: <b>${details.remaining_Balance}</b></p>
+              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out}</b></p>
             </div>
           </div>
         </div>
@@ -897,7 +897,7 @@ export default function CandPaymentOutDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
               <p>Total In: <b>${details.total_Payment_Out}</b></p>
-              <p>Remaining: <b>${details.remaining_Balance}</b></p>
+              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out}</b></p>
             </div>
           </div>
         </div>
@@ -1033,7 +1033,7 @@ export default function CandPaymentOutDetails() {
         Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
         Total_Payment_In: payments.total_Payment_Out,
         Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.remaining_Balance,
+        Remaining_PKR: payments.total_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
         Total_Visa_Price_Out_Curr: payments.total_Visa_Price_Out_Curr,
         Total_Payment_Out_Curr: payments.total_Payment_Out_Curr,
         Remaining_Curr: payments.remaining_Curr,
@@ -1065,7 +1065,7 @@ export default function CandPaymentOutDetails() {
       Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
       Total_Payment_In: payments.total_Payment_Out,
       Total_Cash_Out: payments.total_Cash_Out,
-      Remaining_PKR: payments.remaining_Balance,
+      Remaining_PKR: payments.total_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
       Status: payments.status,
     }
 
@@ -1175,7 +1175,7 @@ export default function CandPaymentOutDetails() {
       Total_Visa_Price_Out_PKR: details.total_Visa_Price_Out_PKR,
       Total_Payment_In: details.total_Payment_Out,
       Total_Cash_Out: details.total_Cash_Out,
-      Remaining_PKR: details.remaining_Balance,
+      Remaining_PKR: details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out,
       Total_Visa_Price_Out_Curr: details.total_Visa_Price_Out_Curr,
       Total_Payment_Out_Curr: details.total_Payment_Out_Curr,
       Remaining_Curr: details.remaining_Curr,
@@ -1443,7 +1443,7 @@ export default function CandPaymentOutDetails() {
                                     <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.remaining_Balance} disabled />
+                                    <input type='number' value={editedEntry1.total_Visa_Price_Out_PKR-editedEntry1.total_Payment_Out+editedEntry1.total_Cash_Out} disabled />
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td p-1 '>
@@ -1515,7 +1515,7 @@ export default function CandPaymentOutDetails() {
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    {entry.remaining_Balance}
+                                    {entry.total_Visa_Price_Out_PKR-entry.total_Payment_Out+entry.total_Cash_Out}
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td text-center'>
@@ -1628,7 +1628,7 @@ export default function CandPaymentOutDetails() {
               <div className="col-md-4">
                 <p>Rozgar Visa Price: <b>{details.total_Visa_Price_Out_PKR}</b></p>
                 <p>Total In: <b>{details.total_Payment_Out}</b></p>
-                <p>Remaning: <b>{details.remaining_Balance}</b></p>
+                <p>Remaning: <b>{details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out}</b></p>
               </div>
             </div>
             <div className="d-flex justify-content-between supplier_Name">

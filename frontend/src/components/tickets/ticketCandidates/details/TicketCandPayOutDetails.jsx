@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import TicketHook from '../../../../hooks/ticketHooks/TicketHook'
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,7 +17,7 @@ import { toast } from 'react-toastify';
 import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
 
-export default function TicketCandPaymentOutDetails() {
+export default function TicketCandPayOutDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
@@ -314,7 +313,6 @@ export default function TicketCandPaymentOutDetails() {
 
   }
 
-
   const [date1, setDate1] = useState('')
   const [name, setName] = useState('')
   const [searchPP_No, setSearchPP_NO] = useState('')
@@ -448,7 +446,7 @@ export default function TicketCandPaymentOutDetails() {
                         <td>${String(entry.total_Visa_Price_Out_PKR)}</td>
                         <td>${String(entry.total_Payment_Out)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
-                        <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.total_Visa_Price_Out_PKR-entry.total_Payment_Out+entry.total_Cash_Out)}</td>
                         <td>${String(entry.status)}</td>
                         <td>
                         ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
@@ -598,7 +596,7 @@ export default function TicketCandPaymentOutDetails() {
                         <td>${String(entry.total_Visa_Price_Out_PKR)}</td>
                         <td>${String(entry.total_Payment_Out)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
-                        <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.total_Visa_Price_Out_PKR-entry.total_Payment_Out+entry.total_Cash_Out)}</td>
                         <td>${String(entry.status)}</td>
                         <td>
                         ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
@@ -719,7 +717,7 @@ export default function TicketCandPaymentOutDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
               <p>Total Out: <b>${details.total_Payment_Out}</b></p>
-              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR - details.total_Payment_Out + details.total_Cash_Out}</b></p>
+              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out}</b></p>
             </div>
           </div>
         </div>
@@ -897,7 +895,7 @@ export default function TicketCandPaymentOutDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_Out_PKR}</b></p>
               <p>Total In: <b>${details.total_Payment_Out}</b></p>
-              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR - details.total_Payment_Out + details.total_Cash_Out}</b></p>
+              <p>Remaining: <b>${details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out}</b></p>
             </div>
           </div>
         </div>
@@ -1033,7 +1031,7 @@ export default function TicketCandPaymentOutDetails() {
         Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
         Total_Payment_In: payments.total_Payment_Out,
         Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.remaining_Balance,
+        Remaining_PKR: payments.total_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
         Total_Visa_Price_Out_Curr: payments.total_Visa_Price_Out_Curr,
         Total_Payment_Out_Curr: payments.total_Payment_Out_Curr,
         Remaining_Curr: payments.remaining_Curr,
@@ -1065,7 +1063,7 @@ export default function TicketCandPaymentOutDetails() {
       Total_Visa_Price_Out_PKR: payments.total_Visa_Price_Out_PKR,
       Total_Payment_In: payments.total_Payment_Out,
       Total_Cash_Out: payments.total_Cash_Out,
-      Remaining_PKR: payments.remaining_Balance,
+      Remaining_PKR: payments.total_Visa_Price_Out_PKR-payments.total_Payment_Out+payments.total_Cash_Out,
       Status: payments.status,
     }
 
@@ -1175,7 +1173,7 @@ export default function TicketCandPaymentOutDetails() {
       Total_Visa_Price_Out_PKR: details.total_Visa_Price_Out_PKR,
       Total_Payment_In: details.total_Payment_Out,
       Total_Cash_Out: details.total_Cash_Out,
-      Remaining_PKR: details.remaining_Balance,
+      Remaining_PKR: details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out,
       Total_Visa_Price_Out_Curr: details.total_Visa_Price_Out_Curr,
       Total_Payment_Out_Curr: details.total_Payment_Out_Curr,
       Remaining_Curr: details.remaining_Curr,
@@ -1437,17 +1435,17 @@ export default function TicketCandPaymentOutDetails() {
                                   </TableCell>
 
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Payment_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_Out')}  disabled/>
+                                    <input type='number' min='0' value={editedEntry1.total_Payment_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_Out')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')}  disabled/>
+                                    <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.remaining_Balance} disabled />
+                                    <input type='number' value={editedEntry1.total_Visa_Price_Out_PKR-editedEntry1.total_Payment_Out+editedEntry1.total_Cash_Out} disabled />
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td p-1 '>
-                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_Out_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_Out_Curr')}  />
+                                      <input type='number' min='0' value={editedEntry1.total_Visa_Price_Out_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Visa_Price_Out_Curr')} />
                                     </TableCell>
                                     <TableCell className='border data_td p-1 '>
                                       <input type='number' min='0' value={editedEntry1.total_Payment_Out_Curr} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Payment_Out_Curr')} disabled/>
@@ -1515,7 +1513,7 @@ export default function TicketCandPaymentOutDetails() {
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    {entry.remaining_Balance}
+                                    {entry.total_Visa_Price_Out_PKR-entry.total_Payment_Out+entry.total_Cash_Out}
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td text-center'>
@@ -1628,7 +1626,7 @@ export default function TicketCandPaymentOutDetails() {
               <div className="col-md-4">
                 <p>Rozgar Visa Price: <b>{details.total_Visa_Price_Out_PKR}</b></p>
                 <p>Total In: <b>{details.total_Payment_Out}</b></p>
-                <p>Remaning: <b>{details.total_Visa_Price_Out_PKR - details.total_Payment_Out + details.total_Cash_Out}</b></p>
+                <p>Remaning: <b>{details.total_Visa_Price_Out_PKR-details.total_Payment_Out+details.total_Cash_Out}</b></p>
               </div>
             </div>
             <div className="d-flex justify-content-between supplier_Name">

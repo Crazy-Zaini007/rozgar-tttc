@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import AzadVisaHook from '../../../../hooks/azadVisaHooks/AzadVisaHooks'
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,7 +17,7 @@ import { toast } from 'react-toastify';
 import ClipLoader from 'react-spinners/ClipLoader'
 import { Link } from 'react-router-dom'
 
-export default function AzadVisaCandPaymentInDetails() {
+export default function AzadVisaCandPayInDetails() {
   const [isLoading, setIsLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
   const [loading3, setLoading3] = useState(false)
@@ -448,7 +447,7 @@ export default function AzadVisaCandPaymentInDetails() {
                         <td>${String(entry.total_Visa_Price_In_PKR)}</td>
                         <td>${String(entry.total_Payment_In)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
-                        <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.total_Visa_Price_In_PKR-entry.total_Payment_In+entry.total_Cash_Out)}</td>
                         <td>${String(entry.status)}</td>
                         <td>
                         ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
@@ -598,7 +597,7 @@ export default function AzadVisaCandPaymentInDetails() {
                         <td>${String(entry.total_Visa_Price_In_PKR)}</td>
                         <td>${String(entry.total_Payment_In)}</td>
                         <td>${String(entry.total_Cash_Out)}</td>
-                        <td>${String(entry.remaining_Balance)}</td>
+                        <td>${String(entry.entry.total_Visa_Price_In_PKR-entry.total_Payment_In+entry.total_Cash_Out)}</td>
                         <td>${String(entry.status)}</td>
                         <td>
           ${entry.picture ? `<img src="${entry.picture}" alt="Person Picture" />` : "No Picture"}
@@ -719,7 +718,7 @@ export default function AzadVisaCandPaymentInDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_In_PKR}</b></p>
               <p>Total In: <b>${details.total_Payment_In}</b></p>
-              <p>Remaining: <b>${details.total_Visa_Price_In_PKR - details.total_Payment_In + details.total_Cash_Out}</b></p>
+              <p>Remaining: <b>${details.total_Visa_Price_In_PKR-details.total_Payment_In+details.total_Cash_Out}</b></p>
             </div>
           </div>
         </div>
@@ -897,7 +896,7 @@ export default function AzadVisaCandPaymentInDetails() {
               <p>Passport No: <b>${details.pp_No}</b></p>
               <p>Rozgar Visa Price: <b>${details.total_Visa_Price_In_PKR}</b></p>
               <p>Total In: <b>${details.total_Payment_In}</b></p>
-              <p>Remaining: <b>${details.total_Visa_Price_In_PKR - details.total_Payment_In + details.total_Cash_Out}</b></p>
+              <p>Remaining: <b>${details.total_Visa_Price_In_PKR-details.total_Payment_In+details.total_Cash_Out}</b></p>
             </div>
           </div>
         </div>
@@ -1033,7 +1032,7 @@ export default function AzadVisaCandPaymentInDetails() {
         Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
         Total_Payment_In: payments.total_Payment_In,
         Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.remaining_Balance,
+        Remaining_PKR: payments.total_Visa_Price_In_PKR-payments.total_Payment_In+payments.total_Cash_Out,
         Total_Visa_Price_In_Curr: payments.total_Visa_Price_In_Curr,
         Total_Payment_In_Curr: payments.total_Payment_In_Curr,
         Remaining_Curr: payments.remaining_Curr,
@@ -1065,7 +1064,7 @@ export default function AzadVisaCandPaymentInDetails() {
         Total_Visa_Price_In_PKR: payments.total_Visa_Price_In_PKR,
         Total_Payment_In: payments.total_Payment_In,
         Total_Cash_Out: payments.total_Cash_Out,
-        Remaining_PKR: payments.remaining_Balance,
+        Remaining_PKR: payments.total_Visa_Price_In_PKR-payments.total_Payment_In+payments.total_Cash_Out,
         Status: payments.status,
       }
 
@@ -1175,7 +1174,7 @@ export default function AzadVisaCandPaymentInDetails() {
       Total_Visa_Price_In_PKR: details.total_Visa_Price_In_PKR,
       Total_Payment_In: details.total_Payment_In,
       Total_Cash_Out: details.total_Cash_Out,
-      Remaining_PKR: details.remaining_Balance,
+      Remaining_PKR: details.total_Visa_Price_In_PKR-details.total_Payment_In+details.total_Cash_Out,
       Total_Visa_Price_In_Curr: details.total_Visa_Price_In_Curr,
       Total_Payment_In_Curr: details.total_Payment_In_Curr,
       Remaining_Curr: details.remaining_Curr,
@@ -1442,7 +1441,7 @@ export default function AzadVisaCandPaymentInDetails() {
                                     <input type='number' min='0' value={editedEntry1.total_Cash_Out} onChange={(e) => handleTotalPaymentInputChange(e, 'total_Cash_Out')} disabled />
                                   </TableCell>
                                   <TableCell className='border data_td p-1 '>
-                                    <input type='number' value={editedEntry1.remaining_Balance} disabled />
+                                    <input type='number' value={editedEntry1.total_Visa_Price_In_PKR-editedEntry1.total_Payment_In+editedEntry1.total_Cash_Out} disabled />
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td p-1 '>
@@ -1514,7 +1513,7 @@ export default function AzadVisaCandPaymentInDetails() {
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center'>
-                                    {entry.remaining_Balance}
+                                    {entry.total_Visa_Price_In_PKR-entry.total_Payment_In+entry.total_Cash_Out}
                                   </TableCell>
                                   {show && <>
                                     <TableCell className='border data_td text-center'>
@@ -1625,7 +1624,7 @@ export default function AzadVisaCandPaymentInDetails() {
               <div className="col-md-4">
                 <p>Rozgar Visa Price: <b>{details.total_Visa_Price_In_PKR}</b></p>
                 <p>Total In: <b>{details.total_Payment_In}</b></p>
-                <p>Remaning: <b>{details.total_Visa_Price_In_PKR - details.total_Payment_In + details.total_Cash_Out}</b></p>
+                <p>Remaning: <b>{details.total_Visa_Price_In_PKR-details.total_Payment_In+details.total_Cash_Out}</b></p>
               </div>
             </div>
             <div className="d-flex justify-content-between supplier_Name">

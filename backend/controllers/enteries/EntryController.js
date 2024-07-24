@@ -424,7 +424,7 @@ const addEntry = async (req, res) => {
                     ? visa_Sale_Rate_Oth_Cur
                     : 0,
                   curr_Country: cur_Country_One,
-                opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0,
+                opening:0,
                  
                   closing:0,
                   persons: [
@@ -585,7 +585,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
-                  opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -748,7 +748,7 @@ const addEntry = async (req, res) => {
                     ? visa_Sale_Rate_Oth_Cur
                     : 0,
                   curr_Country: cur_Country_One,
-                  opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0,
+                  opening:0,
                   
                   closing:0,
                   persons: [
@@ -906,7 +906,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
-                  opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -1197,7 +1197,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
-                  opening:azad_Visa_Sales_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -1354,7 +1354,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
-                  opening:azad_Visa_Purchase_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -1509,7 +1509,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
-                  opening:azad_Visa_Sales_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -1664,7 +1664,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_Two,
-                  opening:azad_Visa_Purchase_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -1949,7 +1949,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
-                  opening:ticket_Sales_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -2098,7 +2098,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                     curr_Country: cur_Country_Two,
-                    opening:ticket_Purchase_PKR,
+                    opening:0,
                     closing:0,
                   persons: [
                     {
@@ -2253,7 +2253,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                     curr_Country: cur_Country_One,
-                    opening:ticket_Sales_PKR,
+                    opening:0,
                     closing:0,
                   persons: [
                     {
@@ -2401,7 +2401,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                     curr_Country: cur_Country_Two,
-                    opening:ticket_Purchase_PKR,
+                    opening:0,
                     closing:0,
                   persons: [
                     {
@@ -2685,7 +2685,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
-                  opening:visit_Sales_PKR,
+                  opening:0,
                     closing:0,
                   persons: [
                     {
@@ -2831,7 +2831,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                     curr_Country: cur_Country_Two,
-                    opening:visit_Purchase_Rate_PKR,
+                    opening:0,
                     closing:0,
                   persons: [
                     {
@@ -2980,7 +2980,7 @@ const addEntry = async (req, res) => {
                     : 0,
 
                   curr_Country: cur_Country_One,
-                  opening:visit_Sales_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -3126,7 +3126,7 @@ const addEntry = async (req, res) => {
                     ? visit_Purchase_Rate_Oth_Cur
                     : 0,
                     curr_Country: cur_Country_Two,
-                    opening:visit_Purchase_Rate_PKR,
+                    opening:0,
                     closing:0,
                   persons: [
                     {
@@ -3545,34 +3545,34 @@ const addMultipleEnteries = async (req, res) => {
           entryData.flight_Date !== undefined && entryData.flight_Date !== ""
             ? entryData.flight_Date
             : "No Fly";
-            if (entryData.reference_Out &&entryData.reference_Out.trim().toLowerCase().includes('candidate')) {
+            if (entryData.reference_Out &&(entryData.reference_Out.trim().toLowerCase().includes('candidate')||entryData.reference_Out.trim().toLowerCase().includes('direct'))) {
               entryData.reference_Out_Name = entryData.name;
             }
-            if (entryData.reference_In&&entryData.reference_In.trim().toLowerCase().includes('candidate') ) {
+            if (entryData.reference_In&&(entryData.reference_In.trim().toLowerCase().includes('candidate')||entryData.reference_In.trim().toLowerCase().includes('direct')) ) {
               entryData.reference_In_Name = entryData.name;
             }
             
-              if (entryData.visit_Reference_In&&entryData.visit_Reference_In.trim().toLowerCase().includes('candidate')) {
+              if (entryData.visit_Reference_In&&(entryData.visit_Reference_In.trim().toLowerCase().includes('candidate')|| entryData.visit_Reference_In.trim().toLowerCase().includes('direct'))) {
                 entryData.visit_Reference_In_Name = entryData.name;
               
-              if (entryData.visit_Reference_Out&&entryData.visit_Reference_Out.trim().toLowerCase().includes('candidate')) {
+              if (entryData.visit_Reference_Out&&(entryData.visit_Reference_Out.trim().toLowerCase().includes('candidate')||entryData.visit_Reference_Out.trim().toLowerCase().includes('direct'))) {
                 entryData.visit_Reference_Out_Name = entryData.name;
               }
             }
             
 
-              if (entryData.ticket_Reference_In&&entryData.ticket_Reference_In.trim().toLowerCase().includes('candidate')) {
+              if (entryData.ticket_Reference_In&&(entryData.ticket_Reference_In.trim().toLowerCase().includes('candidate')||entryData.ticket_Reference_In.trim().toLowerCase().includes('direct'))) {
                 entryData.ticket_Reference_In_Name = entryData.name;
               }
-              if (entryData.ticket_Reference_Out&&entryData.ticket_Reference_Out.trim().toLowerCase().includes('candidate')) {
+              if (entryData.ticket_Reference_Out&&(entryData.ticket_Reference_Out.trim().toLowerCase().includes('candidate')||entryData.ticket_Reference_Out.trim().toLowerCase().includes('direct'))) {
                 entryData.ticket_Reference_Out_Name = entryData.name;
               }
             
        
-              if (entryData.azad_Visa_Reference_In&&entryData.azad_Visa_Reference_In.trim().toLowerCase().includes('candidate')) {
+              if (entryData.azad_Visa_Reference_In&&(entryData.azad_Visa_Reference_In.trim().toLowerCase().includes('candidate')||entryData.azad_Visa_Reference_In.trim().toLowerCase().includes('direct'))) {
                 entryData.azad_Visa_Reference_In_Name = entryData.name;
               }
-              if (entryData.azad_Visa_Reference_Out&&entryData.azad_Visa_Reference_Out.trim().toLowerCase().includes('candidate') ) {
+              if (entryData.azad_Visa_Reference_Out&&(entryData.azad_Visa_Reference_Out.trim().toLowerCase().includes('candidate')||entryData.azad_Visa_Reference_Out.trim().toLowerCase().includes('direct'))) {
                 entryData.azad_Visa_Reference_Out_Name = entryData.name;
               }
 
@@ -3686,7 +3686,7 @@ const addMultipleEnteries = async (req, res) => {
                   entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                   remaining_Curr: entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                   curr_Country: entryData.cur_Country_One,
-                  opening:entryData?.visa_Sales_Rate_PKR??0,
+                  opening:0??0,
                   closing:0,
                   persons: [
                     {
@@ -3722,7 +3722,6 @@ const addMultipleEnteries = async (req, res) => {
                     person.entry_Mode === entryData.entry_Mode &&
                     person.name === entryData.name
                 );
-
               if (existingPersonIndex !== -1) {
                 existingPaymentInSupplier.payment_In_Schema.total_Visa_Price_In_PKR +=
                   entryData?.visa_Sales_Rate_PKR ?? 0;
@@ -3753,17 +3752,12 @@ const addMultipleEnteries = async (req, res) => {
                   entry_Date: new Date().toISOString().split("T")[0],
                 });
 
-
-                const newStatus = existingPaymentInSupplier.payment_In_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentInSupplier.payment_In_Schema.status;
-                const isStatusClosed = existingPaymentInSupplier.payment_In_Schema.status.toLowerCase() === 'closed';
-
                 await existingPaymentInSupplier.updateOne({
                   $inc: {
                     "payment_In_Schema.total_Visa_Price_In_PKR":
                       entryData?.visa_Sales_Rate_PKR ?? 0,
                     "payment_In_Schema.remaining_Balance":
                       entryData?.visa_Sales_Rate_PKR ?? 0,
-
                     "payment_In_Schema.total_Visa_Price_In_Curr":
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     "payment_In_Schema.remaining_Curr":
@@ -3809,7 +3803,7 @@ const addMultipleEnteries = async (req, res) => {
                   remaining_Curr: entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
 
                   curr_Country: entryData.cur_Country_Two,
-                  opening:entryData?.visa_Purchase_Rate_PKR,
+                  opening:0,
                   closing:0,
                   persons: [
                     {
@@ -3938,7 +3932,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     remaining_Curr: entryData?.visa_Sale_Rate_Oth_Cur ?? 0,
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.visa_Sales_Rate_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -4072,7 +4066,7 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visa_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.visa_Purchase_Rate_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -4188,6 +4182,7 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_Out === "Directs" ||
             entryData.reference_Out === "Direct"
           ) {
+            console.log('Yes: entryData.reference_Out',entryData.reference_Out)
             try {
               // Check if the supplier with the given name and entry mode exists
               const existingPaymentInCandidate = await Candidate.findOne({
@@ -4251,6 +4246,8 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_In === "Directs" ||
             entryData.reference_In === "Direct"
           ) {
+           
+
             try {
               // Check if the supplier with the given name exists
               const existingPaymentOutCandidate = await Candidate.findOne({
@@ -4338,7 +4335,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.azad_Visa_Sales_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -4473,7 +4470,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.azad_Visa_Purchase_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -4610,7 +4607,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.azad_Visa_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.azad_Visa_Sales_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -4746,7 +4743,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.azad_Visa_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.azad_Visa_Purchase_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -5018,7 +5015,7 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.ticket_Sales_PKR,
+                    opening:0,
                   closing:0,
                     persons: [
                       {
@@ -5153,7 +5150,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.ticket_Purchase_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -5288,7 +5285,7 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.ticket_Sales_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.ticket_Sales_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -5423,7 +5420,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.ticket_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.ticket_Purchase_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -5690,7 +5687,7 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.visit_Sales_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -5822,7 +5819,7 @@ const addMultipleEnteries = async (req, res) => {
                       entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                     remaining_Curr: entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.visit_Purchase_Rate_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -5957,7 +5954,7 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visit_Sales_Rate_Oth_Curr ?? 0,
 
                     curr_Country: entryData.cur_Country_One,
-                    opening:entryData?.visit_Sales_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -6087,7 +6084,7 @@ const addMultipleEnteries = async (req, res) => {
                     remaining_Curr: entryData?.visit_Purchase_Rate_Oth_Cur ?? 0,
 
                     curr_Country: entryData.cur_Country_Two,
-                    opening:entryData?.visit_Purchase_Rate_PKR,
+                    opening:0,
                     closing:0,
                     persons: [
                       {
@@ -9366,7 +9363,7 @@ let azadPicture
                   : 0,
 
                 curr_Country: cur_Country_Two,
-                opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
+                opening:0,
                 closing:0,
                 persons: [
                   {
@@ -9521,7 +9518,7 @@ let azadPicture
                   : 0,
 
                 curr_Country: cur_Country_Two,
-                opening:visa_Purchase_Rate_PKR?visa_Purchase_Rate_PKR:0,
+                opening:0,
                 closing:0,
                 persons: [
                   {
@@ -9730,7 +9727,7 @@ let azadPicture
                   ? visa_Sale_Rate_Oth_Cur
                   : 0,
                 curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0,
+              opening:0,
                
                 closing:0,
                 persons: [
@@ -9883,7 +9880,7 @@ let azadPicture
                   ? visa_Sale_Rate_Oth_Cur
                   : 0,
                 curr_Country: cur_Country_One,
-                opening:visa_Sales_Rate_PKR?visa_Sales_Rate_PKR:0, 
+                opening:0, 
                 closing:0,
                 persons: [
                   {
@@ -10096,7 +10093,7 @@ if (
             : 0,
 
           curr_Country: cur_Country_One,
-          opening:azad_Visa_Sales_PKR,
+          opening:0,
           closing:0,
           persons: [
             {
@@ -10252,7 +10249,7 @@ if (
             : 0,
 
           curr_Country: cur_Country_Two,
-          opening:azad_Visa_Purchase_PKR,
+          opening:0,
           closing:0,
           persons: [
             {
@@ -10406,7 +10403,7 @@ if (
             : 0,
 
           curr_Country: cur_Country_One,
-          opening:azad_Visa_Sales_PKR,
+          opening:0,
           closing:0,
           persons: [
             {
@@ -10560,7 +10557,7 @@ if (
             : 0,
 
           curr_Country: cur_Country_Two,
-          opening:azad_Visa_Purchase_PKR,
+          opening:0,
           closing:0,
           persons: [
             {
@@ -10840,7 +10837,7 @@ if (
               : 0,
 
             curr_Country: cur_Country_One,
-            opening:ticket_Sales_PKR,
+            opening:0,
             closing:0,
             persons: [
               {
@@ -10988,7 +10985,7 @@ if (
               : 0,
 
               curr_Country: cur_Country_Two,
-              opening:ticket_Purchase_PKR,
+              opening:0,
               closing:0,
             persons: [
               {
@@ -11141,7 +11138,7 @@ if (
               : 0,
 
               curr_Country: cur_Country_One,
-              opening:ticket_Sales_PKR,
+              opening:0,
               closing:0,
             persons: [
               {
@@ -11288,7 +11285,7 @@ if (
               : 0,
 
               curr_Country: cur_Country_Two,
-              opening:ticket_Purchase_PKR,
+              opening:0,
               closing:0,
             persons: [
               {
@@ -11565,7 +11562,7 @@ if (
               : 0,
 
             curr_Country: cur_Country_One,
-            opening:visit_Sales_PKR,
+            opening:0,
               closing:0,
             persons: [
               {
@@ -11710,7 +11707,7 @@ if (
               : 0,
 
               curr_Country: cur_Country_Two,
-              opening:visit_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
             persons: [
               {
@@ -11857,7 +11854,7 @@ if (
               : 0,
 
             curr_Country: cur_Country_One,
-            opening:visit_Sales_PKR,
+            opening:0,
             closing:0,
             persons: [
               {
@@ -12002,7 +11999,7 @@ if (
               ? visit_Purchase_Rate_Oth_Cur
               : 0,
               curr_Country: cur_Country_Two,
-              opening:visit_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
             persons: [
               {
@@ -12379,7 +12376,7 @@ if (
       // Updating the Entry values in all sections
 
       // For Suppliers Reference_In
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "supplier" && reference_In.toLowerCase() === "supplier" && entryToUpdate.reference_In_Name === reference_In_Name) {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("supplier") && reference_In.toLowerCase().includes("supplier") && entryToUpdate.reference_In_Name === reference_In_Name) {
         
 
         for (const supplier of suppliers){
@@ -12431,7 +12428,7 @@ if (
     }
       
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "supplier" && reference_In.toLowerCase() === "supplier" && entryToUpdate.reference_In_Name !== reference_In_Name) {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("supplier") && reference_In.toLowerCase().includes("supplier") && entryToUpdate.reference_In_Name !== reference_In_Name) {
 
         for (const agent of suppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -12514,7 +12511,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_Two,
-              opening:visa_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -12620,7 +12617,7 @@ if (
         }
       }
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "supplier" && reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("supplier") && reference_In.toLowerCase().includes("agent")) {
 
      for (const agent of suppliers){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -12702,7 +12699,7 @@ if (
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_Two,
-              opening:visa_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -12811,7 +12808,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "supplier" && (reference_In.toLowerCase() === "candidate"||reference_In.toLowerCase() === "direct" )) {  
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("supplier") && (reference_In.toLowerCase().includes("candidate")||reference_In.toLowerCase() === "direct" )) {  
  for (const agent of suppliers){
   if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
    let allCandPayments=agent.payment_Out_Schema.candPayments
@@ -12910,7 +12907,7 @@ if (
       }
 
       // For Agents Reference_In
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "agent" && reference_In.toLowerCase() === "agent" && entryToUpdate.reference_In_Name === reference_In_Name) {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("agent") && reference_In.toLowerCase().includes("agent") && entryToUpdate.reference_In_Name === reference_In_Name) {
         //Reference In for Suppliers 
         for(const agent of agents){
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
@@ -12954,7 +12951,7 @@ if (
 
       }
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "agent" && reference_In.toLowerCase() === "agent" && entryToUpdate.reference_In_Name !== reference_In_Name) {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("agent") && reference_In.toLowerCase().includes("agent") && entryToUpdate.reference_In_Name !== reference_In_Name) {
         
        for (const agent of agents){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -13037,7 +13034,7 @@ if (
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_Two,
-              opening:visa_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -13144,7 +13141,7 @@ if (
         }
       }
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "agent" && reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("agent") && reference_In.toLowerCase().includes("supplier")) {
 
        for (const agent of agents){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -13229,7 +13226,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_Two,
-              opening:visa_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -13338,7 +13335,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase() === "agent" && (reference_In.toLowerCase() === "candidate"||reference_In.toLowerCase() === "direct" )) {
+      if (entryToUpdate.reference_In && entryToUpdate.reference_In.toLowerCase().includes("agent") && (reference_In.toLowerCase().includes("candidate")||reference_In.toLowerCase() === "direct" )) {
 
         
        for (const agent of agents){
@@ -13441,7 +13438,7 @@ if (
 
 
       // For Candidates Reference_In
-      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase() === "candidate"||entryToUpdate.reference_In.toLowerCase() === "direct" ) && (reference_In.toLowerCase() === "candidate"||reference_In.toLowerCase() === "direct" ) && entryToUpdate.reference_In_Name === reference_In_Name) {
+      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase().includes("candidate")||entryToUpdate.reference_In.toLowerCase() === "direct" ) && (reference_In.toLowerCase().includes("candidate")||reference_In.toLowerCase() === "direct" ) && entryToUpdate.reference_In_Name === reference_In_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await Candidate.findOne({
@@ -13465,34 +13462,20 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_Out_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR -=
-              entryToUpdate?.visa_Purchase_Rate_PKR ??
-                0 - visa_Purchase_Rate_PKR
-                ? visa_Purchase_Rate_PKR
-                : 0);
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Balance -=
-            entryToUpdate?.visa_Purchase_Rate_PKR ??
-              0 - visa_Purchase_Rate_PKR
-              ? visa_Purchase_Rate_PKR
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr -=
-            entryToUpdate?.visa_Purchase_Rate_Oth_Cur ??
-              0 - visa_Purchase_Rate_Oth_Cur
-              ? visa_Purchase_Rate_Oth_Cur
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Curr -=
-            entryToUpdate?.visa_Purchase_Rate_Oth_Cur ??
-              0 - visa_Purchase_Rate_Oth_Cur
-              ? visa_Purchase_Rate_Oth_Cur
-              : 0;
+            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR=
+              visa_Purchase_Rate_PKR ?visa_Purchase_Rate_PKR:0);
+        
+          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr =
+            visa_Purchase_Rate_Oth_Cur ?visa_Purchase_Rate_Oth_Cur:
+              0;
+         
 
           await existingPaymentInCandidate.save();
         }
 
-
       }
 
-      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase() === "candidate" ||entryToUpdate.reference_In.toLowerCase() === "direct") && reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase().includes("candidate") ||entryToUpdate.reference_In.toLowerCase() === "direct") && reference_In.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -13529,7 +13512,7 @@ if (
                 ? visa_Purchase_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_Two,
-              opening:visa_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -13637,7 +13620,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase() === "candidate" ||entryToUpdate.reference_In.toLowerCase() === "direct")  && reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.reference_In && (entryToUpdate.reference_In.toLowerCase().includes("candidate") ||entryToUpdate.reference_In.toLowerCase() === "direct")  && reference_In.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -13675,7 +13658,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_Two,
-              opening:visa_Purchase_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -13782,7 +13765,7 @@ if (
 
 
       // For Suppliers Reference_Out
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "supplier" && reference_Out.toLowerCase() === "supplier" && entryToUpdate.reference_Out_Name === reference_Out_Name) {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("supplier") && reference_Out.toLowerCase().includes("supplier") && entryToUpdate.reference_Out_Name === reference_Out_Name) {
 
         for(const supplier of suppliers){
           if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
@@ -13827,7 +13810,7 @@ if (
       
       }
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "supplier" && reference_Out.toLowerCase() === "supplier" && entryToUpdate.reference_Out_Name !== reference_Out_Name) {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("supplier") && reference_Out.toLowerCase().includes("supplier") && entryToUpdate.reference_Out_Name !== reference_Out_Name) {
         for (const agent of suppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
            let allCandPayments=agent.payment_In_Schema.candPayments
@@ -13908,7 +13891,7 @@ if (
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -14015,7 +13998,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "supplier" && reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("supplier") && reference_Out.toLowerCase().includes("agent")) {
 
         for (const agent of suppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -14098,7 +14081,7 @@ if (
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -14205,7 +14188,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "supplier" && (reference_Out.toLowerCase() === "candidate" ||reference_Out.toLowerCase() === "direct") ) {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("supplier") && (reference_Out.toLowerCase().includes("candidate") ||reference_Out.toLowerCase() === "direct") ) {
         
         for (const agent of suppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -14308,7 +14291,7 @@ if (
 
 
       // For Agents Reference_Out
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "agent" && reference_Out.toLowerCase() === "agent" && entryToUpdate.reference_Out_Name === reference_Out_Name) {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("agent") && reference_Out.toLowerCase().includes("agent") && entryToUpdate.reference_Out_Name === reference_Out_Name) {
 
         for (const agent of agents){
           if(agent.payment_In_Schema && agent.payment_In_Schema.persons){
@@ -14352,7 +14335,7 @@ if (
       
       }
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "agent" && reference_Out.toLowerCase() === "agent" && entryToUpdate.reference_Out_Name !== reference_Out_Name) {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("agent") && reference_Out.toLowerCase().includes("agent") && entryToUpdate.reference_Out_Name !== reference_Out_Name) {
 
         for (const agent of agents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -14434,7 +14417,7 @@ if (
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -14541,7 +14524,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "agent" && reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("agent") && reference_Out.toLowerCase().includes("supplier")) {
 
         for (const agent of agents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -14624,7 +14607,7 @@ if (
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -14731,7 +14714,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase() === "agent" &&(reference_Out.toLowerCase() === "candidate" ||reference_Out.toLowerCase() === "direct")) {
+      if (entryToUpdate.reference_Out && entryToUpdate.reference_Out.toLowerCase().includes("agent") &&(reference_Out.toLowerCase().includes("candidate") ||reference_Out.toLowerCase() === "direct")) {
         for (const agent of agents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
            let allCandPayments=agent.payment_In_Schema.candPayments
@@ -14833,7 +14816,7 @@ if (
 
 
       // For Candidate Reference_Out
-      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase() === "candidate" ||entryToUpdate.reference_Out.toLowerCase() === "direct") && (reference_Out.toLowerCase() === "candidate" ||reference_Out.toLowerCase() === "direct") && entryToUpdate.reference_Out_Name === reference_Out_Name) {
+      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase().includes("candidate") ||entryToUpdate.reference_Out.toLowerCase() === "direct") && (reference_Out.toLowerCase().includes("candidate") ||reference_Out.toLowerCase() === "direct") && entryToUpdate.reference_Out_Name === reference_Out_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await Candidate.findOne({
@@ -14843,6 +14826,7 @@ if (
         });
 
         if (existingPaymentInCandidate) {
+          console.log('')
           existingPaymentInCandidate.payment_In_Schema.supplierName = name,
           existingPaymentInCandidate.payment_In_Schema.picture = mainPicture?mainPicture.secure_url:existingPaymentInCandidate.payment_In_Schema.picture,
             existingPaymentInCandidate.payment_In_Schema.pp_No = pp_No,
@@ -14856,30 +14840,16 @@ if (
             final_Status,
             existingPaymentInCandidate.payment_In_Schema.flight_Date =
             flight_Date,
-            existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR -=
-            entryToUpdate?.visa_Sales_Rate_PKR ?? 0 - visa_Sales_Rate_PKR
-              ? visa_Sales_Rate_PKR
-              : 0,
-            existingPaymentInCandidate.payment_In_Schema.remaining_Balance -=
-            entryToUpdate?.visa_Sales_Rate_PKR ?? 0 - visa_Sales_Rate_PKR
-              ? visa_Sales_Rate_PKR
-              : 0,
-            existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_Curr -=
-            entryToUpdate?.visa_Sale_Rate_Oth_Cur ??
-              0 - visa_Sale_Rate_Oth_Cur
-              ? visa_Sale_Rate_Oth_Cur
-              : 0,
-            existingPaymentInCandidate.payment_In_Schema.remaining_Curr -=
-            entryToUpdate?.visa_Sale_Rate_Oth_Cur ??
-              0 - visa_Sale_Rate_Oth_Cur
-              ? visa_Sale_Rate_Oth_Cur
-              : 0,
+            existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR =visa_Sales_Rate_PKR? visa_Sales_Rate_PKR:0,
+            existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_Curr =
+            visa_Sale_Rate_Oth_Cur ?visa_Sale_Rate_Oth_Cur:0
+           
             await existingPaymentInCandidate.save()
         }
       }
 
 
-      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase() === "candidate" ||entryToUpdate.reference_Out.toLowerCase() === "direct") && reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase().includes("candidate") ||entryToUpdate.reference_Out.toLowerCase() === "direct") && reference_Out.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -14917,7 +14887,7 @@ if (
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -15024,7 +14994,7 @@ if (
       }
 
 
-      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase() === "candidate" ||entryToUpdate.reference_Out.toLowerCase() === "direct") && reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.reference_Out && (entryToUpdate.reference_Out.toLowerCase().includes("candidate") ||entryToUpdate.reference_Out.toLowerCase() === "direct") && reference_Out.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -15062,7 +15032,7 @@ if (
                 ? visa_Sale_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:visa_Sales_Rate_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -15170,7 +15140,7 @@ if (
 
       // For Azad Suppliers/Agents Reference_In
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "supplier" && azad_Visa_Reference_In.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_In_Name === azad_Visa_Reference_In_Name) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("supplier") && azad_Visa_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.azad_Visa_Reference_In_Name === azad_Visa_Reference_In_Name) {
         // Update the Agent,Supplier and candidate
         for (const azadSupplier of azadSuppliers){
           if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
@@ -15242,7 +15212,7 @@ if (
       
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "supplier" && azad_Visa_Reference_In.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_In_Name !== azad_Visa_Reference_In_Name) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("supplier") && azad_Visa_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.azad_Visa_Reference_In_Name !== azad_Visa_Reference_In_Name) {
 
         for (const agent of azadSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -15332,7 +15302,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -15435,7 +15405,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "supplier" && azad_Visa_Reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("supplier") && azad_Visa_Reference_In.toLowerCase().includes("agent")) {
 
         for (const agent of azadSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -15525,7 +15495,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -15628,7 +15598,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "supplier" && azad_Visa_Reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("supplier") && azad_Visa_Reference_In.toLowerCase().includes("candidate")) {
 
  for (const agent of azadSuppliers){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -15733,7 +15703,7 @@ if (
 
       // For Azad Agents Reference_In
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "agent" && azad_Visa_Reference_In.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_In_Name === azad_Visa_Reference_In_Name) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("agent") && azad_Visa_Reference_In.toLowerCase().includes("agent") && entryToUpdate.azad_Visa_Reference_In_Name === azad_Visa_Reference_In_Name) {
         
         for(const agent of azadAgents){
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
@@ -15804,7 +15774,7 @@ if (
        
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "agent" && azad_Visa_Reference_In.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_In_Name !== azad_Visa_Reference_In_Name) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("agent") && azad_Visa_Reference_In.toLowerCase().includes("agent") && entryToUpdate.azad_Visa_Reference_In_Name !== azad_Visa_Reference_In_Name) {
 
         for (const agent of azadAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -15893,7 +15863,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_Two,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -15996,7 +15966,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "agent" && azad_Visa_Reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("agent") && azad_Visa_Reference_In.toLowerCase().includes("supplier")) {
 
         for (const agent of azadAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -16086,7 +16056,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_Two,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
 
               persons: [
@@ -16190,7 +16160,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "agent" && azad_Visa_Reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("agent") && azad_Visa_Reference_In.toLowerCase().includes("candidate")) {
 
  for (const agent of azadAgents){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -16292,7 +16262,7 @@ if (
       }
 
       // For Azad Candidate Reference_In 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "candidate" && azad_Visa_Reference_In.toLowerCase() === "candidate" && entryToUpdate.azad_Visa_Reference_In_Name === azad_Visa_Reference_In_Name) {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("candidate") && azad_Visa_Reference_In.toLowerCase().includes("candidate") && entryToUpdate.azad_Visa_Reference_In_Name === azad_Visa_Reference_In_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await AzadCandidate.findOne({
@@ -16316,26 +16286,13 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_Out_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR -=
-              entryToUpdate?.azad_Visa_Purchase_PKR ??
-                0 - azad_Visa_Purchase_PKR
-                ? azad_Visa_Purchase_PKR
-                : 0);
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Balance -=
-            entryToUpdate?.azad_Visa_Purchase_PKR ??
-              0 - azad_Visa_Purchase_PKR
-              ? azad_Visa_Purchase_PKR
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr -=
-            entryToUpdate?.azad_Visa_Purchase_Rate_Oth_Cur ??
-              0 - azad_Visa_Purchase_Rate_Oth_Cur
-              ? azad_Visa_Purchase_Rate_Oth_Cur
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Curr -=
-            entryToUpdate?.azad_Visa_Purchase_Rate_Oth_Cur ??
-              0 - azad_Visa_Purchase_Rate_Oth_Cur
-              ? azad_Visa_Purchase_Rate_Oth_Cur
-              : 0;
+            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR =
+              azad_Visa_Purchase_PKR ?azad_Visa_Purchase_PKR:
+                0 );
+         
+          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr =
+            azad_Visa_Purchase_Rate_Oth_Cur ?azad_Visa_Purchase_Rate_Oth_Cur:0;
+         
 
           await existingPaymentInCandidate.save();
         }
@@ -16343,7 +16300,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "candidate" && azad_Visa_Reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("candidate") && azad_Visa_Reference_In.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await AzadCandidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -16388,7 +16345,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -16492,7 +16449,7 @@ if (
       }
 
 
-      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase() === "candidate" && azad_Visa_Reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.azad_Visa_Reference_In && entryToUpdate.azad_Visa_Reference_In.toLowerCase().includes("candidate") && azad_Visa_Reference_In.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await AzadCandidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -16536,7 +16493,7 @@ if (
                 ? azad_Visa_Purchase_Rate_Oth_Cur
                 : 0,
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -16641,7 +16598,7 @@ if (
 
       // For Azad Suppliers Reference_Out
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "supplier" && azad_Visa_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_Out_Name === azad_Visa_Reference_Out_Name) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("supplier") && azad_Visa_Reference_Out.toLowerCase().includes("supplier") && entryToUpdate.azad_Visa_Reference_Out_Name === azad_Visa_Reference_Out_Name) {
        
         for (const supplier of azadSuppliers){
           if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
@@ -16712,7 +16669,7 @@ if (
         
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "supplier" && azad_Visa_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.azad_Visa_Reference_Out_Name !== azad_Visa_Reference_Out_Name) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("supplier") && azad_Visa_Reference_Out.toLowerCase().includes("supplier") && entryToUpdate.azad_Visa_Reference_Out_Name !== azad_Visa_Reference_Out_Name) {
 
         for (const agent of azadSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -16799,7 +16756,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -16902,7 +16859,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "supplier" && azad_Visa_Reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("supplier") && azad_Visa_Reference_Out.toLowerCase().includes("agent")) {
 
         for (const agent of azadSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -16991,7 +16948,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -17094,7 +17051,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "supplier" && azad_Visa_Reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("supplier") && azad_Visa_Reference_Out.toLowerCase().includes("candidate")) {
 
 
         for (const agent of azadSuppliers){
@@ -17199,7 +17156,7 @@ if (
 
       // For Azad Agents Reference_Out
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "agent" && azad_Visa_Reference_Out.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_Out_Name === azad_Visa_Reference_Out_Name) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("agent") && azad_Visa_Reference_Out.toLowerCase().includes("agent") && entryToUpdate.azad_Visa_Reference_Out_Name === azad_Visa_Reference_Out_Name) {
         
         for (const agent of azadAgents){
           if(agent.payment_In_Schema &&agent.payment_In_Schema.persons){
@@ -17272,7 +17229,7 @@ if (
 
 
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "agent" && azad_Visa_Reference_Out.toLowerCase() === "agent" && entryToUpdate.azad_Visa_Reference_Out_Name !== azad_Visa_Reference_Out_Name) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("agent") && azad_Visa_Reference_Out.toLowerCase().includes("agent") && entryToUpdate.azad_Visa_Reference_Out_Name !== azad_Visa_Reference_Out_Name) {
 
 
         for (const agent of azadAgents){
@@ -17361,7 +17318,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -17464,7 +17421,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "agent" && azad_Visa_Reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("agent") && azad_Visa_Reference_Out.toLowerCase().includes("supplier")) {
         for (const agent of azadAgents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
            let allCandPayments=agent.payment_In_Schema.candPayments
@@ -17552,7 +17509,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -17655,7 +17612,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "agent" && azad_Visa_Reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("agent") && azad_Visa_Reference_Out.toLowerCase().includes("candidate")) {
 
 
         for (const agent of azadAgents){
@@ -17758,7 +17715,7 @@ if (
       }
 
       // For Azad Candidate Reference_Out
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "candidate" && azad_Visa_Reference_Out.toLowerCase() === "candidate" && entryToUpdate.azad_Visa_Reference_Out_Name === azad_Visa_Reference_Out_Name) {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("candidate") && azad_Visa_Reference_Out.toLowerCase().includes("candidate") && entryToUpdate.azad_Visa_Reference_Out_Name === azad_Visa_Reference_Out_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await AzadCandidate.findOne({
@@ -17782,11 +17739,8 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_In_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR -=
-              entryToUpdate?.azad_Visa_Sales_PKR ??
-                0 - azad_Visa_Sales_PKR
-                ? azad_Visa_Sales_PKR
-                : 0);
+            (existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR =
+              azad_Visa_Sales_PKR ?azad_Visa_Sales_PK: 0);
           existingPaymentInCandidate.payment_In_Schema.remaining_Balance -=
             entryToUpdate?.azad_Visa_Sales_PKR ??
               0 - azad_Visa_Sales_PKR
@@ -17809,7 +17763,7 @@ if (
 
       }
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "candidate" && azad_Visa_Reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("candidate") && azad_Visa_Reference_Out.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await AzadCandidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -17854,7 +17808,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -17958,7 +17912,7 @@ if (
       }
 
 
-      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase() === "candidate" && azad_Visa_Reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.azad_Visa_Reference_Out && entryToUpdate.azad_Visa_Reference_Out.toLowerCase().includes("candidate") && azad_Visa_Reference_Out.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await AzadCandidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -18003,7 +17957,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -18109,7 +18063,7 @@ if (
 
       // For Ticket Suppliers Reference_In
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "supplier" && ticket_Reference_In.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_In_Name === ticket_Reference_In_Name) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("supplier") && ticket_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.ticket_Reference_In_Name === ticket_Reference_In_Name) {
        
         for(const supplier of ticketSuppliers){
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
@@ -18180,7 +18134,7 @@ if (
      
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "supplier" && ticket_Reference_In.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_In_Name !== ticket_Reference_In_Name) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("supplier") && ticket_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.ticket_Reference_In_Name !== ticket_Reference_In_Name) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -18268,7 +18222,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -18371,7 +18325,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "supplier" && ticket_Reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("supplier") && ticket_Reference_In.toLowerCase().includes("agent")) {
 
 
         for (const agent of ticketSuppliers){
@@ -18461,7 +18415,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -18564,7 +18518,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "supplier" && ticket_Reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("supplier") && ticket_Reference_In.toLowerCase().includes("candidate")) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -18668,7 +18622,7 @@ if (
 
       // For Ticket Agents Reference_In
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "agent" && ticket_Reference_In.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_In_Name === ticket_Reference_In_Name) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("agent") && ticket_Reference_In.toLowerCase().includes("agent") && entryToUpdate.ticket_Reference_In_Name === ticket_Reference_In_Name) {
        
         for(const agent of ticketAgents){
           if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons){
@@ -18739,7 +18693,7 @@ if (
         
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "agent" && ticket_Reference_In.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_In_Name !== ticket_Reference_In_Name) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("agent") && ticket_Reference_In.toLowerCase().includes("agent") && entryToUpdate.ticket_Reference_In_Name !== ticket_Reference_In_Name) {
 
        for (const agent of ticketAgents){
         if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -18827,7 +18781,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -18930,7 +18884,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "agent" && ticket_Reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("agent") && ticket_Reference_In.toLowerCase().includes("supplier")) {
 
         
        for (const agent of ticketAgents){
@@ -19123,7 +19077,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "agent" && ticket_Reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("agent") && ticket_Reference_In.toLowerCase().includes("candidate")) {
 
 
         for (const agent of ticketAgents){
@@ -19225,7 +19179,7 @@ if (
       }
 
       // For Ticket Candidate Reference_In 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "candidate" && ticket_Reference_In.toLowerCase() === "candidate" && entryToUpdate.ticket_Reference_In_Name === ticket_Reference_In_Name) {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("candidate") && ticket_Reference_In.toLowerCase().includes("candidate") && entryToUpdate.ticket_Reference_In_Name === ticket_Reference_In_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await TicketCandidate.findOne({
@@ -19249,34 +19203,18 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_Out_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR -=
-              entryToUpdate?.azad_Visa_Purchase_PKR ??
-                0 - azad_Visa_Purchase_PKR
-                ? azad_Visa_Purchase_PKR
-                : 0);
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Balance -=
-            entryToUpdate?.azad_Visa_Purchase_PKR ??
-              0 - azad_Visa_Purchase_PKR
-              ? azad_Visa_Purchase_PKR
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr -=
-            entryToUpdate?.azad_Visa_Purchase_Rate_Oth_Cur ??
-              0 - azad_Visa_Purchase_Rate_Oth_Cur
-              ? azad_Visa_Purchase_Rate_Oth_Cur
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Curr -=
-            entryToUpdate?.azad_Visa_Purchase_Rate_Oth_Cur ??
-              0 - azad_Visa_Purchase_Rate_Oth_Cur
-              ? azad_Visa_Purchase_Rate_Oth_Cur
-              : 0;
-
+            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR =
+              azad_Visa_Purchase_PKR ?azad_Visa_Purchase_PKR:0 );
+          
+          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr =
+            azad_Visa_Purchase_Rate_Oth_Cur ?azad_Visa_Purchase_Rate_Oth_Cur:0
           await existingPaymentInCandidate.save();
         }
 
 
       }
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "candidate" && ticket_Reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("candidate") && ticket_Reference_In.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await TicketCandidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -19321,7 +19259,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -19425,7 +19363,7 @@ if (
       }
 
 
-      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase() === "candidate" && ticket_Reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.ticket_Reference_In && entryToUpdate.ticket_Reference_In.toLowerCase().includes("candidate") && ticket_Reference_In.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await TicketCandidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -19470,7 +19408,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -19575,7 +19513,7 @@ if (
 
       // For Azad Suppliers Reference_Out
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "supplier" && ticket_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_Out_Name === ticket_Reference_Out_Name) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("supplier") && ticket_Reference_Out.toLowerCase().includes("supplier") && entryToUpdate.ticket_Reference_Out_Name === ticket_Reference_Out_Name) {
         
         for (const supplier of ticketSuppliers){
           if(supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
@@ -19646,7 +19584,7 @@ if (
        
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "supplier" && ticket_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.ticket_Reference_Out_Name !== ticket_Reference_Out_Name) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("supplier") && ticket_Reference_Out.toLowerCase().includes("supplier") && entryToUpdate.ticket_Reference_Out_Name !== ticket_Reference_Out_Name) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -19734,7 +19672,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -19837,7 +19775,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "supplier" && ticket_Reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("supplier") && ticket_Reference_Out.toLowerCase().includes("agent")) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -19926,7 +19864,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -20029,7 +19967,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "supplier" && ticket_Reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("supplier") && ticket_Reference_Out.toLowerCase().includes("candidate")) {
 
         for (const agent of ticketSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -20134,7 +20072,7 @@ if (
 
       // For Azad Agents Reference_Out
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "agent" && ticket_Reference_Out.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_Out_Name === ticket_Reference_Out_Name) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("agent") && ticket_Reference_Out.toLowerCase().includes("agent") && entryToUpdate.ticket_Reference_Out_Name === ticket_Reference_Out_Name) {
       
         for(const agent of ticketAgents){
           if(agent.payment_In_Schema && agent.payment_In_Schema.persons){
@@ -20206,7 +20144,7 @@ if (
         
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "agent" && ticket_Reference_Out.toLowerCase() === "agent" && entryToUpdate.ticket_Reference_Out_Name !== ticket_Reference_Out_Name) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("agent") && ticket_Reference_Out.toLowerCase().includes("agent") && entryToUpdate.ticket_Reference_Out_Name !== ticket_Reference_Out_Name) {
 
 
         for (const agent of ticketAgents){
@@ -20295,7 +20233,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -20398,7 +20336,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "agent" && ticket_Reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("agent") && ticket_Reference_Out.toLowerCase().includes("supplier")) {
 
         for (const agent of ticketAgents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -20486,7 +20424,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -20589,7 +20527,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "agent" && ticket_Reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("agent") && ticket_Reference_Out.toLowerCase().includes("candidate")) {
 
         for (const agent of ticketAgents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -20690,7 +20628,7 @@ if (
       }
 
       // For Azad Candidate Reference_Out
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "candidate" && ticket_Reference_Out.toLowerCase() === "candidate" && entryToUpdate.ticket_Reference_Out_Name === ticket_Reference_Out_Name) {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("candidate") && ticket_Reference_Out.toLowerCase().includes("candidate") && entryToUpdate.ticket_Reference_Out_Name === ticket_Reference_Out_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await TicketCandidate.findOne({
@@ -20714,26 +20652,13 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_In_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR -=
-              entryToUpdate?.azad_Visa_Sales_PKR ??
-                0 - azad_Visa_Sales_PKR
-                ? azad_Visa_Sales_PKR
-                : 0);
-          existingPaymentInCandidate.payment_In_Schema.remaining_Balance -=
-            entryToUpdate?.azad_Visa_Sales_PKR ??
-              0 - azad_Visa_Sales_PKR
-              ? azad_Visa_Sales_PKR
-              : 0;
-          existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_Curr -=
-            entryToUpdate?.azad_Visa_Sales_Rate_Oth_Cur ??
-              0 - azad_Visa_Sales_Rate_Oth_Cur
-              ? azad_Visa_Sales_Rate_Oth_Cur
-              : 0;
-          existingPaymentInCandidate.payment_In_Schema.remaining_Curr -=
-            entryToUpdate?.azad_Visa_Sales_Rate_Oth_Cur ??
-              0 - azad_Visa_Sales_Rate_Oth_Cur
-              ? azad_Visa_Sales_Rate_Oth_Cur
-              : 0;
+            (existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR =
+              azad_Visa_Sales_PKR ?azad_Visa_Sales_PKR:0);
+         
+          existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_Curr =
+            azad_Visa_Sales_Rate_Oth_Cur ?azad_Visa_Sales_Rate_Oth_Cur:0
+              
+         
 
           await existingPaymentInCandidate.save();
         }
@@ -20741,7 +20666,7 @@ if (
 
       }
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "candidate" && ticket_Reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("candidate") && ticket_Reference_Out.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await TicketCandidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -20786,7 +20711,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -20890,7 +20815,7 @@ if (
       }
 
 
-      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase() === "candidate" && ticket_Reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.ticket_Reference_Out && entryToUpdate.ticket_Reference_Out.toLowerCase().includes("candidate") && ticket_Reference_Out.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await TicketCandidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -20935,7 +20860,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -21040,7 +20965,7 @@ if (
 
       // For Visit Suppliers Reference_In
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "supplier" && visit_Reference_In.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_In_Name === visit_Reference_In_Name) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("supplier") && visit_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.visit_Reference_In_Name === visit_Reference_In_Name) {
         for (const supplier of visitSuppliers){
           if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons){
             let supplierInPersonIndex;
@@ -21110,7 +21035,7 @@ if (
       
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "supplier" && visit_Reference_In.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_In_Name !== visit_Reference_In_Name) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("supplier") && visit_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.visit_Reference_In_Name !== visit_Reference_In_Name) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -21197,7 +21122,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -21301,7 +21226,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "supplier" && visit_Reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("supplier") && visit_Reference_In.toLowerCase().includes("agent")) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -21389,7 +21314,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -21492,7 +21417,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "supplier" && visit_Reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("supplier") && visit_Reference_In.toLowerCase().includes("candidate")) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -21597,7 +21522,7 @@ if (
 
       // For Visit Agents Reference_In
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "agent" && visit_Reference_In.toLowerCase() === "agent" && entryToUpdate.visit_Reference_In_Name === visit_Reference_In_Name) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("agent") && visit_Reference_In.toLowerCase().includes("agent") && entryToUpdate.visit_Reference_In_Name === visit_Reference_In_Name) {
        for (const agent of visitAgents){
         if(agent.payment_Out_Schema &&agent.payment_Out_Schema.persons){
           let supplierInPersonIndex;
@@ -21667,7 +21592,7 @@ if (
       
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "agent" && visit_Reference_In.toLowerCase() === "agent" && entryToUpdate.visit_Reference_In_Name !== visit_Reference_In_Name) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("agent") && visit_Reference_In.toLowerCase().includes("agent") && entryToUpdate.visit_Reference_In_Name !== visit_Reference_In_Name) {
 
         for (const agent of visitAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -21754,7 +21679,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -21857,7 +21782,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "agent" && visit_Reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("agent") && visit_Reference_In.toLowerCase().includes("supplier")) {
 
         for (const agent of visitAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -21945,7 +21870,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -22048,7 +21973,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "agent" && visit_Reference_In.toLowerCase() === "candidate") {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("agent") && visit_Reference_In.toLowerCase().includes("candidate")) {
 
         for (const agent of visitAgents){
           if(agent.payment_Out_Schema&&agent.payment_Out_Schema.candPayments){
@@ -22150,7 +22075,7 @@ if (
       }
 
       // For Visit Candidate Reference_In 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "candidate" && visit_Reference_In.toLowerCase() === "candidate" && entryToUpdate.visit_Reference_In_Name === visit_Reference_In_Name) {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("candidate") && visit_Reference_In.toLowerCase().includes("candidate") && entryToUpdate.visit_Reference_In_Name === visit_Reference_In_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await VisitCandidate.findOne({
@@ -22174,34 +22099,18 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_Out_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR -=
-              entryToUpdate?.azad_Visa_Purchase_PKR ??
-                0 - azad_Visa_Purchase_PKR
-                ? azad_Visa_Purchase_PKR
-                : 0);
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Balance -=
-            entryToUpdate?.azad_Visa_Purchase_PKR ??
-              0 - azad_Visa_Purchase_PKR
-              ? azad_Visa_Purchase_PKR
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr -=
-            entryToUpdate?.azad_Visa_Purchase_Rate_Oth_Cur ??
-              0 - azad_Visa_Purchase_Rate_Oth_Cur
-              ? azad_Visa_Purchase_Rate_Oth_Cur
-              : 0;
-          existingPaymentInCandidate.payment_Out_Schema.remaining_Curr -=
-            entryToUpdate?.azad_Visa_Purchase_Rate_Oth_Cur ??
-              0 - azad_Visa_Purchase_Rate_Oth_Cur
-              ? azad_Visa_Purchase_Rate_Oth_Cur
-              : 0;
-
+            (existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_PKR =
+              azad_Visa_Purchase_PKR ?azad_Visa_Purchase_PKR:0);
+         
+          existingPaymentInCandidate.payment_Out_Schema.total_Visa_Price_Out_Curr=
+          azad_Visa_Purchase_Rate_Oth_Cur ?azad_Visa_Purchase_Rate_Oth_Cur:0   
           await existingPaymentInCandidate.save();
         }
 
 
       }
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "candidate" && visit_Reference_In.toLowerCase() === "supplier") {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("candidate") && visit_Reference_In.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await VisitCandidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -22246,7 +22155,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -22350,7 +22259,7 @@ if (
       }
 
 
-      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase() === "candidate" && visit_Reference_In.toLowerCase() === "agent") {
+      if (entryToUpdate.visit_Reference_In && entryToUpdate.visit_Reference_In.toLowerCase().includes("candidate") && visit_Reference_In.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await VisitCandidate.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.name,
           "payment_Out_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -22395,7 +22304,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Purchase_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -22500,7 +22409,7 @@ if (
 
       // For Visit Suppliers Reference_Out
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "supplier" && visit_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_Out_Name === visit_Reference_Out_Name) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("supplier") && visit_Reference_Out.toLowerCase().includes("supplier") && entryToUpdate.visit_Reference_Out_Name === visit_Reference_Out_Name) {
         for (const supplier of visitSuppliers){
           if(supplier.payment_In_Schema && supplier.payment_In_Schema.persons){
             let supplierInPersonIndex;
@@ -22570,7 +22479,7 @@ if (
       
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "supplier" && visit_Reference_Out.toLowerCase() === "supplier" && entryToUpdate.visit_Reference_Out_Name !== visit_Reference_Out_Name) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("supplier") && visit_Reference_Out.toLowerCase().includes("supplier") && entryToUpdate.visit_Reference_Out_Name !== visit_Reference_Out_Name) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -22657,7 +22566,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -22760,7 +22669,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "supplier" && visit_Reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("supplier") && visit_Reference_Out.toLowerCase().includes("agent")) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -22848,7 +22757,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -22952,7 +22861,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "supplier" && visit_Reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("supplier") && visit_Reference_Out.toLowerCase().includes("candidate")) {
 
         for (const agent of visitSuppliers){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -23057,7 +22966,7 @@ if (
 
       // For Visit Agents Reference_Out
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "agent" && visit_Reference_Out.toLowerCase() === "agent" && entryToUpdate.visit_Reference_Out_Name === visit_Reference_Out_Name) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("agent") && visit_Reference_Out.toLowerCase().includes("agent") && entryToUpdate.visit_Reference_Out_Name === visit_Reference_Out_Name) {
     for (const agent of visitAgents){
       if(agent.payment_In_Schema && agent.payment_In_Schema.persons){
         let supplierInPersonIndex;
@@ -23127,7 +23036,7 @@ if (
        
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "agent" && visit_Reference_Out.toLowerCase() === "agent" && entryToUpdate.visit_Reference_Out_Name !== visit_Reference_Out_Name) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("agent") && visit_Reference_Out.toLowerCase().includes("agent") && entryToUpdate.visit_Reference_Out_Name !== visit_Reference_Out_Name) {
 
         for (const agent of visitAgents){
           if(agent.payment_In_Schema&&agent.payment_In_Schema.candPayments){
@@ -23215,7 +23124,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -23318,7 +23227,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "agent" && visit_Reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("agent") && visit_Reference_Out.toLowerCase().includes("supplier")) {
 
 
         for (const agent of visitAgents){
@@ -23408,7 +23317,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -23511,7 +23420,7 @@ if (
 
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "agent" && visit_Reference_Out.toLowerCase() === "candidate") {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("agent") && visit_Reference_Out.toLowerCase().includes("candidate")) {
 
 
          for (const agent of visitAgents){
@@ -23613,7 +23522,7 @@ if (
       }
 
       // For Azad Candidate Reference_Out
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "candidate" && visit_Reference_Out.toLowerCase() === "candidate" && entryToUpdate.visit_Reference_Out_Name === visit_Reference_Out_Name) {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("candidate") && visit_Reference_Out.toLowerCase().includes("candidate") && entryToUpdate.visit_Reference_Out_Name === visit_Reference_Out_Name) {
 
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await VisitCandidate.findOne({
@@ -23637,34 +23546,18 @@ if (
               final_Status),
             (existingPaymentInCandidate.payment_In_Schema.flight_Date =
               flight_Date),
-            (existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR -=
-              entryToUpdate?.azad_Visa_Sales_PKR ??
-                0 - azad_Visa_Sales_PKR
-                ? azad_Visa_Sales_PKR
-                : 0);
-          existingPaymentInCandidate.payment_In_Schema.remaining_Balance -=
-            entryToUpdate?.azad_Visa_Sales_PKR ??
-              0 - azad_Visa_Sales_PKR
-              ? azad_Visa_Sales_PKR
-              : 0;
-          existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_Curr -=
-            entryToUpdate?.azad_Visa_Sales_Rate_Oth_Cur ??
-              0 - azad_Visa_Sales_Rate_Oth_Cur
-              ? azad_Visa_Sales_Rate_Oth_Cur
-              : 0;
-          existingPaymentInCandidate.payment_In_Schema.remaining_Curr -=
-            entryToUpdate?.azad_Visa_Sales_Rate_Oth_Cur ??
-              0 - azad_Visa_Sales_Rate_Oth_Cur
-              ? azad_Visa_Sales_Rate_Oth_Cur
-              : 0;
+            (existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_PKR =
+             azad_Visa_Sales_PKR ?azad_Visa_Sales_PKR:0);
 
+          existingPaymentInCandidate.payment_In_Schema.total_Visa_Price_In_Curr=
+          azad_Visa_Sales_Rate_Oth_Cur ?azad_Visa_Sales_Rate_Oth_Cur:0;
           await existingPaymentInCandidate.save();
         }
 
 
       }
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "candidate" && visit_Reference_Out.toLowerCase() === "supplier") {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("candidate") && visit_Reference_Out.toLowerCase().includes("supplier")) {
         const existingPaymentInCandidate = await VisitCandidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -23709,7 +23602,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -23813,7 +23706,7 @@ if (
       }
 
 
-      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase() === "candidate" && visit_Reference_Out.toLowerCase() === "agent") {
+      if (entryToUpdate.visit_Reference_Out && entryToUpdate.visit_Reference_Out.toLowerCase().includes("candidate") && visit_Reference_Out.toLowerCase().includes("agent")) {
         const existingPaymentInCandidate = await VisitCandidate.findOne({
           "payment_In_Schema.supplierName": entryToUpdate.name,
           "payment_In_Schema.entry_Mode": entryToUpdate.entry_Mode,
@@ -23858,7 +23751,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_One,
-              opening:azad_Visa_Sales_PKR,
+              opening:0,
               closing:0,
               persons: [
                 {
@@ -23962,7 +23855,7 @@ if (
 
 
       // For Protector Reference_In
-      if (entryToUpdate.protector_Reference_In && entryToUpdate.protector_Reference_In.toLowerCase() === "supplier" && protector_Reference_In.toLowerCase() === "supplier" && entryToUpdate.protector_Reference_In_Name === protector_Reference_In_Name) {
+      if (entryToUpdate.protector_Reference_In && entryToUpdate.protector_Reference_In.toLowerCase().includes("supplier") && protector_Reference_In.toLowerCase().includes("supplier") && entryToUpdate.protector_Reference_In_Name === protector_Reference_In_Name) {
         //Reference In for Suppliers 
         const existingSupplierPaymentIn = await Protector.findOne({
           "payment_Out_Schema.supplierName": entryToUpdate.protector_Reference_In_Name,
@@ -24087,7 +23980,7 @@ if (
                 : 0,
 
               curr_Country: cur_Country_Two,
-              opening:protector_Price_In,
+              opening:0,
               closing:0,
               persons: [
                 {
