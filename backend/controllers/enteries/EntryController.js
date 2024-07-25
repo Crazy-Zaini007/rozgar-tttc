@@ -9144,6 +9144,7 @@ const updateEntry = async (req, res) => {
         azad_Visa_Sales_Rate_Oth_Cur,
         azad_Visa_Purchase_Rate_Oth_Cur,
       } = req.body;
+
       
       if(reference_Out && reference_Out.toLowerCase()==='candidate'){
         reference_Out_Name=name
@@ -9174,6 +9175,43 @@ const updateEntry = async (req, res) => {
       if(azad_Visa_Reference_In && azad_Visa_Reference_In.toLowerCase()==='candidate'){
         azad_Visa_Reference_In_Name=name
       }
+
+
+      if(reference_Out && reference_Out_Name==''){
+      res.status(400).json({message:'Enter Visa Reference Out Name'})
+      return
+      }
+      if(reference_In && reference_In_Name==''){
+        res.status(400).json({message:'Enter Visa Reference In Name'})
+        return
+        }
+
+       if(visit_Reference_Out && visit_Reference_Out_Name==''){
+          res.status(400).json({message:'Enter Visit Reference Out Name'})
+          return
+          }
+          if(visit_Reference_In && visit_Reference_In_Name==''){
+            res.status(400).json({message:'Enter Visit Reference In Name'})
+            return
+            }
+
+            if(azad_Visa_Reference_Out && azad_Visa_Reference_Out_Name==''){
+              res.status(400).json({message:'Enter Azad Visa Reference Out Name'})
+              return
+              }
+              if(azad_Visa_Reference_In && azad_Visa_Reference_In_Name==''){
+                res.status(400).json({message:'Enter Azad Visa Reference In Name'})
+                return
+                }
+
+                if(ticket_Reference_Out && ticket_Reference_Out_Name==''){
+                  res.status(400).json({message:'Enter Ticket Reference Out Name'})
+                  return
+                  }
+                  if(ticket_Reference_In && ticket_Reference_In_Name==''){
+                    res.status(400).json({message:'Enter Ticket Reference In Name'})
+                    return
+                    }
 
   
       const agents=await Agents.find({})

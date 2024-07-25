@@ -383,7 +383,6 @@ const EntryDetails = () => {
       entry.visit_Reference_Out && entry.visit_Reference_Out.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.visit_Reference_In && entry.visit_Reference_In.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
 
-
       entry.contact && entry.contact.trim().toLowerCase().startsWith(name.trim().toLowerCase()) ||
       entry.pp_No && entry.entry_Mode.trim().toLowerCase().startsWith(name.trim().toLowerCase())
 
@@ -414,8 +413,6 @@ const EntryDetails = () => {
       entry.visit_Reference_In_Name?.toLowerCase().includes(visit_Reference_In.toLowerCase()) &&
       entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_Out_Type.toLowerCase()) &&
       entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_In_Type.toLowerCase())
-
-
     );
   })
   
@@ -1173,7 +1170,7 @@ const EntryDetails = () => {
                               </TableCell>
 
                               <TableCell className='border data_td p-0 '>
-                                  {(editedEntry.reference_Out?.toLowerCase() === "candidate" || editedEntry.reference_Out?.toLowerCase() === "candidates")  ? (
+                                  {(editedEntry.reference_Out?.toLowerCase()=== "candidate"||editedEntry.reference_Out?.toLowerCase() === "candidates")  ? (
                                   <input className='p-0'
                                     type="text"
                                     placeholder={`${editedEntry.name} / ${editedEntry.pp_No}`}
@@ -1181,7 +1178,6 @@ const EntryDetails = () => {
 
                                     readOnly />
                                 ) : (
-
                                   <select className='p-0' required value={editedEntry.reference_Out_Name} onChange={(e) => handleInputChange(e, 'reference_Out_Name')} >
                                     {(editedEntry.reference_Out.toLowerCase() === "agent" || editedEntry.reference_Out.toLowerCase() === "agents") && (
                                       <>

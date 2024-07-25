@@ -286,7 +286,7 @@ const handleComment=async(e)=>{
 
   const handleImageClick = (url) => {
     window.open(url, '_blank');
-  
+    console.log(url)
   }
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
@@ -367,14 +367,14 @@ const handleComment=async(e)=>{
                     />
                   </div>
                   <div className="right my-auto">
-                  <div class="dropdown dropstart">
+                  <div className="dropdown dropstart">
   <button className="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-  <i class="fa-solid fa-ellipsis"></i>
+  <i className="fa-solid fa-ellipsis"></i>
   </button>
-  <ul class="dropdown-menu shadow border-0" aria-labelledby="dropdownMenuButton1">
-    <li><Link class="dropdown-item close_btn"  onClick={()=>{setReqId('');setOption(0)}}>Close</Link></li>
-    <li><Link class="dropdown-item del_btn" onClick={()=>deleteRequirement(data)}>Delete</Link></li>
-    <li><Link class="dropdown-item add_btn bg-none" data-bs-toggle="modal" data-bs-target="#comment_Modal">Add Comment</Link></li>
+  <ul className="dropdown-menu shadow border-0" aria-labelledby="dropdownMenuButton1">
+    <li><Link className="dropdown-item close_btn"  onClick={()=>{setReqId('');setOption(0)}}>Close</Link></li>
+    <li><Link className="dropdown-item del_btn" onClick={()=>deleteRequirement(data)}>Delete</Link></li>
+    <li><Link className="dropdown-item add_btn bg-none" data-bs-toggle="modal" data-bs-target="#comment_Modal">Add Comment</Link></li>
   
   </ul>
 </div>
@@ -419,7 +419,7 @@ const handleComment=async(e)=>{
       </div>
 
       {/* New Comment Modal */}
-<div className="modal fade add_Modal" id="comment_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div className="modal fade add_Modal" id="comment_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered">
     <div className="modal-content">
       <div className="modal-header pb-1 mb-0">
@@ -481,7 +481,7 @@ const handleComment=async(e)=>{
 </div>
 
    {/* New Requirement Modal */}
-   <div className="modal fade add_Modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div className="modal fade add_Modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered">
     <div className="modal-content">
       <div className="modal-header pb-1 mb-0">
@@ -524,7 +524,7 @@ const handleComment=async(e)=>{
 
 
 {/* New Requirement Modal */}
-<div className="modal fade add_Modal" id="edit_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div className="modal fade add_Modal" id="edit_Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div className="modal-dialog modal-dialog-centered">
     <div className="modal-content">
       <div className="modal-header pb-1 mb-0">
