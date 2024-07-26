@@ -355,7 +355,7 @@ export default function CDWOCPaymentOut() {
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
-
+// Return
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
