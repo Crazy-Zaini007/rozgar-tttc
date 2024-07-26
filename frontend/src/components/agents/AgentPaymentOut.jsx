@@ -50,7 +50,7 @@ const initializeMissingFields = (entry) => {
     }
   });
   return initializedEntry;
-};
+}
 
 export default function AgentPaymentOut() {
   const dispatch = useDispatch();
