@@ -138,36 +138,49 @@ export default function NewEntry() {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-
-    const updatedDataArray = dataArray.map((entry, rowIndex) => {
-      return initializeMissingFields(
-        Object.fromEntries(
-          Object.entries(entry).map(([key, value]) => {
-            const trimmedValue = typeof value === 'string' ? value.trim() : value;
-
-            if (key === 'flight_Date') {
-              if (!isNaN(trimmedValue) && trimmedValue !== '') {
-                const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
-
-                if (!isNaN(dateValue.getTime())) {
-                  return [key, dateValue.toISOString().split('T')[0]];
-                } else {
-                  console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
-                  return [key, undefined];
+  
+    const seenEntries = new Set();
+  
+    const updatedDataArray = dataArray.reduce((acc, entry, rowIndex) => {
+      const uniqueKey = `${entry.name}-${entry.pp_No}`;
+      if (!seenEntries.has(uniqueKey)) {
+        seenEntries.add(uniqueKey);
+  
+        const updatedEntry = initializeMissingFields(
+          Object.fromEntries(
+            Object.entries(entry).map(([key, value]) => {
+              const trimmedValue = typeof value === 'string' ? value.trim() : value;
+  
+              if (key === 'flight_Date') {
+                if (!isNaN(trimmedValue) && trimmedValue !== '') {
+                  const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
+  
+                  if (!isNaN(dateValue.getTime())) {
+                    return [key, dateValue.toISOString().split('T')[0]];
+                  } else {
+                    console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
+                    return [key, undefined];
+                  }
+                } else if (['Not Fly', 'Fly'].includes(trimmedValue)) {
+                  return [key, trimmedValue];
                 }
-              } else if (['Not Fly', 'Fly'].includes(trimmedValue)) {
-                return [key, trimmedValue];
               }
-            }
-
-            return [key, trimmedValue === '' ? undefined : trimmedValue];
-          })
-        )
-      );
-    });
-
+  
+              return [key, trimmedValue === '' ? undefined : trimmedValue];
+            })
+          )
+        );
+  
+        acc.push(updatedEntry);
+      }
+      return acc;
+    }, []);
+  
     return updatedDataArray;
   };
+  
+
+
 
   const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...entries];
@@ -207,10 +220,16 @@ export default function NewEntry() {
 
       const json = await response.json();
       if (response.ok) {
-        setEntries('')
+        const existingEntries = json.data;
+        // Assuming each entry has a unique identifier, e.g., 'id'
+        const existingEntryIds = new Set(existingEntries.map(entry => (entry.name &&entry.pp_No &&entry.entry_Mode )));
+
+        const filteredEntries = entries.filter(entry => !existingEntryIds.has(entry.name &&entry.pp_No &&entry.entry_Mode ));
+    
+        setEntries(filteredEntries);
         setNewMessage(toast.success(json.message))
         setLoading(false)
-        dispatch(addMulEnteries(json.data)); // Dispatch the action with received data
+        dispatch(addMulEnteries(json.data)); 
       }
       if (!response.ok) {
         setLoading(false)

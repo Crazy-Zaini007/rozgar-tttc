@@ -138,8 +138,7 @@ const addEntry = async (req, res) => {
 
       let sendResponse = true;
       const existingPPNO = await Entries.findOne({
-        pp_No: new RegExp(`^${pp_No}$`, 'i'),
-        entry_Mode: new RegExp(`^${entry_Mode}$`, 'i'),
+        pp_No: new RegExp(`^${pp_No}$`, 'i')
       });
 
       if (existingPPNO) {
@@ -148,7 +147,7 @@ const addEntry = async (req, res) => {
           .status(404)
           .json({
             message:
-              "Entry with the same Passport Number and Entry Mode already exists",
+              "Entry with the same Passport Number already exists",
           });
         sendResponse = false;
       }
@@ -1042,7 +1041,7 @@ const addEntry = async (req, res) => {
             // Check if the supplier with the given name and entry mode exists
             const existingPaymentInCandidate = await Candidate.findOne({
               "payment_In_Schema.supplierName": name,
-              "payment_In_Schema.entry_Mode": entry_Mode,
+              
               "payment_In_Schema.pp_No": pp_No,
             });
 
@@ -1104,7 +1103,7 @@ const addEntry = async (req, res) => {
             // Check if the supplier with the given name exists
             const existingPaymentOutCandidate = await Candidate.findOne({
               "payment_Out_Schema.supplierName": name,
-              "payment_Out_Schema.entry_Mode": entry_Mode,
+              
               "payment_Out_Schema.pp_No": pp_No,
             });
 
@@ -1791,7 +1790,7 @@ const addEntry = async (req, res) => {
             // Check if the supplier with the given name and entry mode exists
             const existingPaymentInAzadCandidate = await AzadCandidate.findOne({
               "payment_In_Schema.supplierName": name,
-              "payment_In_Schema.entry_Mode": entry_Mode,
+              
               "payment_In_Schema.pp_No": pp_No,
             });
 
@@ -1856,7 +1855,7 @@ const addEntry = async (req, res) => {
             const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
               {
                 "payment_Out_Schema.supplierName": name,
-                "payment_Out_Schema.entry_Mode": entry_Mode,
+                
                 "payment_Out_Schema.pp_No": pp_No,
               }
             );
@@ -2528,7 +2527,7 @@ const addEntry = async (req, res) => {
             const existingPaymentInTicketCandidate =
               await TicketCandidate.findOne({
                 "payment_In_Schema.supplierName": name,
-                "payment_In_Schema.entry_Mode": entry_Mode,
+                
                 "payment_In_Schema.pp_No": pp_No,
               });
 
@@ -2592,7 +2591,7 @@ const addEntry = async (req, res) => {
             const existingPaymentOutTicketCandidate =
               await TicketCandidate.findOne({
                 "payment_Out_Schema.supplierName": name,
-                "payment_Out_Schema.entry_Mode": entry_Mode,
+                
                 "payment_Out_Schema.pp_No": pp_No,
               });
 
@@ -3248,7 +3247,7 @@ const addEntry = async (req, res) => {
             const existingPaymentInVisitCandidate =
               await VisitCandidate.findOne({
                 "payment_In_Schema.supplierName": name,
-                "payment_In_Schema.entry_Mode": entry_Mode,
+                
                 "payment_In_Schema.pp_No": pp_No,
               });
 
@@ -3312,7 +3311,6 @@ const addEntry = async (req, res) => {
             const existingPaymentOutVisitCandidate =
               await VisitCandidate.findOne({
                 "payment_Out_Schema.supplierName": name,
-                "payment_Out_Schema.entry_Mode": entry_Mode,
                 "payment_Out_Schema.pp_No": pp_No,
               });
 
@@ -3535,6 +3533,7 @@ const addMultipleEnteries = async (req, res) => {
 
       const addedEntries = [];
       const paymentInfo = {};
+      let savedEntries=[];
 
       for (const entryData of entries) {
         let final_Status = entryData.final_Status
@@ -3581,11 +3580,8 @@ const addMultipleEnteries = async (req, res) => {
         if (!entryData.entry_Date) {
           entryData.entry_Date = new Date().toISOString().split("T")[0]
         }
-        let sendResponse = true;
-
         const existingPPNO = await Entries.findOne({
-          pp_No: new RegExp(`^${entryData.pp_No}$`, 'i'),
-          entry_Mode: new RegExp(`^${entryData.entry_Mode}$`, 'i'),
+          pp_No: new RegExp(`^${entryData.pp_No}$`, 'i')
         });
 
         // if (existingPPNO) {
@@ -7105,7 +7101,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -7121,7 +7117,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentOutCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -7303,7 +7299,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInTicketCandidate = await AzadCandidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -7319,7 +7315,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentOutTicketCandidate = await AzadCandidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -7500,7 +7496,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInTicketCandidate = await TicketCandidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -7517,7 +7513,7 @@ const delEntry = async (req, res) => {
         const existingPaymentOutTicketCandidate = await TicketCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         );
@@ -7696,7 +7692,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentInVisitCandidate = await VisitCandidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -7712,7 +7708,7 @@ const delEntry = async (req, res) => {
         // Check if the supplier with the given name and entry mode exists
         const existingPaymentOutVisitCandidate = await VisitCandidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -8392,7 +8388,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentInCandidate = await Candidate.findOne({
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           });
   
@@ -8408,7 +8404,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentOutCandidate = await Candidate.findOne({
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           });
   
@@ -8590,7 +8586,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentInTicketCandidate = await AzadCandidate.findOne({
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           });
   
@@ -8606,7 +8602,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentOutTicketCandidate = await AzadCandidate.findOne({
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           });
   
@@ -8787,7 +8783,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentInTicketCandidate = await TicketCandidate.findOne({
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           });
   
@@ -8804,7 +8800,7 @@ const delMultipleEntries = async (req, res) => {
           const existingPaymentOutTicketCandidate = await TicketCandidate.findOne(
             {
               "payment_Out_Schema.supplierName": name,
-              "payment_Out_Schema.entry_Mode": entry_Mode,
+              
               "payment_Out_Schema.pp_No": pp_No,
             }
           );
@@ -8983,7 +8979,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentInVisitCandidate = await VisitCandidate.findOne({
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           });
   
@@ -8999,7 +8995,7 @@ const delMultipleEntries = async (req, res) => {
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentOutVisitCandidate = await VisitCandidate.findOne({
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           });
   
@@ -9682,7 +9678,7 @@ let azadPicture
           // Check if the supplier with the given name exists
           const existingPaymentOutCandidate = await Candidate.findOne({
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           });
 
@@ -10041,7 +10037,7 @@ let azadPicture
           // Check if the supplier with the given name and entry mode exists
           const existingPaymentInCandidate = await Candidate.findOne({
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           });
 
@@ -10721,7 +10717,7 @@ if (
     // Check if the supplier with the given name and entry mode exists
     const existingPaymentInAzadCandidate = await AzadCandidate.findOne({
       "payment_In_Schema.supplierName": name,
-      "payment_In_Schema.entry_Mode": entry_Mode,
+      
       "payment_In_Schema.pp_No": pp_No,
     });
 
@@ -10785,7 +10781,7 @@ if (
     const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
       {
         "payment_Out_Schema.supplierName": name,
-        "payment_Out_Schema.entry_Mode": entry_Mode,
+        
         "payment_Out_Schema.pp_No": pp_No,
       }
     );
@@ -11448,7 +11444,7 @@ if (
       const existingPaymentInTicketCandidate =
         await TicketCandidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -11511,7 +11507,7 @@ if (
       const existingPaymentOutTicketCandidate =
         await TicketCandidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -12157,7 +12153,7 @@ if (
       const existingPaymentInVisitCandidate =
         await VisitCandidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -12220,7 +12216,7 @@ if (
       const existingPaymentOutVisitCandidate =
         await VisitCandidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -12425,7 +12421,7 @@ if (
                 supplier.payment_Out_Schema.persons.find(
                   (person) =>
                     person.name === entryToUpdate.name &&
-                    person.entry_Mode === entryToUpdate.entry_Mode &&
+                   
                     person.pp_No === entryToUpdate.pp_No
                 );
               // If the person is found, remove it from the persons array
@@ -12903,7 +12899,7 @@ if (
         // Check if the supplier with the given name exists
         const existingPaymentOutCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -12953,7 +12949,7 @@ if (
             agent.payment_Out_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
@@ -13433,7 +13429,7 @@ if (
         // Check if the supplier with the given name exists
         const existingPaymentOutCandidate = await Candidate.findOne({
           "payment_Out_Schema.supplierName": name,
-          "payment_Out_Schema.entry_Mode": entry_Mode,
+          
           "payment_Out_Schema.pp_No": pp_No,
         });
 
@@ -13812,7 +13808,7 @@ if (
             supplier.payment_In_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
@@ -14285,7 +14281,7 @@ if (
 
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -14337,7 +14333,7 @@ if (
             agent.payment_In_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
@@ -14809,7 +14805,7 @@ if (
 
         const existingPaymentInCandidate = await Candidate.findOne({
           "payment_In_Schema.supplierName": name,
-          "payment_In_Schema.entry_Mode": entry_Mode,
+          
           "payment_In_Schema.pp_No": pp_No,
         });
 
@@ -15188,7 +15184,7 @@ if (
             azadSupplier.payment_Out_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -15695,7 +15691,7 @@ if (
         const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         )
@@ -15750,7 +15746,7 @@ if (
             agent.payment_Out_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -16257,7 +16253,7 @@ if (
         const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         )
@@ -16645,7 +16641,7 @@ if (
             supplier.payment_In_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -17148,7 +17144,7 @@ if (
         const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
           {
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           }
         )
@@ -17203,7 +17199,7 @@ if (
             agent.payment_In_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -17710,7 +17706,7 @@ if (
         const existingPaymentOutAzadCandidate = await AzadCandidate.findOne(
           {
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           }
         )
@@ -18110,7 +18106,7 @@ if (
             supplier.payment_Out_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -18614,7 +18610,7 @@ if (
         const existingPaymentOutAzadCandidate = await TicketCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         )
@@ -18669,7 +18665,7 @@ if (
           agent.payment_Out_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
@@ -19174,7 +19170,7 @@ if (
         const existingPaymentOutAzadCandidate = await TicketCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         )
@@ -19560,7 +19556,7 @@ if (
             supplier.payment_In_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -20064,7 +20060,7 @@ if (
         const existingPaymentOutAzadCandidate = await TicketCandidate.findOne(
           {
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           }
         )
@@ -20119,7 +20115,7 @@ if (
             agent.payment_In_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -20623,7 +20619,7 @@ if (
         const existingPaymentOutAzadCandidate = await TicketCandidate.findOne(
           {
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           }
         )
@@ -21011,7 +21007,7 @@ if (
           supplier.payment_Out_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
@@ -21514,7 +21510,7 @@ if (
         const existingPaymentOutAzadCandidate = await VisitCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         )
@@ -21568,7 +21564,7 @@ if (
           agent.payment_Out_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
@@ -22070,7 +22066,7 @@ if (
         const existingPaymentOutAzadCandidate = await VisitCandidate.findOne(
           {
             "payment_Out_Schema.supplierName": name,
-            "payment_Out_Schema.entry_Mode": entry_Mode,
+            
             "payment_Out_Schema.pp_No": pp_No,
           }
         )
@@ -22455,7 +22451,7 @@ if (
             supplier.payment_In_Schema.persons.find(
                 (person) =>
                   person.name === entryToUpdate.name &&
-                  person.entry_Mode === entryToUpdate.entry_Mode &&
+                 
                   person.pp_No === entryToUpdate.pp_No
               );
             // If the person is found, remove it from the persons array
@@ -22958,7 +22954,7 @@ if (
         const existingPaymentOutAzadCandidate = await VisitCandidate.findOne(
           {
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           }
         )
@@ -23012,7 +23008,7 @@ if (
         agent.payment_In_Schema.persons.find(
             (person) =>
               person.name === entryToUpdate.name &&
-              person.entry_Mode === entryToUpdate.entry_Mode &&
+             
               person.pp_No === entryToUpdate.pp_No
           );
         // If the person is found, remove it from the persons array
@@ -23517,7 +23513,7 @@ if (
         const existingPaymentOutAzadCandidate = await VisitCandidate.findOne(
           {
             "payment_In_Schema.supplierName": name,
-            "payment_In_Schema.entry_Mode": entry_Mode,
+            
             "payment_In_Schema.pp_No": pp_No,
           }
         )
@@ -23905,7 +23901,7 @@ if (
             existingSupplierPaymentIn.payment_Out_Schema.persons.find(
               (person) =>
                 person.name === entryToUpdate.name &&
-                person.entry_Mode === entryToUpdate.entry_Mode &&
+               
                 person.pp_No === entryToUpdate.pp_No
             );
           // If the person is found, remove it from the persons array
