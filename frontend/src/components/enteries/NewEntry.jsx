@@ -96,7 +96,7 @@ export default function NewEntry() {
   const dispatch = useDispatch();
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false)
-
+  const[isDownload,setIsdownload]=useState(false)
   const [single, setSingle] = useState(0)
   const setEntry = (index) => {
     setSingle(index)
@@ -153,7 +153,7 @@ export default function NewEntry() {
   
               if (key === 'flight_Date') {
                 if (!isNaN(trimmedValue) && trimmedValue !== '') {
-                  const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
+                  const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000);
   
                   if (!isNaN(dateValue.getTime())) {
                     return [key, dateValue.toISOString().split('T')[0]];
@@ -223,10 +223,13 @@ export default function NewEntry() {
         const existingEntries = json.data;
         // Assuming each entry has a unique identifier, e.g., 'id'
         const existingEntryIds = new Set(existingEntries.map(entry => (entry.name &&entry.pp_No &&entry.entry_Mode )));
-
         const filteredEntries = entries.filter(entry => !existingEntryIds.has(entry.name &&entry.pp_No &&entry.entry_Mode ));
-    
         setEntries(filteredEntries);
+        setTimeout(() => {
+          if(filteredEntries.length>0){
+            setIsdownload(true)
+          }
+        }, 1000);
         setNewMessage(toast.success(json.message))
         setLoading(false)
         dispatch(addMulEnteries(json.data)); 
@@ -244,6 +247,89 @@ export default function NewEntry() {
 
   }
 
+
+  
+  const downloadExcel = () => {
+    const data = [];
+
+    // Iterate over entries and push all fields
+    entries.forEach((entry, index) => {
+      const rowData = {
+        name: entry.name,
+        pp_No: entry.pp_No,
+        trade: entry.trade,
+        company: entry.company,
+        contact: entry.contact,
+        country: entry.country,
+        flight_Date: entry.flight_Date,
+        final_Status: entry.final_Status,
+        remarks: entry.remarks,
+        reference_Out: entry.reference_Out,
+        reference_Out_Name: entry.reference_Out_Name,
+        visa_Sales_Rate_PKR: entry.visa_Sales_Rate_PKR,
+        visa_Sale_Rate_Oth_Cur: entry.visa_Sale_Rate_Oth_Cur,
+        cur_Country_One: entry.cur_Country_One,
+        reference_In: entry.reference_In,
+        reference_In_Name: entry.reference_In_Name,
+        visa_Purchase_Rate_PKR: entry.visa_Purchase_Rate_PKR,
+        visa_Purchase_Rate_Oth_Cur: entry.visa_Purchase_Rate_Oth_Cur,
+        cur_Country_Two: entry.cur_Country_Two,
+        // Visit  Section 
+        visit_Reference_Out: entry.visit_Reference_Out,
+        visit_Reference_Out_Name: entry.visit_Reference_Out_Name,
+        visit_Sales_PKR: entry.visit_Sales_PKR,
+        visit_Sales_Rate_Oth_Curr: entry.visit_Sales_Rate_Oth_Curr,
+        visit_Sales_Cur: entry.visit_Sales_Cur,
+        visit_Reference_In: entry.visit_Reference_In,
+        visit_Reference_In_Name: entry.visit_Reference_In_Name,
+        visit_Purchase_Rate_PKR: entry.visit_Purchase_Rate_PKR,
+        visit_Purchase_Rate_Oth_Cur: entry.visit_Purchase_Rate_Oth_Cur,
+        visit_Purchase_Cur: entry.visit_Purchase_Cur,
+
+        // Ticket Section
+        ticket_Reference_Out: entry.ticket_Reference_Out,
+        ticket_Reference_Out_Name: entry.ticket_Reference_Out_Name,
+        ticket_Sales_PKR: entry.ticket_Sales_PKR,
+        ticket_Sales_Rate_Oth_Cur: entry.ticket_Sales_Rate_Oth_Cur,
+        ticket_Sales_Cur: entry.ticket_Sales_Cur,
+        ticket_Reference_In: entry.ticket_Reference_In,
+        ticket_Reference_In_Name: entry.ticket_Reference_In_Name,
+        ticket_Purchase_PKR: entry.ticket_Purchase_PKR,
+        ticket_Purchase_Rate_Oth_Cur: entry.ticket_Purchase_Rate_Oth_Cur,
+        ticket_Purchase_Cur: entry.ticket_Purchase_Cur,
+
+
+        // Azad Visa Section 
+        azad_Visa_Reference_Out: entry.azad_Visa_Reference_Out,
+        azad_Visa_Reference_Out_Name: entry.azad_Visa_Reference_Out_Name,
+        azad_Visa_Sales_PKR: entry.azad_Visa_Sales_PKR,
+        azad_Visa_Sales_Rate_Oth_Cur: entry.azad_Visa_Sales_Rate_Oth_Cur,
+        azad_Visa_Sales_Cur: entry.azad_Visa_Sales_Cur,
+        azad_Visa_Reference_In: entry.azad_Visa_Reference_In,
+        azad_Visa_Reference_In_Name: entry.azad_Visa_Reference_In_Name,
+        azad_Visa_Purchase_PKR: entry.azad_Visa_Purchase_PKR,
+        azad_Visa_Purchase_Rate_Oth_Cur: entry.azad_Visa_Purchase_Rate_Oth_Cur,
+        azad_Visa_Purchase_Cur: entry.azad_Visa_Purchase_Cur,
+
+        // Add other fields for Section 3
+
+        protector_Price_In: entry.protector_Price_In,
+        protector_Price_In_Oth_Cur: entry.protector_Price_In_Oth_Cur,
+        protector_Price_Out: entry.protector_Price_Out,
+        protector_Reference_In: entry.protector_Reference_In,
+        protector_Reference_In_Name: entry.protector_Reference_In_Name,
+
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'Entries.xlsx');
+  }
+
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
@@ -256,10 +342,17 @@ export default function NewEntry() {
               <button className='btn m-1  btn-sm entry_btn text-sm' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Entry</button>
               <button className='btn m-1  btn-sm entry_btn text-sm' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Entries</button>
 
-              {single === 1 && <label className="btn m-1  btn-sm upload_btn">
+              {single === 1 &&
+              <>
+               <label className="btn m-1  btn-sm upload_btn">
                 Upload New List
                 <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
-              </label>}
+              </label>
+              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadExcel()} disabled={entries.length<1}>Download</button>
+
+              </>
+              }
+
             </div>
           </div>
           {/* Single Entry */}

@@ -387,32 +387,32 @@ const EntryDetails = () => {
       entry.pp_No && entry.entry_Mode.trim().toLowerCase().startsWith(name.trim().toLowerCase())
 
     )&&
-      (entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase())) &&
-      (entry.trade && entry.trade?.toLowerCase().includes(trade.toLowerCase())) &&
-      (entry.company&& entry.company?.toLowerCase().includes(company.toLowerCase())) &&
-      (entry.country&& entry.country?.toLowerCase().includes(country.toLowerCase())) &&
-      (entry.final_Status&& entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase())) &&
-      (entry.flight_Date && entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())) &&
-      (entry.entry_Mode&& entry.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase())) &&
-      (entry.reference_Out_Name&&entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase())) &&
-      (entry.reference_In_Name&&entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase())) &&
-      (entry.reference_Out&&entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase())) &&
-      (entry.reference_In&&entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase()))&&
+      entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
+      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
+      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
+      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
+      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
+      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+      entry.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
+      entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase()) &&
+      entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase()) &&
+      entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
+      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase())&&
 
-      (entry.azad_Visa_Reference_Out_Name&& entry.azad_Visa_Reference_Out_Name?.toLowerCase().includes(azad_Reference_Out.toLowerCase())) &&
-      (entry.azad_Visa_Reference_In_Name&&entry.azad_Visa_Reference_In_Name?.toLowerCase().includes(azad_Reference_In.toLowerCase())) &&
-      (entry.azad_Visa_Reference_Out&&entry.azad_Visa_Reference_Out?.toLowerCase().includes(azad_Reference_Out_Type.toLowerCase())) &&
-      (entry.azad_Visa_Reference_In&&entry.azad_Visa_Reference_In?.toLowerCase().includes(azad_Reference_In_Type.toLowerCase())) &&
+      entry.azad_Visa_Reference_Out_Name?.toLowerCase().includes(azad_Reference_Out.toLowerCase()) &&
+      entry.azad_Visa_Reference_In_Name?.toLowerCase().includes(azad_Reference_In.toLowerCase()) &&
+      entry.azad_Visa_Reference_Out?.toLowerCase().includes(azad_Reference_Out_Type.toLowerCase()) &&
+      entry.azad_Visa_Reference_In?.toLowerCase().includes(azad_Reference_In_Type.toLowerCase()) &&
 
-      (entry.ticket_Reference_Out_Name&&entry.ticket_Reference_Out_Name?.toLowerCase().includes(ticket_Reference_Out.toLowerCase())) &&
-      (entry.ticket_Reference_In_Name&&entry.ticket_Reference_In_Name?.toLowerCase().includes(ticket_Reference_In.toLowerCase())) &&
-      (entry.ticket_Reference_Out&& entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_Out_Type.toLowerCase())) &&
-      (entry.ticket_Reference_Out&& entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_In_Type.toLowerCase()))&&
+      entry.ticket_Reference_Out_Name?.toLowerCase().includes(ticket_Reference_Out.toLowerCase()) &&
+      entry.ticket_Reference_In_Name?.toLowerCase().includes(ticket_Reference_In.toLowerCase()) &&
+      entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_Out_Type.toLowerCase()) &&
+      entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_In_Type.toLowerCase())&&
 
-     ( entry.visit_Reference_Out_Name&&entry.visit_Reference_Out_Name?.toLowerCase().includes(visit_Reference_Out.toLowerCase())) &&
-      (entry.visit_Reference_In_Name&&entry.visit_Reference_In_Name?.toLowerCase().includes(visit_Reference_In.toLowerCase())) &&
-      (entry.visit_Reference_Out&& entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_Out_Type.toLowerCase())) &&
-     ( entry.visit_Reference_Out&&entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_In_Type.toLowerCase()))
+      entry.visit_Reference_Out_Name?.toLowerCase().includes(visit_Reference_Out.toLowerCase()) &&
+      entry.visit_Reference_In_Name?.toLowerCase().includes(visit_Reference_In.toLowerCase()) &&
+      entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_Out_Type.toLowerCase()) &&
+      entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_In_Type.toLowerCase())
     );
   })
   
@@ -427,69 +427,69 @@ const EntryDetails = () => {
     filteredEntries.forEach((entry, index) => {
       const rowData = {
         SN: index + 1,
-        Name: entry.name,
-        PP_NO: entry.pp_No,
-        Trade: entry.trade,
-        Company: entry.company,
-        Remarks: entry.remarks,
-        Contact: entry.contact,
-        Visit_Sale_Party: entry.visit_Sales_Party,
-        Final_Status: entry.final_Status,
-        Flight_Date: entry.flight_Date,
-        Country: entry.country,
-        Entry_Mode: entry.entry_Mode,
-        Visa_Sales_Rate_PKR: entry.visa_Sales_Rate_PKR,
-        Visa_Sale_Rate_Oth_Cur: entry.visa_Sale_Rate_Oth_Cur,
-        Reference_Out: entry.reference_Out,
-        Reference_Out_Name: entry.reference_Out_Name,
-        Reference_In: entry.reference_In,
-        Reference_In_Name: entry.reference_In_Name,
-
-
+        name: entry.name,
+        pp_No: entry.pp_No,
+        trade: entry.trade,
+        company: entry.company,
+        contact: entry.contact,
+        country: entry.country,
+        flight_Date: entry.flight_Date,
+        final_Status: entry.final_Status,
+        remarks: entry.remarks,
+        reference_Out: entry.reference_Out,
+        reference_Out_Name: entry.reference_Out_Name,
+        visa_Sales_Rate_PKR: entry.visa_Sales_Rate_PKR,
+        visa_Sale_Rate_Oth_Cur: entry.visa_Sale_Rate_Oth_Cur,
+        cur_Country_One: entry.cur_Country_One,
+        reference_In: entry.reference_In,
+        reference_In_Name: entry.reference_In_Name,
+        visa_Purchase_Rate_PKR: entry.visa_Purchase_Rate_PKR,
+        visa_Purchase_Rate_Oth_Cur: entry.visa_Purchase_Rate_Oth_Cur,
+        cur_Country_Two: entry.cur_Country_Two,
         // Visit  Section 
-        Visit_Sales_Party: entry.visit_Sales_Party,
-        Visit_Purchase_Party: entry.visit_Purchase_Party,
-        Visit_Sales_PKR: entry.visit_Sales_PKR,
-        Visit_Sales_Cur: entry.visit_Sales_Cur,
-        Visit_Purchase_Rate_PKR: entry.visit_Purchase_Rate_PKR,
-        Visit_Purchase_Cur: entry.visit_Purchase_Cur,
-        Visit_Reference_Out: entry.visit_Reference_Out,
-        Visit_Reference_Out_Name: entry.visit_Reference_Out_Name,
-        Visit_Reference_In: entry.visit_Reference_In,
-        Visit_Reference_In_Name: entry.visit_Reference_In_Name,
+        visit_Reference_Out: entry.visit_Reference_Out,
+        visit_Reference_Out_Name: entry.visit_Reference_Out_Name,
+        visit_Sales_PKR: entry.visit_Sales_PKR,
+        visit_Sales_Rate_Oth_Curr: entry.visit_Sales_Rate_Oth_Curr,
+        visit_Sales_Cur: entry.visit_Sales_Cur,
+        visit_Reference_In: entry.visit_Reference_In,
+        visit_Reference_In_Name: entry.visit_Reference_In_Name,
+        visit_Purchase_Rate_PKR: entry.visit_Purchase_Rate_PKR,
+        visit_Purchase_Rate_Oth_Cur: entry.visit_Purchase_Rate_Oth_Cur,
+        visit_Purchase_Cur: entry.visit_Purchase_Cur,
 
         // Ticket Section
-        Ticket_Sale_Party: entry.ticket_Sales_Party,
-        Ticket_Purchase_Party: entry.ticket_Purchase_Party,
-        Ticket_Sale_Rate_PKR: entry.ticket_Sales_PKR,
-        Ticket_Sales_Cur: entry.ticket_Sales_Cur,
-        Ticket_Purchase_PKR: entry.ticket_Purchase_PKR,
-        Ticket_Purchase_Cur: entry.ticket_Purchase_Cur,
-        Ticket_Reference_Out: entry.ticket_Reference_Out,
-        Ticket_Reference_Out_Name: entry.ticket_Reference_Out_Name,
-        Ticket_Reference_In: entry.ticket_Reference_In,
-        Ticket_Reference_In_Name: entry.ticket_Reference_In_Name,
+        ticket_Reference_Out: entry.ticket_Reference_Out,
+        ticket_Reference_Out_Name: entry.ticket_Reference_Out_Name,
+        ticket_Sales_PKR: entry.ticket_Sales_PKR,
+        ticket_Sales_Rate_Oth_Cur: entry.ticket_Sales_Rate_Oth_Cur,
+        ticket_Sales_Cur: entry.ticket_Sales_Cur,
+        ticket_Reference_In: entry.ticket_Reference_In,
+        ticket_Reference_In_Name: entry.ticket_Reference_In_Name,
+        ticket_Purchase_PKR: entry.ticket_Purchase_PKR,
+        ticket_Purchase_Rate_Oth_Cur: entry.ticket_Purchase_Rate_Oth_Cur,
+        ticket_Purchase_Cur: entry.ticket_Purchase_Cur,
 
 
         // Azad Visa Section 
-        Azad_Visa_Sale_Party: entry.azad_Visa_Sales_Party,
-        Azad_Visa_Purchase_Party: entry.azad_Visa_Purchase_Party,
-        Azad_Visa_Sale_Rate_PKR: entry.azad_Visa_Sales_PKR,
-        Azad_Visa_Sales_Cur: entry.azad_Visa_Sales_Cur,
-        Azad_Visa_Purchase_PKR: entry.azad_Visa_Purchase_PKR,
-        Azad_Visa_Purchase_Cur: entry.azad_Visa_Purchase_Cur,
-        Azad_Visa_Reference_Out: entry.azad_Visa_Reference_Out,
-        Azad_Visa_Reference_Out_Name: entry.azad_Visa_Reference_Out_Name,
-        Azad_Visa_Reference_In: entry.azad_Visa_Reference_In,
-        Azad_Visa_Reference_In_Name: entry.azad_Visa_Reference_In_Name,
+        azad_Visa_Reference_Out: entry.azad_Visa_Reference_Out,
+        azad_Visa_Reference_Out_Name: entry.azad_Visa_Reference_Out_Name,
+        azad_Visa_Sales_PKR: entry.azad_Visa_Sales_PKR,
+        azad_Visa_Sales_Rate_Oth_Cur: entry.azad_Visa_Sales_Rate_Oth_Cur,
+        azad_Visa_Sales_Cur: entry.azad_Visa_Sales_Cur,
+        azad_Visa_Reference_In: entry.azad_Visa_Reference_In,
+        azad_Visa_Reference_In_Name: entry.azad_Visa_Reference_In_Name,
+        azad_Visa_Purchase_PKR: entry.azad_Visa_Purchase_PKR,
+        azad_Visa_Purchase_Rate_Oth_Cur: entry.azad_Visa_Purchase_Rate_Oth_Cur,
+        azad_Visa_Purchase_Cur: entry.azad_Visa_Purchase_Cur,
 
         // Add other fields for Section 3
 
-        Protector_Price_In: entry.protector_Price_In,
-        Protector_Price_In_Oth_Cur: entry.protector_Price_In_Oth_Cur,
-        Protector_Price_Out: entry.protector_Price_Out,
+        protector_Price_In: entry.protector_Price_In,
+        protector_Price_In_Oth_Cur: entry.protector_Price_In_Oth_Cur,
+        protector_Price_Out: entry.protector_Price_Out,
         protector_Reference_In: entry.protector_Reference_In,
-        Protector_Reference_In_Name: entry.protector_Reference_In_Name,
+        protector_Reference_In_Name: entry.protector_Reference_In_Name,
 
       };
 
@@ -500,7 +500,7 @@ const EntryDetails = () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Entries.xlsx');
-  };
+  }
 
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
@@ -839,60 +839,22 @@ const EntryDetails = () => {
 
                     <div className="col-auto px-1">
                       <label htmlFor="">Visit Reference Out Type:</label><br/>
-                      <input  
-                      className='m-0 p-1'
-                      list="visit_Reference_Out_Type" 
-                      required 
-                      value={visit_Reference_Out_Type} onChange={(e) => setVisitReference_Out_Type(e.target.value)}
-                    /> <datalist id="visit_Reference_Out_Type">
-                      <option value="">All</option>
-                        <option value="agent">Agents</option>
-                        <option value="supplier">Suppliers</option>
-                        <option value="candidate">Candidates</option>
-                  </datalist>
+                   
           
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Visit Reference Out:</label><br/>
-                      <input  
-                      className='m-0 p-1'
-                      list="visit_Reference_Out" 
-                      required 
-                      value={visit_Reference_Out} onChange={(e) => setVisitReference_Out(e.target.value)}
-                    /> <datalist id="visit_Reference_Out">
-                       {[...new Set(enteries.map(data => data.visit_Reference_Out_Name))].map(reference_Out_NameValue => (
-                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
-                        ))}
-                  </datalist>
+                    
                      
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Visit Reference In Type:</label><br/>
-                      <input  
-                      className='m-0 p-1'
-                      list="visit_Reference_In_Type" 
-                      required 
-                      value={visit_Reference_In_Type} onChange={(e) => setVisitReference_In_Type(e.target.value)}
-                    /> <datalist id="visit_Reference_In_Type">
-                      <option value="">All</option>
-                        <option value="agent">Agents</option>
-                        <option value="supplier">Suppliers</option>
-                        <option value="candidate">Candidates</option>
-                  </datalist>
+                     
                       
                     </div>
                     <div className="col-auto px-1 ">
                       <label htmlFor="">Visit Reference In:</label><br/>
-                      <input  
-                      className='m-0 p-1'
-                      list="visit_Reference_In" 
-                      required 
-                      value={visit_Reference_In} onChange={(e) => setVisitReference_In(e.target.value)}
-                    /> <datalist id="visit_Reference_In">
-                      {[...new Set(enteries.map(data => data.visit_Reference_In_Name))].map(reference_In_NameValue => (
-                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
-                        ))}
-                  </datalist>
+                     
                     
                     </div>
 
@@ -1055,6 +1017,409 @@ const EntryDetails = () => {
 
 
                       <TableBody>
+                        {/* <TableRow>
+                          <TableCell className="border data_td text-center">
+                        
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="date" 
+                      required 
+                      value={date} onChange={(e) => setDate(e.target.value)}
+                    /> <datalist id="date">
+                  {[...new Set(enteries.map(data => data.entry_Date))].map(dateValue => (
+                          <option value={dateValue} key={dateValue}>{dateValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input 
+                      className='m-0 p-1'
+                      list="trade" 
+                      required 
+                      value={trade} onChange={(e) => setTrade(e.target.value)}
+                    /> <datalist id="trade">
+                  {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
+                                        <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
+                                      ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="company" 
+                      required 
+                      value={company} onChange={(e) => setCompany(e.target.value)}
+                    /> <datalist id="company">
+                  {[...new Set(enteries.map(data => data.company))].map(companyValue => (
+                          <option key={companyValue} value={companyValue}>{companyValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input 
+                      className='m-0 p-1'
+                      list="trade" 
+                      required 
+                      value={trade} onChange={(e) => setTrade(e.target.value)}
+                    /> <datalist id="trade">
+                  {[...new Set(enteries.map(data => data.trade))].map(tradeValue => (
+                                        <option key={tradeValue} value={tradeValue}>{tradeValue}</option>
+                                      ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="company" 
+                      required 
+                      value={company} onChange={(e) => setCompany(e.target.value)}
+                    /> <datalist id="company">
+                  {[...new Set(enteries.map(data => data.company))].map(companyValue => (
+                          <option key={companyValue} value={companyValue}>{companyValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="company" 
+                      required 
+                      value={company} onChange={(e) => setCompany(e.target.value)}
+                    /> <datalist id="company">
+                  {[...new Set(enteries.map(data => data.company))].map(companyValue => (
+                          <option key={companyValue} value={companyValue}>{companyValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="company" 
+                      required 
+                      value={company} onChange={(e) => setCompany(e.target.value)}
+                    /> <datalist id="company">
+                  {[...new Set(enteries.map(data => data.company))].map(companyValue => (
+                          <option key={companyValue} value={companyValue}>{companyValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="final_Status" 
+                      required 
+                      value={final_Status} onChange={(e) => setFinal_Status(e.target.value)}
+                    /> <datalist id="final_Status">
+                  {[...new Set(enteries.map(data => data.final_Status))].map(final_StatusValue => (
+                          <option key={final_StatusValue} value={final_StatusValue}>{final_StatusValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="flight_Date" 
+                      required 
+                      value={flight_Date} onChange={(e) => setFlight_Date(e.target.value)}
+                    /> <datalist id="flight_Date">
+                  {[...new Set(enteries.map(data => data.flight_Date))].map(flight_DateValue => (
+                          <option key={flight_DateValue} value={flight_DateValue}>{flight_DateValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="country" 
+                      required 
+                      value={country} onChange={(e) => setCountry(e.target.value)} 
+                    /> <datalist id="country">
+                  {[...new Set(enteries.map(data => data.country))].map(countryValue => (
+                          <option key={countryValue} value={countryValue}>{countryValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="entry_Mode" 
+                      required 
+                      value={entry_Mode} onChange={(e) => setEntry_Mode(e.target.value)}
+                    /> <datalist id="entry_Mode">
+                       {[...new Set(enteries.map(data => data.entry_Mode))].map(entry_ModeValue => (
+                          <option key={entry_ModeValue} value={entry_ModeValue}>{entry_ModeValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_Out_Type" 
+                      required 
+                      value={reference_Out_Type} onChange={(e) => setReference_Out_Type(e.target.value)}
+                    /> <datalist id="reference_Out_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_Out" 
+                      required 
+                      value={reference_Out} onChange={(e) => setReference_Out(e.target.value)}
+                    /> <datalist id="reference_Out">
+                       {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_Out" 
+                      required 
+                      value={reference_Out} onChange={(e) => setReference_Out(e.target.value)}
+                    /> <datalist id="reference_Out">
+                       {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_Out" 
+                      required 
+                      value={reference_Out} onChange={(e) => setReference_Out(e.target.value)}
+                    /> <datalist id="reference_Out">
+                       {[...new Set(enteries.map(data => data.reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_In_Type" 
+                      required 
+                      value={reference_In_Type} onChange={(e) => setReference_In_Type(e.target.value)}
+                    /> <datalist id="reference_In_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_In" 
+                      required 
+                      value={reference_In} onChange={(e) => setReference_In(e.target.value)}
+                    /> <datalist id="reference_In">
+                      {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_In" 
+                      required 
+                      value={reference_In} onChange={(e) => setReference_In(e.target.value)}
+                    /> <datalist id="reference_In">
+                      {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_In" 
+                      required 
+                      value={reference_In} onChange={(e) => setReference_In(e.target.value)}
+                    /> <datalist id="reference_In">
+                      {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="reference_In" 
+                      required 
+                      value={reference_In} onChange={(e) => setReference_In(e.target.value)}
+                    /> <datalist id="reference_In">
+                      {[...new Set(enteries.map(data => data.reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+
+                       {section1&&
+                       <>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_Out_Type" 
+                      required 
+                      value={visit_Reference_Out_Type} onChange={(e) => setVisitReference_Out_Type(e.target.value)}
+                    /> <datalist id="visit_Reference_Out_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_Out" 
+                      required 
+                      value={visit_Reference_Out} onChange={(e) => setVisitReference_Out(e.target.value)}
+                    /> <datalist id="visit_Reference_Out">
+                       {[...new Set(enteries.map(data => data.visit_Reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_Out" 
+                      required 
+                      value={visit_Reference_Out} onChange={(e) => setVisitReference_Out(e.target.value)}
+                    /> <datalist id="visit_Reference_Out">
+                       {[...new Set(enteries.map(data => data.visit_Reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_Out" 
+                      required 
+                      value={visit_Reference_Out} onChange={(e) => setVisitReference_Out(e.target.value)}
+                    /> <datalist id="visit_Reference_Out">
+                       {[...new Set(enteries.map(data => data.visit_Reference_Out_Name))].map(reference_Out_NameValue => (
+                          <option key={reference_Out_NameValue} value={reference_Out_NameValue}>{reference_Out_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In_Type" 
+                      required 
+                      value={visit_Reference_In_Type} onChange={(e) => setVisitReference_In_Type(e.target.value)}
+                    /> <datalist id="visit_Reference_In_Type">
+                      <option value="">All</option>
+                        <option value="agent">Agents</option>
+                        <option value="supplier">Suppliers</option>
+                        <option value="candidate">Candidates</option>
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In" 
+                      required 
+                      value={visit_Reference_In} onChange={(e) => setVisitReference_In(e.target.value)}
+                    /> <datalist id="visit_Reference_In">
+                      {[...new Set(enteries.map(data => data.visit_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In" 
+                      required 
+                      value={visit_Reference_In} onChange={(e) => setVisitReference_In(e.target.value)}
+                    /> <datalist id="visit_Reference_In">
+                      {[...new Set(enteries.map(data => data.visit_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In" 
+                      required 
+                      value={visit_Reference_In} onChange={(e) => setVisitReference_In(e.target.value)}
+                    /> <datalist id="visit_Reference_In">
+                      {[...new Set(enteries.map(data => data.visit_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                          <TableCell className="border data_td text-center">
+                          <input  
+                      className='m-0 p-1'
+                      list="visit_Reference_In" 
+                      required 
+                      value={visit_Reference_In} onChange={(e) => setVisitReference_In(e.target.value)}
+                    /> <datalist id="visit_Reference_In">
+                      {[...new Set(enteries.map(data => data.visit_Reference_In_Name))].map(reference_In_NameValue => (
+                          <option key={reference_In_NameValue} value={reference_In_NameValue}>{reference_In_NameValue}</option>
+                        ))}
+                  </datalist>
+                          </TableCell>
+                       </>
+                       }
+                        {section2&&
+                       <>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                       </>
+                       }
+                       
+                       {section3&&
+                       <>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                       </>
+                       }
+
+                       {section4&&
+                       <>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                          <TableCell className="border data_td text-center"></TableCell>
+                       </>
+                       }
+                        
+                        </TableRow> */}
+                      
                         {filteredEntries && filteredEntries.length > 0 ? filteredEntries.slice(0,rowsValue ? rowsValue : undefined).map((entry, index) => (
                           <TableRow key={entry._id} className={index % 2 === 0 ? 'bg_white' : 'bg_dark'}>
                             {editMode && editedRowIndex === index ? (
