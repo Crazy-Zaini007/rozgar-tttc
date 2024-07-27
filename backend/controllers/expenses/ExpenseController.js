@@ -140,7 +140,8 @@ const addMultipleExpense=async(req,res)=>{
                     curr_Country,
                     curr_Rate,
                     curr_Amount,
-                    date} = payment
+                    date
+                } = payment
                     if(!payment_Via){
                         res.status(400).json({message:"Payment Via is required"})
                         break;

@@ -387,32 +387,32 @@ const EntryDetails = () => {
       entry.pp_No && entry.entry_Mode.trim().toLowerCase().startsWith(name.trim().toLowerCase())
 
     )&&
-      entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase()) &&
-      entry.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-      entry.company?.toLowerCase().includes(company.toLowerCase()) &&
-      entry.country?.toLowerCase().includes(country.toLowerCase()) &&
-      entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-      entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-      entry.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-      entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase()) &&
-      entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase()) &&
-      entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase()) &&
-      entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase())&&
+      (entry.entry_Date && entry.entry_Date.toLowerCase().includes(date.toLowerCase())) &&
+      (entry.trade && entry.trade?.toLowerCase().includes(trade.toLowerCase())) &&
+      (entry.company&& entry.company?.toLowerCase().includes(company.toLowerCase())) &&
+      (entry.country&& entry.country?.toLowerCase().includes(country.toLowerCase())) &&
+      (entry.final_Status&& entry.final_Status?.toLowerCase().includes(final_Status.toLowerCase())) &&
+      (entry.flight_Date && entry.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())) &&
+      (entry.entry_Mode&& entry.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase())) &&
+      (entry.reference_Out_Name&&entry.reference_Out_Name?.toLowerCase().includes(reference_Out.toLowerCase())) &&
+      (entry.reference_In_Name&&entry.reference_In_Name?.toLowerCase().includes(reference_In.toLowerCase())) &&
+      (entry.reference_Out&&entry.reference_Out?.toLowerCase().includes(reference_Out_Type.toLowerCase())) &&
+      (entry.reference_In&&entry.reference_In?.toLowerCase().includes(reference_In_Type.toLowerCase()))&&
 
-      entry.azad_Visa_Reference_Out_Name?.toLowerCase().includes(azad_Reference_Out.toLowerCase()) &&
-      entry.azad_Visa_Reference_In_Name?.toLowerCase().includes(azad_Reference_In.toLowerCase()) &&
-      entry.azad_Visa_Reference_Out?.toLowerCase().includes(azad_Reference_Out_Type.toLowerCase()) &&
-      entry.azad_Visa_Reference_In?.toLowerCase().includes(azad_Reference_In_Type.toLowerCase()) &&
+      (entry.azad_Visa_Reference_Out_Name&& entry.azad_Visa_Reference_Out_Name?.toLowerCase().includes(azad_Reference_Out.toLowerCase())) &&
+      (entry.azad_Visa_Reference_In_Name&&entry.azad_Visa_Reference_In_Name?.toLowerCase().includes(azad_Reference_In.toLowerCase())) &&
+      (entry.azad_Visa_Reference_Out&&entry.azad_Visa_Reference_Out?.toLowerCase().includes(azad_Reference_Out_Type.toLowerCase())) &&
+      (entry.azad_Visa_Reference_In&&entry.azad_Visa_Reference_In?.toLowerCase().includes(azad_Reference_In_Type.toLowerCase())) &&
 
-      entry.ticket_Reference_Out_Name?.toLowerCase().includes(ticket_Reference_Out.toLowerCase()) &&
-      entry.ticket_Reference_In_Name?.toLowerCase().includes(ticket_Reference_In.toLowerCase()) &&
-      entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_Out_Type.toLowerCase()) &&
-      entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_In_Type.toLowerCase())&&
+      (entry.ticket_Reference_Out_Name&&entry.ticket_Reference_Out_Name?.toLowerCase().includes(ticket_Reference_Out.toLowerCase())) &&
+      (entry.ticket_Reference_In_Name&&entry.ticket_Reference_In_Name?.toLowerCase().includes(ticket_Reference_In.toLowerCase())) &&
+      (entry.ticket_Reference_Out&& entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_Out_Type.toLowerCase())) &&
+      (entry.ticket_Reference_Out&& entry.ticket_Reference_Out?.toLowerCase().includes(ticket_Reference_In_Type.toLowerCase()))&&
 
-      entry.visit_Reference_Out_Name?.toLowerCase().includes(visit_Reference_Out.toLowerCase()) &&
-      entry.visit_Reference_In_Name?.toLowerCase().includes(visit_Reference_In.toLowerCase()) &&
-      entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_Out_Type.toLowerCase()) &&
-      entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_In_Type.toLowerCase())
+     ( entry.visit_Reference_Out_Name&&entry.visit_Reference_Out_Name?.toLowerCase().includes(visit_Reference_Out.toLowerCase())) &&
+      (entry.visit_Reference_In_Name&&entry.visit_Reference_In_Name?.toLowerCase().includes(visit_Reference_In.toLowerCase())) &&
+      (entry.visit_Reference_Out&& entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_Out_Type.toLowerCase())) &&
+     ( entry.visit_Reference_Out&&entry.visit_Reference_Out?.toLowerCase().includes(visit_Reference_In_Type.toLowerCase()))
     );
   })
   

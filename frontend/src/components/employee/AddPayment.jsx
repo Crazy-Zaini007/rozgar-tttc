@@ -187,7 +187,7 @@ export default function AddPayment() {
   }
 
   const [multiplePayment, setMultiplePayment] = useState([{date:'', employeeName: '', category: '', payment_Via: '', payment_Type: '',slip_No:'', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0 }])
-
+  
   const [triggerEffect, setTriggerEffect] = useState(false);
 
   // handle Picture 

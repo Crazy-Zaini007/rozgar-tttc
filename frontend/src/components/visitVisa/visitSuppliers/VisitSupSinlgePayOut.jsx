@@ -264,18 +264,18 @@ export default function VisitSupSinglePayOut() {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-
+  
     return dataArray.map((entry, rowIndex) => {
       return initializeMissingFields(
         Object.fromEntries(
           Object.entries(entry).map(([key, value]) => {
             const trimmedValue = typeof value === 'string' ? value.trim() : value;
-
+  
             if (key === 'date' && !isNaN(trimmedValue) && trimmedValue !== '') {
-              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000);
+              const dateValue = new Date(Math.round((trimmedValue - 25569) * 86400 * 1000));
               return [key, !isNaN(dateValue.getTime()) ? dateValue.toISOString().split('T')[0] : undefined];
             }
-
+  
             return [key, trimmedValue === '' ? undefined : trimmedValue];
           })
         )
