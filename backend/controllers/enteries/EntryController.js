@@ -3689,7 +3689,7 @@ const addMultipleEnteries = async (req, res) => {
 
         if (!existingPPNO) {
 
-          if (entryData.final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
+          if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'offer letter' || entryData.final_Status.trim().toLowerCase() === 'offer latter')) {
             const newReminder = new Reminders({
               type: "Offer Letter",
               content: `${name}'s Final Status is updated to Offer Letter.`,
@@ -3698,7 +3698,7 @@ const addMultipleEnteries = async (req, res) => {
             await newReminder.save();
           }
           
-          if (entryData.final_Status.trim().toLowerCase() === 'e number' || final_Status.trim().toLowerCase() === 'e_number') {
+          if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'e number' || entryData.final_Status.trim().toLowerCase() === 'e_number')) {
     
             const newReminder = new Reminders({
               type: "E Number",
@@ -3708,7 +3708,7 @@ const addMultipleEnteries = async (req, res) => {
             await newReminder.save();
           }
           
-          if (entryData.final_Status.trim().toLowerCase() === 'qvc' || final_Status.trim().toLowerCase() === 'q_v_c') {
+          if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'qvc' || entryData.final_Status.trim().toLowerCase() === 'q_v_c')) {
             const newReminder = new Reminders({
               type: "QVC",
               content: `${name}'s Final Status is updated to QVC.`,
@@ -3717,7 +3717,7 @@ const addMultipleEnteries = async (req, res) => {
             await newReminder.save();
           }
           
-          if (entryData.final_Status.trim().toLowerCase() === 'visa issued' || final_Status.trim().toLowerCase() === 'visa_issued' || final_Status.trim().toLowerCase() === 'vissa issued' || final_Status.trim().toLowerCase() === 'vissa_issued') {
+          if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'visa issued' || entryData.final_Status.trim().toLowerCase() === 'visa_issued' || entryData.final_Status.trim().toLowerCase() === 'vissa issued' || entryData.final_Status.trim().toLowerCase() === 'vissa_issued')) {
             const newReminder = new Reminders({
               type: "Visa Issued",
               content: `${name}'s Final Status is updated to Visa Issued.`,
@@ -3726,7 +3726,7 @@ const addMultipleEnteries = async (req, res) => {
             await newReminder.save();
           }
           
-          if (entryData.final_Status.trim().toLowerCase() === 'ptn' || final_Status.trim().toLowerCase() === 'p_t_n') {
+          if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'ptn' || entryData.final_Status.trim().toLowerCase() === 'p_t_n')) {
             const newReminder = new Reminders({
               type: "PTN",
               content: `${name}'s Final Status is updated to PTN.`,
@@ -3735,7 +3735,7 @@ const addMultipleEnteries = async (req, res) => {
             await newReminder.save();
           }
           
-          if (entryData.final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket') {
+          if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'ticket' || final_Status.trim().toLowerCase() === 'tiket')) {
             const newReminder = new Reminders({
               type: "Ticket",
               content: `${name}'s Final Status is updated to Ticket.`,
