@@ -410,14 +410,14 @@ const addMultipleSalaries = async (req, res) => {
     }
 
     if (user) {
-    const multiplePayments = req.body;
-
-    if (!Array.isArray(multiplePayments) || multiplePayments.length === 0) {
+    const multiplePayment = req.body;
+    let updatedPayments = [];
+    if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
     }
     try {
-      for (const payment of multiplePayments){
+      for (const payment of multiplePayment){
         const {
           employeeName,
           category,
@@ -432,10 +432,7 @@ const addMultipleSalaries = async (req, res) => {
           curr_Amount,
         } = payment
         const employee = await Employees.findOne({employeeName:employeeName.toLowerCase()})
-
-      if (!employee) {
-        res.status(404).json({ message: "Employee not found" })
-      }
+        
       if (employee) {
         const parsedPaymentOut = Number(payment_Out);
         
@@ -477,6 +474,7 @@ const addMultipleSalaries = async (req, res) => {
           invoice:nextInvoiceNumber
         }
 
+        updatedPayments.push(payment);
         const cashInHandDoc = await CashInHand.findOne({});
 
         if (!cashInHandDoc) {
@@ -501,13 +499,14 @@ const addMultipleSalaries = async (req, res) => {
         employee.employeePayments.push(payment)
         await employee.save()
       }
-      res.status(200).json({ message: `Salaries done for ${multiplePayments.length} Employees!` })
+      res.status(200).json({ 
+        data:updatedPayments,
+        message: `Salaries done for ${updatedPayments.length} Employees!` })
 
       }
     } catch (error) {
       
     }
-      
       
     }
   } catch (error) {

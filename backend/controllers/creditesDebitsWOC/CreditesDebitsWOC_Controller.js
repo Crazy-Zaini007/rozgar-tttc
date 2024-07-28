@@ -180,7 +180,8 @@ const addMultiplePaymentIn = async (req, res) => {
             return;
         }
     const multiplePayment = req.body;
-
+    let updatedPayments = [];
+    
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
         res.status(400).json({ message: "Invalid request payload" });
         return;
@@ -205,10 +206,7 @@ for(const payment of multiplePayment){
       
     } = payment
 
-    if(!payment_Via){
-        res.status(400).json({message:"Payment Via is required"})
-        break;
-      }
+ 
     const newPaymentIn=Number(payment_In)
 const newPaymentOut=Number(payment_Out)
  
@@ -262,6 +260,7 @@ const newPaymentOut=Number(payment_Out)
             existingSupplier.payment_In_Schema.total_Payment_Out += newPaymentOut ? newPaymentOut : 0;
             existingSupplier.payment_In_Schema.balance += newPaymentIn ? newPaymentIn : -newPaymentOut;
           
+            updatedPayments.push(payment);
 
             const newNotification=new Notifications({
                 type:`CDWOC Payment ${payment_In? "In":"Out"}`,
@@ -316,6 +315,22 @@ const newPaymentOut=Number(payment_Out)
                 }
             })
 
+            updatedPayments.push(
+                {
+                    supplierName,
+                    category,
+                    payment_Via,
+                    payment_Type,
+                    slip_No,
+                    payment_In,
+                    payment_Out,
+                    details,
+                    date,
+                    curr_Country,
+                    curr_Rate,
+                    curr_Amount,
+                }
+            );
          
             const newNotification=new Notifications({
                 type:`CDWOC Payment ${payment_In? "In":"Out"}`,
@@ -333,7 +348,9 @@ const newPaymentOut=Number(payment_Out)
       } catch (error) {
         
       }
-      res.status(200).json({ message: `${multiplePayment.length} Payments added Successfully` });
+      res.status(200).json({
+        data:updatedPayments,
+         message: `${updatedPayments.length} Payments added Successfully` });
        
 
     } catch (err) {

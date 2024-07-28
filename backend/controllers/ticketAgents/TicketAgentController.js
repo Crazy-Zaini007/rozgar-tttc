@@ -212,7 +212,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
     }
 
     try {
-      const updatedPayments = [];
+      let updatedPayments = [];
 
       for (const payment of multiplePayment) {
         let {
@@ -229,10 +229,7 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
           curr_Amount,
           date,
         } = payment;
-        if(!payment_Via){
-          res.status(400).json({message:"Payment Via is required"})
-          break;
-        }
+       
         const newPaymentIn = parseInt(payment_In, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 
@@ -250,117 +247,115 @@ const addAzadAgentMultiplePaymentsIn = async (req, res) => {
             }
           }
         }
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: `${supplierName} not found`,
+        if (existingSupplier) {
+          let nextInvoiceNumber = 0;
+
+          const currentInvoiceNumber = await InvoiceNumber.findOne({});
+  
+          if (!currentInvoiceNumber) {
+            const newInvoiceNumberDoc = new InvoiceNumber();
+            await newInvoiceNumberDoc.save();
+          }
+  
+          const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+            {},
+            { $inc: { invoice_Number: 1 } },
+            { new: true, upsert: true }
+          );
+  
+          if (updatedInvoiceNumber) {
+            nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+          }
+  
+          let uploadImage;
+          if (slip_Pic) {
+            uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+              upload_preset: "rozgar",
+            });
+          }
+          const newPayment = {
+            name: supplierName,
+            category,
+            payment_Via,
+            payment_Type,
+            slip_No: slip_No ? slip_No : "",
+            payment_In: newPaymentIn,
+            slip_Pic: uploadImage?.secure_url || "",
+            details,
+            payment_In_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:date?date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+          };
+  
+          updatedPayments.push(newPayment);
+  
+          await existingSupplier.updateOne({
+            $inc: {
+              "payment_In_Schema.total_Payment_In": payment_In,
+              "payment_In_Schema.remaining_Balance": -payment_In,
+              "payment_In_Schema.total_Payment_In_Curr": newCurrAmount
+                ? newCurrAmount
+                : 0,
+            },
+  
+            $push: {
+              "payment_In_Schema.payment": newPayment,
+            },
           });
-          return;
-        }
-
-        let nextInvoiceNumber = 0;
-
-        const currentInvoiceNumber = await InvoiceNumber.findOne({});
-
-        if (!currentInvoiceNumber) {
-          const newInvoiceNumberDoc = new InvoiceNumber();
-          await newInvoiceNumberDoc.save();
-        }
-
-        const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
-          {},
-          { $inc: { invoice_Number: 1 } },
-          { new: true, upsert: true }
-        );
-
-        if (updatedInvoiceNumber) {
-          nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
-        }
-
-        let uploadImage;
-        if (slip_Pic) {
-          uploadImage = await cloudinary.uploader.upload(slip_Pic, {
-            upload_preset: "rozgar",
+          const cashInHandDoc = await CashInHand.findOne({});
+  
+          if (!cashInHandDoc) {
+            const newCashInHandDoc = new CashInHand();
+            await newCashInHandDoc.save();
+          }
+  
+          const cashInHandUpdate = {
+            $inc: {},
+          };
+  
+          if (payment_Via.toLowerCase() === "cash") {
+            cashInHandUpdate.$inc.cash = newPaymentIn;
+            cashInHandUpdate.$inc.total_Cash = newPaymentIn;
+          } else {
+            cashInHandUpdate.$inc.bank_Cash = newPaymentIn;
+            cashInHandUpdate.$inc.total_Cash = newPaymentIn;
+          }
+  
+          await CashInHand.updateOne({}, cashInHandUpdate);
+          const newBackup = new Backup({
+            name: supplierName,
+            category: category,
+            payment_Via: payment_Via,
+            payment_Type: payment_Type,
+            slip_No: slip_No ? slip_No : "",
+            payment_In: newPaymentIn,
+            slip_Pic: uploadImage?.secure_url || "",
+            details: details,
+            payment_In_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date: new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
           });
-        }
-        const newPayment = {
-          name: supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No: slip_No ? slip_No : "",
-          payment_In: newPaymentIn,
-          slip_Pic: uploadImage?.secure_url || "",
-          details,
-          payment_In_Curr: curr_Country ? curr_Country : "",
-          curr_Rate: curr_Rate ? curr_Rate : 0,
-          curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date:date?date:new Date().toISOString().split("T")[0],
-          invoice: nextInvoiceNumber,
-        };
-
-        updatedPayments.push(newPayment);
-
-        await existingSupplier.updateOne({
-          $inc: {
-            "payment_In_Schema.total_Payment_In": payment_In,
-            "payment_In_Schema.remaining_Balance": -payment_In,
-            "payment_In_Schema.total_Payment_In_Curr": newCurrAmount
-              ? newCurrAmount
-              : 0,
-          },
-
-          $push: {
-            "payment_In_Schema.payment": newPayment,
-          },
-        });
-        const cashInHandDoc = await CashInHand.findOne({});
-
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
+          await newBackup.save();
+          await existingSupplier.save();
+  
+          const newNotification = new Notifications({
+            type: "Ticket Agent Payment In",
+            content: `${user.userName} added Payment_In: ${payment_In} of Ticket Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0],
+          });
+          await newNotification.save();
         }
 
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-
-        if (payment_Via.toLowerCase() === "cash") {
-          cashInHandUpdate.$inc.cash = newPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = newPaymentIn;
-        } else {
-          cashInHandUpdate.$inc.bank_Cash = newPaymentIn;
-          cashInHandUpdate.$inc.total_Cash = newPaymentIn;
-        }
-
-        await CashInHand.updateOne({}, cashInHandUpdate);
-        const newBackup = new Backup({
-          name: supplierName,
-          category: category,
-          payment_Via: payment_Via,
-          payment_Type: payment_Type,
-          slip_No: slip_No ? slip_No : "",
-          payment_In: newPaymentIn,
-          slip_Pic: uploadImage?.secure_url || "",
-          details: details,
-          payment_In_Curr: curr_Country ? curr_Country : "",
-          curr_Rate: curr_Rate ? curr_Rate : 0,
-          curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date: new Date().toISOString().split("T")[0],
-          invoice: nextInvoiceNumber,
-        });
-        await newBackup.save();
-        await existingSupplier.save();
-
-        const newNotification = new Notifications({
-          type: "Ticket Agent Payment In",
-          content: `${user.userName} added Payment_In: ${payment_In} of Ticket Agent: ${supplierName}`,
-          date: new Date().toISOString().split("T")[0],
-        });
-        await newNotification.save();
+      
       }
 
       res.status(200).json({
-        message: `${multiplePayment.length} Payments Out added Successfully `,
+        data:updatedPayments,
+        message: `${updatedPayments.length} Payments Out added Successfully `,
       });
     } catch (error) {
       console.error("Error updating values:", error);
@@ -1873,7 +1868,7 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
     }
 
     try {
-      const updatedPayments = [];
+      let updatedPayments = [];
 
       for (const payment of multiplePayment) {
         let {
@@ -1890,16 +1885,6 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
           curr_Amount,
           date,
         } = payment;
-
-        if(!payment_Via){
-          res.status(400).json({message:"Payment Via is required"})
-          break;
-        }
-        if (!supplierName) {
-          res.status(400).json({ message: "Name is required" });
-          return;
-        }
-
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
 
@@ -1917,117 +1902,115 @@ const addAzadAgentMultiplePaymentsOut = async (req, res) => {
             }
           }
         }
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: `${supplierName} not found`,
+        if (existingSupplier) {
+          let nextInvoiceNumber = 0;
+
+          const currentInvoiceNumber = await InvoiceNumber.findOne({});
+  
+          if (!currentInvoiceNumber) {
+            const newInvoiceNumberDoc = new InvoiceNumber();
+            await newInvoiceNumberDoc.save();
+          }
+  
+          const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+            {},
+            { $inc: { invoice_Number: 1 } },
+            { new: true, upsert: true }
+          );
+  
+          if (updatedInvoiceNumber) {
+            nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+          }
+  
+          const uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+            upload_preset: "rozgar",
           });
-          return;
+  
+          const newPayment = {
+            name: supplierName,
+            category,
+            payment_Via,
+            payment_Type,
+            slip_No: slip_No ? slip_No : "",
+            payment_Out: newPaymentOut,
+            slip_Pic: uploadImage?.secure_url || "",
+            details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:date?date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+          };
+  
+          updatedPayments.push(newPayment);
+  
+          await existingSupplier.updateOne({
+            $inc: {
+              "payment_Out_Schema.total_Payment_Out": payment_Out,
+              "payment_Out_Schema.remaining_Balance": -payment_Out,
+              "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount
+                ? newCurrAmount
+                : 0,
+            },
+  
+            $push: {
+              "payment_Out_Schema.payment": newPayment,
+            },
+          });
+          const cashInHandDoc = await CashInHand.findOne({});
+  
+          if (!cashInHandDoc) {
+            const newCashInHandDoc = new CashInHand();
+            await newCashInHandDoc.save();
+          }
+  
+          const cashInHandUpdate = {
+            $inc: {},
+          };
+  
+          if (payment_Via.toLowerCase() === "cash") {
+            cashInHandUpdate.$inc.cash = -newPaymentOut;
+            cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
+          } else {
+            cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
+            cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
+          }
+  
+          await CashInHand.updateOne({}, cashInHandUpdate);
+  
+          const newBackup = new Backup({
+            name: supplierName,
+            category: category,
+            payment_Via: payment_Via,
+            payment_Type: payment_Type,
+            slip_No: slip_No ? slip_No : "",
+            payment_Out: newPaymentOut,
+            slip_Pic: uploadImage?.secure_url || "",
+            details: details,
+            payment_Out_Curr: curr_Country ? curr_Country : "",
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date: new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
+          });
+          await newBackup.save();
+  
+          const newNotification = new Notifications({
+            type: "Ticket Agent Payment Out",
+            content: `${user.userName} added Payment_Out: ${payment_Out} of Ticket Agent: ${supplierName}`,
+            date: new Date().toISOString().split("T")[0],
+          });
+          await newNotification.save();
         }
 
-        let nextInvoiceNumber = 0;
-
-        const currentInvoiceNumber = await InvoiceNumber.findOne({});
-
-        if (!currentInvoiceNumber) {
-          const newInvoiceNumberDoc = new InvoiceNumber();
-          await newInvoiceNumberDoc.save();
-        }
-
-        const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
-          {},
-          { $inc: { invoice_Number: 1 } },
-          { new: true, upsert: true }
-        );
-
-        if (updatedInvoiceNumber) {
-          nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
-        }
-
-        const uploadImage = await cloudinary.uploader.upload(slip_Pic, {
-          upload_preset: "rozgar",
-        });
-
-        const newPayment = {
-          name: supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No: slip_No ? slip_No : "",
-          payment_Out: newPaymentOut,
-          slip_Pic: uploadImage?.secure_url || "",
-          details,
-          payment_Out_Curr: curr_Country ? curr_Country : "",
-          curr_Rate: curr_Rate ? curr_Rate : 0,
-          curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date:date?date:new Date().toISOString().split("T")[0],
-          invoice: nextInvoiceNumber,
-        };
-
-        updatedPayments.push(newPayment);
-
-        await existingSupplier.updateOne({
-          $inc: {
-            "payment_Out_Schema.total_Payment_Out": payment_Out,
-            "payment_Out_Schema.remaining_Balance": -payment_Out,
-            "payment_Out_Schema.total_Payment_Out_Curr": newCurrAmount
-              ? newCurrAmount
-              : 0,
-          },
-
-          $push: {
-            "payment_Out_Schema.payment": newPayment,
-          },
-        });
-        const cashInHandDoc = await CashInHand.findOne({});
-
-        if (!cashInHandDoc) {
-          const newCashInHandDoc = new CashInHand();
-          await newCashInHandDoc.save();
-        }
-
-        const cashInHandUpdate = {
-          $inc: {},
-        };
-
-        if (payment_Via.toLowerCase() === "cash") {
-          cashInHandUpdate.$inc.cash = -newPaymentOut;
-          cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-        } else {
-          cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
-          cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-        }
-
-        await CashInHand.updateOne({}, cashInHandUpdate);
-
-        const newBackup = new Backup({
-          name: supplierName,
-          category: category,
-          payment_Via: payment_Via,
-          payment_Type: payment_Type,
-          slip_No: slip_No ? slip_No : "",
-          payment_Out: newPaymentOut,
-          slip_Pic: uploadImage?.secure_url || "",
-          details: details,
-          payment_Out_Curr: curr_Country ? curr_Country : "",
-          curr_Rate: curr_Rate ? curr_Rate : 0,
-          curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date: new Date().toISOString().split("T")[0],
-          invoice: nextInvoiceNumber,
-        });
-        await newBackup.save();
-
-        const newNotification = new Notifications({
-          type: "Ticket Agent Payment Out",
-          content: `${user.userName} added Payment_Out: ${payment_Out} of Ticket Agent: ${supplierName}`,
-          date: new Date().toISOString().split("T")[0],
-        });
-        await newNotification.save();
+      
       }
 
       res
         .status(200)
         .json({
-          message: `${multiplePayment.length} Payments Out added Successfully`,
+          data:updatedPayments,
+          message: `${updatedPayments.length} Payments Out added Successfully`,
         });
     } catch (error) {
       console.error("Error updating values:", error);

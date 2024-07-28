@@ -210,9 +210,10 @@ const addMultiplePaymentsOut = async (req, res) => {
       return;
     }
 
-    const multiplePaymentOut = req.body;
+    const multiplePayment = req.body;
+    let updatedPayments = [];
 
-    if (!Array.isArray(multiplePaymentOut) || multiplePaymentOut.length === 0) {
+    if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
     }
@@ -221,7 +222,7 @@ const addMultiplePaymentsOut = async (req, res) => {
 
       const updatedPayments = [];
 
-      for (const payment of multiplePaymentOut) {
+      for (const payment of multiplePayment) {
         let {
           supplierName,
           category,
@@ -237,15 +238,6 @@ const addMultiplePaymentsOut = async (req, res) => {
           date,
           
         } = payment;
-        if(!payment_Via){
-          res.status(400).json({message:"Payment Via is required"})
-          break;
-        }
-        if (!supplierName) {
-          res.status(400).json({ message: "Name is required" });
-          return;
-        }
-
         const newPaymentOut = parseInt(payment_Out, 10);
         const newCurrAmount = parseInt(curr_Amount, 10);
      
@@ -260,117 +252,115 @@ const addMultiplePaymentsOut = async (req, res) => {
           }
         }
        }
-        if (!existingSupplier) {
-          res.status(404).json({
-            message: `${supplierName} not found`,
-          });
-          return;
-        }
+        if (existingSupplier) {
+          let nextInvoiceNumber = 0;
 
-        let nextInvoiceNumber = 0;
-
-        const currentInvoiceNumber = await InvoiceNumber.findOne({});
-
-        if (!currentInvoiceNumber) {
-          const newInvoiceNumberDoc = new InvoiceNumber();
-          await newInvoiceNumberDoc.save();
-        }
-
-        const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
-          {},
-          { $inc: { invoice_Number: 1 } },
-          { new: true, upsert: true }
-        );
-
-        if (updatedInvoiceNumber) {
-          nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
-        }
-
-        let uploadImage;
-
-        if (slip_Pic) {
-          uploadImage = await cloudinary.uploader.upload(slip_Pic, {
-            upload_preset: "rozgar",
-          })
-        }
-
-        // Use the correct variable name, e.g., existingSupplier instead of existingPayment
-        const newPayment = {
-          name: supplierName,
-          category,
-          payment_Via,
-          payment_Type,
-          slip_No: slip_No ? slip_No : '',
-          payment_Out: newPaymentOut,
-          slip_Pic: uploadImage?.secure_url || '',
-          details,
-          payment_Out_Curr: curr_Country ? curr_Country : '',
-          curr_Rate: curr_Rate ? curr_Rate : 0,
-          curr_Amount: newCurrAmount ? newCurrAmount : 0,
-          date:date?date:new Date().toISOString().split("T")[0],
-          invoice: nextInvoiceNumber,
-         
-        };
-
-        updatedPayments.push(newPayment);
-
-        try {
-        
-            // Update total_Visa_Price_In_PKR and other fields using $inc
-            await existingSupplier.updateOne({
-              $inc: {
-                "payment_Out_Schema.total_Payment_Out": payment_Out,
-                "payment_Out_Schema.remaining_Balance": -payment_Out,
-                "payment_Out_Schema.payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
-                "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
-              },
-             
-              $push: {
-                "payment_Out_Schema.payment": newPayment,
-              },
+          const currentInvoiceNumber = await InvoiceNumber.findOne({});
+  
+          if (!currentInvoiceNumber) {
+            const newInvoiceNumberDoc = new InvoiceNumber();
+            await newInvoiceNumberDoc.save();
+          }
+  
+          const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
+            {},
+            { $inc: { invoice_Number: 1 } },
+            { new: true, upsert: true }
+          );
+  
+          if (updatedInvoiceNumber) {
+            nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
+          }
+  
+          let uploadImage;
+  
+          if (slip_Pic) {
+            uploadImage = await cloudinary.uploader.upload(slip_Pic, {
+              upload_preset: "rozgar",
             })
-            const cashInHandDoc = await CashInHand.findOne({});
-
-            if (!cashInHandDoc) {
-              const newCashInHandDoc = new CashInHand();
-              await newCashInHandDoc.save();
-            }
-
-            const cashInHandUpdate = {
-              $inc: {},
-            };
-
-            if (payment_Via.toLowerCase() === "cash" ) {
-              cashInHandUpdate.$inc.cash = -newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-            }
-            else{
-              cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
-              cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
-            }
-
-            await CashInHand.updateOne({}, cashInHandUpdate);
-            const newNotification=new Notifications({
-              type:"Protector Payment Out",
-              content:`${user.userName} added Payment_Out: ${payment_Out} of Protector: ${supplierName}`,
-              date: new Date().toISOString().split("T")[0]
-    
-            })
-            await newNotification.save()
-
-            await existingSupplier.save();
+          }
+  
+          // Use the correct variable name, e.g., existingSupplier instead of existingPayment
+          const newPayment = {
+            name: supplierName,
+            category,
+            payment_Via,
+            payment_Type,
+            slip_No: slip_No ? slip_No : '',
+            payment_Out: newPaymentOut,
+            slip_Pic: uploadImage?.secure_url || '',
+            details,
+            payment_Out_Curr: curr_Country ? curr_Country : '',
+            curr_Rate: curr_Rate ? curr_Rate : 0,
+            curr_Amount: newCurrAmount ? newCurrAmount : 0,
+            date:date?date:new Date().toISOString().split("T")[0],
+            invoice: nextInvoiceNumber,
            
+          };
+  
+          updatedPayments.push(newPayment);
+  
+          try {
+          
+              // Update total_Visa_Price_In_PKR and other fields using $inc
+              await existingSupplier.updateOne({
+                $inc: {
+                  "payment_Out_Schema.total_Payment_Out": payment_Out,
+                  "payment_Out_Schema.remaining_Balance": -payment_Out,
+                  "payment_Out_Schema.payment_Out_Curr": newCurrAmount ? newCurrAmount : 0,
+                  "payment_Out_Schema.remaining_Curr": newCurrAmount ? -newCurrAmount : 0,
+                },
+               
+                $push: {
+                  "payment_Out_Schema.payment": newPayment,
+                },
+              })
+              const cashInHandDoc = await CashInHand.findOne({});
+  
+              if (!cashInHandDoc) {
+                const newCashInHandDoc = new CashInHand();
+                await newCashInHandDoc.save();
+              }
+  
+              const cashInHandUpdate = {
+                $inc: {},
+              };
+  
+              if (payment_Via.toLowerCase() === "cash" ) {
+                cashInHandUpdate.$inc.cash = -newPaymentOut;
+                cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
+              }
+              else{
+                cashInHandUpdate.$inc.bank_Cash = -newPaymentOut;
+                cashInHandUpdate.$inc.total_Cash = -newPaymentOut;
+              }
+  
+              await CashInHand.updateOne({}, cashInHandUpdate);
+              const newNotification=new Notifications({
+                type:"Protector Payment Out",
+                content:`${user.userName} added Payment_Out: ${payment_Out} of Protector: ${supplierName}`,
+                date: new Date().toISOString().split("T")[0]
+      
+              })
+              await newNotification.save()
+  
+              await existingSupplier.save();
+             
+  
+          }
+          catch (error) {
+            console.error("Error updating values:", error);
+            res
+              .status(500)
+              .json({ message: "Error updating values", error: error.message });
+          }
+        }
 
-        }
-        catch (error) {
-          console.error("Error updating values:", error);
-          res
-            .status(500)
-            .json({ message: "Error updating values", error: error.message });
-        }
+   
       }
       res.status(200).json({
-        message: `${multiplePaymentOut.length} Payments added Successfully`,
+        data:updatedPayments,
+        message: `${updatedPayments.length} Payments added Successfully`,
       });
     } catch (error) {
       console.error("Error updating values:", error);

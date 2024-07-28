@@ -19,6 +19,23 @@ const VisitCandidate = require("../../database/visitCandidates/VisitCandidateSch
 const Protector = require("../../database/protector/ProtectorSchema");
 const Reminders = require('../../database/reminders/RemindersModel')
 const mongoose = require("mongoose");
+
+const Companies = require('../../database/setting/Company_Schema')
+const Trades = require('../../database/setting/Trade_Schmea')
+const EntryMode = require('../../database/setting/Entry_Mode_Schema')
+const FinalStatus = require('../../database/setting/Final_Status_Schema')
+
+const AVPP = require('../../database/setting/AVPP_Schema')
+const AVSP = require('../../database/setting/AVSP_Schema')
+
+const TPP = require('../../database/setting/TPP_Schema')
+const TSP = require('../../database/setting/TSP_Schema')
+const VIPP = require('../../database/setting/VIPP_Schema')
+const VISP = require('../../database/setting/VISP_Schema')
+const VPP = require('../../database/setting/VPP_Schema')
+const VSP = require('../../database/setting/VSP_Schema')
+const ProtectorParties=require('../../database/setting/Protector_Schema')
+
 const moment = require("moment");
 // Adding a new Single Entry Controller
 const addEntry = async (req, res) => {
@@ -152,7 +169,7 @@ const addEntry = async (req, res) => {
         sendResponse = false;
       }
       if (!existingPPNO) {
-
+        
         if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {
           const newReminder = new Reminders({
             type: "Offer Letter",
@@ -3511,6 +3528,7 @@ const addEntry = async (req, res) => {
 
         res.status(200).json(responsePayload);
       }
+    
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -3533,7 +3551,6 @@ const addMultipleEnteries = async (req, res) => {
 
       const addedEntries = [];
       const paymentInfo = {};
-      let savedEntries=[];
 
       for (const entryData of entries) {
         let final_Status = entryData.final_Status
@@ -3584,12 +3601,97 @@ const addMultipleEnteries = async (req, res) => {
           pp_No: new RegExp(`^${entryData.pp_No}$`, 'i')
         });
 
-        // if (existingPPNO) {
-        //   res.status(400).json({
-        //     message: `Entry with Passport Number ${entryData.pp_No} and Entry Mode ${entryData.entry_Mode} already exists`,
-        //   });
-        //   return;
-        // }
+        let existCompany,existingTrade,existingEntryMode,existingFinalStatus,visaReference_Out,visaReference_In,azadVisaReference_Out,azadVisaReference_In,ticketReference_Out,ticketReference_In,visitReference_Out,visitReference_In,protectorReference_Out
+      if(company){
+        const companies=await Companies.find({})
+        existCompany=companies.find(data=>data.company.trim().toLowerCase()===entryData.company.trim().toLowerCase())
+        if (!existCompany) continue;
+      }
+      if(entryData.trade){
+     const trades=await Trades.find({})
+     existingTrade=trades.find(data=>data.trade.trim().toLowerCase()===entryData.trade.trim().toLowerCase())
+     if (!existingTrade) continue;
+     
+      }
+      if(entryData.entry_Mode){
+        const entryModes=await EntryMode.find({})
+        existingEntryMode=entryModes.find(data=>data.entry_Mode.trim().toLowerCase()===entryData.entry_Mode.trim().toLowerCase())
+     if (!existingEntryMode) continue;
+        
+      }
+      if(entryData.final_Status){
+        const finalStatuses=await FinalStatus.find({})
+         existingFinalStatus=finalStatuses.find(data=>data.final_Status.trim().toLowerCase()===entryData.final_Status.trim().toLowerCase())
+     if (!existingFinalStatus) continue;
+       
+      }
+
+      if(entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent')||entryData.reference_Out.toLowerCase().includes('supplier'))){
+        const allOutVisas=await VIPP.find({})
+        visaReference_Out=allOutVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_Out_Name.trim().toLowerCase())
+     if (!visaReference_Out) continue;
+
+      }
+
+      if(entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent')||entryData.reference_In.toLowerCase().includes('supplier'))){
+        const allInVisas=await VISP.find({})
+        visaReference_In=allInVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_In_Name.trim().toLowerCase())
+     if (!visaReference_In) continue;
+
+      }
+
+      if(entryData.azad_Visa_Reference_Out_Name && (entryData.azad_Visa_Reference_Out.toLowerCase().includes('agent')||entryData.azad_Visa_Reference_Out.toLowerCase().includes('supplier'))){
+        const allOutAzasVisas=await AVPP.find({})
+        azadVisaReference_Out=allOutAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_Out_Name.trim().toLowerCase())
+     if (!azadVisaReference_Out) continue;
+
+      }
+
+      if(entryData.azad_Visa_Reference_In_Name && (entryData.azad_Visa_Reference_In.toLowerCase().includes('agent')||entryData.azad_Visa_Reference_In.toLowerCase().includes('supplier'))){
+        const allInAzasVisas=await AVSP.find({})
+        azadVisaReference_In=allInAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_In_Name.trim().toLowerCase())
+     if (!azadVisaReference_In) continue;
+
+      }
+
+      
+      if(entryData.ticket_Reference_Out_Name && (entryData.ticket_Reference_Out.toLowerCase().includes('agent')||entryData.ticket_Reference_Out.toLowerCase().includes('supplier'))){
+        const allOutTickets=await TPP.find({})
+        ticketReference_Out=allOutTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_Out_Name.trim().toLowerCase())
+     if (!ticketReference_Out) continue;
+
+      }
+
+      if(entryData.ticket_Reference_In_Name && (entryData.ticket_Reference_In.toLowerCase().includes('agent')||entryData.ticket_Reference_In.toLowerCase().includes('supplier'))){
+        const allInTickets=await TSP.find({})
+        ticketReference_In=allInTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_In_Name.trim().toLowerCase())
+     if (!ticketReference_In) continue;
+
+      }
+
+      if(entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent')||entryData.visit_Reference_Out.toLowerCase().includes('supplier'))){
+        
+        const allOutVisits=await VSP.find({})
+        visitReference_Out=allOutVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_Out_Name.trim().toLowerCase())
+     if (!visitReference_Out) continue;
+
+      }
+
+      if(entryData.visit_Reference_In_Name && (entryData.visit_Reference_In.toLowerCase().includes('agent')||entryData.visit_Reference_In.toLowerCase().includes('supplier'))){
+       
+        const allInVisits=await VPP.find({})
+        visitReference_In=allInVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_In_Name.trim().toLowerCase())
+     if (!visitReference_In) continue;
+
+      }
+
+      if(entryData.protector_Reference_In_Name){
+        const protectors=await ProtectorParties.find({})
+        protectorReference_Out=protectors.find(data=>data.supplierName.trim().toLowerCase()===entryData.protector_Reference_In_Name.trim().toLowerCase())
+     if (!protectorReference_Out) continue;
+
+      }
+
         if (!existingPPNO) {
 
           if (final_Status.trim().toLowerCase() === 'offer letter' || final_Status.trim().toLowerCase() === 'offer latter') {

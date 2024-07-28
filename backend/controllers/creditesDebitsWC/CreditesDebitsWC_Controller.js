@@ -216,7 +216,7 @@ const addMultiplePaymentIn = async (req, res) => {
             return;
         }
     const multiplePayment = req.body;
-
+    let updatedPayments = [];
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
         res.status(400).json({ message: "Invalid request payload" });
         return;
@@ -240,10 +240,6 @@ for(const payment of multiplePayment){
         date,
        
     } = payment
-    if(!payment_Via){
-        res.status(400).json({message:"Payment Via is required"})
-        break;
-      }
     const newPaymentIn=Number(payment_In)
     const newPaymentOut=Number(payment_Out)
       
@@ -297,8 +293,8 @@ for(const payment of multiplePayment){
             existingSupplier.payment_In_Schema.total_Payment_In += newPaymentIn ? newPaymentIn : 0;
             existingSupplier.payment_In_Schema.total_Payment_Out += newPaymentOut ? newPaymentOut : 0;
             existingSupplier.payment_In_Schema.balance += newPaymentIn ? newPaymentIn : -newPaymentOut;
-            
 
+            updatedPayments.push(payment);
 
             const cashInHandDoc = await CashInHand.findOne({});
             if (!cashInHandDoc) {
@@ -374,6 +370,23 @@ for(const payment of multiplePayment){
                 }
             })
 
+            updatedPayments.push(
+                {
+                    supplierName,
+                    category,
+                    payment_Via,
+                    payment_Type,
+                    slip_No,
+                    payment_In,
+                    payment_Out,
+                    details,
+                    date,
+                    curr_Country,
+                    curr_Rate,
+                    curr_Amount,
+                }
+            );
+
             const cashInHandDoc = await CashInHand.findOne({});
             if (!cashInHandDoc) {
                 const newCashInHandDoc = new CashInHand();
@@ -408,7 +421,9 @@ for(const payment of multiplePayment){
       } catch (error) {
         
       }
-      res.status(200).json({ message: `${multiplePayment.length} Payments In added Successfully` });
+      res.status(200).json({ 
+        data:updatedPayments,
+        message: `${updatedPayments.length} Payments In added Successfully` });
        
 
     } catch (err) {

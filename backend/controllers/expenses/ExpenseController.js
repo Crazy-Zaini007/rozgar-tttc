@@ -142,10 +142,7 @@ const addMultipleExpense=async(req,res)=>{
                     curr_Amount,
                     date
                 } = payment
-                    if(!payment_Via){
-                        res.status(400).json({message:"Payment Via is required"})
-                        break;
-                      }
+                   
                     let nextInvoiceNumber = 0;
 
                     // Check if InvoiceNumber document exists
@@ -217,7 +214,9 @@ const addMultipleExpense=async(req,res)=>{
                     await newExpense.save()
 
             }
-            res.status(200).json({ message: `${updatedPayments.length} Expenses added Successfully` })
+            res.status(200).json({ 
+                data:updatedPayments,
+                message: `${updatedPayments.length} Expenses added Successfully` })
 
         }
         

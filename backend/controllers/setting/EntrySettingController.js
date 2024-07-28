@@ -62,7 +62,7 @@ const addVSP = async (req, res) => {
         if (!user) {
             res.status(404).json({ message: "User not found" })
         }
-
+        
         if (user) {
             // Checking User Role 
             if (user.role !== "Admin") {
