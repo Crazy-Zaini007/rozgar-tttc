@@ -3602,7 +3602,7 @@ const addMultipleEnteries = async (req, res) => {
         });
 
         let existCompany,existingTrade,existingEntryMode,existingFinalStatus,visaReference_Out,visaReference_In,azadVisaReference_Out,azadVisaReference_In,ticketReference_Out,ticketReference_In,visitReference_Out,visitReference_In,protectorReference_Out
-      if(company){
+      if(entryData.company){
         const companies=await Companies.find({})
         existCompany=companies.find(data=>data.company.trim().toLowerCase()===entryData.company.trim().toLowerCase())
         if (!existCompany) continue;
