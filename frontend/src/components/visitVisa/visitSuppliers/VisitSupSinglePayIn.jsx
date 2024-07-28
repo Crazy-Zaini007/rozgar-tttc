@@ -96,7 +96,7 @@ export default function VisitSupSinglePayIn() {
 
 
   const [option, setOption] = useState(false)
-
+  const[isDownload,setIsdownload]=useState(false)
   // Form input States
   const [supplierName, setSupplierName] = useState('')
   const [category, setCategory] = useState('')
@@ -309,7 +309,17 @@ export default function VisitSupSinglePayIn() {
 
       const json = await response.json();
       if (response.ok) {
-        setMultiplePayment('')
+        const existingEntries = json.data;
+        // Assuming each entry has a unique identifier, e.g., 'id'
+        const existingEntryIds = new Set(existingEntries.map(entry => (entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In )));
+        const filteredEntries = multiplePayment.filter(entry => !existingEntryIds.has(entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In ));
+        setMultiplePayment(filteredEntries);
+        setTimeout(() => {
+          if(filteredEntries.length>0){
+            setIsdownload(true)
+          }
+        }, 1000);
+        
         setNewMessage(toast.success(json.message))
         setLoading(false)
       }
@@ -334,6 +344,35 @@ export default function VisitSupSinglePayIn() {
 
 
 
+  
+  const downloadIndividualPayments = () => {
+    const data = [];
+    // Flatten the array of objects to get an array of individual payments
+    // Iterate over individual payments and push all fields
+    multiplePayment.forEach((payment) => {
+      const rowData = {
+        date: payment.date,
+        supplierName: payment.supplierName,
+        category: payment.category,
+        payment_Via: payment.payment_Via,
+        payment_Type: payment.payment_Type,
+        Details: payment.details,
+        slip_No: payment.slip_No,
+        payment_In: payment.payment_In,
+        details: payment.details,
+        curr_Country: payment.curr_Country,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `Remaining Payments.xlsx`);
+  }
 
   return (
     <>
@@ -342,10 +381,15 @@ export default function VisitSupSinglePayIn() {
           <h4>Suppliers Payment IN</h4>
           <button className='btn btn-sm  m-1 entry_btn' onClick={() => setSingle(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
           <button className='btn btn-sm  m-1  entry_btn' onClick={() => setSingle(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
-          {single === 1 && <label className="btn m-1 btn-sm upload_btn">
-            Upload New List
-            <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
-          </label>}
+          {single === 1 && 
+                <>
+                <label className="btn m-1 btn-sm upload_btn">
+                  Upload New List
+                  <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
+                </label>
+              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadIndividualPayments()} disabled={multiplePayment.length<1}>Download</button>
+                </>
+                }
           <button className='btn btn-sm  m-1 entry_btn bg-danger border-0 text-white' onClick={() => setSingle(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
 
         </Paper>
@@ -355,18 +399,7 @@ export default function VisitSupSinglePayIn() {
           {!option && <TableContainer component={Paper}>
             <form className='py-3 px-2' onSubmit={handleForm}>
               <div className="text-end ">
-                {/* {close === false &&
-                  <label htmlFor="">
-                    Open
-                    <input type="checkbox" value={open} onClick={() => setOpen(!open)} />
-                  </label>
-                }
-                {open === true &&
-                  <label htmlFor="">
-                    Close
-                    <input type="checkbox" value={close} onClick={() => setClose(!close)} />
-                  </label>
-                } */}
+              
 
                 <button className='btn btn-sm  submit_btn m-1' disabled={loading}>{loading ? "Adding..." : "Add Payment"}</button>
                 {/* <span className='btn btn-sm  submit_btn m-1 bg-primary border-0'><AddRoundedIcon fontSize='small'/></span> */}

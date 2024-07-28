@@ -21,6 +21,39 @@ import AddPaymentReturn from './AddPaymentReturn.jsx';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import * as XLSX from 'xlsx';
 
+
+
+const allKeys = [
+  'date', 'employeeName', 'category', 'payment_Via', 'payment_Type', 'slip_No', 
+  'payment_Out', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'
+];
+
+const defaultValues = {
+  'date': '',
+  'employeeName': '',
+  'category': '',
+  'payment_Via': '',
+  'payment_Type': '',
+  'slip_No': '',
+  'payment_Out': 0,
+  'details': '',
+  'curr_Country': '',
+  'curr_Rate': 0,
+  'curr_Amount': 0
+};
+
+const initializeMissingFields = (entry) => {
+  const initializedEntry = { ...entry };
+  allKeys.forEach(key => {
+    if (!initializedEntry.hasOwnProperty(key)) {
+      initializedEntry[key] = defaultValues[key];
+    } else if (typeof defaultValues[key] === 'number') {
+      initializedEntry[key] = parseFloat(initializedEntry[key]);
+    }
+  });
+  return initializedEntry;
+}
+
 export default function AddPayment() {
   const dispatch = useDispatch();
   // getting data from redux store 
@@ -59,7 +92,7 @@ export default function AddPayment() {
   };
   
   const [option, setOption] = useState(false)
-
+  const[isDownload,setIsdownload]=useState(false)
   // Form input States
   const [employeeName, setEmployeeName] = useState('')
   const [employeeId, setEmployeeId] = useState('')
@@ -186,13 +219,10 @@ export default function AddPayment() {
     setSingle(index)
   }
 
-  const [multiplePayment, setMultiplePayment] = useState([{date:'', employeeName: '', category: '', payment_Via: '', payment_Type: '',slip_No:'', payment_Out: 0, details: '', curr_Country: '', curr_Rate: 0, curr_Amount: 0 }])
-  
+  const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
 
-  // handle Picture 
-
-
+  
   const handleImage = (e) => {
     const file = e.target.files[0];
     TransformFile(file)
@@ -218,6 +248,8 @@ export default function AddPayment() {
       setSlip_Pic('');
     }
   };
+
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -225,7 +257,6 @@ export default function AddPayment() {
       return;
     }
 
-    // Check if the file type is either Excel or CSV
     if (
       file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
       file.type !== 'text/csv'
@@ -239,56 +270,45 @@ export default function AddPayment() {
       const data = e.target.result;
       const dataArray = parseExcelData(data);
       setMultiplePayment(dataArray);
-      setTriggerEffect(true); // Trigger the useEffect when multiplePayment changes
+      setTriggerEffect(true);
     };
 
     fileReader.readAsBinaryString(file);
 
-    // Clear the file input value
     e.target.value = null;
   };
 
- 
   const parseExcelData = (data) => {
     const workbook = XLSX.read(data, { type: 'binary' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
-    
-    // Modify the dataArray to ensure missing fields are initialized with undefined
-    const updatedDataArray = dataArray.map((entry, rowIndex) => {
-      // Map over each entry and replace empty strings with undefined
-      return Object.fromEntries(
-        Object.entries(entry).map(([key, value]) => {
-          const trimmedValue = typeof value === 'string' ? value.trim() : value; // Check if the value is a string before trimming
   
-          // Convert the flight_Date value if the key is 'flight_Date'
-          if (key === 'date') {
-            if (!isNaN(trimmedValue) && trimmedValue !== '') {
-              // Parse the numeric value as a date without time component
-              const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000 + new Date().getTimezoneOffset() * 60000); // Adjust for timezone offset
+    return dataArray.map((entry, rowIndex) => {
+      return initializeMissingFields(
+        Object.fromEntries(
+          Object.entries(entry).map(([key, value]) => {
+            const trimmedValue = typeof value === 'string' ? value.trim() : value;
   
-              if (!isNaN(dateValue.getTime())) {
-                return [key, dateValue.toISOString().split('T')[0]]; // Format the date as 'YYYY-MM-DD' if the date is valid
-              } else {
-                console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
-                return [key, undefined];
-              }
-            } 
-          }
+            if (key === 'date' && !isNaN(trimmedValue) && trimmedValue !== '') {
+              const dateValue = new Date(Math.round((trimmedValue - 25569) * 86400 * 1000));
+              return [key, !isNaN(dateValue.getTime()) ? dateValue.toISOString().split('T')[0] : undefined];
+            }
   
-          return [key, trimmedValue === '' ? undefined : trimmedValue];
-        })
+            return [key, trimmedValue === '' ? undefined : trimmedValue];
+          })
+        )
       );
     });
-  
-    return updatedDataArray;
+  };
 
-  }
-
-  const handleInputChange = (rowIndex, key, value) => {
+ const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...multiplePayment];
-    updatedData[rowIndex][key] = value;
+    if (typeof defaultValues[key] === 'number') {
+      updatedData[rowIndex][key] = parseFloat(value) || defaultValues[key];
+    } else {
+      updatedData[rowIndex][key] = value;
+    }
     setMultiplePayment(updatedData);
   };
 
@@ -307,7 +327,17 @@ export default function AddPayment() {
 
       const json = await response.json();
       if (response.ok) {
-        setMultiplePayment('')
+        const existingEntries = json.data;
+        // Assuming each entry has a unique identifier, e.g., 'id'
+        const existingEntryIds = new Set(existingEntries.map(entry => (entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In )));
+        const filteredEntries = multiplePayment.filter(entry => !existingEntryIds.has(entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In ));
+        setMultiplePayment(filteredEntries);
+        setTimeout(() => {
+          if(filteredEntries.length>0){
+            setIsdownload(true)
+          }
+        }, 1000);
+        
         setNewMessage(toast.success(json.message))
         setLoading(false)
       }
@@ -331,6 +361,36 @@ export default function AddPayment() {
   }, [triggerEffect, multiplePayment]);
 
 
+  
+  const downloadIndividualPayments = () => {
+    const data = [];
+    // Flatten the array of objects to get an array of individual payments
+    // Iterate over individual payments and push all fields
+    multiplePayment.forEach((payment) => {
+      const rowData = {
+        date: payment.date,
+        employeeName: payment.employeeName,
+        category: payment.category,
+        payment_Via: payment.payment_Via,
+        payment_Type: payment.payment_Type,
+        Details: payment.details,
+        slip_No: payment.slip_No,
+        payment_Out: payment.payment_Out,
+        details: payment.details,
+        curr_Country: payment.curr_Country,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `Remaining Payments.xlsx`);
+  }
+
   const collapsed = useSelector((state) => state.collapsed.collapsed);
   return (
     <>
@@ -343,10 +403,15 @@ export default function AddPayment() {
                 <button className='btn m-1  btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment</button>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment</button>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Payment Return</button>
-                {single === 1 && <label className="btn m-1  btn-sm upload_btn">
+                {single === 1 && 
+                <>
+                <label className="btn m-1 btn-sm upload_btn">
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
-                </label>}
+                </label>
+              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadIndividualPayments()} disabled={multiplePayment.length<1}>Download</button>
+                </>
+                }
               </div>
             </div>
             {single === 1 &&

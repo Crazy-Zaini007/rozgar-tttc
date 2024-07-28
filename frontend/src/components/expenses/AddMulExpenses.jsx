@@ -40,7 +40,8 @@ const initializeMissingFields = (entry) => {
 export default function AddMulExpenses() {
     const { user } = useAuthContext()
 
-   
+  const[isDownload,setIsdownload]=useState(false)
+  
   const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
 
@@ -141,8 +142,19 @@ export default function AddMulExpenses() {
 
             }
             if (response.ok) {
-                setNewMessage(toast.success(json.message));
-                setMultiplePayment('')
+              const existingEntries = json.data;
+              // Assuming each entry has a unique identifier, e.g., 'id'
+              const existingEntryIds = new Set(existingEntries.map(entry => (entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In )));
+              const filteredEntries = multiplePayment.filter(entry => !existingEntryIds.has(entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In ));
+              setMultiplePayment(filteredEntries);
+              setTimeout(() => {
+                if(filteredEntries.length>0){
+                  setIsdownload(true)
+                }
+              }, 1000);
+              
+              setNewMessage(toast.success(json.message))
+              setLoading(false)
             }
 
         } catch (error) {
@@ -153,6 +165,33 @@ export default function AddMulExpenses() {
     };
     
     const collapsed = useSelector((state) => state.collapsed.collapsed);
+    
+  const downloadIndividualPayments = () => {
+    const data = [];
+    multiplePayment.forEach((payment) => {
+      const rowData = {
+        date: payment.date,
+        name: payment.name,
+        expCategory: payment.expCategory,
+        payment_Via: payment.payment_Via,
+        payment_Type: payment.payment_Type,
+        Details: payment.details,
+        slip_No: payment.slip_No,
+        payment_Out: payment.payment_Out,
+        details: payment.details,
+        curr_Country: payment.curr_Country,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `Remaining Payments.xlsx`);
+  }
     return (
       <>
       <div className={`${collapsed ?"collapsed":"main"}`}>
@@ -165,6 +204,8 @@ export default function AddMulExpenses() {
                   Upload New List 
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>
+              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadIndividualPayments()} disabled={multiplePayment.length<1}>Download</button>
+
                             </div>
                         </div>
                         <div className="col-md-12 multiple_form p-0">

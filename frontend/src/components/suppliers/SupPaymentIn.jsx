@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { useSelector } from 'react-redux';
+
 const allKeys = [
   'date', 'supplierName', 'category', 'payment_Via', 'payment_Type', 'slip_No', 
   'payment_In', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'
@@ -38,10 +39,11 @@ const initializeMissingFields = (entry) => {
   return initializedEntry;
 };
 
-export default function SuppPaymentIn() {
+export default function SupPaymentIn() {
   const { user } = useAuthContext();
   const [single, setSingle] = useState(0)
   const [, setNewMessage] = useState('')
+  const[isDownload,setIsdownload]=useState(false)
 
   const setEntry = (index) => {
     setSingle(index)
@@ -134,7 +136,17 @@ export default function SuppPaymentIn() {
 
       const json = await response.json();
       if (response.ok) {
-        setMultiplePayment('')
+        const existingEntries = json.data;
+        // Assuming each entry has a unique identifier, e.g., 'id'
+        const existingEntryIds = new Set(existingEntries.map(entry => (entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In )));
+        const filteredEntries = multiplePayment.filter(entry => !existingEntryIds.has(entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In ));
+        setMultiplePayment(filteredEntries);
+        setTimeout(() => {
+          if(filteredEntries.length>0){
+            setIsdownload(true)
+          }
+        }, 1000);
+        
         setNewMessage(toast.success(json.message))
         setLoading(false)
       }
@@ -161,6 +173,36 @@ export default function SuppPaymentIn() {
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
 
+  
+  const downloadIndividualPayments = () => {
+    const data = [];
+    // Flatten the array of objects to get an array of individual payments
+    // Iterate over individual payments and push all fields
+    multiplePayment.forEach((payment) => {
+      const rowData = {
+        date: payment.date,
+        supplierName: payment.supplierName,
+        category: payment.category,
+        payment_Via: payment.payment_Via,
+        payment_Type: payment.payment_Type,
+        Details: payment.details,
+        slip_No: payment.slip_No,
+        payment_In: payment.payment_In,
+        details: payment.details,
+        curr_Country: payment.curr_Country,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `Remaining Payments.xlsx`);
+  }
+  
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
@@ -168,13 +210,18 @@ export default function SuppPaymentIn() {
           <div className="row">
             <div className="col-md-12">
               <Paper className='py-3 mb-1 px-2'>
-                <h4>Supplier Payment In</h4>
+                <h4>Supplier Payment IN</h4>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(0)} style={single === 0 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Single Payment-In</button>
                 <button className='btn m-1 btn-sm entry_btn' onClick={() => setEntry(1)} style={single === 1 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Multiple Payment-In</button>
-                {single === 1 && <label className="btn m-1 btn-sm upload_btn">
+                {single === 1 && 
+                <>
+                <label className="btn m-1 btn-sm upload_btn">
                   Upload New List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
-                </label>}
+                </label>
+              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadIndividualPayments()} disabled={multiplePayment.length<1}>Download</button>
+                </>
+                }
                 <button className='btn m-1 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
 
               </Paper>
