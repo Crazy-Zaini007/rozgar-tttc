@@ -3597,54 +3597,59 @@ const addMultipleEnteries = async (req, res) => {
           pp_No: new RegExp(`^${entryData.pp_No}$`, 'i')
         });
 
-        let existCompany,existingTrade,existingEntryMode,existingFinalStatus,visaReference_Out,visaReference_In,azadVisaReference_Out,azadVisaReference_In,ticketReference_Out,ticketReference_In,visitReference_Out,visitReference_In,protectorReference_Out
+       
       if(entryData.company){
         const companies=await Companies.find({})
-        existCompany=companies.find(data=>data.company.trim().toLowerCase()===entryData.company.trim().toLowerCase())
+       const existCompany=companies.find(data=>data.company.trim().toLowerCase()===entryData.company.trim().toLowerCase())
         if (!existCompany) continue;
       }
       if(entryData.trade){
      const trades=await Trades.find({})
-     existingTrade=trades.find(data=>data.trade.trim().toLowerCase()===entryData.trade.trim().toLowerCase())
+     const existingTrade=trades.find(data=>data.trade.trim().toLowerCase()===entryData.trade.trim().toLowerCase())
      if (!existingTrade) continue;
      
       }
       if(entryData.entry_Mode){
         const entryModes=await EntryMode.find({})
-        existingEntryMode=entryModes.find(data=>data.entry_Mode.trim().toLowerCase()===entryData.entry_Mode.trim().toLowerCase())
+        const  existingEntryMode=entryModes.find(data=>data.entry_Mode.trim().toLowerCase()===entryData.entry_Mode.trim().toLowerCase())
+        console.log('existingEntryMode',existingEntryMode)
      if (!existingEntryMode) continue;
         
       }
       if(entryData.final_Status){
         const finalStatuses=await FinalStatus.find({})
-         existingFinalStatus=finalStatuses.find(data=>data.final_Status.trim().toLowerCase()===entryData.final_Status.trim().toLowerCase())
+        const  existingFinalStatus=finalStatuses.find(data=>data.final_Status.trim().toLowerCase()===entryData.final_Status.trim().toLowerCase())
      if (!existingFinalStatus) continue;
        
       }
       if(entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent')||entryData.reference_Out.toLowerCase().includes('supplier'))){
-        const allOutVisas=await VIPP.find({})
-        visaReference_Out=allOutVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_Out_Name.trim().toLowerCase())
+        const allOutVisas=await VSP.find({})
+        const visaReference_Out=allOutVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_Out_Name.trim().toLowerCase())
+     
+
      if (!visaReference_Out) continue;
 
       }
 
       if(entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent')||entryData.reference_In.toLowerCase().includes('supplier'))){
-        const allInVisas=await VISP.find({})
-        visaReference_In=allInVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_In_Name.trim().toLowerCase())
+        const allInVisas=await VPP.find({})
+        const visaReference_In=allInVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_In_Name.trim().toLowerCase())
+  
      if (!visaReference_In) continue;
 
       }
 
       if(entryData.azad_Visa_Reference_Out_Name && (entryData.azad_Visa_Reference_Out.toLowerCase().includes('agent')||entryData.azad_Visa_Reference_Out.toLowerCase().includes('supplier'))){
         const allOutAzasVisas=await AVPP.find({})
-        azadVisaReference_Out=allOutAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_Out_Name.trim().toLowerCase())
+        const azadVisaReference_Out=allOutAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_Out_Name.trim().toLowerCase())
+        
      if (!azadVisaReference_Out) continue;
 
       }
 
       if(entryData.azad_Visa_Reference_In_Name && (entryData.azad_Visa_Reference_In.toLowerCase().includes('agent')||entryData.azad_Visa_Reference_In.toLowerCase().includes('supplier'))){
         const allInAzasVisas=await AVSP.find({})
-        azadVisaReference_In=allInAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_In_Name.trim().toLowerCase())
+        const azadVisaReference_In=allInAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_In_Name.trim().toLowerCase())
      if (!azadVisaReference_In) continue;
 
       }
@@ -3652,37 +3657,37 @@ const addMultipleEnteries = async (req, res) => {
       
       if(entryData.ticket_Reference_Out_Name && (entryData.ticket_Reference_Out.toLowerCase().includes('agent')||entryData.ticket_Reference_Out.toLowerCase().includes('supplier'))){
         const allOutTickets=await TPP.find({})
-        ticketReference_Out=allOutTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_Out_Name.trim().toLowerCase())
+        const  ticketReference_Out=allOutTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_Out_Name.trim().toLowerCase())
      if (!ticketReference_Out) continue;
 
       }
 
       if(entryData.ticket_Reference_In_Name && (entryData.ticket_Reference_In.toLowerCase().includes('agent')||entryData.ticket_Reference_In.toLowerCase().includes('supplier'))){
         const allInTickets=await TSP.find({})
-        ticketReference_In=allInTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_In_Name.trim().toLowerCase())
+        const ticketReference_In=allInTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_In_Name.trim().toLowerCase())
      if (!ticketReference_In) continue;
 
       }
 
       if(entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent')||entryData.visit_Reference_Out.toLowerCase().includes('supplier'))){
         
-        const allOutVisits=await VSP.find({})
-        visitReference_Out=allOutVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_Out_Name.trim().toLowerCase())
+        const allOutVisits=await VISP.find({})
+        const visitReference_Out=allOutVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_Out_Name.trim().toLowerCase())
      if (!visitReference_Out) continue;
 
       }
 
       if(entryData.visit_Reference_In_Name && (entryData.visit_Reference_In.toLowerCase().includes('agent')||entryData.visit_Reference_In.toLowerCase().includes('supplier'))){
        
-        const allInVisits=await VPP.find({})
-        visitReference_In=allInVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_In_Name.trim().toLowerCase())
+        const allInVisits=await VIPP.find({})
+        const visitReference_In=allInVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_In_Name.trim().toLowerCase())
      if (!visitReference_In) continue;
 
       }
 
       if(entryData.protector_Reference_In_Name){
         const protectors=await ProtectorParties.find({})
-        protectorReference_Out=protectors.find(data=>data.supplierName.trim().toLowerCase()===entryData.protector_Reference_In_Name.trim().toLowerCase())
+        const  protectorReference_Out=protectors.find(data=>data.supplierName.trim().toLowerCase()===entryData.protector_Reference_In_Name.trim().toLowerCase())
      if (!protectorReference_Out) continue;
 
       }

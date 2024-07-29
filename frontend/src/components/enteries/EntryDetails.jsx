@@ -436,6 +436,7 @@ const EntryDetails = () => {
         flight_Date: entry.flight_Date,
         final_Status: entry.final_Status,
         remarks: entry.remarks,
+        entry_Mode: entry.entry_Mode,
         reference_Out: entry.reference_Out,
         reference_Out_Name: entry.reference_Out_Name,
         visa_Sales_Rate_PKR: entry.visa_Sales_Rate_PKR,
