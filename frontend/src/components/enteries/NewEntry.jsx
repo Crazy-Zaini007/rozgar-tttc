@@ -126,7 +126,7 @@ export default function NewEntry() {
       const dataArray = parseExcelData(data);
 
       setEntries(dataArray);
-      setTriggerEffect(true); // Trigger the useEffect when formData changes
+      setTriggerEffect(true);
     };
 
     fileReader.readAsBinaryString(file);
@@ -329,11 +329,12 @@ export default function NewEntry() {
       if (response.ok) {
         const existingEntries = json.data;
         setEntries(existingEntries);
+        console.log('existingEntries',existingEntries)
+        console.log('entries',entries)
         if(existingEntries.length>0){
           downloadEntryErrors(existingEntries)
         }
-        setTimeout(() => {
-        }, 1000);
+       
         setNewMessage(toast.success(json.message))
         setLoading(false)
         dispatch(addMulEnteries(json.data)); 

@@ -3656,7 +3656,7 @@ const addMultipleEnteries = async (req, res) => {
     }
 
     if (entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent') || entryData.reference_Out.toLowerCase().includes('supplier'))) {
-        const allOutVisas = await VIPP.find({});
+        const allOutVisas = await VPP.find({});
         visaReference_Out = allOutVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.reference_Out_Name.trim().toLowerCase());
         if (!visaReference_Out) {
             entryData.visaReferenceOutError = 'Visa reference out not found';
@@ -3665,7 +3665,7 @@ const addMultipleEnteries = async (req, res) => {
     }
 
     if (entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent') || entryData.reference_In.toLowerCase().includes('supplier'))) {
-        const allInVisas = await VISP.find({});
+        const allInVisas = await VSP.find({});
         visaReference_In = allInVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.reference_In_Name.trim().toLowerCase());
         if (!visaReference_In) {
             entryData.visaReferenceInError = 'Visa reference in not found';
@@ -3710,7 +3710,7 @@ const addMultipleEnteries = async (req, res) => {
     }
 
     if (entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent') || entryData.visit_Reference_Out.toLowerCase().includes('supplier'))) {
-        const allOutVisits = await VSP.find({});
+        const allOutVisits = await VISP.find({});
         visitReference_Out = allOutVisits.find(data => data.supplierName.trim().toLowerCase() === entryData.visit_Reference_Out_Name.trim().toLowerCase());
         if (!visitReference_Out) {
             entryData.visitReferenceOutError = 'Visit reference out not found';
