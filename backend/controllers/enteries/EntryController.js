@@ -24,6 +24,7 @@ const Companies = require('../../database/setting/Company_Schema')
 const Trades = require('../../database/setting/Trade_Schmea')
 const EntryMode = require('../../database/setting/Entry_Mode_Schema')
 const FinalStatus = require('../../database/setting/Final_Status_Schema')
+const Countries = require('../../database/setting/Country_Schema')
 
 const AVPP = require('../../database/setting/AVPP_Schema')
 const AVSP = require('../../database/setting/AVSP_Schema')
@@ -3535,7 +3536,7 @@ const addEntry = async (req, res) => {
   }
 }
 
-// adding multiple Entries
+
 const addMultipleEnteries = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -3551,8 +3552,10 @@ const addMultipleEnteries = async (req, res) => {
 
       const addedEntries = [];
       const paymentInfo = {};
-
+      let unSavedEntries=[]
       for (const entryData of entries) {
+        let hasError = false;
+
         let final_Status = entryData.final_Status
         let name=entryData.name
         entryData.flight_Date =
@@ -3593,107 +3596,167 @@ const addMultipleEnteries = async (req, res) => {
         if (!entryData.entry_Date) {
           entryData.entry_Date = new Date().toISOString().split("T")[0]
         }
+
         const existingPPNO = await Entries.findOne({
           pp_No: new RegExp(`^${entryData.pp_No}$`, 'i')
-        });
+      });
 
-       
-      if(entryData.company){
-        const companies=await Companies.find({})
-       const existCompany=companies.find(data=>data.company.trim().toLowerCase()===entryData.company.trim().toLowerCase())
-        if (!existCompany) continue;
-      }
-      if(entryData.trade){
-     const trades=await Trades.find({})
-     const existingTrade=trades.find(data=>data.trade.trim().toLowerCase()===entryData.trade.trim().toLowerCase())
-     if (!existingTrade) continue;
-     
-      }
-      if(entryData.entry_Mode){
-        const entryModes=await EntryMode.find({})
-        const  existingEntryMode=entryModes.find(data=>data.entry_Mode.trim().toLowerCase()===entryData.entry_Mode.trim().toLowerCase())
-        console.log('existingEntryMode',existingEntryMode)
-     if (!existingEntryMode) continue;
-        
-      }
-      if(entryData.final_Status){
-        const finalStatuses=await FinalStatus.find({})
-        const  existingFinalStatus=finalStatuses.find(data=>data.final_Status.trim().toLowerCase()===entryData.final_Status.trim().toLowerCase())
-     if (!existingFinalStatus) continue;
-       
-      }
-      if(entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent')||entryData.reference_Out.toLowerCase().includes('supplier'))){
-        const allOutVisas=await VSP.find({})
-        const visaReference_Out=allOutVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_Out_Name.trim().toLowerCase())
-     
+           if (existingPPNO) {
+        entryData.ppNoError = 'Entry with this Passport Number already exists';
+        hasError = true;
+    }
 
-     if (!visaReference_Out) continue;
+    let existCompany, existingTrade, existingEntryMode, existingFinalStatus, existingCountry;
+    let visaReference_Out, visaReference_In, azadVisaReference_Out, azadVisaReference_In;
+    let ticketReference_Out, ticketReference_In, visitReference_Out, visitReference_In, protectorReference_Out;
 
-      }
+    if (entryData.company) {
+        const companies = await Companies.find({});
+        existCompany = companies.find(data => data.company.trim().toLowerCase() === entryData.company.trim().toLowerCase());
+        if (!existCompany) {
+            entryData.companyError = 'Company not found';
+            hasError = true;
+        }
+    }
 
-      if(entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent')||entryData.reference_In.toLowerCase().includes('supplier'))){
-        const allInVisas=await VPP.find({})
-        const visaReference_In=allInVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.reference_In_Name.trim().toLowerCase())
-  
-     if (!visaReference_In) continue;
+    if (entryData.country) {
+        const countries = await Countries.find({});
+        existingCountry = countries.find(data => data.country.trim().toLowerCase() === entryData.country.trim().toLowerCase());
+        if (!existingCountry) {
+            entryData.countryError = 'Country not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (entryData.trade) {
+        const trades = await Trades.find({});
+        existingTrade = trades.find(data => data.trade.trim().toLowerCase() === entryData.trade.trim().toLowerCase());
+        if (!existingTrade) {
+            entryData.tradeError = 'Trade not found';
+            hasError = true;
+        }
+    }
 
-      if(entryData.azad_Visa_Reference_Out_Name && (entryData.azad_Visa_Reference_Out.toLowerCase().includes('agent')||entryData.azad_Visa_Reference_Out.toLowerCase().includes('supplier'))){
-        const allOutAzasVisas=await AVPP.find({})
-        const azadVisaReference_Out=allOutAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_Out_Name.trim().toLowerCase())
-        
-     if (!azadVisaReference_Out) continue;
+    if (entryData.entry_Mode) {
+        const entryModes = await EntryMode.find({});
+        existingEntryMode = entryModes.find(data => data.entry_Mode.trim().toLowerCase() === entryData.entry_Mode.trim().toLowerCase());
+        if (!existingEntryMode) {
+            entryData.entryModeError = 'Entry mode not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (entryData.final_Status) {
+        const finalStatuses = await FinalStatus.find({});
+        existingFinalStatus = finalStatuses.find(data => data.final_Status.trim().toLowerCase() === entryData.final_Status.trim().toLowerCase());
+        if (!existingFinalStatus) {
+            entryData.finalStatusError = 'Final status not found';
+            hasError = true;
+        }
+    }
 
-      if(entryData.azad_Visa_Reference_In_Name && (entryData.azad_Visa_Reference_In.toLowerCase().includes('agent')||entryData.azad_Visa_Reference_In.toLowerCase().includes('supplier'))){
-        const allInAzasVisas=await AVSP.find({})
-        const azadVisaReference_In=allInAzasVisas.find(data=>data.supplierName.trim().toLowerCase()===entryData.azad_Visa_Reference_In_Name.trim().toLowerCase())
-     if (!azadVisaReference_In) continue;
+    if (entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent') || entryData.reference_Out.toLowerCase().includes('supplier'))) {
+        const allOutVisas = await VIPP.find({});
+        visaReference_Out = allOutVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.reference_Out_Name.trim().toLowerCase());
+        if (!visaReference_Out) {
+            entryData.visaReferenceOutError = 'Visa reference out not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent') || entryData.reference_In.toLowerCase().includes('supplier'))) {
+        const allInVisas = await VISP.find({});
+        visaReference_In = allInVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.reference_In_Name.trim().toLowerCase());
+        if (!visaReference_In) {
+            entryData.visaReferenceInError = 'Visa reference in not found';
+            hasError = true;
+        }
+    }
 
-      
-      if(entryData.ticket_Reference_Out_Name && (entryData.ticket_Reference_Out.toLowerCase().includes('agent')||entryData.ticket_Reference_Out.toLowerCase().includes('supplier'))){
-        const allOutTickets=await TPP.find({})
-        const  ticketReference_Out=allOutTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_Out_Name.trim().toLowerCase())
-     if (!ticketReference_Out) continue;
+    if (entryData.azad_Visa_Reference_Out_Name && (entryData.azad_Visa_Reference_Out.toLowerCase().includes('agent') || entryData.azad_Visa_Reference_Out.toLowerCase().includes('supplier'))) {
+        const allOutAzasVisas = await AVPP.find({});
+        azadVisaReference_Out = allOutAzasVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.azad_Visa_Reference_Out_Name.trim().toLowerCase());
+        if (!azadVisaReference_Out) {
+            entryData.azadVisaReferenceOutError = 'Azad visa reference out not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (entryData.azad_Visa_Reference_In_Name && (entryData.azad_Visa_Reference_In.toLowerCase().includes('agent') || entryData.azad_Visa_Reference_In.toLowerCase().includes('supplier'))) {
+        const allInAzasVisas = await AVSP.find({});
+        azadVisaReference_In = allInAzasVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.azad_Visa_Reference_In_Name.trim().toLowerCase());
+        if (!azadVisaReference_In) {
+            entryData.azadVisaReferenceInError = 'Azad visa reference in not found';
+            hasError = true;
+        }
+    }
 
-      if(entryData.ticket_Reference_In_Name && (entryData.ticket_Reference_In.toLowerCase().includes('agent')||entryData.ticket_Reference_In.toLowerCase().includes('supplier'))){
-        const allInTickets=await TSP.find({})
-        const ticketReference_In=allInTickets.find(data=>data.supplierName.trim().toLowerCase()===entryData.ticket_Reference_In_Name.trim().toLowerCase())
-     if (!ticketReference_In) continue;
+    if (entryData.ticket_Reference_Out_Name && (entryData.ticket_Reference_Out.toLowerCase().includes('agent') || entryData.ticket_Reference_Out.toLowerCase().includes('supplier'))) {
+        const allOutTickets = await TPP.find({});
+        ticketReference_Out = allOutTickets.find(data => data.supplierName.trim().toLowerCase() === entryData.ticket_Reference_Out_Name.trim().toLowerCase());
+        if (!ticketReference_Out) {
+            entryData.ticketReferenceOutError = 'Ticket reference out not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (entryData.ticket_Reference_In_Name && (entryData.ticket_Reference_In.toLowerCase().includes('agent') || entryData.ticket_Reference_In.toLowerCase().includes('supplier'))) {
+        const allInTickets = await TSP.find({});
+        ticketReference_In = allInTickets.find(data => data.supplierName.trim().toLowerCase() === entryData.ticket_Reference_In_Name.trim().toLowerCase());
+        if (!ticketReference_In) {
+            entryData.ticketReferenceInError = 'Ticket reference in not found';
+            hasError = true;
+        }
+    }
 
-      if(entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent')||entryData.visit_Reference_Out.toLowerCase().includes('supplier'))){
-        
-        const allOutVisits=await VISP.find({})
-        const visitReference_Out=allOutVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_Out_Name.trim().toLowerCase())
-     if (!visitReference_Out) continue;
+    if (entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent') || entryData.visit_Reference_Out.toLowerCase().includes('supplier'))) {
+        const allOutVisits = await VSP.find({});
+        visitReference_Out = allOutVisits.find(data => data.supplierName.trim().toLowerCase() === entryData.visit_Reference_Out_Name.trim().toLowerCase());
+        if (!visitReference_Out) {
+            entryData.visitReferenceOutError = 'Visit reference out not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (entryData.visit_Reference_In_Name && (entryData.visit_Reference_In.toLowerCase().includes('agent') || entryData.visit_Reference_In.toLowerCase().includes('supplier'))) {
+        const allInVisits = await VIPP.find({});
+        visitReference_In = allInVisits.find(data => data.supplierName.trim().toLowerCase() === entryData.visit_Reference_In_Name.trim().toLowerCase());
+        if (!visitReference_In) {
+            entryData.visitReferenceInError = 'Visit reference in not found';
+            hasError = true;
+        }
+    }
 
-      if(entryData.visit_Reference_In_Name && (entryData.visit_Reference_In.toLowerCase().includes('agent')||entryData.visit_Reference_In.toLowerCase().includes('supplier'))){
-       
-        const allInVisits=await VIPP.find({})
-        const visitReference_In=allInVisits.find(data=>data.supplierName.trim().toLowerCase()===entryData.visit_Reference_In_Name.trim().toLowerCase())
-     if (!visitReference_In) continue;
+    if (entryData.protector_Reference_In_Name) {
+        const protectors = await ProtectorParties.find({});
+        protectorReference_Out = protectors.find(data => data.supplierName.trim().toLowerCase() === entryData.protector_Reference_In_Name.trim().toLowerCase());
+        if (!protectorReference_Out) {
+            entryData.protectorReferenceInError = 'Protector reference not found';
+            hasError = true;
+        }
+    }
 
-      }
+    if (hasError) {
+        unSavedEntries.push(entryData);
+    }
 
-      if(entryData.protector_Reference_In_Name){
-        const protectors=await ProtectorParties.find({})
-        const  protectorReference_Out=protectors.find(data=>data.supplierName.trim().toLowerCase()===entryData.protector_Reference_In_Name.trim().toLowerCase())
-     if (!protectorReference_Out) continue;
 
-      }
 
-        if (!existingPPNO) {
-
+      if (!existingPPNO && 
+        (entryData.company && existCompany) &&
+        (entryData.trade && existingTrade) &&
+        (entryData.entry_Mode && existingEntryMode) &&
+        (entryData.final_Status && existingFinalStatus) &&
+        (entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent') || entryData.reference_Out.toLowerCase().includes('supplier')) && visaReference_Out) &&
+        (entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent') || entryData.reference_In.toLowerCase().includes('supplier')) && visaReference_In) &&
+        (entryData.azad_Visa_Reference_Out_Name && (entryData.azad_Visa_Reference_Out.toLowerCase().includes('agent') || entryData.azad_Visa_Reference_Out.toLowerCase().includes('supplier')) && azadVisaReference_Out) &&
+        (entryData.azad_Visa_Reference_In_Name && (entryData.azad_Visa_Reference_In.toLowerCase().includes('agent') || entryData.azad_Visa_Reference_In.toLowerCase().includes('supplier')) && azadVisaReference_In) &&
+        (entryData.ticket_Reference_Out_Name && (entryData.ticket_Reference_Out.toLowerCase().includes('agent') || entryData.ticket_Reference_Out.toLowerCase().includes('supplier')) && ticketReference_Out) &&
+        (entryData.ticket_Reference_In_Name && (entryData.ticket_Reference_In.toLowerCase().includes('agent') || entryData.ticket_Reference_In.toLowerCase().includes('supplier')) && ticketReference_In) &&
+        (entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent') || entryData.visit_Reference_Out.toLowerCase().includes('supplier')) && visitReference_Out) &&
+        (entryData.visit_Reference_In_Name && (entryData.visit_Reference_In.toLowerCase().includes('agent') || entryData.visit_Reference_In.toLowerCase().includes('supplier')) && visitReference_In) &&
+        (entryData.protector_Reference_In_Name && protectorReference_Out)) {
+          
           if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'offer letter' || entryData.final_Status.trim().toLowerCase() === 'offer latter')) {
             const newReminder = new Reminders({
               type: "Offer Letter",
@@ -4280,7 +4343,7 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_Out === "Directs" ||
             entryData.reference_Out === "Direct"
           ) {
-            console.log('Yes: entryData.reference_Out',entryData.reference_Out)
+          
             try {
               // Check if the supplier with the given name and entry mode exists
               const existingPaymentInCandidate = await Candidate.findOne({
@@ -6540,9 +6603,8 @@ const addMultipleEnteries = async (req, res) => {
           addedEntries.push(newEntry);
         }
       }
-
       const responsePayload = {
-        data: addedEntries,
+        data: unSavedEntries,
         message: `${addedEntries.length} Entries added successfully`,
         paymentInfo: paymentInfo,
       };

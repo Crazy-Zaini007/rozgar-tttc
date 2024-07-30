@@ -202,6 +202,113 @@ export default function NewEntry() {
   const [, setNewMessage] = useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
 
+
+
+  
+  const downloadEntryErrors = (errorsEntries) => {
+    const data = [];
+
+    // Iterate over entries and push all fields
+    errorsEntries.forEach((entry, index) => {
+      const rowData = {
+        name: entry.name,
+        pp_No: entry.pp_No,
+        ppNoError: entry.ppNoError,
+        trade: entry.trade,
+        tradeError: entry.tradeError,
+        company: entry.company,
+        companyError: entry.companyError,
+        contact: entry.contact,
+        country: entry.country,
+        countryError: entry.countryError,
+
+        flight_Date: entry.flight_Date,
+        final_Status: entry.final_Status,
+        finalStatusError: entry.finalStatusError,
+
+        remarks: entry.remarks,
+        entry_Mode: entry.entry_Mode,
+        entryModeError: entry.entryModeError,
+        reference_Out: entry.reference_Out,
+        reference_Out_Name: entry.reference_Out_Name,
+        visaReferenceOutError: entry.visaReferenceOutError,
+        visa_Sales_Rate_PKR: entry.visa_Sales_Rate_PKR,
+        visa_Sale_Rate_Oth_Cur: entry.visa_Sale_Rate_Oth_Cur,
+        cur_Country_One: entry.cur_Country_One,
+        reference_In: entry.reference_In,
+        reference_In_Name: entry.reference_In_Name,
+        visaReferenceInError: entry.visaReferenceInError,
+
+        visa_Purchase_Rate_PKR: entry.visa_Purchase_Rate_PKR,
+        visa_Purchase_Rate_Oth_Cur: entry.visa_Purchase_Rate_Oth_Cur,
+        cur_Country_Two: entry.cur_Country_Two,
+        // Visit  Section 
+        visit_Reference_Out: entry.visit_Reference_Out,
+        visit_Reference_Out_Name: entry.visit_Reference_Out_Name,
+        visitReferenceOutError: entry.visitReferenceOutError,
+
+        visit_Sales_PKR: entry.visit_Sales_PKR,
+        visit_Sales_Rate_Oth_Curr: entry.visit_Sales_Rate_Oth_Curr,
+        visit_Sales_Cur: entry.visit_Sales_Cur,
+        visit_Reference_In: entry.visit_Reference_In,
+        visit_Reference_In_Name: entry.visit_Reference_In_Name,
+        visitReferenceInrror: entry.visitReferenceInrror,
+
+        visit_Purchase_Rate_PKR: entry.visit_Purchase_Rate_PKR,
+        visit_Purchase_Rate_Oth_Cur: entry.visit_Purchase_Rate_Oth_Cur,
+        visit_Purchase_Cur: entry.visit_Purchase_Cur,
+
+        // Ticket Section
+        ticket_Reference_Out: entry.ticket_Reference_Out,
+        ticket_Reference_Out_Name: entry.ticket_Reference_Out_Name,
+        ticketReferenceOutError: entry.ticketReferenceOutError,
+
+        ticket_Sales_PKR: entry.ticket_Sales_PKR,
+        ticket_Sales_Rate_Oth_Cur: entry.ticket_Sales_Rate_Oth_Cur,
+        ticket_Sales_Cur: entry.ticket_Sales_Cur,
+        ticket_Reference_In: entry.ticket_Reference_In,
+        ticket_Reference_In_Name: entry.ticket_Reference_In_Name,
+        ticketReferenceInError: entry.ticketReferenceInError,
+
+        ticket_Purchase_PKR: entry.ticket_Purchase_PKR,
+        ticket_Purchase_Rate_Oth_Cur: entry.ticket_Purchase_Rate_Oth_Cur,
+        ticket_Purchase_Cur: entry.ticket_Purchase_Cur,
+
+
+        // Azad Visa Section 
+        azad_Visa_Reference_Out: entry.azad_Visa_Reference_Out,
+        azad_Visa_Reference_Out_Name: entry.azad_Visa_Reference_Out_Name,
+        azadVisaReferenceOutError: entry.azadVisaReferenceOutError,
+
+        azad_Visa_Sales_PKR: entry.azad_Visa_Sales_PKR,
+        azad_Visa_Sales_Rate_Oth_Cur: entry.azad_Visa_Sales_Rate_Oth_Cur,
+        azad_Visa_Sales_Cur: entry.azad_Visa_Sales_Cur,
+        azad_Visa_Reference_In: entry.azad_Visa_Reference_In,
+        azad_Visa_Reference_In_Name: entry.azad_Visa_Reference_In_Name,
+        azadVisaReferenceInError: entry.azadVisaReferenceInError,
+
+        azad_Visa_Purchase_PKR: entry.azad_Visa_Purchase_PKR,
+        azad_Visa_Purchase_Rate_Oth_Cur: entry.azad_Visa_Purchase_Rate_Oth_Cur,
+        azad_Visa_Purchase_Cur: entry.azad_Visa_Purchase_Cur,
+
+        // Add other fields for Section 3
+
+        protector_Price_In: entry.protector_Price_In,
+        protector_Price_In_Oth_Cur: entry.protector_Price_In_Oth_Cur,
+        protector_Price_Out: entry.protector_Price_Out,
+        protector_Reference_In: entry.protector_Reference_In,
+        protector_Reference_In_Name: entry.protector_Reference_In_Name,
+        protectorReferenceInError: entry.protectorReferenceInError,
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'Entries Errors.xlsx');
+  }
   //Adding Multiple entries 
 
   const addMultipleEntries = async (e) => {
@@ -221,14 +328,11 @@ export default function NewEntry() {
       const json = await response.json();
       if (response.ok) {
         const existingEntries = json.data;
-        // Assuming each entry has a unique identifier, e.g., 'id'
-        const existingEntryIds = new Set(existingEntries.map(entry => (entry.name &&entry.pp_No &&entry.entry_Mode )));
-        const filteredEntries = entries.filter(entry => !existingEntryIds.has(entry.name &&entry.pp_No &&entry.entry_Mode ));
-        setEntries(filteredEntries);
+        setEntries(existingEntries);
+        if(existingEntries.length>0){
+          downloadEntryErrors(existingEntries)
+        }
         setTimeout(() => {
-          if(filteredEntries.length>0){
-            setIsdownload(true)
-          }
         }, 1000);
         setNewMessage(toast.success(json.message))
         setLoading(false)
@@ -330,6 +434,9 @@ export default function NewEntry() {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Entries.xlsx');
   }
+
+
+
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
