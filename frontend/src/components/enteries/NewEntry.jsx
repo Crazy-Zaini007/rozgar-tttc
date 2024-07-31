@@ -7,20 +7,23 @@ import { addMulEnteries } from '../../redux/reducers/entrySlice'
 import { useDispatch,useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-
 const allKeys = [
-  'name', 'pp_No', 'trade', 'company', 'contact', 'country', 'flight_Date', 'final_Status', 'remarks', 'entry_Mode', 
-  'reference_Out', 'reference_Out_Name', 'visa_Sales_Rate_PKR', 'visa_Sale_Rate_Oth_Cur', 'cur_Country_One', 
-  'reference_In', 'reference_In_Name', 'visa_Purchase_Rate_PKR', 'visa_Purchase_Rate_Oth_Cur', 'cur_Country_Two', 
-  'visit_Reference_Out', 'visit_Reference_Out_Name', 'visit_Sales_PKR', 'visit_Sales_Rate_Oth_Curr', 'visit_Sales_Cur', 
-  'visit_Reference_In', 'visit_Reference_In_Name', 'visit_Purchase_Rate_PKR', 'visit_Purchase_Rate_Oth_Cur', 
-  'visit_Purchase_Cur', 'ticket_Reference_Out', 'ticket_Reference_Out_Name', 'ticket_Sales_PKR', 'ticket_Sales_Rate_Oth_Cur', 
-  'ticket_Sales_Cur', 'ticket_Reference_In', 'ticket_Reference_In_Name', 'ticket_Purchase_PKR', 'ticket_Purchase_Rate_Oth_Cur', 
-  'ticket_Purchase_Cur', 'azad_Visa_Reference_Out', 'azad_Visa_Reference_Out_Name', 'azad_Visa_Sales_PKR', 
-  'azad_Visa_Sales_Rate_Oth_Cur', 'azad_Visa_Sales_Cur', 'azad_Visa_Reference_In', 'azad_Visa_Reference_In_Name', 
-  'azad_Visa_Purchase_PKR', 'azad_Visa_Purchase_Rate_Oth_Cur', 'azad_Visa_Purchase_Cur', 'protector_Price_In', 
-  'protector_Price_In_Oth_Cur', 'protector_Price_Out', 'protector_Reference_In', 'protector_Reference_In_Name'
+  'name', 'pp_No', 'trade', 'company', 'contact', 'country', 'flight_Date', 'final_Status', 'remarks', 'entry_Mode',
+  'reference_Out', 'reference_Out_Name', 'visa_Sales_Rate_PKR', 'visa_Sale_Rate_Oth_Cur', 'cur_Country_One',
+  'reference_In', 'reference_In_Name', 'visa_Purchase_Rate_PKR', 'visa_Purchase_Rate_Oth_Cur', 'cur_Country_Two',
+  'visit_Reference_Out', 'visit_Reference_Out_Name', 'visit_Sales_PKR', 'visit_Sales_Rate_Oth_Curr', 'visit_Sales_Cur',
+  'visit_Reference_In', 'visit_Reference_In_Name', 'visit_Purchase_Rate_PKR', 'visit_Purchase_Rate_Oth_Cur',
+  'visit_Purchase_Cur', 'ticket_Reference_Out', 'ticket_Reference_Out_Name', 'ticket_Sales_PKR', 'ticket_Sales_Rate_Oth_Cur',
+  'ticket_Sales_Cur', 'ticket_Reference_In', 'ticket_Reference_In_Name', 'ticket_Purchase_PKR', 'ticket_Purchase_Rate_Oth_Cur',
+  'ticket_Purchase_Cur', 'azad_Visa_Reference_Out', 'azad_Visa_Reference_Out_Name', 'azad_Visa_Sales_PKR',
+  'azad_Visa_Sales_Rate_Oth_Cur', 'azad_Visa_Sales_Cur', 'azad_Visa_Reference_In', 'azad_Visa_Reference_In_Name',
+  'azad_Visa_Purchase_PKR', 'azad_Visa_Purchase_Rate_Oth_Cur', 'azad_Visa_Purchase_Cur', 'protector_Price_In',
+  'protector_Price_In_Oth_Cur', 'protector_Price_Out', 'protector_Reference_In', 'protector_Reference_In_Name',
+  'ppNoError', 'tradeError', 'companyError', 'countryError', 'finalStatusError', 'entryModeError', 'visaReferenceOutError',
+  'visaReferenceInError', 'visitReferenceOutError', 'visitReferenceInrror', 'ticketReferenceOutError', 'ticketReferenceInError',
+  'azadVisaReferenceOutError', 'azadVisaReferenceInError', 'protectorReferenceInError'
 ];
+
 const defaultValues = {
   'name': '',
   'pp_No': '',
@@ -76,7 +79,22 @@ const defaultValues = {
   'protector_Price_In_Oth_Cur': 0,
   'protector_Price_Out': 0,
   'protector_Reference_In': '',
-  'protector_Reference_In_Name': ''
+  'protector_Reference_In_Name': '',
+  'ppNoError': '',
+  'tradeError': '',
+  'companyError': '',
+  'countryError': '',
+  'finalStatusError': '',
+  'entryModeError': '',
+  'visaReferenceOutError': '',
+  'visaReferenceInError': '',
+  'visitReferenceOutError': '',
+  'visitReferenceInrror': '',
+  'ticketReferenceOutError': '',
+  'ticketReferenceInError': '',
+  'azadVisaReferenceOutError': '',
+  'azadVisaReferenceInError': '',
+  'protectorReferenceInError': ''
 };
 
 const initializeMissingFields = (entry) => {
@@ -91,7 +109,6 @@ const initializeMissingFields = (entry) => {
   return initializedEntry;
 };
 
-
 export default function NewEntry() {
   const dispatch = useDispatch();
   const { user } = useAuthContext();
@@ -103,95 +120,115 @@ export default function NewEntry() {
   }
 
   const [entries, setEntries] = useState([initializeMissingFields({})]);
-  const [triggerEffect, setTriggerEffect] = useState(false);
+const [triggerEffect, setTriggerEffect] = useState(false);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
 
-    if (!file) {
-      return;
-    }
+  if (!file) {
+    return;
+  }
 
-    if (
-      file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
-      file.type !== 'text/csv'
-    ) {
-      alert('Please upload a valid Excel or CSV file.');
-      return;
-    }
+  if (
+    file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
+    file.type !== 'text/csv'
+  ) {
+    alert('Please upload a valid Excel or CSV file.');
+    return;
+  }
 
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      const data = e.target.result;
-      const dataArray = parseExcelData(data);
+  const fileReader = new FileReader();
+  fileReader.onload = (e) => {
+    const data = e.target.result;
+    const dataArray = parseExcelData(data);
 
-      setEntries(dataArray);
-      setTriggerEffect(true);
-    };
-
-    fileReader.readAsBinaryString(file);
-    e.target.value = null;
+    setEntries(dataArray);
+    setTriggerEffect(true);
   };
 
-  const parseExcelData = (data) => {
-    const workbook = XLSX.read(data, { type: 'binary' });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const dataArray = XLSX.utils.sheet_to_json(sheet);
+  fileReader.readAsBinaryString(file);
+  e.target.value = null;
+};
+
+const parseExcelData = (data) => {
+  const workbook = XLSX.read(data, { type: 'binary' });
+  const sheetName = workbook.SheetNames[0];
   
-    const seenEntries = new Set();
-  
-    const updatedDataArray = dataArray.reduce((acc, entry, rowIndex) => {
-      const uniqueKey = `${entry.name}-${entry.pp_No}`;
-      if (!seenEntries.has(uniqueKey)) {
-        seenEntries.add(uniqueKey);
-  
-        const updatedEntry = initializeMissingFields(
-          Object.fromEntries(
-            Object.entries(entry).map(([key, value]) => {
-              const trimmedValue = typeof value === 'string' ? value.trim() : value;
-  
-              if (key === 'flight_Date') {
-                if (!isNaN(trimmedValue) && trimmedValue !== '') {
-                  const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000);
-  
-                  if (!isNaN(dateValue.getTime())) {
-                    return [key, dateValue.toISOString().split('T')[0]];
-                  } else {
-                    console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
-                    return [key, undefined];
-                  }
-                } else if (['Not Fly', 'Fly'].includes(trimmedValue)) {
-                  return [key, trimmedValue];
+  if (!sheetName) {
+    console.error('No sheet name found in the Excel file.');
+    return [];
+  }
+
+  const sheet = workbook.Sheets[sheetName];
+
+  if (!sheet) {
+    console.error(`Sheet with name "${sheetName}" not found in the Excel file.`);
+    return [];
+  }
+
+  const dataArray = XLSX.utils.sheet_to_json(sheet);
+
+  if (!Array.isArray(dataArray) || dataArray.length === 0) {
+    console.error('No data found in the sheet.');
+    return [];
+  }
+
+  const seenEntries = new Set();
+
+  const updatedDataArray = dataArray.reduce((acc, entry, rowIndex) => {
+    const uniqueKey = `${entry.name}-${entry.pp_No}`;
+    if (!seenEntries.has(uniqueKey)) {
+      seenEntries.add(uniqueKey);
+
+      const updatedEntry = initializeMissingFields(
+        Object.fromEntries(
+          Object.entries(entry).map(([key, value]) => {
+            const trimmedValue = typeof value === 'string' ? value.trim() : value;
+
+            if (key === 'flight_Date') {
+              if (!isNaN(trimmedValue) && trimmedValue !== '') {
+                const dateValue = new Date((trimmedValue - 25569) * 86400 * 1000);
+
+                if (!isNaN(dateValue.getTime())) {
+                  return [key, dateValue.toISOString().split('T')[0]];
+                } else {
+                  console.error(`Row ${rowIndex + 2}, Column "${key}" has an invalid date value.`);
+                  return [key, undefined];
                 }
+              } else if (['Not Fly', 'Fly'].includes(trimmedValue)) {
+                return [key, trimmedValue];
               }
-  
-              return [key, trimmedValue === '' ? undefined : trimmedValue];
-            })
-          )
-        );
-  
-        acc.push(updatedEntry);
-      }
-      return acc;
-    }, []);
-  
-    return updatedDataArray;
-  };
-  
+            }
 
+            return [key, trimmedValue === '' ? undefined : trimmedValue];
+          })
+        )
+      );
 
-
-  const handleInputChange = (rowIndex, key, value) => {
-    const updatedData = [...entries];
-    if (typeof defaultValues[key] === 'number') {
-      const parsedValue = parseFloat(value);
-      updatedData[rowIndex][key] = isNaN(parsedValue) ? defaultValues[key] : parsedValue;
-    } else {
-      updatedData[rowIndex][key] = value;
+      acc.push(updatedEntry);
     }
-    setEntries(updatedData);
-  };
+    return acc;
+  }, []);
+
+  return updatedDataArray;
+};
+
+const handleInputChange = (rowIndex, key, value) => {
+  const updatedData = [...entries];
+  if (typeof defaultValues[key] === 'number') {
+    const parsedValue = parseFloat(value);
+    updatedData[rowIndex][key] = isNaN(parsedValue) ? defaultValues[key] : parsedValue;
+  } else {
+    updatedData[rowIndex][key] = value;
+  }
+  setEntries(updatedData);
+};
+
+const excludedKeys = [
+  'ppNoError', 'tradeError', 'companyError', 'countryError', 'finalStatusError', 'entryModeError', 'visaReferenceOutError',
+  'visaReferenceInError', 'visitReferenceOutError', 'visitReferenceInrror', 'ticketReferenceOutError', 'ticketReferenceInError',
+  'azadVisaReferenceOutError', 'azadVisaReferenceInError', 'protectorReferenceInError'
+];
 
   useEffect(() => {
     if (triggerEffect) {
@@ -299,7 +336,7 @@ export default function NewEntry() {
         protector_Reference_In: entry.protector_Reference_In,
         protector_Reference_In_Name: entry.protector_Reference_In_Name,
         protectorReferenceInError: entry.protectorReferenceInError,
-      };
+      }
 
       data.push(rowData);
     });
@@ -349,94 +386,6 @@ export default function NewEntry() {
     }
 
   }
-
-
-  
-  const downloadExcel = () => {
-    const data = [];
-
-    // Iterate over entries and push all fields
-    entries.forEach((entry, index) => {
-      const rowData = {
-        name: entry.name,
-        pp_No: entry.pp_No,
-        trade: entry.trade,
-        company: entry.company,
-        contact: entry.contact,
-        country: entry.country,
-        flight_Date: entry.flight_Date,
-        final_Status: entry.final_Status,
-        remarks: entry.remarks,
-        entry_Mode: entry.entry_Mode,
-        reference_Out: entry.reference_Out,
-        reference_Out_Name: entry.reference_Out_Name,
-        visa_Sales_Rate_PKR: entry.visa_Sales_Rate_PKR,
-        visa_Sale_Rate_Oth_Cur: entry.visa_Sale_Rate_Oth_Cur,
-        cur_Country_One: entry.cur_Country_One,
-        reference_In: entry.reference_In,
-        reference_In_Name: entry.reference_In_Name,
-        visa_Purchase_Rate_PKR: entry.visa_Purchase_Rate_PKR,
-        visa_Purchase_Rate_Oth_Cur: entry.visa_Purchase_Rate_Oth_Cur,
-        cur_Country_Two: entry.cur_Country_Two,
-        // Visit  Section 
-        visit_Reference_Out: entry.visit_Reference_Out,
-        visit_Reference_Out_Name: entry.visit_Reference_Out_Name,
-        visit_Sales_PKR: entry.visit_Sales_PKR,
-        visit_Sales_Rate_Oth_Curr: entry.visit_Sales_Rate_Oth_Curr,
-        visit_Sales_Cur: entry.visit_Sales_Cur,
-        visit_Reference_In: entry.visit_Reference_In,
-        visit_Reference_In_Name: entry.visit_Reference_In_Name,
-        visit_Purchase_Rate_PKR: entry.visit_Purchase_Rate_PKR,
-        visit_Purchase_Rate_Oth_Cur: entry.visit_Purchase_Rate_Oth_Cur,
-        visit_Purchase_Cur: entry.visit_Purchase_Cur,
-
-        // Ticket Section
-        ticket_Reference_Out: entry.ticket_Reference_Out,
-        ticket_Reference_Out_Name: entry.ticket_Reference_Out_Name,
-        ticket_Sales_PKR: entry.ticket_Sales_PKR,
-        ticket_Sales_Rate_Oth_Cur: entry.ticket_Sales_Rate_Oth_Cur,
-        ticket_Sales_Cur: entry.ticket_Sales_Cur,
-        ticket_Reference_In: entry.ticket_Reference_In,
-        ticket_Reference_In_Name: entry.ticket_Reference_In_Name,
-        ticket_Purchase_PKR: entry.ticket_Purchase_PKR,
-        ticket_Purchase_Rate_Oth_Cur: entry.ticket_Purchase_Rate_Oth_Cur,
-        ticket_Purchase_Cur: entry.ticket_Purchase_Cur,
-
-
-        // Azad Visa Section 
-        azad_Visa_Reference_Out: entry.azad_Visa_Reference_Out,
-        azad_Visa_Reference_Out_Name: entry.azad_Visa_Reference_Out_Name,
-        azad_Visa_Sales_PKR: entry.azad_Visa_Sales_PKR,
-        azad_Visa_Sales_Rate_Oth_Cur: entry.azad_Visa_Sales_Rate_Oth_Cur,
-        azad_Visa_Sales_Cur: entry.azad_Visa_Sales_Cur,
-        azad_Visa_Reference_In: entry.azad_Visa_Reference_In,
-        azad_Visa_Reference_In_Name: entry.azad_Visa_Reference_In_Name,
-        azad_Visa_Purchase_PKR: entry.azad_Visa_Purchase_PKR,
-        azad_Visa_Purchase_Rate_Oth_Cur: entry.azad_Visa_Purchase_Rate_Oth_Cur,
-        azad_Visa_Purchase_Cur: entry.azad_Visa_Purchase_Cur,
-
-        // Add other fields for Section 3
-
-        protector_Price_In: entry.protector_Price_In,
-        protector_Price_In_Oth_Cur: entry.protector_Price_In_Oth_Cur,
-        protector_Price_Out: entry.protector_Price_Out,
-        protector_Reference_In: entry.protector_Reference_In,
-        protector_Reference_In_Name: entry.protector_Reference_In_Name,
-
-      };
-
-      data.push(rowData);
-    });
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Entries.xlsx');
-  }
-
-
-
-
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (
@@ -452,11 +401,9 @@ export default function NewEntry() {
               {single === 1 &&
               <>
                <label className="btn m-1  btn-sm upload_btn">
-                Upload list
+                Upload List
                 <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
               </label>
-              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadExcel()} disabled={entries.length<1}>Download</button>
-
               </>
               }
             </div>
@@ -549,19 +496,19 @@ export default function NewEntry() {
                           </tr>
                         </thead>
                         <tbody>
-          {entries && entries.map((rowData, rowIndex) => (
-            <tr key={rowIndex}>
-              {allKeys.map((key, colIndex) => (
-                <td key={colIndex}>
-                  <input className='p-1'
-                    type="text"
-                    value={rowData[key] || ""}
-                    onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
+                        {entries && entries.map((rowData, rowIndex) => (
+    <tr key={rowIndex}>
+      {allKeys.filter(key => !excludedKeys.includes(key)).map((key, colIndex) => (
+        <td key={colIndex}>
+          <input className='p-1'
+            type="text"
+            value={rowData[key] || ""}
+            onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
+          />
+        </td>
+      ))}
+    </tr>
+  ))}
         </tbody>
 
                       </table>
