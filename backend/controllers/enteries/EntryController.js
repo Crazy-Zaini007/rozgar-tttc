@@ -3553,7 +3553,7 @@ const addMultipleEnteries = async (req, res) => {
       const paymentInfo = {};
       let unSavedEntries=[]
       for (const entryData of entries) {
-        let hasError = false;
+        let confirmStatus = true;
 
         let final_Status = entryData.final_Status
         let name=entryData.name
@@ -3602,7 +3602,7 @@ const addMultipleEnteries = async (req, res) => {
 
            if (existingPPNO) {
         entryData.ppNoError = 'Entry with this Passport Number already exists';
-        hasError = true;
+       confirmStatus= false;
     }
 
     let existCompany, existingTrade, existingEntryMode, existingFinalStatus, existingCountry;
@@ -3614,7 +3614,7 @@ const addMultipleEnteries = async (req, res) => {
         existCompany = companies.find(data => data.company.trim().toLowerCase() === entryData.company.trim().toLowerCase());
         if (!existCompany) {
             entryData.companyError = 'Company not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3623,7 +3623,7 @@ const addMultipleEnteries = async (req, res) => {
         existingCountry = countries.find(data => data.country.trim().toLowerCase() === entryData.country.trim().toLowerCase());
         if (!existingCountry) {
             entryData.countryError = 'Country not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3632,7 +3632,7 @@ const addMultipleEnteries = async (req, res) => {
         existingTrade = trades.find(data => data.trade.trim().toLowerCase() === entryData.trade.trim().toLowerCase());
         if (!existingTrade) {
             entryData.tradeError = 'Trade not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3641,7 +3641,7 @@ const addMultipleEnteries = async (req, res) => {
         existingEntryMode = entryModes.find(data => data.entry_Mode.trim().toLowerCase() === entryData.entry_Mode.trim().toLowerCase());
         if (!existingEntryMode) {
             entryData.entryModeError = 'Entry mode not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3650,7 +3650,7 @@ const addMultipleEnteries = async (req, res) => {
         existingFinalStatus = finalStatuses.find(data => data.final_Status.trim().toLowerCase() === entryData.final_Status.trim().toLowerCase());
         if (!existingFinalStatus) {
             entryData.finalStatusError = 'Final status not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3659,7 +3659,7 @@ const addMultipleEnteries = async (req, res) => {
         visaReference_Out = allOutVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.reference_Out_Name.trim().toLowerCase());
         if (!visaReference_Out) {
             entryData.visaReferenceOutError = 'Visa reference out not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3668,7 +3668,7 @@ const addMultipleEnteries = async (req, res) => {
         visaReference_In = allInVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.reference_In_Name.trim().toLowerCase());
         if (!visaReference_In) {
             entryData.visaReferenceInError = 'Visa reference in not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3677,7 +3677,7 @@ const addMultipleEnteries = async (req, res) => {
         azadVisaReference_Out = allOutAzasVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.azad_Visa_Reference_Out_Name.trim().toLowerCase());
         if (!azadVisaReference_Out) {
             entryData.azadVisaReferenceOutError = 'Azad visa reference out not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3686,7 +3686,7 @@ const addMultipleEnteries = async (req, res) => {
         azadVisaReference_In = allInAzasVisas.find(data => data.supplierName.trim().toLowerCase() === entryData.azad_Visa_Reference_In_Name.trim().toLowerCase());
         if (!azadVisaReference_In) {
             entryData.azadVisaReferenceInError = 'Azad visa reference in not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3695,7 +3695,7 @@ const addMultipleEnteries = async (req, res) => {
         ticketReference_Out = allOutTickets.find(data => data.supplierName.trim().toLowerCase() === entryData.ticket_Reference_Out_Name.trim().toLowerCase());
         if (!ticketReference_Out) {
             entryData.ticketReferenceOutError = 'Ticket reference out not found';
-            hasError = true
+            confirmStatus = true
         }
     }
 
@@ -3704,7 +3704,7 @@ const addMultipleEnteries = async (req, res) => {
         ticketReference_In = allInTickets.find(data => data.supplierName.trim().toLowerCase() === entryData.ticket_Reference_In_Name.trim().toLowerCase());
         if (!ticketReference_In) {
             entryData.ticketReferenceInError = 'Ticket reference in not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3713,7 +3713,7 @@ const addMultipleEnteries = async (req, res) => {
         visitReference_Out = allOutVisits.find(data => data.supplierName.trim().toLowerCase() === entryData.visit_Reference_Out_Name.trim().toLowerCase());
         if (!visitReference_Out) {
             entryData.visitReferenceOutError = 'Visit reference out not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3722,7 +3722,7 @@ const addMultipleEnteries = async (req, res) => {
         visitReference_In = allInVisits.find(data => data.supplierName.trim().toLowerCase() === entryData.visit_Reference_In_Name.trim().toLowerCase());
         if (!visitReference_In) {
             entryData.visitReferenceInError = 'Visit reference in not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
@@ -3731,31 +3731,17 @@ const addMultipleEnteries = async (req, res) => {
         protectorReference_Out = protectors.find(data => data.supplierName.trim().toLowerCase() === entryData.protector_Reference_In_Name.trim().toLowerCase());
         if (!protectorReference_Out) {
             entryData.protectorReferenceInError = 'Protector reference not found';
-            hasError = true;
+           confirmStatus= false;
         }
     }
 
-    if (hasError) {
+    if (!confirmStatus) {
         unSavedEntries.push(entryData);
     }
 
 
 
-      if (!existingPPNO && 
-        (entryData.company && existCompany) &&
-        (entryData.trade && existingTrade) &&
-        (entryData.entry_Mode && existingEntryMode) &&
-        (entryData.final_Status && existingFinalStatus) &&
-        (entryData.reference_Out_Name && (entryData.reference_Out.toLowerCase().includes('agent') || entryData.reference_Out.toLowerCase().includes('supplier')) && visaReference_Out) &&
-        (entryData.reference_In_Name && (entryData.reference_In.toLowerCase().includes('agent') || entryData.reference_In.toLowerCase().includes('supplier')) && visaReference_In) &&
-        (entryData.azad_Visa_Reference_Out_Name && (entryData.azad_Visa_Reference_Out.toLowerCase().includes('agent') || entryData.azad_Visa_Reference_Out.toLowerCase().includes('supplier')) && azadVisaReference_Out) &&
-        (entryData.azad_Visa_Reference_In_Name && (entryData.azad_Visa_Reference_In.toLowerCase().includes('agent') || entryData.azad_Visa_Reference_In.toLowerCase().includes('supplier')) && azadVisaReference_In) &&
-        (entryData.ticket_Reference_Out_Name && (entryData.ticket_Reference_Out.toLowerCase().includes('agent') || entryData.ticket_Reference_Out.toLowerCase().includes('supplier')) && ticketReference_Out) &&
-        (entryData.ticket_Reference_In_Name && (entryData.ticket_Reference_In.toLowerCase().includes('agent') || entryData.ticket_Reference_In.toLowerCase().includes('supplier')) && ticketReference_In) &&
-        (entryData.visit_Reference_Out_Name && (entryData.visit_Reference_Out.toLowerCase().includes('agent') || entryData.visit_Reference_Out.toLowerCase().includes('supplier')) && visitReference_Out) &&
-        (entryData.visit_Reference_In_Name && (entryData.visit_Reference_In.toLowerCase().includes('agent') || entryData.visit_Reference_In.toLowerCase().includes('supplier')) && visitReference_In) &&
-        (entryData.protector_Reference_In_Name && protectorReference_Out)) {
-          
+      if (!existingPPNO&&confirmStatus) {
           if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'offer letter' || entryData.final_Status.trim().toLowerCase() === 'offer latter')) {
             const newReminder = new Reminders({
               type: "Offer Letter",

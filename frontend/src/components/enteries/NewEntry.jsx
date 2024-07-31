@@ -236,12 +236,11 @@ const excludedKeys = [
     }
   }, [triggerEffect, entries]);
 
+
+  console.log('entries',entries)
   const [, setNewMessage] = useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
-
-
-
-  
+    
   const downloadEntryErrors = (errorsEntries) => {
     const data = [];
 
