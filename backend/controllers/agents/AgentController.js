@@ -235,8 +235,7 @@ const addMultiplePaymentsIn = async (req, res) => {
           curr_Country,
           curr_Rate,
           curr_Amount,
-          date,
-
+          date
         } = payment;
 
         const newPaymentIn = parseInt(payment_In, 10);

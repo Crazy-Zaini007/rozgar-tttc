@@ -329,8 +329,6 @@ export default function NewEntry() {
       if (response.ok) {
         const existingEntries = json.data;
         setEntries(existingEntries);
-        console.log('existingEntries',existingEntries)
-        console.log('entries',entries)
         if(existingEntries.length>0){
           downloadEntryErrors(existingEntries)
         }
@@ -454,14 +452,13 @@ export default function NewEntry() {
               {single === 1 &&
               <>
                <label className="btn m-1  btn-sm upload_btn">
-                Upload New List
+                Upload list
                 <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
               </label>
               <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadExcel()} disabled={entries.length<1}>Download</button>
 
               </>
               }
-
             </div>
           </div>
           {/* Single Entry */}
