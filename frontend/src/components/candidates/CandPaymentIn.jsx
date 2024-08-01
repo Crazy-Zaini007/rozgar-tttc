@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { useSelector } from 'react-redux';
 
-
 const allKeys = [
   'date', 'supplierName','pp_No', 'category', 'payment_Via', 'payment_Type', 'slip_No',
   'payment_In', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'
@@ -94,6 +93,14 @@ export default function CandPaymentIn() {
       const filteredEntry = Object.fromEntries(
         Object.entries(entry).filter(([key]) => !errorKeys.includes(key))
       );
+  
+      if (filteredEntry.date && !isNaN(filteredEntry.date)) {
+        const excelDate = parseFloat(filteredEntry.date);
+        const jsDate = new Date(Math.round((excelDate - 25569) * 86400 * 1000));
+        const formattedDate = `${jsDate.getFullYear()}-${String(jsDate.getMonth() + 1).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
+        filteredEntry.date = formattedDate;
+      }
+  
       return initializeMissingFields(filteredEntry);
     });
   };
@@ -107,8 +114,6 @@ export default function CandPaymentIn() {
     }
     setMultiplePayment(updatedData);
   };
-
-
   // Downloading Errors
   const downloadErrorsDetails = (payments) => {
     const data = [];

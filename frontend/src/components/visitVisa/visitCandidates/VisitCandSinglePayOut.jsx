@@ -282,6 +282,14 @@ export default function VisitCandSinglePayOut() {
       const filteredEntry = Object.fromEntries(
         Object.entries(entry).filter(([key]) => !errorKeys.includes(key))
       );
+  
+      if (filteredEntry.date && !isNaN(filteredEntry.date)) {
+        const excelDate = parseFloat(filteredEntry.date);
+        const jsDate = new Date(Math.round((excelDate - 25569) * 86400 * 1000));
+        const formattedDate = `${jsDate.getFullYear()}-${String(jsDate.getMonth() + 1).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
+        filteredEntry.date = formattedDate;
+      }
+  
       return initializeMissingFields(filteredEntry);
     });
   };
