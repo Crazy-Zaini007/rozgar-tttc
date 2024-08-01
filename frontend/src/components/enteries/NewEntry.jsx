@@ -244,7 +244,6 @@ const excludedKeys = [
   }, [triggerEffect, entries]);
 
 
-  console.log('entries',entries)
   const [, setNewMessage] = useState('')
   const apiUrl = process.env.REACT_APP_API_URL;
     
@@ -371,9 +370,13 @@ const excludedKeys = [
       const json = await response.json();
       if (response.ok) {
         const existingEntries = json.data;
-        setEntries(existingEntries);
+       
         if(existingEntries.length>0){
           downloadEntryErrors(existingEntries)
+          setEntries(existingEntries);
+        }
+        else{
+          setEntries('');
         }
        
         setNewMessage(toast.success(json.message))

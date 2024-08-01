@@ -350,6 +350,10 @@ export default function VisitCandSinglePayOut() {
         const existingEntries = json.data;
         if(existingEntries.length>0){
           downloadErrorsDetails(existingEntries)
+          setMultiplePayment(existingEntries)
+        }else{
+          setMultiplePayment('')
+
         }
         setNewMessage(toast.success(json.message))
         setLoading(false)

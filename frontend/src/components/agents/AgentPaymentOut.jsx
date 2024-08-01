@@ -347,8 +347,12 @@ export default function AgentPaymentOut() {
       const json = await response.json();
       if (response.ok) {
         const existingEntries = json.data;
-        if (existingEntries.length > 0) {
+        if(existingEntries.length>0){
           downloadErrorsDetails(existingEntries)
+          setMultiplePayment(existingEntries)
+        }else{
+          setMultiplePayment('')
+
         }
         setNewMessage(toast.success(json.message))
         setLoading(false)
