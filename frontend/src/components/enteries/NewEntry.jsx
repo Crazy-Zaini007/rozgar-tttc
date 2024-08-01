@@ -214,14 +214,21 @@ const parseExcelData = (data) => {
 };
 
 const handleInputChange = (rowIndex, key, value) => {
-  const updatedData = [...entries];
-  if (typeof defaultValues[key] === 'number') {
-    const parsedValue = parseFloat(value);
-    updatedData[rowIndex][key] = isNaN(parsedValue) ? defaultValues[key] : parsedValue;
-  } else {
-    updatedData[rowIndex][key] = value;
-  }
-  setEntries(updatedData);
+  setEntries(prevEntries => {
+    const updatedEntries = [...prevEntries]; // shallow copy of the array
+    const updatedEntry = { ...updatedEntries[rowIndex] }; // shallow copy of the entry object
+    
+    if (typeof defaultValues[key] === 'number') {
+      const parsedValue = parseFloat(value);
+      updatedEntry[key] = isNaN(parsedValue) ? defaultValues[key] : parsedValue;
+    } else {
+      updatedEntry[key] = value;
+    }
+
+    updatedEntries[rowIndex] = updatedEntry; // replace the old entry with the updated entry
+
+    return updatedEntries; // return the new array
+  });
 };
 
 const excludedKeys = [

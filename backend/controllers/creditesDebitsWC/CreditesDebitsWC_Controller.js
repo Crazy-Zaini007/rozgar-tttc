@@ -6,6 +6,9 @@ const CashInHand = require('../../database/cashInHand/CashInHandSchema')
 const Notifications=require('../../database/notifications/NotifyModel.js')
 const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
+const PaymentVia=require('../../database/setting/Paymeny_Via_Schema.js')
+const PaymentType=require('../../database/setting/Payment_Type_Schema.js')
+const Categories=require('../../database/setting/Category_Schema.js')
 const mongoose = require('mongoose')
 const moment = require('moment');
 const addPaymentIn = async (req, res) => {
@@ -217,6 +220,8 @@ const addMultiplePaymentIn = async (req, res) => {
         }
     const multiplePayment = req.body;
     let updatedPayments = [];
+    let unsavedPayments= [];
+
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
         res.status(400).json({ message: "Invalid request payload" });
         return;
@@ -246,6 +251,34 @@ for(const payment of multiplePayment){
 
         const agents=await CDWC.find({})
         let existingSupplier
+        let confirmStatus=true
+
+        if(payment_Via){
+          const allPaymetVia=await PaymentVia.find({})
+          const existingPaymentVia=allPaymetVia.find(p=>p.payment_Via.trim().toLowerCase()==payment_Via.trim().toLowerCase())
+          if(!existingPaymentVia){
+            payment.paymentViaError='Payment Via not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(payment_Type){
+          const allPaymetTypes=await PaymentType.find({})
+          const existingPaymentType=allPaymetTypes.find(p=>p.payment_Type.trim().toLowerCase()==payment_Type.trim().toLowerCase())
+          if(!existingPaymentType){
+            payment.paymentTypeError='Payment Type not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(category){
+          const allCategories=await Categories.find({})
+          const existingCategory=allCategories.find(p=>p.category.trim().toLowerCase()==category.trim().toLowerCase())
+          if(!existingCategory){
+            payment.paymentCategoryError='Payment Category not found in setting'
+            confirmStatus=false
+          }
+        }
 
        for (const agent of agents){
         if(agent.payment_In_Schema){
@@ -256,7 +289,11 @@ for(const payment of multiplePayment){
         }
        }
 
-        if (existingSupplier) {
+           if(!confirmStatus){
+        unsavedPayments.push(payment)
+       }
+
+        if (existingSupplier && confirmStatus) {
             let nextInvoiceNumber = 0;
 
             const currentInvoiceNumber = await InvoiceNumber.findOne({});
@@ -326,103 +363,16 @@ for(const payment of multiplePayment){
 
             await existingSupplier.save();
 
-        } else {
-            let nextInvoiceNumber = 0;
-
-            const currentInvoiceNumber = await InvoiceNumber.findOne({});
-
-            if (!currentInvoiceNumber) {
-                const newInvoiceNumberDoc = new InvoiceNumber();
-                await newInvoiceNumberDoc.save();
-            }
-
-            const updatedInvoiceNumber = await InvoiceNumber.findOneAndUpdate(
-                {},
-                { $inc: { invoice_Number: 1 } },
-                { new: true, upsert: true }
-            )
-            if (updatedInvoiceNumber) {
-                nextInvoiceNumber = updatedInvoiceNumber.invoice_Number;
-            }
-
-            // If the supplier does not exist, create a new entry
-            const newSupplierEntry = new CDWC({
-                payment_In_Schema: {
-                    supplierName,
-                    payment: [{
-                        category,
-                        payment_Via,
-                        payment_Type,
-                        slip_No,
-                        payment_In,
-                        payment_Out,
-                        details,
-                        date:date?date:new Date().toISOString().split("T")[0],
-                        curr_Country,
-                        curr_Rate,
-                        curr_Amount,
-                        invoice: nextInvoiceNumber
-                    }],
-                    total_Payment_In: payment_In,
-                    total_Payment_Out: payment_Out,
-                    status: 'Open',
-                    balance: payment_In ? payment_In : -payment_Out
-                }
-            })
-
-            updatedPayments.push(
-                {
-                    supplierName,
-                    category,
-                    payment_Via,
-                    payment_Type,
-                    slip_No,
-                    payment_In,
-                    payment_Out,
-                    details,
-                    date,
-                    curr_Country,
-                    curr_Rate,
-                    curr_Amount,
-                }
-            );
-
-            const cashInHandDoc = await CashInHand.findOne({});
-            if (!cashInHandDoc) {
-                const newCashInHandDoc = new CashInHand();
-                await newCashInHandDoc.save();
-            }
-
-            const cashInHandUpdate = {
-                $inc: {}
-            };
-            if (payment_Via.toLowerCase() === "cash") {
-                cashInHandUpdate.$inc.cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
-            }
-            else {
-                cashInHandUpdate.$inc.bank_Cash = payment_In ? payment_In : -payment_Out
-                cashInHandUpdate.$inc.total_Cash = payment_In ? payment_In : -payment_Out
-            } 
-            await CashInHand.updateOne({}, cashInHandUpdate);
-            const newNotification=new Notifications({
-                type:`CDWC Payment ${payment_In? "In":"Out"}`,
-                content:`${user.userName} added ${payment_In? "Payment_In":"Payment_Out"}: ${payment_In?payment_In :payment_Out} of CDWC Supplier: ${supplierName}`,
-                date: new Date().toISOString().split("T")[0]
-      
-              })
-              await newNotification.save()
-            await newSupplierEntry.save();
-
         }
 
 }
         
       } catch (error) {
-        
+        console.error(err);
+        res.status(500).json({ message:error.message});
       }
       res.status(200).json({ 
-        data:updatedPayments,
+        data:unsavedPayments,
         message: `${updatedPayments.length} Payments In added Successfully` });
        
 

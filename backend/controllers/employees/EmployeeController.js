@@ -7,6 +7,9 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
+const PaymentVia=require('../../database/setting/Paymeny_Via_Schema.js')
+const PaymentType=require('../../database/setting/Payment_Type_Schema.js')
+const Categories=require('../../database/setting/Category_Schema.js')
 // adding an employee
 const addEmployee = async (req, res) => {
 
@@ -412,6 +415,8 @@ const addMultipleSalaries = async (req, res) => {
     if (user) {
     const multiplePayment = req.body;
     let updatedPayments = [];
+    let unsavedPayments= [];
+
     if (!Array.isArray(multiplePayment) || multiplePayment.length === 0) {
       res.status(400).json({ message: "Invalid request payload" });
       return;
@@ -431,9 +436,45 @@ const addMultipleSalaries = async (req, res) => {
           curr_Rate,
           curr_Amount,
         } = payment
+
+        let confirmStatus=true
+        if(payment_Via){
+          const allPaymetVia=await PaymentVia.find({})
+          const existingPaymentVia=allPaymetVia.find(p=>p.payment_Via.trim().toLowerCase()==payment_Via.trim().toLowerCase())
+          if(!existingPaymentVia){
+            payment.paymentViaError='Payment Via not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(payment_Type){
+          const allPaymetTypes=await PaymentType.find({})
+          const existingPaymentType=allPaymetTypes.find(p=>p.payment_Type.trim().toLowerCase()==payment_Type.trim().toLowerCase())
+          if(!existingPaymentType){
+            payment.paymentTypeError='Payment Type not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(category){
+          const allCategories=await Categories.find({})
+          const existingCategory=allCategories.find(p=>p.category.trim().toLowerCase()==category.trim().toLowerCase())
+          if(!existingCategory){
+            payment.paymentCategoryError='Payment Category not found in setting'
+            confirmStatus=false
+          }
+        }
+
         const employee = await Employees.findOne({employeeName:employeeName.toLowerCase()})
-        
-      if (employee) {
+        if(!employee){
+          payment.employeeNameError='Employee record not found'
+          confirmStatus=false
+        }
+
+        if(!confirmStatus){
+          unsavedPayments.push(payment)
+         }
+      if (employee&&confirmStatus) {
         const parsedPaymentOut = Number(payment_Out);
         
     // Find the payment object corresponding to the provided month
@@ -500,7 +541,7 @@ const addMultipleSalaries = async (req, res) => {
         await employee.save()
       }
       res.status(200).json({ 
-        data:updatedPayments,
+        data:unsavedPayments,
         message: `Salaries done for ${updatedPayments.length} Employees!` })
 
       }

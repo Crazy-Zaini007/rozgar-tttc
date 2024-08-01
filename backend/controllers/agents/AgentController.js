@@ -22,6 +22,11 @@ const AzadAgents = require("../../database/azadAgent/AzadAgentSchema");
 const TicketAgents = require("../../database/ticketAgent/TicketAgentSchema");
 const VisitAgents = require("../../database/visitAgent/VisitAgentSchema");
 
+
+const PaymentVia=require('../../database/setting/Paymeny_Via_Schema.js')
+const PaymentType=require('../../database/setting/Payment_Type_Schema.js')
+const Categories=require('../../database/setting/Category_Schema.js')
+
 const mongoose = require("mongoose");
 const moment = require("moment");
 
@@ -219,8 +224,8 @@ const addMultiplePaymentsIn = async (req, res) => {
 
     try {
 
-
       let updatedPayments = [];
+      let unsavedPayments= [];
 
       for (const payment of multiplePayment) {
         let {
@@ -242,7 +247,35 @@ const addMultiplePaymentsIn = async (req, res) => {
         const newCurrAmount = parseInt(curr_Amount, 10);
         const suppliers=await Agents.find({})
         let existingSupplier
+        let confirmStatus=true
 
+        if(payment_Via){
+          const allPaymetVia=await PaymentVia.find({})
+          const existingPaymentVia=allPaymetVia.find(p=>p.payment_Via.trim().toLowerCase()==payment_Via.trim().toLowerCase())
+          if(!existingPaymentVia){
+            payment.paymentViaError='Payment Via not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(payment_Type){
+          const allPaymetTypes=await PaymentType.find({})
+          const existingPaymentType=allPaymetTypes.find(p=>p.payment_Type.trim().toLowerCase()==payment_Type.trim().toLowerCase())
+          if(!existingPaymentType){
+            payment.paymentTypeError='Payment Type not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(category){
+          const allCategories=await Categories.find({})
+          const existingCategory=allCategories.find(p=>p.category.trim().toLowerCase()==category.trim().toLowerCase())
+          if(!existingCategory){
+            payment.paymentCategoryError='Payment Category not found in setting'
+            confirmStatus=false
+          }
+        }
+        
        for (const supplier of suppliers){
         if(supplier.payment_In_Schema){
           if(supplier.payment_In_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()&&supplier.payment_In_Schema.status.toLowerCase()==='open'){
@@ -251,8 +284,16 @@ const addMultiplePaymentsIn = async (req, res) => {
           }
         }
        }
+       if(!existingSupplier){
+        payment.nameError='Agent name not found in Payments records'
+        confirmStatus=false
+       }
 
-        if (existingSupplier) {
+       if(!confirmStatus){
+        unsavedPayments.push(payment)
+       }
+
+        if (existingSupplier && confirmStatus) {
           let nextInvoiceNumber = 0;
           const currentInvoiceNumber = await InvoiceNumber.findOne({});
           if (!currentInvoiceNumber) {
@@ -354,9 +395,7 @@ const addMultiplePaymentsIn = async (req, res) => {
                   })
                   await newNotification.save()
               await existingSupplier.save();
-  
-            
-  
+              
           }
           catch (error) {
             console.error("Error updating values:", error);
@@ -369,8 +408,8 @@ const addMultiplePaymentsIn = async (req, res) => {
     
       }
       res.status(200).json({
-        data:updatedPayments,
-        message: `${updatedPayments.length} Payments In added Successfully`,
+        data:unsavedPayments,
+        message: `${updatedPayments.length} Payments added Successfully`,
       })
 
     } catch (error) {
@@ -2047,6 +2086,7 @@ const addMultiplePaymentsOut = async (req, res) => {
     try {
 
       let updatedPayments = [];
+      let unsavedPayments= [];
 
       for (const payment of multiplePayment) {
         let {
@@ -2068,20 +2108,57 @@ const addMultiplePaymentsOut = async (req, res) => {
         const newCurrAmount = parseInt(curr_Amount, 10);
         const suppliers=await Agents.find({})
         let existingSupplier
+        let confirmStatus=true
 
+
+        if(payment_Via){
+          const allPaymetVia=await PaymentVia.find({})
+          const existingPaymentVia=allPaymetVia.find(p=>p.payment_Via.trim().toLowerCase()==payment_Via.trim().toLowerCase())
+          if(!existingPaymentVia){
+            payment.paymentViaError='Payment Via not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(payment_Type){
+          const allPaymetTypes=await PaymentType.find({})
+          const existingPaymentType=allPaymetTypes.find(p=>p.payment_Type.trim().toLowerCase()==payment_Type.trim().toLowerCase())
+          if(!existingPaymentType){
+            payment.paymentTypeError='Payment Type not found in setting'
+            confirmStatus=false
+          }
+        }
+
+        if(category){
+          const allCategories=await Categories.find({})
+          const existingCategory=allCategories.find(p=>p.category.trim().toLowerCase()==category.trim().toLowerCase())
+          if(!existingCategory){
+            payment.paymentCategoryError='Payment Category not found in setting'
+            confirmStatus=false
+          }
+        }
+        
        for (const supplier of suppliers){
         if(supplier.payment_Out_Schema){
           if(supplier.payment_Out_Schema.supplierName.toLowerCase()===supplierName.toLowerCase()&&supplier.payment_Out_Schema.status.toLowerCase()==='open'){
             existingSupplier = supplier;
             break
           }
+         
         }
        }
-        
 
-        if (existingSupplier) {
+       if(!existingSupplier){
+        payment.nameError='Agent name not found in Payments records'
+        confirmStatus=false
+       }
+       
+       if(!confirmStatus){
+        unsavedPayments.push(payment)
+       }
+
+        if (existingSupplier&& confirmStatus) {
           let nextInvoiceNumber = 0;
-
         const currentInvoiceNumber = await InvoiceNumber.findOne({});
 
         if (!currentInvoiceNumber) {
@@ -2200,7 +2277,7 @@ const addMultiplePaymentsOut = async (req, res) => {
       
       }
       res.status(200).json({
-        data:updatedPayments,
+        data:unsavedPayments,
         message: `${updatedPayments.length} Payments Out added Successfully`,
       });
     } catch (error) {

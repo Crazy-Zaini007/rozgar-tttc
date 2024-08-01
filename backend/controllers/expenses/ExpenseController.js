@@ -5,6 +5,10 @@ const InvoiceNumber = require('../../database/invoiceNumber/InvoiceNumberSchema'
 const CashInHand = require('../../database/cashInHand/CashInHandSchema')
 const RecycleBin=require('../../database/recyclebin/RecycleBinModel.js')
 
+const PaymentVia=require('../../database/setting/Paymeny_Via_Schema.js')
+const PaymentType=require('../../database/setting/Payment_Type_Schema.js')
+const ExpenseCategories=require('../../database/setting/Expe_Category_Schema.js')
+
 const mongoose = require('mongoose')
 //Adding a new Expense
 const addExpense = async (req, res) => {
@@ -126,6 +130,7 @@ const addMultipleExpense=async(req,res)=>{
 
         if (user && user.role === "Admin") {
             const updatedPayments = [];
+            let unsavedPayments= [];
 
             for(const payment of multiplepayment){
                 const {
@@ -143,6 +148,39 @@ const addMultipleExpense=async(req,res)=>{
                     date
                 } = payment
                    
+                let confirmStatus=true
+
+                if(payment_Via){
+                  const allPaymetVia=await PaymentVia.find({})
+                  const existingPaymentVia=allPaymetVia.find(p=>p.payment_Via.trim().toLowerCase()==payment_Via.trim().toLowerCase())
+                  if(!existingPaymentVia){
+                    payment.paymentViaError='Payment Via not found in setting'
+                    confirmStatus=false
+                  }
+                }
+        
+                if(payment_Type){
+                  const allPaymetTypes=await PaymentType.find({})
+                  const existingPaymentType=allPaymetTypes.find(p=>p.payment_Type.trim().toLowerCase()==payment_Type.trim().toLowerCase())
+                  if(!existingPaymentType){
+                    payment.paymentTypeError='Payment Type not found in setting'
+                    confirmStatus=false
+                  }
+                }
+        
+                if(expCategory){
+                  const allCategories=await ExpenseCategories.find({})
+                  const existingCategory=allCategories.find(p=>p.category.trim().toLowerCase()==expCategory.trim().toLowerCase())
+                  if(!existingCategory){
+                    payment.expenseCategoryError='Expense Category not found in setting'
+                    confirmStatus=false
+                  }
+                }
+
+                if(!confirmStatus){
+                    unsavedPayments.push(payment)
+                }
+                  if(confirmStatus){
                     let nextInvoiceNumber = 0;
 
                     // Check if InvoiceNumber document exists
@@ -212,10 +250,11 @@ const addMultipleExpense=async(req,res)=>{
                     
                     await CashInHand.updateOne({}, cashInHandUpdate);
                     await newExpense.save()
+                  }
 
             }
             res.status(200).json({ 
-                data:updatedPayments,
+                data:unsavedPayments,
                 message: `${updatedPayments.length} Expenses added Successfully` })
 
         }

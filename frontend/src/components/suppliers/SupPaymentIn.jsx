@@ -9,7 +9,7 @@ import { useAuthContext } from '../../hooks/userHooks/UserAuthHook';
 import { useSelector } from 'react-redux';
 
 const allKeys = [
-  'date', 'supplierName', 'category', 'payment_Via', 'payment_Type', 'slip_No', 
+  'date', 'supplierName', 'category', 'payment_Via', 'payment_Type', 'slip_No',
   'payment_In', 'details', 'curr_Country', 'curr_Rate', 'curr_Amount'
 ];
 
@@ -27,6 +27,10 @@ const defaultValues = {
   'curr_Amount': 0
 };
 
+const errorKeys = [
+  'paymentViaError', 'paymentTypeError', 'paymentCategoryError', 'nameError'
+];
+
 const initializeMissingFields = (entry) => {
   const initializedEntry = { ...entry };
   allKeys.forEach(key => {
@@ -43,7 +47,6 @@ export default function SupPaymentIn() {
   const { user } = useAuthContext();
   const [single, setSingle] = useState(0)
   const [, setNewMessage] = useState('')
-  const[isDownload,setIsdownload]=useState(false)
 
   const setEntry = (index) => {
     setSingle(index)
@@ -53,15 +56,13 @@ export default function SupPaymentIn() {
  
   const [multiplePayment, setMultiplePayment] = useState([initializeMissingFields({})]);
   const [triggerEffect, setTriggerEffect] = useState(false);
-
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
+  
     if (!file) {
       return;
     }
-
+  
     if (
       file.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' &&
       file.type !== 'text/csv'
@@ -69,7 +70,7 @@ export default function SupPaymentIn() {
       alert('Please upload a valid Excel or CSV file.');
       return;
     }
-
+  
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       const data = e.target.result;
@@ -77,38 +78,26 @@ export default function SupPaymentIn() {
       setMultiplePayment(dataArray);
       setTriggerEffect(true);
     };
-
+  
     fileReader.readAsBinaryString(file);
-
     e.target.value = null;
   };
-
- 
+  
   const parseExcelData = (data) => {
     const workbook = XLSX.read(data, { type: 'binary' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const dataArray = XLSX.utils.sheet_to_json(sheet);
   
-    return dataArray.map((entry, rowIndex) => {
-      return initializeMissingFields(
-        Object.fromEntries(
-          Object.entries(entry).map(([key, value]) => {
-            const trimmedValue = typeof value === 'string' ? value.trim() : value;
-  
-            if (key === 'date' && !isNaN(trimmedValue) && trimmedValue !== '') {
-              const dateValue = new Date(Math.round((trimmedValue - 25569) * 86400 * 1000));
-              return [key, !isNaN(dateValue.getTime()) ? dateValue.toISOString().split('T')[0] : undefined];
-            }
-  
-            return [key, trimmedValue === '' ? undefined : trimmedValue];
-          })
-        )
+    return dataArray.map((entry) => {
+      const filteredEntry = Object.fromEntries(
+        Object.entries(entry).filter(([key]) => !errorKeys.includes(key))
       );
+      return initializeMissingFields(filteredEntry);
     });
   };
-
- const handleInputChange = (rowIndex, key, value) => {
+  
+  const handleInputChange = (rowIndex, key, value) => {
     const updatedData = [...multiplePayment];
     if (typeof defaultValues[key] === 'number') {
       updatedData[rowIndex][key] = parseFloat(value) || defaultValues[key];
@@ -117,6 +106,41 @@ export default function SupPaymentIn() {
     }
     setMultiplePayment(updatedData);
   };
+
+
+  // Downloading Errors
+  const downloadErrorsDetails = (payments) => {
+    const data = [];
+    // Flatten the array of objects to get an array of individual payment
+    // Iterate over individual payments and push all fields
+    payments.forEach((payment) => {
+      const rowData = {
+        date: payment.date,
+        supplierName:payment.supplierName,
+        nameError:payment.nameError,
+        category: payment.category,
+        paymentCategoryError:payment.paymentCategoryError,
+        payment_Via: payment.payment_Via,
+        paymentViaError:payment.paymentViaError,
+        payment_Type: payment.payment_Type,
+        paymentTypeError:payment.paymentTypeError,
+        slip_No: payment.slip_No,
+        details: payment.details,
+        payment_In: payment.payment_In,
+        curr_Country: payment.curr_Country,
+        curr_Rate: payment.curr_Rate,
+        curr_Amount: payment.curr_Amount
+      };
+
+      data.push(rowData);
+    });
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `Payments Errors Details.xlsx`);
+  }
+
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -137,19 +161,13 @@ export default function SupPaymentIn() {
       const json = await response.json();
       if (response.ok) {
         const existingEntries = json.data;
-        // Assuming each entry has a unique identifier, e.g., 'id'
-        const existingEntryIds = new Set(existingEntries.map(entry => (entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In )));
-        const filteredEntries = multiplePayment.filter(entry => !existingEntryIds.has(entry.date&&entry.supplierName&&entry.category&&entry.payment_Via&&entry.payment_Type&&entry.slip_No&&entry.payment_In ));
-        setMultiplePayment(filteredEntries);
-        setTimeout(() => {
-          if(filteredEntries.length>0){
-            setIsdownload(true)
-          }
-        }, 1000);
-        
+        if(existingEntries.length>0){
+          downloadErrorsDetails(existingEntries)
+        }
         setNewMessage(toast.success(json.message))
         setLoading(false)
       }
+
       if (!response.ok) {
         setLoading(false)
         setNewMessage(toast.error(json.message))
@@ -172,37 +190,6 @@ export default function SupPaymentIn() {
 
   const collapsed = useSelector((state) => state.collapsed.collapsed);
 
-
-  
-  const downloadIndividualPayments = () => {
-    const data = [];
-    // Flatten the array of objects to get an array of individual payments
-    // Iterate over individual payments and push all fields
-    multiplePayment.forEach((payment) => {
-      const rowData = {
-        date: payment.date,
-        supplierName: payment.supplierName,
-        category: payment.category,
-        payment_Via: payment.payment_Via,
-        payment_Type: payment.payment_Type,
-        Details: payment.details,
-        slip_No: payment.slip_No,
-        payment_In: payment.payment_In,
-        details: payment.details,
-        curr_Country: payment.curr_Country,
-        curr_Rate: payment.curr_Rate,
-        curr_Amount: payment.curr_Amount
-      };
-
-      data.push(rowData);
-    });
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, `Remaining Payments.xlsx`);
-  }
-  
   return (
     <>
     <div className={`${collapsed ?"collapsed":"main"}`}>
@@ -216,10 +203,10 @@ export default function SupPaymentIn() {
                 {single === 1 && 
                 <>
                 <label className="btn m-1 btn-sm upload_btn">
-                  Upload New List
+                  Upload List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>
-              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadIndividualPayments()} disabled={multiplePayment.length<1}>Download</button>
+             
                 </>
                 }
                 <button className='btn m-1 btn-sm entry_btn bg-danger border-0 text-white' onClick={() => setEntry(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
@@ -260,20 +247,19 @@ export default function SupPaymentIn() {
                             </tr>
                           </thead>
                           <tbody className='p-0 m-0'>
-            {multiplePayment.length > 0 && multiplePayment.map((rowData, rowIndex) => (
-              <tr key={rowIndex} className='p-0 m-0'>
-                {allKeys.map((key, colIndex) => (
-                  <td key={colIndex} className='p-0 m-0'>
-                    <input
-                      type={typeof defaultValues[key] === 'number' ? 'number' : 'text'}
-                      className='m-0'
-                      value={rowData[key] || ""}
-                      onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
+                          {multiplePayment && multiplePayment.map((rowData, rowIndex) => (
+                              <tr key={rowIndex}>
+                                {allKeys.map((key, colIndex) => (
+                                  <td key={colIndex}>
+                                    <input className='p-1'
+                                      type="text"
+                                      value={rowData[key] || ""}
+                                      onChange={(e) => handleInputChange(rowIndex, key, e.target.value)}
+                                    />
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
           </tbody>
 
                         </table>

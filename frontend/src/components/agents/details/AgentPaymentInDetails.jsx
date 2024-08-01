@@ -30,6 +30,7 @@ export default function AgentPaymentInDetails() {
   const [show2, setShow2] = useState(false)
 
   const[newStatus,setNewStatus]=useState('')
+  console.log('newStatus',newStatus)
   const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
 
@@ -84,7 +85,7 @@ export default function AgentPaymentInDetails() {
   }, [])
 
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In);
-
+console.log('agent_Payments_In',agent_Payments_In)
   const currencies = useSelector((state) => state.setting.currencies);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
@@ -114,7 +115,7 @@ export default function AgentPaymentInDetails() {
 
   const [option, setOption] = useState(false)
   const [selectedSupplier, setSelectedSupplier] = useState('');
-
+  console.log('selectedSupplier',selectedSupplier)
   const handleRowClick = (supplierName) => {
     setSelectedSupplier(supplierName);
     setOption(!option)
@@ -172,7 +173,7 @@ export default function AgentPaymentInDetails() {
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount, cand_Name: payment.cand_Name,newStatus })
+          body: JSON.stringify({ paymentId, supplierName: selectedSupplier, payment_Via: payment.payment_Via, payment_In: payment.payment_In, cash_Out: payment.cash_Out, curr_Amount: payment.curr_Amount,newStatus })
         })
 
         const json = await response.json()
@@ -486,7 +487,9 @@ export default function AgentPaymentInDetails() {
           candPayment.payments.some((payment) =>
             payment.cand_Name.trim().toLowerCase() === person.name.trim().toLowerCase()
           )
-        );
+        
+        )
+        
 
         return (
           isNotInCandPayments &&
@@ -2603,7 +2606,7 @@ const printPerson = (person) => {
                         
                         <TableCell className='border data_td text-center bg-warning text-white'>
                         Total Visa Price PKR= 
-                          {filteredPersons.reduce((total, filteredData) => {
+                          {filteredClosingPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.visa_Price_In_PKR);
                               return isNaN(paymentIn) ? sum : sum + paymentIn;
@@ -2613,7 +2616,7 @@ const printPerson = (person) => {
  
                         <TableCell className='border data_td text-center bg-success text-white'>
                         Total In PKR= 
-                          {filteredPersons.reduce((total, filteredData) => {
+                          {filteredClosingPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.total_In);
                               return isNaN(paymentIn) ? sum : sum + paymentIn;
@@ -2623,7 +2626,7 @@ const printPerson = (person) => {
 
                         <TableCell className='border data_td text-center bg-info text-white'>
                         Total Remaining= 
-                          {filteredPersons.reduce((total, filteredData) => {
+                          {filteredClosingPersons.reduce((total, filteredData) => {
                             return total + filteredData.persons.slice(0,rowsValue1 ? rowsValue1 : undefined).reduce((sum, paymentItem) => {
                               const paymentIn = parseFloat(paymentItem.remaining_Price);
                               return isNaN(paymentIn) ? sum : sum + paymentIn;

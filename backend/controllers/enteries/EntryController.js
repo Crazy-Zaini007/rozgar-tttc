@@ -3554,7 +3554,6 @@ const addMultipleEnteries = async (req, res) => {
       let unSavedEntries=[]
       for (const entryData of entries) {
         let confirmStatus = true;
-
         let final_Status = entryData.final_Status
         let name=entryData.name
         entryData.flight_Date =
@@ -3738,9 +3737,7 @@ const addMultipleEnteries = async (req, res) => {
     if (!confirmStatus) {
         unSavedEntries.push(entryData);
     }
-
-
-
+    
       if (!existingPPNO&&confirmStatus) {
           if (entryData.final_Status&&(entryData.final_Status.trim().toLowerCase() === 'offer letter' || entryData.final_Status.trim().toLowerCase() === 'offer latter')) {
             const newReminder = new Reminders({
