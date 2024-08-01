@@ -391,10 +391,10 @@ export default function TicketCandSinglePayIn() {
           {single === 1 && 
                 <>
                 <label className="btn m-1 btn-sm upload_btn">
-                  Upload New List
+                  Upload List
                   <input type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 </label>
-              <button className='btn m-1  btn-sm upload_btn text-sm' onClick={() => downloadIndividualPayments()} disabled={multiplePayment.length<1}>Download</button>
+             
                 </>
                 }
           <button className='btn btn-sm  m-1  entry_btn bg-danger border-0 text-white' onClick={() => setSingle(2)} style={single === 2 ? { backgroundColor: 'var(--accent-lighter-blue)', color: 'var(--white)', transition: 'background-color 0.3s', transform: '0.3s' } : {}}>Double Entry</button>
