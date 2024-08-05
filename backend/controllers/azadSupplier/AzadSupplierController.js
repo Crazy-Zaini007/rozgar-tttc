@@ -1025,7 +1025,9 @@ const updateSupPaymentInPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
-        newStatus
+        newStatus,
+        azad_Visa_Price_In_PKR,
+        azad_Visa_Price_In_Curr,
       } = req.body;
 
       let entryMode;
@@ -1035,6 +1037,11 @@ const updateSupPaymentInPerson = async (req, res) => {
         "payment_In_Schema._id": newStatus,
 
       });
+
+      const new_Visa_Price_PKR=Number(azad_Visa_Price_In_PKR)
+      const new_Visa_Price_Cur=Number(azad_Visa_Price_In_Curr)
+      let visa_Price_PKR=0
+      let visa_Price_Curr=0
 
       if (existingSupplier) {
         const personIn = existingSupplier.payment_In_Schema.persons.find(
@@ -1111,6 +1118,9 @@ const updateSupPaymentInPerson = async (req, res) => {
             });
             await newReminder.save();
           }
+          visa_Price_PKR=new_Visa_Price_PKR-personIn.azad_Visa_Price_In_PKR
+          visa_Price_Curr=new_Visa_Price_Cur-personIn.azad_Visa_Price_In_Curr
+
           entryMode = personIn.entry_Mode;
           personIn.company = company;
           personIn.country = country;
@@ -1118,7 +1128,21 @@ const updateSupPaymentInPerson = async (req, res) => {
           personIn.final_Status = final_Status;
           personIn.trade = trade;
           personIn.status = status;
+          
+          personIn.azad_Visa_Price_In_PKR = new_Visa_Price_PKR;
+          personIn.azad_Visa_Price_In_Curr = visa_Price_Curr;
+          personIn.remaining_Price += visa_Price_PKR;
+          personIn.remaining_Curr += visa_Price_Curr;
+
           personIn.flight_Date = flight_Date ? flight_Date : "Not Fly";
+
+           // updating overall visa prices
+           existingSupplier.payment_In_Schema.total_Azad_Visa_Price_In_PKR+=visa_Price_PKR
+           existingSupplier.payment_In_Schema.remaining_Balance-=visa_Price_PKR
+
+           existingSupplier.payment_In_Schema.total_Azad_Visa_Price_In_Curr+=visa_Price_Curr
+           existingSupplier.payment_In_Schema.remaining_Curr-=visa_Price_Curr
+
           await existingSupplier.save();
         } else {
           res
@@ -1632,6 +1656,8 @@ const updateSupPaymentInPerson = async (req, res) => {
         entry.entry_Mode = entry_Mode;
         entry.final_Status = final_Status;
         entry.trade = trade;
+        entry.azad_Visa_Sales_PKR=new_Visa_Price_PKR
+        entry.azad_Visa_Sales_Rate_Oth_Cur=new_Visa_Price_Cur
         entry.flight_Date = flight_Date ? flight_Date : "Not Fly";
         await entry.save();
       }
@@ -2733,7 +2759,9 @@ const updateSupPaymentOutPerson = async (req, res) => {
         final_Status,
         trade,
         flight_Date,
-        newStatus
+        newStatus,
+        azad_Visa_Price_Out_PKR,
+        azad_Visa_Price_Out_Curr
       } = req.body;
 
       let entryMode;
@@ -2743,6 +2771,11 @@ const updateSupPaymentOutPerson = async (req, res) => {
         "payment_Out_Schema._id": newStatus,
 
       });
+
+      const new_Visa_Price_PKR=Number(azad_Visa_Price_Out_PKR)
+      const new_Visa_Price_Cur=Number(azad_Visa_Price_Out_Curr)
+      let visa_Price_PKR=0
+      let visa_Price_Curr=0
 
       if (existingSupplier) {
         const personIn = existingSupplier.payment_Out_Schema.persons.find(
@@ -2819,6 +2852,8 @@ const updateSupPaymentOutPerson = async (req, res) => {
             });
             await newReminder.save();
           }
+          visa_Price_PKR=new_Visa_Price_PKR-personIn.azad_Visa_Price_Out_PKR
+          visa_Price_Curr=new_Visa_Price_Cur-personIn.azad_Visa_Price_Out_Curr
 
           entryMode = personIn.entry_Mode;
           personIn.company = company;
@@ -2827,7 +2862,21 @@ const updateSupPaymentOutPerson = async (req, res) => {
           personIn.final_Status = final_Status;
           personIn.trade = trade;
           personIn.status = status;
+
+          personIn.azad_Visa_Price_Out_PKR = new_Visa_Price_PKR;
+          personIn.azad_Visa_Price_Out_Curr = visa_Price_Curr;
+          personIn.remaining_Price += visa_Price_PKR;
+          personIn.remaining_Curr += visa_Price_Curr;
+
           personIn.flight_Date = flight_Date ? flight_Date : "Not Fly";
+
+            // updating overall visa prices
+            existingSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_PKR+=visa_Price_PKR
+            existingSupplier.payment_Out_Schema.remaining_Balance-=visa_Price_PKR
+  
+            existingSupplier.payment_Out_Schema.total_Azad_Visa_Price_Out_Curr+=visa_Price_Curr
+            existingSupplier.payment_Out_Schema.remaining_Curr-=visa_Price_Curr
+            
           await existingSupplier.save();
         } else {
           res
@@ -3342,6 +3391,8 @@ const updateSupPaymentOutPerson = async (req, res) => {
         entry.entry_Mode = entry_Mode;
         entry.final_Status = final_Status;
         entry.trade = trade;
+        entry.azad_Visa_Purchase_PKR=new_Visa_Price_PKR
+        entry.azad_Visa_Purchase_Rate_Oth_Cur=new_Visa_Price_Cur
         entry.flight_Date = flight_Date ? flight_Date : "Not Fly";
         await entry.save();
       }

@@ -264,7 +264,7 @@ console.log('agent_Payments_In',agent_Payments_In)
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status,newStatus })
+        body: JSON.stringify({ supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status,newStatus,visa_Price_In_PKR:editedEntry2.visa_Price_In_PKR,visa_Price_In_Curr:editedEntry2.visa_Price_In_Curr })
       })
 
       const json = await response.json()
@@ -1659,7 +1659,7 @@ const printPerson = (person) => {
                                     <i className="fa-solid fa-arrow-up me-2 text-danger text-bold"></i>{entry.total_Cash_Out}
                                   </TableCell>
                                   <TableCell className='border data_td text-center' >
-                                    {entry.remaining_Balance}
+                                    {entry.total_Visa_Price_In_PKR-entry.total_Payment_In+entry.total_Cash_Out+entry.opening}
                                   </TableCell>
                                   {show1 && <>
                                     <TableCell className='border data_td text-center' >
@@ -2290,10 +2290,10 @@ const printPerson = (person) => {
                                 <input type='date' value={editedEntry2.flight_Date} onChange={(e) => handlePersonInputChange(e, 'flight_Date')} />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_In_PKR} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR}  onChange={(e) => handlePersonInputChange(e, 'visa_Price_In_PKR')} />
                               </TableCell>
                               {show && <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_In_Curr}  onChange={(e) => handlePersonInputChange(e, 'visa_Price_In_Curr')} />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
@@ -2528,7 +2528,7 @@ const printPerson = (person) => {
                             }
 
                               <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_In_PKR} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_In_PKR}  onChange={(e) => handlePersonInputChange(e, 'visa_Price_In_PKR')}  />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.total_In} readonly />
@@ -2540,7 +2540,7 @@ const printPerson = (person) => {
                                 <input type='number' value={editedEntry2.visa_Price_In_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
                               </TableCell>
                               {show && <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_In_Curr} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_In_Curr}  onChange={(e) => handlePersonInputChange(e, 'visa_Price_In_Curr')} />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>

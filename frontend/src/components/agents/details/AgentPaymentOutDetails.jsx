@@ -268,7 +268,7 @@ export default function AgentPaymentOutDetails() {
           'Content-Type': 'application/json',
           "Authorization": `Bearer ${user.token}`,
         },
-        body: JSON.stringify({ newStatus,supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status })
+        body: JSON.stringify({ newStatus, supplierName: selectedSupplier, personId: editedEntry2._id, name: editedEntry2.name, pp_No: editedEntry2.pp_No, contact: editedEntry2.contact, company: editedEntry2.company, country: editedEntry2.country, entry_Mode: editedEntry2.entry_Mode, final_Status: editedEntry2.final_Status, trade: editedEntry2.trade, flight_Date: editedEntry2.flight_Date,status: editedEntry2.status,visa_Price_Out_PKR:editedEntry2.visa_Price_Out_PKR,visa_Price_Out_Curr:editedEntry2.visa_Price_Out_Curr })
       })
 
       const json = await response.json()
@@ -2285,10 +2285,10 @@ export default function AgentPaymentOutDetails() {
                                 <input type='date' value={editedEntry2.flight_Date} onChange={(e) => handlePersonInputChange(e, 'flight_Date')} />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_Out_PKR} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_Out_PKR} onChange={(e) => handlePersonInputChange(e, 'visa_Price_Out_PKR')} />
                               </TableCell>
                               {show && <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_Out_Curr} onChange={(e) => handlePersonInputChange(e, 'visa_Price_Out_Curr')}  />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
@@ -2528,7 +2528,7 @@ export default function AgentPaymentOutDetails() {
                             }
 
                               <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_Out_PKR} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_Out_PKR} onChange={(e) => handlePersonInputChange(e, 'visa_Price_Out_PKR')} />
                               </TableCell>
                               <TableCell className='border data_td p-1 '>
                                 <input type='number' value={editedEntry2.total_In} readonly />
@@ -2540,7 +2540,7 @@ export default function AgentPaymentOutDetails() {
                                 <input type='number' value={editedEntry2.visa_Price_Out_PKR - editedEntry2.total_In + editedEntry2.cash_Out} readonly />
                               </TableCell>
                               {show && <TableCell className='border data_td p-1 '>
-                                <input type='number' value={editedEntry2.visa_Price_Out_Curr} readonly />
+                                <input type='number' value={editedEntry2.visa_Price_Out_Curr} onChange={(e) => handlePersonInputChange(e, 'visa_Price_Out_Curr')} />
                               </TableCell>}
                               <TableCell className='border data_td p-1 '>
                                 <select name="" id="" value={editedEntry2.status} onChange={(e) => handlePersonInputChange(e, 'status')}>
