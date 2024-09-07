@@ -30,7 +30,6 @@ export default function AgentPaymentInDetails() {
   const [show2, setShow2] = useState(false)
 
   const[newStatus,setNewStatus]=useState('')
-  console.log('newStatus',newStatus)
   const apiUrl = process.env.REACT_APP_API_URL;
   const [, setNewMessage] = useState('')
 
@@ -85,7 +84,6 @@ export default function AgentPaymentInDetails() {
   }, [])
 
   const agent_Payments_In = useSelector((state) => state.agents.agent_Payments_In);
-console.log('agent_Payments_In',agent_Payments_In)
   const currencies = useSelector((state) => state.setting.currencies);
   const paymentVia = useSelector((state) => state.setting.paymentVia);
   const paymentType = useSelector((state) => state.setting.paymentType);
@@ -115,7 +113,6 @@ console.log('agent_Payments_In',agent_Payments_In)
 
   const [option, setOption] = useState(false)
   const [selectedSupplier, setSelectedSupplier] = useState('');
-  console.log('selectedSupplier',selectedSupplier)
   const handleRowClick = (supplierName) => {
     setSelectedSupplier(supplierName);
     setOption(!option)
@@ -160,7 +157,7 @@ console.log('agent_Payments_In',agent_Payments_In)
         reader.readAsDataURL(file);
       }
     }
-  };
+  }
 
   const deletePaymentIn = async (payment) => {
     if (window.confirm('Are you sure you want to delete this record?')) {
@@ -481,41 +478,38 @@ console.log('agent_Payments_In',agent_Payments_In)
   .map((filteredData) => ({
     ...filteredData,
     persons: filteredData.persons
-      .filter((person) => {
-        // Check if person.name does not match any cand_Name in candPayments.payments
-        const isNotInCandPayments = !filteredData.candPayments.some((candPayment) =>
-          candPayment.payments.some((payment) =>
-            payment.cand_Name.trim().toLowerCase() === person.name.trim().toLowerCase()
-          )
-        
+    .filter((persons) => {
+      // Check if person.name does not match any cand_Name in candPayments.payments
+      const isNotInCandPayments = !filteredData.candPayments.some((candPayment) =>
+        candPayment.payments.some((payment) =>
+          payment.cand_Name.trim().toLowerCase() === persons.name.trim().toLowerCase()
         )
-        
+      )
 
-        return (
-          isNotInCandPayments &&
-          person.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-          person.name?.trim().toLowerCase().startsWith(name.trim().toLowerCase()) &&
-          person.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
-          person.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-          person.company?.toLowerCase().includes(company.toLowerCase()) &&
-          person.country?.toLowerCase().includes(country.toLowerCase()) &&
-          person.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-          person.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-          person.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-          person.status?.toLowerCase().includes(status1.toLowerCase()) &&
-          (
-            person.name?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.pp_No?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.entry_Mode?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.company?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.country?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.trade?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.final_Status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.flight_Date?.trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
-            person.status?.trim().toLowerCase().startsWith(search2.trim().toLowerCase())
-          )
-        );
-      })
+      return (
+        isNotInCandPayments &&
+        (persons.entry_Date || '').toLowerCase().includes(date3.toLowerCase()) &&
+        (persons.name || '').trim().toLowerCase().includes(name.trim().toLowerCase()) &&
+        (persons.pp_No|| '').toLowerCase().includes(pp_No.toLowerCase()) &&
+        (persons.entry_Mode|| '').toLowerCase().includes(entry_Mode.toLowerCase()) &&
+        (persons.company|| '').toLowerCase().includes(company.toLowerCase()) &&
+        (persons.country|| '').toLowerCase().includes(country.toLowerCase()) &&
+        (persons.trade|| '').toLowerCase().includes(trade.toLowerCase()) &&
+        (persons.final_Status|| '')?.toLowerCase().includes(final_Status.toLowerCase()) &&
+        (persons.flight_Date|| '')?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+        (persons.status|| '')?.toLowerCase().includes(status1.toLowerCase()) &&
+        ((persons.name|| '').trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+        (persons.pp_No|| '').trim().toLowerCase().startsWith(search2.trim().toLowerCase()) ||
+        (persons.entry_Mode|| '').trim().toLowerCase().includes(search2.trim().toLowerCase()) ||
+        (persons.company|| '').trim().toLowerCase().includes(search2.trim().toLowerCase()) ||
+        (persons.country|| '').trim().toLowerCase().includes(search2.trim().toLowerCase()) ||
+        (persons.trade|| '').trim().toLowerCase().includes(search2.trim().toLowerCase()) ||
+        (persons.final_Status|| '').trim().toLowerCase().includes(search2.trim().toLowerCase()) ||
+        (persons.flight_Date|| '').trim().toLowerCase().includes(search2.trim().toLowerCase()) ||
+        (persons.status|| '').trim().toLowerCase().includes(search2.trim().toLowerCase())
+        )
+      );
+    })
   }))
 
 
@@ -705,7 +699,7 @@ console.log('agent_Payments_In',agent_Payments_In)
   const changeStatus = async () => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
-       
+      
       try {
         const response = await fetch(`${apiUrl}/auth/agents/update/payment_in/status`, {
           method: 'PATCH',

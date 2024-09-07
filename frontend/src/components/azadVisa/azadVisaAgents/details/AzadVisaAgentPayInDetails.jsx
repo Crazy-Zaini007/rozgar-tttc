@@ -413,19 +413,28 @@ export default function AzadVisaAgentPayInDetails() {
         .map((filteredData) => ({
             ...filteredData,
             persons: filteredData.persons
-                .filter((persons) =>
-                    persons.entry_Date?.toLowerCase().includes(date3.toLowerCase()) &&
-                    persons.name?.toLowerCase().includes(name.toLowerCase()) &&
-                    persons.pp_No?.toLowerCase().includes(pp_No.toLowerCase()) &&
-                    persons.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-                    persons.company?.toLowerCase().includes(company.toLowerCase()) &&
-                    persons.country?.toLowerCase().includes(country.toLowerCase()) &&
-                    persons.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-                    persons.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-                    persons.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase())&&
-                    persons.status?.toLowerCase().includes(status1.toLowerCase())
-
-                ),
+            .filter((persons) => {
+              // Check if person.name does not match any cand_Name in candPayments.payments
+              const isNotInCandPayments = !filteredData.candPayments.some((candPayment) =>
+                candPayment.payments.some((payment) =>
+                  payment.cand_Name.trim().toLowerCase() === persons.name.trim().toLowerCase()
+                )
+              )
+        
+              return (
+                isNotInCandPayments &&
+                (persons.entry_Date || '').toLowerCase().includes(date3.toLowerCase()) &&
+                (persons.name || '').trim().toLowerCase().includes(name.trim().toLowerCase()) &&
+                (persons.pp_No|| '').toLowerCase().includes(pp_No.toLowerCase()) &&
+                (persons.entry_Mode|| '').toLowerCase().includes(entry_Mode.toLowerCase()) &&
+                (persons.company|| '').toLowerCase().includes(company.toLowerCase()) &&
+                (persons.country|| '').toLowerCase().includes(country.toLowerCase()) &&
+                (persons.trade|| '').toLowerCase().includes(trade.toLowerCase()) &&
+                (persons.final_Status|| '')?.toLowerCase().includes(final_Status.toLowerCase()) &&
+                (persons.flight_Date|| '')?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+                (persons.status|| '')?.toLowerCase().includes(status1.toLowerCase())
+              );
+            })
         }))
 
    

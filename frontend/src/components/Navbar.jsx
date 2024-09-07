@@ -9,7 +9,7 @@ export default function Navbar() {
     const toggleSidebar = () => {
       myDispatch(toggleCollapse())
   
-    };
+    }
 const collapsed = useSelector((state) => state.collapsed.collapsed);
 
   return (

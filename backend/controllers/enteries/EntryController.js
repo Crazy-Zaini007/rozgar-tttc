@@ -3924,10 +3924,13 @@ const addMultipleEnteries = async (req, res) => {
             entryData.reference_In === "Suppliers" ||
             entryData.reference_In === "Supplier"
           ) {
+            console.log('entryData.reference_In',entryData.reference_In)
+            console.log('entryData.reference_In_Name',entryData.reference_In_Name)
             let existingPaymentOutSupplier;
             for(const supplier of suppliers){
               if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.supplierName.toLowerCase()===entryData.reference_In_Name.toLowerCase()&& supplier.payment_Out_Schema.status.toLowerCase()==='open'){
                 existingPaymentOutSupplier=supplier
+               
                 break
               }
             }
@@ -4014,11 +4017,7 @@ const addMultipleEnteries = async (req, res) => {
                   flight_Date: entryData.flight_Date,
                   entry_Date: new Date().toISOString().split("T")[0],
                 });
-
-
-                const newStatus = existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase() === 'closed' ? "Open" : existingPaymentOutSupplier.payment_Out_Schema.status;
-                const isStatusClosed = existingPaymentOutSupplier.payment_Out_Schema.status.toLowerCase() === 'closed';
-
+                
                 await existingPaymentOutSupplier.updateOne({
                   $inc: {
                     "payment_Out_Schema.total_Visa_Price_Out_PKR":

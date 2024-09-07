@@ -329,14 +329,14 @@ export default function TicketCandPayOutDetails() {
     if (payment?.supplierName && payment.supplierName.trim().toLowerCase().startsWith(name.trim().toLowerCase())) {
       return (
         payment.createdAt?.toLowerCase().includes(date1.toLowerCase()) &&
-        payment.pp_No?.toLowerCase().includes(searchPP_No.toLowerCase()) &&
-        payment.entry_Mode?.toLowerCase().includes(entry_Mode.toLowerCase()) &&
-        payment.company?.toLowerCase().includes(company.toLowerCase()) &&
-        payment.country?.toLowerCase().includes(country.toLowerCase()) &&
-        payment.trade?.toLowerCase().includes(trade.toLowerCase()) &&
-        payment.final_Status?.toLowerCase().includes(final_Status.toLowerCase()) &&
-        payment.flight_Date?.toLowerCase().includes(flight_Date.toLowerCase()) &&
-        payment.status?.toLowerCase().includes(status.toLowerCase())
+        (payment.pp_No|| '').toLowerCase().includes(searchPP_No.toLowerCase()) &&
+        (payment.entry_Mode|| '').toLowerCase().includes(entry_Mode.toLowerCase()) &&
+        (payment.company|| '').toLowerCase().includes(company.toLowerCase()) &&
+        (payment.country|| '').toLowerCase().includes(country.toLowerCase()) &&
+        (payment.trade|| '').toLowerCase().includes(trade.toLowerCase()) &&
+        (payment.final_Status|| '')?.toLowerCase().includes(final_Status.toLowerCase()) &&
+        (payment.flight_Date|| '')?.toLowerCase().includes(flight_Date.toLowerCase()) &&
+        (payment.status|| '')?.toLowerCase().includes(status.toLowerCase())
       );
     }
     // If supplierName doesn't exist or doesn't match, exclude the payment

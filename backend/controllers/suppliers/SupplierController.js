@@ -1234,7 +1234,7 @@ const updatePaymentInPerson=async(req,res)=>{
         const personIn = existingSupplier.payment_In_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
           
-        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+        if(final_Status?.toLowerCase()==='offer letter' || final_Status?.toLowerCase()==='offer_letter'){
           const newReminder=new Reminders({
             type:"Offer Letter",
             content:`${name}'s Final Status is updated to Offer Letter.`,
@@ -1242,7 +1242,7 @@ const updatePaymentInPerson=async(req,res)=>{
           })
           await newReminder.save()
         }
-        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+        if(final_Status?.toLowerCase()==='e number' || final_Status?.toLowerCase()==='e_number'){
           const newReminder=new Reminders({
             type:"E Number",
             content:`${name}'s Final Status is updated to E Number.`,
@@ -1252,7 +1252,7 @@ const updatePaymentInPerson=async(req,res)=>{
           await newReminder.save()
         }
 
-        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+        if(final_Status?.toLowerCase()==='qvc' || final_Status?.toLowerCase()==='q_v_c'){
           const newReminder=new Reminders({
             type:"QVC",
             content:`${name}'s Final Status is updated to QVC.`,
@@ -1261,7 +1261,7 @@ const updatePaymentInPerson=async(req,res)=>{
           })
           await newReminder.save()
         }
-        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+        if(final_Status?.toLowerCase()==='visa issued' || final_Status?.toLowerCase()==='visa_issued' || final_Status?.toLowerCase()==='vissa issued'  || final_Status?.toLowerCase()==='vissa_issued'){
           const newReminder=new Reminders({
             type:"Visa Issued",
             content:`${name}'s Final Status is updated to Visa Issued.`,
@@ -1270,7 +1270,7 @@ const updatePaymentInPerson=async(req,res)=>{
           })
           await newReminder.save()
         }
-        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+        if(final_Status?.toLowerCase()==='ptn' || final_Status?.toLowerCase()==='p_t_n'){
           const newReminder=new Reminders({
             type:"PTN",
             content:`${name}'s Final Status is updated to PTN.`,
@@ -1279,7 +1279,7 @@ const updatePaymentInPerson=async(req,res)=>{
           await newReminder.save()
         }
 
-        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+        if(final_Status?.toLowerCase()==='ticket' || final_Status?.toLowerCase()==='tiket'){
           const newReminder=new Reminders({
             type:"Ticket",
             content:`${name}'s Final Status is updated to Ticket.`,
@@ -1325,7 +1325,7 @@ const updatePaymentInPerson=async(req,res)=>{
 
 if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons)
 {
-  const personOut= agent.payment_Out_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString())
+  const personOut= agent.payment_Out_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString())
        if(personOut){
         personOut.company=company
         personOut.country=country
@@ -1343,7 +1343,7 @@ if(agent.payment_Out_Schema && agent.payment_Out_Schema.persons)
 const agents=await Agents.find({})
 for(const supplier of agents){
   if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons) {
-    const personIn = supplier.payment_In_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString());
+    const personIn = supplier.payment_In_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString());
     if (personIn) {
         personIn.company = company;
         personIn.country = country;
@@ -1358,7 +1358,7 @@ for(const supplier of agents){
 
 if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons)
 {
-const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString())
+const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString())
  if(personOut){
   personOut.company=company
   personOut.country=country
@@ -1375,9 +1375,9 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
 
 
 const candidateIn=await Candidate.findOne({
-  "payment_In_Schema.supplierName": name.toString(),
-  "payment_In_Schema.entry_Mode": entryMode.toString(),
-  "payment_In_Schema.pp_No": pp_No.toString(),
+  "payment_In_Schema.supplierName": name?.toString(),
+  "payment_In_Schema.entry_Mode": entryMode?.toString(),
+  "payment_In_Schema.pp_No": pp_No?.toString(),
 })
 if(candidateIn){
   candidateIn.payment_In_Schema.company=company
@@ -1391,9 +1391,9 @@ if(candidateIn){
 }
 
 const candidateOut=await Candidate.findOne({
-  "payment_Out_Schema.supplierName": name.toString(),
-  "payment_Out_Schema.entry_Mode": entryMode.toString(),
-  "payment_Out_Schema.pp_No": pp_No.toString(),
+  "payment_Out_Schema.supplierName": name?.toString(),
+  "payment_Out_Schema.entry_Mode": entryMode?.toString(),
+  "payment_Out_Schema.pp_No": pp_No?.toString(),
 })
 if(candidateOut){
   candidateOut.payment_Out_Schema.company=company
@@ -1411,7 +1411,7 @@ if(candidateOut){
        for(const ticketSupplier of ticketSuppliers){
         
         if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
-          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1425,7 +1425,7 @@ if(candidateOut){
         }
 
         if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
-          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1444,7 +1444,7 @@ if(candidateOut){
 
        for (const ticketAgent of ticketAgents){
         if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
-          const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(AgentPersonIn){
             AgentPersonIn.company=company
             AgentPersonIn.country=country
@@ -1458,7 +1458,7 @@ if(candidateOut){
         }
        
         if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
-          const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(AgentPersonOut){
             AgentPersonOut.company=company
             AgentPersonOut.country=country
@@ -1477,7 +1477,7 @@ if(candidateOut){
        for(const visitSupplier of visitSuppliers){
  
         if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
-          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1491,7 +1491,7 @@ if(candidateOut){
         }
 
         if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
-          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1510,7 +1510,7 @@ if(candidateOut){
        const visitAgents=await VisitAgents.find({})
 for (const visitAgent of visitAgents){
   if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
-    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonIn){
       AgentPersonIn.company=company
       AgentPersonIn.country=country
@@ -1524,7 +1524,7 @@ for (const visitAgent of visitAgents){
   }
  
   if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
-    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonOut){
       AgentPersonOut.company=company
       AgentPersonOut.country=country
@@ -1541,7 +1541,7 @@ for (const visitAgent of visitAgents){
        const azadSuppliers=await AzadSupplier.find({})
        for(const azadSupplier of azadSuppliers){
         if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
-          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -1556,7 +1556,7 @@ for (const visitAgent of visitAgents){
       
  
         if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
-          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -1577,7 +1577,7 @@ for (const visitAgent of visitAgents){
        const azadAgents=await AzadAgents.find({})
 for (const azadAgent of azadAgents){
   if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
-    const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonIn){
       AgentPersonIn.company=company
       AgentPersonIn.country=country
@@ -1591,7 +1591,7 @@ for (const azadAgent of azadAgents){
   }
  
   if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
-    const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonOut){
       AgentPersonOut.company=company
       AgentPersonOut.country=country
@@ -1707,7 +1707,7 @@ if(azadCandidateOut){
    const protectors=await Protector.find({})
    for(const protector of protectors){
     if(protector.payment_Out_Schema && protector.payment_Out_Schema.persons){
-      const personOut= protector.payment_Out_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString())
+      const personOut= protector.payment_Out_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString())
       if(personOut){
        personOut.company=company
        personOut.country=country
@@ -3125,7 +3125,7 @@ const updatePaymentOutPerson=async(req,res)=>{
         const personIn = existingSupplier.payment_Out_Schema.persons.find(person => person._id.toString() === personId.toString());
         if (personIn) {
           
-        if(final_Status.toLowerCase()==='offer letter' || final_Status.toLowerCase()==='offer_letter'){
+        if(final_Status?.toLowerCase()==='offer letter' || final_Status?.toLowerCase()==='offer_letter'){
           const newReminder=new Reminders({
             type:"Offer Letter",
             content:`${name}'s Final Status is updated to Offer Letter.`,
@@ -3133,7 +3133,7 @@ const updatePaymentOutPerson=async(req,res)=>{
           })
           await newReminder.save()
         }
-        if(final_Status.toLowerCase()==='e number' || final_Status.toLowerCase()==='e_number'){
+        if(final_Status?.toLowerCase()==='e number' || final_Status?.toLowerCase()==='e_number'){
           const newReminder=new Reminders({
             type:"E Number",
             content:`${name}'s Final Status is updated to E Number.`,
@@ -3143,7 +3143,7 @@ const updatePaymentOutPerson=async(req,res)=>{
           await newReminder.save()
         }
 
-        if(final_Status.toLowerCase()==='qvc' || final_Status.toLowerCase()==='q_v_c'){
+        if(final_Status?.toLowerCase()==='qvc' || final_Status?.toLowerCase()==='q_v_c'){
           const newReminder=new Reminders({
             type:"QVC",
             content:`${name}'s Final Status is updated to QVC.`,
@@ -3152,7 +3152,7 @@ const updatePaymentOutPerson=async(req,res)=>{
           })
           await newReminder.save()
         }
-        if(final_Status.toLowerCase()==='visa issued' || final_Status.toLowerCase()==='visa_issued' || final_Status.toLowerCase()==='vissa issued'  || final_Status.toLowerCase()==='vissa_issued'){
+        if(final_Status?.toLowerCase()==='visa issued' || final_Status?.toLowerCase()==='visa_issued' || final_Status?.toLowerCase()==='vissa issued'  || final_Status?.toLowerCase()==='vissa_issued'){
           const newReminder=new Reminders({
             type:"Visa Issued",
             content:`${name}'s Final Status is updated to Visa Issued.`,
@@ -3161,7 +3161,7 @@ const updatePaymentOutPerson=async(req,res)=>{
           })
           await newReminder.save()
         }
-        if(final_Status.toLowerCase()==='ptn' || final_Status.toLowerCase()==='p_t_n'){
+        if(final_Status?.toLowerCase()==='ptn' || final_Status?.toLowerCase()==='p_t_n'){
           const newReminder=new Reminders({
             type:"PTN",
             content:`${name}'s Final Status is updated to PTN.`,
@@ -3170,7 +3170,7 @@ const updatePaymentOutPerson=async(req,res)=>{
           await newReminder.save()
         }
 
-        if(final_Status.toLowerCase()==='ticket' || final_Status.toLowerCase()==='tiket'){
+        if(final_Status?.toLowerCase()==='ticket' || final_Status?.toLowerCase()==='tiket'){
           const newReminder=new Reminders({
             type:"Ticket",
             content:`${name}'s Final Status is updated to Ticket.`,
@@ -3213,7 +3213,7 @@ const updatePaymentOutPerson=async(req,res)=>{
 
 if(agent.payment_In_Schema && agent.payment_In_Schema.persons)
 {
-  const personOut= agent.payment_In_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString())
+  const personOut= agent.payment_In_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString())
        if(personOut){
         personOut.company=company
         personOut.country=country
@@ -3233,7 +3233,7 @@ if(agent.payment_In_Schema && agent.payment_In_Schema.persons)
 const suppliers=await Agents.find({})
 for(const supplier of suppliers){
   if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons) {
-    const personIn = supplier.payment_In_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString());
+    const personIn = supplier.payment_In_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString());
     if (personIn) {
         personIn.company = company;
         personIn.country = country;
@@ -3248,7 +3248,7 @@ for(const supplier of suppliers){
 
 if(supplier.payment_Out_Schema && supplier.payment_Out_Schema.persons)
 {
-const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString())
+const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString())
  if(personOut){
   personOut.company=company
   personOut.country=country
@@ -3265,9 +3265,9 @@ const personOut= supplier.payment_Out_Schema.persons.find(person=> person.name =
 
 
 const candidateIn=await Candidate.findOne({
-  "payment_In_Schema.supplierName": name.toString(),
-  "payment_In_Schema.entry_Mode": entryMode.toString(),
-  "payment_In_Schema.pp_No": pp_No.toString(),
+  "payment_In_Schema.supplierName": name?.toString(),
+  "payment_In_Schema.entry_Mode": entryMode?.toString(),
+  "payment_In_Schema.pp_No": pp_No?.toString(),
 })
 if(candidateIn){
   candidateIn.payment_In_Schema.company=company
@@ -3281,9 +3281,9 @@ if(candidateIn){
 }
 
 const candidateOut=await Candidate.findOne({
-  "payment_Out_Schema.supplierName": name.toString(),
-  "payment_Out_Schema.entry_Mode": entryMode.toString(),
-  "payment_Out_Schema.pp_No": pp_No.toString(),
+  "payment_Out_Schema.supplierName": name?.toString(),
+  "payment_Out_Schema.entry_Mode": entryMode?.toString(),
+  "payment_Out_Schema.pp_No": pp_No?.toString(),
 })
 if(candidateOut){
   candidateOut.payment_Out_Schema.company=company
@@ -3301,7 +3301,7 @@ if(candidateOut){
        for(const ticketSupplier of ticketSuppliers){
         
         if(ticketSupplier.payment_In_Schema && ticketSupplier.payment_In_Schema.persons){
-          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonIn= ticketSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -3315,7 +3315,7 @@ if(candidateOut){
         }
 
         if(ticketSupplier.payment_Out_Schema && ticketSupplier.payment_Out_Schema.persons){
-          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonOut= ticketSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -3334,7 +3334,7 @@ if(candidateOut){
 
 for (const ticketAgent of ticketAgents){
   if(ticketAgent.payment_In_Schema && ticketAgent.payment_In_Schema.persons){
-    const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonIn= ticketAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonIn){
       AgentPersonIn.company=company
       AgentPersonIn.country=country
@@ -3348,7 +3348,7 @@ for (const ticketAgent of ticketAgents){
   }
  
   if(ticketAgent.payment_Out_Schema && ticketAgent.payment_Out_Schema.persons){
-    const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonOut= ticketAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonOut){
       AgentPersonOut.company=company
       AgentPersonOut.country=country
@@ -3366,7 +3366,7 @@ for (const ticketAgent of ticketAgents){
        for(const visitSupplier of visitSuppliers){
  
         if(visitSupplier.payment_In_Schema && visitSupplier.payment_In_Schema.persons){
-          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonIn= visitSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -3380,7 +3380,7 @@ for (const ticketAgent of ticketAgents){
         }
 
         if(visitSupplier.payment_Out_Schema && visitSupplier.payment_Out_Schema.persons){
-          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonOut= visitSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -3401,7 +3401,7 @@ for (const ticketAgent of ticketAgents){
 
 for (const visitAgent of visitAgents){
   if(visitAgent.payment_In_Schema && visitAgent.payment_In_Schema.persons){
-    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonIn= visitAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonIn){
       AgentPersonIn.company=company
       AgentPersonIn.country=country
@@ -3415,7 +3415,7 @@ for (const visitAgent of visitAgents){
   }
  
   if(visitAgent.payment_Out_Schema && visitAgent.payment_Out_Schema.persons){
-    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+    const AgentPersonOut= visitAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
     if(AgentPersonOut){
       AgentPersonOut.company=company
       AgentPersonOut.country=country
@@ -3433,7 +3433,7 @@ for (const visitAgent of visitAgents){
        const azadSuppliers=await AzadSupplier.find({})
        for(const azadSupplier of azadSuppliers){
         if(azadSupplier.payment_In_Schema && azadSupplier.payment_In_Schema.persons){
-          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonIn= azadSupplier.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonIn){
             SupPersonIn.company=company
             SupPersonIn.country=country
@@ -3448,7 +3448,7 @@ for (const visitAgent of visitAgents){
       
  
         if(azadSupplier.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
-          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const SupPersonOut= azadSupplier.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(SupPersonOut){
             SupPersonOut.company=company
             SupPersonOut.country=country
@@ -3468,7 +3468,7 @@ for (const visitAgent of visitAgents){
        const azadAgents=await AzadAgents.find({})
        for (const azadAgent of azadAgents){
         if(azadAgent.payment_In_Schema && azadAgent.payment_In_Schema.persons){
-          const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+          const AgentPersonIn= azadAgent.payment_In_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(AgentPersonIn){
             AgentPersonIn.company=company
             AgentPersonIn.country=country
@@ -3481,8 +3481,8 @@ for (const visitAgent of visitAgents){
           }
         }
        
-        if(azadAgent.payment_Out_Schema && azadSupplier.payment_Out_Schema.persons){
-          const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name.toString() && person.pp_No.toString()===pp_No.toString() && person.entry_Mode.toString()===entryMode.toString())
+        if(azadAgent.payment_Out_Schema && azadAgent.payment_Out_Schema.persons){
+          const AgentPersonOut= azadAgent.payment_Out_Schema.persons.find(person=> person.name.toString ===name?.toString() && person.pp_No?.toString()===pp_No?.toString() && person.entry_Mode.toString()===entryMode?.toString())
           if(AgentPersonOut){
             AgentPersonOut.company=company
             AgentPersonOut.country=country
@@ -3595,7 +3595,7 @@ if(azadCandidateOut){
    const protectors=await Protector.find({})
    for(const protector of protectors){
     if(protector.payment_Out_Schema && protector.payment_Out_Schema.persons){
-      const personOut= protector.payment_Out_Schema.persons.find(person=> person.name ===name.toString() && person.pp_No===pp_No.toString() && person.entry_Mode===entryMode.toString())
+      const personOut= protector.payment_Out_Schema.persons.find(person=> person.name ===name?.toString() && person.pp_No===pp_No?.toString() && person.entry_Mode===entryMode?.toString())
       if(personOut){
        personOut.company=company
        personOut.country=country
@@ -4355,7 +4355,7 @@ const deleteSingleCandVisePaymentIn=async(req,res)=>{
         });
       }
       if(candPayment){
-        const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
+        const personToUpdate=allPersons.find(p=>p.name?.toString()===candPayment.cand_Name.toString())
         if(personToUpdate){
           personToUpdate.total_In-=candPayment.new_Payment
           personToUpdate.cash_Out-=candPayment.cash_Out
@@ -4558,7 +4558,7 @@ candPayment.new_Curr_Payment+=-updateCurr_Amount
 candPayment.curr_Rate=updatedPaymentIn/updateCurr_Amount
 
 // updating Person total_In and remainig pkr and curr as well
-  const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
+  const personToUpdate=allPersons.find(p=>p.name?.toString()===candPayment.cand_Name.toString())
   if(personToUpdate){
     personToUpdate.total_In+=-updatedPaymentIn
     personToUpdate.cash_Out+=-updatedCashOut
@@ -5177,7 +5177,7 @@ const deleteSingleCandVisePaymentOut=async(req,res)=>{
         });
       }
       if(candPayment){
-        const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
+        const personToUpdate=allPersons.find(p=>p.name?.toString()===candPayment.cand_Name.toString())
         if(personToUpdate){
           personToUpdate.total_In-=candPayment.new_Payment
           personToUpdate.cash_Out-=candPayment.cash_Out
@@ -5381,7 +5381,7 @@ candPayment.new_Curr_Payment+=-updateCurr_Amount
 candPayment.curr_Rate=updatedPaymentOut/updateCurr_Amount
 
 // updating Person total_In and remainig pkr and curr as well
-  const personToUpdate=allPersons.find(p=>p.name.toString()===candPayment.cand_Name.toString())
+  const personToUpdate=allPersons.find(p=>p.name?.toString()===candPayment.cand_Name.toString())
   if(personToUpdate){
     personToUpdate.total_In+=-updatedPaymentOut
     personToUpdate.cash_Out+=-updatedCashOut
