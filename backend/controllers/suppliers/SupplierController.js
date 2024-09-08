@@ -3179,18 +3179,22 @@ const updatePaymentOutPerson=async(req,res)=>{
           await newReminder.save()
         }
         
+        entryMode=personIn.entry_Mode
+
         visa_Price_PKR=new_Visa_Price_PKR-personIn.visa_Price_Out_PKR
         visa_Price_Curr=new_Visa_Price_Cur-personIn.visa_Price_Out_Curr
 
-          entryMode=personIn.entry_Mode
-            personIn.company = company;
-            personIn.country = country;
-            personIn.entry_Mode = entry_Mode;
-            personIn.final_Status = final_Status;
-            personIn.trade = trade;
-            personIn.status = status;
-            personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
-            
+          personIn.company = company;
+          personIn.country = country;
+          personIn.entry_Mode = entry_Mode;
+          personIn.final_Status = final_Status;
+          personIn.trade = trade;
+          personIn.status = status;
+          personIn.visa_Price_Out_PKR = new_Visa_Price_PKR;
+          personIn.visa_Price_Out_Curr = visa_Price_Curr;
+          personIn.remaining_Price += visa_Price_PKR;
+          personIn.remaining_Curr += visa_Price_Curr;
+          personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
              // updating overall visa prices
              existingSupplier.payment_Out_Schema.total_Visa_Price_Out_PKR+=visa_Price_PKR
              existingSupplier.payment_Out_Schema.remaining_Balance-=visa_Price_PKR
@@ -3226,10 +3230,6 @@ if(agent.payment_In_Schema && agent.payment_In_Schema.persons)
 }
      
       }
-
-       
-    
-
 const suppliers=await Agents.find({})
 for(const supplier of suppliers){
   if (supplier.payment_In_Schema && supplier.payment_In_Schema.persons) {

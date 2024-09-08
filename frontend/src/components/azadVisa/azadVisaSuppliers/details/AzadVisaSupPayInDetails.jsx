@@ -597,7 +597,6 @@ const changeStatus = async (myStatus) => {
     if (window.confirm(`Are you sure you want to Change the Status of ${selectedSupplier}?`)) {
       setLoading5(true)
       let newStatus=myStatus
-
       try {
         const response = await fetch(`${apiUrl}/auth/azadVisa/suppliers/update/payment_in/status`, {
           method: 'PATCH',
@@ -627,8 +626,6 @@ const changeStatus = async (myStatus) => {
       }
     }
   }
-
-  
   const printMainTable = () => {
     // Function to format the date as dd-MM-yyyy
     const formatDate = (date) => {

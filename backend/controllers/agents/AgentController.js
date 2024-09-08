@@ -1300,7 +1300,6 @@ const updatePaymentInPerson=async(req,res)=>{
             personIn.visa_Price_In_Curr = visa_Price_Curr;
             personIn.remaining_Price += visa_Price_PKR;
             personIn.remaining_Curr += visa_Price_Curr;
-
             personIn.flight_Date = flight_Date?flight_Date:'Not Fly';
 
             // updating overall visa prices
